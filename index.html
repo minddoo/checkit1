@@ -108,6 +108,25 @@
         <p data-i18n="footer-copy">&copy; 2024 Health Assistant. All rights reserved.</p>
     </footer>
 
+    <!-- Chatbot UI -->
+    <div id="chatbot-container" class="chatbot-container">
+        <button id="chat-toggle" class="chat-toggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div id="chat-window" class="chat-window hidden">
+            <div class="chat-header">
+                <h3 data-i18n="chat-title">Health FAQ Bot</h3>
+                <button id="chat-close">&times;</button>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot-message" data-i18n="chat-welcome">안녕하세요! 무엇을 도와드릴까요?</div>
+            </div>
+            <div id="faq-options" class="faq-options">
+                <!-- FAQ buttons will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <script src="main.js"></script>
 </body>
 </html>

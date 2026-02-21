@@ -143,7 +143,7 @@ function changeLanguage(lang) {
     });
 
     // Update active button style
-    document.querySelectorAll('.lang-switcher button').forEach(btn => {
+    document.querySelectorAll('.lang-switcher button, .chat-lang-selector button').forEach(btn => {
         btn.classList.remove('active');
         if (btn.getAttribute('onclick').includes(`'${lang}'`)) {
             btn.classList.add('active');

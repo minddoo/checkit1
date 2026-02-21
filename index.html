@@ -115,7 +115,14 @@
         </button>
         <div id="chat-window" class="chat-window hidden">
             <div class="chat-header">
-                <h3 data-i18n="chat-title">Health FAQ Bot</h3>
+                <div class="chat-header-left">
+                    <h3 data-i18n="chat-title">Health FAQ Bot</h3>
+                    <div class="chat-lang-selector">
+                        <button onclick="changeLanguage('ko')">KR</button>
+                        <button onclick="changeLanguage('en')">EN</button>
+                        <button onclick="changeLanguage('zh')">CN</button>
+                    </div>
+                </div>
                 <button id="chat-close">&times;</button>
             </div>
             <div id="chat-messages" class="chat-messages">

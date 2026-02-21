@@ -1,14 +1,113 @@
-<!doctype html>
-<html lang="en">
+
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>외국인 건강검진 어시스트</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="#" data-i18n="logo">Health Assistant</a>
+            </div>
+            <ul>
+                <li><a href="#services" data-i18n="nav-services">서비스</a></li>
+                <li><a href="#process" data-i18n="nav-process">프로세스</a></li>
+                <li><a href="#testimonials" data-i18n="nav-testimonials">후기</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">문의</a></li>
+            </ul>
+        </nav>
+        <div class="lang-switcher">
+            <button onclick="changeLanguage('ko')">KR</button>
+            <button onclick="changeLanguage('en')">EN</button>
+            <button onclick="changeLanguage('zh')">CN</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <h1 data-i18n="hero-title">외국인을 위한 건강검진, <br>더 이상 복잡하지 않아요.</h1>
+                <p data-i18n="hero-subtitle">Health Assistant가 예약부터 통역, 서류까지 모든 과정을 도와드립니다.</p>
+                <a href="#contact" class="cta-button" data-i18n="hero-cta">상담 신청하기</a>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <h2 data-i18n="services-title">주요 서비스</h2>
+            <div class="service-cards">
+                <div class="card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3 data-i18n="service-1-title">병원 예약</h3>
+                    <p data-i18n="service-1-desc">원하는 날짜와 시간에 맞춰 건강검진을 예약해드립니다.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-language"></i>
+                    <h3 data-i18n="service-2-title">통역 지원</h3>
+                    <p data-i18n="service-2-desc">의료진과의 원활한 소통을 위해 전문 통역을 지원합니다.</p>
+                </div>
+                <div class="card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3 data-i18n="service-3-title">서류 안내</h3>
+                    <p data-i18n="service-3-desc">건강검진에 필요한 모든 서류를 안내하고 준비를 돕습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="process">
+            <h2 data-i18n="process-title">진행 과정</h2>
+            <div class="process-steps">
+                <div class="step">
+                    <span>1</span>
+                    <h3 data-i18n="process-1-title">상담 및 예약</h3>
+                    <p data-i18n="process-1-desc">온라인으로 상담을 신청하고 원하는 병원과 시간을 선택합니다.</p>
+                </div>
+                <div class="step">
+                    <span>2</span>
+                    <h3 data-i18n="process-2-title">검진 진행</h3>
+                    <p data-i18n="process-2-desc">예약된 날짜에 병원을 방문하여 어시스턴트와 함께 검진을 받습니다.</p>
+                </div>
+                <div class="step">
+                    <span>3</span>
+                    <h3 data-i18n="process-3-title">결과 확인</h3>
+                    <p data-i18n="process-3-desc">검진 결과를 통역과 함께 상세히 안내받고, 관련 서류를 수령합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <h2 data-i18n="testimonials-title">사용자 후기</h2>
+            <div class="testimonial-cards">
+                <div class="card">
+                    <p data-i18n="testimonial-1-text">"정말 최고의 서비스였습니다. 예약부터 통역까지 완벽하게 도와주셔서 정말 편안하게 건강검진을 마칠 수 있었습니다."</p>
+                    <span>- John Doe, USA</span>
+                </div>
+                <div class="card">
+                    <p data-i18n="testimonial-2-text">"한국 병원 방문이 처음이라 막막했는데, Health Assistant 덕분에 모든 것이 순조로웠습니다. 강력히 추천합니다!"</p>
+                    <span>- Maria Garcia, Spain</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2 data-i18n="contact-title">문의하기</h2>
+            <p data-i18n="contact-subtitle">궁금한 점이 있다면 언제든지 문의해주세요.</p>
+            <form>
+                <input type="email" placeholder="이메일 주소를 입력하세요" data-i18n-placeholder="contact-email">
+                <textarea rows="5" placeholder="문의 내용을 입력하세요" data-i18n-placeholder="contact-message"></textarea>
+                <button type="submit" class="cta-button" data-i18n="contact-submit">전송</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p data-i18n="footer-copy">&copy; 2024 Health Assistant. All rights reserved.</p>
+    </footer>
+
+    <script src="main.js"></script>
 </body>
 </html>

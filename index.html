@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>외국인 건강검진 어시스트</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CHECKIT</title>
+    <link rel="stylesheet" href="style.css?v=6.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <a href="#" data-i18n="logo">Health Assistant</a>
+                <a href="#" data-i18n="logo">CHECKIT</a>
             </div>
             <ul>
                 <li><a href="#services" data-i18n="nav-services">서비스</a></li>
@@ -22,59 +22,65 @@
             </ul>
         </nav>
         <div class="lang-switcher">
-            <button onclick="changeLanguage('ko')">KR</button>
-            <button onclick="changeLanguage('en')">EN</button>
-            <button onclick="changeLanguage('zh')">CN</button>
+            <button data-lang="ko">KR</button>
+            <button data-lang="en">EN</button>
+            <button data-lang="zh">CN</button>
+            <button data-lang="vi">VI</button>
         </div>
     </header>
 
     <main>
         <section class="hero">
             <div class="hero-text">
-                <h1 data-i18n="hero-title">외국인을 위한 건강검진, <br>더 이상 복잡하지 않아요.</h1>
-                <p data-i18n="hero-subtitle">Health Assistant가 예약부터 통역, 서류까지 모든 과정을 도와드립니다.</p>
-                <a href="#contact" class="cta-button" data-i18n="hero-cta">상담 신청하기</a>
+                <h1 data-i18n="hero-title">외국인을 위한 건강검진, <br>언어의 장벽 없이 편안하게.</h1>
+                <p data-i18n="hero-subtitle">일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지. CHECKIT이 모든 비의료 과정을 해결합니다.</p>
+                <a href="#contact" class="cta-button" data-i18n="hero-cta">지금 바로 상담 신청</a>
             </div>
         </section>
 
         <section id="services" class="services">
-            <h2 data-i18n="services-title">주요 서비스</h2>
+            <h2 data-i18n="services-title">CHECKIT 주요 서비스</h2>
             <div class="service-cards">
                 <div class="card">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3 data-i18n="service-1-title">병원 예약</h3>
-                    <p data-i18n="service-1-desc">원하는 날짜와 시간에 맞춰 건강검진을 예약해드립니다.</p>
+                    <i class="fas fa-notes-medical"></i>
+                    <h3 data-i18n="service-1-title">검진 안내 및 예약 보조</h3>
+                    <p data-i18n="service-1-desc">언어 혼란 없이, 필요한 검진 항목을 파악하고 최적의 병원으로 예약을 도와드립니다.</p>
                 </div>
                 <div class="card">
-                    <i class="fas fa-language"></i>
-                    <h3 data-i18n="service-2-title">통역 지원</h3>
-                    <p data-i18n="service-2-desc">의료진과의 원활한 소통을 위해 전문 통역을 지원합니다.</p>
+                    <i class="fas fa-headset"></i>
+                    <h3 data-i18n="service-2-title">전 과정 다국어 안내</h3>
+                    <p data-i18n="service-2-desc">검진 전 주의사항부터 검진 당일 소통까지, 모든 과정을 지정된 언어로 편안하게 안내합니다.</p>
                 </div>
                 <div class="card">
-                    <i class="fas fa-file-alt"></i>
-                    <h3 data-i18n="service-3-title">서류 안내</h3>
-                    <p data-i18n="service-3-desc">건강검진에 필요한 모든 서류를 안내하고 준비를 돕습니다.</p>
+                    <i class="fas fa-file-invoice"></i>
+                    <h3 data-i18n="service-3-title">결과 번역 및 관리</h3>
+                    <p data-i18n="service-3-desc">검진 결과를 알기 쉽게 번역하고, 필요시 재검 일정 관리를 꼼꼼하게 돕습니다.</p>
+                </div>
+                 <div class="card">
+                    <i class="fas fa-user-shield"></i>
+                    <h3 data-i18n="service-4-title">서류 및 행정 지원</h3>
+                    <p data-i18n="service-4-desc">보험사 제출 서류 등 건강검진과 관련된 모든 서류 및 행정 절차를 지원합니다.</p>
                 </div>
             </div>
         </section>
 
         <section id="process" class="process">
-            <h2 data-i18n="process-title">진행 과정</h2>
+            <h2 data-i18n="process-title">CHECKIT 이용 과정</h2>
             <div class="process-steps">
                 <div class="step">
                     <span>1</span>
-                    <h3 data-i18n="process-1-title">상담 및 예약</h3>
-                    <p data-i18n="process-1-desc">온라인으로 상담을 신청하고 원하는 병원과 시간을 선택합니다.</p>
+                    <h3 data-i18n="process-1-title">온라인 상담 신청</h3>
+                    <p data-i18n="process-1-desc">웹사이트를 통해 간단히 상담을 신청하고, 전담 매니저가 배정됩니다.</p>
                 </div>
                 <div class="step">
                     <span>2</span>
-                    <h3 data-i18n="process-2-title">검진 진행</h3>
-                    <p data-i18n="process-2-desc">예약된 날짜에 병원을 방문하여 어시스턴트와 함께 검진을 받습니다.</p>
+                    <h3 data-i18n="process-2-title">맞춤 컨설팅 및 예약 보조</h3>
+                    <p data-i18n="process-2-desc">필요한 검진, 일정, 언어를 조율하고 최종 예약을 확정합니다.</p>
                 </div>
                 <div class="step">
                     <span>3</span>
-                    <h3 data-i18n="process-3-title">결과 확인</h3>
-                    <p data-i18n="process-3-desc">검진 결과를 통역과 함께 상세히 안내받고, 관련 서류를 수령합니다.</p>
+                    <h3 data-i18n="process-3-title">검진 및 결과 안내</h3>
+                    <p data-i18n="process-3-desc">예약된 날짜에 편안하게 검진을 받고, 번역된 결과지와 후속 안내까지 한번에 제공받습니다.</p>
                 </div>
             </div>
         </section>
@@ -87,46 +93,51 @@
                     <span>- John Doe, USA</span>
                 </div>
                 <div class="card">
-                    <p data-i18n="testimonial-2-text">"한국 병원 방문이 처음이라 막막했는데, Health Assistant 덕분에 모든 것이 순조로웠습니다. 강력히 추천합니다!"</p>
+                    <p data-i18n="testimonial-2-text">"한국 병원 방문이 처음이라 막막했는데, CHECKIT 덕분에 모든 것이 순조로웠습니다. 강력히 추천합니다!"</p>
                     <span>- Maria Garcia, Spain</span>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="contact">
-            <h2 data-i18n="contact-title">문의하기</h2>
-            <p data-i18n="contact-subtitle">궁금한 점이 있다면 언제든지 문의해주세요.</p>
-            <form>
-                <input type="email" placeholder="이메일 주소를 입력하세요" data-i18n-placeholder="contact-email">
-                <textarea rows="5" placeholder="문의 내용을 입력하세요" data-i18n-placeholder="contact-message"></textarea>
-                <button type="submit" class="cta-button" data-i18n="contact-submit">전송</button>
+            <h2 data-i18n="contact-title">궁금한 점이 있으신가요?</h2>
+            <p data-i18n="contact-subtitle">24시간 내에 전문 매니저가 답변해드립니다.</p>
+            <form action="https://formspree.io/f/xqedyngo" method="POST">
+                <input type="email" name="email" data-i18n-placeholder="contact-email" required>
+                <textarea name="message" rows="5" data-i18n-placeholder="contact-message" required></textarea>
+                <button type="submit" class="cta-button" data-i18n="contact-submit">상담 신청하기</button>
             </form>
         </section>
     </main>
 
     <footer>
-        <p data-i18n="footer-copy">&copy; 2024 Health Assistant. All rights reserved.</p>
+        <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
     <!-- Chatbot UI -->
-    <div id="chatbot-container" class="chatbot-container">
+    <div id="chatbot-container">
         <button id="chat-toggle" class="chat-toggle">
-            <i class="fas fa-comments"></i>
+             <i class="fas fa-comment-dots"></i>
         </button>
         <div id="chat-window" class="chat-window hidden">
             <div class="chat-header">
                 <div class="chat-header-left">
-                    <h3 data-i18n="chat-title">Health FAQ Bot</h3>
+                    <h3 data-i18n="chat-title">CHECKIT봇</h3>
                     <div class="chat-lang-selector">
-                        <button onclick="changeLanguage('ko')">KR</button>
-                        <button onclick="changeLanguage('en')">EN</button>
-                        <button onclick="changeLanguage('zh')">CN</button>
+                        <button data-lang="ko">KR</button>
+                        <button data-lang="en">EN</button>
+                        <button data-lang="zh">CN</button>
+                        <button data-lang="vi">VI</button>
                     </div>
                 </div>
                 <button id="chat-close">&times;</button>
             </div>
             <div id="chat-messages" class="chat-messages">
-                <div class="message bot-message" data-i18n="chat-welcome">안녕하세요! 무엇을 도와드릴까요?</div>
+                <div class="message bot-message" data-i18n="chat-welcome"></div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" data-i18n-placeholder="chat-input-placeholder">
+                <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
             </div>
             <div id="faq-options" class="faq-options">
                 <!-- FAQ buttons will be injected here -->
@@ -134,6 +145,6 @@
         </div>
     </div>
 
-    <script src="main.js"></script>
+    <script src="main.js?v=6.0"></script>
 </body>
 </html>

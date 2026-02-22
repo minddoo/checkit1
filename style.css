@@ -30,6 +30,10 @@ body {
     background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.04"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
 }
 
+body.nav-active {
+    overflow: hidden;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -39,9 +43,10 @@ ul {
     list-style: none;
 }
 
+/* === Header === */
 header {
     background-color: var(--white-color);
-    padding: 1rem 3rem;
+    padding: 1rem 2rem;
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
@@ -53,15 +58,25 @@ header {
 }
 
 header .logo a {
-    font-size: 2.2rem; /* Increased logo size */
+    font-size: 1.8rem;
     font-weight: bold;
     color: var(--primary-color);
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 2rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .lang-switcher {
     display: flex;
     gap: 0.5rem;
-    margin-left: 2rem;
 }
 
 .lang-switcher button {
@@ -75,34 +90,26 @@ header .logo a {
     transition: all 0.2s ease;
 }
 
-.lang-switcher button:hover {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-}
-
+.lang-switcher button:hover,
 .lang-switcher button.active {
     background-color: var(--primary-color);
     color: var(--white-color);
 }
 
-header nav {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+.hamburger {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: var(--dark-color);
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
-header nav ul {
-    display: flex;
-}
-
-header nav ul li {
-    margin-left: 2rem;
-}
-
+/* === Hero Section === */
 .hero {
     padding: 6rem 2rem;
     text-align: center;
-    background-color: #f0f8ff; /* A very light, almost white, blue for a subtle background */
+    background-color: #f0f8ff;
 }
 
 .hero-text h1 {
@@ -133,6 +140,7 @@ header nav ul li {
     filter: brightness(1.1);
 }
 
+/* === Content Sections === */
 .services, .process, .testimonials, .contact {
     padding: 5rem 2rem;
     text-align: center;
@@ -226,6 +234,7 @@ header nav ul li {
     box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.25);
 }
 
+/* === Footer === */
 footer {
     background-color: var(--dark-color);
     color: var(--light-color);
@@ -236,19 +245,19 @@ footer {
 /* === Chatbot Styles === */
 #chatbot-container {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 20px;
+    right: 20px;
     z-index: 2000;
 }
 
 #chat-toggle {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-color: var(--primary-color);
     color: var(--white-color);
     border: none;
-    font-size: 2.5rem;
+    font-size: 2rem;
     cursor: pointer;
     box-shadow: var(--shadow-depth-3);
     transition: transform 0.3s ease, background-color 0.3s;
@@ -268,19 +277,24 @@ footer {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
-    height: 90vh;
-    max-height: 950px;
+    height: 85vh;
+    max-height: 800px;
     background-color: var(--white-color);
     border-radius: 12px;
     box-shadow: var(--shadow-depth-3);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, -45%);
 }
 
-#chat-window.hidden {
-    display: none;
+#chat-window:not(.hidden) {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%);
 }
 
 .chat-header {
@@ -292,36 +306,15 @@ footer {
     align-items: center;
 }
 
-.chat-header-left {
+.chat-header-left, .chat-lang-selector {
     display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    align-items: center;
+    gap: 0.8rem;
 }
 
 .chat-header h3 {
     margin: 0;
     font-size: 1.2rem;
-}
-
-.chat-lang-selector {
-    display: flex;
-    gap: 0.3rem;
-}
-
-.chat-lang-selector button {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: var(--white-color);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    transition: all 0.2s;
-}
-
-.chat-lang-selector button:hover, .chat-lang-selector button.active {
-    background: var(--white-color);
-    color: var(--primary-color);
 }
 
 #chat-close {
@@ -332,9 +325,12 @@ footer {
     cursor: pointer;
 }
 
+#chat-messages, #faq-options, .chat-input-container {
+    padding: 1rem;
+}
+
 #chat-messages {
     flex: 1;
-    padding: 1rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -342,102 +338,51 @@ footer {
     background-color: #f9f9f9;
 }
 
-.message {
-    padding: 0.8rem 1.2rem;
-    border-radius: 16px;
-    max-width: 85%;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.5;
-}
-
-.bot-message {
-    background-color: #f0f2f5;
-    align-self: flex-start;
-    border-bottom-left-radius: 3px;
-    box-shadow: var(--shadow-depth-1);
-}
-
-.user-message {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    align-self: flex-end;
-    border-bottom-right-radius: 3px;
-}
-
-.chat-input-container {
-    padding: 1rem;
-    border-top: 1px solid #eee;
-    display: flex;
-    gap: 0.5rem;
-}
-
-#chat-input {
-    flex: 1;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-#chat-send {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.2rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#chat-send:hover {
-    background-color: #1fe0b3;
-}
-
-#faq-options {
-    padding: 1rem;
-    border-top: 1px solid #eee;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    background-color: #f9f9f9;
-}
-
-.faq-button {
-    background-color: var(--white-color);
-    border: 1px solid #ddd;
-    padding: 0.8rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-align: left;
-    transition: all 0.2s ease;
-}
-
-.faq-button:hover {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    border-color: var(--primary-color);
-    transform: translateX(5px);
-}
-
 /* === Responsive Design === */
 @media screen and (max-width: 768px) {
     header {
-        flex-direction: column;
         padding: 1rem;
-        gap: 1rem;
     }
 
-    header nav ul {
+    header .logo a {
+        font-size: 1.5rem;
+    }
+
+    .main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 100;
+    }
+
+    .main-nav.is-active {
+        transform: translateX(0);
+    }
+
+    .main-nav ul {
         flex-direction: column;
         text-align: center;
-        gap: 1rem;
-        margin: 0;
+        gap: 2rem;
     }
 
-    header nav ul li {
-        margin-left: 0;
+    .main-nav ul a {
+        font-size: 1.8rem;
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+
+    .hamburger {
+        display: block;
+        z-index: 101; /* Above the nav panel */
     }
 
     .hero {
@@ -461,14 +406,6 @@ footer {
     }
 
     /* --- Mobile Chat Window --- */
-    #chat-toggle {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
-        bottom: 20px;
-        right: 20px;
-    }
-
     #chat-window {
         width: 100%;
         height: 100%;
@@ -476,7 +413,6 @@ footer {
         top: auto;
         left: 0;
         bottom: 0;
-        right: 0;
         transform: translateY(100%);
         border-radius: 20px 20px 0 0;
         transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -485,13 +421,4 @@ footer {
     #chat-window:not(.hidden) {
         transform: translateY(0);
     }
-
-    #chat-messages {
-      font-size: 0.95rem;
-    }
-
-    .chat-header h3 {
-      font-size: 1.1rem;
-    }
-
 }

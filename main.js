@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Translations and Language Switching ---
     const translations = {
         'ko': {
             'nav-services': '서비스',
@@ -172,10 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         langSwitchers.forEach(button => {
+            button.classList.remove('active');
             if (button.dataset.lang === lang) {
                 button.classList.add('active');
-            } else {
-                button.classList.remove('active');
             }
         });
         currentLang = lang;
@@ -189,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Chatbot Functionality ---
     const chatToggle = document.getElementById('chat-toggle');
     const chatWindow = document.getElementById('chat-window');
     const chatClose = document.getElementById('chat-close');
@@ -217,22 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const botResponses = {
-        ko: {
-            greeting: "안녕하세요! 무엇을 도와드릴까요?",
-            fallback: "기본 질문 외의 문의는 \'문의하기\'를 통해 상세 내용을 남겨주시면, 담당 매니저가 직접 연락드리겠습니다."
-        },
-        en: {
-            greeting: "Hello! How can I help you?",
-            fallback: "For questions other than the basic ones, please leave the details via \'Contact Us\', and a manager will contact you directly."
-        },
-        zh: {
-            greeting: "你好！我能帮你什么？",
-            fallback: "对于基本问题以外的查询，请通过\"联系我们\"留下详细信息，经理将直接与您联系。"
-        },
-        vi: {
-            greeting: "Xin chào! Tôi có thể giúp gì cho bạn?",
-            fallback: "Đối với các câu hỏi khác ngoài những câu hỏi cơ bản, vui lòng để lại chi tiết qua \'Liên hệ\' và người quản lý sẽ liên hệ trực tiếp với bạn."
-        }
+        ko: { greeting: "안녕하세요! 무엇을 도와드릴까요?", fallback: "기본 질문 외의 문의는 '문의하기'를 통해 상세 내용을 남겨주시면, 담당 매니저가 직접 연락드리겠습니다." },
+        en: { greeting: "Hello! How can I help you?", fallback: "For questions other than the basic ones, please leave the details via 'Contact Us', and a manager will contact you directly." },
+        zh: { greeting: "你好！我能帮你什么？", fallback: "对于基本问题以外的查询，请通过\"联系我们\"留下详细信息，经理将直接与您联系。" },
+        vi: { greeting: "Xin chào! Tôi có thể giúp gì cho bạn?", fallback: "Đối với các câu hỏi khác ngoài những câu hỏi cơ bản, vui lòng để lại chi tiết qua 'Liên hệ' và người quản lý sẽ liên hệ trực tiếp với bạn." }
     };
     
     const greetings = ['안녕', 'hello', 'hi', 'hey', '你好', 'xin chào'];
@@ -241,17 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const userText = chatInput.value.trim().toLowerCase();
         if (userText) {
             addMessage(chatInput.value, 'user');
-            
             const isGreeting = greetings.some(greeting => userText.includes(greeting));
-
             if (isGreeting) {
-                setTimeout(() => {
-                    addMessage(botResponses[currentLang].greeting, "bot");
-                }, 500);
+                setTimeout(() => addMessage(botResponses[currentLang].greeting, "bot"), 500);
             } else {
-                setTimeout(() => {
-                    addMessage(botResponses[currentLang].fallback, "bot");
-                }, 500);
+                setTimeout(() => addMessage(botResponses[currentLang].fallback, "bot"), 500);
             }
             chatInput.value = '';
         }
@@ -259,9 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatSend.addEventListener('click', handleUserInput);
     chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleUserInput();
-        }
+        if (e.key === 'Enter') handleUserInput();
     });
 
     const faq = {
@@ -269,15 +250,15 @@ document.addEventListener('DOMContentLoaded', () => {
             { q: "검진 예약은 어떻게 하나요?", a: "\'문의하기\'로 요청을 남겨주시면, 담당 매니저가 신속하게 절차를 안내해 드립니다." },
             { q: "중개 수수료가 있나요?", a: "아니요. 저희는 병원/의료인과 어떠한 계약도 없으므로 알선/중개 수수료가 전혀 없습니다. 상담 시 안내드리는 소정의 서비스 이용료만 발생합니다." },
             { q: "병원 추천도 해주시나요?", a: "특정 병원을 추천하지는 않습니다. 대신 원하시는 검진 항목에 맞는 병원 및 프로그램 리스트를 제공하여, 고객님께서 직접 선택하시는 데 도움을 드립니다." },
-            { q: "검진 당일, 동행해주시나요?", a: "아니요, 저희는 물리적인 동행 서비스는 제공하지 않습니다. 다만, 검진 당일 필요한 소통을 도와드리는 \'커뮤니케이션 서비스\'는 제공됩니다." },
-            { q: "검진 결과는 어떻게 알려주나요?", a: "결과지에 대한 \'단순 번역\'만 제공합니다. 의료적 판단, 사후 진료 알선은 절대 하지 않으며, 번역본 전달과 함께 재검 일정 관리, 주의사항 안내를 도와드립니다." }
+            { q: "검진 당일, 동행해주시나요?", a: "아니요, 저희는 물리적인 동행 서비스는 제공하지 않습니다. 다만, 검진 당일 필요한 소통을 도와드리는 '커뮤니케이션 서비스'는 제공됩니다." },
+            { q: "검진 결과는 어떻게 알려주나요?", a: "결과지에 대한 '단순 번역'만 제공합니다. 의료적 판단, 사후 진료 알선은 절대 하지 않으며, 번역본 전달과 함께 재검 일정 관리, 주의사항 안내를 도와드립니다." }
         ],
         en: [
-            { q: "How do I book a checkup?", a: "Please leave your request through the \'Contact Us\' form. A manager will quickly guide you through the process." },
+            { q: "How do I book a checkup?", a: "Please leave your request through the 'Contact Us' form. A manager will quickly guide you through the process." },
             { q: "Are there any brokerage fees?", a: "No. We have no contracts with hospitals or doctors, so there are absolutely no brokerage or commission fees. You only need to pay our service fee, which will be detailed during your consultation." },
             { q: "Can you recommend a hospital?", a: "We do not recommend specific hospitals. Instead, we provide a list of hospitals and programs that match your desired checkup items to help you make your own choice." },
-            { q: "Do you accompany me to the hospital on the day of the checkup?", a: "No, we do not offer a physical accompaniment service. However, we do provide a \'communication service\' to help you with necessary communication on the day of your checkup." },
-            { q: "How do you inform me of the checkup results?", a: "We provide a \'simple translation\' of your results only. We do not offer medical interpretations, judgments, or arrange follow-up treatments. We assist with managing your re-examination schedule and informing you of any precautions along with the translated copy." }
+            { q: "Do you accompany me to the hospital on the day of the checkup?", a: "No, we do not offer a physical accompaniment service. However, we do provide a 'communication service' to help you with necessary communication on the day of your checkup." },
+            { q: "How do you inform me of the checkup results?", a: "We provide a 'simple translation' of your results only. We do not offer medical interpretations, judgments, or arrange follow-up treatments. We assist with managing your re-examination schedule and informing you of any precautions along with the translated copy." }
         ],
          zh: [
             { q: "如何预约体检？", a: "请通过\"联系我们\"表格留下您的请求。经理会迅速引导您完成流程。" },
@@ -287,11 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
             { q: "你们如何告知我体检结果？", a: "我们只提供您结果的\"简单翻译\"。我们不提供医疗解释、判断或安排后续治疗。我们会协助管理您的复查日程，并在提供翻译副本的同时告知您任何预防措施。" }
         ],
         vi: [
-            { q: "Làm cách nào để đặt lịch khám sức khỏe?", a: "Vui lòng để lại yêu cầu của bạn qua biểu mẫu \'Liên hệ với chúng tôi\'. Một người quản lý sẽ nhanh chóng hướng dẫn bạn qua quy trình." },
+            { q: "Làm cách nào để đặt lịch khám sức khỏe?", a: "Vui lòng để lại yêu cầu của bạn qua biểu mẫu 'Liên hệ với chúng tôi'. Một người quản lý sẽ nhanh chóng hướng dẫn bạn qua quy trình." },
             { q: "Có phí môi giới không?", a: "Không. Chúng tôi không có hợp đồng với bệnh viện hoặc bác sĩ, vì vậy hoàn toàn không có phí môi giới hoặc hoa hồng. Bạn chỉ cần trả phí dịch vụ của chúng tôi, sẽ được trình bày chi tiết trong buổi tư vấn của bạn." },
             { q: "Bạn có giới thiệu bệnh viện không?", a: "Chúng tôi không giới thiệu bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp danh sách các bệnh viện và chương trình phù hợp với các mục khám bạn mong muốn để giúp bạn tự đưa ra lựa chọn." },
-            { q: "Bạn có đi cùng tôi đến bệnh viện vào ngày khám không?", a: "Không, chúng tôi không cung cấp dịch vụ đi kèm thể chất. Tuy nhiên, chúng tôi cung cấp \'dịch vụ giao tiếp\' để giúp bạn giao tiếp cần thiết vào ngày khám." },
-            { q: "Làm thế nào bạn thông báo cho tôi kết quả khám?", a: "Chúng tôi chỉ cung cấp \'bản dịch đơn giản\' kết quả của bạn. Chúng tôi không cung cấp các diễn giải y tế, phán đoán hoặc sắp xếp các phương pháp điều trị tiếp theo. Chúng tôi hỗ trợ quản lý lịch tái khám và thông báo cho bạn về bất kỳ biện pháp phòng ngừa nào cùng với bản dịch." }
+            { q: "Bạn có đi cùng tôi đến bệnh viện vào ngày khám không?", a: "Không, chúng tôi không cung cấp dịch vụ đi kèm thể chất. Tuy nhiên, chúng tôi cung cao cấp 'dịch vụ giao tiếp' để giúp bạn giao tiếp cần thiết vào ngày khám." },
+            { q: "Làm thế nào bạn thông báo cho tôi kết quả khám?", a: "Chúng tôi chỉ cung cấp 'bản dịch đơn giản' kết quả của bạn. Chúng tôi không cung cấp các diễn giải y tế, phán đoán hoặc sắp xếp các phương pháp điều trị tiếp theo. Chúng tôi hỗ trợ quản lý lịch tái khám và thông báo cho bạn về bất kỳ biện pháp phòng ngừa nào cùng với bản dịch." }
         ]
     };
 
@@ -311,5 +292,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Initial Load ---
     updateTexts(currentLang);
+
+    // --- Hamburger Menu Functionality ---
+    const hamburger = document.querySelector('.hamburger');
+    const mainNav = document.querySelector('.main-nav');
+    const navLinks = document.querySelectorAll('.main-nav a');
+    const body = document.body;
+
+    const toggleNav = () => {
+        mainNav.classList.toggle('is-active');
+        body.classList.toggle('nav-active');
+        const icon = hamburger.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    };
+
+    hamburger.addEventListener('click', toggleNav);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (mainNav.classList.contains('is-active')) {
+                toggleNav();
+            }
+        });
+    });
 });

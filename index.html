@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT</title>
-    <link rel="stylesheet" href="style.css?v=6.0">
+    <link rel="stylesheet" href="style.css?v=6.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">
-                <a href="#" data-i18n="logo">CHECKIT</a>
-            </div>
+        <div class="logo">
+            <a href="#" data-i18n="logo">CHECKIT</a>
+        </div>
+        <nav class="main-nav">
             <ul>
                 <li><a href="#services" data-i18n="nav-services">서비스</a></li>
                 <li><a href="#process" data-i18n="nav-process">프로세스</a></li>
@@ -21,11 +21,16 @@
                 <li><a href="#contact" data-i18n="nav-contact">문의</a></li>
             </ul>
         </nav>
-        <div class="lang-switcher">
-            <button data-lang="ko">KR</button>
-            <button data-lang="en">EN</button>
-            <button data-lang="zh">CN</button>
-            <button data-lang="vi">VI</button>
+        <div class="header-right">
+            <div class="lang-switcher">
+                <button data-lang="ko">KR</button>
+                <button data-lang="en">EN</button>
+                <button data-lang="zh">CN</button>
+                <button data-lang="vi">VI</button>
+            </div>
+            <button class="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
@@ -145,6 +150,6 @@
         </div>
     </div>
 
-    <script src="main.js?v=6.0"></script>
+    <script src="main.js?v=6.1"></script>
 </body>
 </html>

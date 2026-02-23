@@ -72,12 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-best-for': '명확한 정보와 함께 스스로 과정을 관리하고 싶은 분.',
 
             'plan2-title': 'Zero-Mistake Plan', 
-            'plan2-included': '(400 플랜 모두 포함 +)',
+            'plan2-included': '(No-Confusion Plan 모두 포함 +)',
             'plan2-feat1': '강화된 문진표 가이드 (상세, 실수 방지 중심)', 'plan2-feat2': '외국인들이 자주 놓치는 실수 알림', 'plan2-feat3': '1회 서식 확인 (누락 항목, 서명, 날짜)', 'plan2-feat4': '검진 전 가이드 팩 (타임라인 + 지연 유발 요인)', 'plan2-feat5': '대장내시경 준비 기본 (해당 시)', 'plan2-feat6': '시간에 민감한 문제에 대한 우선 메시지', 'plan2-feat7': '결과 후속 조치 (1회)', 'plan2-feat8': '누락 또는 지연된 서류에 대한 알림', 'plan2-feat9': '일정 변경 지원 (1회 포함)',
             'plan2-best-for': '흔한 실수와 일정 지연을 방지하고 싶은 분.',
 
             'plan3-title': 'Total-Safe Plan',
-            'plan3-included': '(500 플랜 모두 포함 +)',
+            'plan3-included': '(Zero-Mistake Plan 모두 포함 +)',
             'plan3-feat1': '프리미엄 문진표 관리', 'plan3-feat2': '위험 포인트 설명 (비의료적, 절차 기반)', 'plan3-feat3': '복잡한 서식 항목을 위한 영어 답변 템플릿', 'plan3-feat4': '전체 서식 확인 (모든 페이지, 서명, 첨부파일)', 'plan3-feat5': '프리미엄 검진 전 팩 (상세 타임라인, 실수 대응 플로우)', 'plan3-feat6': '실시간 검진 당일 채팅 지원', 'plan3-feat7': '병원 내 동선 가이드 (그래픽)', 'plan3-feat8': '영문 영수증 요청 (대행)', 'plan3-feat9': 'CD / 추가 서류 요청', 'plan3-feat10': '결과 나올 때까지 완전한 검진 후 후속 조치', 'plan3-feat11': '결과 구성 (비의료적, 내용 구성만)', 'plan3-feat12': '병원 소통용 템플릿', 'plan3-feat13': '일정 변경 지원 (최대 3회 포함)',
             'plan3-best-for': '완벽하게 스트레스 없는 경험을 원하는 모든 분.',
 
@@ -188,12 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-best-for': 'Travelers who want clarity and self-guided support.',
 
             'plan2-title': 'Zero-Mistake Plan',
-            'plan2-included': 'Included (everything in 400 +)',
+            'plan2-included': 'Included (everything in No-Confusion Plan +)',
             'plan2-feat1': 'Enhanced Questionnaire Guide (detailed, mistake-prevention focused)', 'plan2-feat2': 'Common mistake alerts that foreigners often miss', 'plan2-feat3': 'One-time format check (missing fields, signatures, dates)', 'plan2-feat4': 'Pre-check Guide Pack (timeline + what commonly causes delays)', 'plan2-feat5': 'Colonoscopy preparation basics (if relevant)', 'plan2-feat6': 'Priority messaging for time-sensitive issues', 'plan2-feat7': 'Result follow-up (1 time)', 'plan2-feat8': 'Document alerts for missing or delayed paperwork', 'plan2-feat9': 'Schedule change support (1 time included)',
             'plan2-best-for': 'Those who want to avoid common mistakes and delays.',
 
             'plan3-title': 'Total-Safe Plan',
-            'plan3-included': 'Included (everything in 500 +)',
+            'plan3-included': 'Included (everything in Zero-Mistake Plan +)',
             'plan3-feat1': 'Premium Questionnaire Management', 'plan3-feat2': 'Risk-point explanation (non-medical, process-based)', 'plan3-feat3': 'English answer templates for complex form items', 'plan3-feat4': 'Complete format check (all pages, signatures, attachments)', 'plan3-feat5': 'Premium Pre-check Pack (detailed timeline, mistake-response flow)', 'plan3-feat6': 'Real-time exam-day chat support', 'plan3-feat7': 'Hospital navigation guide (graphic)', 'plan3-feat8': 'English receipt request (handled on your behalf)', 'plan3-feat9': 'CD / additional document request', 'plan3-feat10': 'Full post-exam follow-up until results are delivered', 'plan3-feat11': 'Result structuring (non-medical, content organization only)', 'plan3-feat12': 'Templates for communicating with the hospital', 'plan3-feat13': 'Schedule change support (up to 3 times included)',
             'plan3-best-for': 'Anyone who wants a completely stress-free experience.',
 
@@ -304,12 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-best-for': '希望获得清晰信息并进行自我指导的旅行者。',
 
             'plan2-title': '零失误计划',
-            'plan2-included': '（包括 400 计划中的所有内容 +）',
+            'plan2-included': '（包括 No-Confusion Plan 中的所有内容 +）',
             'plan2-feat1': '增强版问卷指南（详细，注重防错）', 'plan2-feat2': '外国人常犯的错误提醒', 'plan2-feat3': '一次性格式检查（缺失字段、签名、日期）', 'plan2-feat4': '预检指南包（时间表+通常导致延迟的原因）', 'plan2-feat5': '结肠镜检查准备基础知识（如果相关）', 'plan2-feat6': '时间敏感问题的优先消息传递', 'plan2-feat7': '结果跟进（1次）', 'plan2-feat8': '文件丢失或延迟的提醒', 'plan2-feat9': '日程变更支持（包括1次）',
             'plan2-best-for': '希望避免常见错误和延误的人士。',
 
             'plan3-title': '全面安全计划',
-            'plan3-included': '（包括 500 计划中的所有内容 +）',
+            'plan3-included': '（包括 Zero-Mistake Plan 中的所有内容 +）',
             'plan3-feat1': '高级问卷管理', 'plan3-feat2': '风险点解释（非医疗，基于流程）', 'plan3-feat3': '复杂表格项目的英文答案模板', 'plan3-feat4': '完整的格式检查（所有页面、签名、附件）', 'plan3-feat5': '高级预检包（详细时间表，错误响应流程）', 'plan3-feat6': '实时检查日聊天支持', 'plan3-feat7': '医院导航指南（图文）', 'plan3-feat8': '英文收据请求（代为处理）', 'plan3-feat9': 'CD/附加文件请求', 'plan3-feat10': '直到结果交付的全面检查后跟进', 'plan3-feat11': '结果结构化（非医疗，仅内容组织）', 'plan3-feat12': '与医院沟通的模板', 'plan3-feat13': '日程变更支持（最多包括3次）',
             'plan3-best-for': '任何想要完全无压力体验的人。',
 
@@ -420,12 +420,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-best-for': 'Du khách muốn sự rõ ràng và hỗ trợ tự hướng dẫn.',
 
             'plan2-title': 'Gói Không Sai sót',
-            'plan2-included': '(Bao gồm mọi thứ trong 400 +)',
+            'plan2-included': '(Bao gồm mọi thứ trong Gói Không Nhầm lẫn +)',
             'plan2-feat1': 'Hướng dẫn câu hỏi nâng cao (chi tiết, tập trung vào phòng ngừa sai sót)', 'plan2-feat2': 'Cảnh báo lỗi thường gặp mà người nước ngoài hay bỏ qua', 'plan2-feat3': 'Kiểm tra định dạng một lần (thiếu trường, chữ ký, ngày tháng)', 'plan2-feat4': 'Gói hướng dẫn trước khi kiểm tra (mốc thời gian + những gì thường gây chậm trễ)', 'plan2-feat5': 'Kiến thức cơ bản về chuẩn bị nội soi đại tràng (nếu có)', 'plan2-feat6': 'Ưu tiên nhắn tin cho các vấn đề nhạy cảm về thời gian', 'plan2-feat7': 'Theo dõi kết quả (1 lần)', 'plan2-feat8': 'Cảnh báo tài liệu thiếu hoặc chậm', 'plan2-feat9': 'Hỗ trợ thay đổi lịch trình (bao gồm 1 lần)',
             'plan2-best-for': 'Những người muốn tránh các lỗi phổ biến và sự chậm trễ.',
 
             'plan3-title': 'Gói An toàn Toàn diện',
-            'plan3-included': '(Bao gồm mọi thứ trong 500 +)',
+            'plan3-included': '(Bao gồm mọi thứ trong Gói Không Sai sót +)',
             'plan3-feat1': 'Quản lý câu hỏi cao cấp', 'plan3-feat2': 'Giải thích điểm rủi ro (phi y tế, dựa trên quy trình)', 'plan3-feat3': 'Mẫu câu trả lời tiếng Anh cho các mục biểu mẫu phức tạp', 'plan3-feat4': 'Kiểm tra định dạng hoàn chỉnh (tất cả các trang, chữ ký, tệp đính kèm)', 'plan3-feat5': 'Gói trước khi kiểm tra cao cấp (mốc thời gian chi tiết, quy trình phản hồi lỗi)', 'plan3-feat6': 'Hỗ trợ trò chuyện trong ngày thi theo thời gian thực', 'plan3-feat7': 'Hướng dẫn điều hướng bệnh viện (đồ họa)', 'plan3-feat8': 'Yêu cầu biên lai tiếng Anh (thay mặt bạn)', 'plan3-feat9': 'Yêu cầu CD / tài liệu bổ sung', 'plan3-feat10': 'Theo dõi đầy đủ sau kỳ thi cho đến khi có kết quả', 'plan3-feat11': 'Cấu trúc kết quả (phi y tế, chỉ tổ chức nội dung)', 'plan3-feat12': 'Mẫu để giao tiếp với bệnh viện', 'plan3-feat13': 'Hỗ trợ thay đổi lịch trình (bao gồm tối đa 3 lần)',
             'plan3-best-for': 'Bất kỳ ai muốn có một trải nghiệm hoàn toàn không căng thẳng.',
 
@@ -469,8 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'refund-full-refund-desc': 'Hoàn tiền đầy đủ chỉ được thực hiện khi lỗi rõ ràng thuộc về phía chúng tôi.',
             'refund-fr-li1': 'Chúng tôi đã cung cấp thông tin không chính xác (sai ngày, sai hướng dẫn, sai biểu mẫu)',
             'refund-fr-li2': 'Chúng tôi đã không gửi các thông báo bắt buộc hoặc hướng dẫn chuẩn bị',
-            'refund-fr-li3': 'Chúng tôi đã không yêu cầu một tài liệu đã được bao gồm trong kế hoạch của bạn',
-            'refund-fr-li4': 'Chúng tôi đã trì hoãn kết quả của bạn do lỗi của chúng tôi',
+            'fr-li3': 'Chúng tôi đã không yêu cầu một tài liệu đã được bao gồm trong kế hoạch của bạn',            'refund-fr-li4': 'We delayed your results due to our error',
         }
     };
 

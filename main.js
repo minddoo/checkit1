@@ -82,86 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'ans-4': 'No, our managers do not physically \'accompany\' you. Instead, we offer a \'real-time communication service\' on the day of the exam to remotely assist with all necessary communication from check-in to check-out, ensuring a smooth process.',
             'ans-5': 'As soon as the examination results are issued by the hospital, we translate them into your requested language and deliver them to you. We do not add any medical judgment or diagnosis to the results; we only provide a faithful translation of the original content.',
             'faq-default-ans': 'Thank you for your inquiry. For this matter, please leave a question through the contact section on our homepage, and a professional manager will respond promptly.'
-        },
-        zh: {
-            'logo': 'CHECKIT',
-            'nav-services': '服务', 'nav-process': '流程', 'nav-testimonials': '评价', 'nav-contact': '联系我们',
-            'hero-title': '为外国人提供健康体检，<br>无语言障碍，舒适便捷。',
-            'hero-subtitle': '从错过日程、难以理解的检查指南，到只有韩文的结果报告。CHECKIT为您解决所有非医疗过程。',
-            'hero-cta': '立即申请咨询',
-            'services-title': '这项服务适合谁？',
-            'individuals-title': '个人客户', 'individuals-desc': '体验个性化的健康体检之旅。为韩国居民和医疗游客提供服务。',
-            'individuals-cta': '了解更多',
-            'business-title': '企业客户', 'business-desc': '系统地管理外籍员工的健康，预防工伤事故，提高工作效率。',
-            'business-cta': '了解更多',
-            'process-title': 'CHECKIT 使用流程', 
-            'process-1-title': '申请咨询', 'process-1-desc': '通过网站简单申请咨询，我们将为您分配专属经理。',
-            'process-2-title': '定制咨询', 'process-2-desc': '协调所需的检查、日程和语言，确认最终预订。',
-            'process-3-title': '体检与结果', 'process-3-desc': '在预定日期轻松接受体检，一次性收到翻译好的结果报告和后续指南。',
-            'testimonials-title': '用户评价', 
-            'testimonial-1-text': '“作为一名长期居民，我一直在医院里为语言障碍而苦恼。CHECKIT完美地处理了一切，从安排预约到最终的翻译报告。这是我在韩国最无压力的医疗体验。”',
-            'testimonial-1-author': '- Michael. L (美国, 居民)',
-            'testimonial-2-text': '“我来韩国短期旅行，需要一次快速可靠的体检。CHECKIT的流程效率惊人。他们帮我找到了附近的医院并处理了所有沟通。几天之内我就通过电子邮件收到了我的英文结果。服务太棒了！”',
-            'testimonial-2-author': '- A. Tran (越南, 游客)',
-            'testimonial-3-text': '“为我们多元化的外籍员工团队管理健康检查是一场后勤噩梦。错过预约、语言问题和结果延迟是常有的事。自从使用CHECKIT后，我们的流程变得顺畅，员工们也感受到了真正的关怀。这极大地改善了我们团队的福祉。”',
-            'testimonial-3-author': '- J. Kim (人力资源经理, 科技公司)',
-            'contact-title': '有任何疑问吗？', 'contact-subtitle': '专业经理将在24小时内回复。',
-            'contact-email': '请输入您的电子邮件地址', 'contact-message': '请输入您的留言', 'contact-submit': '申请咨询',
-            'footer-copy': '© 2024 CHECKIT. 版权所有。',
-            'chat-title': 'CHECKIT 机器人', 
-            'chat-welcome': '你好！对CHECKIT有任何疑问吗？请选择以下问题或自行输入。',
-            'chat-input-placeholder': '请输入您想问的问题...',
-            'faq-1': '如何进行预订？',
-            'faq-2': '是与医院/医生签约的模式吗？',
-            'faq-3': '你们是否提供医疗行为或转诊服务？',
-            'faq-4': '体检当天是否提供陪同服务？',
-            'faq-5': '检查结果如何传达？',
-            'ans-1': '预订请通过网站底部的“申请咨询”进行，专属经理将开始您的1:1管理。',
-            'ans-2': '不，我们不“推荐”特定医院。我们会根据您的需求和偏好，提供一份医院“列表”，帮助您自己选择最合适的医院。',
-            'ans-3': '不，我们明确声明不进行医疗行为或医疗转诊，因为这可能违反医疗法规。我们的职责是帮助您顺利完成体检的非医疗部分（预订、翻译、引导）。',
-            'ans-4': '不，我们的经理不会亲自“陪同”您。但在体检当天，我们提供“实时沟通服务”，远程协助您完成从挂号到结束的所有必要沟通，确保过程顺利。',
-            'ans-5': '医院出具检查结果后，我们会立即将其翻译成您要求的语言并交付给您。我们不会对结果添加任何医疗判断或诊断，仅提供对原始内容的忠实翻译。',
-            'faq-default-ans': '感谢您的询问。关于此事，请通过我们主页上的联系部分留下问题，专业经理将迅速回复。'
-        },
-        vi: {
-            'logo': 'CHECKIT',
-            'nav-services': 'Dịch vụ', 'nav-process': 'Quy trình', 'nav-testimonials': 'Đánh giá', 'nav-contact': 'Liên hệ',
-            'hero-title': 'Khám sức khỏe cho người nước ngoài, <br>Thoải mái không rào cản ngôn ngữ.',
-            'hero-subtitle': 'Từ lịch hẹn bị lỡ, hướng dẫn khó hiểu, đến kết quả chỉ có bằng tiếng Hàn. CHECKIT giải quyết mọi quy trình phi y tế.',
-            'hero-cta': 'Yêu cầu tư vấn ngay',
-            'services-title': 'Dịch vụ này dành cho ai?',
-            'individuals-title': 'Dành cho cá nhân', 'individuals-desc': 'Trải nghiệm hành trình khám sức khỏe cá nhân hóa. Dịch vụ dành cho người cư trú tại Hàn Quốc và khách du lịch y tế.',
-            'individuals-cta': 'Tìm hiểu thêm',
-            'business-title': 'Dành cho doanh nghiệp', 'business-desc': 'Quản lý sức khỏe của nhân viên nước ngoài một cách có hệ thống để phòng ngừa tai nạn lao động và nâng cao hiệu quả công việc.',
-            'business-cta': 'Tìm hiểu thêm',
-            'process-title': 'Quy trình hoạt động của CHECKIT', 
-            'process-1-title': 'Yêu cầu tư vấn', 'process-1-desc': 'Chỉ cần yêu cầu tư vấn qua trang web của chúng tôi và một người quản lý riêng sẽ được chỉ định.',
-            'process-2-title': 'Tư vấn tùy chỉnh', 'process-2-desc': 'Chúng tôi phối hợp các kỳ thi, lịch trình và ngôn ngữ cần thiết để xác nhận đặt chỗ cuối cùng của bạn.',
-            'process-3-title': 'Khám & Kết quả', 'process-3-desc': 'Thoải mái kiểm tra sức khỏe và nhận kết quả đã được dịch cùng hướng dẫn theo dõi tất cả trong một lần.',
-            'testimonials-title': 'Đánh giá của người dùng', 
-            'testimonial-1-text': '“Là một người cư trú lâu năm, tôi luôn phải vật lộn với rào cản ngôn ngữ tại các bệnh viện. CHECKIT đã quản lý mọi thứ một cách hoàn hảo, từ việc lên lịch hẹn cho đến báo cáo cuối cùng đã được dịch thuật. Đó là trải nghiệm y tế không căng thẳng nhất mà tôi từng có ở Hàn Quốc.”',
-            'testimonial-1-author': '- Michael. L (Hoa Kỳ, Cư dân)',
-            'testimonial-2-text': '“Tôi đến Hàn Quốc trong một chuyến đi ngắn và cần một cuộc kiểm tra sức khỏe nhanh chóng, đáng tin cậy. Quy trình của CHECKIT cực kỳ hiệu quả. Họ đã tìm một bệnh viện gần tôi và xử lý mọi giao tiếp. Tôi nhận được kết quả bằng tiếng Anh qua email chỉ trong vài ngày. Dịch vụ tuyệt vời!”',
-            'testimonial-2-author': '- A. Tran (Việt Nam, Khách du lịch)',
-            'testimonial-3-text': '“Việc quản lý kiểm tra sức khỏe cho đội ngũ nhân viên nước ngoài đa dạng của chúng tôi là một cơn ác mộng về hậu cần. Các cuộc hẹn bị bỏ lỡ, vấn đề ngôn ngữ và kết quả chậm trễ là chuyện thường tình. Kể từ khi sử dụng CHECKIT, quy trình của chúng tôi đã được sắp xếp hợp lý và nhân viên của chúng tôi cảm thấy được quan tâm thực sự. Điều này đã cải thiện đáng kể sức khỏe của đội ngũ chúng tôi.”',
-            'testimonial-3-author': '- J. Kim (Trưởng phòng Nhân sự, Công ty Công nghệ)',
-            'contact-title': 'Bạn có câu hỏi nào không?', 'contact-subtitle': 'Một người quản lý chuyên nghiệp sẽ trả lời trong vòng 24 giờ.',
-            'contact-email': 'Nhập địa chỉ email của bạn', 'contact-message': 'Nhập tin nhắn của bạn', 'contact-submit': 'Yêu cầu tư vấn',
-            'footer-copy': '© 2024 CHECKIT. Mọi quyền được bảo lưu.',
-            'chat-title': 'Bot CHECKIT', 
-            'chat-welcome': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi bên dưới hoặc tự nhập câu hỏi của bạn.',
-            'chat-input-placeholder': 'Nhập tin nhắn của bạn...',
-            'faq-1': 'Làm cách nào để đặt chỗ?',
-            'faq-2': 'Đây có phải là cấu trúc hợp đồng với bệnh viện/bác sĩ không?',
-            'faq-3': 'Bạn có thực hiện các hành vi y tế hoặc giới thiệu không?',
-            'faq-4': 'Bạn có cung cấp dịch vụ đi cùng trong ngày không?',
-            'faq-5': 'Kết quả được giao như thế nào?',
-            'ans-1': 'Để đặt hẹn, vui lòng sử dụng mục \'Yêu cầu Tư vấn\' ở cuối trang web của chúng tôi. Một người quản lý riêng sẽ bắt đầu chăm sóc 1:1 cho bạn.',
-            'ans-2': 'Không, chúng tôi không \'đề xuất\' một bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp một \'danh sách\' các bệnh viện phù hợp với nhu cầu và sở thích của bạn, giúp bạn tự mình chọn lựa bệnh viện tối ưu nhất.',
-            'ans-3': 'Không, để rõ ràng, chúng tôi không thực hiện các hành vi y tế hoặc giới thiệu y tế vì điều này có thể vi phạm luật y tế. Vai trò của chúng tôi là hỗ trợ các khía cạnh phi y tế (đặt chỗ, phiên dịch, hướng dẫn) để đảm bảo bạn có một trải nghiệm khám sức khỏe thuận lợi.',
-            'ans-4': 'Không, người quản lý của chúng tôi không \'đi cùng\' bạn. Thay vào đó, chúng tôi cung cấp \'dịch vụ giao tiếp thời gian thực\' vào ngày khám để hỗ trợ từ xa mọi giao tiếp cần thiết từ lúc đăng ký cho đến khi kết thúc, đảm bảo quá trình diễn ra suôn sẻ.',
-            'ans-5': 'Ngay sau khi kết quả khám được bệnh viện cấp, chúng tôi sẽ dịch chúng sang ngôn ngữ bạn yêu cầu và giao cho bạn. Chúng tôi không thêm bất kỳ nhận định hoặc chẩn đoán y tế nào vào kết quả; chúng tôi chỉ cung cấp một bản dịch trung thành của nội dung gốc.',
-            'faq-default-ans': 'Cảm ơn bạn đã yêu cầu. Về vấn đề này, vui lòng để lại câu hỏi qua phần liên hệ trên trang chủ của chúng tôi và một người quản lý chuyên nghiệp sẽ trả lời nhanh chóng.'
         }
     };
 
@@ -211,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         faqContainer.innerHTML = '';
 
         // Add welcome message
-        appendMessage('bot', translations[lang]['chat-welcome']);
+        appendMessage('bot', translations[lang]?.[ 'chat-welcome']);
 
         // Add new FAQ buttons
         for (let i = 1; i <= 5; i++) {
@@ -283,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function appendMessage(sender, text) {
+        if (!text) return; // Add a guard clause
         const chatMessages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', `${sender}-message`);
@@ -323,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const questionKey = `faq-${i}`;
                 const answerKey = `ans-${i}`;
                 // A simple check if the user's message contains the question text
-                if (translations[currentLang][questionKey] && message.toLowerCase().includes(translations[currentLang][questionKey].toLowerCase())) {
+                if (translations[currentLang]?.[questionKey] && message.toLowerCase().includes(translations[currentLang][questionKey].toLowerCase())) {
                     responseText = translations[currentLang][answerKey];
                     matched = true;
                     break;

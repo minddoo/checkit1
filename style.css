@@ -140,7 +140,8 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .solution-outro h2 { font-size: 2.4rem; font-weight: 700; color: var(--primary-color); }
 .solution-outro p { font-size: 1.2rem; color: #007A5E; max-width: 750px; margin: 1rem auto 0; }
 .pricing-section, .options-section { padding: 5rem 2rem; }
-.options-section { background-color: var(--section-bg-light); }
+.pricing-section { background-color: var(--section-bg-light); }
+.options-section { background-color: var(--white-color); }
 .pricing-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; max-width: 1200px; margin: 0 auto; }
 .pricing-card { background: var(--white-color); border: 1px solid #e9ecef; border-radius: 12px; box-shadow: var(--shadow-md); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; overflow: hidden; }
 .pricing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
@@ -162,16 +163,14 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .plan-zero-mistake .pricing-header .price, .plan-zero-mistake .pricing-features li::before { color: var(--plan-brown); }
 .plan-zero-mistake .cta-button { background-color: var(--plan-brown); }
 .plan-zero-mistake:hover { border-color: var(--plan-brown); }
-.plan-total-safe { border: 2px solid var(--primary-color); }
-.plan-total-safe .pricing-header { background-color: var(--primary-color); color: var(--white-color); }
-.plan-total-safe .pricing-header .price { color: var(--white-color); }
 .plan-total-safe .pricing-features li::before { color: var(--primary-color); }
 .options-section .section-title span { background: var(--blue-accent); color: var(--white-color); border-radius: 8px; padding: 0.3rem 1rem; font-size: 2.2rem; }
 .options-container { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .option-card .features-container p { font-size: 0.95rem; color: var(--secondary-color); line-height: 1.6; }
 .option-card .pricing-header .price { color: var(--blue-accent); }
-.schedule-options li { list-style: none; padding-left: 0; font-size: 1rem; }
-.schedule-options .price { font-size: 1rem; font-weight: 600; }
+.schedule-options li { list-style: none; font-size: 1rem; padding-left: 1.8rem; position: relative; margin-bottom: 0.8rem; }
+.schedule-options li::before { content: '✓'; position: absolute; left: 0; font-weight: 600; color: var(--blue-accent); }
+.schedule-options .price { font-size: 1rem; font-weight: 600; color: var(--blue-accent); }
 .expectation-section, .reality-section { padding: 5rem 2rem; }
 .expectation-section { background-color: var(--white-color); }
 .reality-section { background-color: var(--section-bg-light); }

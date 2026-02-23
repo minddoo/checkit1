@@ -260,9 +260,59 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     margin: 0 auto;
 }
 
-#corporate-benefits {
+#corporate-flow {
     padding: 6rem 2rem;
     background-color: var(--section-bg-light);
+}
+
+#corporate-flow .section-title {
+    font-size: 2rem;
+    margin-bottom: 4rem;
+}
+
+.flow-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.flow-column {
+    background: var(--white-color);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    border-top: 4px solid var(--secondary-color);
+}
+
+.flow-column.solution-column { border-top-color: var(--blue-accent); }
+.flow-column.effect-column { border-top-color: var(--primary-color); }
+
+.flow-column h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.flow-column ul {
+    list-style: none;
+}
+
+.flow-column li {
+    background-color: var(--section-bg-light);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+#corporate-benefits {
+    padding: 6rem 2rem;
+    background-color: var(--white-color);
 }
 
 .benefits-container {
@@ -305,7 +355,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 }
 
 #corporate-process {
-    background-color: var(--white-color);
+    background-color: var(--section-bg-light);
 }
 .process-steps.corporate-steps {
     grid-template-columns: repeat(4, 1fr);
@@ -318,8 +368,8 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 
 /* --- MOBILE & RESPONSIVE --- */
 @media screen and (max-width: 992px) {
-    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .reality-container, .refund-container, .benefits-container, .process-steps.corporate-steps {
-        grid-template-columns: 1fr;
+    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .reality-container, .refund-container, .benefits-container, .process-steps.corporate-steps, .flow-container {
+        grid-template-columns: repeat(2, 1fr);
     }
     .pricing-card { max-width: 500px; margin-left: auto; margin-right: auto; }
 }
@@ -329,7 +379,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     .section-title { font-size: 2rem; margin-bottom: 2.5rem; }
     .section-subtitle { font-size: 1rem; margin: -1.5rem auto 2rem; }
 
-    .hero, .customer-type-section, .process-section, .testimonials-section, .contact-section, .contact, .pricing-section, .options-section, .notice-section, .refund-section, .personal-story-section, .expectation-section, .reality-section, #corporate-hero, #corporate-benefits, #story-intro {
+    .hero, .customer-type-section, .process-section, .testimonials-section, .contact-section, .contact, .pricing-section, .options-section, .notice-section, .refund-section, .personal-story-section, .expectation-section, .reality-section, #corporate-hero, #corporate-benefits, #story-intro, #corporate-flow {
         padding: 4rem 1.5rem;
     }
 
@@ -346,12 +396,12 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     .hero-text p, .customer-card p, .step p, #corporate-hero .hero-text p, .benefit-card p { font-size: 1rem; }
 
     .benefits-container { gap: 1.5rem; }
-    .options-container { grid-template-columns: 1fr; }
+    .options-container, .flow-container { grid-template-columns: 1fr; }
     .pricing-card { margin-bottom: 2rem; }
     .reality-intro h2 { font-size: 2rem; }
     .solution-outro h2 { font-size: 2rem; }
     .notice-header h2, .notice-icon { font-size: 1.5rem; }
-    #story-intro h2 { font-size: 1.8rem; }
+    #story-intro h2, #corporate-flow .section-title { font-size: 1.8rem; }
 
     #chat-window {
         width: calc(100vw - 40px); max-height: 70vh; bottom: 90px; right: 20px;

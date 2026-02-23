@@ -21,6 +21,18 @@ ul { list-style: none; }
 .cta-button.inverted { background-color: var(--white-color); color: var(--primary-color); border: 1px solid var(--primary-color); }
 .cta-button.inverted:hover { background-color: var(--primary-color); color: var(--white-color); }
 
+/* --- LANGUAGE-SPECIFIC FONT STYLES --- */
+html[lang="zh"] body, html[lang="zh"] h1, html[lang="zh"] h2, html[lang="zh"] h3, html[lang="zh"] h4, html[lang="zh"] button, html[lang="zh"] a {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+html[lang="zh"] h1, html[lang="zh"] h2, html[lang="zh"] h3, html[lang="zh"] h4, html[lang="zh"] .section-title, html[lang="zh"] .customer-card h3 {
+    font-weight: 600 !important;
+}
+html[lang="zh"] body, html[lang="zh"] p, html[lang="zh"] li, html[lang="zh"] span, html[lang="zh"] div:not([class*="title"]):not(h1):not(h2):not(h3):not(h4) {
+    font-weight: 400 !important;
+}
+
+
 /* --- HEADER --- */
 header { background-color: rgba(255,255,255,0.85); backdrop-filter: saturate(180%) blur(10px); -webkit-backdrop-filter: saturate(180%) blur(10px); padding: 1rem 2rem; border-bottom: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;}
 header .logo a { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); }

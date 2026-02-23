@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTexts(lang) {
         currentLang = lang;
         localStorage.setItem('checkitLang', lang);
+        document.documentElement.lang = lang; // Set language on <html> tag
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');

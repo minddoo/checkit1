@@ -24,9 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-title': '궁금한 점이 있으신가요?', 'contact-subtitle': '24시간 내에 전문 매니저가 답변해드립니다.',
             'contact-email': '이메일 주소를 입력하세요', 'contact-message': '문의 내용을 입력하세요', 'contact-submit': '상담 신청하기',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
-            'chat-title': 'CHECKIT봇', 'chat-welcome': '안녕하세요! 궁금한 점을 물어보세요. 아래에서 자주 묻는 질문을 선택하거나 직접 입력해 주세요.',
+            'chat-title': 'CHECKIT봇', 
+            'chat-welcome': '안녕하세요! 궁금한 점을 물어보세요. 아래에서 자주 묻는 질문을 선택하거나 직접 입력해 주세요.',
             'chat-input-placeholder': '메시지를 입력하세요...',
-            'faq-1': '서비스는 어떤 종류가 있나요?', 'faq-2': '비용은 얼마인가요?', 'faq-3': '예약 절차는 어떻게 되나요?'
+            'faq-1': '서비스는 어떤 종류가 있나요?',
+            'faq-2': '비용은 얼마인가요?',
+            'faq-3': '예약 절차는 어떻게 되나요?',
+            'faq-1-ans': 'CHECKIT은 개인 맞춤형 건강검진 예약, 통역, 결과 번역 등 비의료 전 과정을 지원합니다. 자세한 내용은 <a href="/individual.html">개인 고객 페이지</a>를 참고하세요.',
+            'faq-2-ans': '비용은 선택하시는 검진 프로그램과 부가 서비스에 따라 다릅니다. 기본 플랜은 ...부터 시작하며, 자세한 내용은 <a href="/individual.html#pricing">요금 안내</a>를 확인해주세요.',
+            'faq-3-ans': '홈페이지의 '상담 신청'을 통해 문의를 남겨주시면, 전문 매니저가 24시간 내에 연락드려 모든 과정을 안내해 드립니다.',
+            'faq-default-ans': '죄송합니다. 아직 학습 중이라 답변을 드릴 수 없어요. 더 자세한 문의는 홈페이지의 문의 섹션을 이용해주세요.'
         },
         en: {
             'logo': 'CHECKIT',
@@ -49,9 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-title': 'Have Any Questions?', 'contact-subtitle': 'A professional manager will respond within 24 hours.',
             'contact-email': 'Enter your email address', 'contact-message': 'Enter your message', 'contact-submit': 'Request Consultation',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
-            'chat-title': 'CHECKIT Bot', 'chat-welcome': 'Hello! Feel free to ask anything. Select a frequently asked question below or type your own.',
+            'chat-title': 'CHECKIT Bot', 
+            'chat-welcome': 'Hello! Feel free to ask anything. Select a frequently asked question below or type your own.',
             'chat-input-placeholder': 'Type your message...',
-            'faq-1': 'What types of services are there?', 'faq-2': 'How much does it cost?', 'faq-3': 'What is the reservation process?'
+            'faq-1': 'What types of services are there?',
+            'faq-2': 'How much does it cost?',
+            'faq-3': 'What is the reservation process?',
+            'faq-1-ans': 'CHECKIT supports the entire non-medical process, including personalized health check-up reservations, interpretation, and result translation. For more details, please refer to the <a href="/individual.html">For Individuals page</a>.',
+            'faq-2-ans': 'The cost varies depending on the check-up program and additional services you choose. Basic plans start from..., and you can find more details on our <a href="/individual.html#pricing">Pricing page</a>.',
+            'faq-3-ans': 'If you leave an inquiry through the 'Request Consultation' on our website, a professional manager will contact you within 24 hours to guide you through the process.',
+            'faq-default-ans': 'I apologize, I am still learning and cannot provide an answer. For more detailed inquiries, please use the contact section on our homepage.'
         },
         zh: {
             'logo': 'CHECKIT',
@@ -74,9 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-title': '有任何疑问吗？', 'contact-subtitle': '专业经理将在24小时内回复。',
             'contact-email': '请输入您的电子邮件地址', 'contact-message': '请输入您的留言', 'contact-submit': '申请咨询',
             'footer-copy': '© 2024 CHECKIT. 版权所有。',
-            'chat-title': 'CHECKIT 机器人', 'chat-welcome': '你好！随时提问。请选择下面的常见问题或自行输入。',
+            'chat-title': 'CHECKIT 机器人', 
+            'chat-welcome': '你好！随时提问。请选择下面的常见问题或自行输入。',
             'chat-input-placeholder': '请输入您想问的问题...',
-            'faq-1': '有哪些服务类型？', 'faq-2': '费用是多少？', 'faq-3': '预订流程是怎样的？'
+            'faq-1': '有哪些服务类型？',
+            'faq-2': '费用是多少？',
+            'faq-3': '预订流程是怎样的？',
+            'faq-1-ans': 'CHECKIT 支持整个非医疗过程，包括个性化的健康检查预订、口译和结果翻译。有关详细信息，请参阅<a href="/individual.html">个人客户页面</a>。',
+            'faq-2-ans': '费用因您选择的体检项目和附加服务而异。基本计划的起始价格为...，您可以在我们的<a href="/individual.html#pricing">价格页面</a>上找到更多详细信息。',
+            'faq-3-ans': '如果您通过我们网站上的“请求咨询”留下查询，专业经理将在24小时内与您联系，指导您完成整个过程。',
+            'faq-default-ans': '很抱歉，我还在学习中，无法提供答案。如需更详细的查询，请使用我们主页上的联系部分。'
         },
         vi: {
             'logo': 'CHECKIT',
@@ -99,9 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-title': 'Bạn có câu hỏi nào không?', 'contact-subtitle': 'Một người quản lý chuyên nghiệp sẽ trả lời trong vòng 24 giờ.',
             'contact-email': 'Nhập địa chỉ email của bạn', 'contact-message': 'Nhập tin nhắn của bạn', 'contact-submit': 'Yêu cầu tư vấn',
             'footer-copy': '© 2024 CHECKIT. Mọi quyền được bảo lưu.',
-            'chat-title': 'Bot CHECKIT', 'chat-welcome': 'Xin chào! Cứ tự nhiên hỏi bất cứ điều gì. Chọn một câu hỏi thường gặp bên dưới hoặc tự nhập câu hỏi của bạn.',
+            'chat-title': 'Bot CHECKIT', 
+            'chat-welcome': 'Xin chào! Cứ tự nhiên hỏi bất cứ điều gì. Chọn một câu hỏi thường gặp bên dưới hoặc tự nhập câu hỏi của bạn.',
             'chat-input-placeholder': 'Nhập tin nhắn của bạn...',
-            'faq-1': 'Có những loại dịch vụ nào?', 'faq-2': 'Chi phí là bao nhiêu?', 'faq-3': 'Quy trình đặt hẹn như thế nào?'
+            'faq-1': 'Có những loại dịch vụ nào?',
+            'faq-2': 'Chi phí là bao nhiêu?',
+            'faq-3': 'Quy trình đặt hẹn như thế nào?',
+            'faq-1-ans': 'CHECKIT hỗ trợ toàn bộ quy trình phi y tế, bao gồm đặt chỗ khám sức khỏe cá nhân, phiên dịch và dịch kết quả. Để biết thêm chi tiết, vui lòng tham khảo <a href="/individual.html">trang Dành cho Cá nhân</a>.',
+            'faq-2-ans': 'Chi phí thay đổi tùy thuộc vào chương trình khám sức khỏe và các dịch vụ bổ sung bạn chọn. Các gói cơ bản bắt đầu từ ..., và bạn có thể tìm thêm chi tiết trên <a href="/individual.html#pricing">trang Giá cả</a> của chúng tôi.',
+            'faq-3-ans': 'Nếu bạn để lại yêu cầu qua mục 'Yêu cầu tư vấn' trên trang web của chúng tôi, một người quản lý chuyên nghiệp sẽ liên hệ với bạn trong vòng 24 giờ để hướng dẫn bạn trong suốt quá trình.',
+            'faq-default-ans': 'Tôi xin lỗi, tôi vẫn đang học và không thể cung cấp câu trả lời. Đối với các yêu cầu chi tiết hơn, vui lòng sử dụng phần liên hệ trên trang chủ của chúng tôi.'
         }
     };
 
@@ -126,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.toggle('active', button.dataset.lang === lang);
         });
 
-        updateFAQ(lang);
+        updateFAQButtons(lang);
     }
 
     function setupLangSwitchers() {
@@ -138,13 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentLang = newLang;
                     localStorage.setItem('checkitLang', newLang);
                     updateTexts(newLang);
+                    // Also update the initial bot message
+                    const chatMessages = document.getElementById('chat-messages');
+                    const welcomeMsg = chatMessages.querySelector('.bot-message p');
+                    if(welcomeMsg) {
+                        welcomeMsg.innerHTML = translations[currentLang]['chat-welcome'];
+                    }
                 }
             });
         });
     }
 
     // 2. CHATBOT --------------------------------------
-    function updateFAQ(lang) {
+    function updateFAQButtons(lang) {
         const faqContainer = document.getElementById('faq-options');
         if (!faqContainer) return;
         faqContainer.innerHTML = '';
@@ -189,16 +223,56 @@ document.addEventListener('DOMContentLoaded', () => {
         chatClose.addEventListener('click', closeChat);
 
         const sendMessage = () => {
-            const message = chatInput.value.trim();
-            if (message) {
-                const userMsgDiv = document.createElement('div');
-                userMsgDiv.className = 'message user-message';
-                userMsgDiv.textContent = message;
-                chatMessages.appendChild(userMsgDiv);
-                chatInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                // You can add bot response logic here
+            const messageText = chatInput.value.trim();
+            if (!messageText) return;
+
+            appendMessage('user', messageText);
+            chatInput.value = '';
+            showTypingIndicator();
+
+            setTimeout(() => {
+                getBotResponse(messageText);
+            }, 1200);
+        };
+        
+        const appendMessage = (sender, text) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', `${sender}-message`);
+            messageDiv.innerHTML = text; // Use innerHTML to render links
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const showTypingIndicator = () => {
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(indicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const removeTypingIndicator = () => {
+            const indicator = chatMessages.querySelector('.typing-indicator');
+            if (indicator) {
+                chatMessages.removeChild(indicator);
             }
+        };
+        
+        const getBotResponse = (userMessage) => {
+            let responseKey = 'faq-default-ans'; // Default response
+
+            for (let i = 1; i <= 3; i++) {
+                const faqKey = `faq-${i}`;
+                // Check if the user message contains the FAQ question text
+                if (translations[currentLang][faqKey] && userMessage.includes(translations[currentLang][faqKey])) {
+                    responseKey = `faq-${i}-ans`;
+                    break;
+                }
+            }
+
+            const responseText = translations[currentLang][responseKey];
+            removeTypingIndicator();
+            appendMessage('bot', responseText);
         };
 
         chatSend.addEventListener('click', sendMessage);

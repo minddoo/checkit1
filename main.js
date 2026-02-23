@@ -33,24 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonial-2-author': '- A. Tran (베트남, 관광객)',
             'testimonial-3-text': '“다양한 국적의 외국인 직원들을 위한 건강검진을 관리하는 것은 끔찍한 악몽이었습니다. 예약 누락, 언어 문제, 결과 지연이 흔했습니다. CHECKIT을 사용한 후로 저희의 프로세스는 간소화되었고, 직원들은 진정으로 케어받고 있다고 느낍니다. 팀의 웰빙이 크게 향상되었습니다.”',
             'testimonial-3-author': '- J. Kim (HR 매니저, 기술 회사)',
-            'contact-title': '궁금한 점이 있으신가요?', 'contact-subtitle': '24시간 내에 전문 매니저가 답변해드립니다.',
+            'contact-title': '시작할 준비가 되셨나요?', 'contact-subtitle': '필요한 사항을 알려주시면, 전담 매니저가 24시간 내에 답변해드립니다.',
             'contact-email': '이메일 주소를 입력하세요', 'contact-message': '문의 내용을 입력하세요', 'contact-submit': '상담 신청하기',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
-            'chat-title': 'CHECKIT봇', 
-            'chat-welcome': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
-            'chat-input-placeholder': '메시지를 입력하세요...',
-            'faq-1': '예약은 어떻게 하나요?',
-            'faq-2': '병원/의료인과 계약된 구조인가요?',
-            'faq-3': '의료 행위나 진료 알선을 하나요?',
-            'faq-4': '검진 당일 동행 서비스도 있나요?',
-            'faq-5': '결과지는 어떻게 전달되나요?',
-            'ans-1': '예약은 사이트 하단 \'상담하기\'를 통해 말씀해주시면, 담당 매니저가 1:1 관리를 시작합니다.',
-            'ans-2': '아니요, 저희는 특정 병원을 \'추천\'하지 않습니다. 대신, 고객님의 필요와 선호도에 맞는 병원들의 \'리스트\'를 제공하여, 직접 최적의 병원을 선택하실 수 있도록 돕습니다.',
-            'ans-3': '아니요, 명확히 말씀드리지만 저희는 의료 행위나 진료 알선을 하지 않습니다. 이는 의료법에 저촉될 수 있기 때문입니다. 저희의 역할은 고객님이 원활하게 검진을 받으실 수 있도록 비의료적인 부분(예약, 통역, 안내)을 돕는 것입니다.',
-            'ans-4': '아니요, 저희 매니저가 물리적으로 \'동행\'하지는 않습니다. 대신, 검진 당일 접수부터 종료까지 실시간으로 필요한 모든 의사소통을 원격으로 지원하여 불편함이 없도록 돕는 \'실시간 소통 서비스\'를 제공합니다.',
-            'ans-5': '검진 결과지는 병원에서 발급받는 즉시, 고객님이 요청하신 언어로 번역하여 전달해 드립니다. 저희는 결과에 대한 어떠한 의학적 판단이나 진단을 추가하지 않고, 원본의 내용을 충실하게 번역만 제공합니다.',
-            'faq-default-ans': '문의해주셔서 감사합니다. 해당 내용에 대해서는 홈페이지의 문의 섹션을 통해 질문을 남겨주시면, 전문 매니저가 신속하게 답변해드리겠습니다.',
-            'individual-hero-title': '한국 건강검진의 기대와 현실',
+            
+            'individual-hero-title': '한국 건강검진의 <br>기대와 현실',
             'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다.<br>CHECKIT이 그 간극을 메웁니다.',
             'view-reality-cta': '현실 확인하기',
             'expectation-title': '한국 의료 서비스에 대한 당신의 기대',
@@ -79,6 +66,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality4-li2': '한국을 떠난 후에도 결과가 몇 주 동안 지연됩니다.',
             'reality4-li3': '해외 전화 인증 제한으로 영수증을 받을 수 없습니다.',
             'reality4-li4': '검사 후 규칙(예: 용종 제거 후 비행)에 대한 설명이 없습니다.',
+            'story-intro1': '서류상으로 보면 작은 문제처럼 보입니다.',
+            'story-intro2': '하지만 실제 현실에서는 이렇게 보입니다.',
+            'story-p1': '한국에 오기 전, 모든 것이 안심되게 들렸습니다. 영어 지원이 가능하고, 외국인들이 자주 이용하며, 모든 과정이 순조롭고 잘 안내될 것이라고 들었습니다.',
+            'story-p2': '그리고 예약을 시도했습니다.',
+            'story-p3': '그때부터 모든 것이 무너지기 시작했습니다.',
+            'story-p4': '영어를 할 줄 아는 사람이 아무도 없었습니다. 모든 안내, 알림, 준비사항은 한국어로만 되어 있었습니다. 약속받았던 것과는 너무나 다른 현실에 놀랐습니다.',
+            'story-p5': '일정을 확정하는 데만 며칠이 걸렸습니다. 전화는 받지 않았고, 답장은 늦거나 오지 않았습니다. 기본적인 것을 이해하려고 할 때마다 너무 많은 것을 요구하는 것처럼 느껴졌습니다.',
+            'story-p6': '검진 당일, 혼란은 극에 달했습니다. 누군가 안내해 줄 것이라고 했지만, 어디로 가야 할지, 무엇을 가져가야 할지, 누구에게 물어봐야 할지 전혀 몰랐습니다.',
+            'story-p7': '직원들은 한국어로 빠르게 말하고, 애매하게 손짓하며 지나갔습니다. 한 검사는 설명도 없이 중단되었고, 다른 곳으로 가라는 간단한 손짓만 있었습니다.',
+            'story-p8': '그 순간, 저는 완전히 혼자라는 것을 깨달았습니다.',
+            'story-p9': '저는 결과를 받지 못한 채 한국을 떠났습니다. 며칠이 몇 주가 되었습니다. 후속 조치도, 명확한 답변도 없었습니다. 책임감을 느끼는 사람도 없었습니다.',
+            'story-p10': '그리고 마침내, 저는 중요한 것을 깨달았습니다. 오기 전에 들었던 약속들은 도착해서 마주한 현실과 전혀 달랐습니다.',
             'solution-title': 'CHECKIT이 바로 해결책입니다',
             'solution-desc': '저희가 모든 비의료 과정을 처리하므로 당신은 건강에만 집중할 수 있습니다.<br>혼란, 실수, 스트레스 없이 편안하게 검진받으세요.',
             'pricing-title': '플랜 선택하기',
@@ -89,11 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-feat1': '중립적인 병원 목록 (추천 없음)', 'plan1-feat2': '프로그램 및 가격 구조 (공식 정보 번역만 제공)', 'plan1-feat3': '단계별 예약 가이드', 'plan1-feat4': '모든 병원 서류의 영어 번역', 'plan1-feat5': '필수 문진표 가이드 (간단, 실수 방지)', 'plan1-feat6': '필수 검진 전 안내 (금식 및 기본 준비)', 'plan1-feat7': '검진 당일 준비물 안내', 'plan1-feat8': '이메일을 통한 안전한 결과 전달', 'plan1-feat9': '결과 지연 1회 확인 포함',
             'plan1-best-for': '명확한 정보와 함께 스스로 과정을 관리하고 싶은 분.',
             'plan2-title': 'Zero-Mistake Plan', 
-            'plan2-included': '(No-Confusion Plan 모두 포함 +)',
+            'plan2-included': '(400달러 플랜 모두 포함 +)',
             'plan2-feat1': '강화된 문진표 가이드 (상세, 실수 방지 중심)', 'plan2-feat2': '외국인들이 자주 놓치는 실수 알림', 'plan2-feat3': '1회 서식 확인 (누락 항목, 서명, 날짜)', 'plan2-feat4': '검진 전 가이드 팩 (타임라인 + 지연 유발 요인)', 'plan2-feat5': '대장내시경 준비 기본 (해당 시)', 'plan2-feat6': '시간에 민감한 문제에 대한 우선 메시지', 'plan2-feat7': '결과 후속 조치 (1회)', 'plan2-feat8': '누락 또는 지연된 서류에 대한 알림', 'plan2-feat9': '일정 변경 지원 (1회 포함)',
             'plan2-best-for': '흔한 실수와 일정 지연을 방지하고 싶은 분.',
             'plan3-title': 'Total-Safe Plan',
-            'plan3-included': '(Zero-Mistake Plan 모두 포함 +)',
+            'plan3-included': '(500달러 플랜 모두 포함 +)',
             'plan3-feat1': '프리미엄 문진표 관리', 'plan3-feat2': '위험 포인트 설명 (비의료적, 절차 기반)', 'plan3-feat3': '복잡한 서식 항목을 위한 영어 답변 템플릿', 'plan3-feat4': '전체 서식 확인 (모든 페이지, 서명, 첨부파일)', 'plan3-feat5': '프리미엄 검진 전 팩 (상세 타임라인, 실수 대응 플로우)', 'plan3-feat6': '실시간 검진 당일 채팅 지원', 'plan3-feat7': '병원 내 동선 가이드 (그래픽)', 'plan3-feat8': '영문 영수증 요청 (대행)', 'plan3-feat9': 'CD / 추가 서류 요청', 'plan3-feat10': '결과 나올 때까지 완전한 검진 후 후속 조치', 'plan3-feat11': '결과 구성 (비의료적, 내용 구성만)', 'plan3-feat12': '병원 소통용 템플릿', 'plan3-feat13': '일정 변경 지원 (최대 3회 포함)',
             'plan3-best-for': '완벽하게 스트레스 없는 경험을 원하는 모든 분.',
             'options-title': '옵션', 
@@ -104,6 +103,35 @@ document.addEventListener('DOMContentLoaded', () => {
             'option5-title': '그래픽 동선 가이드', 'option5-desc': '정확한 병원 내 동선과 이동 흐름을 보여줍니다. 첫 방문객에게 유용합니다.',
             'option6-title': '일정 변경', 'option6-desc': '예약 후 예약을 변경해야 하는 고객을 위한 옵션입니다.',
             'option6-sub1': '1회 변경', 'option6-sub2': '2회 패키지', 'option6-sub3': '무제한 변경',
+            'notice-title': '공지',
+            'notice-subtitle': '왜 한국에서는 외국인들이 같은 건강검진에 더 많은 비용을 지불할까요?',
+            'notice-q-intro': '저희는 종종 이런 질문을 받습니다.',
+            'notice-q': '"왜 병원이 제공하는 것보다 당신들의 옵션이 더 저렴한가요?"',
+            'notice-a1-title': '짧은 답변:',
+            'notice-a1-p1': '검사가 달라서가 아닙니다.',
+            'notice-a1-p2': '가격 구조가 다르기 때문입니다.',
+            'notice-a2-title': '많은 병원에서 실제로 일어나는 일',
+            'notice-a2-p1': '대부분의 병원들은 별도의 "외국인 패키지"를 만듭니다. 이 패키지들은 종종 내국인들은 지불하지 않는 서비스들을 묶어 총가격을 높입니다.',
+            'notice-a3-title': '외국인 고객들에게서 흔히 볼 수 있는 상황',
+            'notice-a3-p1': '한 고객은 외국인 패키지로 180만원을 견적 받았습니다. 저희의 안내를 통해 같은 검사를 105만원에 예약했습니다.',
+            'refund-title': '환불 정책',
+            'refund-non-refundable-title': '환불이 불가능한 경우',
+            'refund-non-refundable-desc': '아래 항목 중 하나에 해당하는 경우 환불을 제공할 수 없습니다. 이러한 사건들은 저희의 통제 범위를 벗어나며 병원의 행정 또는 의료 절차 내에서 발생합니다.',
+            'refund-nr-li1': '병원 측 문제 (지연, 시스템 오류, 의사 일정 변경, 추가 검사 필요)',
+            'refund-nr-li2': '고객의 불충분한 준비',
+            'refund-nr-li3': '고객이 제공된 지침을 따르지 않은 경우',
+            'refund-nr-li4': '부정확하거나 불완전한 설문지',
+            'refund-nr-li5': '금식 실패 또는 제한된 음식 섭취',
+            'refund-nr-li6': '고객이 만든 일정 실수',
+            'refund-nr-li7': '병원으로 인한 결과 지연',
+            'refund-nr-li8': '고객의 필수 정보 제출 지연',
+            'refund-nr-li9': '의료 시스템 내에서 자연스럽게 발생할 수 있는 사건 (예상치 못한 업무 흐름 지연, 내부 처리 시간, 병원 프로토콜)',
+            'refund-full-refund-title': '전액 환불이 가능한 경우',
+            'refund-full-refund-desc': '실수가 명백히 저희 측에 있을 경우에만 전액 환불이 가능합니다.',
+            'refund-fr-li1': '저희가 잘못된 정보를 제공한 경우 (잘못된 날짜, 잘못된 지침, 잘못된 양식)',
+            'refund-fr-li2': '저희가 필수 공지나 준비 지침을 보내지 못한 경우',
+            'refund-fr-li3': '저희가 플랜에 포함된 서류를 요청하지 못한 경우',
+            'refund-fr-li4': '저희의 실수로 결과가 지연된 경우'
         },
         'en': {
             'logo': 'CHECKIT',
@@ -128,24 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonial-2-author': '- A. Tran (Vietnam, Tourist)',
             'testimonial-3-text': '“Managing health checks for our diverse team of foreign employees was a logistical nightmare. Missed appointments, language issues, and delayed results were common. Since using CHECKIT, our process is streamlined, and our employees feel truly cared for. It has significantly improved our team\'s well-being.”',
             'testimonial-3-author': '- J. Kim (HR Manager, Tech Firm)',
-            'contact-title': 'Have Any Questions?', 'contact-subtitle': 'A professional manager will respond within 24 hours.',
+            'contact-title': 'Ready to Get Started?', 'contact-subtitle': 'Tell us your needs, and a dedicated manager will respond within 24 hours.',
             'contact-email': 'Enter your email address', 'contact-message': 'Enter your message', 'contact-submit': 'Request Consultation',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
-            'chat-title': 'CHECKIT Bot', 
-            'chat-welcome': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
-            'chat-input-placeholder': 'Type your message...',
-            'faq-1': 'How do I make a reservation?',
-            'faq-2': 'Is it a contract structure with hospitals/doctors?',
-            'faq-3': 'Do you perform medical acts or referrals?',
-            'faq-4': 'Do you also offer same-day accompaniment?',
-            'faq-5': 'How are the results delivered?',
-            'ans-1': 'For reservations, please use the \'Request Consultation\' at the bottom of our site. A dedicated manager will then begin your 1:1 care.',
-            'ans-2': 'No, we don\'t \'recommend\' a specific hospital. Instead, we provide a \'list\' of hospitals that fit your needs and preferences, helping you choose the optimal one yourself.',
-            'ans-3': 'No, to be clear, we do not perform medical acts or make medical referrals as this could violate medical laws. Our role is to assist with the non-medical aspects (reservations, interpretation, guidance) to ensure you have a smooth check-up experience.',
-            'ans-4': 'No, our managers do not physically \'accompany\' you. Instead, we offer a \'real-time communication service\' on the day of the exam to remotely assist with all necessary communication from check-in to check-out, ensuring a smooth process.',
-            'ans-5': 'As soon as the examination results are issued by the hospital, we translate them into your requested language and deliver them to you. We do not add any medical judgment or diagnosis to the results; we only provide a faithful translation of the original content.',
-            'faq-default-ans': 'Thank you for your inquiry. For this matter, please leave a question through the contact section on our homepage, and a professional manager will respond promptly.',
-            'individual-hero-title': 'Health Check-ups in Korea: Expectation vs. Reality',
+            
+            'individual-hero-title': 'Health Check-ups in Korea: <br>Expectation vs. Reality',
             'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety.<br>CHECKIT bridges the gap.',
             'view-reality-cta': 'See the Reality',
             'expectation-title': 'What You Expect from Korean Healthcare',
@@ -174,6 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality4-li2': 'Results delayed for weeks — even after you leave Korea.',
             'reality4-li3': 'You can’t get receipts due to overseas phone verification limits.',
             'reality4-li4': 'No explanation about post-exam rules (e.g., flying after polyp removal).',
+            'story-intro1': 'These issues look small on paper.',
+            'story-intro2': 'But here\'s what they actually look like in real life.',
+            'story-p1': 'Before I came to Korea, everything sounded reassuring. I was told there was English support, that foreigners used the service often, and that the whole process would be smooth and well guided.',
+            'story-p2': 'Then I tried to make a reservation.',
+            'story-p3': 'That\'s when things began to fall apart.',
+            'story-p4': 'No one could actually speak English. Every guide, alert, and preparation note was only in Korean—which was surprising, considering what I had been promised.',
+            'story-p5': 'It took days just to confirm a schedule. Calls went unanswered. Replies came late or didn\'t come at all. Each follow-up made me feel like I was asking for too much... even though I was only trying to understand the basics.',
+            'story-p6': 'On the day of the exam, the confusion peaked. Even though they said someone would guide me, I didn\'t know where to go, what to bring, or who to ask.',
+            'story-p7': 'Staff spoke quickly in Korean, pointed vaguely, and moved on. One test was stopped halfway with no explanation—just a brief gesture telling me to head somewhere else.',
+            'story-p8': 'At that moment, I realized I was completely on my own.',
+            'story-p9': 'I left Korea without receiving my results. Days turned into weeks. No follow-up. No clear answer. No one who felt responsible.',
+            'story-p10': 'And in the end, I understood something important: the promises I heard before coming did not match the reality I faced once I arrived.',
             'solution-title': 'CHECKIT is the Solution',
             'solution-desc': 'We handle the entire non-medical process so you can focus on your health.<br>Enjoy a check-up experience with no confusion, no mistakes, and no stress.',
             'pricing-title': 'Choose Your Plan',
@@ -184,11 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-feat1': 'Neutral hospital list (no recommendations)', 'plan1-feat2': 'Program & price structure (official info translated only)', 'plan1-feat3': 'Step-by-step reservation guide', 'plan1-feat4': 'English translation of all hospital documents', 'plan1-feat5': 'Essential Questionnaire Guide (simple, mistake-free)', 'plan1-feat6': 'Essential pre-check instructions (fasting & basic preparation)', 'plan1-feat7': 'What to bring on exam day', 'plan1-feat8': 'Secure result delivery via email', 'plan1-feat9': 'One-time result delay check included',
             'plan1-best-for': 'Travelers who want clarity and self-guided support.',
             'plan2-title': 'Zero-Mistake Plan',
-            'plan2-included': 'Included (everything in No-Confusion Plan +)',
+            'plan2-included': 'Included (everything in 400 +)',
             'plan2-feat1': 'Enhanced Questionnaire Guide (detailed, mistake-prevention focused)', 'plan2-feat2': 'Common mistake alerts that foreigners often miss', 'plan2-feat3': 'One-time format check (missing fields, signatures, dates)', 'plan2-feat4': 'Pre-check Guide Pack (timeline + what commonly causes delays)', 'plan2-feat5': 'Colonoscopy preparation basics (if relevant)', 'plan2-feat6': 'Priority messaging for time-sensitive issues', 'plan2-feat7': 'Result follow-up (1 time)', 'plan2-feat8': 'Document alerts for missing or delayed paperwork', 'plan2-feat9': 'Schedule change support (1 time included)',
             'plan2-best-for': 'Those who want to avoid common mistakes and delays.',
             'plan3-title': 'Total-Safe Plan',
-            'plan3-included': 'Included (everything in Zero-Mistake Plan +)',
+            'plan3-included': 'Included (everything in 500 +)',
             'plan3-feat1': 'Premium Questionnaire Management', 'plan3-feat2': 'Risk-point explanation (non-medical, process-based)', 'plan3-feat3': 'English answer templates for complex form items', 'plan3-feat4': 'Complete format check (all pages, signatures, attachments)', 'plan3-feat5': 'Premium Pre-check Pack (detailed timeline, mistake-response flow)', 'plan3-feat6': 'Real-time exam-day chat support', 'plan3-feat7': 'Hospital navigation guide (graphic)', 'plan3-feat8': 'English receipt request (handled on your behalf)', 'plan3-feat9': 'CD / additional document request', 'plan3-feat10': 'Full post-exam follow-up until results are delivered', 'plan3-feat11': 'Result structuring (non-medical, content organization only)', 'plan3-feat12': 'Templates for communicating with the hospital', 'plan3-feat13': 'Schedule change support (up to 3 times included)',
             'plan3-best-for': 'Anyone who wants a completely stress-free experience.',
             'options-title': 'Options',
@@ -199,6 +226,35 @@ document.addEventListener('DOMContentLoaded', () => {
             'option5-title': 'Graphic Navigation Guide', 'option5-desc': 'Shows the exact hospital layout and movement flow. Helpful for first-time visitors.',
             'option6-title': 'Schedule Change', 'option6-desc': 'For customers who need to change their reservation after booking.',
             'option6-sub1': 'Single Change', 'option6-sub2': 'Double Package', 'option6-sub3': 'Unlimited Changes',
+            'notice-title': 'NOTICE',
+            'notice-subtitle': 'Why foreigners pay more for the same medical checkups in Korea',
+            'notice-q-intro': 'We\'re often asked this question.',
+            'notice-q': '"Why are your options cheaper than what hospitals offer?"',
+            'notice-a1-title': 'The short answer:',
+            'notice-a1-p1': 'It\'s not because the tests are different.',
+            'notice-a1-p2': 'It\'s because the pricing structure is.',
+            'notice-a2-title': 'What actually happens in many hospitals',
+            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don't pay for – which raises the total price.',
+            'notice-a3-title': 'A common situation we see with foreign clients',
+            'notice-a3-p1': 'A client was quoted ₩1,800,000 for a foreigner package. With guidance, the same tests were booked for ₩1,050,000.',
+            'refund-title': 'REFUND POLICY',
+            'refund-non-refundable-title': 'Non-Refundable Situations',
+            'refund-non-refundable-desc': 'We cannot provide a refund if your situation falls under any of the categories below. These events are outside our control and occur within the hospital\'s own administrative or medical processes.',
+            'refund-nr-li1': 'Hospital-side issues (delays, system errors, doctor schedule changes, additional tests required)',
+            'refund-nr-li2': 'Insufficient preparation by the customer',
+            'refund-nr-li3': 'The customer did not follow the provided instructions',
+            'refund-nr-li4': 'Incorrect or incomplete questionnaire',
+            'refund-nr-li5': 'Fasting failure or consuming restricted foods',
+            'refund-nr-li6': 'Schedule mistakes made by the customer',
+            'refund-nr-li7': 'Delayed results caused by the hospital',
+            'refund-nr-li8': 'Late submission of required information by the customer',
+            'refund-nr-li9': 'Events naturally possible within medical systems (unexpected workflow delays, internal processing times, hospital protocols)',
+            'refund-full-refund-title': 'Full Refund Situations',
+            'refund-full-refund-desc': 'A full refund is issued only when the mistake is clearly on our side.',
+            'refund-fr-li1': 'We provided incorrect information (wrong dates, wrong instructions, wrong forms)',
+            'refund-fr-li2': 'We failed to send mandatory notices or preparation instructions',
+            'refund-fr-li3': 'We failed to request a document that was included in your plan',
+            'refund-fr-li4': 'We delayed your results due to our error'
         },
         'zh': {
             'logo': 'CHECKIT',
@@ -223,24 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonial-2-author': '- A. Tran (越南, 游客)',
             'testimonial-3-text': '“为我们多元化的外籍员工团队管理健康检查是一场后勤噩梦。错过预约、语言问题和结果延迟是常有的事。自从使用CHECKIT后，我们的流程变得顺畅，员工们也感受到了真正的关怀。这极大地改善了我们团队的福祉。”',
             'testimonial-3-author': '- J. Kim (人力资源经理, 科技公司)',
-            'contact-title': '有任何疑问吗？', 'contact-subtitle': '专业经理将在24小时内回复。',
+            'contact-title': '准备好开始了吗？', 'contact-subtitle': '告诉我们您的需求，专属经理将在24小时内回复。',
             'contact-email': '请输入您的电子邮件地址', 'contact-message': '请输入您的留言', 'contact-submit': '申请咨询',
             'footer-copy': '© 2024 CHECKIT. 版权所有。',
-            'chat-title': 'CHECKIT 机器人', 
-            'chat-welcome': '你好！对CHECKIT有任何疑问吗？请选择以下问题或自行输入。',
-            'chat-input-placeholder': '请输入您想问的问题',
-            'faq-1': '如何进行预订？',
-            'faq-2': '是与医院/医生签约的模式吗？',
-            'faq-3': '你们是否提供医疗行为或转诊服务？',
-            'faq-4': '体检当天是否提供陪同服务？',
-            'faq-5': '检查结果如何传达？',
-            'ans-1': '预订请通过网站底部的“申请咨询”进行，专属经理将开始您的1:1管理。',
-            'ans-2': '不，我们不“推荐”特定医院。我们会根据您的需求和偏好，提供一份医院“列表”，帮助您自己选择最合适的医院。',
-            'ans-3': '不，我们明确声明不进行医疗行为或医疗转诊，因为这可能违反医疗法规。我们的职责是帮助您顺利完成体检的非医疗部分（预订、翻译、引导）。',
-            'ans-4': '不，我们的经理不会亲自“陪同”您。但在体检当天，我们提供“实时沟通服务”，远程协助您完成从挂号到结束的所有必要沟通，确保过程顺利。',
-            'ans-5': '医院出具检查结果后，我们会立即将其翻译成您要求的语言并交付给您。我们不会对结果添加任何医疗判断或诊断，仅提供对原始内容的忠实翻译。',
-            'faq-default-ans': '感谢您的询问。关于此事，请通过我们主页上的联系部分留下问题，专业经理将迅速回复。',
-            'individual-hero-title': '韩国健康体检：期望与现实',
+            
+            'individual-hero-title': '韩国健康体检：<br>期望与现实',
             'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。<br>CHECKIT 弥合了这一差距。',
             'view-reality-cta': '看看现实',
             'expectation-title': '您对韩国医疗保健的期望',
@@ -263,12 +306,24 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality3-li1': '仅确保预订就需要 2-3 天。',
             'reality3-li2': '不同的工作人员给出不同的答案 — 没人负责。',
             'reality3-li3': '没有韩国电话号码 → 没有提醒或准备说明。',
-            'reality3-li4': '海外时差 → 通話失败，预订延迟。',
+            'reality3-li4': '海外时差 → 通话失败，预订延迟。',
             'reality4-title': '结果延迟和零责任制',
             'reality4-li1': '结果通过邮件寄到您没有的地址。',
             'reality4-li2': '即使在您离开韩国后，结果仍延迟数周。',
             'reality4-li3': '由于海外电话验证限制，您无法获得收据。',
             'reality4-li4': '没有关于检查后规则的解释（例如，息肉切除后飞行）。',
+            'story-intro1': '这些问题在纸面上看起来很小。',
+            'story-intro2': '但现实生活中它们是这样的。',
+            'story-p1': '来韩国之前，一切听起来都很让人放心。我被告知有英语支持，外国人经常使用这项服务，整个过程会很顺利，指导得很好。',
+            'story-p2': '然后我尝试预订。',
+            'story-p3': '就在那时，事情开始崩溃了。',
+            'story-p4': '没有人能真正说英语。每一个指南、提醒和准备说明都只有韩语——考虑到我之前得到的承诺，这令人惊讶。',
+            'story-p5': '仅仅确认一个日程就花了好几天。电话无人接听。回复很晚或者根本没有。每一次跟进都让我觉得我要求得太多了……尽管我只是想了解基本情况。',
+            'story-p6': '检查当天，困惑达到了顶点。尽管他们说会有人引导我，但我不知道该去哪里，该带什么，或者该问谁。',
+            'story-p7': '工作人员用韩语快速地说着，含糊地指着，然后就走开了。一项检查在没有解释的情况下中途停止了——只是一个简短的手势，告诉我该去别的地方了。',
+            'story-p8': '那一刻，我意识到我完全是孤身一人。',
+            'story-p9': '我没有收到结果就离开了韩国。几天变成了几周。没有跟进。没有明确的答复。没有人感到负责。',
+            'story-p10': '最后，我明白了一件重要的事情：我来之前听到的承诺与我到达后面对的现实不符。',
             'solution-title': 'CHECKIT 是解决方案',
             'solution-desc': '我们处理整个非医疗流程，因此您可以专注于您的健康。<br>体验无忧、无误、无压力的体检。',
             'pricing-title': '选择您的计划',
@@ -279,11 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-feat1': '中立医院名单（无推荐）', 'plan1-feat2': '项目和价格结构（仅翻译官方信息）', 'plan1-feat3': '分步预订指南', 'plan1-feat4': '所有医院文件的英文翻译', 'plan1-feat5': '基本问卷指南（简单，无错误）', 'plan1-feat6': '基本预检说明（禁食和基本准备）', 'plan1-feat7': '检查当天携带物品', 'plan1-feat8': '通过电子邮件安全发送结果', 'plan1-feat9': '包括一次性结果延迟检查',
             'plan1-best-for': '希望获得清晰信息并进行自我指导的旅行者。',
             'plan2-title': '零失误计划',
-            'plan2-included': '（包括 No-Confusion Plan 中的所有内容 +）',
+            'plan2-included': '（包括 400 美元套餐中的所有项目 +）',
             'plan2-feat1': '增强版问卷指南（详细，注重防错）', 'plan2-feat2': '外国人常犯的错误提醒', 'plan2-feat3': '一次性格式检查（缺失字段、签名、日期）', 'plan2-feat4': '预检指南包（时间表+通常导致延迟的原因）', 'plan2-feat5': '结肠镜检查准备基础知识（如果相关）', 'plan2-feat6': '时间敏感问题的优先消息传递', 'plan2-feat7': '结果跟进（1次）', 'plan2-feat8': '文件丢失或延迟的提醒', 'plan2-feat9': '日程变更支持（包括1次）',
             'plan2-best-for': '希望避免常见错误和延误的人士。',
             'plan3-title': '全面安全计划',
-            'plan3-included': '（包括 Zero-Mistake Plan 中的所有内容 +）',
+            'plan3-included': '（包括 500 美元套餐中的所有项目 +）',
             'plan3-feat1': '高级问卷管理', 'plan3-feat2': '风险点解释（非医疗，基于流程）', 'plan3-feat3': '复杂表格项目的英文答案模板', 'plan3-feat4': '完整的格式检查（所有页面、签名、附件）', 'plan3-feat5': '高级预检包（详细时间表，错误响应流程）', 'plan3-feat6': '实时检查日聊天支持', 'plan3-feat7': '医院导航指南（图文）', 'plan3-feat8': '英文收据请求（代为处理）', 'plan3-feat9': 'CD/附加文件请求', 'plan3-feat10': '直到结果交付的全面检查后跟进', 'plan3-feat11': '结果结构化（非医疗，仅内容组织）', 'plan3-feat12': '与医院沟通的模板', 'plan3-feat13': '日程变更支持（最多包括3次）',
             'plan3-best-for': '任何想要完全无压力体验的人。',
             'options-title': '选项',
@@ -294,6 +349,35 @@ document.addEventListener('DOMContentLoaded', () => {
             'option5-title': '图文导航指南', 'option5-desc': '显示确切的医院布局和移动流程。对首次访客有帮助。',
             'option6-title': '日程变更', 'option6-desc': '适用于预订后需要更改预订的客户。',
             'option6-sub1': '单次变更', 'option6-sub2': '双次套餐', 'option6-sub3': '无限次变更',
+            'notice-title': '注意',
+            'notice-subtitle': '为什么外国人在韩国做同样的体检要付更多的钱',
+            'notice-q-intro': '我们经常被问到这个问题。',
+            'notice-q': '“为什么你们的选择比医院提供的便宜？”',
+            'notice-a1-title': '简短的回答是：',
+            'notice-a1-p1': '不是因为测试不同。',
+            'notice-a1-p2': '而是因为定价结构不同。',
+            'notice-a2-title': '许多医院的实际情况',
+            'notice-a2-p1': '大多数医院都设立了单独的“外国人套餐”。这些套餐通常捆绑了本地人不需要付费的服务，从而提高了总价。',
+            'notice-a3-title': '我们外国客户的常见情况',
+            'notice-a3-p1': '一位客户的外国人套餐报价为1,800,000韩元。在指导下，同样的测试以1,050,000韩元的价格预订。',
+            'refund-title': '退款政策',
+            'refund-non-refundable-title': '不可退款的情况',
+            'refund-non-refundable-desc': '如果您的情况属于以下任何一类，我们无法提供退款。这些事件超出了我们的控制范围，发生在医院自身的行政或医疗程序中。',
+            'refund-nr-li1': '医院方面的问题（延误、系统错误、医生日程变更、需要额外检查）',
+            'refund-nr-li2': '客户准备不充分',
+            'refund-nr-li3': '客户未遵守提供的指示',
+            'refund-nr-li4': '问卷不正确或不完整',
+            'refund-nr-li5': '禁食失败或食用了限制性食物',
+            'refund-nr-li6': '客户自己造成的日程安排错误',
+            'refund-nr-li7': '医院造成的检查结果延迟',
+            'refund-nr-li8': '客户延迟提交所需信息',
+            'refund-nr-li9': '医疗系统中可能自然发生的事件（意外的工作流程延迟、内部处理时间、医院协议）',
+            'refund-full-refund-title': '全额退款的情况',
+            'refund-full-refund-desc': '只有在错误明显由我方造成时，才会全额退款。',
+            'refund-fr-li1': '我们提供了不正确的信息（错误的日期、错误的说明、错误的表格）',
+            'refund-fr-li2': '我们未能发送强制性通知或准备说明',
+            'refund-fr-li3': '我们未能索取您计划中包含的文件',
+            'refund-fr-li4': '由于我们的失误，您的结果被延迟了'
         },
         'vi': {
             'logo': 'CHECKIT',
@@ -318,24 +402,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonial-2-author': '- A. Tran (Việt Nam, Khách du lịch)',
             'testimonial-3-text': '“Việc quản lý kiểm tra sức khỏe cho đội ngũ nhân viên nước ngoài đa dạng của chúng tôi là một cơn ác mộng về hậu cần. Các cuộc hẹn bị bỏ lỡ, vấn đề ngôn ngữ và kết quả chậm trễ là chuyện thường tình. Kể từ khi sử dụng CHECKIT, quy trình của chúng tôi đã được sắp xếp hợp lý và nhân viên của chúng tôi cảm thấy được quan tâm thực sự. Điều này đã cải thiện đáng kể sức khỏe của đội ngũ chúng tôi.”',
             'testimonial-3-author': '- J. Kim (Trưởng phòng Nhân sự, Công ty Công nghệ)',
-            'contact-title': 'Bạn có câu hỏi nào không?', 'contact-subtitle': 'Một người quản lý chuyên nghiệp sẽ trả lời trong vòng 24 giờ.',
+            'contact-title': 'Sẵn sàng để bắt đầu?', 'contact-subtitle': 'Hãy cho chúng tôi biết nhu cầu của bạn và một người quản lý riêng sẽ trả lời trong vòng 24 giờ.',
             'contact-email': 'Nhập địa chỉ email của bạn', 'contact-message': 'Nhập tin nhắn của bạn', 'contact-submit': 'Yêu cầu tư vấn',
             'footer-copy': '© 2024 CHECKIT. Mọi quyền được bảo lưu.',
-            'chat-title': 'Bot CHECKIT', 
-            'chat-welcome': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi bên dưới hoặc tự nhập câu hỏi của bạn.',
-            'chat-input-placeholder': 'Nhập tin nhắn của bạn...',
-            'faq-1': 'Làm cách nào để đặt chỗ?',
-            'faq-2': 'Đây có phải là cấu trúc hợp đồng với bệnh viện/bác sĩ không?',
-            'faq-3': 'Bạn có thực hiện các hành vi y tế hoặc giới thiệu không?',
-            'faq-4': 'Bạn có cung cấp dịch vụ đi cùng trong ngày không?',
-            'faq-5': 'Kết quả được giao như thế nào?',
-            'ans-1': 'Để đặt hẹn, vui lòng sử dụng mục \'Yêu cầu Tư vấn\' ở cuối trang web của chúng tôi. Một người quản lý riêng sẽ bắt đầu chăm sóc 1:1 cho bạn.',
-            'ans-2': 'Không, chúng tôi không \'đề xuất\' một bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp một \'danh sách\' các bệnh viện phù hợp với nhu cầu và sở thích của bạn, giúp bạn tự mình chọn lựa bệnh viện tối ưu nhất.',
-            'ans-3': 'Không, để rõ ràng, chúng tôi không thực hiện các hành vi y tế hoặc giới thiệu y tế vì điều này có thể vi phạm luật y tế. Vai trò của chúng tôi là hỗ trợ các khía cạnh phi y tế (đặt chỗ, phiên dịch, hướng dẫn) để đảm bảo bạn có một trải nghiệm khám sức khỏe thuận lợi.',
-            'ans-4': 'Không, người quản lý của chúng tôi không \'đi cùng\' bạn. Thay vào đó, chúng tôi cung cấp \'dịch vụ giao tiếp thời gian thực\' vào ngày khám để hỗ trợ từ xa mọi giao tiếp cần thiết từ lúc đăng ký cho đến khi kết thúc, đảm bảo quá trình diễn ra suôn sẻ.',
-            'ans-5': 'Ngay sau khi kết quả khám được bệnh viện cấp, chúng tôi sẽ dịch chúng sang ngôn ngữ bạn yêu cầu và giao cho bạn. Chúng tôi không thêm bất kỳ nhận định hoặc chẩn đoán y tế nào vào kết quả; chúng tôi chỉ cung cấp một bản dịch trung thành của nội dung gốc.',
-            'faq-default-ans': 'Cảm ơn bạn đã yêu cầu. Về vấn đề này, vui lòng để lại câu hỏi qua phần liên hệ trên trang chủ của chúng tôi và một người quản lý chuyên nghiệp sẽ trả lời nhanh chóng.',
-            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc: Kỳ vọng và Thực tế',
+            
+            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc: <br>Kỳ vọng và Thực tế',
             'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng.<br>CHECKIT thu hẹp khoảng cách đó.',
             'view-reality-cta': 'Xem thực tế',
             'expectation-title': 'Những gì bạn mong đợi từ chăm sóc sức khỏe Hàn Quốc',
@@ -363,7 +434,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality4-li1': 'Kết quả được gửi bằng thư đến một địa chỉ bạn không có.',
             'reality4-li2': 'Kết quả bị trì hoãn trong nhiều tuần - ngay cả sau khi bạn rời Hàn Quốc.',
             'reality4-li3': 'Bạn không thể nhận được biên lai do giới hạn xác minh điện thoại ở nước ngoài.',
-            'reality4-li4': 'Không có giải thích về các quy tắc sau kỳ thi (ví dụ: bay sau khi cắt bỏ polyp). ',
+            'reality4-li4': 'Không có giải thích về các quy tắc sau kỳ thi (ví dụ: bay sau khi cắt bỏ polyp).',
+            'story-intro1': 'Những vấn đề này có vẻ nhỏ trên giấy tờ.',
+            'story-intro2': 'Nhưng đây là những gì chúng thực sự trông như thế nào trong cuộc sống thực.',
+            'story-p1': 'Trước khi tôi đến Hàn Quốc, mọi thứ nghe có vẻ yên tâm. Tôi được cho biết có hỗ trợ tiếng Anh, người nước ngoài thường xuyên sử dụng dịch vụ và toàn bộ quá trình sẽ diễn ra suôn sẻ và được hướng dẫn tốt.',
+            'story-p2': 'Sau đó, tôi đã cố gắng đặt chỗ.',
+            'story-p3': 'Đó là lúc mọi thứ bắt đầu đổ vỡ.',
+            'story-p4': 'Không ai thực sự có thể nói được tiếng Anh. Mọi hướng dẫn, cảnh báo và ghi chú chuẩn bị đều chỉ bằng tiếng Hàn - điều này thậtน่า ngạc nhiên, nếu xét đến những gì tôi đã được hứa.',
+            'story-p5': 'Phải mất nhiều ngày chỉ để xác nhận lịch trình. Các cuộc gọi không được trả lời. Các câu trả lời đến muộn hoặc không bao giờ đến. Mỗi lần theo dõi đều khiến tôi cảm thấy như mình đang đòi hỏi quá nhiều... mặc dù tôi chỉ đang cố gắng để hiểu những điều cơ bản.',
+            'story-p6': 'Vào ngày khám, sự bối rối lên đến đỉnh điểm. Mặc dù họ nói sẽ có người hướng dẫn tôi, nhưng tôi không biết phải đi đâu, mang theo gì, hoặc hỏi ai.',
+            'story-p7': 'Nhân viên nói nhanh bằng tiếng Hàn, chỉ trỏ một cách mơ hồ rồi bỏ đi. Một cuộc kiểm tra đã bị dừng lại giữa chừng mà không có lời giải thích nào — chỉ là một cử chỉ ngắn gọn bảo tôi đi đến một nơi khác.',
+            'story-p8': 'Vào khoảnh khắc đó, tôi nhận ra mình hoàn toàn đơn độc.',
+            'story-p9': 'Tôi rời Hàn Quốc mà không nhận được kết quả. Ngày tháng trôi qua. Không có hồi âm. Không có câu trả lời rõ ràng. Không có ai cảm thấy có trách nhiệm.',
+            'story-p10': 'Và cuối cùng, tôi đã hiểu ra một điều quan trọng: những lời hứa mà tôi nghe được trước khi đến không hề khớp với thực tế mà tôi phải đối mặt khi tôi đến nơi.',
             'solution-title': 'CHECKIT là giải pháp',
             'solution-desc': 'Chúng tôi xử lý toàn bộ quy trình phi y tế để bạn có thể tập trung vào sức khỏe của mình.<br>Trải nghiệm khám bệnh không nhầm lẫn, không sai sót và không căng thẳng.',
             'pricing-title': 'Chọn gói của bạn',
@@ -374,11 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan1-feat1': 'Danh sách bệnh viện trung lập (không khuyến nghị)', 'plan1-feat2': 'Cấu trúc chương trình và giá (chỉ dịch thông tin chính thức)', 'plan1-feat3': 'Hướng dẫn đặt chỗ từng bước', 'plan1-feat4': 'Bản dịch tiếng Anh của tất cả các tài liệu bệnh viện', 'plan1-feat5': 'Hướng dẫn câu hỏi cần thiết (đơn giản, không sai sót)', 'plan1-feat6': 'Hướng dẫn trước khi kiểm tra cần thiết (nhịn ăn và chuẩn bị cơ bản)', 'plan1-feat7': 'Những gì cần mang theo vào ngày thi', 'plan1-feat8': 'Gửi kết quả an toàn qua email', 'plan1-feat9': 'Bao gồm kiểm tra chậm kết quả một lần',
             'plan1-best-for': 'Du khách muốn sự rõ ràng và hỗ trợ tự hướng dẫn.',
             'plan2-title': 'Gói Không Sai sót',
-            'plan2-included': '(Bao gồm mọi thứ trong Gói Không Nhầm lẫn +)',
+            'plan2-included': '(Bao gồm mọi thứ trong Gói 400 +)',
             'plan2-feat1': 'Hướng dẫn câu hỏi nâng cao (chi tiết, tập trung vào phòng ngừa sai sót)', 'plan2-feat2': 'Cảnh báo lỗi thường gặp mà người nước ngoài hay bỏ qua', 'plan2-feat3': 'Kiểm tra định dạng một lần (thiếu trường, chữ ký, ngày tháng)', 'plan2-feat4': 'Gói hướng dẫn trước khi kiểm tra (mốc thời gian + những gì thường gây chậm trễ)', 'plan2-feat5': 'Kiến thức cơ bản về chuẩn bị nội soi đại tràng (nếu có)', 'plan2-feat6': 'Ưu tiên nhắn tin cho các vấn đề nhạy cảm về thời gian', 'plan2-feat7': 'Theo dõi kết quả (1 lần)', 'plan2-feat8': 'Cảnh báo tài liệu thiếu hoặc chậm', 'plan2-feat9': 'Hỗ trợ thay đổi lịch trình (bao gồm 1 lần)',
             'plan2-best-for': 'Những người muốn tránh các lỗi phổ biến và sự chậm trễ.',
             'plan3-title': 'Gói An toàn Toàn diện',
-            'plan3-included': '(Bao gồm mọi thứ trong Gói Không Sai sót +)',
+            'plan3-included': '(Bao gồm mọi thứ trong Gói 500 +)',
             'plan3-feat1': 'Quản lý câu hỏi cao cấp', 'plan3-feat2': 'Giải thích điểm rủi ro (phi y tế, dựa trên quy trình)', 'plan3-feat3': 'Mẫu câu trả lời tiếng Anh cho các mục biểu mẫu phức tạp', 'plan3-feat4': 'Kiểm tra định dạng hoàn chỉnh (tất cả các trang, chữ ký, tệp đính kèm)', 'plan3-feat5': 'Gói trước khi kiểm tra cao cấp (mốc thời gian chi tiết, quy trình phản hồi lỗi)', 'plan3-feat6': 'Hỗ trợ trò chuyện trong ngày thi theo thời gian thực', 'plan3-feat7': 'Hướng dẫn điều hướng bệnh viện (đồ họa)', 'plan3-feat8': 'Yêu cầu biên lai tiếng Anh (thay mặt bạn)', 'plan3-feat9': 'Yêu cầu CD / tài liệu bổ sung', 'plan3-feat10': 'Theo dõi đầy đủ sau kỳ thi cho đến khi có kết quả', 'plan3-feat11': 'Cấu trúc kết quả (phi y tế, chỉ tổ chức nội dung)', 'plan3-feat12': 'Mẫu để giao tiếp với bệnh viện', 'plan3-feat13': 'Hỗ trợ thay đổi lịch trình (bao gồm tối đa 3 lần)',
             'plan3-best-for': 'Bất kỳ ai muốn có một trải nghiệm hoàn toàn không căng thẳng.',
             'options-title': 'Tùy chọn',
@@ -389,10 +472,39 @@ document.addEventListener('DOMContentLoaded', () => {
             'option5-title': 'Hướng dẫn điều hướng đồ họa', 'option5-desc': 'Hiển thị bố cục bệnh viện và luồng di chuyển chính xác. Hữu ích cho những người lần đầu đến.',
             'option6-title': 'Thay đổi lịch trình', 'option6-desc': 'Dành cho những khách hàng cần thay đổi đặt chỗ sau khi đã đặt.',
             'option6-sub1': 'Thay đổi một lần', 'option6-sub2': 'Gói đôi', 'option6-sub3': 'Thay đổi không giới hạn',
+            'notice-title': 'THÔNG BÁO',
+            'notice-subtitle': 'Tại sao người nước ngoài phải trả nhiều tiền hơn cho cùng một cuộc kiểm tra sức khỏe ở Hàn Quốc',
+            'notice-q-intro': 'Chúng tôi thường được hỏi câu này.',
+            'notice-q': '"Tại sao các lựa chọn của bạn lại rẻ hơn so với những gì bệnh viện cung cấp?"',
+            'notice-a1-title': 'Câu trả lời ngắn gọn:',
+            'notice-a1-p1': 'Không phải vì các bài kiểm tra khác nhau.',
+            'notice-a1-p2': 'Mà là vì cấu trúc giá cả khác nhau.',
+            'notice-a2-title': 'Điều thực sự xảy ra ở nhiều bệnh viện',
+            'notice-a2-p1': 'Hầu hết các bệnh viện đều tạo ra các "gói dành cho người nước ngoài" riêng biệt. Các gói này thường gộp các dịch vụ mà người dân địa phương không phải trả tiền - điều này làm tăng tổng giá.',
+            'notice-a3-title': 'Một tình huống phổ biến mà chúng tôi thấy ở các khách hàng nước ngoài',
+            'notice-a3-p1': 'Một khách hàng đã được báo giá 1.800.000 KRW cho một gói dành cho người nước ngoài. Với sự hướng dẫn, các xét nghiệm tương tự đã được đặt với giá 1.050.000 KRW.',
+            'refund-title': 'CHÍNH SÁCH HOÀN TIỀN',
+            'refund-non-refundable-title': 'Các trường hợp không được hoàn tiền',
+            'refund-non-refundable-desc': 'Chúng tôi không thể hoàn lại tiền nếu trường hợp của bạn thuộc bất kỳ danh mục nào dưới đây. Những sự kiện này nằm ngoài tầm kiểm soát của chúng tôi và xảy ra trong các quy trình hành chính hoặc y tế của bệnh viện.',
+            'refund-nr-li1': 'Các vấn đề từ phía bệnh viện (chậm trễ, lỗi hệ thống, thay đổi lịch của bác sĩ, yêu cầu xét nghiệm bổ sung)',
+            'refund-nr-li2': 'Khách hàng chuẩn bị không đầy đủ',
+            'refund-nr-li3': 'Khách hàng không tuân theo các hướng dẫn được cung cấp',
+            'refund-nr-li4': 'Bảng câu hỏi không chính xác hoặc không đầy đủ',
+            'refund-nr-li5': 'Nhịn ăn không thành công hoặc tiêu thụ thực phẩm bị hạn chế',
+            'refund-nr-li6': 'Lỗi lịch trình do khách hàng gây ra',
+            'refund-nr-li7': 'Kết quả chậm trễ do bệnh viện',
+            'refund-nr-li8': 'Khách hàng nộp thông tin cần thiết muộn',
+            'refund-nr-li9': 'Các sự kiện có thể xảy ra một cách tự nhiên trong hệ thống y tế (chậm trễ quy trình làm việc không mong muốn, thời gian xử lý nội bộ, quy trình của bệnh viện)',
+            'refund-full-refund-title': 'Các trường hợp được hoàn tiền đầy đủ',
+            'refund-full-refund-desc': 'Hoàn tiền đầy đủ chỉ được thực hiện khi lỗi rõ ràng thuộc về phía chúng tôi.',
+            'refund-fr-li1': 'Chúng tôi cung cấp thông tin không chính xác (sai ngày, sai hướng dẫn, sai biểu mẫu)',
+            'refund-fr-li2': 'Chúng tôi không gửi các thông báo bắt buộc hoặc hướng dẫn chuẩn bị',
+            'refund-fr-li3': 'Chúng tôi không yêu cầu một tài liệu đã được bao gồm trong kế hoạch của bạn',
+            'refund-fr-li4': 'Chúng tôi làm chậm kết quả của bạn do lỗi của chúng tôi'
         }
     };
 
-    let currentLang = localStorage.getItem('checkitLang') || 'ko';
+    let currentLang = localStorage.getItem('checkitLang') || 'en';
 
     // 2. CORE FUNCTIONS --------------------------------
     function updatePrices(lang) {
@@ -401,8 +513,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('[data-price-usd]').forEach(el => {
             const usdPrice = parseFloat(el.getAttribute('data-price-usd'));
+            if (isNaN(usdPrice)) return;
             const convertedPrice = usdPrice * currency.rate;
-            el.innerHTML = currency.format(convertedPrice);
+            el.textContent = currency.format(convertedPrice);
         });
     }
 
@@ -429,132 +542,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         updatePrices(lang);
-        if (document.getElementById('chat-window')) {
-            updateChatUI(lang);
-        }
     }
 
     function setupLangSwitchers() {
-        const switchers = document.querySelectorAll('.lang-switcher button');
-        switchers.forEach(button => {
+        document.querySelectorAll('.lang-switcher button').forEach(button => {
             button.addEventListener('click', (e) => {
                 updateTexts(e.target.dataset.lang);
             });
         });
     }
 
-    // 3. CHATBOT --------------------------------------
-    function updateChatUI(lang) {
-        const chatMessages = document.getElementById('chat-messages');
-        const faqContainer = document.getElementById('faq-options');
-        if (!chatMessages || !faqContainer) return;
-
-        chatMessages.innerHTML = '';
-        faqContainer.innerHTML = '';
-
-        appendMessage('bot', translations[lang]?.['chat-welcome']);
-
-        for (let i = 1; i <= 5; i++) {
-            const key = `faq-${i}`;
-            if (translations[lang]?.[key]) {
-                const button = document.createElement('button');
-                button.textContent = translations[lang][key];
-                button.dataset.questionKey = key;
-                button.addEventListener('click', () => handleFAQClick(key));
-                faqContainer.appendChild(button);
-            }
-        }
-    }
-
-    function handleFAQClick(questionKey) {
-        const userMessage = translations[currentLang][questionKey];
-        appendMessage('user', userMessage);
-        showTypingIndicator();
-        setTimeout(() => getBotResponse(questionKey, true), 1200);
-    }
-
-    function getBotResponse(message, isFaqClick) {
-        removeTypingIndicator();
-        let responseText;
-        if (isFaqClick) {
-            const answerKey = `ans-${message.slice(-1)}`;
-            responseText = translations[currentLang][answerKey];
-        } else {
-            responseText = translations[currentLang]['faq-default-ans'];
-        }
-        appendMessage('bot', responseText);
-    }
-
-    function setupChatbot() {
-        const chatWindow = document.getElementById('chat-window');
-        const chatToggle = document.getElementById('chat-toggle');
-        const chatClose = document.getElementById('chat-close');
-        const chatInput = document.getElementById('chat-input');
-        const chatSend = document.getElementById('chat-send');
-
-        if (!chatWindow) return;
-
-        chatToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            chatWindow.classList.remove('hidden');
-            chatToggle.classList.add('hidden');
-            updateTexts(currentLang);
-        });
-
-        chatClose.addEventListener('click', (e) => {
-            e.stopPropagation();
-            chatWindow.classList.add('hidden');
-            chatToggle.classList.remove('hidden');
-        });
-
-        const sendMessage = () => {
-            const messageText = chatInput.value.trim();
-            if (!messageText) return;
-            appendMessage('user', messageText);
-            chatInput.value = '';
-            showTypingIndicator();
-            setTimeout(() => getBotResponse(messageText, false), 1200);
-        };
-        
-        chatSend.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        document.querySelectorAll('#faq-options button').forEach(btn => {
-            btn.addEventListener('click', () => handleFAQClick(btn.dataset.questionKey));
-        });
-    }
-
-    function appendMessage(sender, text) {
-        const chatMessages = document.getElementById('chat-messages');
-        if (!chatMessages || !text) return;
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chat-message', sender);
-        messageDiv.innerHTML = text;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function showTypingIndicator() {
-        const chatMessages = document.getElementById('chat-messages');
-        if (!chatMessages) return;
-        const indicator = document.createElement('div');
-        indicator.className = 'typing-indicator';
-        indicator.innerHTML = '<span></span><span></span><span></span>';
-        chatMessages.appendChild(indicator);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function removeTypingIndicator() {
-        const indicator = document.querySelector('.typing-indicator');
-        if (indicator) indicator.remove();
-    }
-
-    // 4. MOBILE NAVIGATION ---------------------------
+    // 3. MOBILE NAVIGATION ---------------------------
     function setupHamburgerMenu() {
         const hamburger = document.querySelector('.hamburger');
         const navUl = document.querySelector('header nav ul');
@@ -580,10 +578,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // INITIALIZE ALL --------------------------------
     setupLangSwitchers();
     setupHamburgerMenu();
-    if (document.getElementById('chat-window')) {
-        setupChatbot();
-    }
-    
-    // Set initial language and prices
     updateTexts(currentLang);
 });

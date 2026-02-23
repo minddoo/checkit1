@@ -1,4 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    // All language and currency logic is now handled by main.js
+    // The language and currency conversion logic is now centralized in main.js.
+    // No specific JavaScript is needed for the individual page anymore.
 });

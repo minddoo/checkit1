@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT - For Individuals</title>
-    <link rel="stylesheet" href="style.css?v=9.0">
+    <link rel="stylesheet" href="style.css?v=10.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -15,9 +15,9 @@
                 <a href="index.html" data-i18n="logo">CHECKIT</a>
             </div>
             <ul>
-                <li><a href="#services" data-i18n="nav-services">서비스</a></li>
-                <li><a href="#process" data-i18n="nav-process">이용 과정</a></li>
-                <li><a href="#contact" data-i18n="nav-contact">문의</a></li>
+                <li><a href="#reality" data-i18n="nav-reality">The Reality</a></li>
+                <li><a href="#services" data-i18n="nav-services">Services</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
             </ul>
             <button class="hamburger">
                 <i class="fas fa-bars"></i>
@@ -34,50 +34,93 @@
     <main>
         <section class="hero">
             <div class="hero-text">
-                <h1 data-i18n="individual-hero-title">A Health Check-up Journey Just for You,<br>No Worries with CHECKIT.</h1>
-                <p data-i18n="individual-hero-subtitle">Facing language barriers and complex procedures for health check-ups in Korea? Now, experience top-tier care with comfort.</p>
-                 <a href="#services" class="cta-button" data-i18n="view-plans-cta">Find My Service</a>
+                <h1 data-i18n="individual-hero-title">Health Check-ups in Korea: <br>Expectation vs. Reality</h1>
+                <p data-i18n="individual-hero-subtitle">You expect world-class service, but what you often get is confusion and anxiety. CHECKIT bridges the gap.</p>
+                 <a href="#reality" class="cta-button" data-i18n="view-reality-cta">See the Reality</a>
             </div>
         </section>
 
-        <section class="story-section">
-            <div class="story-container">
-                 <div class="story-part before">
-                    <h2 data-i18n="story-before-title">Without CHECKIT...</h2>
-                    <div class="problem-card">
-                        <i class="fas fa-comments-dollar"></i>
-                        <h3 data-i18n="problem1-title">Opaque Costs</h3>
-                        <p data-i18n="problem1-desc">It's frustrating not knowing which tests are necessary or if the cost is appropriate.</p>
-                    </div>
-                    <div class="problem-card">
-                        <i class="fas fa-calendar-times"></i>
-                        <h3 data-i18n="problem2-title">Complex Booking</h3>
-                        <p data-i18n="problem2-desc">Phone-only reservations, unfamiliar Korean medical terms. The barriers start with booking.</p>
-                    </div>
-                    <div class="problem-card">
-                        <i class="fas fa-user-slash"></i>
-                        <h3 data-i18n="problem3-title">Anxious Check-up Process</h3>
-                        <p data-i18n="problem3-desc">It's easy to miss the need for additional tests because you can't understand the medical staff's explanations.</p>
-                    </div>
+        <!-- Expectation Section -->
+        <section id="expectation" class="expectation-section">
+            <h2 class="section-title" data-i18n="expectation-title">The Dream: What You Expect from Korean Healthcare</h2>
+            <div class="expectation-container">
+                <div class="expectation-card">
+                    <h3 data-i18n="exp1-title">#1. Cost Efficiency</h3>
+                    <p data-i18n="exp1-desc">“Medical care in Korea is known to be dramatically cheaper than in the U.S.”</p>
+                    <img src="./assets/exp1.png" alt="Reddit post about cheap healthcare in Korea">
                 </div>
-
-                <div class="story-arrow">
-                     <i class="fas fa-arrow-down"></i>
+                <div class="expectation-card">
+                    <h3 data-i18n="exp2-title">#2. Convenience</h3>
+                    <p data-i18n="exp2-desc">“The entire process is expected to be simple and hassle-free.”</p>
+                    <img src="./assets/exp2.png" alt="Reddit post about Korea's healthcare system">
                 </div>
+                <div class="expectation-card">
+                    <h3 data-i18n="exp3-title">#3. Professional Quality</h3>
+                    <p data-i18n="exp3-desc">“Facilities and medical standards are expected to be world-class.”</p>
+                    <img src="./assets/exp3.png" alt="Reddit post comparing surgery in America vs Korea">
+                </div>
+                <div class="expectation-card">
+                    <h3 data-i18n="exp4-title">#4. Time Safety</h3>
+                    <p data-i18n="exp4-desc">“It’s expected to be quick, with minimal impact on your schedule.”</p>
+                    <img src="./assets/exp4.png" alt="Reddit post about fast healthcare in Korea">
+                </div>
+            </div>
+        </section>
 
-                <div class="story-part after">
-                    <h2 data-i18n="story-after-title">With CHECKIT!</h2>
-                    <div class="solution-card">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        <h3 data-i18n="solution-desc">We solve all these difficulties and provide the service that is perfect for you.</h3>
-                        <p data-i18n="solution-sub-desc">From transparent costs and simple booking to comfortable communication. Just focus on your health.</p>
-                    </div>
+        <div class="reality-intro">
+            <h2 data-i18n="reality-intro-title">But then, reality hits.</h2>
+            <div class="arrow-down">↓</div>
+        </div>
+
+        <!-- Reality Section -->
+        <section id="reality" class="reality-section">
+            <div class="reality-container">
+                <div class="reality-card">
+                    <h4><i class="fa-solid fa-phone-slash"></i><span data-i18n="reality1-title">No English Support</span></h4>
+                    <ul>
+                        <li data-i18n="reality1-li1">Staff members avoid calls because they can’t speak English.</li>
+                        <li data-i18n="reality1-li2">Instructions, prep guides, and alerts are all in Korean.</li>
+                        <li data-i18n="reality1-li3">Sensitive questions (periods, surgery, symptoms) receive no real explanation.</li>
+                        <li data-i18n="reality1-li4">During the exam, every announcement is in Korean only.</li>
+                    </ul>
+                </div>
+                <div class="reality-card">
+                    <h4><i class="fa-solid fa-map-location-dot"></i><span data-i18n="reality2-title">Confusing Process</span></h4>
+                    <ul>
+                        <li data-i18n="reality2-li1">You don’t even know what’s included in your check-up package.</li>
+                        <li data-i18n="reality2-li2">Prep items arrive with no explanation on how to use them.</li>
+                        <li data-i18n="reality2-li3">Colonoscopy medication is explained only in Korean → exam fails.</li>
+                        <li data-i18n="reality2-li4">The pre-check questionnaire is long, complicated, and entirely in Korean.</li>
+                    </ul>
+                </div>
+                <div class="reality-card">
+                    <h4><i class="fa-solid fa-calendar-xmark"></i><span data-i18n="reality3-title">Unreliable Scheduling</span></h4>
+                    <ul>
+                        <li data-i18n="reality3-li1">It takes 2-3 days just to secure a reservation.</li>
+                        <li data-i18n="reality3-li2">Different staff give different answers — no one takes responsibility.</li>
+                        <li data-i18n="reality3-li3">No Korean phone number → no reminders or prep instructions.</li>
+                        <li data-i18n="reality3-li4">Overseas time difference → calls fail, booking gets delayed.</li>
+                    </ul>
+                </div>
+                <div class="reality-card">
+                    <h4><i class="fa-solid fa-folder-open"></i><span data-i18n="reality4-title">Delayed Results & Zero Accountability</span></h4>
+                    <ul>
+                        <li data-i18n="reality4-li1">Results mailed physically to an address you don’t have.</li>
+                        <li data-i18n="reality4-li2">Results delayed for weeks — even after you leave Korea.</li>
+                        <li data-i18n="reality4-li3">You can’t get receipts due to overseas phone verification limits.</li>
+                        <li data-i18n="reality4-li4">No explanation about post-exam rules (e.g., flying after polyp removal).</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
         <section id="services" class="pricing-section">
-            <h2 class="section-title" data-i18n="pricing-title">Choose the Perfect Plan for You</h2>
+            <div class="solution-outro">
+                 <h2 data-i18n="solution-title">CHECKIT is the Solution</h2>
+                <p data-i18n="solution-desc">We handle the entire non-medical process so you can focus on your health. No confusion, no mistakes, no stress.</p>
+            </div>
+
+            <h2 class="section-title" data-i18n="pricing-title">Choose Your Plan</h2>
             <div class="pricing-container">
                 <!-- No-Confusion Plan -->
                 <div class="pricing-card">
@@ -103,12 +146,11 @@
                         <strong data-i18n="plan-best-for">Best for:</strong>
                         <p data-i18n="plan1-best-for">Self-guided travelers who want clarity without extra services.</p>
                     </div>
-                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">Get Started</a>
+                    <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
 
                 <!-- Zero-Mistake Plan -->
-                <div class="pricing-card popular">
-                    <div class="popular-badge" data-i18n="plan-popular-badge">Most Popular</div>
+                <div class="pricing-card">
                     <div class="pricing-header">
                         <h3 data-i18n="plan2-title">Zero-Mistake Plan</h3>
                         <p class="price" data-price-usd="500">500 USD</p>
@@ -143,7 +185,7 @@
                     <div class="features-container">
                         <strong data-i18n="plan3-included">Included (everything in 500 +)</strong>
                         <ul class="pricing-features">
-                            <li data-i18n="plan3-feat1">Premium Questionnaire Management (structured assistance, non-medical)</li>
+                            <li data-i18n="plan3-feat1">Premium Questionnaire Management</li>
                             <li data-i18n="plan3-feat2">Risk-point explanation (non-medical, process-based)</li>
                             <li data-i18n="plan3-feat3">English answer templates for complex form items</li>
                             <li data-i18n="plan3-feat4">Complete format check (all pages, signatures, attachments)</li>
@@ -154,7 +196,7 @@
                             <li data-i18n="plan3-feat9">CD / additional document request</li>
                             <li data-i18n="plan3-feat10">Full post-exam follow-up until results are delivered</li>
                             <li data-i18n="plan3-feat11">Result structuring (non-medical, content organization only)</li>
-                            <li data-i18n="plan3-feat12">Templates for communicating with the hospital (sent to your email)</li>
+                            <li data-i18n="plan3-feat12">Templates for communicating with the hospital</li>
                             <li data-i18n="plan3-feat13">Schedule change support (up to 3 times included)</li>
                         </ul>
                     </div>
@@ -162,7 +204,7 @@
                         <strong data-i18n="plan-best-for">Best for:</strong>
                         <p data-i18n="plan3-best-for">Executives, expats, and anyone who wants zero risk and zero hassle.</p>
                     </div>
-                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">Get Started</a>
+                    <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
             </div>
         </section>
@@ -172,10 +214,29 @@
             <p class="section-subtitle" data-i18n="options-subtitle">Enhance your plan only if you need extra support.</p>
             
             <div class="options-container">
-                <div class="option-card">
+                 <div class="option-card">
+                    <h3 data-i18n="option4-title">Program & Aftercare Structure Pack</h3>
+                    <p class="price" data-price-usd="60">60 USD</p>
+                    <p data-i18n="option4-desc">A non-medical guide explaining your exam conditions, result structure, and post-exam care.</p>
+                </div>
+                 <div class="option-card">
+                    <h3 data-i18n="option5-title">Graphic Navigation Guide</h3>
+                    <p class="price" data-price-usd="20">20 USD</p>
+                    <p data-i18n="option5-desc">Shows the exact hospital layout and movement flow. Helpful for first-time visitors.</p>
+                </div>
+                <div class="option-card schedule-options">
+                    <h3 data-i18n="option6-title">Schedule Change Options</h3>
+                     <p data-i18n="option6-desc">For customers who need to change their reservation after booking.</p>
+                    <ul>
+                        <li><span data-i18n="option6-sub1">Single Change</span> — <span class="price" data-price-usd="25">25 USD</span></li>
+                        <li><span data-i18n="option6-sub2">Double Package</span> — <span class="price" data-price-usd="40">40 USD</span></li>
+                        <li><span data-i18n="option6-sub3">Unlimited Changes</span> — <span class="price" data-price-usd="200">200 USD</span></li>
+                    </ul>
+                </div>
+                 <div class="option-card">
                     <h3 data-i18n="option1-title">English Receipt Request</h3>
                     <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option1-desc">We request an English receipt on your behalf, suitable for insurance or reimbursement purposes. Useful if you need official documents in English after your exam.</p>
+                    <p data-i18n="option1-desc">We request an English receipt on your behalf, suitable for insurance purposes.</p>
                 </div>
                 <div class="option-card">
                     <h3 data-i18n="option2-title">CD Result Request</h3>
@@ -185,55 +246,14 @@
                 <div class="option-card">
                     <h3 data-i18n="option3-title">Urgent Result Follow-up</h3>
                     <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option3-desc">If your results are delayed, we send one urgent follow-up message to the hospital on your behalf. This option is for customers who need faster action beyond the standard follow-up.</p>
-                </div>
-                 <div class="option-card">
-                    <h3 data-i18n="option4-title">Program & Aftercare Structure Pack</h3>
-                    <p class="price" data-price-usd="60">60 USD</p>
-                    <p data-i18n="option4-desc">A non-medical guide explaining: What conditions your chosen exam can identify, How your result documents are structured, What to pay attention to after the exam. For customers who want clear, structured understanding of their exam and results.</p>
-                </div>
-                 <div class="option-card">
-                    <h3 data-i18n="option5-title">Graphic Navigation Guide</h3>
-                    <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option5-desc">Showing the exact hospital layout and movement flow. Helpful for first-time visitors and large hospitals.</p>
-                </div>
-                <div class="option-card schedule-options">
-                    <h3 data-i18n="option6-title">Schedule Change Options</h3>
-                    <p data-i18n="option6-desc">For customers who need to change their reservation after booking.</p>
-                    <ul>
-                        <li><span data-i18n="option6-sub1">Single Change</span> — <span class="price" data-price-usd="25">25 USD</span></li>
-                        <li><span data-i18n="option6-sub2">Double Package</span> — <span class="price" data-price-usd="40">40 USD</span></li>
-                        <li><span data-i18n="option6-sub3">Unlimited Changes</span> — <span class="price" data-price-usd="200">200 USD</span></li>
-                    </ul>
-                    <p class="included-note" data-i18n="option6-note">Included in plans: 500 Plan → 1 schedule change included, 700 Plan → 3 schedule changes included. Additional changes require this option.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="process" class="process">
-            <h2 class="section-title" data-i18n="process-title">How CHECKIT Works</h2>
-            <div class="process-steps">
-                <div class="step">
-                    <span>1</span>
-                    <h3 data-i18n="process-1-title">Online Consultation Request</h3>
-                    <p data-i18n="process-1-desc">Simply request a consultation through our website, and a dedicated manager will be assigned to you.</p>
-                </div>
-                <div class="step">
-                    <span>2</span>
-                    <h3 data-i18n="process-2-title">Customized Consulting & Booking</h3>
-                    <p data-i18n="process-2-desc">We coordinate the necessary tests, schedule, and language, then confirm the final booking.</p>
-                </div>
-                <div class="step">
-                    <span>3</span>
-                    <h3 data-i18n="process-3-title">Checkup & Results Guidance</h3>
-                    <p data-i18n="process-3-desc">Receive your checkup comfortably on the scheduled date, and get your translated results and follow-up guidance all at once.</p>
+                    <p data-i18n="option3-desc">We send one urgent follow-up message to the hospital on your behalf.</p>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="contact">
-            <h2 data-i18n="contact-title">Do you have any questions?</h2>
-            <p data-i18n="contact-subtitle">A professional manager will respond within 24 hours.</p>
+            <h2 data-i18n="contact-title">Ready to Get Started?</h2>
+            <p data-i18n="contact-subtitle">Tell us your needs, and a dedicated manager will respond within 24 hours.</p>
             <form action="https://formspree.io/f/xqedyngo" method="POST">
                 <input type="email" name="email" data-i18n-placeholder="contact-email" required>
                 <textarea name="message" rows="5" data-i18n-placeholder="contact-message" required></textarea>
@@ -246,6 +266,6 @@
         <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="main.js?v=9.0"></script>
+    <script src="main.js?v=10.0"></script>
 </body>
 </html>

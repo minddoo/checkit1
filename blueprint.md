@@ -7,41 +7,27 @@ CHECKIT is a concierge service that assists foreigners with the health check-up 
 
 ## 2. Implemented Features & Design
 
-*   **Multi-Page Architecture:** The site uses separate pages for the main landing page (`index.html`) and a dedicated page for individual customers (`individual.html`).
-*   **Language Toggle:** Switch between Korean, English, Chinese, and Vietnamese with preference saved across sessions.
-*   **Modern & Clean UI:** A visually appealing design with a hero section, process steps, and contact forms.
-*   **Homepage with Customer Segmentation:** Users can choose between "For Individuals" and "For Business" paths.
-*   **Storytelling Narrative:** The `individual.html` page uses a "Before vs. After" narrative to build empathy and demonstrate the value of the service.
+*   **Multi-Page Architecture:** Main landing page (`index.html`) and a dedicated page for individual customers (`individual.html`).
+*   **Language & Currency Toggle:** Switch between Korean, English, Chinese, and Vietnamese, with prices dynamically converting from a USD base.
+*   **Uniform Pricing Display:** All service packages are presented equally without a 'recommended' highlight for balanced consideration.
+*   **Modular Options:** Add-on services are available separately from the main packages.
 
-## 3. Final Plan: Implement Definitive Packages, Options, and Currency Conversion
+## 3. Final Plan: Implement "Expectation vs. Reality" Narrative
 
-The current goal is to finalize the `individual.html` page by implementing the exact product structure, pricing, and features as provided, and to add dynamic currency conversion.
+The primary goal is to completely redesign the `individual.html` page to create a powerful "Expectation vs. Reality" narrative that highlights the problems CHECKIT solves.
 
 **This involves:**
 
-1.  **Rebuilding the Pricing Section:**
-    *   Create a three-tier package structure based on the provided images:
-        *   **No-Confusion Plan:** 400 USD
-        *   **Zero-Mistake Plan:** 500 USD
-        *   **Total-Safe Plan:** 700 USD
-    *   Accurately list all included features for each plan and the "Best for:" description.
+1.  **New Storytelling Structure:**
+    *   **Expectation Section:** Show the positive expectations foreigners have about Korean healthcare (e.g., cost, convenience), using formatted quotes and references (like Reddit posts) from the provided images.
+    *   **Reality Section:** Contrast the expectation by showing the real-world problems they face (e.g., No English Support, Confusing Process, Unreliable Scheduling). This will be structured in clear, problem-focused cards.
+    *   **Removal of Redundant Sections:** The generic "Process" section will be removed from `individual.html` to focus purely on this new, persuasive narrative flow leading into the service plans.
 
-2.  **Creating an Add-On Options Section:**
-    *   Add a distinct "+Option" section below the main packages.
-    *   List all optional add-ons with their USD prices, as specified in the images (e.g., English Receipt Request, Schedule Change Options).
+2.  **Content and Translation Overhaul:**
+    *   Transcribe all new English text from the provided "Expectation vs. Reality" images.
+    *   Create new i18n keys and provide full, accurate translations for all new content into Korean, Chinese, and Vietnamese.
 
-3.  **Implementing Dynamic Currency Conversion:**
-    *   The base currency will be **USD**.
-    *   Prices will be dynamically converted and displayed in the user's selected language's currency:
-        *   **KR (Korean):** KRW
-        *   **EN (English):** USD
-        *   **CN (Chinese):** CNY
-        *   **VI (Vietnamese):** VND
-    *   This will be handled in `main.js` by reading a `data-price-usd` attribute from the HTML and applying a stored exchange rate.
-
-4.  **Complete Overhaul of Content and Translations:**
-    *   Transcribe all text from the provided images into the `translations` object in `main.js`.
-    *   Provide full and accurate translations for Korean, Chinese, and Vietnamese for all new package names, features, option details, and descriptions.
-
-5.  **Final CSS Adjustments:**
-    *   Refine the styles for the new, detailed pricing cards and the new options section to ensure clarity, readability, and a premium feel.
+3.  **CSS Refinements:**
+    *   Create distinct, clean styles for the new "Expectation" and "Reality" sections.
+    *   Ensure all pricing cards are styled uniformly, removing any highlights or scaling effects from the 'popular' plan.
+    *   Review and adjust overall typography and line breaks for consistency and improved readability across the entire page.

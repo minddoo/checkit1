@@ -77,8 +77,7 @@ header nav ul a:hover::after { width: 100%; }
 
 /* --- CONTACT SECTION (SHARED) --- */
 .contact-section, .contact { padding: 6rem 2rem; background: var(--mint-bg); text-align: center; }
-.contact-section .section-title, .contact h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 3.5rem; color: var(--dark-color); }
-.contact-section .section-subtitle, .contact p { font-size: 1.2rem; text-align: center; color: var(--secondary-color); max-width: 700px; margin: -2.5rem auto 2.5rem; }
+/* The h2 and p inside .contact now use the global .section-title and .section-subtitle styles */
 .contact-section form, .contact form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
 .contact-section input, .contact-section textarea, .contact input, .contact textarea { padding: 1rem; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; background: var(--white-color); color: var(--dark-color); transition: border-color 0.2s, box-shadow 0.2s; }
 .contact-section input:focus, .contact-section textarea:focus, .contact input:focus, .contact textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 166, 126, 0.3); }
@@ -173,8 +172,9 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 }
 
 @media screen and (max-width: 768px) {
-    .section-title, .contact-section .section-title, .contact h2 { font-size: 2rem; margin-bottom: 2.5rem; }
-    .section-subtitle, .contact-section .section-subtitle, .contact p { font-size: 1rem; margin: -1.5rem auto 2rem; }
+    .content-wrapper { padding: 0 1.5rem; }
+    .section-title { font-size: 2rem; margin-bottom: 2.5rem; }
+    .section-subtitle { font-size: 1rem; margin: -1.5rem auto 2rem; }
 
     .hero, .customer-type-section, .process-section, .testimonials-section, .contact-section, .contact, .pricing-section, .options-section, .notice-section, .refund-section, .personal-story-section, .expectation-section, .reality-section {
         padding: 4rem 1.5rem;
@@ -184,10 +184,15 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     header nav ul.is-active { left: 0; }
     header nav ul a { display: block; padding: 1rem 2rem; font-size: 1.1rem; }
     .hamburger { display: block; }
+
     .hero-text h1 { font-size: 2.2rem; }
-    .hero-text p { font-size: 1rem; }
+    .hero-text p, .customer-card p, .step p { font-size: 1rem; }
 
     .options-container { grid-template-columns: 1fr; }
     .pricing-card { margin-bottom: 2rem; }
+    .reality-intro h2 { font-size: 2rem; }
+    .solution-outro h2 { font-size: 2rem; }
+    .notice-header h2, .notice-icon { font-size: 1.5rem; }
+
     #chat-window { width: calc(100vw - 40px); max-height: 70vh; bottom: 90px; right: 20px; }
 }

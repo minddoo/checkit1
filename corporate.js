@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "nav-process": "Process",
             "nav-testimonials": "Reviews",
             "nav-contact": "Contact",
-            "corporate-hero-title": "Customized Health Screening Solutions for Businesses",
-            "corporate-hero-subtitle": "Effortlessly manage your employees' health without language barriers.",
+            "corporate-hero-title": "Your operations depend on foreign workers. But is their health being managed effectively?",
+            "corporate-hero-subtitle": "Language barriers and complex administration are realities you can no longer ignore. An optimal solution is needed for both your company and your international employees.",
             "corporate-hero-cta": "Request Corporate Consultation",
             "benefits-title": "Why CHECKIT for Your Business?",
             "benefit-1-title": "Streamlined Management",
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "corporate-process-2-desc": "Simply provide an employee list. We coordinate all schedules and details.",
             "corporate-process-3-title": "Hassle-Free Exams",
             "corporate-process-3-desc": "Employees receive comfortable exams with native language guidance.",
-            "corporate-process-4-title": "Reporting & Follow-up",
+            "corporate-process-4-title": "Reporting & <br>Follow-up",
             "corporate-process-4-desc": "We provide integrated reports and manage follow-ups for re-examinations.",
             "corporate-contact-title": "Get Started with CHECKIT",
             "corporate-contact-subtitle": "Fill out the form below, and our corporate manager will contact you shortly.",
@@ -42,8 +42,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "nav-process": "프로세스",
             "nav-testimonials": "고객 후기",
             "nav-contact": "문의하기",
-            "corporate-hero-title": "기업을 위한 맞춤형 건강검진 솔루션",
-            "corporate-hero-subtitle": "언어 장벽 없이 간편하게 직원의 건강을 관리하세요.",
+            "corporate-hero-title": "외국인 직원 없이는 현장이 멈춥니다. <br>하지만, 그들의 건강검진, 제대로 관리하고 계신가요?",
+            "corporate-hero-subtitle": "언어의 장벽과 복잡한 행정 절차, 더 이상 외면할 수 없는 현실입니다. 기업과 외국인 직원 모두를 위한 최적의 솔루션이 필요합니다.",
             "corporate-hero-cta": "기업 상담 신청하기",
             "benefits-title": "왜 기업은 CHECKIT을 선택해야 할까요?",
             "benefit-1-title": "간소화된 관리",
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "corporate-process-2-desc": "직원 명단을 제공해주시면, 모든 일정과 세부사항을 조율합니다.",
             "corporate-process-3-title": "편리한 검진",
             "corporate-process-3-desc": "직원들은 모국어 안내와 함께 편안한 검진을 받습니다.",
-            "corporate-process-4-title": "결과 보고 및 사후관리",
+            "corporate-process-4-title": "결과 보고 및<br>사후관리",
             "corporate-process-4-desc": "통합 보고서를 제공하고 재검 대상자의 사후관리를 지원합니다.",
             "corporate-contact-title": "CHECKIT과 함께 시작하기",
             "corporate-contact-subtitle": "아래 양식을 작성해주시면 기업 담당 매니저가 신속하게 연락드리겠습니다.",
@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "nav-process": "流程",
             "nav-testimonials": "客户评价",
             "nav-contact": "联系我们",
-            "corporate-hero-title": "为企业量身定制的健康体检解决方案",
-            "corporate-hero-subtitle": "轻松管理员工健康，无语言障碍。",
+            "corporate-hero-title": "您的业务依赖外国员工。但他们的健康得到有效管理了吗？",
+            "corporate-hero-subtitle": "语言障碍和复杂的行政程序是您无法再忽视的现实。您的公司和外籍员工都需要一个最佳解决方案。",
             "corporate-hero-cta": "申请企业咨询",
             "benefits-title": "为什么您的企业需要 CHECKIT？",
             "benefit-1-title": "简化管理",
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "corporate-process-2-desc": "只需提供员工名单。我们协调所有日程和细节。",
             "corporate-process-3-title": "无忧体检",
             "corporate-process-3-desc": "员工在母语指导下接受舒适的体检。",
-            "corporate-process-4-title": "报告与后续管理",
+            "corporate-process-4-title": "报告与<br>后续管理",
             "corporate-process-4-desc": "我们提供综合报告并管理复检人员的后续跟进。",
             "corporate-contact-title": "开始使用 CHECKIT",
             "corporate-contact-subtitle": "请填写以下表格，我们的企业客户经理将很快与您联系。",
@@ -116,8 +116,8 @@ document.addEventListener("DOMContentLoaded", () => {
             "nav-process": "Quy trình",
             "nav-testimonials": "Đánh giá",
             "nav-contact": "Liên hệ",
-            "corporate-hero-title": "Giải pháp khám sức khỏe tùy chỉnh cho doanh nghiệp",
-            "corporate-hero-subtitle": "Dễ dàng quản lý sức khỏe của nhân viên mà không gặp rào cản ngôn ngữ.",
+            "corporate-hero-title": "Hoạt động của bạn phụ thuộc vào lao động nước ngoài. Nhưng sức khỏe của họ có được quản lý hiệu quả không?",
+            "corporate-hero-subtitle": "Rào cản ngôn ngữ và thủ tục hành chính phức tạp là thực tế bạn không thể bỏ qua nữa. Cần có một giải pháp tối ưu cho cả công ty và nhân viên quốc tế của bạn.",
             "corporate-hero-cta": "Yêu cầu tư vấn cho doanh nghiệp",
             "benefits-title": "Tại sao doanh nghiệp của bạn nên chọn CHECKIT?",
             "benefit-1-title": "Quản lý tinh gọn",
@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "corporate-process-2-desc": "Chỉ cần cung cấp danh sách nhân viên. Chúng tôi điều phối lịch trình.",
             "corporate-process-3-title": "Khám bệnh dễ dàng",
             "corporate-process-3-desc": "Nhân viên được khám thoải mái với hướng dẫn bằng tiếng mẹ đẻ.",
-            "corporate-process-4-title": "Báo cáo & Theo dõi",
+            "corporate-process-4-title": "Báo cáo & <br>Theo dõi",
             "corporate-process-4-desc": "Chúng tôi cung cấp báo cáo và quản lý theo dõi cho các lần tái khám.",
             "corporate-contact-title": "Bắt đầu với CHECKIT",
             "corporate-contact-subtitle": "Điền vào biểu mẫu dưới đây và quản lý doanh nghiệp của chúng tôi sẽ sớm liên hệ với bạn.",
@@ -160,9 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const elements = document.querySelectorAll("[data-i18n]");
         elements.forEach(el => {
-            const key = el.getAttribute("data-i18n");
+            const key = el.getAttribute("data-i18n]");
             if (translations[lang] && translations[lang][key]) {
-                el.textContent = translations[lang][key];
+                el.innerHTML = translations[lang][key];
             }
         });
 
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         navUl.classList.toggle("is-active");
     });
 
-    // Get stored language or default to 'en' and set it
-    const savedLang = localStorage.getItem('language') || 'en';
+    // Get stored language or default to 'ko' and set it
+    const savedLang = localStorage.getItem('language') || 'ko';
     setLanguage(savedLang);
 });

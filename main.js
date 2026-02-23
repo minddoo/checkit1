@@ -1,7 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. TRANSLATIONS & LANGUAGE ------------------
+    // 1. TRANSLATIONS & LANGUAGE -------------------
     const translations = {
         ko: {
             'logo': 'CHECKIT',
@@ -166,12 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let currentLang = localStorage.getItem('checkitLang') || 'ko';
-    let isChatInitialized = false;
 
-    function updateTexts(lang, isLanguageSwitch = false) {
+    function updateTexts(lang) {
         currentLang = lang;
         localStorage.setItem('checkitLang', lang);
-        document.documentElement.lang = lang; 
+        document.documentElement.lang = lang; // Set language on <html> tag
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
@@ -190,38 +189,31 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.toggle('active', button.dataset.lang === lang);
         });
 
-        // Only update chat FAQ buttons if it's a language switch.
-        if (isLanguageSwitch) {
-            updateChatFAQ(lang);
-        }
+        updateChatUI(lang);
     }
 
     function setupLangSwitchers() {
         document.querySelectorAll('.lang-switcher button').forEach(button => {
             button.addEventListener('click', (e) => {
-                updateTexts(e.target.dataset.lang, true);
+                updateTexts(e.target.dataset.lang);
             });
         });
     }
 
     // 2. CHATBOT --------------------------------------
-    function initializeChat() {
-        if (isChatInitialized) return;
+    function updateChatUI(lang) {
         const chatMessages = document.getElementById('chat-messages');
-        if (!chatMessages) return;
-
-        chatMessages.innerHTML = '';
-        appendMessage('bot', translations[currentLang]['chat-welcome']);
-        updateChatFAQ(currentLang);
-        isChatInitialized = true;
-    }
-
-    function updateChatFAQ(lang) {
         const faqContainer = document.getElementById('faq-options');
-        if (!faqContainer) return;
+        if (!chatMessages || !faqContainer) return;
 
+        // Clear existing content
+        chatMessages.innerHTML = '';
         faqContainer.innerHTML = '';
 
+        // Add welcome message
+        appendMessage('bot', translations[lang]?.[ 'chat-welcome']);
+
+        // Add new FAQ buttons
         for (let i = 1; i <= 5; i++) {
             const key = `faq-${i}`;
             if (translations[lang]?.[key]) {
@@ -242,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showTypingIndicator();
         
         setTimeout(() => {
-            getBotResponse(questionKey);
+            getBotResponse(questionKey, true);
         }, 1200);
     }
 
@@ -259,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             chatWindow.classList.remove('hidden');
             chatToggle.classList.add('hidden');
-            initializeChat(); 
+            updateTexts(currentLang); // Initialize chat with current language
         });
 
         chatClose.addEventListener('click', (e) => {
@@ -277,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
 
             setTimeout(() => {
-                getBotResponse(messageText);
+                getBotResponse(messageText, false);
             }, 1200);
         };
         
@@ -291,11 +283,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function appendMessage(sender, text) {
-        if (!text) return;
+        if (!text) return; // Add a guard clause
         const chatMessages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chat-message', sender);
-        messageDiv.innerHTML = text;
+        messageDiv.classList.add('message', `${sender}-message`);
+        messageDiv.innerHTML = text; // Use innerHTML to render links from answers
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -313,33 +305,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const chatMessages = document.getElementById('chat-messages');
         const indicator = chatMessages.querySelector('.typing-indicator');
         if (indicator) {
-            indicator.remove();
+            chatMessages.removeChild(indicator);
         }
     }
     
-    function getBotResponse(message) {
+    function getBotResponse(message, isFaqClick) {
         removeTypingIndicator();
-        let responseText = translations[currentLang]['faq-default-ans'];
-        let matched = false;
+        let responseText = '';
     
-        // Check if the message is a direct FAQ key (from button click)
-        if (message.startsWith('faq-')) {
-            const answerKey = `ans-${message.slice(-1)}`;
+        if (isFaqClick) {
+            // For FAQ clicks, get the specific corresponding answer
+            const answerKey = `ans-${message.slice(-1)}`; // message is the questionKey, e.g., 'faq-1'
             responseText = translations[currentLang][answerKey];
-            matched = true;
         } else {
-            // Check for keyword matches in free text
+            // For free text, try to match it to a question
+            let matched = false;
             for (let i = 1; i <= 5; i++) {
                 const questionKey = `faq-${i}`;
-                const questionText = translations[currentLang][questionKey].toLowerCase();
-                if (message.toLowerCase().includes(questionText.substring(0, 10))) { 
-                    const answerKey = `ans-${i}`;
+                const answerKey = `ans-${i}`;
+                // A simple check if the user's message contains the question text
+                if (translations[currentLang]?.[questionKey] && message.toLowerCase().includes(translations[currentLang][questionKey].toLowerCase())) {
                     responseText = translations[currentLang][answerKey];
                     matched = true;
                     break;
                 }
             }
+            if (!matched) {
+                responseText = translations[currentLang]['faq-default-ans'];
+            }
         }
+    
         appendMessage('bot', responseText);
     }
 
@@ -370,5 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLangSwitchers();
     setupChatbot();
     setupHamburgerMenu();
+    // Set initial language based on localStorage or default
     updateTexts(currentLang);
 });

@@ -1,31 +1,64 @@
 
-# Blueprint: CHECKIT Website
+# CHECKIT Web Application Blueprint
 
-## 1. Project Overview
+## **1. Project Overview**
 
-CHECKIT is a concierge service that assists foreigners with the health check-up process in Korea. It is not a medical service. The goal is to provide a smooth, transparent, and convenient experience for a set service fee.
+A web application for **CHECKIT**, a service that assists foreigners in Korea with the non-medical aspects of their health check-ups. The site aims to be clean, professional, and user-friendly, providing clear information and an easy way to request consultations. It is multilingual, supporting Korean, English, Chinese, and Vietnamese.
 
-## 2. Implemented Features & Design
+---
 
-*   **Multi-Page Architecture:** Main landing page (`index.html`) and a dedicated page for individual customers (`individual.html`).
-*   **Language & Currency Toggle:** Switch between Korean, English, Chinese, and Vietnamese, with prices dynamically converting from a USD base.
-*   **"Expectation vs. Reality" Narrative:** A clear storytelling structure that highlights the problems CHECKIT solves.
-*   **Uniform Service Display:** All service plans and options are presented with a consistent and balanced design.
+## **2. Implemented Styles & Features**
 
-## 3. Final Plan: Refine UI and Simplify Content
+### **Design & Layout**
+*   **Color Palette:** Primary Green (`#00A67E`), secondary gray, dark text, light backgrounds.
+*   **Typography:** Modern sans-serif font (`-apple-system`, `Segoe UI`, etc.).
+*   **Header:** Sticky header with a logo, navigation links, and a language switcher.
+*   **Hero Section:** Large, impactful headline and a clear call-to-action (CTA) button.
+*   **Customer-Type Section:** Side-by-side cards for `Individuals` and `Business` users.
+*   **Process Section:** A step-by-step guide explaining how the service works.
+*   **Testimonials Section:** User reviews to build trust.
+*   **Contact Section:** A simple and clear form for consultation requests.
+*   **Footer:** Standard footer with copyright information.
+*   **Responsiveness:** The layout is fully responsive and adapts to mobile, tablet, and desktop screens. A hamburger menu is used for mobile navigation.
 
-The goal is to enhance visual consistency and simplify key marketing messages for better readability and a more professional feel.
+### **Functionality**
+*   **Internationalization (i18n):** The site content can be switched between Korean, English, Chinese, and Vietnamese using a language switcher. This is implemented in `main.js` and `individual.js`.
+*   **Interactive Chatbot:**
+    *   A floating chatbot icon is present on all pages.
+    *   The chatbot provides answers to frequently asked questions (FAQs).
+    *   It has a welcome message and options for users to click.
+    *   It includes a typing indicator to simulate a real conversation.
+    *   The chatbot window can be opened and closed.
+*   **Individual Service Page (`individual.html`):**
+    *   Details the common issues foreigners face (Expectation vs. Reality).
+    *   Provides a detailed breakdown of different service plans (`No-Confusion`, `Zero-Mistake`, `Total-Safe`).
+    *   Lists optional add-on services.
+    *   Includes a contact form for inquiries.
 
-**This involves:**
+---
 
-1.  **UI Consistency Overhaul:**
-    *   **Expectation Section:** Redesign the "Expectation" section to use a card-based layout that is visually consistent with the "Reality" section. All placeholder images (Reddit screenshots) will be removed to focus on the text content.
-    *   **Options Section:** Redesign the "Options" items to visually mimic the main pricing packages, creating a cohesive and unified service presentation.
+## **3. Current Task: Main Page Visual Enhancement**
 
-2.  **Content Simplification:**
-    *   **"Best For" Descriptions:** Revise the `plan-best-for` descriptions for all packages. The text will be shortened to a single, concise line, and specific titles like "Executives" or "Expats" will be removed to create a more universally appealing message.
+**Objective:** To refine the main page design for a softer, more professional, and visually engaging user experience.
 
-3.  **Code Implementation:**
-    *   **HTML:** Update the `individual.html` file to reflect the new card structures for the "Expectation" and "Options" sections.
-    *   **CSS:** Update `style.css` to create the new styles for the redesigned cards and ensure perfect visual alignment and responsive behavior.
-    *   **JavaScript:** Update the `main.js` file with the new, simplified translation strings for the `plan-best-for` keys in all four languages.
+**Plan:**
+
+1.  **Apply Light Mint Background:**
+    *   **Target:** Hero section and Contact section.
+    *   **Action:** Change the background color of `.hero` and `.contact-section` from white/dark to a light mint color (`#f0fff8`) to create a gentle and welcoming feel.
+
+2.  **Redesign Process Section:**
+    *   **Target:** `.process-section`.
+    *   **Action:** Convert the linear, arrow-connected steps into a modern card-based design. Each `.step` will become a distinct card with a shadow and rounded corners, improving readability and visual appeal. The arrows will be removed.
+
+3.  **Enhance Testimonials Section:**
+    *   **Target:** `.testimonial-cards`.
+    *   **Action:**
+        *   Change the background of the testimonial cards to the primary green color (`--primary-color`) with white text for better contrast and emphasis.
+        *   Enrich the review content to be more specific and compelling.
+        *   Add a third testimonial from the perspective of a corporate health manager to highlight the B2B benefits of the service.
+
+4.  **Update HTML and JS:**
+    *   **Target:** `index.html`, `main.js`.
+    *   **Action:** Update the HTML structure to remove process arrows and add the new testimonial. Update the i18n translation keys in `main.js` to reflect the new and updated review texts.
+

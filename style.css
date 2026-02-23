@@ -151,9 +151,18 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .notice-body .question { font-style: italic; color: #1f2937; margin: 1rem 0 2rem; padding: 1rem; background-color: #fefce8; border-left: 4px solid #facc15; }
 .notice-body h4 { font-size: 1.2rem; font-weight: 700; color: #92400e; margin-top: 2rem; margin-bottom: 0.75rem; }
 
-/* --- PERSONAL STORY SECTION --- */
-.personal-story-section { background: linear-gradient(to bottom, #f9fafb, #e5e7eb); }
-.story-card { background-color: rgba(29, 40, 56, 0.85); backdrop-filter: blur(10px); color: var(--light-color); border-radius: 15px; padding: 2.5rem; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; }
+/* --- PERSONAL STORY SECTION (Restored) --- */
+.personal-story-section { background: linear-gradient(to bottom, #f0f2f5, #e9ecef); }
+.personal-story-section .story-intro-text { text-align: center; max-width: 700px; margin: 0 auto 3rem; }
+.personal-story-section .story-intro-text p { font-size: 1.5rem; font-weight: 600; line-height: 1.6; color: var(--dark-color); }
+.personal-story-section .story-intro-text p:last-child { font-size: 1.2rem; font-weight: 400; color: var(--secondary-color); margin-top: 0.5rem; }
+.story-card { background-color: rgba(29, 40, 56, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--light-color); border-radius: 15px; padding: 2.5rem; max-width: 800px; margin: 2rem auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: left; }
+.story-card p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+.story-highlight { text-align: center; margin: 2rem 0; }
+.story-highlight .arrow { font-size: 2rem; color: var(--primary-color); display: block; animation: story-bounce 2s infinite; }
+@keyframes story-bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
+.story-highlight p { font-size: 1.3rem; font-weight: 600; color: var(--light-color); margin-top: 0.5rem; }
+
 
 /* --- REFUND POLICY SECTION (Reverted to Original) --- */
 .refund-section { background-color: var(--section-bg-light); }

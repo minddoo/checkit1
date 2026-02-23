@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT - For Individuals</title>
-    <link rel="stylesheet" href="style.css?v=10.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=12.0">
+    <link rel="stylesheet" href="https.cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
@@ -45,24 +45,20 @@
             <h2 class="section-title" data-i18n="expectation-title">The Dream: What You Expect from Korean Healthcare</h2>
             <div class="expectation-container">
                 <div class="expectation-card">
-                    <h3 data-i18n="exp1-title">#1. Cost Efficiency</h3>
+                    <h4 data-i18n="exp1-title">#1. Cost Efficiency</h4>
                     <p data-i18n="exp1-desc">“Medical care in Korea is known to be dramatically cheaper than in the U.S.”</p>
-                    <img src="./assets/exp1.png" alt="Reddit post about cheap healthcare in Korea">
                 </div>
                 <div class="expectation-card">
-                    <h3 data-i18n="exp2-title">#2. Convenience</h3>
+                    <h4 data-i18n="exp2-title">#2. Convenience</h4>
                     <p data-i18n="exp2-desc">“The entire process is expected to be simple and hassle-free.”</p>
-                    <img src="./assets/exp2.png" alt="Reddit post about Korea's healthcare system">
                 </div>
                 <div class="expectation-card">
-                    <h3 data-i18n="exp3-title">#3. Professional Quality</h3>
+                    <h4 data-i18n="exp3-title">#3. Professional Quality</h4>
                     <p data-i18n="exp3-desc">“Facilities and medical standards are expected to be world-class.”</p>
-                    <img src="./assets/exp3.png" alt="Reddit post comparing surgery in America vs Korea">
                 </div>
                 <div class="expectation-card">
-                    <h3 data-i18n="exp4-title">#4. Time Safety</h3>
+                    <h4 data-i18n="exp4-title">#4. Time Safety</h4>
                     <p data-i18n="exp4-desc">“It’s expected to be quick, with minimal impact on your schedule.”</p>
-                    <img src="./assets/exp4.png" alt="Reddit post about fast healthcare in Korea">
                 </div>
             </div>
         </section>
@@ -123,7 +119,7 @@
             <h2 class="section-title" data-i18n="pricing-title">Choose Your Plan</h2>
             <div class="pricing-container">
                 <!-- No-Confusion Plan -->
-                <div class="pricing-card">
+                <div class="pricing-card plan-no-confusion">
                     <div class="pricing-header">
                         <h3 data-i18n="plan1-title">No-Confusion Plan</h3>
                         <p class="price" data-price-usd="400">400 USD</p>
@@ -144,13 +140,13 @@
                     </div>
                     <div class="best-for">
                         <strong data-i18n="plan-best-for">Best for:</strong>
-                        <p data-i18n="plan1-best-for">Self-guided travelers who want clarity without extra services.</p>
+                        <p data-i18n="plan1-best-for">Travelers who want clarity and self-guided support.</p>
                     </div>
                     <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
 
                 <!-- Zero-Mistake Plan -->
-                <div class="pricing-card">
+                <div class="pricing-card plan-zero-mistake">
                     <div class="pricing-header">
                         <h3 data-i18n="plan2-title">Zero-Mistake Plan</h3>
                         <p class="price" data-price-usd="500">500 USD</p>
@@ -171,13 +167,13 @@
                     </div>
                     <div class="best-for">
                         <strong data-i18n="plan-best-for">Best for:</strong>
-                        <p data-i18n="plan2-best-for">Travelers who want to avoid all common foreigner mistakes.</p>
+                        <p data-i18n="plan2-best-for">Those who want to avoid common mistakes and delays.</p>
                     </div>
                     <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
 
                 <!-- Total-Safe Plan -->
-                <div class="pricing-card">
+                <div class="pricing-card plan-total-safe">
                     <div class="pricing-header">
                         <h3 data-i18n="plan3-title">Total-Safe Plan</h3>
                         <p class="price" data-price-usd="700">700 USD</p>
@@ -202,7 +198,7 @@
                     </div>
                      <div class="best-for">
                         <strong data-i18n="plan-best-for">Best for:</strong>
-                        <p data-i18n="plan3-best-for">Executives, expats, and anyone who wants zero risk and zero hassle.</p>
+                        <p data-i18n="plan3-best-for">Anyone who wants a completely stress-free experience.</p>
                     </div>
                     <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
@@ -210,43 +206,65 @@
         </section>
 
         <section class="options-section">
-            <h2 class="section-title"><span class="plus-option" data-i18n="options-title">+Option</span></h2>
-            <p class="section-subtitle" data-i18n="options-subtitle">Enhance your plan only if you need extra support.</p>
-            
-            <div class="options-container">
-                 <div class="option-card">
-                    <h3 data-i18n="option4-title">Program & Aftercare Structure Pack</h3>
-                    <p class="price" data-price-usd="60">60 USD</p>
-                    <p data-i18n="option4-desc">A non-medical guide explaining your exam conditions, result structure, and post-exam care.</p>
+            <h2 class="section-title"><span data-i18n="options-title">Service Add-ons</span></h2>
+            <div class="pricing-container options-container">
+                 <div class="pricing-card option-card">
+                    <div class="pricing-header">
+                        <h3 data-i18n="option4-title">Program & Aftercare Pack</h3>
+                        <p class="price" data-price-usd="60">60 USD</p>
+                    </div>
+                    <div class="features-container">
+                        <p data-i18n="option4-desc">A non-medical guide explaining your exam conditions, result structure, and post-exam care.</p>
+                    </div>
                 </div>
-                 <div class="option-card">
-                    <h3 data-i18n="option5-title">Graphic Navigation Guide</h3>
-                    <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option5-desc">Shows the exact hospital layout and movement flow. Helpful for first-time visitors.</p>
+                 <div class="pricing-card option-card">
+                    <div class="pricing-header">
+                        <h3 data-i18n="option5-title">Graphic Navigation Guide</h3>
+                        <p class="price" data-price-usd="20">20 USD</p>
+                    </div>
+                    <div class="features-container">
+                        <p data-i18n="option5-desc">Shows the exact hospital layout and movement flow. Helpful for first-time visitors.</p>
+                    </div>
                 </div>
-                <div class="option-card schedule-options">
-                    <h3 data-i18n="option6-title">Schedule Change Options</h3>
-                     <p data-i18n="option6-desc">For customers who need to change their reservation after booking.</p>
-                    <ul>
-                        <li><span data-i18n="option6-sub1">Single Change</span> — <span class="price" data-price-usd="25">25 USD</span></li>
-                        <li><span data-i18n="option6-sub2">Double Package</span> — <span class="price" data-price-usd="40">40 USD</span></li>
-                        <li><span data-i18n="option6-sub3">Unlimited Changes</span> — <span class="price" data-price-usd="200">200 USD</span></li>
-                    </ul>
+                <div class="pricing-card option-card schedule-options">
+                    <div class="pricing-header">
+                        <h3 data-i18n="option6-title">Schedule Change</h3>
+                    </div>
+                     <div class="features-container">
+                        <p data-i18n="option6-desc">For customers who need to change their reservation after booking.</p>
+                        <ul class="pricing-features">
+                            <li><span data-i18n="option6-sub1">Single Change</span>: <span class="price" data-price-usd="25">25 USD</span></li>
+                            <li><span data-i18n="option6-sub2">Double Package</span>: <span class="price" data-price-usd="40">40 USD</span></li>
+                            <li><span data-i18n="option6-sub3">Unlimited Changes</span>: <span class="price" data-price-usd="200">200 USD</span></li>
+                        </ul>
+                    </div>
                 </div>
-                 <div class="option-card">
-                    <h3 data-i18n="option1-title">English Receipt Request</h3>
-                    <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option1-desc">We request an English receipt on your behalf, suitable for insurance purposes.</p>
+                 <div class="pricing-card option-card">
+                     <div class="pricing-header">
+                        <h3 data-i18n="option1-title">English Receipt Request</h3>
+                        <p class="price" data-price-usd="20">20 USD</p>
+                    </div>
+                     <div class="features-container">
+                        <p data-i18n="option1-desc">We request an English receipt on your behalf, suitable for insurance purposes.</p>
+                    </div>
                 </div>
-                <div class="option-card">
-                    <h3 data-i18n="option2-title">CD Result Request</h3>
-                    <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option2-desc">We request your exam CD or additional imaging files on your behalf.</p>
+                <div class="pricing-card option-card">
+                     <div class="pricing-header">
+                        <h3 data-i18n="option2-title">CD Result Request</h3>
+                        <p class="price" data-price-usd="20">20 USD</p>
+                    </div>
+                    <div class="features-container">
+                        <p data-i18n="option2-desc">We request your exam CD or additional imaging files on your behalf.</p>
+                    </div>
                 </div>
-                <div class="option-card">
-                    <h3 data-i18n="option3-title">Urgent Result Follow-up</h3>
-                    <p class="price" data-price-usd="20">20 USD</p>
-                    <p data-i18n="option3-desc">We send one urgent follow-up message to the hospital on your behalf.</p>
+                <div class="pricing-card option-card">
+                    <div class="pricing-header">
+                        <h3 data-i18n="option3-title">Urgent Result Follow-up</h3>
+                        <p class="price" data-price-usd="20">20 USD</p>
+                    </div>
+                    <div class="features-container">
+                        <p data-i18n="option3-desc">We send one urgent follow-up message to the hospital on your behalf.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -266,6 +284,6 @@
         <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="main.js?v=10.0"></script>
+    <script src="individual.js?v=12.0"></script>
 </body>
 </html>

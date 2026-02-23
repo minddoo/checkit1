@@ -9,25 +9,23 @@ CHECKIT is a concierge service that assists foreigners with the health check-up 
 
 *   **Multi-Page Architecture:** Main landing page (`index.html`) and a dedicated page for individual customers (`individual.html`).
 *   **Language & Currency Toggle:** Switch between Korean, English, Chinese, and Vietnamese, with prices dynamically converting from a USD base.
-*   **Uniform Pricing Display:** All service packages are presented equally without a 'recommended' highlight for balanced consideration.
-*   **Modular Options:** Add-on services are available separately from the main packages.
+*   **"Expectation vs. Reality" Narrative:** A clear storytelling structure that highlights the problems CHECKIT solves.
+*   **Uniform Service Display:** All service plans and options are presented with a consistent and balanced design.
 
-## 3. Final Plan: Implement "Expectation vs. Reality" Narrative
+## 3. Final Plan: Refine UI and Simplify Content
 
-The primary goal is to completely redesign the `individual.html` page to create a powerful "Expectation vs. Reality" narrative that highlights the problems CHECKIT solves.
+The goal is to enhance visual consistency and simplify key marketing messages for better readability and a more professional feel.
 
 **This involves:**
 
-1.  **New Storytelling Structure:**
-    *   **Expectation Section:** Show the positive expectations foreigners have about Korean healthcare (e.g., cost, convenience), using formatted quotes and references (like Reddit posts) from the provided images.
-    *   **Reality Section:** Contrast the expectation by showing the real-world problems they face (e.g., No English Support, Confusing Process, Unreliable Scheduling). This will be structured in clear, problem-focused cards.
-    *   **Removal of Redundant Sections:** The generic "Process" section will be removed from `individual.html` to focus purely on this new, persuasive narrative flow leading into the service plans.
+1.  **UI Consistency Overhaul:**
+    *   **Expectation Section:** Redesign the "Expectation" section to use a card-based layout that is visually consistent with the "Reality" section. All placeholder images (Reddit screenshots) will be removed to focus on the text content.
+    *   **Options Section:** Redesign the "Options" items to visually mimic the main pricing packages, creating a cohesive and unified service presentation.
 
-2.  **Content and Translation Overhaul:**
-    *   Transcribe all new English text from the provided "Expectation vs. Reality" images.
-    *   Create new i18n keys and provide full, accurate translations for all new content into Korean, Chinese, and Vietnamese.
+2.  **Content Simplification:**
+    *   **"Best For" Descriptions:** Revise the `plan-best-for` descriptions for all packages. The text will be shortened to a single, concise line, and specific titles like "Executives" or "Expats" will be removed to create a more universally appealing message.
 
-3.  **CSS Refinements:**
-    *   Create distinct, clean styles for the new "Expectation" and "Reality" sections.
-    *   Ensure all pricing cards are styled uniformly, removing any highlights or scaling effects from the 'popular' plan.
-    *   Review and adjust overall typography and line breaks for consistency and improved readability across the entire page.
+3.  **Code Implementation:**
+    *   **HTML:** Update the `individual.html` file to reflect the new card structures for the "Expectation" and "Options" sections.
+    *   **CSS:** Update `style.css` to create the new styles for the redesigned cards and ensure perfect visual alignment and responsive behavior.
+    *   **JavaScript:** Update the `main.js` file with the new, simplified translation strings for the `plan-best-for` keys in all four languages.

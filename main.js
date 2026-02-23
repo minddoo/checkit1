@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer-copy': '© 2024 CHECKIT. 版权所有。',
             'chat-title': 'CHECKIT 机器人', 
             'chat-welcome': '你好！对CHECKIT有任何疑问吗？请选择以下问题或自行输入。',
-            'chat-input-placeholder': '请输入您想问的问题...',
+            'chat-input-placeholder': '请输入您想问的问题',
             'faq-1': '如何进行预订？',
             'faq-2': '是与医院/医生签约的模式吗？',
             'faq-3': '你们是否提供医疗行为或转诊服务？',

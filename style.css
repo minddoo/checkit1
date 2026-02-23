@@ -324,10 +324,6 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .faq-options button { background: white; border: 1px solid #dee2e6; padding: 0.9rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; width: 100%; text-align: left; color: var(--dark-color); box-shadow: var(--shadow-sm); }
 .faq-options button:hover { background-color: #f8f9fa; border-color: #ced4da; transform: translateY(-1px); box-shadow: var(--shadow-md); }
 
-/* FAQ Options: Chinese Horizontal Layout */
-html[lang="zh"] .faq-options { flex-direction: row; flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 0.75rem; }
-html[lang="zh"] .faq-options button { width: auto; flex-shrink: 0; flex-grow: 0; }
-
 .chat-input-container { display: flex; padding: 0.5rem; border-top: 1px solid #e9ecef; }
 #chat-input { flex-grow: 1; border: none; outline: none; padding: 0.8rem; background: transparent; font-size: 1rem; }
 #chat-send { background: none; border: none; font-size: 1.5rem; color: var(--primary-color); cursor: pointer; padding: 0.5rem; transition: color 0.2s; }

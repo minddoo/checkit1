@@ -7,12 +7,10 @@ CHECKIT is a concierge service that assists foreigners with the health check-up 
 
 ## 2. Target Audience & Value Proposition
 
-The website caters to two distinct customer segments with different narratives.
-
 ### 2.1. Individual Customers (B2C)
 - **Target:** Foreign residents in Korea and foreigners abroad interested in medical tourism in Korea.
 - **Pain Points:** Language barriers, complicated booking systems, uncertainty about costs, and difficulty understanding results.
-- **Value Proposition:** Find the right check-up within your budget at the same price as locals. We provide booking assistance and translated results for a seamless experience.
+- **Value Proposition:** Find the right check-up within your budget at the same price as locals. We provide booking assistance and translated results for a seamless experience, with clear, tiered service plans.
 
 ### 2.2. Corporate Customers (B2B)
 - **Target:** Companies employing foreign workers.
@@ -21,26 +19,30 @@ The website caters to two distinct customer segments with different narratives.
 
 ## 3. Implemented Features & Design
 
-*   **Multi-Page Architecture:** The site now uses separate pages for the main landing page and for detailed customer segments (starting with individuals).
+*   **Multi-Page Architecture:** The site uses separate pages for the main landing page (`index.html`) and a dedicated page for individual customers (`individual.html`).
 *   **Homepage with Customer Segmentation:** Users can choose between "For Individuals" and "For Business" paths.
-*   **Language Toggle:** Switch between Korean, English, Chinese, and Vietnamese.
+*   **Language Toggle:** Switch between Korean, English, Chinese, and Vietnamese with preference saved across sessions.
 *   **Modern & Clean UI:** A visually appealing design with a hero section, service description, process steps, and FAQ.
-*   **FAQ Section & Chatbot:** Dynamically loaded FAQ content and a chatbot provide instant answers.
+*   **FAQ Section & Chatbot:** Dynamically loaded FAQ content and a chatbot provide instant answers on the main page.
 
-## 4. Current Plan: Create Dedicated Page for Individual Customers
+## 4. Current Plan: Redesign `individual.html` with Tiered Pricing
 
-The current goal is to create a new, separate page entirely dedicated to individual customers, providing a focused experience.
+The current goal is to completely redesign the `individual.html` page to be more professional and informative, based on the tiered service model from the reference link. The centerpiece will be a premium pricing table.
 
 **This involves:**
 
-1.  **Create `individual.html`:**
-    *   Create a new HTML file for individual customers.
-    *   Design a unique layout including a tailored hero section, "Why Choose Us?", detailed service descriptions, the user process, and a contact form.
-    *   Ensure the header, footer, and all necessary assets (CSS, JS) are correctly linked.
+1.  **Re-structure `individual.html`:**
+    *   Replace the current generic service list with a sophisticated **pricing table**.
+    *   The table will feature three distinct plans: **LITE**, **STANDARD**, and **PREMIUM**.
+    *   Each plan will clearly display its price and list of features using icons (e.g., checkmarks) for easy comparison.
+    *   The **STANDARD** plan will be visually highlighted as the "Most Popular" choice.
+    *   The CTA button for each plan will link directly to the contact section of the page.
 
-2.  **Update `index.html` (Main Page):
-    *   Modify the link on the "For Individuals" card to point to the new `individual.html`.
-    *   Remove the now-redundant `#individual-services` section from the main page to simplify its structure.
+2.  **Enhance CSS in `style.css`:**
+    *   Create new styles for the pricing table, including plan headers, feature lists, and buttons.
+    *   Use modern design principles (shadows, colors, typography) to create a premium, trustworthy look and feel.
+    *   Ensure the new pricing table is fully responsive and optimized for mobile viewing.
 
-3.  **Refactor `main.js`:**
-    *   Remove the JavaScript logic that was responsible for showing and hiding the service details section on the main page, as it is no longer needed.
+3.  **Update `main.js` with New Content:**
+    *   Add all new text strings from the pricing table (plan names, prices, feature descriptions) to the `translations` object.
+    *   Provide complete translations for Korean, English, Chinese, and Vietnamese.

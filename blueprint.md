@@ -10,55 +10,47 @@ A web application for **CHECKIT**, a service that assists foreigners in Korea wi
 ## **2. Implemented Styles & Features**
 
 ### **Design & Layout**
-*   **Color Palette:** Primary Green (`#00A67E`), secondary gray, dark text, light backgrounds.
+*   **Color Palette:** Primary Green (`#00A67E`), secondary gray, dark text, light backgrounds, and a soft mint (`#f0fff8`).
 *   **Typography:** Modern sans-serif font (`-apple-system`, `Segoe UI`, etc.).
 *   **Header:** Sticky header with a logo, navigation links, and a language switcher.
-*   **Hero Section:** Large, impactful headline and a clear call-to-action (CTA) button.
+*   **Responsiveness:** The layout is fully responsive and adapts to mobile, tablet, and desktop screens.
+
+### **Main Page (`index.html`)**
+*   **Hero Section:** Features a light mint background for a welcoming feel.
 *   **Customer-Type Section:** Side-by-side cards for `Individuals` and `Business` users.
-*   **Process Section:** A step-by-step guide explaining how the service works.
-*   **Testimonials Section:** User reviews to build trust.
-*   **Contact Section:** A simple and clear form for consultation requests.
-*   **Footer:** Standard footer with copyright information.
-*   **Responsiveness:** The layout is fully responsive and adapts to mobile, tablet, and desktop screens. A hamburger menu is used for mobile navigation.
+*   **Process Section:** A step-by-step guide presented in a modern, readable card format.
+*   **Testimonials Section:** Trust-building user reviews displayed in eye-catching green cards with white text. Includes a testimonial from a corporate HR manager.
+*   **Contact Section:** A clear contact form with the same light mint background as the hero section.
 
 ### **Functionality**
-*   **Internationalization (i18n):** The site content can be switched between Korean, English, Chinese, and Vietnamese using a language switcher. This is implemented in `main.js` and `individual.js`.
-*   **Interactive Chatbot:**
-    *   A floating chatbot icon is present on all pages.
-    *   The chatbot provides answers to frequently asked questions (FAQs).
-    *   It has a welcome message and options for users to click.
-    *   It includes a typing indicator to simulate a real conversation.
-    *   The chatbot window can be opened and closed.
-*   **Individual Service Page (`individual.html`):**
-    *   Details the common issues foreigners face (Expectation vs. Reality).
-    *   Provides a detailed breakdown of different service plans (`No-Confusion`, `Zero-Mistake`, `Total-Safe`).
-    *   Lists optional add-on services.
-    *   Includes a contact form for inquiries.
+*   **Internationalization (i18n):** The site content can be switched between Korean, English, Chinese, and Vietnamese. This is managed via `main.js` and `individual.js`.
+*   **Interactive Chatbot:** A persistent floating chatbot provides FAQ answers and is available on all pages.
+*   **Individual Service Page (`individual.html`):** Details service plans and common challenges for foreigners.
 
 ---
 
-## **3. Current Task: Main Page Visual Enhancement**
+## **3. Current Task: Individual Page Visual & Content Refinement**
 
-**Objective:** To refine the main page design for a softer, more professional, and visually engaging user experience.
+**Objective:** To improve the clarity and emotional impact of the `individual.html` page by visually distinguishing the "Expectation" and "Reality" sections and refining content.
 
 **Plan:**
 
-1.  **Apply Light Mint Background:**
-    *   **Target:** Hero section and Contact section.
-    *   **Action:** Change the background color of `.hero` and `.contact-section` from white/dark to a light mint color (`#f0fff8`) to create a gentle and welcoming feel.
+1.  **Update Page `blueprint.md`:** Reflect the new changes for the individual page.
 
-2.  **Redesign Process Section:**
-    *   **Target:** `.process-section`.
-    *   **Action:** Convert the linear, arrow-connected steps into a modern card-based design. Each `.step` will become a distinct card with a shadow and rounded corners, improving readability and visual appeal. The arrows will be removed.
+2.  **Refine "Expectation" Section:**
+    *   **Content:** Remove the word "꿈:" (Dream:) from the section title for a more direct heading.
+    *   **Style:** Change the background color of the expectation cards (`.expectation-card`) to a light sky blue to evoke a positive, hopeful feeling.
 
-3.  **Enhance Testimonials Section:**
-    *   **Target:** `.testimonial-cards`.
-    *   **Action:**
-        *   Change the background of the testimonial cards to the primary green color (`--primary-color`) with white text for better contrast and emphasis.
-        *   Enrich the review content to be more specific and compelling.
-        *   Add a third testimonial from the perspective of a corporate health manager to highlight the B2B benefits of the service.
+3.  **Emphasize "Reality" Section:**
+    *   **Style (`.reality-intro`):** Change the background of the "하지만, 현실은 다릅니다" (But, the reality is different) section to a light red to create a clear visual warning.
+    *   **Style (`.reality-card`):** Change the background of the reality cards to the same light red, grouping the challenges together visually.
 
-4.  **Update HTML and JS:**
-    *   **Target:** `index.html`, `main.js`.
-    *   **Action:** Update the HTML structure to remove process arrows and add the new testimonial. Update the i18n translation keys in `main.js` to reflect the new and updated review texts.
+4.  **Adjust "Options" Section:**
+    *   **Content:** Change the section title from "추가 서비스" (Additional Services) to "옵션" (Options).
+    *   **Style:** Modify the title style to be simple blue text without a background, distinguishing it from other primary section titles.
 
+5.  **Unify Contact Section:**
+    *   **Style:** Change the background of the final contact section ("Ready to start?") to the light mint color (`--mint-bg`) used on the main page for design consistency.
+
+6.  **Update Translations (`individual.js`):**
+    *   Apply all content changes to the translation files to ensure multilingual support is up-to-date.

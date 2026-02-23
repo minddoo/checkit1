@@ -4,6 +4,7 @@
     --primary-color: #00A67E; --secondary-color: #5a646e; --dark-color: #212529; --light-color: #f8f9fa;
     --white-color: #ffffff; --danger-color: #d9534f; --blue-accent: #3498db; --section-bg-light: #f9fafb;
     --plan-orange: #E67E22; --plan-brown: #8D6E63; --mint-bg: #f0fff8;
+    --light-sky-blue: #f0f8ff; --light-red: #fff0f0;
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.04); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
 }
@@ -120,14 +121,14 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 }
 
 /* --- STYLES FOR INDIVIDUAL.HTML --- */
-.contact { padding: 5rem 2rem; background: var(--dark-color); color: var(--white-color); text-align: center; }
-.contact h2 { color: var(--white-color); font-size: 2rem; margin-bottom: 1rem; }
-.contact p { color: #adb5bd; max-width: 600px; margin: 1rem auto 2rem; }
+.contact { padding: 5rem 2rem; background: var(--mint-bg); text-align: center; }
+.contact h2 { color: var(--dark-color); font-size: 2rem; margin-bottom: 1rem; }
+.contact p { color: var(--secondary-color); max-width: 600px; margin: 1rem auto 2rem; }
 .contact form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
-.contact input, .contact textarea { padding: 1rem; border: 1px solid #495057; border-radius: 8px; font-size: 1rem; background: #212529; color: var(--white-color); transition: border-color 0.2s; }
+.contact input, .contact textarea { padding: 1rem; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; background: var(--white-color); color: var(--dark-color); transition: border-color 0.2s; }
 .contact input:focus, .contact textarea:focus { outline: none; border-color: var(--primary-color); }
 .contact .cta-button { margin-top: 1rem; }
-.reality-intro { padding: 3.5rem 2rem; text-align: center; background-color: var(--section-bg-light); }
+.reality-intro { padding: 3.5rem 2rem; text-align: center; background-color: var(--light-red); }
 .reality-intro h2 { font-size: 2.2rem; font-weight: 700; color: var(--danger-color); }
 .arrow-down { font-size: 3rem; color: var(--danger-color); margin-top: 0.5rem; animation: bounce 2s infinite; }
 @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-15px); } 60% { transform: translateY(-8px); } }
@@ -159,7 +160,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .plan-zero-mistake .cta-button { background-color: var(--plan-brown); }
 .plan-zero-mistake:hover { border-color: var(--plan-brown); }
 .plan-total-safe .pricing-features li::before { color: var(--primary-color); }
-.options-section .section-title span { background: var(--blue-accent); color: var(--white-color); border-radius: 8px; padding: 0.3rem 1rem; font-size: 2.2rem; }
+.options-section .section-title { color: var(--blue-accent); background: none; padding: 0; }
 .options-container { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 .option-card .features-container p { font-size: 0.95rem; color: var(--secondary-color); line-height: 1.6; }
 .option-card .pricing-header .price { color: var(--blue-accent); }
@@ -170,10 +171,10 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .expectation-section { background-color: var(--white-color); }
 .reality-section { background-color: var(--section-bg-light); }
 .expectation-container, .reality-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 1100px; margin: 0 auto; }
-.expectation-card, .reality-card { background: var(--white-color); border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s ease; }
+.expectation-card, .reality-card { border: 1px solid #e9ecef; border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-sm); transition: box-shadow 0.3s ease; }
 .expectation-card:hover, .reality-card:hover { box-shadow: var(--shadow-md); }
-.expectation-card { border-left: 5px solid var(--blue-accent); }
-.reality-card { border-left: 5px solid var(--danger-color); }
+.expectation-card { background-color: var(--light-sky-blue); border-left: 5px solid var(--blue-accent); }
+.reality-card { background-color: var(--light-red); border-left: 5px solid var(--danger-color); }
 .expectation-card h4, .reality-card h4 { font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600; display: flex; align-items: center; }
 .reality-card h4 i { font-size: 1.1rem; margin-right: 0.8rem; }
 .expectation-card p, .reality-card ul { color: var(--secondary-color); }

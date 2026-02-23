@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다. CHECKIT이 그 간극을 메웁니다.',
             'view-reality-cta': '현실 확인하기',
             
-            'expectation-title': '꿈: 한국 의료 서비스에 대한 당신의 기대',
+            'expectation-title': '한국 의료 서비스에 대한 당신의 기대',
             'exp1-title': '#1. 비용 효율성', 'exp1-desc': '“한국의 의료 서비스는 미국보다 훨씬 저렴하다고 알려져 있습니다.”',
             'exp2-title': '#2. 편리함', 'exp2-desc': '“전체 과정이 간단하고 번거로움이 없을 것으로 기대됩니다.”',
             'exp3-title': '#3. 전문적인 수준', 'exp3-desc': '“시설과 의료 수준이 세계적일 것으로 기대됩니다.”',
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan3-feat1': '프리미엄 문진표 관리', 'plan3-feat2': '위험 포인트 설명 (비의료적, 절차 기반)', 'plan3-feat3': '복잡한 서식 항목을 위한 영어 답변 템플릿', 'plan3-feat4': '전체 서식 확인 (모든 페이지, 서명, 첨부파일)', 'plan3-feat5': '프리미엄 검진 전 팩 (상세 타임라인, 실수 대응 플로우)', 'plan3-feat6': '실시간 검진 당일 채팅 지원', 'plan3-feat7': '병원 내 동선 가이드 (그래픽)', 'plan3-feat8': '영문 영수증 요청 (대행)', 'plan3-feat9': 'CD / 추가 서류 요청', 'plan3-feat10': '결과 나올 때까지 완전한 검진 후 후속 조치', 'plan3-feat11': '결과 구성 (비의료적, 내용 구성만)', 'plan3-feat12': '병원 소통용 템플릿', 'plan3-feat13': '일정 변경 지원 (최대 3회 포함)',
             'plan3-best-for': '완벽하게 스트레스 없는 경험을 원하는 모든 분.',
 
-            'options-title': '추가 서비스', 'options-subtitle': '추가 지원이 필요한 경우에만 플랜을 강화하세요.',
+            'options-title': '옵션', 
             'option1-title': '영문 영수증 요청', 'option1-desc': '보험 목적에 적합한 영문 영수증을 대신 요청합니다.',
             'option2-title': 'CD 결과 요청', 'option2-desc': '검사 CD 또는 추가 영상 파일을 대신 요청합니다.',
             'option3-title': '긴급 결과 후속 조치', 'option3-desc': '병원에 긴급 후속 조치 메시지를 한 번 보냅니다.',
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety. CHECKIT bridges the gap.',
             'view-reality-cta': 'See the Reality',
             
-            'expectation-title': 'The Dream: What You Expect from Korean Healthcare',
+            'expectation-title': 'What You Expect from Korean Healthcare',
             'exp1-title': '#1. Cost Efficiency', 'exp1-desc': '“Medical care in Korea is known to be dramatically cheaper than in the U.S.”',
             'exp2-title': '#2. Convenience', 'exp2-desc': '“The entire process is expected to be simple and hassle-free.”',
             'exp3-title': '#3. Professional Quality', 'exp3-desc': '“Facilities and medical standards are expected to be world-class.”',
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan3-feat1': 'Premium Questionnaire Management', 'plan3-feat2': 'Risk-point explanation (non-medical, process-based)', 'plan3-feat3': 'English answer templates for complex form items', 'plan3-feat4': 'Complete format check (all pages, signatures, attachments)', 'plan3-feat5': 'Premium Pre-check Pack (detailed timeline, mistake-response flow)', 'plan3-feat6': 'Real-time exam-day chat support', 'plan3-feat7': 'Hospital navigation guide (graphic)', 'plan3-feat8': 'English receipt request (handled on your behalf)', 'plan3-feat9': 'CD / additional document request', 'plan3-feat10': 'Full post-exam follow-up until results are delivered', 'plan3-feat11': 'Result structuring (non-medical, content organization only)', 'plan3-feat12': 'Templates for communicating with the hospital', 'plan3-feat13': 'Schedule change support (up to 3 times included)',
             'plan3-best-for': 'Anyone who wants a completely stress-free experience.',
 
-            'options-title': 'Add-on Services', 'options-subtitle': 'Enhance your plan only if you need extra support.',
+            'options-title': 'Options',
             'option1-title': 'English Receipt Request', 'option1-desc': 'We request an English receipt on your behalf, suitable for insurance purposes.',
             'option2-title': 'CD Result Request', 'option2-desc': 'We request your exam CD or additional imaging files on your behalf.',
             'option3-title': 'Urgent Result Follow-up', 'option3-desc': 'We send one urgent follow-up message to the hospital on your behalf.',
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。CHECKIT 弥合了这一差距。',
             'view-reality-cta': '看看现实',
             
-            'expectation-title': '梦想：您对韩国医疗保健的期望',
+            'expectation-title': '您对韩国医疗保健的期望',
             'exp1-title': '#1. 成本效益', 'exp1-desc': '“众所周知，韩国的医疗保健费用比美国便宜得多。”',
             'exp2-title': '#2. 便利性', 'exp2-desc': '“整个过程预计将简单无忧。”',
             'exp3-title': '#3. 专业品质', 'exp3-desc': '“设施和医疗标准有望达到世界一流水平。”',
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan3-feat1': '高级问卷管理', 'plan3-feat2': '风险点解释（非医疗，基于流程）', 'plan3-feat3': '复杂表格项目的英文答案模板', 'plan3-feat4': '完整的格式检查（所有页面、签名、附件）', 'plan3-feat5': '高级预检包（详细时间表，错误响应流程）', 'plan3-feat6': '实时检查日聊天支持', 'plan3-feat7': '医院导航指南（图文）', 'plan3-feat8': '英文收据请求（代为处理）', 'plan3-feat9': 'CD/附加文件请求', 'plan3-feat10': '直到结果交付的全面检查后跟进', 'plan3-feat11': '结果结构化（非医疗，仅内容组织）', 'plan3-feat12': '与医院沟通的模板', 'plan3-feat13': '日程变更支持（最多包括3次）',
             'plan3-best-for': '任何想要完全无压力体验的人。',
 
-            'options-title': '附加服务', 'options-subtitle': '仅在需要额外支持时才增强您的计划。',
+            'options-title': '选项',
             'option1-title': '英文收据请求', 'option1-desc': '我们代您申请英文收据，适用于保险目的。',
             'option2-title': 'CD 结果请求', 'option2-desc': '我们代您申请您的检查 CD 或其他影像文件。',
             'option3-title': '紧急结果跟进', 'option3-desc': '我们代您向医院发送一条紧急跟进信息。',
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng. CHECKIT thu hẹp khoảng cách đó.',
             'view-reality-cta': 'Xem thực tế',
 
-            'expectation-title': 'Giấc mơ: Những gì bạn mong đợi từ chăm sóc sức khỏe Hàn Quốc',
+            'expectation-title': 'Những gì bạn mong đợi từ chăm sóc sức khỏe Hàn Quốc',
             'exp1-title': '#1. Hiệu quả chi phí', 'exp1-desc': '“Chăm sóc y tế ở Hàn Quốc được biết là rẻ hơn đáng kể so với ở Hoa Kỳ”',
             'exp2-title': '#2. Sự tiện lợi', 'exp2-desc': '“Toàn bộ quá trình được cho là đơn giản và không phức tạp.”',
             'exp3-title': '#3. Chất lượng chuyên môn', 'exp3-desc': '“Cơ sở vật chất và tiêu chuẩn y tế được kỳ vọng sẽ đạt đẳng cấp thế giới.”',
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'plan3-feat1': 'Quản lý câu hỏi cao cấp', 'plan3-feat2': 'Giải thích điểm rủi ro (phi y tế, dựa trên quy trình)', 'plan3-feat3': 'Mẫu câu trả lời tiếng Anh cho các mục biểu mẫu phức tạp', 'plan3-feat4': 'Kiểm tra định dạng hoàn chỉnh (tất cả các trang, chữ ký, tệp đính kèm)', 'plan3-feat5': 'Gói trước khi kiểm tra cao cấp (mốc thời gian chi tiết, quy trình phản hồi lỗi)', 'plan3-feat6': 'Hỗ trợ trò chuyện trong ngày thi theo thời gian thực', 'plan3-feat7': 'Hướng dẫn điều hướng bệnh viện (đồ họa)', 'plan3-feat8': 'Yêu cầu biên lai tiếng Anh (thay mặt bạn)', 'plan3-feat9': 'Yêu cầu CD / tài liệu bổ sung', 'plan3-feat10': 'Theo dõi đầy đủ sau kỳ thi cho đến khi có kết quả', 'plan3-feat11': 'Cấu trúc kết quả (phi y tế, chỉ tổ chức nội dung)', 'plan3-feat12': 'Mẫu để giao tiếp với bệnh viện', 'plan3-feat13': 'Hỗ trợ thay đổi lịch trình (bao gồm tối đa 3 lần)',
             'plan3-best-for': 'Bất kỳ ai muốn có một trải nghiệm hoàn toàn không căng thẳng.',
 
-            'options-title': 'Dịch vụ bổ sung', 'options-subtitle': 'Chỉ nâng cao gói của bạn nếu bạn cần hỗ trợ thêm.',
+            'options-title': 'Tùy chọn',
             'option1-title': 'Yêu cầu biên lai tiếng Anh', 'option1-desc': 'Chúng tôi thay mặt bạn yêu cầu biên lai tiếng Anh, phù hợp cho mục đích bảo hiểm.',
             'option2-title': 'Yêu cầu kết quả CD', 'option2-desc': 'Chúng tôi thay mặt bạn yêu cầu CD kỳ thi hoặc các tệp hình ảnh bổ sung của bạn.',
             'option3-title': 'Theo dõi kết quả khẩn cấp', 'option3-desc': 'Chúng tôi thay mặt bạn gửi một tin nhắn theo dõi khẩn cấp đến bệnh viện.',

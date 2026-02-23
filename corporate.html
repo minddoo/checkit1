@@ -103,13 +103,13 @@
             <div class="content-wrapper">
                 <h2 class="section-title" data-i18n="corporate-contact-title">Get Started with CHECKIT</h2>
                 <p class="section-subtitle" data-i18n="corporate-contact-subtitle">Fill out the form below, and our corporate manager will contact you shortly.</p>
-                <form>
-                    <input type="text" id="company-name" data-i18n-placeholder="form-company-name" placeholder="Company Name">
-                    <input type="text" id="contact-person" data-i18n-placeholder="form-contact-person" placeholder="Your Name">
-                    <input type="email" id="email" data-i18n-placeholder="form-email" placeholder="Email Address">
-                    <input type="tel" id="phone" data-i18n-placeholder="form-phone" placeholder="Phone Number">
-                    <input type="number" id="employee-count" data-i18n-placeholder="form-employee-count" placeholder="Number of Employees">
-                    <textarea rows="5" id="message" data-i18n-placeholder="form-message" placeholder="Your Message (Optional)"></textarea>
+                <form action="https://formspree.io/f/xaqdljye" method="POST">
+                    <input type="text" id="company-name" name="company-name" data-i18n-placeholder="form-company-name" placeholder="Company Name">
+                    <input type="text" id="contact-person" name="contact-person" data-i18n-placeholder="form-contact-person" placeholder="Your Name">
+                    <input type="email" id="email" name="email" data-i18n-placeholder="form-email" placeholder="Email Address">
+                    <input type="tel" id="phone" name="phone" data-i18n-placeholder="form-phone" placeholder="Phone Number">
+                    <input type="number" id="employee-count" name="employee-count" data-i18n-placeholder="form-employee-count" placeholder="Number of Employees">
+                    <textarea rows="5" id="message" name="message" data-i18n-placeholder="form-message" placeholder="Your Message (Optional)"></textarea>
                     <button type="submit" class="cta-button" data-i18n="form-submit">Submit Inquiry</button>
                 </form>
             </div>

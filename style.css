@@ -226,3 +226,15 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .notice-body p { color: #4b5563; margin-bottom: 1.5rem; line-height: 1.8; }
 .notice-body .question { font-style: italic; color: #1f2937; margin: 1rem 0 2rem; padding: 1rem; background-color: #fefce8; border-left: 4px solid #facc15; }
 .notice-body h4 { font-size: 1.2rem; font-weight: 700; color: #92400e; margin-top: 2rem; margin-bottom: 0.75rem; }
+
+/* --- PERSONAL STORY SECTION --- */
+.personal-story-section { background: linear-gradient(to bottom, #f9fafb, #e5e7eb); padding: 6rem 2rem; }
+.story-intro-text { text-align: center; margin-bottom: 3rem; }
+.story-intro-text p { font-size: 1.75rem; font-weight: 700; color: var(--dark-color); line-height: 1.4; border-left: 4px solid var(--primary-color); padding-left: 1rem; display: inline-block; }
+.story-intro-text p:last-child { margin-top: 0.5rem; }
+.story-card { background-color: rgba(29, 40, 56, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--light-color); border-radius: 15px; padding: 2.5rem; margin-bottom: 2.5rem; max-width: 800px; margin-left: auto; margin-right: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.story-card p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
+.story-card p:last-child { margin-bottom: 0; }
+.story-highlight { text-align: center; margin: 2rem 0; }
+.story-highlight .arrow { font-size: 2.5rem; color: var(--primary-color); display: block; margin-bottom: 0.5rem; animation: bounce 2s infinite; }
+.story-highlight p { font-size: 1.2rem; font-weight: 600; color: var(--white-color); }

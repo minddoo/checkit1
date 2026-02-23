@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': '기업 고객',
             'business-desc': '외국인 직원의 건강을 체계적으로 관리하여 산업 재해를 예방하고 업무 효율을 높이세요.',
             'business-cta': '더 알아보기',
+            'individual-hero-title': '오직 당신을 위한 건강검진 여정,<br>CHECKIT과 함께라면 걱정 없습니다.',
+            'individual-hero-subtitle': '한국에서의 건강검진, 언어의 장벽과 복잡한 절차에 부딪히셨나요? 이제는 편안하게 최상의 케어를 경험하세요.',
             'individual-why-title': '왜 CHECKIT을 선택해야 할까요?',
             'individual-point1-title': '투명하고 합리적인 비용',
             'individual-point1-desc': '바가지 요금 걱정 없이, 한국인과 동일한 비용으로 건강검진을 받으세요. CHECKIT은 어떤 병원과도 금전적 계약을 맺지 않습니다.',
@@ -23,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-point3-title': '언어 장벽 없는 소통',
             'individual-point3-desc': '결과지 번역은 물론, 검진 전/후 안내까지 모두 당신의 언어로 제공되어 궁금증과 불안을 해소해 드립니다.',
             'individual-services-title': '개인 고객을 위한 서비스',
-            'business-placeholder-title': '기업 고객 서비스는 현재 준비 중입니다.',
-            'business-placeholder-desc': '곧 외국인 직원들을 위한 체계적인 건강 관리 솔루션으로 찾아뵙겠습니다. 자세한 내용은 문의하기를 통해 연락주세요.',
             'service-1-title': '검진 안내 및 예약 보조',
             'service-1-desc': '언어 혼란 없이, 필요한 검진 항목을 파악하고 최적의 병원으로 예약을 도와드립니다.',
             'service-2-title': '전 과정 다국어 안내',
@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': 'For Business',
             'business-desc': 'Systematically manage the health of your foreign employees to prevent industrial accidents and increase work efficiency.',
             'business-cta': 'Learn More',
+            'individual-hero-title': 'A Health Check-up Journey Just for You,<br>No Worries with CHECKIT.',
+            'individual-hero-subtitle': 'Facing language barriers and complex procedures for health check-ups in Korea? Now, experience top-tier care with comfort.',
             'individual-why-title': 'Why Choose CHECKIT?',
             'individual-point1-title': 'Transparent & Reasonable Costs',
             'individual-point1-desc': 'Get your health check-up at the same price as locals, without worrying about overcharging. CHECKIT has no financial contracts with any hospital.',
@@ -76,9 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-point3-title': 'Communication Without Barriers',
             'individual-point3-desc': 'We provide everything in your language, from pre/post-check-up instructions to the translated results, relieving your concerns and anxiety.',
             'individual-services-title': 'Services for Individuals',
-            'business-placeholder-title': 'Services for Business are coming soon.',
-            'business-placeholder-desc': 'We will soon be back with a systematic health management solution for foreign employees. For more information, please contact us.',
-            'services-title': 'Key Services of CHECKIT',
             'service-1-title': 'Guidance & Booking Assistance',
             'service-1-desc': 'We help you identify necessary checkup items and assist with booking at an optimal hospital without language confusion.',
             'service-2-title': 'Full Multilingual Support',
@@ -122,6 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': '企业客户',
             'business-desc': '系统地管理外籍员工的健康，以预防工业事故并提高工作效率。',
             'business-cta': '了解更多',
+            'individual-hero-title': '专为您打造的健康检查之旅，<br>有CHECKIT，无后顾之忧。',
+            'individual-hero-subtitle': '在韩国进行健康检查时是否遇到语言障碍和复杂程序？现在，舒适地体验顶级的关怀吧。',
             'individual-why-title': '为什么选择 CHECKIT？',
             'individual-point1-title': '透明合理的费用',
             'individual-point1-desc': '以与韩国人相同的费用接受健康检查，无需担心被多收费。CHECKIT 与任何医院都没有财务合同。',
@@ -130,9 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-point3-title': '无语言障碍的沟通',
             'individual-point3-desc': '从体检前/后说明到翻译的结果，我们都以您的语言提供一切，减轻您的疑虑和焦虑。',
             'individual-services-title': '为个人客户提供的服务',
-            'business-placeholder-title': '企业客户服务即将推出。',
-            'business-placeholder-desc': '我们将很快为外国员工提供系统的健康管理解决方案。欲了解更多信息，请联系我们。',
-            'services-title': 'CHECKIT 主要服务',
             'service-1-title': '体检指南及预约协助',
             'service-1-desc': '无需担心语言混乱，我们将帮助您确定必要的体检项目，并协助您在最合适的医院进行预约。',
             'service-2-title': '全程多语种服务',
@@ -176,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': 'Dành cho doanh nghiệp',
             'business-desc': 'Quản lý sức khỏe của nhân viên nước ngoài một cách có hệ thống để ngăn ngừa tai nạn lao động và tăng hiệu quả công việc.',
             'business-cta': 'Tìm hiểu thêm',
+            'individual-hero-title': 'Một hành trình kiểm tra sức khỏe chỉ dành cho bạn,<br>Không phải lo lắng với CHECKIT.',
+            'individual-hero-subtitle': 'Đối mặt với rào cản ngôn ngữ và các thủ tục phức tạp để kiểm tra sức khỏe tại Hàn Quốc? Bây giờ, hãy trải nghiệm sự chăm sóc hàng đầu một cách thoải mái.',
             'individual-why-title': 'Tại sao chọn CHECKIT?',
             'individual-point1-title': 'Chi phí minh bạch & hợp lý',
             'individual-point1-desc': 'Kiểm tra sức khỏe của bạn với mức giá tương tự như người dân địa phương mà không cần lo lắng về việc bị tính giá quá cao. CHECKIT không có hợp đồng tài chính với bất kỳ bệnh viện nào.',
@@ -184,9 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual-point3-title': 'Giao tiếp không rào cản',
             'individual-point3-desc': 'Chúng tôi cung cấp mọi thứ bằng ngôn ngữ của bạn, từ hướng dẫn trước / sau khi khám đến kết quả được dịch, giúp bạn giải tỏa những lo lắng và băn khoăn.',
             'individual-services-title': 'Dịch vụ cho cá nhân',
-            'business-placeholder-title': 'Dịch vụ cho doanh nghiệp sắp ra mắt.',
-            'business-placeholder-desc': 'Chúng tôi sẽ sớm trở lại với một giải pháp quản lý sức khỏe có hệ thống cho nhân viên nước ngoài. Để biết thêm thông tin, vui lòng liên hệ với chúng tôi.',
-            'services-title': 'Dịch vụ chính của CHECKIT',
             'service-1-title': 'Hướng dẫn & Hỗ trợ đặt lịch',
             'service-1-desc': 'Chúng tôi giúp bạn xác định các mục khám cần thiết và hỗ trợ đặt lịch tại bệnh viện tối ưu mà không gặp khó khăn về ngôn ngữ.',
             'service-2-title': 'Hỗ trợ đa ngôn ngữ toàn diện',
@@ -221,6 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLang = 'ko';
 
     function updateTexts(lang) {
+        // Save language preference
+        localStorage.setItem('checkitLang', lang);
+
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (translations[lang] && translations[lang][key]) {
@@ -242,7 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         currentLang = lang;
-        updateFaqButtons(lang);
+
+        // Only run chat-related updates if the chat UI exists on the page
+        const faqOptions = document.getElementById('faq-options');
+        if (faqOptions) {
+            updateFaqButtons(lang);
+        }
     }
 
     langSwitchers.forEach(button => {
@@ -252,85 +257,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // --- Service Details Logic ---
-    const individualsBtn = document.querySelector('#for-individuals-card .cta-button');
-    const businessBtn = document.querySelector('#for-business-card .cta-button');
-    const individualServices = document.getElementById('individual-services');
-    const businessServices = document.getElementById('business-services');
-    const allServiceDetails = document.querySelectorAll('.service-details');
+    // --- Chatbot Logic (Conditional) --- 
+    const chatbotContainer = document.getElementById('chatbot-container');
+    if (chatbotContainer) {
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatWindow = document.getElementById('chat-window');
+        const chatClose = document.getElementById('chat-close');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
 
-    function showService(serviceToShow) {
-        allServiceDetails.forEach(service => {
-            service.classList.add('hidden');
+        chatToggle.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+            if (!chatWindow.classList.contains('hidden')) {
+                updateTexts(currentLang); 
+            }
         });
-        if (serviceToShow) {
-            serviceToShow.classList.remove('hidden');
-            setTimeout(() => { // Allow time for the element to become visible before scrolling
-                serviceToShow.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100); 
+
+        chatClose.addEventListener('click', () => {
+            chatWindow.classList.add('hidden');
+        });
+
+        function addMessage(text, sender) {
+            const messageEl = document.createElement('div');
+            messageEl.classList.add('message', `${sender}-message`);
+            messageEl.textContent = text;
+            chatMessages.appendChild(messageEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-    }
 
-    individualsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showService(individualServices);
-    });
+        const botResponses = {
+            ko: { greeting: "안녕하세요! 무엇을 도와드릴까요?", fallback: "기본 질문 외의 문의는 '문의하기'를 통해 상세 내용을 남겨주시면, 담당 매니저가 직접 연락드리겠습니다." },
+            en: { greeting: "Hello! How can I help you?", fallback: "For questions other than the basic ones, please leave the details via 'Contact Us', and a manager will contact you directly." },
+            zh: { greeting: "你好！我能帮你什么？", fallback: "对于基本问题以外的查询，请通过\"联系我们\"留下详细信息，经理将直接与您联系。" },
+            vi: { greeting: "Xin chào! Tôi có thể giúp gì cho bạn?", fallback: "Đối với các câu hỏi khác ngoài những câu hỏi cơ bản, vui lòng để lại chi tiết qua 'Liên hệ' và người quản lý sẽ liên hệ trực tiếp với bạn." }
+        };
+        
+        const greetings = ['안녕', 'hello', 'hi', 'hey', '你好', 'xin chào'];
 
-    businessBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        showService(businessServices);
-    });
-
-
-    // --- Chatbot Logic --- 
-    const chatToggle = document.getElementById('chat-toggle');
-    const chatWindow = document.getElementById('chat-window');
-    const chatClose = document.getElementById('chat-close');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const chatSend = document.getElementById('chat-send');
-    const faqOptions = document.getElementById('faq-options');
-
-    chatToggle.addEventListener('click', () => {
-        chatWindow.classList.toggle('hidden');
-        if (!chatWindow.classList.contains('hidden')) {
-            updateTexts(currentLang);
+        function handleUserInput() {
+            const userText = chatInput.value.trim().toLowerCase();
+            if (userText) {
+                addMessage(chatInput.value, 'user');
+                const isGreeting = greetings.some(greeting => userText.includes(greeting));
+                setTimeout(() => addMessage(isGreeting ? botResponses[currentLang].greeting : botResponses[currentLang].fallback, "bot"), 500);
+                chatInput.value = '';
+            }
         }
-    });
 
-    chatClose.addEventListener('click', () => {
-        chatWindow.classList.add('hidden');
-    });
-
-    function addMessage(text, sender) {
-        const messageEl = document.createElement('div');
-        messageEl.classList.add('message', `${sender}-message`);
-        messageEl.textContent = text;
-        chatMessages.appendChild(messageEl);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatSend.addEventListener('click', handleUserInput);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserInput(); });
     }
-
-    const botResponses = {
-        ko: { greeting: "안녕하세요! 무엇을 도와드릴까요?", fallback: "기본 질문 외의 문의는 '문의하기'를 통해 상세 내용을 남겨주시면, 담당 매니저가 직접 연락드리겠습니다." },
-        en: { greeting: "Hello! How can I help you?", fallback: "For questions other than the basic ones, please leave the details via 'Contact Us', and a manager will contact you directly." },
-        zh: { greeting: "你好！我能帮你什么？", fallback: "对于基本问题以外的查询，请通过\"联系我们\"留下详细信息，经理将直接与您联系。" },
-        vi: { greeting: "Xin chào! Tôi có thể giúp gì cho bạn?", fallback: "Đối với các câu hỏi khác ngoài những câu hỏi cơ bản, vui lòng để lại chi tiết qua 'Liên hệ' và người quản lý sẽ liên hệ trực tiếp với bạn." }
-    };
-    
-    const greetings = ['안녕', 'hello', 'hi', 'hey', '你好', 'xin chào'];
-
-    function handleUserInput() {
-        const userText = chatInput.value.trim().toLowerCase();
-        if (userText) {
-            addMessage(chatInput.value, 'user');
-            const isGreeting = greetings.some(greeting => userText.includes(greeting));
-            setTimeout(() => addMessage(isGreeting ? botResponses[currentLang].greeting : botResponses[currentLang].fallback, "bot"), 500);
-            chatInput.value = '';
-        }
-    }
-
-    chatSend.addEventListener('click', handleUserInput);
-    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserInput(); });
 
     const faq = {
         ko: [
@@ -364,6 +341,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function updateFaqButtons(lang) {
+        const faqOptions = document.getElementById('faq-options');
+        if (!faqOptions) return; // Guard clause
+        
         faqOptions.innerHTML = '';
         if (faq[lang]) {
             faq[lang].forEach(item => {
@@ -371,36 +351,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.add('faq-button');
                 button.textContent = item.q;
                 button.addEventListener('click', () => {
-                    addMessage(item.q, 'user');
-                    setTimeout(() => addMessage(item.a, 'bot'), 500);
+                    // Ensure addMessage exists before calling it
+                    if (typeof addMessage === 'function') {
+                        addMessage(item.q, 'user');
+                        setTimeout(() => addMessage(item.a, 'bot'), 500);
+                    }
                 });
                 faqOptions.appendChild(button);
             });
         }
     }
+    
+    // Load language from storage and update texts
+    const savedLang = localStorage.getItem('checkitLang') || 'ko';
+    updateTexts(savedLang);
 
-    updateTexts(currentLang);
-
-    // --- Hamburger Menu Logic (Safely Added) --- 
+    // --- Hamburger Menu Logic --- 
     const hamburger = document.querySelector('.hamburger');
     const navUl = document.querySelector('header nav ul');
     const navLinks = document.querySelectorAll('header nav ul a');
 
-    const toggleNav = () => {
-        navUl.classList.toggle('is-active');
-        document.body.classList.toggle('nav-active');
-        const icon = hamburger.querySelector('i');
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-    };
+    if (hamburger && navUl) {
+        const toggleNav = () => {
+            navUl.classList.toggle('is-active');
+            document.body.classList.toggle('nav-active');
+            const icon = hamburger.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        };
 
-    hamburger.addEventListener('click', toggleNav);
+        hamburger.addEventListener('click', toggleNav);
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (navUl.classList.contains('is-active')) {
-                toggleNav();
-            }
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (navUl.classList.contains('is-active')) {
+                    toggleNav();
+                }
+            });
         });
-    });
+    }
 });

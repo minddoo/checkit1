@@ -3,7 +3,7 @@
 
 ## 1. Project Overview
 
-CHECKIT is a concierge service that assists foreigners, both residing in and outside of Korea, with the health check-up process in Korea. It is not a medical service and does not involve commissions or brokerage. The service aims to solve issues foreigners face, such as language barriers, lack of information, and unfair pricing. The goal is to provide a smooth, transparent, and convenient experience for a set service fee, whether they are visiting for medical tourism or are residents.
+CHECKIT is a concierge service that assists foreigners with the health check-up process in Korea. It is not a medical service. The goal is to provide a smooth, transparent, and convenient experience for a set service fee.
 
 ## 2. Target Audience & Value Proposition
 
@@ -15,41 +15,32 @@ The website caters to two distinct customer segments with different narratives.
 - **Value Proposition:** Find the right check-up within your budget at the same price as locals. We provide booking assistance and translated results for a seamless experience.
 
 ### 2.2. Corporate Customers (B2B)
-- **Target:** Companies employing foreign workers (e.g., from China, Vietnam).
-- **Pain Points:**
-    - Language barriers leading to misunderstanding of health results, potentially causing industrial accidents.
-    - Overburdened health managers struggling to handle the specific needs of many foreign employees.
-- **Value Proposition:** Minimize industrial accidents by ensuring foreign employees understand their health status. Enable efficient and consistent health management for all foreign staff, reducing the workload on internal managers without compromising quality.
+- **Target:** Companies employing foreign workers.
+- **Pain Points:** Language barriers causing misunderstanding of health results, and overburdened managers.
+- **Value Proposition:** Minimize industrial accidents and enable efficient health management for all foreign staff.
 
 ## 3. Implemented Features & Design
 
+*   **Multi-Page Architecture:** The site now uses separate pages for the main landing page and for detailed customer segments (starting with individuals).
 *   **Homepage with Customer Segmentation:** Users can choose between "For Individuals" and "For Business" paths.
-*   **Language Toggle:** Switch between Korean and English.
+*   **Language Toggle:** Switch between Korean, English, Chinese, and Vietnamese.
 *   **Modern & Clean UI:** A visually appealing design with a hero section, service description, process steps, and FAQ.
-*   **FAQ Section:** Dynamically loaded FAQ content based on the selected language.
-*   **Interactive Header:** The header changes background on scroll.
-*   **Chatbot:** A floating chatbot provides answers to common questions.
+*   **FAQ Section & Chatbot:** Dynamically loaded FAQ content and a chatbot provide instant answers.
 
-## 4. Current Plan: Develop Personalized Content Sections
+## 4. Current Plan: Create Dedicated Page for Individual Customers
 
-The current goal is to create dedicated content sections for each customer type that are revealed when a user makes a selection on the homepage.
+The current goal is to create a new, separate page entirely dedicated to individual customers, providing a focused experience.
 
 **This involves:**
 
-1.  **Create `individual-services` Section:**
-    *   Design a new section in `index.html` that is initially hidden.
-    *   Add a "Why Choose Us?" subsection tailored to individual users, addressing their specific pain points.
-    *   Add a "Services for Individuals" subsection that details the services relevant to them.
+1.  **Create `individual.html`:**
+    *   Create a new HTML file for individual customers.
+    *   Design a unique layout including a tailored hero section, "Why Choose Us?", detailed service descriptions, the user process, and a contact form.
+    *   Ensure the header, footer, and all necessary assets (CSS, JS) are correctly linked.
 
-2.  **Create `business-services` Section (Placeholder):**
-    *   Create a placeholder section for business customers that will be developed later.
+2.  **Update `index.html` (Main Page):
+    *   Modify the link on the "For Individuals" card to point to the new `individual.html`.
+    *   Remove the now-redundant `#individual-services` section from the main page to simplify its structure.
 
-3.  **Implement Dynamic Display in `main.js`:**
-    *   Write a script that shows the relevant section (`individual-services` or `business-services`) and hides the other sections when a user clicks the corresponding "Learn More" button.
-    *   The page will smoothly scroll to the revealed section.
-
-4.  **Add Translations:**
-    *   Populate `main.js` with multilingual text for all new content.
-
-5.  **Style New Sections in `style.css`:**
-    *   Add CSS to style the new sections and manage their visibility.
+3.  **Refactor `main.js`:**
+    *   Remove the JavaScript logic that was responsible for showing and hiding the service details section on the main page, as it is no longer needed.

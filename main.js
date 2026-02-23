@@ -157,9 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-4': 'Bạn có cung cấp dịch vụ đi cùng trong ngày không?',
             'faq-5': 'Kết quả được giao như thế nào?',
             'ans-1': 'Để đặt hẹn, vui lòng sử dụng mục \'Yêu cầu Tư vấn\' ở cuối trang web của chúng tôi. Một người quản lý riêng sẽ bắt đầu chăm sóc 1:1 cho bạn.',
-            'ans-2': 'Không, chúng tôi không \'đề xuất\' một bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp một \'danh sách\' các bệnh viện phù hợp với nhuкови và sở thích của bạn, giúp bạn tự mình chọn lựa bệnh viện tối ưu nhất.',
+            'ans-2': 'Không, chúng tôi không \'đề xuất\' một bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp một \'danh sách\' các bệnh viện phù hợp với nhu cầu và sở thích của bạn, giúp bạn tự mình chọn lựa bệnh viện tối ưu nhất.',
             'ans-3': 'Không, để rõ ràng, chúng tôi không thực hiện các hành vi y tế hoặc giới thiệu y tế vì điều này có thể vi phạm luật y tế. Vai trò của chúng tôi là hỗ trợ các khía cạnh phi y tế (đặt chỗ, phiên dịch, hướng dẫn) để đảm bảo bạn có một trải nghiệm khám sức khỏe thuận lợi.',
-            'ans-4': 'Không, người quản lý của chúng tôi không \'đi cùng\' bạn. Thay vào đó, chúng tôi cungG cấp \'dịch vụ giao tiếp thời gian thực\' vào ngày khám để hỗ trợ từ xa mọi giao tiếp cần thiết từ lúc đăng ký cho đến khi kết thúc, đảm bảo quá trình diễn ra suôn sẻ.',
+            'ans-4': 'Không, người quản lý của chúng tôi không \'đi cùng\' bạn. Thay vào đó, chúng tôi cung cấp \'dịch vụ giao tiếp thời gian thực\' vào ngày khám để hỗ trợ từ xa mọi giao tiếp cần thiết từ lúc đăng ký cho đến khi kết thúc, đảm bảo quá trình diễn ra suôn sẻ.',
             'ans-5': 'Ngay sau khi kết quả khám được bệnh viện cấp, chúng tôi sẽ dịch chúng sang ngôn ngữ bạn yêu cầu và giao cho bạn. Chúng tôi không thêm bất kỳ nhận định hoặc chẩn đoán y tế nào vào kết quả; chúng tôi chỉ cung cấp một bản dịch trung thành của nội dung gốc.',
             'faq-default-ans': 'Cảm ơn bạn đã yêu cầu. Về vấn đề này, vui lòng để lại câu hỏi qua phần liên hệ trên trang chủ của chúng tôi và một người quản lý chuyên nghiệp sẽ trả lời nhanh chóng.'
         }

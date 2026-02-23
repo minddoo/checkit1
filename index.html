@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT</title>
-    <link rel="stylesheet" href="style.css?v=6.3">
+    <link rel="stylesheet" href="style.css?v=6.4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
                 <a href="#" data-i18n="logo">CHECKIT</a>
             </div>
             <ul>
-                <li><a href="#services" data-i18n="nav-services">서비스</a></li>
+                <li><a href="#customer-type" data-i18n="nav-services">서비스</a></li>
                 <li><a href="#process" data-i18n="nav-process">프로세스</a></li>
                 <li><a href="#testimonials" data-i18n="nav-testimonials">후기</a></li>
                 <li><a href="#contact" data-i18n="nav-contact">문의</a></li>
@@ -43,44 +43,74 @@
 
         <section id="customer-type" class="customer-type-section">
             <div class="customer-type-container">
-                <div class="customer-card" id="for-individuals">
+                <div class="customer-card" id="for-individuals-card">
                     <h2 data-i18n="individuals-title">For Individuals</h2>
                     <p data-i18n="individuals-desc">개인 맞춤형 건강검진 여정을 경험하세요. 한국 거주자 및 의료 관광객을 위한 서비스입니다.</p>
                     <a href="#individual-services" class="cta-button" data-i18n="individuals-cta">더 알아보기</a>
                 </div>
-                <div class="customer-card" id="for-business">
+                <div class="customer-card" id="for-business-card">
                     <h2 data-i18n="business-title">For Business</h2>
                     <p data-i18n="business-desc">외국인 직원의 건강을 체계적으로 관리하여 산업 재해를 예방하고 업무 효율을 높이세요.</p>
                     <a href="#business-services" class="cta-button" data-i18n="business-cta">더 알아보기</a>
                 </div>
             </div>
         </section>
+        
+        <div id="service-details-container">
+            <!-- Individual Services Section (Initially Hidden) -->
+            <section id="individual-services" class="service-details hidden">
+                <div class="why-choose-us">
+                    <h2 data-i18n="individual-why-title">왜 CHECKIT을 선택해야 할까요?</h2>
+                    <div class="points">
+                        <div class="point">
+                            <i class="fas fa-hand-holding-usd"></i>
+                            <h3 data-i18n="individual-point1-title">투명하고 합리적인 비용</h3>
+                            <p data-i18n="individual-point1-desc">바가지 요금 걱정 없이, 한국인과 동일한 비용으로 건강검진을 받으세요. CHECKIT은 어떤 병원과도 금전적 계약을 맺지 않습니다.</p>
+                        </div>
+                        <div class="point">
+                            <i class="fas fa-search-location"></i>
+                            <h3 data-i18n="individual-point2-title">내게 맞는 검진 탐색</h3>
+                            <p data-i18n="individual-point2-desc">어떤 검진을 받아야 할지 막막하신가요? 상담을 통해 개인의 필요와 예산에 맞는 최적의 검진 프로그램을 찾도록 도와드립니다.</p>
+                        </div>
+                        <div class="point">
+                            <i class="fas fa-language"></i>
+                            <h3 data-i18n="individual-point3-title">언어 장벽 없는 소통</h3>
+                            <p data-i18n="individual-point3-desc">결과지 번역은 물론, 검진 전/후 안내까지 모두 당신의 언어로 제공되어 궁금증과 불안을 해소해 드립니다.</p>
+                        </div>
+                    </div>
+                </div>
 
-        <section id="services" class="services">
-            <h2 data-i18n="services-title">CHECKIT 주요 서비스</h2>
-            <div class="service-cards">
-                <div class="card">
-                    <i class="fas fa-notes-medical"></i>
-                    <h3 data-i18n="service-1-title">검진 안내 및 예약 보조</h3>
-                    <p data-i18n="service-1-desc">언어 혼란 없이, 필요한 검진 항목을 파악하고 최적의 병원으로 예약을 도와드립니다.</p>
+                <h2 class="section-title" data-i18n="individual-services-title">개인 고객을 위한 서비스</h2>
+                <div class="service-cards">
+                     <div class="card">
+                        <i class="fas fa-notes-medical"></i>
+                        <h3 data-i18n="service-1-title">검진 안내 및 예약 보조</h3>
+                        <p data-i18n="service-1-desc">언어 혼란 없이, 필요한 검진 항목을 파악하고 최적의 병원으로 예약을 도와드립니다.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-headset"></i>
+                        <h3 data-i18n="service-2-title">전 과정 다국어 안내</h3>
+                        <p data-i18n="service-2-desc">검진 전 주의사항부터 검진 당일 소통까지, 모든 과정을 지정된 언어로 편안하게 안내합니다.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-file-invoice"></i>
+                        <h3 data-i18n="service-3-title">결과 번역 및 관리</h3>
+                        <p data-i18n="service-3-desc">검진 결과를 알기 쉽게 번역하고, 필요시 재검 일정 관리를 꼼꼼하게 돕습니다.</p>
+                    </div>
+                     <div class="card">
+                        <i class="fas fa-user-shield"></i>
+                        <h3 data-i18n="service-4-title">서류 및 행정 지원</h3>
+                        <p data-i18n="service-4-desc">보험사 제출 서류 등 건강검진과 관련된 모든 서류 및 행정 절차를 지원합니다.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <i class="fas fa-headset"></i>
-                    <h3 data-i18n="service-2-title">전 과정 다국어 안내</h3>
-                    <p data-i18n="service-2-desc">검진 전 주의사항부터 검진 당일 소통까지, 모든 과정을 지정된 언어로 편안하게 안내합니다.</p>
-                </div>
-                <div class="card">
-                    <i class="fas fa-file-invoice"></i>
-                    <h3 data-i18n="service-3-title">결과 번역 및 관리</h3>
-                    <p data-i18n="service-3-desc">검진 결과를 알기 쉽게 번역하고, 필요시 재검 일정 관리를 꼼꼼하게 돕습니다.</p>
-                </div>
-                 <div class="card">
-                    <i class="fas fa-user-shield"></i>
-                    <h3 data-i18n="service-4-title">서류 및 행정 지원</h3>
-                    <p data-i18n="service-4-desc">보험사 제출 서류 등 건강검진과 관련된 모든 서류 및 행정 절차를 지원합니다.</p>
-                </div>
-            </div>
-        </section>
+            </section>
+
+            <!-- Business Services Section (Placeholder, Initially Hidden) -->
+            <section id="business-services" class="service-details hidden">
+                <h2 class="section-title" data-i18n="business-placeholder-title">기업 고객 서비스는 현재 준비 중입니다.</h2>
+                <p data-i18n="business-placeholder-desc">곧 외국인 직원들을 위한 체계적인 건강 관리 솔루션으로 찾아뵙겠습니다. 자세한 내용은 문의하기를 통해 연락주세요.</p>
+            </section>
+        </div>
 
         <section id="process" class="process">
             <h2 data-i18n="process-title">CHECKIT 이용 과정</h2>
@@ -163,6 +193,6 @@
         </div>
     </div>
 
-    <script src="main.js?v=6.3"></script>
+    <script src="main.js?v=6.4"></script>
 </body>
 </html>

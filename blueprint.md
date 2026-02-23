@@ -7,7 +7,7 @@ CHECKIT is a concierge service that assists foreigners, both residing in and out
 
 ## 2. Target Audience & Value Proposition
 
-The website will cater to two distinct customer segments with different narratives.
+The website caters to two distinct customer segments with different narratives.
 
 ### 2.1. Individual Customers (B2C)
 - **Target:** Foreign residents in Korea and foreigners abroad interested in medical tourism in Korea.
@@ -23,18 +23,33 @@ The website will cater to two distinct customer segments with different narrativ
 
 ## 3. Implemented Features & Design
 
+*   **Homepage with Customer Segmentation:** Users can choose between "For Individuals" and "For Business" paths.
 *   **Language Toggle:** Switch between Korean and English.
 *   **Modern & Clean UI:** A visually appealing design with a hero section, service description, process steps, and FAQ.
 *   **FAQ Section:** Dynamically loaded FAQ content based on the selected language.
 *   **Interactive Header:** The header changes background on scroll.
 *   **Chatbot:** A floating chatbot provides answers to common questions.
 
-## 4. Current Plan: Implement Customer Segmentation
+## 4. Current Plan: Develop Personalized Content Sections
 
-The immediate goal is to restructure the homepage to guide users into two distinct paths: "For Individuals" and "For Business".
+The current goal is to create dedicated content sections for each customer type that are revealed when a user makes a selection on the homepage.
 
-**Steps:**
+**This involves:**
 
-1.  **Update `index.html`:** Modify the hero section or add a new section immediately after it to present two clear choices to the user.
-2.  **Create Separate Sections/Pages:** Develop distinct content and user flows for each segment.
-3.  **Refine Messaging:** Tailor the language and calls-to-action for each path.
+1.  **Create `individual-services` Section:**
+    *   Design a new section in `index.html` that is initially hidden.
+    *   Add a "Why Choose Us?" subsection tailored to individual users, addressing their specific pain points.
+    *   Add a "Services for Individuals" subsection that details the services relevant to them.
+
+2.  **Create `business-services` Section (Placeholder):**
+    *   Create a placeholder section for business customers that will be developed later.
+
+3.  **Implement Dynamic Display in `main.js`:**
+    *   Write a script that shows the relevant section (`individual-services` or `business-services`) and hides the other sections when a user clicks the corresponding "Learn More" button.
+    *   The page will smoothly scroll to the revealed section.
+
+4.  **Add Translations:**
+    *   Populate `main.js` with multilingual text for all new content.
+
+5.  **Style New Sections in `style.css`:**
+    *   Add CSS to style the new sections and manage their visibility.

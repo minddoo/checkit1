@@ -175,12 +175,86 @@ header nav ul li {
     margin-bottom: 2rem;
 }
 
-.services, .process, .testimonials, .contact {
+/* Service Details Sections */
+.service-details {
+    padding: 5rem 2rem;
+    text-align: center;
+    transition: opacity 0.5s ease-in-out, max-height 0.8s ease-in-out;
+    overflow: hidden;
+    opacity: 0;
+    max-height: 0;
+}
+
+.service-details:not(.hidden) {
+    opacity: 1;
+    max-height: 2000px; /* Adjust as needed */
+}
+
+.service-details.hidden {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin: 0;
+}
+
+.why-choose-us {
+    background-color: #fdfdfd;
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    margin-bottom: 5rem;
+    box-shadow: var(--shadow-depth-1);
+}
+
+.why-choose-us h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--dark-color);
+}
+
+.points {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.point {
+    flex: 1;
+    max-width: 350px;
+    text-align: center;
+}
+
+.point i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.point h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.point p {
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--dark-color);
+}
+
+#business-services p {
+    font-size: 1.2rem;
+}
+
+.process, .testimonials, .contact {
     padding: 5rem 2rem;
     text-align: center;
 }
 
-.services h2, .process h2, .testimonials h2, .contact h2 {
+.process h2, .testimonials h2, .contact h2 {
     font-size: 2.5rem;
     margin-bottom: 3rem;
     color: var(--dark-color);
@@ -322,8 +396,13 @@ body.nav-active {
         /* word-break: keep-all; -- This was causing overflow issues */
     }
 
-    .services, .process, .testimonials, .contact, footer {
+    .process, .testimonials, .contact, footer, .service-details {
         padding: 2.5rem 1rem;
+    }
+
+    .why-choose-us {
+        padding: 2.5rem 1rem;
+        margin-bottom: 3rem;
     }
 
     /* --- Header & Navigation --- */
@@ -386,7 +465,7 @@ body.nav-active {
     /* --- Font & Text Size Reduction --- */
     .hero-text h1 { font-size: 1.7rem; line-height: 1.4; }
     .hero-text p { font-size: 0.95rem; }
-    .services h2, .process h2, .testimonials h2, .contact h2 {
+    .section-title, .why-choose-us h2, .process h2, .testimonials h2, .contact h2 {
         font-size: 1.5rem;
         margin-bottom: 2rem;
     }
@@ -405,6 +484,14 @@ body.nav-active {
     .customer-card p {
         font-size: 1rem;
     }
+
+    /* Why Choose Us Section (Mobile) */
+    .points {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .point h3 { font-size: 1.2rem; }
+    .point p { font-size: 0.9rem; }
 
     /* --- Services Section (2x2 Grid) --- */
     .service-cards {

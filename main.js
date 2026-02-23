@@ -15,7 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': '기업 고객',
             'business-desc': '외국인 직원의 건강을 체계적으로 관리하여 산업 재해를 예방하고 업무 효율을 높이세요.',
             'business-cta': '더 알아보기',
-            'services-title': 'CHECKIT 주요 서비스',
+            'individual-why-title': '왜 CHECKIT을 선택해야 할까요?',
+            'individual-point1-title': '투명하고 합리적인 비용',
+            'individual-point1-desc': '바가지 요금 걱정 없이, 한국인과 동일한 비용으로 건강검진을 받으세요. CHECKIT은 어떤 병원과도 금전적 계약을 맺지 않습니다.',
+            'individual-point2-title': '내게 맞는 검진 탐색',
+            'individual-point2-desc': '어떤 검진을 받아야 할지 막막하신가요? 상담을 통해 개인의 필요와 예산에 맞는 최적의 검진 프로그램을 찾도록 도와드립니다.',
+            'individual-point3-title': '언어 장벽 없는 소통',
+            'individual-point3-desc': '결과지 번역은 물론, 검진 전/후 안내까지 모두 당신의 언어로 제공되어 궁금증과 불안을 해소해 드립니다.',
+            'individual-services-title': '개인 고객을 위한 서비스',
+            'business-placeholder-title': '기업 고객 서비스는 현재 준비 중입니다.',
+            'business-placeholder-desc': '곧 외국인 직원들을 위한 체계적인 건강 관리 솔루션으로 찾아뵙겠습니다. 자세한 내용은 문의하기를 통해 연락주세요.',
             'service-1-title': '검진 안내 및 예약 보조',
             'service-1-desc': '언어 혼란 없이, 필요한 검진 항목을 파악하고 최적의 병원으로 예약을 도와드립니다.',
             'service-2-title': '전 과정 다국어 안내',
@@ -59,6 +68,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': 'For Business',
             'business-desc': 'Systematically manage the health of your foreign employees to prevent industrial accidents and increase work efficiency.',
             'business-cta': 'Learn More',
+            'individual-why-title': 'Why Choose CHECKIT?',
+            'individual-point1-title': 'Transparent & Reasonable Costs',
+            'individual-point1-desc': 'Get your health check-up at the same price as locals, without worrying about overcharging. CHECKIT has no financial contracts with any hospital.',
+            'individual-point2-title': 'Find the Right Check-up for You',
+            'individual-point2-desc': 'Not sure which check-up you need? We help you find the optimal program that fits your personal needs and budget through consultation.',
+            'individual-point3-title': 'Communication Without Barriers',
+            'individual-point3-desc': 'We provide everything in your language, from pre/post-check-up instructions to the translated results, relieving your concerns and anxiety.',
+            'individual-services-title': 'Services for Individuals',
+            'business-placeholder-title': 'Services for Business are coming soon.',
+            'business-placeholder-desc': 'We will soon be back with a systematic health management solution for foreign employees. For more information, please contact us.',
             'services-title': 'Key Services of CHECKIT',
             'service-1-title': 'Guidance & Booking Assistance',
             'service-1-desc': 'We help you identify necessary checkup items and assist with booking at an optimal hospital without language confusion.',
@@ -89,13 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
             'chat-input-placeholder': 'Type your message...',
         },
         'zh': {
-             'nav-services': '服务',
+            'nav-services': '服务',
             'nav-process': '过程',
             'nav-testimonials': '评价',
             'nav-contact': '询问',
             'logo': 'CHECKIT',
             'hero-title': '为外国人提供健康体检，<br>无语言障碍，舒心体验。',
-            'hero-subtitle': '从错过预约、难以理解的体检指南，<br>到仅提供韩语版本的结果报告，CHECKIT为您解决所有非医疗过程中的难题。',
+            'hero-subtitle': '从错过预约、难以理解的体检指南，到仅提供韩语版本的结果报告，CHECKIT为您解决所有非医疗过程中的难题。',
             'hero-cta': '立即申请咨询',
             'individuals-title': '个人客户',
             'individuals-desc': '体验个性化的健康检查之旅。为韩国居民和医疗游客提供服务。',
@@ -103,6 +122,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': '企业客户',
             'business-desc': '系统地管理外籍员工的健康，以预防工业事故并提高工作效率。',
             'business-cta': '了解更多',
+            'individual-why-title': '为什么选择 CHECKIT？',
+            'individual-point1-title': '透明合理的费用',
+            'individual-point1-desc': '以与韩国人相同的费用接受健康检查，无需担心被多收费。CHECKIT 与任何医院都没有财务合同。',
+            'individual-point2-title': '寻找适合您的体检',
+            'individual-point2-desc': '不确定需要哪种体检？我们通过咨询帮助您找到符合您个人需求和预算的最佳方案。',
+            'individual-point3-title': '无语言障碍的沟通',
+            'individual-point3-desc': '从体检前/后说明到翻译的结果，我们都以您的语言提供一切，减轻您的疑虑和焦虑。',
+            'individual-services-title': '为个人客户提供的服务',
+            'business-placeholder-title': '企业客户服务即将推出。',
+            'business-placeholder-desc': '我们将很快为外国员工提供系统的健康管理解决方案。欲了解更多信息，请联系我们。',
             'services-title': 'CHECKIT 主要服务',
             'service-1-title': '体检指南及预约协助',
             'service-1-desc': '无需担心语言混乱，我们将帮助您确定必要的体检项目，并协助您在最合适的医院进行预约。',
@@ -147,6 +176,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'business-title': 'Dành cho doanh nghiệp',
             'business-desc': 'Quản lý sức khỏe của nhân viên nước ngoài một cách có hệ thống để ngăn ngừa tai nạn lao động và tăng hiệu quả công việc.',
             'business-cta': 'Tìm hiểu thêm',
+            'individual-why-title': 'Tại sao chọn CHECKIT?',
+            'individual-point1-title': 'Chi phí minh bạch & hợp lý',
+            'individual-point1-desc': 'Kiểm tra sức khỏe của bạn với mức giá tương tự như người dân địa phương mà không cần lo lắng về việc bị tính giá quá cao. CHECKIT không có hợp đồng tài chính với bất kỳ bệnh viện nào.',
+            'individual-point2-title': 'Tìm kiếm gói khám phù hợp với bạn',
+            'individual-point2-desc': 'Bạn không chắc mình cần kiểm tra những gì? Chúng tôi giúp bạn tìm ra chương trình tối ưu phù hợp với nhu cầu và ngân sách cá nhân của bạn thông qua tư vấn.',
+            'individual-point3-title': 'Giao tiếp không rào cản',
+            'individual-point3-desc': 'Chúng tôi cung cấp mọi thứ bằng ngôn ngữ của bạn, từ hướng dẫn trước / sau khi khám đến kết quả được dịch, giúp bạn giải tỏa những lo lắng và băn khoăn.',
+            'individual-services-title': 'Dịch vụ cho cá nhân',
+            'business-placeholder-title': 'Dịch vụ cho doanh nghiệp sắp ra mắt.',
+            'business-placeholder-desc': 'Chúng tôi sẽ sớm trở lại với một giải pháp quản lý sức khỏe có hệ thống cho nhân viên nước ngoài. Để biết thêm thông tin, vui lòng liên hệ với chúng tôi.',
             'services-title': 'Dịch vụ chính của CHECKIT',
             'service-1-title': 'Hướng dẫn & Hỗ trợ đặt lịch',
             'service-1-desc': 'Chúng tôi giúp bạn xác định các mục khám cần thiết và hỗ trợ đặt lịch tại bệnh viện tối ưu mà không gặp khó khăn về ngôn ngữ.',
@@ -212,6 +251,36 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTexts(lang);
         });
     });
+    
+    // --- Service Details Logic ---
+    const individualsBtn = document.querySelector('#for-individuals-card .cta-button');
+    const businessBtn = document.querySelector('#for-business-card .cta-button');
+    const individualServices = document.getElementById('individual-services');
+    const businessServices = document.getElementById('business-services');
+    const allServiceDetails = document.querySelectorAll('.service-details');
+
+    function showService(serviceToShow) {
+        allServiceDetails.forEach(service => {
+            service.classList.add('hidden');
+        });
+        if (serviceToShow) {
+            serviceToShow.classList.remove('hidden');
+            setTimeout(() => { // Allow time for the element to become visible before scrolling
+                serviceToShow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100); 
+        }
+    }
+
+    individualsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showService(individualServices);
+    });
+
+    businessBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        showService(businessServices);
+    });
+
 
     // --- Chatbot Logic --- 
     const chatToggle = document.getElementById('chat-toggle');
@@ -289,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { q: "Làm cách nào để đặt lịch khám sức khỏe?", a: "Vui lòng để lại yêu cầu của bạn qua biểu mẫu 'Liên hệ với chúng tôi'. Một người quản lý sẽ nhanh chóng hướng dẫn bạn qua quy trình." },
             { q: "Có phí môi giới không?", a: "Không. Chúng tôi không có hợp đồng với bệnh viện hoặc bác sĩ, vì vậy hoàn toàn không có phí môi giới hoặc hoa hồng. Bạn chỉ cần trả phí dịch vụ của chúng tôi, sẽ được trình bày chi tiết trong buổi tư vấn của bạn." },
             { q: "Bạn có giới thiệu bệnh viện không?", a: "Chúng tôi không giới thiệu bệnh viện cụ thể. Thay vào đó, chúng tôi cung cấp danh sách các bệnh viện và chương trình phù hợp với các mục khám bạn mong muốn để giúp bạn tự đưa ra lựa chọn." },
-            { q: "Bạn có đi cùng tôi đến bệnh viện vào ngày khám không?", a: "Không, chúng tôi không cung cấp dịch vụ đi kèm thể chất. Tuy nhiên, chúng tôi cungV cấp 'dịch vụ giao tiếp' để giúp bạn giao tiếp cần thiết vào ngày khám." },
+            { q: "Bạn có đi cùng tôi đến bệnh viện vào ngày khám không?", a: "Không, chúng tôi không cung cấp dịch vụ đi kèm thể chất. Tuy nhiên, chúng tôi cung cấp 'dịch vụ giao tiếp' để giúp bạn giao tiếp cần thiết vào ngày khám." },
             { q: "Làm thế nào bạn thông báo cho tôi kết quả khám?", a: "Chúng tôi chỉ cung cấp 'bản dịch đơn giản' kết quả của bạn. Chúng tôi không cung cấp các diễn giải y tế, phán đoán hoặc sắp xếp các phương pháp điều trị tiếp theo. Chúng tôi hỗ trợ quản lý lịch tái khám và thông báo cho bạn về bất kỳ biện pháp phòng ngừa nào cùng với bản dịch." }
         ]
     };

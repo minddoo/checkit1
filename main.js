@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': '예약 절차는 어떻게 되나요?',
             'faq-1-ans': 'CHECKIT은 개인 맞춤형 건강검진 예약, 통역, 결과 번역 등 비의료 전 과정을 지원합니다. 자세한 내용은 <a href="/individual.html">개인 고객 페이지</a>를 참고하세요.',
             'faq-2-ans': '비용은 선택하시는 검진 프로그램과 부가 서비스에 따라 다릅니다. 기본 플랜은 ...부터 시작하며, 자세한 내용은 <a href="/individual.html#pricing">요금 안내</a>를 확인해주세요.',
-            'faq-3-ans': '홈페이지의 '상담 신청'을 통해 문의를 남겨주시면, 전문 매니저가 24시간 내에 연락드려 모든 과정을 안내해 드립니다.',
+            'faq-3-ans': '홈페이지의 \'상담 신청\'을 통해 문의를 남겨주시면, 전문 매니저가 24시간 내에 연락드려 모든 과정을 안내해 드립니다.',
             'faq-default-ans': '죄송합니다. 아직 학습 중이라 답변을 드릴 수 없어요. 더 자세한 문의는 홈페이지의 문의 섹션을 이용해주세요.'
         },
         en: {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': 'What is the reservation process?',
             'faq-1-ans': 'CHECKIT supports the entire non-medical process, including personalized health check-up reservations, interpretation, and result translation. For more details, please refer to the <a href="/individual.html">For Individuals page</a>.',
             'faq-2-ans': 'The cost varies depending on the check-up program and additional services you choose. Basic plans start from..., and you can find more details on our <a href="/individual.html#pricing">Pricing page</a>.',
-            'faq-3-ans': 'If you leave an inquiry through the 'Request Consultation' on our website, a professional manager will contact you within 24 hours to guide you through the process.',
+            'faq-3-ans': 'If you leave an inquiry through the \'Request Consultation\' on our website, a professional manager will contact you within 24 hours to guide you through the process.',
             'faq-default-ans': 'I apologize, I am still learning and cannot provide an answer. For more detailed inquiries, please use the contact section on our homepage.'
         },
         zh: {
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': 'Quy trình đặt hẹn như thế nào?',
             'faq-1-ans': 'CHECKIT hỗ trợ toàn bộ quy trình phi y tế, bao gồm đặt chỗ khám sức khỏe cá nhân, phiên dịch và dịch kết quả. Để biết thêm chi tiết, vui lòng tham khảo <a href="/individual.html">trang Dành cho Cá nhân</a>.',
             'faq-2-ans': 'Chi phí thay đổi tùy thuộc vào chương trình khám sức khỏe và các dịch vụ bổ sung bạn chọn. Các gói cơ bản bắt đầu từ ..., và bạn có thể tìm thêm chi tiết trên <a href="/individual.html#pricing">trang Giá cả</a> của chúng tôi.',
-            'faq-3-ans': 'Nếu bạn để lại yêu cầu qua mục 'Yêu cầu tư vấn' trên trang web của chúng tôi, một người quản lý chuyên nghiệp sẽ liên hệ với bạn trong vòng 24 giờ để hướng dẫn bạn trong suốt quá trình.',
+            'faq-3-ans': 'Nếu bạn để lại yêu cầu qua mục \'Yêu cầu tư vấn\' trên trang web của chúng tôi, một người quản lý chuyên nghiệp sẽ liên hệ với bạn trong vòng 24 giờ để hướng dẫn bạn trong suốt quá trình.',
             'faq-default-ans': 'Tôi xin lỗi, tôi vẫn đang học và không thể cung cấp câu trả lời. Đối với các yêu cầu chi tiết hơn, vui lòng sử dụng phần liên hệ trên trang chủ của chúng tôi.'
         }
     };

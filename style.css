@@ -134,6 +134,47 @@ header nav ul li {
     filter: brightness(1.1);
 }
 
+/* Customer Type Section */
+.customer-type-section {
+    padding: 4rem 2rem;
+    background-color: var(--white-color);
+}
+
+.customer-type-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.customer-card {
+    background: var(--white-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-depth-2);
+    padding: 2.5rem;
+    text-align: center;
+    flex: 1;
+    max-width: 400px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-top: 5px solid var(--primary-color);
+}
+
+.customer-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-depth-3);
+}
+
+.customer-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.customer-card p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
 .services, .process, .testimonials, .contact {
     padding: 5rem 2rem;
     text-align: center;
@@ -348,6 +389,21 @@ body.nav-active {
     .services h2, .process h2, .testimonials h2, .contact h2 {
         font-size: 1.5rem;
         margin-bottom: 2rem;
+    }
+
+    /* Customer Type Section (Mobile) */
+    .customer-type-section {
+        padding: 2.5rem 1rem;
+    }
+    .customer-type-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .customer-card h2 {
+        font-size: 1.5rem;
+    }
+    .customer-card p {
+        font-size: 1rem;
     }
 
     /* --- Services Section (2x2 Grid) --- */

@@ -1,30 +1,40 @@
-# Blueprint
 
-## Project Overview
+# Blueprint: CHECKIT Website
 
-This project is a website for CHECKIT, a service that assists foreigners with health checkups in Korea. The website provides information about the service, a contact form, and a chatbot for real-time assistance.
+## 1. Project Overview
 
-## Implemented Features
+CHECKIT is a concierge service that assists foreigners, both residing in and outside of Korea, with the health check-up process in Korea. It is not a medical service and does not involve commissions or brokerage. The service aims to solve issues foreigners face, such as language barriers, lack of information, and unfair pricing. The goal is to provide a smooth, transparent, and convenient experience for a set service fee, whether they are visiting for medical tourism or are residents.
 
-*   **Multi-language Support:** The website supports Korean, English, Chinese, and Vietnamese.
-*   **Chatbot:** A chatbot is implemented to provide real-time assistance to users.
-*   **Responsive Design:** The website is designed to be responsive and accessible on various devices.
+## 2. Target Audience & Value Proposition
 
-## Current Task: Chatbot Enhancement
+The website will cater to two distinct customer segments with different narratives.
 
-### Goal
+### 2.1. Individual Customers (B2C)
+- **Target:** Foreign residents in Korea and foreigners abroad interested in medical tourism in Korea.
+- **Pain Points:** Language barriers, complicated booking systems, uncertainty about costs, and difficulty understanding results.
+- **Value Proposition:** Find the right check-up within your budget at the same price as locals. We provide booking assistance and translated results for a seamless experience.
 
-Enhance the chatbot to be more interactive and user-friendly.
+### 2.2. Corporate Customers (B2B)
+- **Target:** Companies employing foreign workers (e.g., from China, Vietnam).
+- **Pain Points:**
+    - Language barriers leading to misunderstanding of health results, potentially causing industrial accidents.
+    - Overburdened health managers struggling to handle the specific needs of many foreign employees.
+- **Value Proposition:** Minimize industrial accidents by ensuring foreign employees understand their health status. Enable efficient and consistent health management for all foreign staff, reducing the workload on internal managers without compromising quality.
 
-### Steps
+## 3. Implemented Features & Design
 
-1.  **DONE** Relocate and resize the chatbot icon for better visibility.
-2.  **DONE** Implement the basic chat functionality, allowing users to send and receive messages.
-3.  **DONE** Add a chat input field and a send button.
-4.  **DONE** Create a `blueprint.md` file to document the project and track progress.
+*   **Language Toggle:** Switch between Korean and English.
+*   **Modern & Clean UI:** A visually appealing design with a hero section, service description, process steps, and FAQ.
+*   **FAQ Section:** Dynamically loaded FAQ content based on the selected language.
+*   **Interactive Header:** The header changes background on scroll.
+*   **Chatbot:** A floating chatbot provides answers to common questions.
 
-### Next Steps
+## 4. Current Plan: Implement Customer Segmentation
 
-*   Implement more sophisticated bot responses.
-*   Integrate a natural language processing (NLP) engine for better understanding of user queries.
-*   Add more interactive elements to the chat window.
+The immediate goal is to restructure the homepage to guide users into two distinct paths: "For Individuals" and "For Business".
+
+**Steps:**
+
+1.  **Update `index.html`:** Modify the hero section or add a new section immediately after it to present two clear choices to the user.
+2.  **Create Separate Sections/Pages:** Develop distinct content and user flows for each segment.
+3.  **Refine Messaging:** Tailor the language and calls-to-action for each path.

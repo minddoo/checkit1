@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ko': {
             'logo': 'CHECKIT',
             'nav-reality': '현실', 'nav-services': '서비스', 'nav-contact': '문의',
-            'individual-hero-title': '한국 건강검진의 기대와 현실',
-            'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다.<br>CHECKIT이 그 간극을 메웁니다.',
+            'individual-hero-title': '한국 건강검진의 <br>기대와 현실',
+            'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다. CHECKIT이 그 간극을 메웁니다.',
             'view-reality-cta': '현실 확인하기',
             
             'expectation-title': '한국 의료 서비스에 대한 당신의 기대',
@@ -127,8 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'en': {
             'logo': 'CHECKIT',
             'nav-reality': 'The Reality', 'nav-services': 'Services', 'nav-contact': 'Contact',
-            'individual-hero-title': 'Health Check-ups in Korea: Expectation vs. Reality',
-            'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety.<br>CHECKIT bridges the gap.',
+            'individual-hero-title': 'Health Check-ups in Korea: <br>Expectation vs. Reality',
+            'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety. CHECKIT bridges the gap.',
             'view-reality-cta': 'See the Reality',
             
             'expectation-title': 'What You Expect from Korean Healthcare',
@@ -163,13 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality4-li4': 'No explanation about post-exam rules (e.g., flying after polyp removal).',
 
             'story-intro1': 'These issues look small on paper.',
-            'story-intro2': 'But here\'s what they actually look like in real life.',
+            'story-intro2': 'But here's what they actually look like in real life.',
             'story-p1': 'Before I came to Korea, everything sounded reassuring. I was told there was English support, that foreigners used the service often, and that the whole process would be smooth and well guided.',
             'story-p2': 'Then I tried to make a reservation.',
-            'story-p3': 'That\'s when things began to fall apart.',
+            'story-p3': 'That's when things began to fall apart.',
             'story-p4': 'No one could actually speak my language. Every guide, alert, and preparation note was only in Korean—which was surprising, considering what I had been promised.',
-            'story-p5': 'It took days just to confirm a schedule. Calls went unanswered. Replies came late or didn\'t come at all. Each follow-up made me feel like I was asking for too much... even though I was only trying to understand the basics.',
-            'story-p6': 'On the day of the exam, the confusion peaked. Even though they said someone would guide me, I didn\'t know where to go, what to bring, or who to ask.',
+            'story-p5': 'It took days just to confirm a schedule. Calls went unanswered. Replies came late or didn't come at all. Each follow-up made me feel like I was asking for too much... even though I was only trying to understand the basics.',
+            'story-p6': 'On the day of the exam, the confusion peaked. Even though they said someone would guide me, I didn't know where to go, what to bring, or who to ask.',
             'story-p7': 'Staff spoke quickly in Korean, pointed vaguely, and moved on. One test was stopped halfway with no explanation—just a brief gesture telling me to head somewhere else.',
             'story-p8': 'At that moment, I realized I was completely on my own.',
             'story-p9': 'I left Korea without receiving my results. Days turned into weeks. No follow-up. No clear answer. No one who felt responsible.',
@@ -211,13 +211,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             'notice-title': 'NOTICE',
             'notice-subtitle': 'Why foreigners pay more for the same medical checkups in Korea',
-            'notice-q-intro': 'We\'re often asked this question.',
+            'notice-q-intro': 'We're often asked this question.',
             'notice-q': '"Why are your options cheaper than what hospitals offer?"',
             'notice-a1-title': 'The short answer:',
-            'notice-a1-p1': 'It\'s not because the tests are different.',
-            'notice-a1-p2': 'It\'s because the pricing structure is.',
+            'notice-a1-p1': 'It's not because the tests are different.',
+            'notice-a1-p2': 'It's because the pricing structure is.',
             'notice-a2-title': 'What actually happens in many hospitals',
-            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don\'t pay for – which raises the total price.',
+            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don't pay for – which raises the total price.',
             'notice-a3-title': 'A common situation we see with foreign clients',
             'notice-a3-p1': 'A client was quoted ₩1,800,000 for a foreigner package. With guidance, the same tests were booked for ₩1,050,000.',
 
@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'zh': {
             'logo': 'CHECKIT',
             'nav-reality': '现实', 'nav-services': '服务', 'nav-contact': '联系我们',
-            'individual-hero-title': '韩国健康体检：期望与现实',
-            'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。<br>CHECKIT 弥合了这一差距。',
+            'individual-hero-title': '韩国健康体检：<br>期望与现实',
+            'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。CHECKIT 弥合了这一差距。',
             'view-reality-cta': '看看现实',
             
             'expectation-title': '您对韩国医疗保健的期望',
@@ -359,8 +359,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'vi': {
             'logo': 'CHECKIT',
             'nav-reality': 'Thực tế', 'nav-services': 'Dịch vụ', 'nav-contact': 'Liên hệ',
-            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc: Kỳ vọng và Thực tế',
-            'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng.<br>CHECKIT thu hẹp khoảng cách đó.',
+            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc: <br>Kỳ vọng và Thực tế',
+            'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng. CHECKIT thu hẹp khoảng cách đó.',
             'view-reality-cta': 'Xem thực tế',
 
             'expectation-title': 'Những gì bạn mong đợi từ chăm sóc sức khỏe Hàn Quốc',
@@ -469,7 +469,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'refund-full-refund-desc': 'Hoàn tiền đầy đủ chỉ được thực hiện khi lỗi rõ ràng thuộc về phía chúng tôi.',
             'refund-fr-li1': 'Chúng tôi đã cung cấp thông tin không chính xác (sai ngày, sai hướng dẫn, sai biểu mẫu)',
             'refund-fr-li2': 'Chúng tôi đã không gửi các thông báo bắt buộc hoặc hướng dẫn chuẩn bị',
-            'fr-li3': 'Chúng tôi đã không yêu cầu một tài liệu đã được bao gồm trong kế hoạch của bạn',            'refund-fr-li4': 'We delayed your results due to our error',
+            'fr-li3': 'Chúng tôi đã không yêu cầu một tài liệu đã được bao gồm trong kế hoạch của bạn',
+            'refund-fr-li4': 'We delayed your results due to our error',
         }
     };
 

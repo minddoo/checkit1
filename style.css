@@ -85,6 +85,38 @@ header nav ul a:hover::after { width: 100%; }
 footer { background-color: #161a1d; color: #6c757d; text-align: center; padding: 2rem; font-size: 0.9rem; }
 
 
+/* --- INDIVIDUAL PAGE SPECIFIC STYLES --- */
+.expectation-section .expectation-card {
+    background-color: #eaf6ff; /* Light sky blue */
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+.reality-section .reality-card {
+    background-color: #fff2f2; /* Light red */
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+.reality-section .reality-card h4 {
+    color: var(--danger-color);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+.reality-section .reality-card ul {
+    list-style-position: inside;
+}
+.reality-section .reality-card li {
+    margin-bottom: 0.75rem;
+}
+.pricing-header h3 {
+    text-align: left;
+}
+
+
 /* --- STYLES FOR CORPORATE.HTML --- */
 
 #corporate-hero {
@@ -179,18 +211,17 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     letter-spacing: 1px;
 }
 
-/* Removing the gem icon */
 #corporate-reality .section-title::before {
     content: none;
 }
 
-.reality-container {
+#corporate-reality .reality-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
 }
 
-.reality-card {
+#corporate-reality .reality-card {
     background: #fffafa; /* A very light, almost white-pink */
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(217, 83, 79, 0.1);
@@ -199,12 +230,12 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     border: 1px solid #f2dede; /* Light red border */
 }
 
-.reality-card:hover {
+#corporate-reality .reality-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 25px rgba(217, 83, 79, 0.2); /* Deeper red shadow on hover */
 }
 
-.reality-card h3 {
+#corporate-reality .reality-card h3 {
     background-color: var(--danger-color); /* Main danger color for the header */
     color: var(--white-color);
     padding: 0.9rem 1.5rem;
@@ -214,23 +245,23 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     text-align: center;
 }
 
-.reality-card ul {
+#corporate-reality .reality-card ul {
     padding: 2rem;
     list-style: none;
 }
 
-.reality-card li {
+#corporate-reality .reality-card li {
     position: relative;
     padding-left: 1.5rem;
     margin-bottom: 1.25rem;
     color: var(--secondary-color);
     line-height: 1.6;
 }
-.reality-card li:last-child {
+#corporate-reality .reality-card li:last-child {
     margin-bottom: 0;
 }
 
-.reality-card li::before {
+#corporate-reality .reality-card li::before {
     content: '•';
     position: absolute;
     left: 0;
@@ -331,7 +362,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 
 /* --- MOBILE & RESPONSIVE --- */
 @media screen and (max-width: 992px) {
-    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .refund-container, .benefits-container, .process-steps.corporate-steps, .flow-container, .reality-container {
+    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .refund-container, .benefits-container, .process-steps.corporate-steps, .flow-container, #corporate-reality .reality-container {
         grid-template-columns: repeat(2, 1fr);
     }
     .pricing-card { max-width: 500px; margin-left: auto; margin-right: auto; }
@@ -359,7 +390,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     .hero-text p, .customer-card p, .step p, #corporate-hero .hero-text p, .benefit-card p { font-size: 1rem; }
 
     .benefits-container { gap: 1.5rem; }
-    .flow-container, .reality-container, .options-container {
+    .flow-container, #corporate-reality .reality-container, .options-container {
          grid-template-columns: 1fr;
     }
     .pricing-card { margin-bottom: 2rem; }

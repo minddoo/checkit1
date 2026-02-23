@@ -83,7 +83,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .chat-header h3 { font-size: 1.2rem; font-weight: 600; margin-right: auto;}
 .chat-header .chat-lang-switcher { margin-right: 0.5rem; }
 .chat-header .chat-lang-switcher button { border: 1px solid rgba(255,255,255,0.5); color: rgba(255,255,255,0.8); padding: 0.2rem 0.5rem; }
-.chat-header .chat-lang-switcher button.active { background: var(--white-color); color: var(--primary-color); border-color: var(--white-color);}
+.chat-header .chat-lang-switcher button.active { background: var(--white-color); color: var(--primary-color); border-color: var(--white-color); }
 #chat-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
 #chat-close:hover { opacity: 1; }
 .chat-messages { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.8rem; }
@@ -155,7 +155,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .pricing-card .cta-button { display: block; width: calc(100% - 4rem); margin: 2rem auto; text-align: center; }
 .plan-no-confusion .pricing-header .price, .plan-no-confusion .pricing-features li::before { color: var(--plan-orange); }
 .plan-no-confusion .cta-button { background-color: var(--plan-orange); }
-.plan-no-confusion:hover { border-color: var(--plan-orange);}
+.plan-no-confusion:hover { border-color: var(--plan-orange); }
 .plan-zero-mistake .pricing-header .price, .plan-zero-mistake .pricing-features li::before { color: var(--plan-brown); }
 .plan-zero-mistake .cta-button { background-color: var(--plan-brown); }
 .plan-zero-mistake:hover { border-color: var(--plan-brown); }
@@ -180,3 +180,40 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .expectation-card p, .reality-card ul { color: var(--secondary-color); }
 .reality-card ul { padding-left: 5px; }
 .reality-card li { margin-bottom: 0.8rem; line-height: 1.6; font-size: 1rem; }
+
+/* --- Individual Page Custom Overrides --- */
+
+/* 1 & 4. Center-align all prices */
+.pricing-header .price, .schedule-options li {
+    text-align: center;
+}
+.schedule-options li {
+    display: block;
+}
+
+/* 2. Center 'Best for' section and shrink text */
+.best-for {
+    text-align: center;
+}
+.best-for p {
+    font-size: 0.9rem; /* Slightly smaller to fit */
+}
+
+/* 3. Option text color to black */
+.option-card .features-container p,
+.option-card .pricing-header h3,
+.schedule-options li {
+    color: var(--dark-color);
+}
+
+/* 5. Recolor Total Safe Plan to gray */
+.plan-total-safe .pricing-header .price,
+.plan-total-safe .pricing-features li::before {
+    color: var(--secondary-color);
+}
+.plan-total-safe .cta-button {
+    background-color: var(--secondary-color);
+}
+.plan-total-safe:hover {
+    border-color: var(--secondary-color);
+}

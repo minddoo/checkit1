@@ -75,7 +75,7 @@ header nav ul a:hover::after { width: 100%; }
 footer { background-color: #161a1d; color: #6c757d; text-align: center; padding: 2rem; font-size: 0.9rem; }
 
 /* --- CHATBOT --- */
-#chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1001; }
+#chatbot-container { position: fixed; bottom: 10px; right: 10px; z-index: 1001; }
 #chat-toggle { width: 60px; height: 60px; background-color: var(--primary-color); color: white; border-radius: 50%; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: var(--shadow-lg); transition: all 0.3s; }
 #chat-toggle.hidden { transform: scale(0); }
 #chat-window { background: var(--white-color); width: 400px; height: 600px; border-radius: 15px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; transition: all 0.3s; }
@@ -120,8 +120,8 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     .hamburger { display: block; }
     .hero-text h1 { font-size: 2.2rem; }
     .hero-text p { font-size: 1.1rem; }
-    #chatbot-container { right: 15px; bottom: 15px; }
-    #chat-window { width: calc(100vw - 30px); height: calc(100vh - 30px); bottom: 15px; right: 15px; top: auto; position: fixed; max-height: 85vh; }
+    #chatbot-container { right: 10px; bottom: 10px; }
+    #chat-window { width: calc(100vw - 20px); height: calc(100vh - 20px); bottom: 10px; right: 10px; top: auto; position: fixed; max-height: 85vh; }
 }
 
 /* --- STYLES FOR INDIVIDUAL.HTML --- */

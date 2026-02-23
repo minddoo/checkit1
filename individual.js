@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality4-li3': '해외 전화 인증 제한으로 영수증을 받을 수 없습니다.',
             'reality4-li4': '검사 후 규칙(예: 용종 제거 후 비행)에 대한 설명이 없습니다.',
             
-            'story-intro1': '서류상으로는 사소해 보이는 문제들.',
-            'story-intro2': '하지만 실제로는 이렇게 보입니다.',
+            'story-intro1': '글로는 사소해 보이는 문제들.',
+            'story-intro2': '현실은 이렇습니다.',
             'story-p1': '한국에 오기 전에는 모든 것이 안심되었습니다. 영어 지원이 가능하고, 외국인들이 자주 이용하며, 전체 과정이 순조롭고 잘 안내될 것이라고 들었습니다.',
             'story-p2': '그리고 예약을 시도했습니다.',
             'story-p3': '그때부터 모든 것이 무너지기 시작했습니다.',
-            'story-p4': '실제로 영어를 할 수 있는 사람은 아무도 없었습니다. 모든 안내, 알림, 준비 메모는 한국어로만 되어 있어 제가 약속받았던 것과는 너무나 달랐습니다.',
+            'story-p4': '실제로 내 언어를 할 수 있는 사람은 아무도 없었습니다. 모든 안내, 알림, 준비 메모는 한국어로만 되어 있어 제가 약속받았던 것과는 너무나 달랐습니다.',
             'story-p5': '일정을 확정하는 데만 며칠이 걸렸습니다. 전화는 받지 않았고, 답장은 늦거나 아예 오지 않았습니다. 후속 조치를 할 때마다 제가 너무 많은 것을 요구하는 것처럼 느껴졌습니다... 저는 단지 기본적인 것을 이해하려고 했을 뿐인데도 말이죠.',
             'story-p6': '검사 당일, 혼란은 극에 달했습니다. 누군가 안내해 줄 것이라고 했지만, 어디로 가야 할지, 무엇을 가져가야 할지, 누구에게 물어봐야 할지 전혀 몰랐습니다.',
             'story-p7': '직원들은 한국어로 빠르게 말하고, 애매하게 가리키고는 그냥 가버렸습니다. 한 검사는 아무 설명 없이 중간에 중단되었고, 다른 곳으로 가라는 간단한 손짓만 있었습니다.',
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p10': '그리고 마침내 중요한 것을 깨달았습니다. 오기 전에 들었던 약속들은 도착해서 마주한 현실과 전혀 일치하지 않았다는 것을요.',
 
             'solution-title': 'CHECKIT이 바로 해결책입니다',
-            'solution-desc': '저희가 모든 비의료 과정을 처리하므로 당신은 건강에만 집중할 수 있습니다. 혼란, 실수, 스트레스 없이 편안하게 검진받으세요.',
+            'solution-desc': '저희가 모든 비의료 과정을 처리하므로 당신은 건강에만 집중할 수 있습니다. 혼란, 실수, 스트레스 없이<br>편안하게 검진받으세요.',
 
             'pricing-title': '플랜 선택하기',
             'plan-included': '포함 내역',
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p1': 'Before I came to Korea, everything sounded reassuring. I was told there was English support, that foreigners used the service often, and that the whole process would be smooth and well guided.',
             'story-p2': 'Then I tried to make a reservation.',
             'story-p3': 'That\'s when things began to fall apart.',
-            'story-p4': 'No one could actually speak English. Every guide, alert, and preparation note was only in Korean—which was surprising, considering what I had been promised.',
+            'story-p4': 'No one could actually speak my language. Every guide, alert, and preparation note was only in Korean—which was surprising, considering what I had been promised.',
             'story-p5': 'It took days just to confirm a schedule. Calls went unanswered. Replies came late or didn\'t come at all. Each follow-up made me feel like I was asking for too much... even though I was only trying to understand the basics.',
             'story-p6': 'On the day of the exam, the confusion peaked. Even though they said someone would guide me, I didn\'t know where to go, what to bring, or who to ask.',
             'story-p7': 'Staff spoke quickly in Korean, pointed vaguely, and moved on. One test was stopped halfway with no explanation—just a brief gesture telling me to head somewhere else.',
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p10': 'And in the end, I understood something important: the promises I heard before coming did not match the reality I faced once I arrived.',
 
             'solution-title': 'CHECKIT is the Solution',
-            'solution-desc': 'We handle the entire non-medical process so you can focus on your health. No confusion, no mistakes, no stress.',
+            'solution-desc': 'We handle the entire non-medical process so you can focus on your health.<br>No confusion, no mistakes, no stress.',
             
             'pricing-title': 'Choose Your Plan',
             'plan-included': 'Included',
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p1': '在我来韩国之前，一切听起来都很让人放心。我被告知有英语支持，外国人经常使用这项服务，整个过程会很顺利，有很好的指导。',
             'story-p2': '然后我试着预订。',
             'story-p3': '就在那时，事情开始崩溃了。',
-            'story-p4': '实际上没有人会说英语。每一份指南、提醒和准备说明都只有韩语——考虑到我得到的承诺，这令人惊讶。',
+            'story-p4': '实际上没有人会说我的语言。每一份指南、提醒和准备说明都只有韩语——考虑到我得到的承诺，这令人惊讶。',
             'story-p5': '仅仅为了确认一个日程就花了好几天。电话无人接听。回复很晚，或者根本没有。每一次跟进都让我觉得我要求太多了……即使我只是想了解基本情况。',
             'story-p6': '考试那天，混乱达到了顶峰。尽管他们说会有人引导我，但我不知道该去哪里，该带什么，或者该问谁。',
             'story-p7': '工作人员用韩语快速地说着，含糊地指着，然后就走开了。一项测试在没有解释的情况下中途停止了——只是一个简短的手势，告诉我该去别的地方了。',
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p10': '最后，我明白了一件重要的事情：我来之前听到的承诺与我到达后所面临的现实不符。',
             
             'solution-title': 'CHECKIT 是解决方案',
-            'solution-desc': '我们处理整个非医疗流程，因此您可以专注于您的健康。没有困惑，没有错误，没有压力。',
+            'solution-desc': '我们处理整个非医疗流程，因此您可以专注于您的健康。<br>没有困惑，没有错误，没有压力。',
             
             'pricing-title': '选择您的计划',
             'plan-included': '包含',
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p1': 'Trước khi tôi đến Hàn Quốc, mọi thứ nghe có vẻ yên tâm. Tôi được cho biết có hỗ trợ tiếng Anh, người nước ngoài thường xuyên sử dụng dịch vụ và toàn bộ quá trình sẽ suôn sẻ và được hướng dẫn tốt.',
             'story-p2': 'Sau đó, tôi đã cố gắng đặt chỗ.',
             'story-p3': 'Đó là lúc mọi thứ bắt đầu đổ vỡ.',
-            'story-p4': 'Không ai thực sự có thể nói được tiếng Anh. Mọi hướng dẫn, cảnh báo và ghi chú chuẩn bị đều chỉ bằng tiếng Hàn—điều đó thật đáng ngạc nhiên, xét đến những gì tôi đã được hứa.',
+            'story-p4': 'Không ai thực sự có thể nói được ngôn ngữ của tôi. Mọi hướng dẫn, cảnh báo và ghi chú chuẩn bị đều chỉ bằng tiếng Hàn—điều đó thật đáng ngạc nhiên, xét đến những gì tôi đã được hứa.',
             'story-p5': 'Chỉ để xác nhận lịch trình đã mất nhiều ngày. Cuộc gọi không được trả lời. Trả lời đến muộn hoặc không hề đến. Mỗi lần theo dõi đều khiến tôi cảm thấy như mình đang đòi hỏi quá nhiều... mặc dù tôi chỉ đang cố gắng để hiểu những điều cơ bản.',
             'story-p6': 'Vào ngày thi, sự nhầm lẫn lên đến đỉnh điểm. Mặc dù họ nói sẽ có người hướng dẫn tôi, nhưng tôi không biết phải đi đâu, mang theo gì hay hỏi ai.',
             'story-p7': 'Nhân viên nói nhanh bằng tiếng Hàn, chỉ trỏ một cách mơ hồ rồi bỏ đi. Một bài kiểm tra đã bị dừng giữa chừng mà không có lời giải thích—chỉ là một cử chỉ ngắn gọn bảo tôi đi đến một nơi nào đó khác.',
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'story-p10': 'Và cuối cùng, tôi đã hiểu ra một điều quan trọng: những lời hứa mà tôi nghe được trước khi đến không hề khớp với thực tế mà tôi phải đối mặt khi đến nơi.',
             
             'solution-title': 'CHECKIT là giải pháp',
-            'solution-desc': 'Chúng tôi xử lý toàn bộ quy trình phi y tế để bạn có thể tập trung vào sức khỏe của mình. Không nhầm lẫn, không sai sót, không căng thẳng.',
+            'solution-desc': 'Chúng tôi xử lý toàn bộ quy trình phi y tế để bạn có thể tập trung vào sức khỏe của mình.<br>Không nhầm lẫn, không sai sót, không căng thẳng.',
             
             'pricing-title': 'Chọn gói của bạn',
             'plan-included': 'Bao gồm',

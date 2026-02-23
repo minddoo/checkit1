@@ -173,14 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!chatWindow || !chatToggle || !chatClose || !chatInput || !chatSend || !chatMessages) return;
 
-        const toggleChat = (e) => {
-            e.stopPropagation();
-            chatWindow.classList.toggle('hidden');
-            chatToggle.classList.toggle('hidden');
+        const openChat = (e) => {
+            if (e) e.stopPropagation();
+            chatWindow.classList.remove('hidden');
+            chatToggle.classList.add('hidden');
         };
 
-        chatToggle.addEventListener('click', toggleChat);
-        chatClose.addEventListener('click', toggleChat);
+        const closeChat = (e) => {
+            if (e) e.stopPropagation();
+            chatWindow.classList.add('hidden');
+            chatToggle.classList.remove('hidden');
+        };
+
+        chatToggle.addEventListener('click', openChat);
+        chatClose.addEventListener('click', closeChat);
 
         const sendMessage = () => {
             const message = chatInput.value.trim();

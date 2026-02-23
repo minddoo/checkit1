@@ -1,89 +1,156 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=999999">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <a href="/" data-i18n="logo">CHECKIT</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/individual.html" data-i18n="nav-services">Services</a></li>
+                <li><a href="#process" data-i18n="nav-process">Process</a></li>
+                <li><a href="#testimonials" data-i18n="nav-testimonials">Reviews</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
+            </ul>
+            <div class="lang-switcher header-lang-switcher">
+                <button data-lang="ko">KR</button>
+                <button data-lang="en">EN</button>
+                <button data-lang="zh">CN</button>
+                <button data-lang="vi">VI</button>
+            </div>
+        </nav>
+        <button class="hamburger"><i class="fas fa-bars"></i></button>
+    </header>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.9.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.9.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="content-wrapper hero-text">
+            <h1 data-i18n="hero-title">Health Check-ups for Foreigners, <br>Comfortable Without Language Barriers.</h1>
+            <p data-i18n="hero-subtitle">From missed schedules and confusing instructions to results only in Korean. CHECKIT solves all non-medical processes.</p>
+            <a href="#contact" class="cta-button" data-i18n="hero-cta">Request a Consultation Now</a>
+        </div>
+    </section>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+    <!-- CUSTOMER TYPE SECTION -->
+    <section class="customer-type-section">
+        <div class="content-wrapper">
+            <h2 class="section-title" data-i18n="services-title">Who is This Service For?</h2>
+            <div class="customer-type-container">
+                <div class="customer-card">
+                    <div class="card-icon"><i class="fas fa-user"></i></div>
+                    <h3 data-i18n="individuals-title">For Individuals</h3>
+                    <p data-i18n="individuals-desc">Experience a personalized health check-up journey. Services for residents in Korea and medical tourists.</p>
+                    <a href="/individual.html" class="cta-button inverted" data-i18n="individuals-cta">Learn More</a>
+                </div>
+                <div class="customer-card">
+                    <div class="card-icon"><i class="fas fa-building"></i></div>
+                    <h3 data-i18n="business-title">For Business</h3>
+                    <p data-i18n="business-desc">Systematically manage the health of your foreign employees to prevent industrial accidents and increase work efficiency.</p>
+                    <a href="#contact" class="cta-button inverted" data-i18n="business-cta">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS SECTION -->
+    <section class="process-section" id="process">
+        <div class="content-wrapper">
+            <h2 class="section-title" data-i18n="process-title">How CHECKIT Works</h2>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3 data-i18n="process-1-title">Consultation Request</h3>
+                    <p data-i18n="process-1-desc">Simply request a consultation through our website, and a dedicated manager will be assigned.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3 data-i18n="process-2-title">Custom Consulting</h3>
+                    <p data-i18n="process-2-desc">We coordinate the necessary exams, schedules, and languages to confirm your final reservation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3 data-i18n="process-3-title">Exam & Results</h3>
+                    <p data-i18n="process-3-desc">Comfortably get your check-up and receive your translated results and follow-up guidance all at once.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="content-wrapper">
+            <h2 class="section-title" data-i18n="testimonials-title">User Reviews</h2>
+            <div class="testimonial-cards">
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-1-text">“As a long-term resident, I've always struggled with the language barrier at hospitals. CHECKIT managed everything perfectly, from scheduling to the final translated report. It was the most stress-free medical experience I've had in Korea.”</p>
+                    <p class="testimonial-author" data-i18n="testimonial-1-author">- Michael. L (USA, Resident)</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-2-text">“I was visiting Korea for a short trip and needed a quick, reliable check-up. CHECKIT's process was incredibly efficient. They found a hospital near me and handled all communication. I got my English results via email in just a few days. Amazing service!”</p>
+                    <p class="testimonial-author" data-i18n="testimonial-2-author">- A. Tran (Vietnam, Tourist)</p>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-3-text">“Managing health checks for our diverse team of foreign employees was a logistical nightmare. Missed appointments, language issues, and delayed results were common. Since using CHECKIT, our process is streamlined, and our employees feel truly cared for. It has significantly improved our team's well-being.”</p>
+                    <p class="testimonial-author" data-i18n="testimonial-3-author">- J. Kim (HR Manager, Tech Firm)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section class="contact-section" id="contact">
+        <div class="content-wrapper">
+            <h2 class="section-title" data-i18n="contact-title">Have Any Questions?</h2>
+            <p class="section-subtitle" data-i18n="contact-subtitle">A professional manager will respond within 24 hours.</p>
+            <form>
+                <input type="email" data-i18n-placeholder="contact-email" placeholder="Enter your email address">
+                <textarea rows="5" data-i18n-placeholder="contact-message" placeholder="Enter your message"></textarea>
+                <button type="submit" class="cta-button" data-i18n="contact-submit">Request Consultation</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
+    </footer>
+
+    <!-- CHATBOT -->
+    <div id="chatbot-container">
+        <button id="chat-toggle"><i class="fas fa-comment-dots"></i></button>
+        <div id="chat-window" class="hidden">
+            <div class="chat-header">
+                <h3 data-i18n="chat-title">CHECKIT Bot</h3>
+                <div class="lang-switcher chat-lang-switcher">
+                    <button data-lang="ko">KR</button>
+                    <button data-lang="en">EN</button>
+                    <button data-lang="zh">CN</button>
+                    <button data-lang="vi">VI</button>
+                </div>
+                <button id="chat-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages will be appended here by JavaScript -->
+            </div>
+            <div id="faq-options" class="faq-options">
+                <!-- FAQ buttons will be appended here by JavaScript -->
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" data-i18n-placeholder="chat-input-placeholder">
+                <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+    <script src="main.js?v=999999"></script>
+</body>
 </html>

@@ -79,6 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             'contact-title': '시작할 준비가 되셨나요?', 'contact-subtitle': '필요한 사항을 알려주시면, 전담 매니저가 24시간 내에 답변해드립니다.', 'contact-email': '이메일 주소를 입력하세요', 'contact-message': '문의 내용을 입력하세요', 'contact-submit': '상담 신청하기',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
+            
+            'notice-title': '공지',
+            'notice-subtitle': '왜 외국인은 한국에서 동일한 건강검진에 더 많은 비용을 지불할까요?',
+            'notice-q-intro': '저희는 종종 이런 질문을 받습니다.',
+            'notice-q': '"왜 당신의 옵션이 병원에서 제공하는 것보다 저렴한가요?"',
+            'notice-a1-title': '간단한 답변:',
+            'notice-a1-p1': '검사가 달라서가 아닙니다.',
+            'notice-a1-p2': '가격 구조 때문입니다.',
+            'notice-a2-title': '실제 많은 병원에서 일어나는 일',
+            'notice-a2-p1': '대부분의 병원은 별도의 "외국인 패키지"를 만듭니다. 이 패키지에는 현지인이 지불하지 않는 서비스가 포함되어 총 가격이 올라갑니다.',
+            'notice-a3-title': '외국인 고객에게서 흔히 볼 수 있는 상황',
+            'notice-a3-p1': '한 고객은 외국인 패키지에 대해 1,800,000원을 견적 받았습니다. 저희의 안내를 통해 동일한 검사를 1,050,000원에 예약했습니다.',
         },
         'en': {
             'logo': 'CHECKIT',
@@ -151,6 +163,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             'contact-title': 'Ready to Get Started?', 'contact-subtitle': 'Tell us your needs, and a dedicated manager will respond within 24 hours.', 'contact-email': 'Enter your email address', 'contact-message': 'Enter your inquiry', 'contact-submit': 'Request Consultation',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
+            
+            'notice-title': 'NOTICE',
+            'notice-subtitle': 'Why foreigners pay more for the same medical checkups in Korea',
+            'notice-q-intro': 'We're often asked this question.',
+            'notice-q': '"Why are your options cheaper than what hospitals offer?"',
+            'notice-a1-title': 'The short answer:',
+            'notice-a1-p1': 'It's not because the tests are different.',
+            'notice-a1-p2': 'It's because the pricing structure is.',
+            'notice-a2-title': 'What actually happens in many hospitals',
+            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don't pay for – which raises the total price.',
+            'notice-a3-title': 'A common situation we see with foreign clients',
+            'notice-a3-p1': 'A client was quoted ₩1,800,000 for a foreigner package. With guidance, the same tests were booked for ₩1,050,000.',
         },
         'zh': {
             'logo': 'CHECKIT',
@@ -182,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality3-li1': '仅确保预订就需要 2-3 天。',
             'reality3-li2': '不同的工作人员给出不同的答案 — 没人负责。',
             'reality3-li3': '没有韩国电话号码 → 没有提醒或准备说明。',
-            'reality3-li4': '海外时差 → 通화失败，预订延迟。',
+            'reality3-li4': '海外时差 → 通話失败，预订延迟。',
 
             'reality4-title': '结果延迟和零责任制',
             'reality4-li1': '结果通过邮件寄到您没有的地址。',
@@ -223,6 +247,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             'contact-title': '准备好开始了吗？', 'contact-subtitle': '告诉我们您的需求，专属经理将在 24 小时内回复。', 'contact-email': '请输入您的电子邮件地址', 'contact-message': '请输入您的咨询内容', 'contact-submit': '申请咨询',
             'footer-copy': '© 2024 CHECKIT. 版权所有。',
+            
+            'notice-title': 'NOTICE',
+            'notice-subtitle': 'Why foreigners pay more for the same medical checkups in Korea',
+            'notice-q-intro': 'We're often asked this question.',
+            'notice-q': '"Why are your options cheaper than what hospitals offer?"',
+            'notice-a1-title': 'The short answer:',
+            'notice-a1-p1': 'It's not because the tests are different.',
+            'notice-a1-p2': 'It's because the pricing structure is.',
+            'notice-a2-title': 'What actually happens in many hospitals',
+            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don't pay for – which raises the total price.',
+            'notice-a3-title': 'A common situation we see with foreign clients',
+            'a3-p1': 'A client was quoted ₩1,800,000 for a foreigner package. With guidance, the same tests were booked for ₩1,050,000.',
         },
         'vi': {
             'logo': 'CHECKIT',
@@ -295,6 +331,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             'contact-title': 'Sẵn sàng để bắt đầu?', 'contact-subtitle': 'Hãy cho chúng tôi biết nhu cầu của bạn và một người quản lý riêng sẽ trả lời trong vòng 24 giờ.', 'contact-email': 'Nhập địa chỉ email của bạn', 'contact-message': 'Nhập câu hỏi của bạn', 'contact-submit': 'Yêu cầu tư vấn',
             'footer-copy': '© 2024 CHECKIT. Mọi quyền được bảo lưu.',
+            
+            'notice-title': 'NOTICE',
+            'notice-subtitle': 'Why foreigners pay more for the same medical checkups in Korea',
+            'notice-q-intro': 'We're often asked this question.',
+            'notice-q': '"Why are your options cheaper than what hospitals offer?"',
+            'notice-a1-title': 'The short answer:',
+            'notice-a1-p1': 'It's not because the tests are different.',
+            'notice-a1-p2': 'It's because the pricing structure is.',
+            'notice-a2-title': 'What actually happens in many hospitals',
+            'notice-a2-p1': 'Most hospitals create separate "foreigner packages." These packages often bundle services that locals don't pay for – which raises the total price.',
+            'notice-a3-title': 'A common situation we see with foreign clients',
+            'a3-p1': 'A client was quoted ₩1,800,000 for a foreigner package. With guidance, the same tests were booked for ₩1,050,000.',
         }
     };
 

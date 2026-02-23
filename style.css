@@ -135,7 +135,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .solution-outro { padding: 4rem 2rem; text-align: center; background-color: #f0fff8; border-bottom: 1px solid #e0f5ee; margin-bottom: 4rem; border-radius: 8px;}
 .solution-outro h2 { font-size: 2.4rem; font-weight: 700; color: var(--primary-color); }
 .solution-outro p { font-size: 1.2rem; color: #007A5E; max-width: 750px; margin: 1rem auto 0; }
-.pricing-section, .options-section { padding: 5rem 2rem; }
+.pricing-section, .options-section, .notice-section { padding: 5rem 2rem; }
 .pricing-section { background-color: var(--section-bg-light); }
 .options-section { background-color: var(--white-color); }
 .pricing-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; max-width: 1200px; margin: 0 auto; }
@@ -166,7 +166,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .option-card .pricing-header .price { color: var(--blue-accent); }
 .schedule-options li { list-style: none; font-size: 1rem; padding-left: 1.8rem; position: relative; margin-bottom: 0.8rem; }
 .schedule-options li::before { content: '✓'; position: absolute; left: 0; font-weight: 600; color: var(--blue-accent); }
-.schedule-options .price { font-size: 1rem; font-weight: 600; color: var(--blue-accent); }
+.schedule-options .price { font-size: 1rem; font-weight: 600; color: var(--blue-accent); display: inline; text-align: left; }
 .expectation-section, .reality-section { padding: 5rem 2rem; }
 .expectation-section { background-color: var(--white-color); }
 .reality-section { background-color: var(--section-bg-light); }
@@ -214,3 +214,15 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .plan-total-safe:hover {
     border-color: var(--secondary-color);
 }
+
+/* --- NOTICE SECTION --- */
+.notice-section { background-color: var(--section-bg-light); padding: 5rem 2rem; }
+.notice-card { background-color: #fffbe6; border: 1px solid #facc15; border-radius: 12px; max-width: 800px; margin: 0 auto; box-shadow: var(--shadow-md); }
+.notice-header { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 1.5rem 2rem; border-bottom: 1px solid #fde68a; }
+.notice-icon { font-size: 1.8rem; }
+.notice-header h2 { font-size: 1.8rem; font-weight: 800; color: #b45309; }
+.notice-body { padding: 2.5rem; }
+.notice-body h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; background-color: #fef3c7; padding: 0.2rem 0.5rem; display: inline; line-height: 1.4; color: #92400e; }
+.notice-body p { color: #4b5563; margin-bottom: 1.5rem; line-height: 1.8; }
+.notice-body .question { font-style: italic; color: #1f2937; margin: 1rem 0 2rem; padding: 1rem; background-color: #fefce8; border-left: 4px solid #facc15; }
+.notice-body h4 { font-size: 1.2rem; font-weight: 700; color: #92400e; margin-top: 2rem; margin-bottom: 0.75rem; }

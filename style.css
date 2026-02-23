@@ -77,7 +77,6 @@ header nav ul a:hover::after { width: 100%; }
 
 /* --- CONTACT SECTION (SHARED) --- */
 .contact-section, .contact { padding: 6rem 2rem; background: var(--mint-bg); text-align: center; }
-/* The h2 and p inside .contact now use the global .section-title and .section-subtitle styles */
 .contact-section form, .contact form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2rem; }
 .contact-section input, .contact-section textarea, .contact input, .contact textarea { padding: 1rem; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; background: var(--white-color); color: var(--dark-color); transition: border-color 0.2s, box-shadow 0.2s; }
 .contact-section input:focus, .contact-section textarea:focus, .contact input:focus, .contact textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 166, 126, 0.3); }
@@ -89,25 +88,10 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1002; }
 #chat-toggle { width: 60px; height: 60px; background-color: var(--primary-color); color: white; border-radius: 50%; border: none; font-size: 1.8rem; cursor: pointer; box-shadow: var(--shadow-lg); transition: all 0.3s; }
 #chat-toggle.hidden { transform: scale(0); }
-#chat-window {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    background: var(--white-color);
-    width: 400px;
-    height: 600px;
-    border-radius: 15px;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: all 0.3s;
-    z-index: 1001;
-}
+#chat-window { position: fixed; bottom: 90px; right: 20px; background: var(--white-color); width: 400px; height: 600px; border-radius: 15px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; transition: all 0.3s; z-index: 1001; }
 #chat-window.hidden { opacity: 0; transform: translateY(20px) scale(0.95); pointer-events: none; }
-.chat-header { padding: 1rem 1.2rem; background-color: var(--primary-color); color: var(--white-color); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e9ecef; }
+.chat-header { padding: 1rem 1.2rem; background-color: var(--primary-color); color: var(--white-color); display: flex; justify-content: space-between; align-items: center; }
 .chat-header h3 { font-size: 1.2rem; font-weight: 600; margin: 0; }
-.chat-header .lang-switcher { transform: scale(0.85); }
 .chat-header #chat-close { background: none; border: none; color: var(--white-color); font-size: 1.3rem; cursor: pointer; opacity: 0.8; transition: opacity 0.2s; }
 .chat-header #chat-close:hover { opacity: 1; }
 .chat-messages { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -118,14 +102,17 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .typing-indicator span { width: 8px; height: 8px; background-color: #ccc; border-radius: 50%; animation: typing-bounce 1.4s infinite ease-in-out both; }
 .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
 .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-@keyframes typing-bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1.0); }
-}
-.chat-footer { padding: 1rem; border-top: 1px solid #e9ecef; background-color: #f8f9fa; }
-.faq-options { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
-.faq-options button { background-color: var(--white-color); border: 1px solid #ced4da; border-radius: 15px; padding: 0.5rem 0.8rem; font-size: 0.85rem; cursor: pointer; transition: background-color 0.2s; }
-.faq-options button:hover { background-color: #e9ecef; }
+@keyframes typing-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+.chat-footer { padding: 0.75rem; border-top: 1px solid #e9ecef; background-color: #f8f9fa; }
+.chat-lang-switcher { display: flex; justify-content: center; gap: 0.5rem; padding-bottom: 0.75rem; }
+.chat-lang-switcher button { padding: 0.4rem 0.8rem; font-size: 0.8rem; font-weight: 500; }
+
+.faq-options { display: flex; overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 0.75rem; -ms-overflow-style: none; scrollbar-width: none; }
+.faq-options::-webkit-scrollbar { display: none; }
+.faq-options button { flex-shrink: 0; background-color: var(--white-color); border: 1px solid #ced4da; border-radius: 15px; padding: 0.5rem 1rem; font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; margin-right: 0.5rem; }
+.faq-options button:hover { background-color: #e9ecef; border-color: #adb5bd; }
+
 .chat-input-container { display: flex; gap: 0.5rem; }
 #chat-input { flex: 1; padding: 0.8rem; border: 1px solid #ced4da; border-radius: 20px; font-size: 1rem; }
 #chat-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(0, 166, 126, 0.2); }
@@ -173,12 +160,8 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .option-card .pricing-header .price { color: var(--blue-accent); }
 
 /* --- Specific styles for Schedule Change option --- */
-.schedule-options .pricing-features .price {
-    color: var(--blue-accent);
-}
-.schedule-options .pricing-features li::before {
-    color: var(--blue-accent);
-}
+.schedule-options .pricing-features .price { color: var(--blue-accent); }
+.schedule-options .pricing-features li::before { color: var(--blue-accent); }
 
 .expectation-section { background-color: var(--white-color); }
 .reality-section { background-color: var(--section-bg-light); }

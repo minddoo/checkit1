@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': '의료 행위나 진료 알선을 하나요?',
             'faq-4': '검진 당일 동행 서비스도 있나요?',
             'faq-5': '결과지는 어떻게 전달되나요?',
-            'ans-base': 'CHECKIT은 의료 기관이 아니며, 어떠한 의료 행위나 알선도 제공하지 않습니다. 저희는 중개 수수료 없이, 고객이 선택한 서비스에 대한 이용 비용만을 청구합니다. 모든 의료 정보와 결과지는 고객의 판단을 돕기 위해 오직 단순 번역 및 전달만 수행합니다.',
             'ans-1': '홈페이지의 \'상담 신청\'을 통해 원하시는 검진 종류와 희망 날짜를 알려주시면, 저희 전담 매니저가 가능 여부를 확인하고 예약을 도와드립니다.',
             'ans-2': '아니요, 저희는 특정 병원이나 의료인과 독점 계약을 맺지 않습니다. 고객님의 필요와 선호도에 맞춰 가장 적합한 병원을 추천하고 예약을 대행해드리는 독립적인 서비스입니다.',
             'ans-3': '아니요, 명확히 말씀드리지만 저희는 의료 행위나 진료 알선을 하지 않습니다. 이는 의료법에 저촉될 수 있기 때문입니다. 저희의 역할은 고객님이 원활하게 검진을 받으실 수 있도록 비의료적인 부분(예약, 통역, 안내)을 돕는 것입니다.',
@@ -69,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': 'Do you perform medical acts or referrals?',
             'faq-4': 'Do you also offer same-day accompaniment?',
             'faq-5': 'How are the results delivered?',
-            'ans-base': 'CHECKIT is not a medical institution and does not provide any medical acts or referrals. We do not charge brokerage fees, only the cost for the services you select. All medical information and results are purely translated and delivered to assist your understanding, without any judgment or diagnosis.',
             'ans-1': 'You can tell us your desired type of examination and preferred date through the \'Request Consultation\' on our homepage. Our dedicated manager will check availability and assist with your reservation.',
             'ans-2': 'No, we do not have exclusive contracts with specific hospitals or doctors. We are an independent service that recommends and arranges bookings at the most suitable hospital based on your needs and preferences.',
             'ans-3': 'No, to be clear, we do not perform medical acts or make medical referrals as this could violate medical laws. Our role is to assist with the non-medical aspects (reservations, interpretation, guidance) to ensure you have a smooth check-up experience.',
@@ -106,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': '你们是否提供医疗行为或转诊服务？',
             'faq-4': '体检当天是否提供陪同服务？',
             'faq-5': '检查结果如何传达？',
-            'ans-base': 'CHECKIT并非医疗机构，不提供任何医疗行为或转诊。我们不收取中介费，仅收取您所选服务的费用。所有医疗信息和结果仅为帮助您理解而进行单纯翻译和传达，不包含任何判断或诊断。',
             'ans-1': '您可以通过网站上的\'申请咨询\'告知我们您希望的检查类型和日期，我们的专属经理将确认可行性并协助您预订。',
             'ans-2': '不，我们不与特定医院或医生签订独家合同。我们是一项独立服务，根据您的需求和偏好，推荐最合适的医院并代为预订。',
             'ans-3': '不，我们明确声明不进行医疗行为或医疗转诊，因为这可能违反医疗法规。我们的职责是帮助您顺利完成体检的非医疗部分（预订、翻译、引导）。',
@@ -143,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'faq-3': 'Bạn có thực hiện các hành vi y tế hoặc giới thiệu không?',
             'faq-4': 'Bạn có cung cấp dịch vụ đi cùng trong ngày không?',
             'faq-5': 'Kết quả được giao như thế nào?',
-            'ans-base': 'CHECKIT không phải là một tổ chức y tế và không cung cấp bất kỳ hành vi y tế hoặc giới thiệu nào. Chúng tôi không tính phí môi giới, chỉ tính chi phí cho các dịch vụ bạn chọn. Tất cả thông tin y tế và kết quả chỉ được dịch và cung cấp đơn thuần để hỗ trợ sự hiểu biết của bạn, không có bất kỳ phán xét hay chẩn đoán nào.',
             'ans-1': 'Bạn có thể cho chúng tôi biết loại khám và ngày ưu tiên của bạn thông qua mục \'Yêu cầu tư vấn\' trên trang chủ của chúng tôi. Người quản lý riêng của chúng tôi sẽ kiểm tra tình trạng sẵn có và hỗ trợ bạn đặt chỗ.',
             'ans-2': 'Không, chúng tôi không có hợp đồng độc quyền với các bệnh viện hoặc bác sĩ cụ thể. Chúng tôi là một dịch vụ độc lập đề xuất và sắp xếp đặt chỗ tại bệnh viện phù hợp nhất dựa trên nhu cầu và sở thích của bạn.',
             'ans-3': 'Không, để rõ ràng, chúng tôi không thực hiện các hành vi y tế hoặc giới thiệu y tế vì điều này có thể vi phạm luật y tế. Vai trò của chúng tôi là hỗ trợ các khía cạnh phi y tế (đặt chỗ, phiên dịch, hướng dẫn) để đảm bảo bạn có một trải nghiệm khám sức khỏe thuận lợi.',
@@ -298,21 +294,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function getBotResponse(message, isFaqClick) {
         removeTypingIndicator();
         let responseText = '';
-
+    
         if (isFaqClick) {
-            // For FAQ clicks, construct the full response
-            const baseAns = translations[currentLang]['ans-base'];
-            const specificAns = translations[currentLang][`ans-${message.slice(-1)}`];
-            responseText = `${specificAns}<br><br><hr style="border-color: #e0e0e0; border-style: solid; border-width: 0.5px 0 0 0;"><br>${baseAns}`;
+            // For FAQ clicks, get the specific corresponding answer
+            const answerKey = `ans-${message.slice(-1)}`; // message is the questionKey, e.g., 'faq-1'
+            responseText = translations[currentLang][answerKey];
         } else {
-            // For free text, check if it matches any FAQ
+            // For free text, try to match it to a question
             let matched = false;
             for (let i = 1; i <= 5; i++) {
-                const key = `faq-${i}`;
-                if (message.toLowerCase().includes(translations[currentLang][key].toLowerCase().slice(0, 10))) { // Match with first 10 chars
-                    const baseAns = translations[currentLang]['ans-base'];
-                    const specificAns = translations[currentLang][`ans-${i}`];
-                    responseText = `${specificAns}<br><br><hr style="border-color: #e0e0e0; border-style: solid; border-width: 0.5px 0 0 0;"><br>${baseAns}`;
+                const questionKey = `faq-${i}`;
+                const answerKey = `ans-${i}`;
+                // A simple check if the user's message contains the question text
+                if (translations[currentLang][questionKey] && message.toLowerCase().includes(translations[currentLang][questionKey].toLowerCase())) {
+                    responseText = translations[currentLang][answerKey];
                     matched = true;
                     break;
                 }
@@ -321,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 responseText = translations[currentLang]['faq-default-ans'];
             }
         }
-
+    
         appendMessage('bot', responseText);
     }
 

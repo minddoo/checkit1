@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Clients - CHECKIT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <a href="/" data-i18n="logo">CHECKIT</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/individual.html" data-i18n="nav-services">Services</a></li>
+                <li><a href="index.html#process" data-i18n="nav-process">Process</a></li>
+                <li><a href="index.html#testimonials" data-i18n="nav-testimonials">Reviews</a></li>
+                <li><a href="#corporate-contact" data-i18n="nav-contact">Contact</a></li>
+            </ul>
+            <div class="lang-switcher header-lang-switcher">
+                <button data-lang="ko">KR</button>
+                <button data-lang="en" class="active">EN</button>
+                <button data-lang="zh">CN</button>
+                <button data-lang="vi">VI</button>
+            </div>
+        </nav>
+        <button class="hamburger"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="corporate-hero">
+            <div class="content-wrapper hero-text">
+                <h1 data-i18n="corporate-hero-title">Customized Health Screening Solutions for Businesses</h1>
+                <p data-i18n="corporate-hero-subtitle">Effortlessly manage your employees' health without language barriers.</p>
+                <a href="#corporate-contact" class="cta-button" data-i18n="corporate-hero-cta">Request Corporate Consultation</a>
+            </div>
+        </section>
+
+        <!-- BENEFITS SECTION -->
+        <section id="corporate-benefits">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="benefits-title">Why CHECKIT for Your Business?</h2>
+                <div class="benefits-container">
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-stream"></i></div>
+                        <h3 data-i18n="benefit-1-title">Streamlined Management</h3>
+                        <p data-i18n="benefit-1-text">Request and manage reservations for multiple employees at once. We handle the complex scheduling for you.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-user-tie"></i></div>
+                        <h3 data-i18n="benefit-2-title">Dedicated Manager</h3>
+                        <p data-i18n="benefit-2-text">A dedicated corporate manager handles the entire process from start to finish, providing a single point of contact.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-file-invoice"></i></div>
+                        <h3 data-i18n="benefit-3-title">Integrated Reporting</h3>
+                        <p data-i18n="benefit-3-text">Receive translated and summarized health reports tailored for corporate needs, helping you understand your team's health status.</p>
+                    </div>
+                     <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3 data-i18n="benefit-4-title">Reduced Workplace Risks</h3>
+                        <p data-i18n="benefit-4-text">Proactively manage employee health to prevent accidents and boost overall productivity and team morale.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROCESS SECTION -->
+        <section id="corporate-process" class="process-section">
+            <div class="content-wrapper">
+                 <h2 class="section-title" data-i18n="corporate-process-title">Our Corporate Service Process</h2>
+                <div class="process-steps corporate-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 data-i18n="corporate-process-1-title">Initial Consultation & Quotation</h3>
+                        <p data-i18n="corporate-process-1-desc">Contact us with your needs. We'll provide a tailored service proposal and a transparent quotation.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 data-i18n="corporate-process-2-title">Employee Registration</h3>
+                        <p data-i18n="corporate-process-2-desc">Simply provide a list of employees. Our manager will coordinate individual schedules and exam details.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 data-i18n="corporate-process-3-title">Hassle-Free Examinations</h3>
+                         <p data-i18n="corporate-process-3-desc">Employees receive guidance in their native language and undergo a comfortable examination process.</p>
+                    </div>
+                     <div class="step">
+                        <div class="step-number">4</div>
+                        <h3 data-i18n="corporate-process-4-title">Reporting & Billing</h3>
+                        <p data-i18n="corporate-process-4-desc">Receive a consolidated, translated report for all employees and a simplified invoice for easy payment.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="corporate-contact" class="contact-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="corporate-contact-title">Get Started with CHECKIT</h2>
+                <p class="section-subtitle" data-i18n="corporate-contact-subtitle">Fill out the form below, and our corporate manager will contact you shortly.</p>
+                <form>
+                    <input type="text" id="company-name" data-i18n-placeholder="form-company-name" placeholder="Company Name">
+                    <input type="text" id="contact-person" data-i18n-placeholder="form-contact-person" placeholder="Your Name">
+                    <input type="email" id="email" data-i18n-placeholder="form-email" placeholder="Email Address">
+                    <input type="tel" id="phone" data-i18n-placeholder="form-phone" placeholder="Phone Number">
+                    <input type="number" id="employee-count" data-i18n-placeholder="form-employee-count" placeholder="Number of Employees">
+                    <textarea rows="5" id="message" data-i18n-placeholder="form-message" placeholder="Your Message (Optional)"></textarea>
+                    <button type="submit" class="cta-button" data-i18n="form-submit">Submit Inquiry</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p data-i18n="footer-copy">© 2024 CHECKIT. All rights reserved.</p>
+    </footer>
+
+    <script src="corporate.js"></script>
+</body>
+</html>

@@ -214,7 +214,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .personal-story-section .story-intro-text { text-align: center; max-width: 700px; margin: 0 auto 3rem; }
 .personal-story-section .story-intro-text p { font-size: 1.5rem; font-weight: 600; line-height: 1.6; color: var(--dark-color); }
 .personal-story-section .story-intro-text p:last-child { font-size: 1.2rem; font-weight: 400; color: var(--secondary-color); margin-top: 0.5rem; }
-.story-card { background-color: rgba(29, 40, 56, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--light-color); border-radius: 15px; padding: 2.5rem; max-width: 800px; margin: 2rem auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: left; }
+.story-card { background-color: rgba(29, 40, 56, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: var(--light-color); border-radius: 15px; padding: 2.5rem; max-w: 800px; margin: 2rem auto; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: left; }
 .story-card p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
 .story-highlight { text-align: center; margin: 2rem 0; }
 .story-highlight .arrow { font-size: 2rem; color: var(--primary-color); display: block; animation: story-bounce 2s infinite; }
@@ -231,10 +231,75 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .refund-column li { margin-bottom: 1rem; line-height: 1.6; color: var(--secondary-color); }
 .refund-column:first-child h3 { color: var(--danger-color); border-color: var(--danger-color); }
 
+/* --- STYLES FOR CORPORATE.HTML --- */
+
+#corporate-hero {
+    padding: 6rem 2rem;
+    text-align: center;
+    background-color: var(--mint-bg);
+}
+
+#corporate-benefits {
+    padding: 6rem 2rem;
+    background-color: var(--section-bg-light);
+}
+
+.benefits-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.benefit-card {
+    background: var(--white-color);
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.benefit-card .card-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.benefit-card h3 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.benefit-card p {
+    color: var(--secondary-color);
+    line-height: 1.6;
+}
+
+#corporate-process {
+    background-color: var(--white-color);
+}
+.process-steps.corporate-steps {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+#corporate-contact form {
+    max-width: 700px;
+}
 
 /* --- MOBILE & RESPONSIVE --- */
 @media screen and (max-width: 992px) {
-    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .reality-container, .refund-container { grid-template-columns: 1fr; }
+    .customer-type-container, .testimonial-cards, .process-steps, .pricing-container, .expectation-container, .reality-container, .refund-container, .benefits-container, .process-steps.corporate-steps {
+        grid-template-columns: 1fr;
+    }
     .pricing-card { max-width: 500px; margin-left: auto; margin-right: auto; }
 }
 
@@ -243,23 +308,30 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     .section-title { font-size: 2rem; margin-bottom: 2.5rem; }
     .section-subtitle { font-size: 1rem; margin: -1.5rem auto 2rem; }
 
-    .hero, .customer-type-section, .process-section, .testimonials-section, .contact-section, .contact, .pricing-section, .options-section, .notice-section, .refund-section, .personal-story-section, .expectation-section, .reality-section {
+    .hero, .customer-type-section, .process-section, .testimonials-section, .contact-section, .contact, .pricing-section, .options-section, .notice-section, .refund-section, .personal-story-section, .expectation-section, .reality-section, #corporate-hero, #corporate-benefits {
         padding: 4rem 1.5rem;
     }
 
-    header nav ul { position: fixed; top: 0; left: -100%; width: 80%; max-width: 320px; height: 100%; background: var(--white-color); flex-direction: column; padding-top: 5rem; box-shadow: var(--shadow-lg); transition: left 0.35s ease-in-out; }
+    header nav ul {
+        position: fixed; top: 0; left: -100%; width: 80%; max-width: 320px;
+        height: 100%; background: var(--white-color); flex-direction: column;
+        padding-top: 5rem; box-shadow: var(--shadow-lg); transition: left 0.35s ease-in-out;
+    }
     header nav ul.is-active { left: 0; }
     header nav ul a { display: block; padding: 1rem 2rem; font-size: 1.1rem; }
     .hamburger { display: block; }
 
-    .hero-text h1 { font-size: 2.2rem; }
-    .hero-text p, .customer-card p, .step p { font-size: 1rem; }
+    .hero-text h1, #corporate-hero .hero-text h1 { font-size: 2.2rem; }
+    .hero-text p, .customer-card p, .step p, #corporate-hero .hero-text p, .benefit-card p { font-size: 1rem; }
 
+    .benefits-container { gap: 1.5rem; }
     .options-container { grid-template-columns: 1fr; }
     .pricing-card { margin-bottom: 2rem; }
     .reality-intro h2 { font-size: 2rem; }
     .solution-outro h2 { font-size: 2rem; }
     .notice-header h2, .notice-icon { font-size: 1.5rem; }
 
-    #chat-window { width: calc(100vw - 40px); max-height: 70vh; bottom: 90px; right: 20px; }
+    #chat-window {
+        width: calc(100vw - 40px); max-height: 70vh; bottom: 90px; right: 20px;
+    }
 }

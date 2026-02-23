@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT - For Individuals</title>
-    <link rel="stylesheet" href="style.css?v=7.0">
+    <link rel="stylesheet" href="style.css?v=9.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -15,8 +15,8 @@
                 <a href="index.html" data-i18n="logo">CHECKIT</a>
             </div>
             <ul>
-                <li><a href="#pricing" data-i18n="nav-pricing">서비스 플랜</a></li>
-                <li><a href="#process" data-i18n="nav-process">프로세스</a></li>
+                <li><a href="#services" data-i18n="nav-services">서비스</a></li>
+                <li><a href="#process" data-i18n="nav-process">이용 과정</a></li>
                 <li><a href="#contact" data-i18n="nav-contact">문의</a></li>
             </ul>
             <button class="hamburger">
@@ -25,7 +25,7 @@
         </nav>
         <div class="lang-switcher">
             <button data-lang="ko">KR</button>
-            <button data-lang="en">EN</button>
+            <button data-lang="en" class="active">EN</button>
             <button data-lang="zh">CN</button>
             <button data-lang="vi">VI</button>
         </div>
@@ -34,97 +34,210 @@
     <main>
         <section class="hero">
             <div class="hero-text">
-                <h1 data-i18n="individual-hero-title">오직 당신을 위한 건강검진 여정,<br>CHECKIT과 함께라면 걱정 없습니다.</h1>
-                <p data-i18n="individual-hero-subtitle">한국에서의 건강검진, 언어의 장벽과 복잡한 절차에 부딪히셨나요? 이제는 편안하게 최상의 케어를 경험하세요.</p>
-                 <a href="#pricing" class="cta-button" data-i18n="view-plans-cta">내게 맞는 플랜 찾아보기</a>
+                <h1 data-i18n="individual-hero-title">A Health Check-up Journey Just for You,<br>No Worries with CHECKIT.</h1>
+                <p data-i18n="individual-hero-subtitle">Facing language barriers and complex procedures for health check-ups in Korea? Now, experience top-tier care with comfort.</p>
+                 <a href="#services" class="cta-button" data-i18n="view-plans-cta">Find My Service</a>
             </div>
         </section>
 
-        <section id="pricing" class="pricing-section">
-            <h2 class="section-title" data-i18n="pricing-title">나에게 꼭 맞는 플랜을 선택하세요</h2>
-            <div class="pricing-container">
-                <!-- LITE PLAN -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 data-i18n="plan-lite-title">LITE</h3>
-                        <p data-i18n="plan-lite-price">₩119,000</p>
+        <section class="story-section">
+            <div class="story-container">
+                 <div class="story-part before">
+                    <h2 data-i18n="story-before-title">Without CHECKIT...</h2>
+                    <div class="problem-card">
+                        <i class="fas fa-comments-dollar"></i>
+                        <h3 data-i18n="problem1-title">Opaque Costs</h3>
+                        <p data-i18n="problem1-desc">It's frustrating not knowing which tests are necessary or if the cost is appropriate.</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-consulting">맞춤 컨설팅</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-booking">예약 대행</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-pre-guidance">사전 안내</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-translation">결과지 번역</span></li>
-                        <li><i class="fas fa-times"></i><span data-i18n="feature-comm-service">커뮤니케이션 서비스</span></li>
-                        <li><i class="fas fa-times"></i><span data-i18n="feature-post-guidance">사후 안내</span></li>
-                    </ul>
-                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">상담 신청</a>
+                    <div class="problem-card">
+                        <i class="fas fa-calendar-times"></i>
+                        <h3 data-i18n="problem2-title">Complex Booking</h3>
+                        <p data-i18n="problem2-desc">Phone-only reservations, unfamiliar Korean medical terms. The barriers start with booking.</p>
+                    </div>
+                    <div class="problem-card">
+                        <i class="fas fa-user-slash"></i>
+                        <h3 data-i18n="problem3-title">Anxious Check-up Process</h3>
+                        <p data-i18n="problem3-desc">It's easy to miss the need for additional tests because you can't understand the medical staff's explanations.</p>
+                    </div>
                 </div>
 
-                <!-- STANDARD PLAN (Highlighted) -->
+                <div class="story-arrow">
+                     <i class="fas fa-arrow-down"></i>
+                </div>
+
+                <div class="story-part after">
+                    <h2 data-i18n="story-after-title">With CHECKIT!</h2>
+                    <div class="solution-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3 data-i18n="solution-desc">We solve all these difficulties and provide the service that is perfect for you.</h3>
+                        <p data-i18n="solution-sub-desc">From transparent costs and simple booking to comfortable communication. Just focus on your health.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="pricing-section">
+            <h2 class="section-title" data-i18n="pricing-title">Choose the Perfect Plan for You</h2>
+            <div class="pricing-container">
+                <!-- No-Confusion Plan -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3 data-i18n="plan1-title">No-Confusion Plan</h3>
+                        <p class="price" data-price-usd="400">400 USD</p>
+                    </div>
+                    <div class="features-container">
+                        <strong data-i18n="plan-included">Included</strong>
+                        <ul class="pricing-features">
+                            <li data-i18n="plan1-feat1">Neutral hospital list (no recommendations)</li>
+                            <li data-i18n="plan1-feat2">Program & price structure (official info translated only)</li>
+                            <li data-i18n="plan1-feat3">Step-by-step reservation guide</li>
+                            <li data-i18n="plan1-feat4">English translation of all hospital documents</li>
+                            <li data-i18n="plan1-feat5">Essential Questionnaire Guide (simple, mistake-free)</li>
+                            <li data-i18n="plan1-feat6">Essential pre-check instructions (fasting & basic preparation)</li>
+                            <li data-i18n="plan1-feat7">What to bring on exam day</li>
+                            <li data-i18n="plan1-feat8">Secure result delivery via email</li>
+                            <li data-i18n="plan1-feat9">One-time result delay check included</li>
+                        </ul>
+                    </div>
+                    <div class="best-for">
+                        <strong data-i18n="plan-best-for">Best for:</strong>
+                        <p data-i18n="plan1-best-for">Self-guided travelers who want clarity without extra services.</p>
+                    </div>
+                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">Get Started</a>
+                </div>
+
+                <!-- Zero-Mistake Plan -->
                 <div class="pricing-card popular">
                     <div class="popular-badge" data-i18n="plan-popular-badge">Most Popular</div>
                     <div class="pricing-header">
-                        <h3 data-i18n="plan-standard-title">STANDARD</h3>
-                        <p data-i18n="plan-standard-price">₩219,000</p>
+                        <h3 data-i18n="plan2-title">Zero-Mistake Plan</h3>
+                        <p class="price" data-price-usd="500">500 USD</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-consulting">맞춤 컨설팅</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-booking">예약 대행</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-pre-guidance">사전 안내</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-translation">결과지 번역</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-comm-service">커뮤니케이션 서비스</span></li>
-                        <li><i class="fas fa-times"></i><span data-i18n="feature-post-guidance">사후 안내</span></li>
-                    </ul>
-                    <a href="#contact" class="cta-button" data-i18n="plan-cta">상담 신청</a>
+                    <div class="features-container">
+                        <strong data-i18n="plan2-included">Included (everything in 400 +)</strong>
+                        <ul class="pricing-features">
+                            <li data-i18n="plan2-feat1">Enhanced Questionnaire Guide (detailed, mistake-prevention focused)</li>
+                            <li data-i18n="plan2-feat2">Common mistake alerts that foreigners often miss</li>
+                            <li data-i18n="plan2-feat3">One-time format check (missing fields, signatures, dates)</li>
+                            <li data-i18n="plan2-feat4">Pre-check Guide Pack (timeline + what commonly causes delays)</li>
+                            <li data-i18n="plan2-feat5">Colonoscopy preparation basics (if relevant)</li>
+                            <li data-i18n="plan2-feat6">Priority messaging for time-sensitive issues</li>
+                            <li data-i18n="plan2-feat7">Result follow-up (1 time)</li>
+                            <li data-i18n="plan2-feat8">Document alerts for missing or delayed paperwork</li>
+                            <li data-i18n="plan2-feat9">Schedule change support (1 time included)</li>
+                        </ul>
+                    </div>
+                    <div class="best-for">
+                        <strong data-i18n="plan-best-for">Best for:</strong>
+                        <p data-i18n="plan2-best-for">Travelers who want to avoid all common foreigner mistakes.</p>
+                    </div>
+                    <a href="#contact" class="cta-button" data-i18n="plan-cta">Get Started</a>
                 </div>
 
-                <!-- PREMIUM PLAN -->
+                <!-- Total-Safe Plan -->
                 <div class="pricing-card">
                     <div class="pricing-header">
-                        <h3 data-i18n="plan-premium-title">PREMIUM</h3>
-                        <p data-i18n="plan-premium-price">₩259,000</p>
+                        <h3 data-i18n="plan3-title">Total-Safe Plan</h3>
+                        <p class="price" data-price-usd="700">700 USD</p>
                     </div>
-                    <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-consulting">맞춤 컨설팅</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-booking">예약 대행</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-pre-guidance">사전 안내</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-translation">결과지 번역</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-comm-service">커뮤니케이션 서비스</span></li>
-                        <li><i class="fas fa-check"></i><span data-i18n="feature-post-guidance">사후 안내</span></li>
+                    <div class="features-container">
+                        <strong data-i18n="plan3-included">Included (everything in 500 +)</strong>
+                        <ul class="pricing-features">
+                            <li data-i18n="plan3-feat1">Premium Questionnaire Management (structured assistance, non-medical)</li>
+                            <li data-i18n="plan3-feat2">Risk-point explanation (non-medical, process-based)</li>
+                            <li data-i18n="plan3-feat3">English answer templates for complex form items</li>
+                            <li data-i18n="plan3-feat4">Complete format check (all pages, signatures, attachments)</li>
+                            <li data-i18n="plan3-feat5">Premium Pre-check Pack (detailed timeline, mistake-response flow)</li>
+                            <li data-i18n="plan3-feat6">Real-time exam-day chat support</li>
+                            <li data-i18n="plan3-feat7">Hospital navigation guide (graphic)</li>
+                            <li data-i18n="plan3-feat8">English receipt request (handled on your behalf)</li>
+                            <li data-i18n="plan3-feat9">CD / additional document request</li>
+                            <li data-i18n="plan3-feat10">Full post-exam follow-up until results are delivered</li>
+                            <li data-i18n="plan3-feat11">Result structuring (non-medical, content organization only)</li>
+                            <li data-i18n="plan3-feat12">Templates for communicating with the hospital (sent to your email)</li>
+                            <li data-i18n="plan3-feat13">Schedule change support (up to 3 times included)</li>
+                        </ul>
+                    </div>
+                     <div class="best-for">
+                        <strong data-i18n="plan-best-for">Best for:</strong>
+                        <p data-i18n="plan3-best-for">Executives, expats, and anyone who wants zero risk and zero hassle.</p>
+                    </div>
+                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">Get Started</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="options-section">
+            <h2 class="section-title"><span class="plus-option" data-i18n="options-title">+Option</span></h2>
+            <p class="section-subtitle" data-i18n="options-subtitle">Enhance your plan only if you need extra support.</p>
+            
+            <div class="options-container">
+                <div class="option-card">
+                    <h3 data-i18n="option1-title">English Receipt Request</h3>
+                    <p class="price" data-price-usd="20">20 USD</p>
+                    <p data-i18n="option1-desc">We request an English receipt on your behalf, suitable for insurance or reimbursement purposes. Useful if you need official documents in English after your exam.</p>
+                </div>
+                <div class="option-card">
+                    <h3 data-i18n="option2-title">CD Result Request</h3>
+                    <p class="price" data-price-usd="20">20 USD</p>
+                    <p data-i18n="option2-desc">We request your exam CD or additional imaging files on your behalf.</p>
+                </div>
+                <div class="option-card">
+                    <h3 data-i18n="option3-title">Urgent Result Follow-up</h3>
+                    <p class="price" data-price-usd="20">20 USD</p>
+                    <p data-i18n="option3-desc">If your results are delayed, we send one urgent follow-up message to the hospital on your behalf. This option is for customers who need faster action beyond the standard follow-up.</p>
+                </div>
+                 <div class="option-card">
+                    <h3 data-i18n="option4-title">Program & Aftercare Structure Pack</h3>
+                    <p class="price" data-price-usd="60">60 USD</p>
+                    <p data-i18n="option4-desc">A non-medical guide explaining: What conditions your chosen exam can identify, How your result documents are structured, What to pay attention to after the exam. For customers who want clear, structured understanding of their exam and results.</p>
+                </div>
+                 <div class="option-card">
+                    <h3 data-i18n="option5-title">Graphic Navigation Guide</h3>
+                    <p class="price" data-price-usd="20">20 USD</p>
+                    <p data-i18n="option5-desc">Showing the exact hospital layout and movement flow. Helpful for first-time visitors and large hospitals.</p>
+                </div>
+                <div class="option-card schedule-options">
+                    <h3 data-i18n="option6-title">Schedule Change Options</h3>
+                    <p data-i18n="option6-desc">For customers who need to change their reservation after booking.</p>
+                    <ul>
+                        <li><span data-i18n="option6-sub1">Single Change</span> — <span class="price" data-price-usd="25">25 USD</span></li>
+                        <li><span data-i18n="option6-sub2">Double Package</span> — <span class="price" data-price-usd="40">40 USD</span></li>
+                        <li><span data-i18n="option6-sub3">Unlimited Changes</span> — <span class="price" data-price-usd="200">200 USD</span></li>
                     </ul>
-                    <a href="#contact" class="cta-button-outline" data-i18n="plan-cta">상담 신청</a>
+                    <p class="included-note" data-i18n="option6-note">Included in plans: 500 Plan → 1 schedule change included, 700 Plan → 3 schedule changes included. Additional changes require this option.</p>
                 </div>
             </div>
         </section>
 
         <section id="process" class="process">
-            <h2 class="section-title" data-i18n="process-title">CHECKIT 이용 과정</h2>
+            <h2 class="section-title" data-i18n="process-title">How CHECKIT Works</h2>
             <div class="process-steps">
                 <div class="step">
                     <span>1</span>
-                    <h3 data-i18n="process-1-title">온라인 상담 신청</h3>
-                    <p data-i18n="process-1-desc">웹사이트를 통해 간단히 상담을 신청하고, 전담 매니저가 배정됩니다.</p>
+                    <h3 data-i18n="process-1-title">Online Consultation Request</h3>
+                    <p data-i18n="process-1-desc">Simply request a consultation through our website, and a dedicated manager will be assigned to you.</p>
                 </div>
                 <div class="step">
                     <span>2</span>
-                    <h3 data-i18n="process-2-title">맞춤 컨설팅 및 예약 보조</h3>
-                    <p data-i18n="process-2-desc">필요한 검진, 일정, 언어를 조율하고 최종 예약을 확정합니다.</p>
+                    <h3 data-i18n="process-2-title">Customized Consulting & Booking</h3>
+                    <p data-i18n="process-2-desc">We coordinate the necessary tests, schedule, and language, then confirm the final booking.</p>
                 </div>
                 <div class="step">
                     <span>3</span>
-                    <h3 data-i18n="process-3-title">검진 및 결과 안내</h3>
-                    <p data-i18n="process-3-desc">예약된 날짜에 편안하게 검진을 받고, 번역된 결과지와 후속 안내까지 한번에 제공받습니다.</p>
+                    <h3 data-i18n="process-3-title">Checkup & Results Guidance</h3>
+                    <p data-i18n="process-3-desc">Receive your checkup comfortably on the scheduled date, and get your translated results and follow-up guidance all at once.</p>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="contact">
-            <h2 data-i18n="contact-title">궁금한 점이 있으신가요?</h2>
-            <p data-i18n="contact-subtitle">24시간 내에 전문 매니저가 답변해드립니다.</p>
+            <h2 data-i18n="contact-title">Do you have any questions?</h2>
+            <p data-i18n="contact-subtitle">A professional manager will respond within 24 hours.</p>
             <form action="https://formspree.io/f/xqedyngo" method="POST">
                 <input type="email" name="email" data-i18n-placeholder="contact-email" required>
                 <textarea name="message" rows="5" data-i18n-placeholder="contact-message" required></textarea>
-                <button type="submit" class="cta-button" data-i18n="contact-submit">상담 신청하기</button>
+                <button type="submit" class="cta-button" data-i18n="contact-submit">Request Consultation</button>
             </form>
         </section>
     </main>
@@ -133,6 +246,6 @@
         <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="main.js?v=7.0"></script>
+    <script src="main.js?v=9.0"></script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const translations = {
         en: {
-            logo: "CHECKIT",
             "nav-services": "Services",
             "nav-process": "Process",
             "nav-testimonials": "Reviews",
@@ -19,14 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "benefit-4-title": "Reduced Workplace Risks",
             "benefit-4-text": "Proactively manage employee health to prevent accidents and boost overall productivity and team morale.",
             "corporate-process-title": "Our Corporate Service Process",
-            "corporate-process-1-title": "Initial Consultation & Quotation",
-            "corporate-process-1-desc": "Contact us with your needs. We'll provide a tailored service proposal and a transparent quotation.",
+            "corporate-process-1-title": "Consultation & Pricing",
+            "corporate-process-1-desc": "Quotation is based on (Number of Employees x Unit Price). Contact us for a tailored proposal.",
             "corporate-process-2-title": "Employee Registration",
-            "corporate-process-2-desc": "Simply provide a list of employees. Our manager will coordinate individual schedules and exam details.",
+            "corporate-process-2-desc": "Simply provide an employee list. We coordinate all schedules and details.",
             "corporate-process-3-title": "Hassle-Free Examinations",
-            "corporate-process-3-desc": "Employees receive guidance in their native language and undergo a comfortable examination process.",
-            "corporate-process-4-title": "Reporting & Billing",
-            "corporate-process-4-desc": "Receive a consolidated, translated report for all employees and a simplified invoice for easy payment.",
+            "corporate-process-3-desc": "Employees receive comfortable exams with native language guidance.",
+            "corporate-process-4-title": "Follow-up & Progress Management",
+            "corporate-process-4-desc": "We provide integrated reports and manage follow-ups for re-examinations.",
             "corporate-contact-title": "Get Started with CHECKIT",
             "corporate-contact-subtitle": "Fill out the form below, and our corporate manager will contact you shortly.",
             "form-company-name": "Company Name",
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "footer-copy": "© 2024 CHECKIT. All rights reserved."
         },
         ko: {
-            logo: "체크잇",
             "nav-services": "서비스",
             "nav-process": "프로세스",
             "nav-testimonials": "고객 후기",
@@ -57,14 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "benefit-4-title": "산업 재해 예방",
             "benefit-4-text": "직원 건강의 선제적 관리를 통해 산업 재해를 예방하고, 전반적인 업무 효율성과 팀 사기를 증진시킵니다.",
             "corporate-process-title": "기업 서비스 프로세스",
-            "corporate-process-1-title": "최초 상담 및 견적",
-            "corporate-process-1-desc": "필요한 사항을 알려주시면, 맞춤형 서비스 제안과 투명한 견적을 제공해드립니다.",
+            "corporate-process-1-title": "상담 및 견적",
+            "corporate-process-1-desc": "견적은 (인원수 x 1인 단가)로 측정됩니다. 맞춤형 제안을 위해 문의해주세요.",
             "corporate-process-2-title": "직원 등록",
-            "corporate-process-2-desc": "직원 명단만 전달해주세요. 저희 매니저가 개별 일정과 검진 항목을 조율합니다.",
+            "corporate-process-2-desc": "직원 명단을 제공해주시면, 모든 일정과 세부사항을 조율합니다.",
             "corporate-process-3-title": "편리한 검진 진행",
-            "corporate-process-3-desc": "직원들은 모국어로 안내를 받으며 편안하게 검진을 진행합니다.",
-            "corporate-process-4-title": "결과 보고 및 정산",
-            "corporate-process-4-desc": "모든 직원의 번역된 결과 보고서를 통합적으로 전달받고, 간소화된 인보이스로 쉽게 결제하세요.",
+            "corporate-process-3-desc": "직원들은 모국어 안내와 함께 편안한 검진을 받습니다.",
+            "corporate-process-4-title": "사후 관리 및 경과 추적",
+            "corporate-process-4-desc": "통합 보고서를 제공하고 재검 대상자의 사후관리를 지원합니다.",
             "corporate-contact-title": "CHECKIT과 함께 시작하기",
             "corporate-contact-subtitle": "아래 양식을 작성해주시면 기업 담당 매니저가 신속하게 연락드리겠습니다.",
             "form-company-name": "회사명",
@@ -77,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "footer-copy": "© 2024 CHECKIT. 모든 권리 보유."
         },
         zh: {
-            logo: "CHECKIT",
             "nav-services": "服务",
             "nav-process": "流程",
             "nav-testimonials": "客户评价",
@@ -95,14 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "benefit-4-title": "降低工伤风险",
             "benefit-4-text": "主动管理员工健康，预防工伤事故，提高整体生产力和团队士气。",
             "corporate-process-title": "我们的企业服务流程",
-            "corporate-process-1-title": "初步咨询与报价",
-            "corporate-process-1-desc": "请联系我们并告知您的需求。我们将提供量身定制的服务方案和透明的报价。",
+            "corporate-process-1-title": "咨询与定价",
+            "corporate-process-1-desc": "报价基于 (员工人数 x 单价)。请联系我们获取方案。",
             "corporate-process-2-title": "员工注册",
-            "corporate-process-2-desc": "您只需提供员工名单。我们的客户经理将协调个人日程和体检详情。",
+            "corporate-process-2-desc": "只需提供员工名单。我们协调所有日程和细节。",
             "corporate-process-3-title": "无忧体检",
-            "corporate-process-3-desc": "员工将获得母语指导，并享受舒适的体检过程。",
-            "corporate-process-4-title": "报告与结算",
-            "corporate-process-4-desc": "接收所有员工的综合翻译报告，并通过简化的发票轻松付款。",
+            "corporate-process-3-desc": "员工在母语指导下接受舒适的体检。",
+            "corporate-process-4-title": "后续管理与进度跟踪",
+            "corporate-process-4-desc": "我们提供综合报告并管理复检人员的后续跟进。",
             "corporate-contact-title": "开始使用 CHECKIT",
             "corporate-contact-subtitle": "请填写以下表格，我们的企业客户经理将很快与您联系。",
             "form-company-name": "公司名称",
@@ -115,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "footer-copy": "© 2024 CHECKIT. 保留所有权利。"
         },
         vi: {
-            logo: "CHECKIT",
             "nav-services": "Dịch vụ",
             "nav-process": "Quy trình",
             "nav-testimonials": "Đánh giá",
@@ -133,14 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
             "benefit-4-title": "Giảm thiểu rủi ro tai nạn lao động",
             "benefit-4-text": "Chủ động quản lý sức khỏe nhân viên để phòng ngừa tai nạn và tăng năng suất cũng như tinh thần đồng đội.",
             "corporate-process-title": "Quy trình dịch vụ cho doanh nghiệp của chúng tôi",
-            "corporate-process-1-title": "Tư vấn ban đầu & Báo giá",
-            "corporate-process-1-desc": "Hãy liên hệ với chúng tôi về nhu cầu của bạn. Chúng tôi sẽ cung cấp một đề xuất dịch vụ phù hợp và một báo giá minh bạch.",
+            "corporate-process-1-title": "Tư vấn & Báo giá",
+            "corporate-process-1-desc": "Báo giá dựa trên (Số nhân viên x Đơn giá). Liên hệ để nhận đề xuất.",
             "corporate-process-2-title": "Đăng ký nhân viên",
-            "corporate-process-2-desc": "Chỉ cần cung cấp danh sách nhân viên. Quản lý của chúng tôi sẽ điều phối lịch trình cá nhân và chi tiết khám.",
+            "corporate-process-2-desc": "Chỉ cần cung cấp danh sách nhân viên. Chúng tôi điều phối lịch trình.",
             "corporate-process-3-title": "Khám bệnh không phiền phức",
-            "corporate-process-3-desc": "Nhân viên nhận được hướng dẫn bằng tiếng mẹ đẻ và trải qua một quy trình khám bệnh thoải mái.",
-            "corporate-process-4-title": "Báo cáo & Thanh toán",
-            "corporate-process-4-desc": "Nhận báo cáo tổng hợp đã được dịch cho tất cả nhân viên và một hóa đơn đơn giản để thanh toán dễ dàng.",
+            "corporate-process-3-desc": "Nhân viên được khám thoải mái với hướng dẫn bằng tiếng mẹ đẻ.",
+            "corporate-process-4-title": "Quản lý theo dõi & Tiến độ",
+            "corporate-process-4-desc": "Chúng tôi cung cấp báo cáo và quản lý theo dõi cho các lần tái khám.",
             "corporate-contact-title": "Bắt đầu với CHECKIT",
             "corporate-contact-subtitle": "Điền vào biểu mẫu dưới đây và quản lý doanh nghiệp của chúng tôi sẽ sớm liên hệ với bạn.",
             "form-company-name": "Tên công ty",
@@ -179,8 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         languageSwitchers.forEach(switcher => {
-            switcher.querySelector(".active").classList.remove("active");
-            switcher.querySelector(`[data-lang="${lang}"]`).classList.add("active");
+            const activeButton = switcher.querySelector(".active");
+            if (activeButton) activeButton.classList.remove("active");
+            const buttonToActivate = switcher.querySelector(`[data-lang="${lang}"]`);
+            if (buttonToActivate) buttonToActivate.classList.add("active");
         });
     }
 
@@ -188,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
         switcher.addEventListener("click", (e) => {
             if (e.target.tagName === "BUTTON") {
                 const lang = e.target.getAttribute("data-lang");
-                setLanguage(lang);
+                if (lang) setLanguage(lang);
             }
         });
     });
@@ -197,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         navUl.classList.toggle("is-active");
     });
 
-    // Get stored language or default to 'en'
+    // Get stored language or default to 'en' and set it
     const savedLang = localStorage.getItem('language') || 'en';
     setLanguage(savedLang);
 });

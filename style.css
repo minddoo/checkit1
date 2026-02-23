@@ -129,7 +129,16 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .options-section { background-color: var(--white-color); }
 .options-section .section-title { color: var(--blue-accent); }
 .options-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-.option-card .pricing-header .price { color: var(--blue-accent); } 
+.option-card .pricing-header .price { color: var(--blue-accent); }
+
+/* --- Specific styles for Schedule Change option --- */
+.schedule-options .pricing-features .price {
+    color: var(--blue-accent);
+}
+.schedule-options .pricing-features li::before {
+    color: var(--blue-accent);
+}
+
 .expectation-section { background-color: var(--white-color); }
 .reality-section { background-color: var(--section-bg-light); }
 .expectation-container, .reality-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 1100px; margin: 0 auto; }

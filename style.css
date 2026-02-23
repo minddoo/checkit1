@@ -183,12 +183,9 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 
 /* --- Individual Page Custom Overrides --- */
 
-/* 1 & 4. Center-align all prices */
-.pricing-header .price, .schedule-options li {
+/* 1 & 4. Center-align prices in headers */
+.pricing-header .price {
     text-align: center;
-}
-.schedule-options li {
-    display: block;
 }
 
 /* 2. Center 'Best for' section and shrink text */
@@ -199,12 +196,12 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
     font-size: 0.9rem; /* Slightly smaller to fit */
 }
 
-/* 3. Option text color to black */
+/* 3. Option text color to black (schedule option text defaults to dark) */
 .option-card .features-container p,
-.option-card .pricing-header h3,
-.schedule-options li {
+.option-card .pricing-header h3 {
     color: var(--dark-color);
 }
+/* The schedule-options price will revert to its original blue color by removing the override */
 
 /* 5. Recolor Total Safe Plan to gray */
 .plan-total-safe .pricing-header .price,

@@ -25,15 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-email': '이메일 주소를 입력하세요', 'contact-message': '문의 내용을 입력하세요', 'contact-submit': '상담 신청하기',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
             'chat-title': 'CHECKIT봇', 
-            'chat-welcome': '안녕하세요! 궁금한 점을 물어보세요. 아래에서 자주 묻는 질문을 선택하거나 직접 입력해 주세요.',
+            'chat-welcome': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
             'chat-input-placeholder': '메시지를 입력하세요...',
-            'faq-1': '서비스는 어떤 종류가 있나요?',
-            'faq-2': '비용은 얼마인가요?',
-            'faq-3': '예약 절차는 어떻게 되나요?',
-            'faq-1-ans': 'CHECKIT은 개인 맞춤형 건강검진 예약, 통역, 결과 번역 등 비의료 전 과정을 지원합니다. 자세한 내용은 <a href="/individual.html">개인 고객 페이지</a>를 참고하세요.',
-            'faq-2-ans': '비용은 선택하시는 검진 프로그램과 부가 서비스에 따라 다릅니다. 기본 플랜은 ...부터 시작하며, 자세한 내용은 <a href="/individual.html#pricing">요금 안내</a>를 확인해주세요.',
-            'faq-3-ans': '홈페이지의 \'상담 신청\'을 통해 문의를 남겨주시면, 전문 매니저가 24시간 내에 연락드려 모든 과정을 안내해 드립니다.',
-            'faq-default-ans': '죄송합니다. 아직 학습 중이라 답변을 드릴 수 없어요. 더 자세한 문의는 홈페이지의 문의 섹션을 이용해주세요.'
+            'faq-1': '예약은 어떻게 하나요?',
+            'faq-2': '병원/의료인과 계약된 구조인가요?',
+            'faq-3': '의료 행위나 진료 알선을 하나요?',
+            'faq-4': '검진 당일 동행 서비스도 있나요?',
+            'faq-5': '결과지는 어떻게 전달되나요?',
+            'ans-base': 'CHECKIT은 의료 기관이 아니며, 어떠한 의료 행위나 알선도 제공하지 않습니다. 저희는 중개 수수료 없이, 고객이 선택한 서비스에 대한 이용 비용만을 청구합니다. 모든 의료 정보와 결과지는 고객의 판단을 돕기 위해 오직 단순 번역 및 전달만 수행합니다.',
+            'ans-1': '홈페이지의 \'상담 신청\'을 통해 원하시는 검진 종류와 희망 날짜를 알려주시면, 저희 전담 매니저가 가능 여부를 확인하고 예약을 도와드립니다.',
+            'ans-2': '아니요, 저희는 특정 병원이나 의료인과 독점 계약을 맺지 않습니다. 고객님의 필요와 선호도에 맞춰 가장 적합한 병원을 추천하고 예약을 대행해드리는 독립적인 서비스입니다.',
+            'ans-3': '아니요, 명확히 말씀드리지만 저희는 의료 행위나 진료 알선을 하지 않습니다. 이는 의료법에 저촉될 수 있기 때문입니다. 저희의 역할은 고객님이 원활하게 검진을 받으실 수 있도록 비의료적인 부분(예약, 통역, 안내)을 돕는 것입니다.',
+            'ans-4': '네, 가능합니다. 저희 매니저가 지정된 시간에 병원에 함께 방문하여 접수부터 검진 종료까지 모든 과정에서 의사소통을 도와드리는 동행 통역 서비스를 제공합니다.',
+            'ans-5': '검진 결과지는 병원에서 발급받는 즉시, 고객님이 요청하신 언어로 번역하여 전달해 드립니다. 저희는 결과에 대한 어떠한 의학적 판단이나 진단을 추가하지 않고, 원본의 내용을 충실하게 번역만 제공합니다.',
+            'faq-default-ans': '문의해주셔서 감사합니다. 해당 내용에 대해서는 홈페이지의 문의 섹션을 통해 질문을 남겨주시면, 전문 매니저가 신속하게 답변해드리겠습니다.'
         },
         en: {
             'logo': 'CHECKIT',
@@ -57,15 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-email': 'Enter your email address', 'contact-message': 'Enter your message', 'contact-submit': 'Request Consultation',
             'footer-copy': '© 2024 CHECKIT. All rights reserved.',
             'chat-title': 'CHECKIT Bot', 
-            'chat-welcome': 'Hello! Feel free to ask anything. Select a frequently asked question below or type your own.',
+            'chat-welcome': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
             'chat-input-placeholder': 'Type your message...',
-            'faq-1': 'What types of services are there?',
-            'faq-2': 'How much does it cost?',
-            'faq-3': 'What is the reservation process?',
-            'faq-1-ans': 'CHECKIT supports the entire non-medical process, including personalized health check-up reservations, interpretation, and result translation. For more details, please refer to the <a href="/individual.html">For Individuals page</a>.',
-            'faq-2-ans': 'The cost varies depending on the check-up program and additional services you choose. Basic plans start from..., and you can find more details on our <a href="/individual.html#pricing">Pricing page</a>.',
-            'faq-3-ans': 'If you leave an inquiry through the \'Request Consultation\' on our website, a professional manager will contact you within 24 hours to guide you through the process.',
-            'faq-default-ans': 'I apologize, I am still learning and cannot provide an answer. For more detailed inquiries, please use the contact section on our homepage.'
+            'faq-1': 'How do I make a reservation?',
+            'faq-2': 'Is it a contract structure with hospitals/doctors?',
+            'faq-3': 'Do you perform medical acts or referrals?',
+            'faq-4': 'Do you also offer same-day accompaniment?',
+            'faq-5': 'How are the results delivered?',
+            'ans-base': 'CHECKIT is not a medical institution and does not provide any medical acts or referrals. We do not charge brokerage fees, only the cost for the services you select. All medical information and results are purely translated and delivered to assist your understanding, without any judgment or diagnosis.',
+            'ans-1': 'You can tell us your desired type of examination and preferred date through the \'Request Consultation\' on our homepage. Our dedicated manager will check availability and assist with your reservation.',
+            'ans-2': 'No, we do not have exclusive contracts with specific hospitals or doctors. We are an independent service that recommends and arranges bookings at the most suitable hospital based on your needs and preferences.',
+            'ans-3': 'No, to be clear, we do not perform medical acts or make medical referrals as this could violate medical laws. Our role is to assist with the non-medical aspects (reservations, interpretation, guidance) to ensure you have a smooth check-up experience.',
+            'ans-4': 'Yes, it is possible. We offer an accompaniment interpretation service where our manager visits the hospital with you at the designated time to help with communication throughout the entire process, from registration to the end of the examination.',
+            'ans-5': 'As soon as the examination results are issued by the hospital, we translate them into your requested language and deliver them to you. We do not add any medical judgment or diagnosis to the results; we only provide a faithful translation of the original content.',
+            'faq-default-ans': 'Thank you for your inquiry. For this matter, please leave a question through the contact section on our homepage, and a professional manager will respond promptly.'
         },
         zh: {
             'logo': 'CHECKIT',
@@ -89,15 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-email': '请输入您的电子邮件地址', 'contact-message': '请输入您的留言', 'contact-submit': '申请咨询',
             'footer-copy': '© 2024 CHECKIT. 版权所有。',
             'chat-title': 'CHECKIT 机器人', 
-            'chat-welcome': '你好！随时提问。请选择下面的常见问题或自行输入。',
+            'chat-welcome': '你好！对CHECKIT有任何疑问吗？请选择以下问题或自行输入。',
             'chat-input-placeholder': '请输入您想问的问题...',
-            'faq-1': '有哪些服务类型？',
-            'faq-2': '费用是多少？',
-            'faq-3': '预订流程是怎样的？',
-            'faq-1-ans': 'CHECKIT 支持整个非医疗过程，包括个性化的健康检查预订、口译和结果翻译。有关详细信息，请参阅<a href="/individual.html">个人客户页面</a>。',
-            'faq-2-ans': '费用因您选择的体检项目和附加服务而异。基本计划的起始价格为...，您可以在我们的<a href="/individual.html#pricing">价格页面</a>上找到更多详细信息。',
-            'faq-3-ans': '如果您通过我们网站上的“请求咨询”留下查询，专业经理将在24小时内与您联系，指导您完成整个过程。',
-            'faq-default-ans': '很抱歉，我还在学习中，无法提供答案。如需更详细的查询，请使用我们主页上的联系部分。'
+            'faq-1': '如何进行预订？',
+            'faq-2': '是与医院/医生签约的模式吗？',
+            'faq-3': '你们是否提供医疗行为或转诊服务？',
+            'faq-4': '体检当天是否提供陪同服务？',
+            'faq-5': '检查结果如何传达？',
+            'ans-base': 'CHECKIT并非医疗机构，不提供任何医疗行为或转诊。我们不收取中介费，仅收取您所选服务的费用。所有医疗信息和结果仅为帮助您理解而进行单纯翻译和传达，不包含任何判断或诊断。',
+            'ans-1': '您可以通过网站上的\'申请咨询\'告知我们您希望的检查类型和日期，我们的专属经理将确认可行性并协助您预订。',
+            'ans-2': '不，我们不与特定医院或医生签订独家合同。我们是一项独立服务，根据您的需求和偏好，推荐最合适的医院并代为预订。',
+            'ans-3': '不，我们明确声明不进行医疗行为或医疗转诊，因为这可能违反医疗法规。我们的职责是帮助您顺利完成体检的非医疗部分（预订、翻译、引导）。',
+            'ans-4': '是的，可以。我们提供陪同翻译服务，我们的经理会在指定时间陪同您前往医院，在从挂号到检查结束的全过程中协助沟通。',
+            'ans-5': '医院出具检查结果后，我们会立即将其翻译成您要求的语言并交付给您。我们不会对结果添加任何医疗判断或诊断，仅提供对原始内容的忠实翻译。',
+            'faq-default-ans': '感谢您的询问。关于此事，请通过我们主页上的联系部分留下问题，专业经理将迅速回复。'
         },
         vi: {
             'logo': 'CHECKIT',
@@ -121,80 +136,93 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact-email': 'Nhập địa chỉ email của bạn', 'contact-message': 'Nhập tin nhắn của bạn', 'contact-submit': 'Yêu cầu tư vấn',
             'footer-copy': '© 2024 CHECKIT. Mọi quyền được bảo lưu.',
             'chat-title': 'Bot CHECKIT', 
-            'chat-welcome': 'Xin chào! Cứ tự nhiên hỏi bất cứ điều gì. Chọn một câu hỏi thường gặp bên dưới hoặc tự nhập câu hỏi của bạn.',
+            'chat-welcome': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi bên dưới hoặc tự nhập câu hỏi của bạn.',
             'chat-input-placeholder': 'Nhập tin nhắn của bạn...',
-            'faq-1': 'Có những loại dịch vụ nào?',
-            'faq-2': 'Chi phí là bao nhiêu?',
-            'faq-3': 'Quy trình đặt hẹn như thế nào?',
-            'faq-1-ans': 'CHECKIT hỗ trợ toàn bộ quy trình phi y tế, bao gồm đặt chỗ khám sức khỏe cá nhân, phiên dịch và dịch kết quả. Để biết thêm chi tiết, vui lòng tham khảo <a href="/individual.html">trang Dành cho Cá nhân</a>.',
-            'faq-2-ans': 'Chi phí thay đổi tùy thuộc vào chương trình khám sức khỏe và các dịch vụ bổ sung bạn chọn. Các gói cơ bản bắt đầu từ ..., và bạn có thể tìm thêm chi tiết trên <a href="/individual.html#pricing">trang Giá cả</a> của chúng tôi.',
-            'faq-3-ans': 'Nếu bạn để lại yêu cầu qua mục \'Yêu cầu tư vấn\' trên trang web của chúng tôi, một người quản lý chuyên nghiệp sẽ liên hệ với bạn trong vòng 24 giờ để hướng dẫn bạn trong suốt quá trình.',
-            'faq-default-ans': 'Tôi xin lỗi, tôi vẫn đang học và không thể cung cấp câu trả lời. Đối với các yêu cầu chi tiết hơn, vui lòng sử dụng phần liên hệ trên trang chủ của chúng tôi.'
+            'faq-1': 'Làm cách nào để đặt chỗ?',
+            'faq-2': 'Đây có phải là cấu trúc hợp đồng với bệnh viện/bác sĩ không?',
+            'faq-3': 'Bạn có thực hiện các hành vi y tế hoặc giới thiệu không?',
+            'faq-4': 'Bạn có cung cấp dịch vụ đi cùng trong ngày không?',
+            'faq-5': 'Kết quả được giao như thế nào?',
+            'ans-base': 'CHECKIT không phải là một tổ chức y tế và không cung cấp bất kỳ hành vi y tế hoặc giới thiệu nào. Chúng tôi không tính phí môi giới, chỉ tính chi phí cho các dịch vụ bạn chọn. Tất cả thông tin y tế và kết quả chỉ được dịch và cung cấp đơn thuần để hỗ trợ sự hiểu biết của bạn, không có bất kỳ phán xét hay chẩn đoán nào.',
+            'ans-1': 'Bạn có thể cho chúng tôi biết loại khám và ngày ưu tiên của bạn thông qua mục \'Yêu cầu tư vấn\' trên trang chủ của chúng tôi. Người quản lý riêng của chúng tôi sẽ kiểm tra tình trạng sẵn có và hỗ trợ bạn đặt chỗ.',
+            'ans-2': 'Không, chúng tôi không có hợp đồng độc quyền với các bệnh viện hoặc bác sĩ cụ thể. Chúng tôi là một dịch vụ độc lập đề xuất và sắp xếp đặt chỗ tại bệnh viện phù hợp nhất dựa trên nhu cầu và sở thích của bạn.',
+            'ans-3': 'Không, để rõ ràng, chúng tôi không thực hiện các hành vi y tế hoặc giới thiệu y tế vì điều này có thể vi phạm luật y tế. Vai trò của chúng tôi là hỗ trợ các khía cạnh phi y tế (đặt chỗ, phiên dịch, hướng dẫn) để đảm bảo bạn có một trải nghiệm khám sức khỏe thuận lợi.',
+            'ans-4': 'Vâng, điều đó là có thể. Chúng tôi cung cấp dịch vụ phiên dịch đi kèm, trong đó người quản lý của chúng tôi sẽ đến bệnh viện cùng bạn vào thời gian được chỉ định để giúp giao tiếp trong toàn bộ quá trình, từ đăng ký cho đến khi kết thúc khám.',
+            'ans-5': 'Ngay sau khi kết quả khám được bệnh viện cấp, chúng tôi sẽ dịch chúng sang ngôn ngữ bạn yêu cầu và giao cho bạn. Chúng tôi không thêm bất kỳ nhận định hoặc chẩn đoán y tế nào vào kết quả; chúng tôi chỉ cung cấp một bản dịch trung thành của nội dung gốc.',
+            'faq-default-ans': 'Cảm ơn bạn đã yêu cầu. Về vấn đề này, vui lòng để lại câu hỏi qua phần liên hệ trên trang chủ của chúng tôi và một người quản lý chuyên nghiệp sẽ trả lời nhanh chóng.'
         }
     };
 
-    let currentLang = localStorage.getItem('checkitLang') || 'en';
+    let currentLang = localStorage.getItem('checkitLang') || 'ko';
 
     function updateTexts(lang) {
+        currentLang = lang;
+        localStorage.setItem('checkitLang', lang);
+
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
+            if (translations[lang]?.[key]) {
                 el.innerHTML = translations[lang][key];
             }
         });
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
-            if (translations[lang] && translations[lang][key]) {
+            if (translations[lang]?.[key]) {
                 el.placeholder = translations[lang][key];
             }
         });
 
-        const allLangButtons = document.querySelectorAll('[data-lang]');
-        allLangButtons.forEach(button => {
+        document.querySelectorAll('.lang-switcher button').forEach(button => {
             button.classList.toggle('active', button.dataset.lang === lang);
         });
 
-        updateFAQButtons(lang);
+        updateChatUI(lang);
     }
 
     function setupLangSwitchers() {
-        const allLangButtons = document.querySelectorAll('[data-lang]');
-        allLangButtons.forEach(button => {
+        document.querySelectorAll('.lang-switcher button').forEach(button => {
             button.addEventListener('click', (e) => {
-                const newLang = e.target.dataset.lang;
-                if (newLang !== currentLang) {
-                    currentLang = newLang;
-                    localStorage.setItem('checkitLang', newLang);
-                    updateTexts(newLang);
-                    // Also update the initial bot message
-                    const chatMessages = document.getElementById('chat-messages');
-                    const welcomeMsg = chatMessages.querySelector('.bot-message p');
-                    if(welcomeMsg) {
-                        welcomeMsg.innerHTML = translations[currentLang]['chat-welcome'];
-                    }
-                }
+                updateTexts(e.target.dataset.lang);
             });
         });
     }
 
     // 2. CHATBOT --------------------------------------
-    function updateFAQButtons(lang) {
+    function updateChatUI(lang) {
+        const chatMessages = document.getElementById('chat-messages');
         const faqContainer = document.getElementById('faq-options');
-        if (!faqContainer) return;
+        if (!chatMessages || !faqContainer) return;
+
+        // Clear existing content
+        chatMessages.innerHTML = '';
         faqContainer.innerHTML = '';
-        for (let i = 1; i <= 3; i++) {
+
+        // Add welcome message
+        appendMessage('bot', translations[lang]['chat-welcome']);
+
+        // Add new FAQ buttons
+        for (let i = 1; i <= 5; i++) {
             const key = `faq-${i}`;
-            if (translations[lang] && translations[lang][key]) {
+            if (translations[lang]?.[key]) {
                 const button = document.createElement('button');
                 button.textContent = translations[lang][key];
+                button.dataset.questionKey = key;
                 button.addEventListener('click', () => {
-                    const chatInput = document.getElementById('chat-input');
-                    chatInput.value = button.textContent;
-                    document.getElementById('chat-send').click();
+                    handleFAQClick(key);
                 });
                 faqContainer.appendChild(button);
             }
         }
+    }
+
+    function handleFAQClick(questionKey) {
+        const userMessage = translations[currentLang][questionKey];
+        appendMessage('user', userMessage);
+        showTypingIndicator();
+        
+        setTimeout(() => {
+            getBotResponse(questionKey, true);
+        }, 1200);
     }
 
     function setupChatbot() {
@@ -203,24 +231,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const chatClose = document.getElementById('chat-close');
         const chatInput = document.getElementById('chat-input');
         const chatSend = document.getElementById('chat-send');
-        const chatMessages = document.getElementById('chat-messages');
 
-        if (!chatWindow || !chatToggle || !chatClose || !chatInput || !chatSend || !chatMessages) return;
+        if (!chatWindow || !chatToggle || !chatClose || !chatInput || !chatSend) return;
 
-        const openChat = (e) => {
-            if (e) e.stopPropagation();
+        chatToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             chatWindow.classList.remove('hidden');
             chatToggle.classList.add('hidden');
-        };
+            updateTexts(currentLang); // Initialize chat with current language
+        });
 
-        const closeChat = (e) => {
-            if (e) e.stopPropagation();
+        chatClose.addEventListener('click', (e) => {
+            e.stopPropagation();
             chatWindow.classList.add('hidden');
             chatToggle.classList.remove('hidden');
-        };
-
-        chatToggle.addEventListener('click', openChat);
-        chatClose.addEventListener('click', closeChat);
+        });
 
         const sendMessage = () => {
             const messageText = chatInput.value.trim();
@@ -231,54 +256,73 @@ document.addEventListener('DOMContentLoaded', () => {
             showTypingIndicator();
 
             setTimeout(() => {
-                getBotResponse(messageText);
+                getBotResponse(messageText, false);
             }, 1200);
         };
         
-        const appendMessage = (sender, text) => {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', `${sender}-message`);
-            messageDiv.innerHTML = text; // Use innerHTML to render links
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        const showTypingIndicator = () => {
-            const indicator = document.createElement('div');
-            indicator.className = 'typing-indicator';
-            indicator.innerHTML = '<span></span><span></span><span></span>';
-            chatMessages.appendChild(indicator);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        const removeTypingIndicator = () => {
-            const indicator = chatMessages.querySelector('.typing-indicator');
-            if (indicator) {
-                chatMessages.removeChild(indicator);
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
             }
-        };
-        
-        const getBotResponse = (userMessage) => {
-            let responseKey = 'faq-default-ans'; // Default response
+        });
+    }
 
-            for (let i = 1; i <= 3; i++) {
-                const faqKey = `faq-${i}`;
-                // Check if the user message contains the FAQ question text
-                if (translations[currentLang][faqKey] && userMessage.includes(translations[currentLang][faqKey])) {
-                    responseKey = `faq-${i}-ans`;
+    function appendMessage(sender, text) {
+        const chatMessages = document.getElementById('chat-messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', `${sender}-message`);
+        messageDiv.innerHTML = text; // Use innerHTML to render links from answers
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const chatMessages = document.getElementById('chat-messages');
+        const indicator = document.createElement('div');
+        indicator.className = 'typing-indicator';
+        indicator.innerHTML = '<span></span><span></span><span></span>';
+        chatMessages.appendChild(indicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const chatMessages = document.getElementById('chat-messages');
+        const indicator = chatMessages.querySelector('.typing-indicator');
+        if (indicator) {
+            chatMessages.removeChild(indicator);
+        }
+    }
+    
+    function getBotResponse(message, isFaqClick) {
+        removeTypingIndicator();
+        let responseText = '';
+
+        if (isFaqClick) {
+            // For FAQ clicks, construct the full response
+            const baseAns = translations[currentLang]['ans-base'];
+            const specificAns = translations[currentLang][`ans-${message.slice(-1)}`];
+            responseText = `${specificAns}<br><br><hr style="border-color: #e0e0e0; border-style: solid; border-width: 0.5px 0 0 0;"><br>${baseAns}`;
+        } else {
+            // For free text, check if it matches any FAQ
+            let matched = false;
+            for (let i = 1; i <= 5; i++) {
+                const key = `faq-${i}`;
+                if (message.toLowerCase().includes(translations[currentLang][key].toLowerCase().slice(0, 10))) { // Match with first 10 chars
+                    const baseAns = translations[currentLang]['ans-base'];
+                    const specificAns = translations[currentLang][`ans-${i}`];
+                    responseText = `${specificAns}<br><br><hr style="border-color: #e0e0e0; border-style: solid; border-width: 0.5px 0 0 0;"><br>${baseAns}`;
+                    matched = true;
                     break;
                 }
             }
+            if (!matched) {
+                responseText = translations[currentLang]['faq-default-ans'];
+            }
+        }
 
-            const responseText = translations[currentLang][responseKey];
-            removeTypingIndicator();
-            appendMessage('bot', responseText);
-        };
-
-        chatSend.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        appendMessage('bot', responseText);
     }
 
     // 3. MOBILE NAVIGATION ---------------------------
@@ -289,9 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hamburger && navUl) {
             hamburger.addEventListener('click', () => {
                 navUl.classList.toggle('is-active');
-                const icon = hamburger.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
+                hamburger.querySelector('i').classList.toggle('fa-bars');
+                hamburger.querySelector('i').classList.toggle('fa-times');
             });
             document.querySelectorAll('header nav ul a').forEach(link => {
                 link.addEventListener('click', () => {
@@ -306,8 +349,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // INITIALIZE ALL --------------------------------
-    updateTexts(currentLang);
     setupLangSwitchers();
     setupChatbot();
     setupHamburgerMenu();
+    // Set initial language based on localStorage or default
+    updateTexts(currentLang);
 });

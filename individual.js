@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'ko': {
             'logo': 'CHECKIT',
             'nav-reality': '현실', 'nav-services': '서비스', 'nav-contact': '문의',
-            'individual-hero-title': '한국 건강검진의<br>기대와 현실',
-            'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다. CHECKIT이 그 간극을 메웁니다.',
+            'individual-hero-title': '한국 건강검진의 기대와 현실',
+            'individual-hero-subtitle': '세계적 수준의 서비스를 기대하지만, 종종 혼란과 불안을 겪습니다.<br>CHECKIT이 그 간극을 메웁니다.',
             'view-reality-cta': '현실 확인하기',
             
             'expectation-title': '한국 의료 서비스에 대한 당신의 기대',
@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'en': {
             'logo': 'CHECKIT',
             'nav-reality': 'The Reality', 'nav-services': 'Services', 'nav-contact': 'Contact',
-            'individual-hero-title': 'Health Check-ups in Korea: <br>Expectation vs. Reality',
-            'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety. CHECKIT bridges the gap.',
+            'individual-hero-title': 'Health Check-ups in Korea: Expectation vs. Reality',
+            'individual-hero-subtitle': 'You expect world-class service, but what you often get is confusion and anxiety.<br>CHECKIT bridges the gap.',
             'view-reality-cta': 'See the Reality',
             
             'expectation-title': 'What You Expect from Korean Healthcare',
@@ -155,8 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'zh': {
             'logo': 'CHECKIT',
             'nav-reality': '现实', 'nav-services': '服务', 'nav-contact': '联系我们',
-            'individual-hero-title': '韩国健康体检：<br>期望与现实',
-            'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。CHECKIT 弥合了这一差距。',
+            'individual-hero-title': '韩国健康体检：期望与现实',
+            'individual-hero-subtitle': '您期望世界一流的服务，但常常得到的是困惑和焦虑。<br>CHECKIT 弥合了这一差距。',
             'view-reality-cta': '看看现实',
             
             'expectation-title': '您对韩国医疗保健的期望',
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality3-li1': '仅确保预订就需要 2-3 天。',
             'reality3-li2': '不同的工作人员给出不同的答案 — 没人负责。',
             'reality3-li3': '没有韩国电话号码 → 没有提醒或准备说明。',
-            'reality3-li4': '海外时差 → 通话失败，预订延迟。',
+            'reality3-li4': '海外时差 → 通화失败，预订延迟。',
 
             'reality4-title': '结果延迟和零责任制',
             'reality4-li1': '结果通过邮件寄到您没有的地址。',
@@ -227,8 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'vi': {
             'logo': 'CHECKIT',
             'nav-reality': 'Thực tế', 'nav-services': 'Dịch vụ', 'nav-contact': 'Liên hệ',
-            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc:<br>Kỳ vọng và Thực tế',
-            'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng. CHECKIT thu hẹp khoảng cách đó.',
+            'individual-hero-title': 'Khám sức khỏe tại Hàn Quốc: Kỳ vọng và Thực tế',
+            'individual-hero-subtitle': 'Bạn mong đợi dịch vụ đẳng cấp thế giới, nhưng những gì bạn thường nhận được là sự nhầm lẫn và lo lắng.<br>CHECKIT thu hẹp khoảng cách đó.',
             'view-reality-cta': 'Xem thực tế',
 
             'expectation-title': 'Những gì bạn mong đợi từ chăm sóc sức khỏe Hàn Quốc',

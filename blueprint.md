@@ -19,38 +19,36 @@ A web application for **CHECKIT**, a service that assists foreigners in Korea wi
 *   **Hero Section:** Features a light mint background for a welcoming feel.
 *   **Customer-Type Section:** Side-by-side cards for `Individuals` and `Business` users.
 *   **Process Section:** A step-by-step guide presented in a modern, readable card format.
-*   **Testimonials Section:** Trust-building user reviews displayed in eye-catching green cards with white text. Includes a testimonial from a corporate HR manager.
+*   **Testimonials Section:** Trust-building user reviews displayed in eye-catching green cards with white text.
 *   **Contact Section:** A clear contact form with the same light mint background as the hero section.
+
+### **Individual Service Page (`individual.html`)**
+*   **Expectation vs. Reality Theme:** Visually distinguishes between the positive expectations (light sky blue cards) and the challenging realities (light red cards) of the Korean healthcare system for foreigners.
+*   **Clear Call to Action:** A prominent contact section with a mint background invites users to get started.
+*   **Structured Plans & Options:** Service tiers and add-ons are presented in a clear, card-based layout.
 
 ### **Functionality**
 *   **Internationalization (i18n):** The site content can be switched between Korean, English, Chinese, and Vietnamese. This is managed via `main.js` and `individual.js`.
 *   **Interactive Chatbot:** A persistent floating chatbot provides FAQ answers and is available on all pages.
-*   **Individual Service Page (`individual.html`):** Details service plans and common challenges for foreigners.
 
 ---
 
-## **3. Current Task: Individual Page Visual & Content Refinement**
+## **3. Current Task: Individual Page Readability & Layout Refinement**
 
-**Objective:** To improve the clarity and emotional impact of the `individual.html` page by visually distinguishing the "Expectation" and "Reality" sections and refining content.
+**Objective:** To improve the visual clarity and professional look of the `individual.html` page by simplifying the layout and standardizing card styles.
 
 **Plan:**
 
-1.  **Update Page `blueprint.md`:** Reflect the new changes for the individual page.
+1.  **Update `blueprint.md`:** Reflect the new layout refinement tasks.
 
-2.  **Refine "Expectation" Section:**
-    *   **Content:** Remove the word "꿈:" (Dream:) from the section title for a more direct heading.
-    *   **Style:** Change the background color of the expectation cards (`.expectation-card`) to a light sky blue to evoke a positive, hopeful feeling.
+2.  **Adjust Hero Section Text (`individual.js`):**
+    *   Modify the `individual-hero-title` translation to remove the `<br>` tag, making the title a single line.
+    *   Modify the `individual-hero-subtitle` translation to add a line break before "CHECKIT" for emphasis.
 
-3.  **Emphasize "Reality" Section:**
-    *   **Style (`.reality-intro`):** Change the background of the "하지만, 현실은 다릅니다" (But, the reality is different) section to a light red to create a clear visual warning.
-    *   **Style (`.reality-card`):** Change the background of the reality cards to the same light red, grouping the challenges together visually.
+3.  **Update Styles (`style.css`):**
+    *   **Center-align Titles:** Apply `text-align: center` to the `.pricing-header h3` rule to center the titles of service plans and options cards.
+    *   **Standardize Card Backgrounds:**
+        *   Change the background color of `.expectation-card` back to white (`--white-color`).
+        *   Change the background color of `.reality-card` back to white (`--white-color`), removing the previous color-coding to create a cleaner aesthetic.
 
-4.  **Adjust "Options" Section:**
-    *   **Content:** Change the section title from "추가 서비스" (Additional Services) to "옵션" (Options).
-    *   **Style:** Modify the title style to be simple blue text without a background, distinguishing it from other primary section titles.
-
-5.  **Unify Contact Section:**
-    *   **Style:** Change the background of the final contact section ("Ready to start?") to the light mint color (`--mint-bg`) used on the main page for design consistency.
-
-6.  **Update Translations (`individual.js`):**
-    *   Apply all content changes to the translation files to ensure multilingual support is up-to-date.
+4.  **Review & Verify:** Check the live preview to ensure all changes are applied correctly and the layout is visually balanced.

@@ -135,7 +135,7 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .solution-outro { padding: 4rem 2rem; text-align: center; background-color: #f0fff8; border-bottom: 1px solid #e0f5ee; margin-bottom: 4rem; border-radius: 8px;}
 .solution-outro h2 { font-size: 2.4rem; font-weight: 700; color: var(--primary-color); }
 .solution-outro p { font-size: 1.2rem; color: #007A5E; max-width: 750px; margin: 1rem auto 0; }
-.pricing-section, .options-section, .notice-section { padding: 5rem 2rem; }
+.pricing-section, .options-section, .notice-section, .refund-section { padding: 5rem 2rem; }
 .pricing-section { background-color: var(--section-bg-light); }
 .options-section { background-color: var(--white-color); }
 .pricing-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; align-items: stretch; max-width: 1200px; margin: 0 auto; }
@@ -238,3 +238,17 @@ footer { background-color: #161a1d; color: #6c757d; text-align: center; padding:
 .story-highlight { text-align: center; margin: 2rem 0; }
 .story-highlight .arrow { font-size: 2.5rem; color: var(--primary-color); display: block; margin-bottom: 0.5rem; animation: bounce 2s infinite; }
 .story-highlight p { font-size: 1.2rem; font-weight: 600; color: var(--white-color); }
+
+/* --- REFUND POLICY SECTION --- */
+.refund-section { background-color: var(--section-bg-light); }
+.refund-section .section-title { text-align: center; }
+.refund-container { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1100px; margin: 0 auto; }
+.refund-column h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; }
+.refund-column p { color: var(--secondary-color); margin-bottom: 1.5rem; }
+.refund-column ul { list-style-position: inside; padding-left: 0; }
+.refund-column li { margin-bottom: 1rem; line-height: 1.6; color: var(--secondary-color); }
+.refund-column .refund-column:first-child h3 { color: var(--danger-color); border-color: var(--danger-color); }
+.refund-column .refund-column:last-child h3 { color: var(--primary-color); border-color: var(--primary-color); }
+@media screen and (max-width: 768px) {
+    .refund-container { grid-template-columns: 1fr; }
+}

@@ -60,14 +60,55 @@ header nav ul a:hover::after { width: 100%; }
 
 /* --- PERSONAL STORY SECTION --- */
 .personal-story-section { padding: 6rem 2rem; }
-.story-intro-text { text-align: center; margin-bottom: 3rem; }
-.story-intro-text p { font-size: 1.25rem; color: var(--secondary-color); margin-bottom: 0.5rem; }
-.story-intro-text p:last-child { font-weight: 600; color: var(--dark-color); }
-.story-card { max-width: 700px; margin: 0 auto 2rem auto; background: var(--section-bg-light); padding: 2.5rem; border-radius: 12px; font-size: 1.1rem; line-height: 1.8; }
-.story-card p { margin-bottom: 1.5rem; }
-.story-highlight { text-align: center; margin: 2rem 0; }
-.story-highlight .arrow { display: block; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--danger-color); }
-.story-highlight p { font-weight: 700; font-size: 1.2rem; color: var(--danger-color); }
+.story-intro-text {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.story-intro-text p {
+    font-size: 1.25rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.story-intro-text p:last-child {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.story-card {
+    max-width: 700px;
+    margin: 0 auto 2rem auto;
+    background: var(--section-bg-light);
+    padding: 2.5rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    text-align: center;
+}
+
+.story-card p {
+    margin-bottom: 1.5rem;
+}
+
+.story-highlight {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.story-highlight .arrow {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--danger-color);
+}
+
+.story-highlight p {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--danger-color);
+}
 
 /* --- SOLUTION & PRICING SECTION --- */
 #services { background-color: var(--white-color); padding-top: 6rem; padding-bottom: 6rem; }
@@ -99,11 +140,15 @@ header nav ul a:hover::after { width: 100%; }
 .options-container .pricing-header h3 { color: var(--dark-color); }
 .options-container .pricing-header .price { color: var(--primary-color); font-weight: 700; }
 .options-container .features-container p, .options-container .features-container li { font-size: 1rem; }
-.schedule-options .pricing-features li .price { display: inline; font-weight: 700; color: var(--primary-color); }
+.schedule-options .pricing-features li .price {
+    display: inline;
+    font-weight: 700;
+    color: var(--primary-color);
+}
 
 /* --- NOTICE SECTION --- */
 .notice-section { padding: 6rem 2rem; background: var(--pale-blue-bg); }
-.notice-card { max-width: 800px; margin: 0 auto; background: var(--white-color); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 5px solid var(--blue-accent); }
+.notice-card { max-width: 800px; margin: 0 auto; background: var(--white-color); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow-lg); }
 .notice-header { text-align: center; margin-bottom: 2rem; }
 .notice-icon { font-size: 2rem; }
 .notice-header h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }

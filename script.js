@@ -134,15 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 questionBtn.textContent = langData[qKey];
                 questionBtn.addEventListener('click', () => {
                     addMessage(langData[qKey], 'user');
-                    suggestedQuestionsContainer.style.display = 'none';
                     const loadingIndicator = addLoadingIndicator();
 
                     setTimeout(() => {
                         chatbotMessages.removeChild(loadingIndicator);
                         addMessage(langData[`a${i}`], 'bot');
-                        setTimeout(() => {
-                           showSuggestedQuestions();
-                        }, 800);
                     }, 1200); // Simulate thinking time
                 });
                 suggestedQuestionsContainer.appendChild(questionBtn);
@@ -182,14 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userMessage) {
             addMessage(userMessage, 'user');
             chatbotInput.value = '';
-            suggestedQuestionsContainer.style.display = 'none';
             const loadingIndicator = addLoadingIndicator();
             
             setTimeout(() => {
                 chatbotMessages.removeChild(loadingIndicator);
                 const unsupportedMsg = translations[currentLang]['unsupported_input'];
                 addMessage(unsupportedMsg, 'bot');
-                showSuggestedQuestions();
             }, 1200);
         }
     };

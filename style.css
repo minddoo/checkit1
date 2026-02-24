@@ -91,10 +91,11 @@ body { font-family: var(--font-family); color: var(--text-color); line-height: 1
 /* ------------------- 
  * 7. Chatbot Styles (New Design)
  * ------------------- */
-#open-chatbot { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: var(--chatbot-primary); color: white; border: none; border-radius: 50%; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease, background-color 0.3s ease; z-index: 1001; }
+#open-chatbot { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: var(--chatbot-primary); color: white; border: none; border-radius: 50%; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.3s ease, background-color 0.3s ease, opacity 0.3s ease, visibility 0.3s; z-index: 1001; }
 #open-chatbot:hover { transform: scale(1.1); }
+body.chatbot-open #open-chatbot { opacity: 0; visibility: hidden; transform: scale(0.8); }
 
-#chatbot-container { position: fixed; bottom: 30px; right: 30px; width: 420px; max-width: calc(100% - 40px); height: 700px; max-height: calc(100% - 50px); background-color: var(--chatbot-bg); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; z-index: 1000; transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease; transform: translateY(30px) scale(0.9); opacity: 0; visibility: hidden; }
+#chatbot-container { position: fixed; bottom: 100px; right: 30px; width: 420px; max-width: calc(100% - 40px); height: 700px; max-height: calc(100vh - 120px); background-color: var(--chatbot-bg); border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; z-index: 1000; transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease; transform: translateY(30px) scale(0.95); opacity: 0; visibility: hidden; }
 #chatbot-container.show { transform: translateY(0) scale(1); opacity: 1; visibility: visible; }
 
 #chatbot-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background-color: var(--chatbot-primary); color: var(--chatbot-header-text); font-weight: 600; font-size: 1.1rem; flex-shrink: 0; }
@@ -117,11 +118,12 @@ body { font-family: var(--font-family); color: var(--text-color); line-height: 1
 .message.loading-indicator span:nth-of-type(2) { animation-delay: -0.1s; }
 @keyframes bounce { 0%, 80%, 100% { transform: scale(0.5); opacity: 0.5; } 40% { transform: scale(1.0); opacity: 1; } }
 
-#chatbot-suggested-questions { padding: 15px 20px 20px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; border-top: 1px solid #f0f0f0; background-color: #fff; flex-shrink: 0; }
+#chatbot-bottom-container { flex-shrink: 0; border-top: 1px solid #f0f0f0; background-color: #fff; }
+#chatbot-suggested-questions { padding: 15px 20px 10px; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
 .suggested-question-btn { background-color: var(--input-bg); border: 1px solid #e5e5e5; color: #333; padding: 15px; border-radius: 12px; cursor: pointer; font-size: 1rem; text-align: left; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .suggested-question-btn:hover { background-color: #f9f9f9; border-color: #ccc; transform: translateY(-1px); }
 
-#chatbot-input-container { display: flex; padding: 20px; border-top: 1px solid #f0f0f0; background-color: #fcfcfc; align-items: center; flex-shrink: 0; }
+#chatbot-input-container { display: flex; padding: 15px 20px 20px; background-color: #fff; align-items: center; }
 #chatbot-input { flex-grow: 1; border: 1px solid var(--input-border); background-color: var(--input-bg); border-radius: 25px; padding: 15px 20px; font-size: 1rem; margin-right: 15px; }
 #chatbot-input:focus { outline: none; border-color: var(--chatbot-primary); box-shadow: 0 0 0 2px rgba(0, 199, 149, 0.2); }
 #chatbot-send { background-color: var(--chatbot-primary); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; }

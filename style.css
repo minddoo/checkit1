@@ -189,7 +189,7 @@ footer { background-color: #161a1d; color: #adb5bd; text-align: center; padding:
     header nav { order: 1; width: 100%; }
     .logo { flex-grow: 1; }
     .lang-switcher { order: 2; }
-    .hamburger { order: 3; }
+    .hamburger { order: 3; display: block; }
     header nav ul { display: none; position: absolute; top: 100%; left: 0; background: var(--white-color); width: 100%; flex-direction: column; padding: 1rem 0; box-shadow: var(--shadow-md); }
     header nav ul.is-active { display: flex; }
     header nav ul a { padding: 1rem 1.5rem; border-bottom: 1px solid #f1f1f1; }

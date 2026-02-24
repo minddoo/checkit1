@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Force redeploy v3 -->
     <header>
         <nav>
             <div class="logo">
@@ -33,7 +32,265 @@
     </header>
 
     <main id="individual-page">
-        <!-- New content will be added here -->
+        <section class="hero">
+            <div class="hero-text content-wrapper">
+                <h1 data-i18n="individual-hero-title">Your Health, Your Way.</h1>
+                <p data-i18n="individual-hero-subtitle">Stop navigating the complex Korean medical system alone. We provide a personalized, stress-free health check-up experience from start to finish.</p>
+                <a href="#services" class="cta-button" data-i18n="individual-hero-cta">See Our Plans</a>
+            </div>
+        </section>
+
+        <section class="expectation-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="expectation-title">What You Expect vs. The Reality</h2>
+                <p class="section-subtitle" data-i18n="expectation-subtitle">Getting a health check-up in a foreign country should be straightforward. But often, it's not.</p>
+                <div class="expectation-container">
+                    <div class="expectation-card">
+                        <h4 data-i18n="expectation-card-1-title">The Hope</h4>
+                        <p data-i18n="expectation-card-1-text">"I'll just book an appointment, get my check-up, and receive my results. Simple."</p>
+                    </div>
+                    <div class="expectation-card">
+                        <h4 data-i18n="expectation-card-2-title">The Search</h4>
+                        <p data-i18n="expectation-card-2-text">"Finding a hospital that's foreigner-friendly and has clear pricing should be easy."</p>
+                    </div>
+                    <div class="expectation-card">
+                        <h4 data-i18n="expectation-card-3-title">The Understanding</h4>
+                        <p data-i18n="expectation-card-3-text">"The medical staff will explain everything, and I'll understand my results perfectly."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="reality-intro">
+            <h2 data-i18n="reality-intro-title">But Then, Reality Hits...</h2>
+            <div class="arrow-down">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <section class="reality-section" id="reality">
+            <div class="content-wrapper">
+                 <h2 class="section-title" data-i18n="reality-title">The Hurdles Foreigners Face</h2>
+                <div class="reality-container">
+                    <div class="reality-card">
+                        <h4 data-i18n="reality-card-1-title"><i class="fas fa-language"></i>Language Barriers</h4>
+                        <ul>
+                            <li data-i18n="reality-card-1-li-1">Complex medical terms are hard to understand.</li>
+                            <li data-i18n="reality-card-1-li-2">Nuances are lost in translation, causing anxiety.</li>
+                        </ul>
+                    </div>
+                    <div class="reality-card">
+                        <h4 data-i18n="reality-card-2-title"><i class="fas fa-hospital-user"></i>Unfriendly Systems</h4>
+                        <ul>
+                            <li data-i18n="reality-card-2-li-1">Confusing reservation processes.</li>
+                            <li data-i18n="reality-card-2-li-2">Impersonal, factory-like service.</li>
+                        </ul>
+                    </div>
+                    <div class="reality-card">
+                        <h4 data-i18n="reality-card-3-title"><i class="fas fa-file-invoice-dollar"></i>Hidden Costs & Upselling</h4>
+                        <ul>
+                            <li data-i18n="reality-card-3-li-1">Unclear pricing and unexpected fees.</li>
+                            <li data-i18n="reality-card-3-li-2">Pressure to add unnecessary, expensive tests.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="personal-story-section">
+            <div class="content-wrapper">
+                <div class="story-intro-text">
+                    <p data-i18n="story-intro-1">Let me tell you a story.</p>
+                    <p data-i18n="story-intro-2">It's about my father.</p>
+                </div>
+                <div class="story-card">
+                    <p data-i18n="story-p-1">My father, a proud and strong man, was diagnosed with a serious illness after a routine check-up. The problem? Key indicators were missed in his previous two annual check-ups. The results were there, but no one had properly explained the trends or the risks. The system had failed him.</p>
+                    <p data-i18n="story-p-2">The doctor just said, "It's in the normal range," and moved on. That phrase, "in the normal range," masked a developing tragedy.</p>
+                </div>
+                <div class="story-highlight">
+                    <span class="arrow" data-i18n="story-highlight-arrow">⬇</span>
+                    <p data-i18n="story-highlight-text">This personal pain is the foundation of CHECKIT.</p>
+                </div>
+                 <div class="story-card">
+                    <p data-i18n="story-p-3">We exist to make sure no one else experiences that preventable heartbreak. We don't just give you data; we provide understanding and guidance. We track your results over time, explain the trends, and empower you to take control of your health. We are your dedicated health partner.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="services">
+            <div class="solution-outro">
+                 <h2 data-i18n="solution-title">The CHECKIT Solution: Your Personal Health Advocate</h2>
+                 <p data-i18n="solution-subtitle">We've redesigned the health check-up process with you at the center. No confusion, no stress, no missed details.</p>
+            </div>
+            <div class="content-wrapper">
+                <div class="pricing-container">
+                    <!-- Plan 1 -->
+                    <div class="pricing-card plan-no-confusion">
+                        <div class="pricing-header">
+                            <h3 data-i18n="plan-1-title">Plan: No-Confusion</h3>
+                            <p class="price" data-i18n="plan-1-price">Starts from ₩150,000</p>
+                        </div>
+                        <div class="features-container">
+                            <strong data-i18n="plan-1-features-title">Core Features:</strong>
+                            <ul class="pricing-features">
+                                <li data-i18n="plan-1-feature-1">Full translation of results sheet</li>
+                                <li data-i18n="plan-1-feature-2">Clear explanation of every medical term</li>
+                            </ul>
+                        </div>
+                        <div class="best-for">
+                            <strong data-i18n="plan-1-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-1-best-for-text">Those who have already completed a check-up but are completely lost in the medical jargon of the results.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-1-cta">Get Started</a>
+                    </div>
+                    <!-- Plan 2 -->
+                    <div class="pricing-card plan-zero-mistake">
+                         <div class="pricing-header">
+                            <h3 data-i18n="plan-2-title">Plan: Zero-Mistake</h3>
+                            <p class="price" data-i18n="plan-2-price">Starts from ₩400,000</p>
+                        </div>
+                        <div class="features-container">
+                            <strong data-i18n="plan-2-features-title">All of No-Confusion, plus:</strong>
+                             <ul class="pricing-features">
+                                <li data-i18n="plan-2-feature-1">Hospital reservation & scheduling</li>
+                                <li data-i18n="plan-2-feature-2">Pre-checkup consultation (program design)</li>
+                                <li data-i18n="plan-2-feature-3">On-site support (translation, guidance)</li>
+                                <li data-i18n="plan-2-feature-4">Historical data analysis (up to 3 years)</li>
+                            </ul>
+                        </div>
+                         <div class="best-for">
+                            <strong data-i18n="plan-2-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-2-best-for-text">Individuals who want a fully managed, error-free check-up experience from beginning to end.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-2-cta">Get Started</a>
+                    </div>
+                    <!-- Plan 3 -->
+                    <div class="pricing-card plan-total-safe">
+                         <div class="pricing-header">
+                            <h3 data-i18n="plan-3-title">Plan: Total-Safe</h3>
+                            <p class="price" data-i18n="plan-3-price">Contact Us</p>
+                        </div>
+                        <div class="features-container">
+                             <strong data-i18n="plan-3-features-title">All of Zero-Mistake, plus:</strong>
+                             <ul class="pricing-features">
+                                <li data-i18n="plan-3-feature-1">Post-checkup specialist matching</li>
+                                <li data-i18n="plan-3-feature-2">Follow-up appointment scheduling</li>
+                                 <li data-i18n="plan-3-feature-3">Ongoing health trend monitoring</li>
+                            </ul>
+                        </div>
+                         <div class="best-for">
+                            <strong data-i18n="plan-3-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-3-best-for-text">Those who need continuous care and management after a check-up, especially if a condition is found.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-3-cta">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="options-section">
+            <div class="content-wrapper">
+                 <h2 class="section-title" data-i18n="options-title">Need a Custom Plan?</h2>
+                 <p class="section-subtitle" data-i18n="options-subtitle">We can customize our services to fit your exact needs. Choose from our a la carte options.</p>
+                <div class="pricing-container options-container">
+                    <div class="pricing-card schedule-options">
+                        <div class="pricing-header">
+                            <h3 data-i18n="options-card-1-title">Scheduling & On-Site</h3>
+                        </div>
+                        <div class="features-container">
+                            <ul class="pricing-features">
+                                <li data-i18n="options-card-1-li-1">Basic Reservation & Guidance: <span class="price">₩50,000</span></li>
+                                <li data-i18n="options-card-1-li-2">On-site Translation (per hour): <span class="price">₩80,000</span></li>
+                                <li data-i18n="options-card-1-li-3">Full Accompaniment (start to finish): <span class="price">₩250,000</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3 data-i18n="options-card-2-title">Results & Analysis</h3>
+                        </div>
+                         <div class="features-container">
+                            <ul class="pricing-features">
+                                <li data-i18n="options-card-2-li-1">Simple Translation of Results: <span class="price">₩100,000</span></li>
+                                <li data-i18n="options-card-2-li-2">In-depth Analysis & Report: <span class="price">₩200,000</span></li>
+                                <li data-i18n="options-card-2-li-3">Historical Trend Analysis (per report): <span class="price">₩50,000</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing-card">
+                         <div class="pricing-header">
+                            <h3 data-i18n="options-card-3-title">Follow-up Care</h3>
+                        </div>
+                        <div class="features-container">
+                            <ul class="pricing-features">
+                                <li data-i18n="options-card-3-li-1">Specialist Recommendation: <span class="price">₩70,000</span></li>
+                                <li data-i18n="options-card-3-li-2">Follow-up Appointment Scheduling: <span class="price">₩50,000</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="notice-section">
+            <div class="content-wrapper">
+                <div class="notice-card">
+                     <div class="notice-header">
+                        <i class="fas fa-exclamation-circle notice-icon"></i>
+                         <h2 data-i18n="notice-title">Important Notice</h2>
+                    </div>
+                    <div class="notice-body">
+                        <h3 data-i18n="notice-h3">CHECKIT is a healthcare facilitator, not a medical provider.</h3>
+                        <p data-i18n="notice-p-1">Our service fees cover consultation, translation, scheduling, and analysis. They do NOT include the actual cost of the medical examination charged by the hospital.</p>
+                        <h4 data-i18n="notice-h4-1">How it Works:</h4>
+                        <p data-i18n="notice-p-2">You will pay the hospital directly for your check-up. We provide you with a separate invoice for our services.</p>
+                        <h4 data-i18n="notice-h4-2">Transparency is Key:</h4>
+                        <p data-i18n="notice-p-3">We ensure you understand all costs upfront. We receive no commissions from hospitals. Our only goal is your well-being.</p>
+                        <div class="question">
+                             <p data-i18n="notice-question">"Can you give me a total cost estimate (hospital + CHECKIT)?"</p>
+                             <p data-i18n="notice-answer">"Absolutely. During our pre-checkup consultation, we will provide a detailed estimate for both."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="refund-section">
+            <div class="content-wrapper">
+                 <h2 class="section-title" data-i18n="refund-title">Our Service Promise & Refund Policy</h2>
+                <div class="refund-container">
+                    <div class="refund-column">
+                        <h3 data-i18n="refund-col-1-title">Refunds are Not Possible If:</h3>
+                        <ul>
+                            <li data-i18n="refund-col-1-li-1">You cancel after we have already made a reservation on your behalf.</li>
+                            <li data-i18n="refund-col-1-li-2">You are a no-show for your scheduled appointment.</li>
+                            <li data-i18n="refund-col-1-li-3">Our service (e.g., translation, analysis) has already been delivered.</li>
+                        </ul>
+                    </div>
+                    <div class="refund-column">
+                        <h3 data-i18n="refund-col-2-title">A Full Refund is Guaranteed If:</h3>
+                         <ul>
+                            <li data-i18n="refund-col-2-li-1">We are unable to secure a reservation at your desired hospital or a suitable alternative.</li>
+                            <li data-i18n="refund-col-2-li-2">We make a significant error in scheduling that causes you to miss your appointment.</li>
+                            <li data-i18n="refund-col-2-li-3">You are not satisfied with the quality of our translation or reporting (subject to review). Our goal is your satisfaction.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="contact-title">Ready to Take Control of Your Health?</h2>
+                <p class="section-subtitle" data-i18n="contact-subtitle">Send us a message. We'll get back to you within one business day to start the conversation. Let us know which plan or services you're interested in.</p>
+                <form>
+                    <input type="text" placeholder="Name" data-i18n-placeholder="contact-name" required>
+                    <input type="email" placeholder="Email" data-i1e-placeholder="contact-email" required>
+                    <textarea rows="6" placeholder="Your Message" data-i18n-placeholder="contact-message" required></textarea>
+                    <button type="submit" class="cta-button" data-i18n="contact-submit">Send Message</button>
+                </form>
+            </div>
+        </section>
     </main>
 
     <footer>

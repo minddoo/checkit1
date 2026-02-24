@@ -1,34 +1,26 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <!-- ... (head content remains the same) ... -->
-</head>
-<body>
+<!-- ... (body and main content) ... -->
 
-    <!-- ... (Header, Hero, Services, Why Us, Process, Check-up types sections are up-to-date) ... -->
-    <header> ... </header>
-    <main>
-        <section id="hero"> ... </section>
-        <section id="services" class="section"> ... </section>
-        <section id="why-us-new" class="section alternate-bg"> ... </section>
-        <section id="process-new" class="section"> ... </section>
-        <section id="checkup-types" class="section alternate-bg"> ... </section>
-
-        <!-- NEW: Final CTA Section -->
-        <section id="contact-new" class="section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="contact_title_new">궁금한 점이 있으신가요?</h2>
-                <p class="section-subtitle" data-lang-key="contact_subtitle_new">CHECKIT의 전문 매니저가 신속하고 친절하게 답변해 드립니다.</p>
-                <a href="#contact" class="cta-button-primary" data-lang-key="contact_cta_new">지금 바로 문의하기</a>
+    <!-- CHATBOT -->
+    <div id="chatbot-container" class="hidden">
+        <div id="chatbot-header">
+            <span data-lang-key="chatbot_header">CHECKIT AI 챗봇</span>
+            <div id="chatbot-lang-buttons">
+                <button class="chatbot-lang-btn active" data-lang="ko">🇰🇷</button>
+                <button class="chatbot-lang-btn" data-lang="en">🇺🇸</button>
+                <button class="chatbot-lang-btn" data-lang="cn">🇨🇳</button>
+                <button class="chatbot-lang-btn" data-lang="vn">🇻🇳</button>
             </div>
-        </section>
+            <button id="close-chatbot">X</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-suggested-questions"></div>
+        <div id="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="메시지를 입력하세요...">
+            <button id="chatbot-send">전송</button>
+        </div>
+    </div>
+    <button id="open-chatbot">
+        <i class="fas fa-comment-dots"></i>
+    </button>
 
-        <!-- ... (Original contact form section might be removed or repurposed later) ... -->
-
-    </main>
-
-    <!-- ... (Footer and Chatbot remain the same) ... -->
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <!-- ... (rest of the body) ... -->

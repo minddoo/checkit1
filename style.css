@@ -1,31 +1,315 @@
+/*==================================================
+  CHECKIT - Global Stylesheet
+==================================================*/
+
+/* ------------------- 
+ * 1. Root Variables & Base Styles
+ * ------------------- */
 :root {
-    /* ... existing variables ... */
+    --primary-color: #007BFF; /* A vibrant blue for key actions */
+    --secondary-color: #F8F9FA; /* A light grey for alternate sections */
+    --text-color: #333;
+    --text-light: #666;
+    --font-family: 'Pretendard', sans-serif;
 }
 
-/* ... existing base styles ... */
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    text-align: center;
+}
 
-/* --- NEW: Final CTA Section --- */
-#contact-new {
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.section-subtitle {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto 50px;
+}
+
+.alternate-bg {
+    background-color: var(--secondary-color);
+}
+
+.cta-button-primary {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cta-button-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* ------------------- 
+ * 2. Header & Navigation
+ * ------------------- */
+header {
+    background: #fff;
+    padding: 15px 0;
+    border-bottom: 1px solid #e9e9e9;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ... (Other header styles if any) ... */
+
+/* ------------------- 
+ * 3. Hero Section
+ * ------------------- */
+#hero {
     padding: 100px 0;
-    background-color: var(--secondary-color); /* A gentle, inviting background */
+    background: linear-gradient(135deg, #007BFF, #00C6FF);
+    color: white;
 }
 
-#contact-new .section-title {
+#hero h1 {
+    font-size: 48px;
     margin-bottom: 20px;
 }
 
-#contact-new .section-subtitle {
-    font-size: 18px;
-    color: #555;
-    max-width: 600px;
-    margin: 0 auto 40px;
-}
-
-#contact-new .cta-button-primary {
-    padding: 18px 45px; /* Make it slightly larger */
+#hero p {
     font-size: 20px;
+    margin-bottom: 30px;
 }
 
+/* ------------------- 
+ * 4. All Other Sections
+ * ------------------- */
 
-/* --- Rest of the existing styles --- */
-/* ... (hero, services, why-us, process, checkup-types, reviews, contact form, footer, chatbot) ... */
+/* Why Us Section */
+#why-us-new .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    text-align: left;
+    margin-top: 50px;
+}
+#why-us-new .feature-item {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+#why-us-new .feature-item i {
+    font-size: 30px;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+#why-us-new .feature-item h3 {
+    margin-bottom: 10px;
+}
+
+/* Process Section */
+#process-new .process-steps {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    margin-top: 50px;
+}
+#process-new .step {
+    max-width: 280px;
+}
+#process-new .step-number {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Check-up Types Section */
+#checkup-types .checkup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+}
+#checkup-types .checkup-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+/* Final CTA Section */
+#contact-new {
+    padding: 100px 0;
+    background-color: var(--secondary-color);
+}
+
+/* ------------------- 
+ * 5. Chatbot
+ * ------------------- */
+
+#open-chatbot {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+#open-chatbot:hover { transform: scale(1.1); }
+
+#chatbot-container {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 400px;
+    max-width: 90vw;
+    height: 600px;
+    max-height: 80vh;
+    background-color: #F9F9F9;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+}
+#chatbot-container:not(.hidden) {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+#chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#chatbot-lang-buttons button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 3px;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-size: 16px;
+}
+
+#chatbot-lang-buttons button.active {
+    background-color: white;
+    color: var(--primary-color);
+    border-color: white;
+}
+
+#close-chatbot { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+#chatbot-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+.message.bot { background-color: #EAEAEA; color: #333; align-self: flex-start; border-bottom-left-radius: 4px; }
+.message.user { background-color: #D0E7FF; color: #333; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+#chatbot-suggested-questions {
+    padding: 10px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid #E0E0E0;
+}
+
+.suggested-question-btn {
+    background-color: #fff;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 8px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s;
+}
+.suggested-question-btn:hover { background-color: #f0f0f0; }
+
+#chatbot-input-container {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #E0E0E0;
+    background-color: #fff;
+}
+
+#chatbot-input { flex-grow: 1; border: 1px solid #ccc; border-radius: 8px; padding: 10px; font-size: 16px; }
+
+#chatbot-send {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hidden {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+}
+

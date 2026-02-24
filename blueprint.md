@@ -1,38 +1,52 @@
-# Blueprint: CHECKIT - Modern Health Service Website
+# Blueprint: CHECKIT - Advanced Service Website
 
 ## 1. Project Overview
 
-This project is a complete redesign of the CHECKIT website, a service that assists foreigners with health check-ups in Korea. The new design focuses on a modern, user-friendly, and visually appealing interface, using a **deep mint color** as its primary branding element and a **card-based layout** for clear content separation.
+This project will overhaul the CHECKIT website into an advanced, feature-rich platform. The redesign focuses on a professional green color scheme and a clear, card-based layout to present detailed information for both individual and corporate clients. 
 
-Built with HTML, CSS, and a placeholder JavaScript file, the website is designed to be fully responsive and professional, creating a strong first impression for potential clients.
+Key new features include full site-wide language translation and an interactive chatbot named "Check봇" to provide immediate user assistance, significantly improving user engagement and support.
 
 ## 2. Core Features & Design
 
 ### **Visual Design**
 
-*   **Color Palette:** The primary color is a deep mint (`#008080`), creating a professional and trustworthy feel. This is complemented by a light secondary color (`#f0f7f7`) and clean white backgrounds.
-*   **Typography:** The `Poppins` font is used for its modern and clean aesthetic, enhancing readability.
-*   **Card-Based Layout:** Services and Process sections are organized into distinct cards (`<div class="card">`). This modular design improves scannability and visual organization. Each card has a subtle shadow and a lift effect on hover, creating a sense of depth.
-*   **Sticky Header:** The header is fixed to the top of the page, ensuring that navigation links and the primary call-to-action are always accessible.
+*   **Primary Color:** The entire website theme will be shifted to a professional and calming **green**.
+*   **Card-Based Layout:** All major content sections, especially for client services, will use a modern card design to enhance readability and visual separation.
+*   **Chatbot Icon:** A distinct chatbot icon will be placed in the bottom-right corner of the screen, providing a constant, accessible point of contact.
 
-### **Structural Enhancements**
+### **Content Structure**
 
-*   **Hero Section:** A compelling hero section with a clear headline and a prominent call-to-action button (`.cta-button-primary`) to immediately engage users.
-*   **Sectional Organization:** The content is logically divided into sections for Services, Process, and a Footer that also serves as a contact point.
-*   **Footer as Contact:** The footer has been redesigned to be a clear and final call-to-action, encouraging users to get in touch via email.
+*   **Detailed Service Sections:** The main page will be divided into clear sections for:
+    *   **Individual Clients:** Targeting foreigners residing in or visiting Korea, focusing on overcoming language barriers and confusion.
+    *   **Corporate Clients:** Highlighting the benefits for businesses, such as systematic health management for foreign employees, prevention of industrial accidents, and improved employee participation and satisfaction.
+
+### **Feature 1: Check봇 (Chatbot)**
+
+*   **Name:** Check봇 (Checkbot)
+*   **Location:** Fixed to the bottom-right corner of the viewport.
+*   **Functionality:**
+    1.  **Interactive Chat Room:** Users can type questions and receive answers.
+    2.  **Basic AI:** The chatbot will respond to predefined questions based on the website's service content (e.g., "What services do you offer?", "Tell me about corporate plans.").
+    3.  **In-Chat Language Switching:** The chatbot window will contain its own language selection buttons, allowing the conversation itself to be translated and conducted in the user's preferred language.
+
+### **Feature 2: Website Language Translation**
+
+*   **Trigger:** Header navigation will include language buttons (e.g., KR, EN, CN, VI).
+*   **Functionality:** Clicking a language button will dynamically translate all major text content on the website to the selected language without a page reload. This will be managed via JavaScript and a language data object.
 
 ## 3. File Structure
 
-*   `index.html`: Contains the new semantic HTML structure, reflecting the updated, modern design.
-*   `style.css`: A completely new stylesheet that implements the deep mint color scheme, card designs, responsive layout, and modern typography.
-*   `script.js`: Currently an empty file to prevent console errors, but ready for future interactivity.
-*   `blueprint.md`: This document, fully updated to describe the new design and structure.
+*   `index.html`: Will be updated to include the new content sections, card structures, and the HTML for the chatbot icon and container.
+*   `style.css`: Will be completely revised to implement the new **green** color theme, updated card designs, and styles for the chatbot UI.
+*   `script.js`: Will be significantly expanded to include all logic for:
+    *   The chatbot's visibility and interaction.
+    *   The chatbot's Q&A engine.
+    *   The chatbot's internal language switching.
+    *   The main website's language translation.
+*   `blueprint.md`: This document, outlining the complete project plan and features.
 
-## 4. Development Plan (Current)
+## 4. Development Plan
 
-This plan outlines the steps taken to implement the new design.
-
-1.  **HTML Restructuring:** The `index.html` file was rewritten to create a more modern and semantic structure, with clear sections for hero, services, and process.
-2.  **CSS Redesign:** The `style.css` file was completely replaced with new code that implements the deep mint color theme and the card-based design, using modern CSS properties like variables for easy theme management.
-3.  **JavaScript Placeholder:** An empty `script.js` file was created to ensure the HTML links are valid and avoid browser errors.
-4.  **Blueprint Update:** This `blueprint.md` document was updated to reflect the new design, features, and file structure.
+1.  **Phase 1: Foundation & Design Overhaul:** Update HTML with new content and CSS with the green theme and card styles. Add chatbot placeholders.
+2.  **Phase 2: Implement Checkbot:** Build the chatbot's UI and its core Q&A and internal language-switching logic.
+3.  **Phase 3: Implement Website Translation:** Create the data structure for all site text and write the JavaScript function to dynamically translate the page content based on header language selection.

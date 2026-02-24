@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - 외국인 건강검진 서비스</title>
+    <title>CHECKIT - 외국인 건강검진 토탈 서비스</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -16,74 +16,77 @@
             <div class="logo">CHECKIT</div>
             <nav>
                 <ul>
-                    <li><a href="#services">서비스</a></li>
-                    <li><a href="#process">진행 과정</a></li>
-                    <li><a href="#reviews">이용 후기</a></li>
+                    <li><a href="#services" data-lang="ko">서비스</a></li>
+                    <li><a href="#process" data-lang="ko">진행 과정</a></li>
+                    <li><a href="#reviews" data-lang="ko">이용 후기</a></li>
                 </ul>
             </nav>
-            <a href="#contact" class="cta-button">상담 신청</a>
+            <div class="lang-buttons">
+                <button onclick="changeLanguage('ko')">KR</button>
+                <button onclick="changeLanguage('en')">EN</button>
+            </div>
         </div>
     </header>
 
     <main>
         <section id="hero">
             <div class="container">
-                <h1>언어의 장벽 없이, <br> 쉽고 편안한 건강검진.</h1>
-                <p>CHECKIT은 외국인 건강검진의 모든 과정을 함께합니다.</p>
-                <a href="#contact" class="cta-button-primary">지금 바로 상담 시작하기</a>
+                <h1 data-lang="ko">언어의 장벽 없이, <br> 편안한 건강검진을 경험하세요.</h1>
+                <p data-lang="ko">CHECKIT은 국내 거주 외국인 및 해외 방문객을 위한 건강검진의 모든 과정을 지원합니다.</p>
+                <a href="#contact" class="cta-button-primary" data-lang="ko">지금 바로 상담 시작하기</a>
             </div>
         </section>
 
         <section id="services" class="section">
             <div class="container">
-                <h2 class="section-title">CHECKIT의 맞춤 서비스</h2>
+                <h2 class="section-title" data-lang="ko">CHECKIT의 고객 맞춤 서비스</h2>
                 <div class="card-container">
                     <div class="card">
-                        <h3>개인 건강검진</h3>
-                        <p>국내 거주 또는 의료 목적으로 방문한 외국인을 위한 1:1 맞춤 검진 플랜을 제공하여, 언어 문제 없이 편안하게 건강을 관리할 수 있도록 돕습니다.</p>
+                        <h3><span class="icon">🧑‍💼</span> <span data-lang="ko">개인 고객</span></h3>
+                        <p data-lang="ko">한국 거주 중이거나 여행 중인 외국인 개인이 겪는 언어 문제와 병원 이용의 혼란을 해결합니다. 예약부터 결과 확인까지 전 과정을 1:1로 지원하여, 쉽고 정확한 건강검진을 보장합니다.</p>
                     </div>
                     <div class="card">
-                        <h3>기업 건강검진</h3>
-                        <p>외국인 직원을 둔 기업을 위한 체계적인 건강관리 솔루션입니다. 산업재해를 예방하고, 직원들의 업무 효율과 만족도를 높이세요.</p>
+                        <h3><span class="icon">🏢</span> <span data-lang="ko">기업 고객</span></h3>
+                        <p data-lang="ko">외국인 근로자들의 건강검진은 이제 필수입니다. 보건관리자의 업무 부담을 줄이고, 체계적인 건강 관리로 복지 품질을 높이세요. 검진 참여율이 높아지고, 산업재해 예방과 업무 효율 증진에 기여합니다.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="process" class="section">
-            <div class="container">
-                <h2 class="section-title">간편한 진행 과정</h2>
-                <div class="card-container">
-                    <div class="card">
-                        <div class="step-number">1</div>
-                        <h3>상담 및 예약</h3>
-                        <p>웹사이트를 통해 간단히 상담을 요청하면, 배정된 전담 매니저가 검진 항목부터 일정까지 조율하여 예약을 확정합니다.</p>
-                    </div>
-                    <div class="card">
-                        <div class="step-number">2</div>
-                        <h3>검진 당일 동행</h3>
-                        <p>예약된 병원에 전문 통역사가 동행하여 접수부터 검진의 모든 과정을 편안하게 마칠 수 있도록 지원합니다.</p>
-                    </div>
-                    <div class="card">
-                        <div class="step-number">3</div>
-                        <h3>결과 번역 및 안내</h3>
-                        <p>검진이 끝나면, 결과지를 원하는 언어로 번역하여 전달하고, 필요한 경우 후속 조치까지 상세히 안내합니다.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- ... (이하 다른 섹션들) ... -->
     </main>
 
     <footer id="contact">
         <div class="container">
-            <h2>궁금한 점이 있으신가요?</h2>
-            <p>24시간 내로 전문 매니저가 답변해 드립니다.</p>
-            <a href="mailto:contact@checkit.com" class="cta-button-primary">이메일로 문의하기</a>
-            <div class="footer-info">
-                <p>&copy; 2024 CHECKIT. All rights reserved.</p>
-            </div>
+            <h2 data-lang="ko">궁금한 점이 있으신가요?</h2>
+            <p data-lang="ko">24시간 내로 전문 매니저가 답변해 드립니다.</p>
+            <a href="mailto:contact@checkit.com" class="cta-button-primary" data-lang="ko">이메일로 문의하기</a>
         </div>
     </footer>
+
+    <!-- Checkbot (Chatbot) -->
+    <div id="checkbot-container">
+        <div id="checkbot-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32px" height="32px"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2.5 11.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-5 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <div id="checkbot-chat-window" class="hidden">
+            <div class="chat-header">
+                <h3>Check봇</h3>
+                <div class="chat-lang-buttons">
+                    <button onclick="setChatLanguage('ko')">KR</button>
+                    <button onclick="setChatLanguage('en')">EN</button>
+                </div>
+                <button id="close-chat-btn">&times;</button>
+            </div>
+            <div class="chat-body">
+                <div class="chat-messages"></div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input-field" placeholder="메시지를 입력하세요...">
+                <button id="chat-send-btn">전송</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

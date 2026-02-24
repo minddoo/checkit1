@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap');
 
 :root {
-    --primary-color: #0D6EFD; /* Bright Blue */
+    --primary-color: #00A97F; /* New Green */
     --secondary-color: #6C757D; /* Cool Gray */
     --success-color: #198754; /* Green */
     --danger-color: #DC3545; /* Red */
@@ -20,8 +20,6 @@
 
     --font-main: 'Poppins', sans-serif;
     --font-body: 'Roboto', sans-serif;
-
-    --noise-texture: url('data:image/svg+xml,...'); /* Add actual SVG for noise */
 }
 
 * {
@@ -32,14 +30,12 @@
 
 body {
     font-family: var(--font-body);
-    background-color: var(--light-bg);
+    background-color: white;
     color: var(--dark-text);
     line-height: 1.6;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Add a subtle noise texture for a premium feel */
-    background-image: var(--noise-texture);
 }
 
 main {
@@ -77,22 +73,22 @@ section {
 
 .cta-button {
     display: inline-block;
-    background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+    background: var(--primary-color);
     color: white;
     padding: 1rem 2.5rem;
-    border-radius: 50px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
     font-family: var(--font-main);
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 169, 127, 0.4);
 }
 
 .cta-button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 169, 127, 0.5);
 }
 
 .cta-button.inverted {
@@ -105,7 +101,7 @@ section {
 .cta-button.inverted:hover {
     background: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 169, 127, 0.4);
 }
 
 /* HEADER */
@@ -205,7 +201,7 @@ header nav a.active::after {
 .hero {
     padding: 8rem 0;
     text-align: center;
-    background: linear-gradient(135deg, rgba(248, 249, 250, 0.9), rgba(233, 236, 239, 0.9)), var(--noise-texture);
+    background: #E6F8F0;
 }
 
 .hero h1 {
@@ -241,7 +237,7 @@ header nav a.active::after {
     border-radius: 15px;
     box-shadow: var(--card-shadow);
     transition: all 0.3s ease;
-    border-top: 4px solid var(--info-color);
+    border-top: 4px solid var(--primary-color);
 }
 
 .customer-card:hover {
@@ -282,7 +278,7 @@ header nav a.active::after {
 .step-number {
     width: 60px;
     height: 60px;
-    background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+    background: var(--primary-color);
     color: white;
     border-radius: 50%;
     display: grid;
@@ -290,7 +286,7 @@ header nav a.active::after {
     font-size: 2rem;
     font-weight: 700;
     margin: 0 auto 1.5rem;
-    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 169, 127, 0.4);
 }
 
 .step h3 {
@@ -308,7 +304,7 @@ header nav a.active::after {
     background-color: white;
 }
 
-.testimonial-container {
+.testimonial-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
@@ -324,25 +320,25 @@ header nav a.active::after {
     flex-direction: column;
 }
 
-.testimonial-card-text {
+.testimonial-text {
     font-style: italic;
     color: var(--muted-text);
     margin-bottom: 1.5rem;
     flex-grow: 1;
 }
 
-.testimonial-card-author {
+.testimonial-author {
     font-weight: 600;
     text-align: right;
     color: var(--dark-text);
 }
 
 /* CONTACT SECTION */
-.contact {
+.contact-section {
     padding-bottom: 8rem;
 }
 
-.contact form {
+.contact-section form {
     max-width: 700px;
     margin: 0 auto;
     display: flex;
@@ -350,8 +346,8 @@ header nav a.active::after {
     gap: 1.5rem;
 }
 
-.contact input,
-.contact textarea {
+.contact-section input,
+.contact-section textarea {
     width: 100%;
     padding: 1rem;
     border: 1px solid var(--border-color);
@@ -361,19 +357,19 @@ header nav a.active::after {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.contact input:focus,
-.contact textarea:focus {
+.contact-section input:focus,
+.contact-section textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 169, 127, 0.2);
 }
 
-.contact textarea {
+.contact-section textarea {
     min-height: 150px;
     resize: vertical;
 }
 
-.contact button {
+.contact-section button {
     align-self: center;
 }
 
@@ -396,7 +392,7 @@ footer {
 #chat-toggle {
     width: 60px;
     height: 60px;
-    background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+    background: var(--primary-color);
     color: white;
     border: none;
     border-radius: 50%;
@@ -435,7 +431,7 @@ footer {
 }
 
 .chat-header {
-    background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+    background: var(--primary-color);
     color: white;
     padding: 1rem;
     display: flex;
@@ -554,7 +550,7 @@ footer {
     font-size: 1.2rem;
     transition: background-color 0.3s;
 }
-#chat-send:hover { background-color: #0B5ED7; }
+#chat-send:hover { background-color: #007A63; }
 
 /* Typing Indicator */
 .typing-indicator {

@@ -1,158 +1,44 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT</title>
+    <title>CHECKIT - 개인 맞춤형 건강검진 솔루션</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=1000006">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- HEADER -->
     <header>
-        <div class="logo">
-            <a href="/" data-i18n="logo">CHECKIT</a>
-        </div>
         <nav>
+            <div class="logo">
+                <a href="index.html" data-i18n="logo">CHECKIT</a>
+            </div>
             <ul>
-                <li><a href="/individual.html" data-i18n="nav-services">Services</a></li>
-                <li><a href="#process" data-i18n="nav-process">Process</a></li>
-                <li><a href="#testimonials" data-i18n="nav-testimonials">Reviews</a></li>
+                <li><a href="#reality" data-i18n="nav-reality">The Reality</a></li>
+                <li><a href="#services" data-i18n="nav-services">Services</a></li>
                 <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
             </ul>
-            <div class="lang-switcher header-lang-switcher">
-                <button data-lang="ko">KR</button>
-                <button data-lang="en">EN</button>
-                <button data-lang="zh">CN</button>
-                <button data-lang="vi">VI</button>
-            </div>
+            <button class="hamburger">
+                <i class="fas fa-bars"></i>
+            </button>
         </nav>
-        <button class="hamburger"><i class="fas fa-bars"></i></button>
+        <div class="lang-switcher">
+            <button data-lang="ko">KR</button>
+            <button data-lang="en" class="active">EN</button>
+            <button data-lang="zh">CN</button>
+            <button data-lang="vi">VI</button>
+        </div>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="content-wrapper hero-text">
-            <h1 data-i18n="hero-title">Health Check-ups for Foreigners, <br>Comfortable Without Language Barriers.</h1>
-            <p data-i18n="hero-subtitle">From missed schedules and confusing instructions to results only in Korean. CHECKIT solves all non-medical processes.</p>
-            <a href="#contact" class="cta-button" data-i18n="hero-cta">Request a Consultation Now</a>
-        </div>
-    </section>
+    <main id="individual-page">
+        <!-- New content will be added here -->
+    </main>
 
-    <!-- CUSTOMER TYPE SECTION -->
-    <section class="customer-type-section">
-        <div class="content-wrapper">
-            <h2 class="section-title" data-i18n="services-title">Who is This Service For?</h2>
-            <div class="customer-type-container">
-                <div class="customer-card">
-                    <div class="card-icon"><i class="fas fa-user"></i></div>
-                    <h3 data-i18n="individuals-title">For Individuals</h3>
-                    <p data-i18n="individuals-desc">Experience a personalized health check-up journey. Services for residents in Korea and medical tourists.</p>
-                    <a href="/individual.html" class="cta-button inverted" data-i18n="individuals-cta">Learn More</a>
-                </div>
-                <div class="customer-card">
-                    <div class="card-icon"><i class="fas fa-building"></i></div>
-                    <h3 data-i18n="business-title">For Business</h3>
-                    <p data-i18n="business-desc">Systematically manage the health of your foreign employees to prevent industrial accidents and increase work efficiency.</p>
-                    <a href="/corporate.html" class="cta-button inverted" data-i18n="business-cta">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- PROCESS SECTION -->
-    <section class="process-section" id="process">
-        <div class="content-wrapper">
-            <h2 class="section-title" data-i18n="process-title">How CHECKIT Works</h2>
-            <div class="process-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3 data-i18n="process-1-title">Consultation Request</h3>
-                    <p data-i18n="process-1-desc">Simply request a consultation through our website, and a dedicated manager will be assigned.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3 data-i18n="process-2-title">Custom Consulting</h3>
-                    <p data-i18n="process-2-desc">We coordinate the necessary exams, schedules, and languages to confirm your final reservation.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3 data-i18n="process-3-title">Exam & Results</h3>
-                    <p data-i18n="process-3-desc">Comfortably get your check-up and receive your translated results and follow-up guidance all at once.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TESTIMONIALS SECTION -->
-    <section class="testimonials-section" id="testimonials">
-        <div class="content-wrapper">
-            <h2 class="section-title" data-i18n="testimonials-title">User Reviews</h2>
-            <div class="testimonial-cards">
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonial-1-text">“As a long-term resident, I've always struggled with the language barrier at hospitals. CHECKIT managed everything perfectly, from scheduling to the final translated report. It was the most stress-free medical experience I've had in Korea.”</p>
-                    <p class="testimonial-author" data-i18n="testimonial-1-author">- Michael. L (USA, Resident)</p>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonial-2-text">“I was visiting Korea for a short trip and needed a quick, reliable check-up. CHECKIT's process was incredibly efficient. They found a hospital near me and handled all communication. I got my English results via email in just a few days. Amazing service!”</p>
-                    <p class="testimonial-author" data-i18n="testimonial-2-author">- A. Tran (Vietnam, Tourist)</p>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text" data-i18n="testimonial-3-text">“Managing health checks for our diverse team of foreign employees was a logistical nightmare. Missed appointments, language issues, and delayed results were common. Since using CHECKIT, our process is streamlined, and our employees feel truly cared for. It has significantly improved our team's well-being.”</p>
-                    <p class="testimonial-author" data-i18n="testimonial-3-author">- J. Kim (HR Manager, Tech Firm)</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section class="contact-section" id="contact">
-        <div class="content-wrapper">
-            <h2 class="section-title" data-i18n="contact-title">Have Any Questions?</h2>
-            <p class="section-subtitle" data-i18n="contact-subtitle">A professional manager will respond within 24 hours.</p>
-            <form>
-                <input type="email" data-i18n-placeholder="contact-email" placeholder="Enter your email address">
-                <textarea rows="5" data-i18n-placeholder="contact-message" placeholder="Enter your message"></textarea>
-                <button type="submit" class="cta-button" data-i18n="contact-submit">Request Consultation</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
     <footer>
         <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <!-- CHATBOT -->
-    <div id="chatbot-container">
-        <button id="chat-toggle"><i class="fas fa-comment-dots"></i></button>
-        <div id="chat-window" class="hidden">
-            <div class="chat-header">
-                <h3 data-i18n="chat-title">CHECKIT Bot</h3>
-                <div class="lang-switcher chat-lang-switcher">
-                    <button data-lang="ko">KR</button>
-                    <button data-lang="en">EN</button>
-                    <button data-lang="zh">CN</button>
-                    <button data-lang="vi">VI</button>
-                </div>
-                <button id="chat-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="chat-messages" class="chat-messages">
-                <!-- Messages will be appended here by JavaScript -->
-            </div>
-            <div class="chat-footer">
-                <div id="faq-options" class="faq-options">
-                    <!-- FAQ buttons will be appended here by JavaScript -->
-                </div>
-                <div class="chat-input-container">
-                    <input type="text" id="chat-input" data-i18n-placeholder="chat-input-placeholder">
-                    <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="main.js?v=1000006"></script>
+    <script src="main.js"></script>
 </body>
 </html>

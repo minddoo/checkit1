@@ -16,14 +16,16 @@
             <div class="logo">CHECKIT</div>
             <nav>
                 <ul>
-                    <li><a href="#services" data-lang="ko">서비스</a></li>
-                    <li><a href="#process" data-lang="ko">진행 과정</a></li>
-                    <li><a href="#reviews" data-lang="ko">이용 후기</a></li>
+                    <li><a href="#services" data-lang-key="nav_services">서비스</a></li>
+                    <li><a href="#process" data-lang-key="nav_process">진행 과정</a></li>
+                    <li><a href="#reviews" data-lang-key="nav_reviews">이용 후기</a></li>
                 </ul>
             </nav>
             <div class="lang-buttons">
                 <button onclick="changeLanguage('ko')">KR</button>
                 <button onclick="changeLanguage('en')">EN</button>
+                <button onclick="changeLanguage('cn')">CN</button>
+                <button onclick="changeLanguage('vn')">VN</button>
             </div>
         </div>
     </header>
@@ -31,36 +33,104 @@
     <main>
         <section id="hero">
             <div class="container">
-                <h1 data-lang="ko">언어의 장벽 없이, <br> 편안한 건강검진을 경험하세요.</h1>
-                <p data-lang="ko">CHECKIT은 국내 거주 외국인 및 해외 방문객을 위한 건강검진의 모든 과정을 지원합니다.</p>
-                <a href="#contact" class="cta-button-primary" data-lang="ko">지금 바로 상담 시작하기</a>
+                <h1 data-lang-key="hero_title">언어의 장벽 없이, <br> 편안한 건강검진을 경험하세요.</h1>
+                <p data-lang-key="hero_subtitle">CHECKIT은 국내 거주 외국인 및 해외 방문객을 위한 건강검진의 모든 과정을 지원합니다.</p>
             </div>
         </section>
 
         <section id="services" class="section">
             <div class="container">
-                <h2 class="section-title" data-lang="ko">CHECKIT의 고객 맞춤 서비스</h2>
+                <h2 class="section-title" data-lang-key="services_title">CHECKIT의 고객 맞춤 서비스</h2>
                 <div class="card-container">
                     <div class="card">
-                        <h3><span class="icon">🧑‍💼</span> <span data-lang="ko">개인 고객</span></h3>
-                        <p data-lang="ko">한국 거주 중이거나 여행 중인 외국인 개인이 겪는 언어 문제와 병원 이용의 혼란을 해결합니다. 예약부터 결과 확인까지 전 과정을 1:1로 지원하여, 쉽고 정확한 건강검진을 보장합니다.</p>
+                        <h3><span class="icon">🧑‍💼</span> <span data-lang-key="services_individual_title">개인 고객</span></h3>
+                        <p data-lang-key="services_individual_desc">한국 거주 중이거나 여행 중인 외국인 개인이 겪는 언어 문제와 병원 이용의 혼란을 해결합니다. 예약부터 결과 확인까지 전 과정을 1:1로 지원하여, 쉽고 정확한 건강검진을 보장합니다.</p>
+                        <a href="individual.html" class="learn-more-btn" data-lang-key="learn_more">더 알아보기 →</a>
                     </div>
                     <div class="card">
-                        <h3><span class="icon">🏢</span> <span data-lang="ko">기업 고객</span></h3>
-                        <p data-lang="ko">외국인 근로자들의 건강검진은 이제 필수입니다. 보건관리자의 업무 부담을 줄이고, 체계적인 건강 관리로 복지 품질을 높이세요. 검진 참여율이 높아지고, 산업재해 예방과 업무 효율 증진에 기여합니다.</p>
+                        <h3><span class="icon">🏢</span> <span data-lang-key="services_corporate_title">기업 고객</span></h3>
+                        <p data-lang-key="services_corporate_desc">외국인 근로자들의 건강검진은 이제 필수입니다. 보건관리자의 업무 부담을 줄이고, 체계적인 건강 관리로 복지 품질을 높이세요. 검진 참여율이 높아지고, 산업재해 예방과 업무 효율 증진에 기여합니다.</p>
+                        <a href="corporate.html" class="learn-more-btn" data-lang-key="learn_more">더 알아보기 →</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ... (이하 다른 섹션들) ... -->
+        <section id="process" class="section alternate-bg">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="process_title">간편한 진행 과정</h2>
+                <div class="card-container-steps">
+                    <div class="card-step">
+                        <div class="step-number">1</div>
+                        <h3 data-lang-key="process_step1_title">상담 및 예약</h3>
+                        <p data-lang-key="process_step1_desc">웹사이트를 통해 간단히 상담을 요청하면, 배정된 전담 매니저가 검진 항목부터 일정까지 조율하여 예약을 확정합니다.</p>
+                    </div>
+                    <div class="card-step">
+                        <div class="step-number">2</div>
+                        <h3 data-lang-key="process_step2_title">검진 당일 동행</h3>
+                        <p data-lang-key="process_step2_desc">예약된 병원에 전문 통역사가 동행하여 접수부터 검진의 모든 과정을 편안하게 마칠 수 있도록 지원합니다.</p>
+                    </div>
+                    <div class="card-step">
+                        <div class="step-number">3</div>
+                        <h3 data-lang-key="process_step3_title">결과 번역 및 안내</h3>
+                        <p data-lang-key="process_step3_desc">검진이 끝나면, 결과지를 원하는 언어로 번역하여 전달하고, 필요한 경우 후속 조치까지 상세히 안내합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-us" class="section">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="why_us_title">CHECKIT을 선택해야 하는 이유</h2>
+                <div class="card-container">
+                    <div class="card feature-card">
+                        <h3 data-lang-key="why_us_feat1_title">전문 통역 지원</h3>
+                        <p data-lang-key="why_us_feat1_desc">의료 전문 용어에 능통한 통역사가 검진의 모든 과정에 동행하여 정확한 소통을 보장합니다.</p>
+                    </div>
+                    <div class="card feature-card">
+                        <h3 data-lang-key="why_us_feat2_title">1:1 맞춤 케어</h3>
+                        <p data-lang-key="why_us_feat2_desc">고객의 필요와 건강 상태에 맞는 최적의 검진 플랜을 추천하고, 전담 매니저가 모든 과정을 관리합니다.</p>
+                    </div>
+                    <div class="card feature-card">
+                        <h3 data-lang-key="why_us_feat3_title">합리적인 비용</h3>
+                        <p data-lang-key="why_us_feat3_desc">자체 제휴 병원 네트워크를 통해 추가 비용 없이 고품질의 건강검진 서비스를 제공합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" class="section alternate-bg">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="reviews_title">이용 후기</h2>
+                <div class="card-container">
+                    <div class="card review-card">
+                        <p class="review-text" data-lang-key="review1_text">"언어 문제 때문에 병원 가는 게 늘 불안했는데, CHECKIT 덕분에 정말 편안하게 검진받을 수 있었어요. 통역사님이 정말 친절하셨어요."</p>
+                        <p class="review-author">- Maria, USA</p>
+                    </div>
+                    <div class="card review-card">
+                        <p class="review-text" data-lang-key="review2_text">"회사 외국인 직원들 단체 건강검진을 진행했는데, 복잡한 과정 없이 한 번에 해결되어서 정말 편했습니다. 직원들 만족도도 높았어요."</p>
+                        <p class="review-author">- Mr. Kim, HR Manager</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="contact_title">문의하기</h2>
+                <form class="contact-form">
+                    <input type="email" name="email" placeholder="이메일 주소" data-lang-key="form_email_placeholder" required>
+                    <input type="tel" name="phone" placeholder="전화번호" data-lang-key="form_phone_placeholder" required>
+                    <textarea name="message" rows="5" placeholder="문의 내용을 입력하세요" data-lang-key="form_message_placeholder" required></textarea>
+                    <button type="submit" class="cta-button-primary" data-lang-key="form_submit_btn">전송하기</button>
+                </form>
+            </div>
+        </section>
     </main>
 
-    <footer id="contact">
+    <footer id="footer">
         <div class="container">
-            <h2 data-lang="ko">궁금한 점이 있으신가요?</h2>
-            <p data-lang="ko">24시간 내로 전문 매니저가 답변해 드립니다.</p>
-            <a href="mailto:contact@checkit.com" class="cta-button-primary" data-lang="ko">이메일로 문의하기</a>
+            <p>&copy; 2024 CHECKIT. All rights reserved.</p>
         </div>
     </footer>
 
@@ -75,6 +145,8 @@
                 <div class="chat-lang-buttons">
                     <button onclick="setChatLanguage('ko')">KR</button>
                     <button onclick="setChatLanguage('en')">EN</button>
+                    <button onclick="setChatLanguage('cn')">CN</button>
+                    <button onclick="setChatLanguage('vn')">VN</button>
                 </div>
                 <button id="close-chat-btn">&times;</button>
             </div>

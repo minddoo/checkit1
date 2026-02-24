@@ -1,38 +1,38 @@
-# Blueprint: CHECKIT Website (English Version)
+# Blueprint: CHECKIT - Modern Health Service Website
 
 ## 1. Project Overview
 
-This project is a simple, single-page informational website for CHECKIT, a service providing health check-up assistance for foreigners in Korea. The website is built with fundamental HTML, CSS, and JavaScript, and has been fully updated to an English version to cater to a global audience.
+This project is a complete redesign of the CHECKIT website, a service that assists foreigners with health check-ups in Korea. The new design focuses on a modern, user-friendly, and visually appealing interface, using a **deep mint color** as its primary branding element and a **card-based layout** for clear content separation.
 
-Its primary purpose is to introduce the services offered, explain the process, showcase user reviews, and provide clear calls-to-action for users to request a consultation.
+Built with HTML, CSS, and a placeholder JavaScript file, the website is designed to be fully responsive and professional, creating a strong first impression for potential clients.
 
 ## 2. Core Features & Design
 
-### **Design & Layout**
+### **Visual Design**
 
-*   **Clean & Simple Structure:** A straightforward, top-to-bottom layout divided into logical sections: Services, Process, Reviews, and Contact.
-*   **Fixed Header:** A sticky header ensures that navigation and language options are always accessible.
-*   **Detailed Content:** The English version includes more descriptive text in the hero section and more detailed user reviews to provide clearer information to a non-Korean audience.
-*   **Dual Call-to-Action:** A second consultation button has been added to the final "Contact" section to maximize conversion opportunities.
+*   **Color Palette:** The primary color is a deep mint (`#008080`), creating a professional and trustworthy feel. This is complemented by a light secondary color (`#f0f7f7`) and clean white backgrounds.
+*   **Typography:** The `Poppins` font is used for its modern and clean aesthetic, enhancing readability.
+*   **Card-Based Layout:** Services and Process sections are organized into distinct cards (`<div class="card">`). This modular design improves scannability and visual organization. Each card has a subtle shadow and a lift effect on hover, creating a sense of depth.
+*   **Sticky Header:** The header is fixed to the top of the page, ensuring that navigation links and the primary call-to-action are always accessible.
 
-### **Functionality**
+### **Structural Enhancements**
 
-*   **Static Content:** The website is composed of static HTML content in English.
-*   **Interactive Buttons:** JavaScript event listeners are attached to both consultation buttons (`#consultBtn` and `#consultBtn2`), which trigger a confirmation `alert`.
-*   **Language Switcher (Placeholder):** The UI includes buttons for switching between Korean (KR), English (EN), Chinese (CN), and Vietnamese (VI), though the full functionality for this feature is not yet implemented.
+*   **Hero Section:** A compelling hero section with a clear headline and a prominent call-to-action button (`.cta-button-primary`) to immediately engage users.
+*   **Sectional Organization:** The content is logically divided into sections for Services, Process, and a Footer that also serves as a contact point.
+*   **Footer as Contact:** The footer has been redesigned to be a clear and final call-to-action, encouraging users to get in touch via email.
 
 ## 3. File Structure
 
-*   `index.html`: The main HTML file containing the entire structure of the webpage (in English).
-*   `style.css`: A CSS file providing styling and layout rules, with minor updates for the English version.
-*   `script.js`: A JavaScript file that handles click events for both consultation buttons.
-*   `blueprint.md`: This document, providing a comprehensive overview of the project's current state.
+*   `index.html`: Contains the new semantic HTML structure, reflecting the updated, modern design.
+*   `style.css`: A completely new stylesheet that implements the deep mint color scheme, card designs, responsive layout, and modern typography.
+*   `script.js`: Currently an empty file to prevent console errors, but ready for future interactivity.
+*   `blueprint.md`: This document, fully updated to describe the new design and structure.
 
-## 4. Development Plan (Completed)
+## 4. Development Plan (Current)
 
-This section outlines the steps that were taken to update the website to the English version.
+This plan outlines the steps taken to implement the new design.
 
-1.  **HTML Content Update:** The `index.html` file was overwritten with the new, English-language HTML code provided by the user.
-2.  **CSS Style Update:** The `style.css` file was updated with new styles to better suit the English content and layout.
-3.  **JavaScript Logic Update:** The `script.js` file was updated to include an event listener for the second consultation button (`#consultBtn2`).
-4.  **Blueprint Update:** This `blueprint.md` file was updated to reflect the new English version of the website, including the updated features and content.
+1.  **HTML Restructuring:** The `index.html` file was rewritten to create a more modern and semantic structure, with clear sections for hero, services, and process.
+2.  **CSS Redesign:** The `style.css` file was completely replaced with new code that implements the deep mint color theme and the card-based design, using modern CSS properties like variables for easy theme management.
+3.  **JavaScript Placeholder:** An empty `script.js` file was created to ensure the HTML links are valid and avoid browser errors.
+4.  **Blueprint Update:** This `blueprint.md` document was updated to reflect the new design, features, and file structure.

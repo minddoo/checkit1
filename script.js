@@ -10,12 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'learn_more': '더 알아보기 →',
             'nav_home': '홈',
 
-            // Hero
-            'hero_title': '언어의 장벽 없이, <br> 편안한 건강검진을 경험하세요.',
-            'hero_subtitle': 'CHECKIT은 국내 거주 외국인 및 해외 방문객을 위한 건강검진의 모든 과정을 지원합니다.',
+            // Hero (New)
+            'hero_title_new': '외국인을 위한 건강검진, <br>언어의 장벽 없이 편안하게.',
+            'hero_subtitle_new': '일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지. CHECKIT이 모든 비의료 과정을 해결합니다.',
+            'hero_cta_new': '지금 바로 상담 신청',
+
+            // Services (New Title)
+            'services_title_new': '누구를 위한 서비스인가요?',
 
             // Services
-            'services_title': 'CHECKIT의 고객 맞춤 서비스',
             'services_individual_title': '개인 고객',
             'services_individual_desc': '한국 거주 중이거나 여행 중인 외국인 개인이 겪는 언어 문제와 병원 이용의 혼란을 해결합니다. 예약부터 결과 확인까지 전 과정을 1:1로 지원하여, 쉽고 정확한 건강검진을 보장합니다.',
             'services_corporate_title': '기업 고객',
@@ -59,12 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'learn_more': 'Learn More →',
             'nav_home': 'Home',
 
-            // Hero
-            'hero_title': 'Experience comfortable health check-ups <br> without language barriers.',
-            'hero_subtitle': 'CHECKIT supports the entire health check-up process for foreigners residing in or visiting Korea.',
+            // Hero (New)
+            'hero_title_new': 'Health Check-ups for Foreigners, <br>Comfortable Without Language Barriers.',
+            'hero_subtitle_new': 'From missed appointments and difficult-to-understand check-up guides to results provided only in Korean. CHECKIT resolves all non-medical processes.',
+            'hero_cta_new': 'Apply for a consultation now',
+
+            // Services (New Title)
+            'services_title_new': 'Who is this service for?',
 
             // Services
-            'services_title': 'Our Customized Services',
             'services_individual_title': 'Individual Clients',
             'services_individual_desc': 'We solve language problems for foreign individuals living in or visiting Korea. We provide 1:1 support from appointments to result confirmation.',
             'services_corporate_title': 'Corporate Clients',
@@ -108,12 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'learn_more': '了解更多 →',
             'nav_home': '首页',
 
-            // Hero
-            'hero_title': '体验无语言障碍的<br>舒适体检。',
-            'hero_subtitle': 'CHECKIT为居住在韩国或来访的外国人提供全面的体检支持。',
+            // Hero (New)
+            'hero_title_new': '为外国人提供健康体检，<br>无语言障碍，轻松自在。',
+            'hero_subtitle_new': '从错过预约、难以理解的体检指南，到仅提供韩语版本的结果报告。CHECKIT为您解决所有非医疗流程。',
+            'hero_cta_new': '立即申请咨询',
+
+            // Services (New Title)
+            'services_title_new': '这项服务适合谁？',
 
             // Services
-            'services_title': '我们的定制服务',
             'services_individual_title': '个人客户',
             'services_individual_desc': '我们为居住在或访问韩国的外国个人解决语言问题。我们提供从预约到结果确认的1:1支持。',
             'services_corporate_title': '企业客户',
@@ -157,12 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'learn_more': 'Tìm hiểu thêm →',
             'nav_home': 'Trang chủ',
 
-            // Hero
-            'hero_title': 'Trải nghiệm kiểm tra sức khỏe thoải mái<br>không rào cản ngôn ngữ.',
-            'hero_subtitle': 'CHECKIT hỗ trợ toàn bộ quy trình kiểm tra sức khỏe cho người nước ngoài cư trú hoặc đến thăm Hàn Quốc.',
+            // Hero (New)
+            'hero_title_new': 'Khám sức khỏe cho người nước ngoài, <br>Thoải mái không rào cản ngôn ngữ.',
+            'hero_subtitle_new': 'Từ các cuộc hẹn bị bỏ lỡ, hướng dẫn khám khó hiểu, đến kết quả chỉ có bằng tiếng Hàn. CHECKIT giải quyết mọi quy trình phi y tế.',
+            'hero_cta_new': 'Đăng ký tư vấn ngay',
+
+            // Services (New Title)
+            'services_title_new': 'Dịch vụ này dành cho ai?',
 
             // Services
-            'services_title': 'Dịch vụ tùy chỉnh của chúng tôi',
             'services_individual_title': 'Khách hàng cá nhân',
             'services_individual_desc': 'Chúng tôi giải quyết các vấn đề ngôn ngữ cho người nước ngoài sống hoặc đến thăm Hàn Quốc. Chúng tôi hỗ trợ 1:1 từ việc đặt hẹn đến xác nhận kết quả.',
             'services_corporate_title': 'Khách hàng doanh nghiệp',

@@ -1,165 +1,78 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHECKIT - For Business</title>
-    <link rel="stylesheet" href="style.css?v=20240523">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
-        <nav>
-            <div class="logo">
-                <a href="index.html" data-i18n="logo">CHECKIT</a>
-            </div>
-            <ul>
-                <li><a href="#benefits" data-i18n="nav-benefits">Core Benefits</a></li>
-                <li><a href="#process" data-i18n="nav-process">Process</a></li>
-                <li><a href="#contact" data-i18n="nav-contact-corp">Contact</a></li>
-            </ul>
-            <button class="hamburger">
-                <i class="fas fa-bars"></i>
-            </button>
-        </nav>
-        <div class="lang-switcher">
-            <button data-lang="ko">KR</button>
-            <button data-lang="en" class="active">EN</button>
-            <button data-lang="zh">CN</button>
-            <button data-lang="vi">VI</button>
+        <div class="logo">
+            <a href="/">CHECKIT</a>
         </div>
+        <nav>
+            <ul>
+                <li><a href="/#process">Process</a></li>
+                <li><a href="/#testimonials">Reviews</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="hamburger"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <section id="corporate-hero" class="hero">
-            <div class="hero-text">
-                <h1 data-i18n="corp-hero-title">Optimize Your Foreign Employee<br>Health Management</h1>
-                <p data-i18n="corp-hero-subtitle">From mandatory health checks to visa-required examinations, CHECKIT provides a systematic solution that reduces HR workload and enhances employee satisfaction.</p>
-                <a href="#contact" class="cta-button" data-i18n="corp-hero-cta">Request a Corporate Consultation</a>
-            </div>
-        </section>
-        
-        <section id="story-intro">
-            <h2 data-i18n="story-intro-title">Your HR team focuses on core tasks.<br>We handle the rest.</h2>
-            <p data-i18n="story-intro-p">Managing health check-ups for foreign employees involves more than just scheduling. Language barriers, unfamiliar procedures, and visa-related complexities create a heavy administrative burden. We solve these non-medical issues so your team can reclaim its time.</p>
-        </section>
-
-        <section id="corporate-flow">
-             <h2 class="section-title" data-i18n="flow-title">A Single Request Solves Everything</h2>
-            <div class="flow-container">
-                <div class="flow-column">
-                    <h3 data-i18n="hr-tasks-title">Typical HR Tasks</h3>
-                    <ul>
-                        <li data-i18n="hr-task1">Finding multilingual hospitals</li>
-                        <li data-i18n="hr-task2">Explaining procedures repeatedly</li>
-                        <li data-i18n="hr-task3">Handling schedule changes</li>
-                        <li data-i18n="hr-task4">Managing different languages</li>
-                        <li data-i18n="hr-task5">Translating documents</li>
-                        <li data-i18n="hr-task6">Following up on results</li>
-                        <li data-i18n="hr-task7">Fielding employee complaints</li>
-                    </ul>
-                </div>
-                <div class="flow-column solution-column">
-                    <h3 data-i18n="checkit-solution-title">CHECKIT's Solution</h3>
-                    <ul>
-                        <li data-i18n="checkit-solution1">HR sends one service request</li>
-                    </ul>
-                </div>
-                <div class="flow-column effect-column">
-                    <h3 data-i18n="checkit-effect-title">CHECKIT's Effect</h3>
-                    <ul>
-                        <li data-i18n="checkit-effect1">Custom consulting per employee</li>
-                        <li data-i18n="checkit-effect2">Multilingual guides &amp; support</li>
-                        <li data-i18n="checkit-effect3">Proactive issue prevention</li>
-                        <li data-i18n="checkit-effect4">Organized, translated results</li>
-                    </ul>
-                </div>
-                <div class="flow-column">
-                    <h3 data-i18n="final-outcome-title">Final Outcome</h3>
-                    <ul>
-                        <li data-i18n="final-outcome1">Reduced HR workload</li>
-                        <li data-i18n="final-outcome2">Lower risk of legal issues</li>
-                        <li data-i18n="final-outcome3">Higher employee satisfaction</li>
-                        <li data-i18n="final-outcome4">Prevention of industrial accidents</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="benefits" class="corporate-benefits">
-            <h2 class="section-title" data-i18n="benefits-title">Core Benefits for Your Business</h2>
-            <div class="benefits-container">
-                <div class="benefit-card">
-                    <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                    <h3 data-i18n="benefit1-title">Cost & Time Efficiency</h3>
-                    <p data-i18n="benefit1-desc">Reduce unnecessary administrative tasks and translation costs. Our optimized process saves your HR team valuable time.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3 data-i18n="benefit2-title">Risk Mitigation</h3>
-                    <p data-i18n="benefit2-desc">Ensure compliance with legal health screening requirements for foreign employees and prevent potential workplace safety issues.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="card-icon"><i class="fas fa-users"></i></div>
-                    <h3 data-i18n="benefit3-title">Employee Satisfaction</h3>
-                    <p data-i18n="benefit3-desc">Provide a caring and supportive environment for your foreign talent, enhancing their sense of belonging and loyalty.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3 data-i18n="benefit4-title">Productivity Boost</h3>
-                    <p data-i18n="benefit4-desc">A healthy workforce is a productive one. Proactive health management minimizes downtime and maximizes efficiency.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="process" class="process-section corporate-process">
+        <section class="hero corporate-hero">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="corp-process-title">How It Works for Businesses</h2>
-                <div class="process-steps corporate-steps">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h3 data-i18n="corp-step1-title">Initial Consultation</h3>
-                        <p data-i18n="corp-step1-desc">Contact us with your company's needs and the number of foreign employees requiring check-ups.</p>
+                <h1 data-i18n="corporate-hero-title">Streamline Employee Health Management</h1>
+                <p data-i18n="corporate-hero-subtitle">Comprehensive health check-up solutions for your international workforce.</p>
+                <a href="#contact" class="cta-button" data-i18n="corporate-hero-cta">Request a Proposal</a>
+            </div>
+        </section>
+
+        <section class="corporate-benefits">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="benefits-title">Why CHECKIT for Your Business?</h2>
+                <div class="benefit-cards">
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-tasks"></i></div>
+                        <h3 data-i18n="benefit-1-title">Simplified Management</h3>
+                        <p data-i18n="benefit-1-desc">A dedicated manager handles all scheduling and communication, freeing up your HR team.</p>
                     </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h3 data-i18n="corp-step2-title">Service Agreement</h3>
-                        <p data-i18n="corp-step2-desc">We propose a customized service plan and finalize a corporate agreement.</p>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3 data-i18n="benefit-2-title">Reduced Workplace Risk</h3>
+                        <p data-i18n="benefit-2-desc">Proactive health management helps prevent accidents and ensures a safer work environment.</p>
                     </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h3 data-i18n="corp-step3-title">Employee Onboarding</h3>
-                        <p data-i18n="corp-step3-desc">We gather the necessary information from each employee through a simplified, multilingual process.</p>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <h3 data-i18n="corp-step4-title">Total Management</h3>
-                        <p data-i18n="corp-step4-desc">CHECKIT handles everything from reservations to delivering final, organized results to your HR team.</p>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3 data-i18n="benefit-3-title">Improved Productivity</h3>
+                        <p data-i18n="benefit-3-desc">Healthy, well-cared-for employees are more focused, productive, and have higher morale.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="contact-section corporate-contact">
+        <section id="contact" class="contact-section">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="corp-contact-title">Contact Our Corporate Team</h2>
-                <p class="section-subtitle" data-i18n="corp-contact-subtitle">A dedicated manager for corporate clients will get in touch to discuss your specific needs.</p>
-                <form action="https://formspree.io/f/xqedyngo" method="POST">
-                    <input type="text" name="company_name" data-i18n-placeholder="contact-company" placeholder="Company Name" required>
-                    <input type="email" name="email" data-i18n-placeholder="contact-email" placeholder="Your Email" required>
-                    <input type="tel" name="phone" data-i18n-placeholder="contact-phone" placeholder="Phone Number" required>
-                    <textarea name="message" rows="5" data-i18n-placeholder="contact-message-corp" placeholder="Please describe your needs (e.g., number of employees, required exams)" required></textarea>
-                    <button type="submit" class="cta-button" data-i18n="contact-submit-corp">Submit Inquiry</button>
+                <h2 class="section-title" data-i18n="corporate-contact-title">Get a Custom Proposal</h2>
+                <p class="section-subtitle" data-i18n="corporate-contact-subtitle">Let's build a health management plan that fits your company's needs.</p>
+                <form>
+                    <input type="text" placeholder="Company Name" data-i18n-placeholder="form-company-name">
+                    <input type="text" placeholder="Your Name" data-i18n-placeholder="form-your-name">
+                    <input type="email" placeholder="Work Email" data-i18n-placeholder="form-work-email">
+                    <input type="number" placeholder="Number of Employees" data-i18n-placeholder="form-employee-count">
+                    <button type="submit" class="cta-button" data-i18n="corporate-contact-submit">Submit</button>
                 </form>
             </div>
         </section>
     </main>
 
     <footer>
-        <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
+        <p>&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="corporate.js?v=1000001"></script>
+    <script src="corporate.js"></script>
 </body>
 </html>

@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT - For Individuals</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">CHECKIT</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/#process">Process</a></li>
+                <li><a href="/#testimonials">Reviews</a></li>
+                <li><a href="/#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="hamburger"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <main>
+        <section class="hero individual-hero">
+            <div class="content-wrapper">
+                <h1 data-i18n="individual-hero-title">Your Health, Your Language.</h1>
+                <p data-i18n="individual-hero-subtitle">Personalized health check-up services for foreign residents and medical tourists in Korea.</p>
+                <a href="#contact" class="cta-button" data-i18n="individual-hero-cta">Get Your Personal Plan</a>
+            </div>
+        </section>
+
+        <section class="individual-services">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="individual-services-title">What We Offer</h2>
+                <div class="service-cards">
+                    <div class="service-card">
+                        <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h3 data-i18n="service-1-title">Effortless Scheduling</h3>
+                        <p data-i18n="service-1-desc">We find the right hospital and handle your entire booking process based on your needs.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-icon"><i class="fas fa-language"></i></div>
+                        <h3 data-i18n="service-2-title">Multilingual Support</h3>
+                        <p data-i18n="service-2-desc">Receive all communication, pre-examination guides, and results in your preferred language.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-icon"><i class="fas fa-file-medical-alt"></i></div>
+                        <h3 data-i18n="service-3-title">Translated Results</h3>
+                        <p data-i18n="service-3-desc">Get your check-up results accurately translated and delivered to you digitally.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="contact-title">Start Your Journey</h2>
+                <p class="section-subtitle" data-i18n="contact-subtitle-individual">Tell us about your needs, and we'll create a personalized plan for you.</p>
+                <form>
+                    <input type="text" placeholder="Your Name" data-i18n-placeholder="form-name">
+                    <input type="email" placeholder="Your Email" data-i18n-placeholder="form-email">
+                    <textarea rows="5" placeholder="What are you looking for? (e.g., visa check-up, annual screening)" data-i18n-placeholder="form-message-individual"></textarea>
+                    <button type="submit" class="cta-button" data-i18n="contact-submit-individual">Request Plan</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 CHECKIT. All rights reserved.</p>
+    </footer>
+
+    <script src="individual.js"></script>
+</body>
+</html>

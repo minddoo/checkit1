@@ -1,0 +1,301 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const translations = {
+        en: {
+            "nav-services": "Services",
+            "nav-process": "Process",
+            "nav-testimonials": "Reviews",
+            "nav-contact": "Contact",
+            "corporate-hero-title": "Customized Health Screening Solutions for Businesses",
+            "corporate-hero-subtitle": "Effortlessly manage your employees' health without language barriers.",
+            "corporate-hero-cta": "Request Corporate Consultation",
+            "story-title": "Your operations depend on foreign workers. But is their health being managed effectively?",
+            "story-subtitle": "Language barriers and complex administration are realities you can no longer ignore. An optimal solution is needed for both your company and your international employees.",
+            "flow-title": "Gaps in non-medical management go beyond on-site confusion, becoming a corporate risk.",
+            "flow-problem-title": "Problem",
+            "flow-problem-1": "Korean-centric guidance & notices",
+            "flow-problem-2": "Unfamiliarity with reservation procedures",
+            "flow-problem-3": "Inability to interpret results",
+            "flow-problem-4": "Failure to recognize reasons for re-examination",
+            "flow-problem-5": "Cannot check progress & management history",
+            "flow-impact-title": "On-site Impact",
+            "flow-impact-1": "Increased workload for health managers (explanation, interpretation)",
+            "flow-impact-2": "Real-time tracking of exam completion is impossible",
+            "flow-impact-3": "Risk of failing to detect health issues early",
+            "flow-impact-4": "Limitations in proving management responsibility during accidents",
+            "flow-solution-title": "Solution",
+            "flow-solution-1": "Multilingual exam guidance for foreign workers",
+            "flow-solution-2": "Dedicated management for reservations & scheduling",
+            "flow-solution-3": "Summary & explanation of non-medical areas in results",
+            "flow-solution-4": "Individual guidance & follow-up for re-examination subjects",
+            "flow-solution-5": "Provision of integrated status reports",
+            "flow-effect-title": "Expected Effects",
+            "flow-effect-1": "Reduction in missed exams & non-compliance with re-exams",
+            "flow-effect-2": "Separation of non-core tasks for health managers",
+            "flow-effect-3": "Systematic securing of management history",
+            "flow-effect-4": "Prevention of safety, ESG, and global site risks",
+            "benefits-title": "Why CHECKIT for Your Business?",
+            "benefit-1-title": "Streamlined Management",
+            "benefit-1-text": "Request and manage reservations for multiple employees at once. We handle the complex scheduling for you.",
+            "benefit-2-title": "Dedicated Manager",
+            "benefit-2-text": "A dedicated corporate manager handles the entire process from start to finish, providing a single point of contact.",
+            "benefit-3-title": "Integrated Reporting",
+            "benefit-3-text": "Receive translated and summarized health reports tailored for corporate needs, helping you understand your team's health status.",
+            "benefit-4-title": "Reduced Workplace Risks",
+            "benefit-4-text": "Proactively manage employee health to prevent accidents and boost overall productivity and team morale.",
+            "corporate-process-title": "Our Corporate Service Process",
+            "corporate-process-1-title": "Consultation & Quotation",
+            "corporate-process-1-desc": "Quotation is based on (Number of Employees x Monthly Unit Price). Contact us for a tailored proposal.",
+            "corporate-process-2-title": "Employee Registration",
+            "corporate-process-2-desc": "Simply provide an employee list. We coordinate all schedules and details.",
+            "corporate-process-3-title": "Hassle-Free Exams",
+            "corporate-process-3-desc": "Employees receive comfortable exams with native language guidance.",
+            "corporate-process-4-title": "Reporting & <br>Follow-up",
+            "corporate-process-4-desc": "We provide integrated reports and manage follow-ups for re-examinations.",
+            "corporate-contact-title": "Get Started with CHECKIT",
+            "corporate-contact-subtitle": "Fill out the form below, and our corporate manager will contact you shortly.",
+            "form-company-name": "Company Name",
+            "form-contact-person": "Your Name",
+            "form-email": "Email Address",
+            "form-phone": "Phone Number",
+            "form-employee-count": "Number of Employees",
+            "form-message": "Your Message (Optional)",
+            "form-submit": "Submit Inquiry",
+            "footer-copy": "© 2024 CHECKIT. All rights reserved."
+        },
+        ko: {
+            "nav-services": "서비스",
+            "nav-process": "프로세스",
+            "nav-testimonials": "고객 후기",
+            "nav-contact": "문의하기",
+            "corporate-hero-title": "기업을 위한 맞춤형 건강검진 솔루션",
+            "corporate-hero-subtitle": "언어 장벽 없이 간편하게 직원의 건강을 관리하세요.",
+            "corporate-hero-cta": "기업 상담 신청하기",
+            "story-title": "외국인 직원 없이는 현장이 멈춥니다. <br>하지만, 그들의 건강검진, 제대로 관리하고 계신가요?",
+            "story-subtitle": "언어의 장벽과 복잡한 행정 절차, 더 이상 외면할 수 없는 현실입니다. 기업과 외국인 직원 모두를 위한 최적의 솔루션이 필요합니다.",
+            "flow-title": "의료 외 관리 공백은 현장 혼선을 넘어 기업의 리스크가 됩니다.",
+            "flow-problem-title": "문제",
+            "flow-problem-1": "검진 안내·주의사항 한국어 중심",
+            "flow-problem-2": "예약·절차 미숙지",
+            "flow-problem-3": "결과지 해석 불가",
+            "flow-problem-4": "재검 사유 인지 실패",
+            "flow-problem-5": "진행 현황·관리 이력 확인 불가",
+            "flow-impact-title": "현장 영향",
+            "flow-impact-1": "보건관리자 설명·통역·문의 대응 증가",
+            "flow-impact-2": "검진 완료·재검 진행 여부 실시간 파악 불가",
+            "flow-impact-3": "건강 이상 조기 인지 실패 위험",
+            "flow-impact-4": "사고 발생 시 관리 책임 소명 한계",
+            "flow-solution-title": "해결",
+            "flow-solution-1": "외국인 근로자 다국어 검진 안내",
+            "flow-solution-2": "예약·일정 관리 전담",
+            "flow-solution-3": "결과지 의료 외 영역 요약 설명",
+            "flow-solution-4": "재검 대상자 개별 안내·이행 추적",
+            "flow-solution-5": "통합 현황 리포트 제공",
+            "flow-effect-title": "기대 효과",
+            "flow-effect-1": "검진 누락·재검 미이행 감소",
+            "flow-effect-2": "보건관리자 비핵심 업무 분리",
+            "flow-effect-3": "관리 이력 체계적 확보",
+            "flow-effect-4": "안전·ESG·글로벌 현장 리스크 예방",
+            "benefits-title": "왜 기업은 CHECKIT을 선택해야 할까요?",
+            "benefit-1-title": "간소화된 관리",
+            "benefit-1-text": "한 번의 요청으로 여러 명의 직원 예약을 한 번에 처리하세요. 복잡한 일정 조율은 저희가 담당합니다.",
+            "benefit-2-title": "전담 매니저",
+            "benefit-2-text": "기업 고객 전담 매니저가 처음부터 끝까지 모든 과정을 책임지고 관리하여, 커뮤니케이션 창구를 단일화합니다.",
+            "benefit-3-title": "통합 리포팅",
+            "benefit-3-text": "기업 맞춤형으로 번역 및 요약된 건강검진 결과 보고서를 통해 팀의 건강 상태를 쉽게 파악할 수 있습니다.",
+            "benefit-4-title": "산업 재해 예방",
+            "benefit-4-text": "직원 건강의 선제적 관리를 통해 산업 재해를 예방하고, 전반적인 업무 효율성과 팀 사기를 증진시킵니다.",
+            "corporate-process-title": "기업 서비스 프로세스",
+            "corporate-process-1-title": "상담 및 견적",
+            "corporate-process-1-desc": "견적은 (인원수 x 1인 월 단가)로 측정됩니다. 맞춤형 제안을 위해 문의해주세요.",
+            "corporate-process-2-title": "직원 등록",
+            "corporate-process-2-desc": "직원 명단을 제공해주시면, 모든 일정과 세부사항을 조율합니다.",
+            "corporate-process-3-title": "편리한 검진",
+            "corporate-process-3-desc": "직원들은 모국어 안내와 함께 편안한 검진을 받습니다.",
+            "corporate-process-4-title": "결과 보고 및<br>사후관리",
+            "corporate-process-4-desc": "통합 보고서를 제공하고 재검 대상자의 사후관리를 지원합니다.",
+            "corporate-contact-title": "CHECKIT과 함께 시작하기",
+            "corporate-contact-subtitle": "아래 양식을 작성해주시면 기업 담당 매니저가 신속하게 연락드리겠습니다.",
+            "form-company-name": "회사명",
+            "form-contact-person": "담당자 이름",
+            "form-email": "이메일 주소",
+            "form-phone": "연락처",
+            "form-employee-count": "직원 수",
+            "form-message": "문의 내용 (선택 사항)",
+            "form-submit": "문의 제출하기",
+            "footer-copy": "© 2024 CHECKIT. 모든 권리 보유."
+        },
+        zh: {
+            "nav-services": "服务",
+            "nav-process": "流程",
+            "nav-testimonials": "客户评价",
+            "nav-contact": "联系我们",
+            "corporate-hero-title": "为企业量身定制的健康体检解决方案",
+            "corporate-hero-subtitle": "轻松管理员工健康，无语言障碍。",
+            "corporate-hero-cta": "申请企业咨询",
+            "story-title": "您的业务依赖外国员工。但他们的健康得到有效管理了吗？",
+            "story-subtitle": "语言障碍和复杂的行政程序是您无法再忽视的现实。您的公司和外籍员工都需要一个最佳解决方案。",
+            "flow-title": "医疗外的管理空白，不仅造成现场混乱，更成为企业风险。",
+            "flow-problem-title": "问题",
+            "flow-problem-1": "以韩语为主的体检指南和注意事项",
+            "flow-problem-2": "不熟悉预约和流程",
+            "flow-problem-3": "无法解读结果报告",
+            "flow-problem-4": "未能知晓复检原因",
+            "flow-problem-5": "无法查询进展和管理记录",
+            "flow-impact-title": "现场影响",
+            "flow-impact-1": "保健经理说明、翻译、咨询等工作量增加",
+            "flow-impact-2": "无法实时掌握体检完成和复检进展情况",
+            "flow-impact-3": "未能及早发现健康问题的风险",
+            "flow-impact-4": "发生事故时，管理责任难以澄清",
+            "flow-solution-title": "解决方案",
+            "flow-solution-1": "为外籍员工提供多语言体检指南",
+            "flow-solution-2": "专人负责预约和日程管理",
+            "flow-solution-3": "对结果报告中的非医疗领域进行摘要说明",
+            "flow-solution-4": "为复检对象提供个别通知和后续跟踪",
+            "flow-solution-5": "提供综合现状报告",
+            "flow-effect-title": "预期效果",
+            "flow-effect-1": "减少漏检和不遵守复检的情况",
+            "flow-effect-2": "分离保健经理的非核心业务",
+            "flow-effect-3": "系统性地确保管理记录",
+            "flow-effect-4": "预防安全、ESG 和全球现场风险",
+            "benefits-title": "为什么您的企业需要 CHECKIT？",
+            "benefit-1-title": "简化管理",
+            "benefit-1-text": "一次性申请和管理多名员工的预约。我们为您处理复杂的日程安排。",
+            "benefit-2-title": "专属客户经理",
+            "benefit-2-text": "专属的企业客户经理将从始至终处理整个流程，提供单一联系点。",
+            "benefit-3-title": "综合报告",
+            "benefit-3-text": "接收为企业需求量身定制的翻译和总结性健康报告，帮助您了解团队的健康状况。",
+            "benefit-4-title": "降低工伤风险",
+            "benefit-4-text": "主动管理员工健康，预防工伤事故，提高整体生产力和团队士气。",
+            "corporate-process-title": "我们的企业服务流程",
+            "corporate-process-1-title": "咨询与报价",
+            "corporate-process-1-desc": "报价基于 (员工人数 x 每月单价)。请联系我们获取方案。",
+            "corporate-process-2-title": "员工注册",
+            "corporate-process-2-desc": "只需提供员工名单。我们协调所有日程和细节。",
+            "corporate-process-3-title": "无忧体检",
+            "corporate-process-3-desc": "员工在母语指导下接受舒适的体检。",
+            "corporate-process-4-title": "报告与<br>后续管理",
+            "corporate-process-4-desc": "我们提供综合报告并管理复检人员的后续跟进。",
+            "corporate-contact-title": "开始使用 CHECKIT",
+            "corporate-contact-subtitle": "请填写以下表格，我们的企业客户经理将很快与您联系。",
+            "form-company-name": "公司名称",
+            "form-contact-person": "您的姓名",
+            "form-email": "电子邮件地址",
+            "form-phone": "电话号码",
+            "form-employee-count": "员工人数",
+            "form-message": "您的留言（可选）",
+            "form-submit": "提交咨询",
+            "footer-copy": "© 2024 CHECKIT. 保留所有权利。"
+        },
+        vi: {
+            "nav-services": "Dịch vụ",
+            "nav-process": "Quy trình",
+            "nav-testimonials": "Đánh giá",
+            "nav-contact": "Liên hệ",
+            "corporate-hero-title": "Giải pháp khám sức khỏe tùy chỉnh cho doanh nghiệp",
+            "corporate-hero-subtitle": "Dễ dàng quản lý sức khỏe của nhân viên mà không gặp rào cản ngôn ngữ.",
+            "corporate-hero-cta": "Yêu cầu tư vấn cho doanh nghiệp",
+            "story-title": "Hoạt động của bạn phụ thuộc vào lao động nước ngoài. Nhưng sức khỏe của họ có được quản lý hiệu quả không?",
+            "story-subtitle": "Rào cản ngôn ngữ và thủ tục hành chính phức tạp là thực tế bạn không thể bỏ qua nữa. Cần có một giải pháp tối ưu cho cả công ty và nhân viên quốc tế của bạn.",
+            "flow-title": "Lỗ hổng quản lý ngoài y tế không chỉ gây hỗn loạn tại hiện trường mà còn trở thành rủi ro cho doanh nghiệp.",
+            "flow-problem-title": "Vấn đề",
+            "flow-problem-1": "Hướng dẫn & lưu ý khám bệnh chủ yếu bằng tiếng Hàn",
+            "flow-problem-2": "Không quen thuộc với quy trình đặt hẹn",
+            "flow-problem-3": "Không thể diễn giải kết quả",
+            "flow-problem-4": "Không nhận biết được lý do tái khám",
+            "flow-problem-5": "Không thể kiểm tra tiến độ & lịch sử quản lý",
+            "flow-impact-title": "Ảnh hưởng tại hiện trường",
+            "flow-impact-1": "Gia tăng khối lượng công việc cho người quản lý sức khỏe (giải thích, phiên dịch)",
+            "flow-impact-2": "Không thể theo dõi tình trạng hoàn thành khám bệnh theo thời gian thực",
+            "flow-impact-3": "Nguy cơ không phát hiện sớm các vấn đề sức khỏe",
+            "flow-impact-4": "Hạn chế trong việc chứng minh trách nhiệm quản lý khi xảy ra tai nạn",
+            "flow-solution-title": "Giải pháp",
+            "flow-solution-1": "Hướng dẫn khám bệnh đa ngôn ngữ cho người lao động nước ngoài",
+            "flow-solution-2": "Quản lý chuyên trách đặt hẹn & lịch trình",
+            "flow-solution-3": "Tóm tắt & giải thích các lĩnh vực ngoài y tế trong kết quả",
+            "flow-solution-4": "Hướng dẫn & theo dõi cá nhân cho đối tượng tái khám",
+            "flow-solution-5": "Cung cấp báo cáo tình hình tổng hợp",
+            "flow-effect-title": "Hiệu quả mong đợi",
+            "flow-effect-1": "Giảm thiểu bỏ sót khám bệnh & không tuân thủ tái khám",
+            "flow-effect-2": "Tách biệt các nhiệm vụ không cốt lõi cho người quản lý sức khỏe",
+            "flow-effect-3": "Đảm bảo lịch sử quản lý một cách có hệ thống",
+            "flow-effect-4": "Phòng ngừa rủi ro về an toàn, ESG và tại các địa điểm toàn cầu",
+            "benefits-title": "Tại sao doanh nghiệp của bạn nên chọn CHECKIT?",
+            "benefit-1-title": "Quản lý tinh gọn",
+            "benefit-1-text": "Yêu cầu và quản lý đặt hẹn cho nhiều nhân viên cùng một lúc. Chúng tôi xử lý lịch trình phức tạp cho bạn.",
+            "benefit-2-title": "Quản lý riêng",
+            "benefit-2-text": "Một quản lý riêng cho doanh nghiệp sẽ xử lý toàn bộ quy trình từ đầu đến cuối, cung cấp một đầu mối liên hệ duy nhất.",
+            "benefit-3-title": "Báo cáo tích hợp",
+            "benefit-3-text": "Nhận các báo cáo sức khỏe được dịch và tóm tắt phù hợp với nhu cầu của công ty, giúp bạn hiểu rõ tình trạng sức khỏe của đội ngũ.",
+            "benefit-4-title": "Giảm thiểu rủi ro tai nạn lao động",
+            "benefit-4-text": "Chủ động quản lý sức khỏe nhân viên để phòng ngừa tai nạn và tăng năng suất cũng như tinh thần đồng đội.",
+            "corporate-process-title": "Quy trình dịch vụ cho doanh nghiệp của chúng tôi",
+            "corporate-process-1-title": "Tư vấn & Báo giá",
+            "corporate-process-1-desc": "Báo giá dựa trên (Số nhân viên x Đơn giá hàng tháng). Liên hệ để nhận đề xuất.",
+            "corporate-process-2-title": "Đăng ký nhân viên",
+            "corporate-process-2-desc": "Chỉ cần cung cấp danh sách nhân viên. Chúng tôi điều phối lịch trình.",
+            "corporate-process-3-title": "Khám bệnh dễ dàng",
+            "corporate-process-3-desc": "Nhân viên được khám thoải mái với hướng dẫn bằng tiếng mẹ đẻ.",
+            "corporate-process-4-title": "Báo cáo & <br>Theo dõi",
+            "corporate-process-4-desc": "Chúng tôi cung cấp báo cáo và quản lý theo dõi cho các lần tái khám.",
+            "corporate-contact-title": "Bắt đầu với CHECKIT",
+            "corporate-contact-subtitle": "Điền vào biểu mẫu dưới đây và quản lý doanh nghiệp của chúng tôi sẽ sớm liên hệ với bạn.",
+            "form-company-name": "Tên công ty",
+            "form-contact-person": "Tên của bạn",
+            "form-email": "Địa chỉ email",
+            "form-phone": "Số điện thoại",
+            "form-employee-count": "Số lượng nhân viên",
+            "form-message": "Lời nhắn của bạn (Tùy chọn)",
+            "form-submit": "Gửi yêu cầu",
+            "footer-copy": "© 2024 CHECKIT. Đã đăng ký Bản quyền."
+        }
+    };
+
+    const languageSwitchers = document.querySelectorAll(".lang-switcher");
+    const hamburger = document.querySelector(".hamburger");
+    const navUl = document.querySelector("header nav ul");
+
+    function setLanguage(lang) {
+        document.documentElement.lang = lang;
+        localStorage.setItem('language', lang);
+
+        const elements = document.querySelectorAll("[data-i18n]");
+        elements.forEach(el => {
+            const key = el.getAttribute("data-i18n");
+            if (translations[lang] && translations[lang][key]) {
+                el.innerHTML = translations[lang][key];
+            }
+        });
+
+        const placeholderElements = document.querySelectorAll("[data-i18n-placeholder]");
+        placeholderElements.forEach(el => {
+            const key = el.getAttribute("data-i18n-placeholder");
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+
+        languageSwitchers.forEach(switcher => {
+            const activeButton = switcher.querySelector(".active");
+            if (activeButton) activeButton.classList.remove("active");
+            const buttonToActivate = switcher.querySelector(`[data-lang="${lang}"]`);
+            if (buttonToActivate) buttonToActivate.classList.add("active");
+        });
+    }
+
+    languageSwitchers.forEach(switcher => {
+        switcher.addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+                const lang = e.target.getAttribute("data-lang");
+                if (lang) setLanguage(lang);
+            }
+        });
+    });
+
+    hamburger.addEventListener("click", () => {
+        navUl.classList.toggle("is-active");
+    });
+
+    // Get stored language or default to 'ko' and set it
+    const savedLang = localStorage.getItem('language') || 'ko';
+    setLanguage(savedLang);
+});

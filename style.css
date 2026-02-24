@@ -8,6 +8,7 @@
 :root {
     --primary-color: #2ECC71; /* CORRECTED: Light Green */
     --primary-dark: #27ae60;
+    --hero-bg-color: #f0fdf4; /* NEW: Hero background color */
     --text-color: #333;
     --text-light: #6c757d;
     --bg-light: #f8f9fa;
@@ -38,8 +39,16 @@ body { font-family: var(--font-family); color: var(--text-color); line-height: 1
 #language-switcher .lang-btn.active { background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color); }
 
 /* ------------------- 
+ * 2.5. Hero Section (NEW)
+ * ------------------- */
+#hero { background-color: var(--hero-bg-color); text-align: center; padding: 120px 0; }
+.hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.3; margin-bottom: 25px; color: #2c3e50; }
+.hero-subtitle { font-size: 1.2rem; color: var(--text-light); max-width: 700px; margin: 0 auto 40px; }
+
+/* ------------------- 
  * 3. Section: Who is this for?
  * ------------------- */
+#service-for { background-color: #fff; } /* Explicitly set background to white */
 #service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
 #service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: left; transition: transform 0.3s; }
 #service-for .card:hover { transform: translateY(-10px); }

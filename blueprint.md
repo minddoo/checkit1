@@ -1,38 +1,46 @@
-# CHECKIT-FE
+# Blueprint: CHECKIT Website Restoration
 
-## Project Overview
+## 1. Project Overview
 
-A simple, multi-language landing page for CHECKIT services, a company that assists foreigners with health check-ups in Korea. The site features a language switcher (KR, EN, CN, VI) and an interactive chatbot to answer frequently asked questions.
+This project is a complete restoration of the CHECKIT website, based on the live version provided at [https://faf9a52c.checkit1111.pages.dev/](https://faf9a52c.checkit1111.pages.dev/). The goal was to replicate the original site's structure, functionality, and design pixel-for-pixel, starting from an empty directory.
 
-## Style, Design, and Features
+The restored application is a static, single-page website built with modern, framework-less HTML, CSS, and JavaScript. It serves as an informational portal for CHECKIT's health check-up assistance services for foreigners in Korea.
 
-*   **Overall Aesthetics:** Clean, modern, and trustworthy design using a green primary color (`#00A97F`) and a sans-serif font family (Poppins, Roboto).
-*   **Layout:** Fully responsive, single-page layout with a sticky header, hero section, and various content sections (Services, Process, Reviews, Contact).
-*   **Header:** Contains the logo, navigation links, and a language switcher.
-*   **Hero Section:** Features a prominent title and subtitle that changes based on the selected language.
-*   **Chatbot:** 
-    *   A floating action button is fixed to the bottom-right of the screen.
-    *   Clicking the button opens a chat window.
-    *   The chat window has its own language switcher.
-    *   It displays a welcome message and a list of frequently asked questions.
-    *   Users can click on FAQs or type their own questions to get pre-defined answers.
-*   **Responsiveness:** The layout adapts to mobile devices, including a hamburger menu for navigation and a full-screen chat window.
+## 2. Core Features & Design
 
-## Current Restoration Plan
+The restored website includes the following key features and design elements:
 
-**Goal:** Perform a full and complete restoration of the website to make it **identical** to the reference URL: `https://faf9a52c.checkit1111.pages.dev/`.
+### **Design & Layout**
 
-**Justification:** Previous incremental fixes have failed to resolve persistent UI bugs, including the chatbot icon's visibility and text rendering issues. A full code overwrite is necessary to establish a clean, known-good baseline and ensure stability.
+*   **Modern & Clean UI:** A visually balanced layout with a professional green and light-grey color palette, clean typography, and ample whitespace.
+*   **Sticky Header:** A navigation header that remains fixed at the top of the page for easy access.
+*   **Responsive Hero Section:** A prominent hero section with a clear headline, subtitle, and a call-to-action button that adapts to all screen sizes.
+*   **Mobile-First Responsive Design:** The layout is fully responsive and optimized for a seamless experience on both mobile devices and desktops, featuring a hamburger menu for navigation on smaller screens.
 
-**Action Steps:**
+### **Functionality**
 
-1.  **Overwrite `index.html`:** Re-create the HTML structure from scratch to match the reference site exactly, ensuring all elements and IDs are correct.
-2.  **Overwrite `main.js`:** Re-write the JavaScript, including:
-    *   The 4-language translation object. The `<br>` tag will be removed from the Chinese `hero-title` as requested to prevent wrapping issues.
-    *   Robust logic for the language switcher.
-    *   Clean, simple, and correct logic for the chatbot's open/close/messaging functionality.
-3.  **Overwrite `style.css`:** Re-write all CSS from scratch to:
-    *   **Force Chatbot Icon Position:** Use `position: fixed` and a high `z-index` to ensure the chatbot toggle button is always visible in the bottom-right corner, no matter what.
-    *   **Fix Hero Title Font Size:** Adjust the `font-size` of the hero title to ensure it fits on two lines without awkward wrapping, especially for the Chinese translation.
-    *   **Correct Chat UI:** Ensure the FAQ buttons within the chat window are appropriately sized to allow the conversation to be easily visible.
-4.  **Deploy:** After all files are overwritten, commit the changes and deploy the site to Firebase Hosting to make the restored version live.
+*   **Multilingual Support (i18n):** The entire user interface, including the chatbot, can be dynamically switched between four languages: Korean (KR), English (EN), Chinese (CN), and Vietnamese (VI). The selected language is saved in `localStorage` to persist across sessions.
+*   **Interactive Chatbot:**
+    *   A floating chat icon is fixed to the bottom-right corner of the screen for easy access.
+    *   The chatbot window provides a welcoming message and a list of Frequently Asked Questions (FAQs).
+    *   Users can click on an FAQ to get an instant, pre-defined answer or type their own message.
+    *   The chatbot's language dynamically updates to match the main site's language setting.
+*   **Modular JavaScript:** The application logic is handled by `main.js`, which is organized into clear, reusable functions for managing language switching, chatbot interactions, and mobile navigation.
+
+## 3. File Structure
+
+*   `index.html`: The main HTML file containing the entire structure of the webpage.
+*   `style.css`: The CSS file that provides all styling, layout, and responsive design rules.
+*   `main.js`: The JavaScript file that controls all interactive features, including the language switcher and the chatbot.
+*   `blueprint.md`: This document, providing a comprehensive overview of the restored project.
+
+## 4. Restoration Plan (Completed)
+
+This section outlines the steps that were taken to complete the restoration.
+
+1.  **Project Initialization:** Started with a completely empty directory after deleting all previous files.
+2.  **HTML Structure Replication:** Created a new `index.html` file and meticulously replicated the exact DOM structure of the reference site, including all necessary tags, classes, and `data-i18n` attributes for localization.
+3.  **JavaScript Functionality Replication:** Created a new `main.js` file. Implemented the full logic for the language switcher and the interactive chatbot. All text content, including translations and chat responses, was extracted and stored in a `translations` object for easy management.
+4.  **CSS Design Replication:** Created a new `style.css` file. Wrote all CSS rules from scratch to match the reference site's design, including colors, fonts, layout, responsive breakpoints, and the fixed positioning of the chatbot icon.
+5.  **Blueprint Creation:** Created this `blueprint.md` file to document the successful restoration.
+6.  **Deployment:** The fully restored application is now ready for deployment.

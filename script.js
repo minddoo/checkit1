@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. FULL, CORRECT & FINAL TRANSLATION DATA ---
     const translations = {
         ko: {
+            'nav_home': '홈',
             'hero_title': '외국인을 위한 건강검진,\n언어의 장벽 없이 편안하게.',
             'hero_subtitle': '일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지. CHECKIT이 모든 비의료 과정을 해결합니다.',
             'hero_cta': '지금 바로 상담 신청',
@@ -11,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'why_us_feature1_title': '커뮤니케이션 전문', 'why_us_feature1_desc': '병원 선택부터 결과 번역까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.', 'why_us_feature2_title': '100% 고객 중심', 'why_us_feature2_desc': '병원과의 계약 없이 오직 고객의 입장에서, 고객에게 필요한 최적의 선택지를 제안하고 과정을 돕습니다.', 'why_us_feature3_title': '비의료 과정에 집중', 'why_us_feature3_desc': '의료 행위를 제외한 모든 부수적인 절차를 대행하여, 고객이 오직 건강검진에만 집중할 수 있도록 합니다.',
             'process_title': 'CHECKIT 이용 과정', 'process_step1_title': '상담 및 병원 선택 지원', 'process_step1_desc_new': '원하는 검진 항목과 일정 상담 후, 조건에 맞는 최적의 병원 리스트를 제공하여 선택을 돕고 예약을 진행합니다.', 'process_step2_title': '실시간 소통 지원', 'process_step2_desc_new': '검진 당일, 병원 내에서 발생하는 모든 소통을 실시간으로 지원하여 불편함이 없도록 합니다.', 'process_step3_title_new': '결과 번역 파일 전달', 'process_step3_desc_new': '고객님이 전달해주신 결과지를 고객님의 언어로 단순 번역 및 요약하여, 이메일이나 메신저를 통해 파일로 전달합니다.',
             'contact_title_new': '궁금한 점이 있으신가요?', 'contact_subtitle_new': 'CHECKIT의 전문 매니저가 신속하고 친절하게 답변해 드립니다.', 'contact_cta_new': '지금 바로 문의하기',
+            'individual_page_title': '개인 고객 맞춤 서비스', 'individual_page_subtitle': 'CHECKIT은 한국에 거주하거나 방문하는 모든 외국인 개인이 언어의 장벽 없이 최상의 건강검진을 받을 수 있도록 돕습니다.',
+            'individual_service1_title': '1:1 전담 매니저', 'individual_service1_desc': '상담 요청 즉시, 고객님의 언어를 구사하는 전담 매니저가 배정됩니다. 병원 선택, 예약, 일정 조율까지 모든 과정을 책임지고 관리합니다.',
+            'individual_service2_title_new': '실시간 소통 지원', 'individual_service2_desc_new': '검진 당일, 물리적 동행 대신 메신저를 통해 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여 불편함이나 외로움 없이 검진에만 집중하도록 돕습니다.',
+            'individual_service3_title_new': '결과지 번역 · 요약', 'individual_service3_desc_new': '고객님께서 병원으로부터 수령한 한국어 결과지를 사진이나 파일로 전달해주시면, 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. (의료적 소견이나 상세 설명은 미포함)',
             'chatbot_header': 'Check봇',
             'chatbot_placeholder': '메시지를 입력하세요...',
             'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
@@ -23,12 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 \'상담 신청\'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.'
         },
         en: {
+            'nav_home': 'Home',
             'hero_title': 'Health Check-ups for Foreigners,\nComfortable Without Language Barriers.', 'hero_subtitle': 'From missed schedules and difficult-to-understand check-up guides to results provided only in Korean. CHECKIT solves all non-medical processes.', 'hero_cta': 'Apply for a Consultation Now',
             'service_for_title': 'Who is this service for?', 'individual_title': 'Individual Clients', 'individual_desc': 'We support foreign individuals residing in or visiting Korea to receive health check-ups comfortably without language barriers.', 'corporate_title': 'Corporate Clients', 'corporate_desc': 'We manage group health check-ups for foreign employees easily and efficiently, reducing the burden of corporate health care.', 'learn_more': 'Learn More',
             'why_us_title': 'Why Choose CHECKIT?', 'why_us_subtitle_new': 'Despite the high quality of medical services, foreigners face difficulties in \'non-medical processes\' such as booking, registration, and result checking. CHECKIT fills this very gap.',
             'why_us_feature1_title': 'Communication Specialists', 'why_us_feature1_desc': 'From hospital selection to result translation, we solve all communication problems caused by language and cultural barriers.', 'why_us_feature2_title': '100% Client-Centric', 'why_us_feature2_desc': 'Without any contracts with hospitals, we solely represent our clients, proposing the best options and assisting in the process.', 'why_us_feature3_title': 'Focus on Non-Medical Processes', 'why_us_feature3_desc': 'We handle all auxiliary procedures, excluding medical practice, allowing clients to focus solely on their health check-up.',
             'process_title': 'CHECKIT Process', 'process_step1_title': 'Consultation & Hospital Selection Support', 'process_step1_desc_new': 'After consulting on desired check-up items and schedule, we provide a list of optimal hospitals that meet the conditions to help you choose and proceed with the reservation.', 'process_step2_title': 'Real-time Communication Support', 'process_step2_desc_new': 'On the day of the check-up, we provide real-time support for all communication within the hospital to ensure no inconvenience.', 'process_step3_title_new': 'Translated Result File Delivery', 'process_step3_desc_new': 'We provide a simple translation and summary of the result sheet you provide, and deliver it as a file via email or messenger.',
             'contact_title_new': 'Do You Have Any Questions?', 'contact_subtitle_new': 'A CHECKIT professional manager will respond quickly and kindly.', 'contact_cta_new': 'Contact Us Now',
+            'individual_page_title': 'Personalized Services for Individual Clients', 'individual_page_subtitle': 'CHECKIT helps all foreign individuals residing in or visiting Korea receive the best health check-ups without language barriers.',
+            'individual_service1_title': '1:1 Dedicated Manager', 'individual_service1_desc': 'As soon as you request a consultation, a dedicated manager who speaks your language is assigned. They responsibly manage the entire process from hospital selection, reservation, to schedule coordination.',
+            'individual_service2_title_new': 'Real-time Communication Support', 'individual_service2_desc_new': 'Instead of physical accompaniment on the day of the check-up, we provide real-time support for all communication processes like hospital reception, consultation, and payment via messenger to help you focus on your check-up without inconvenience or loneliness.',
+            'individual_service3_title_new': 'Result Translation & Summary', 'individual_service3_desc_new': 'If you provide us with the Korean result sheet received from the hospital as a photo or file, we will translate and summarize the key contents into your native language. (Medical opinions or detailed explanations are not included.)',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': 'Type a message...', 'chatbot_greeting': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
             'greeting_response': 'Hello! Nice to meet you. If you have any questions about CHECKIT, feel free to select a question below or ask me directly.',
             'q1': 'How do I make a reservation?', 'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
@@ -39,12 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'unsupported_input': 'That\'s an interesting question! I can only provide pre-set answers for now, but if you inquire through \'Apply for a Consultation\', a professional manager will kindly guide you.'
         },
         cn: {
+            'nav_home': '首页',
             'hero_title': '为外国人提供健康体检，\n无语言障碍，舒心便捷。', 'hero_subtitle': '从错过日程、难以理解的体检指南，到仅提供韩语版本的结果报告。CHECKIT为您解决所有非医疗过程中的难题。', 'hero_cta': '立即申请咨询',
             'service_for_title': '这项服务是为谁准备的？', 'individual_title': '个人客户', 'individual_desc': '我们帮助居住或访问韩国的外国个人无语言障碍地舒适接受健康体检。', 'corporate_title': '企业客户', 'corporate_desc': '我们轻松高效地管理外国员工的团体健康体检，减轻企业保健管理的负担。', 'learn_more': '了解更多',
             'why_us_title': '为什么选择CHECKIT？', 'why_us_subtitle_new': '尽管医疗服务质量很高，但外国人在预约、登记、确认结果等“非医疗过程”中仍面临困难。CHECKIT正是填补了这一空白。',
             'why_us_feature1_title': '沟通专家', 'why_us_feature1_desc': '从选择医院到结果翻译，我们解决所有因语言和文化障碍引起的沟通问题。', 'why_us_feature2_title': '100%以客户为中心', 'why_us_feature2_desc': '我们不与任何医院签订合同，完全代表客户，提出最佳选择并协助整个过程。', 'why_us_feature3_title': '专注于非医疗过程', 'why_us_feature3_desc': '我们处理除医疗行为外的所有辅助程序，让客户可以专注于他们的健康体检。',
             'process_title': 'CHECKIT 使用流程', 'process_step1_title': '咨询与医院选择支持', 'process_step1_desc_new': '在就期望的体检项目和日程进行咨询后，我们提供符合条件的最佳医院列表，以帮助您选择并进行预约。', 'process_step2_title': '实时沟通支持', 'process_step2_desc_new': '在体检当天，我们为医院内的所有沟通提供实时支持，以确保没有不便。', 'process_step3_title_new': '翻译结果文件交付', 'process_step3_desc_new': '我们将您提供的结果报告进行简单的翻译和摘要,然后通过电子邮件或即时通讯工具以文件形式交付。',
             'contact_title_new': '您有任何疑问吗？', 'contact_subtitle_new': 'CHECKIT的专业经理将迅速、亲切地为您解答。', 'contact_cta_new': '立即联系我们',
+            'individual_page_title': '个人客户专属服务', 'individual_page_subtitle': 'CHECKIT 帮助所有居住或访问韩国的外国个人无语言障碍地获得最佳的健康体检服务。',
+            'individual_service1_title': '1:1专属经理', 'individual_service1_desc': '一旦您请求咨询，我们会立即为您指派一位能说您语言的专属经理。他们将负责管理从医院选择、预约到日程协调的整个过程。',
+            'individual_service2_title_new': '实时沟通支持', 'individual_service2_desc_new': '体检当天，我们不提供实体陪同，而是通过即时通讯工具为医院接待、问诊、缴费等所有沟通环节提供实时支持，帮助您专注于体检，无任何不便或孤独感。',
+            'individual_service3_title_new': '结果翻译与摘要', 'individual_service3_desc_new': '您将从医院收到的韩文结果单以照片或文件形式发送给我们，我们将为您翻译核心内容并提供摘要。（不包括医疗意见或详细解释。）',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': '输入消息...', 'chatbot_greeting': '您好！对CHECKIT有什么疑问吗？请从下方选择问题或直接输入。',
             'greeting_response': '您好！很高兴见到您。如果您对CHECKIT有任何疑问，请随时从下方选择问题或直接提问。',
             'q1': '如何预约？', 'a1': 'CHECKIT的专属经理将为您提供帮助。只需告诉我们您想要的检查项目和日程，我们将提供符合您条件的医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您的问题！',
@@ -55,12 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'unsupported_input': '这是一个有趣的问题！目前我只能提供预设的答案，但如果您通过“申请咨询”进行查询，专业的经理会亲切地为您引导。'
         },
         vn: {
+            'nav_home': 'Trang chủ',
             'hero_title': 'Khám sức khỏe cho người nước ngoài,\nThoải mái không rào cản ngôn ngữ.', 'hero_subtitle': 'Từ lịch trình bị bỏ lỡ, hướng dẫn khám khó hiểu, đến kết quả chỉ có bằng tiếng Hàn. CHECKIT giải quyết mọi quy trình phi y tế.', 'hero_cta': 'Đăng ký tư vấn ngay',
             'service_for_title': 'Dịch vụ này dành cho ai?', 'individual_title': 'Khách hàng cá nhân', 'individual_desc': 'Chúng tôi hỗ trợ người nước ngoài cư trú hoặc đến thăm Hàn Quốc nhận khám sức khỏe một cách thoải mái mà không có rào cản ngôn ngữ.', 'corporate_title': 'Khách hàng doanh nghiệp', 'corporate_desc': 'Chúng tôi quản lý các cuộc khám sức khỏe nhóm cho nhân viên nước ngoài một cách dễ dàng và hiệu quả, giảm bớt gánh nặng quản lý chăm sóc sức khỏe của doanh nghiệp.', 'learn_more': 'Tìm hiểu thêm',
             'why_us_title': 'Tại sao chọn CHECKIT?', 'why_us_subtitle_new': 'Mặc dù chất lượng dịch vụ y tế cao, người nước ngoài vẫn gặp khó khăn trong các “quy trình phi y tế” như đặt hẹn, đăng ký và kiểm tra kết quả. CHECKIT lấp đầy khoảng trống này.',
             'why_us_feature1_title': 'Chuyên gia giao tiếp', 'why_us_feature1_desc': 'Từ việc lựa chọn bệnh viện đến dịch kết quả, chúng tôi giải quyết mọi vấn đề giao tiếp do rào cản ngôn ngữ và văn hóa.', 'why_us_feature2_title': '100% lấy khách hàng làm trung tâm', 'why_us_feature2_desc': 'Không có bất kỳ hợp đồng nào với bệnh viện, chúng tôi hoàn toàn đại diện cho khách hàng của mình, đề xuất các lựa chọn tốt nhất và hỗ trợ trong quá trình này.', 'why_us_feature3_title': 'Tập trung vào các quy trình phi y tế', 'why_us_feature3_desc': 'Chúng tôi xử lý tất cả các thủ tục phụ trợ, không bao gồm hành nghề y tế, cho phép khách hàng chỉ tập trung vào việc khám sức khỏe của họ.',
             'process_title': 'Quy trình sử dụng CHECKIT', 'process_step1_title': 'Tư vấn & Hỗ trợ lựa chọn bệnh viện', 'process_step1_desc_new': 'Sau khi tư vấn về các mục khám và lịch trình mong muốn, chúng tôi cungdQuy trình sử dụng CHECKIT cấp danh sách các bệnh viện tối ưu đáp ứng các điều kiện để giúp bạn lựa chọn và tiến hành đặt hẹn.', 'process_step2_title': 'Hỗ trợ giao tiếp thời gian thực', 'process_step2_desc_new': 'Vào ngày khám, chúng tôi cung cấp hỗ trợ thời gian thực cho tất cả các giao tiếp trong bệnh viện để đảm bảo không có sự bất tiện nào.', 'process_step3_title_new': 'Giao tệp kết quả đã dịch', 'process_step3_desc_new': 'Chúng tôi cung cấp một bản dịch và tóm tắt đơn giản của bảng kết quả mà bạn cung cấp, và gửi nó dưới dạng tệp qua email hoặc messenger.',
             'contact_title_new': 'Bạn có câu hỏi nào không?', 'contact_subtitle_new': 'Một quản lý chuyên nghiệp của CHECKIT sẽ trả lời nhanh chóng và thân thiện.', 'contact_cta_new': 'Liên hệ ngay bây giờ',
+            'individual_page_title': 'Dịch vụ Cá nhân hóa cho Khách hàng Cá nhân', 'individual_page_subtitle': 'CHECKIT giúp mọi cá nhân nước ngoài đang cư trú hoặc đến thăm Hàn Quốc được khám sức khỏe tốt nhất mà không gặp rào cản ngôn ngữ.',
+            'individual_service1_title': 'Quản lý riêng 1:1', 'individual_service1_desc': 'Ngay khi bạn yêu cầu tư vấn, một quản lý riêng nói ngôn ngữ của bạn sẽ được chỉ định. Họ chịu trách nhiệm quản lý toàn bộ quy trình từ lựa chọn bệnh viện, đặt hẹn đến điều phối lịch trình.',
+            'individual_service2_title_new': 'Hỗ trợ giao tiếp thời gian thực', 'individual_service2_desc_new': 'Thay vì đi cùng vào ngày khám, chúng tôi cung cấp hỗ trợ thời gian thực cho tất cả các quy trình giao tiếp như tiếp nhận tại bệnh viện, tư vấn và thanh toán qua ứng dụng nhắn tin để giúp bạn tập trung vào việc khám sức khỏe mà không gặp bất tiện hay cô đơn.',
+            'individual_service3_title_new': 'Dịch và Tóm tắt Kết quả', 'individual_service3_desc_new': 'Nếu bạn cung cấp cho chúng tôi phiếu kết quả tiếng Hàn nhận được từ bệnh viện dưới dạng ảnh hoặc tệp, chúng tôi sẽ dịch và tóm tắt nội dung chính sang ngôn ngữ mẹ đẻ của bạn. (Không bao gồm ý kiến y tế hoặc giải thích chi tiết.)',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': 'Nhập tin nhắn...', 'chatbot_greeting': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi dưới đây hoặc tự nhập câu hỏi của bạn.',
             'greeting_response': 'Xin chào! Rất vui được gặp bạn. Nếu bạn có bất kỳ câu hỏi nào về CHECKIT, hãy chọn một câu hỏi dưới đây hoặc hỏi trực tiếp.',
             'q1': 'Làm cách nào để đặt lịch hẹn?', 'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
@@ -102,8 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
         mainLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
         chatbotLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
         
-        resetAndShowGreeting();
+        if (chatbotContainer.classList.contains('show')) {
+            resetAndShowGreeting();
+        }
     };
+    
+    function changeLanguage(lang) {
+        switchLanguage(lang);
+    }
 
     const addMessage = (text, sender) => {
         const messageElement = document.createElement('div');
@@ -165,6 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     chatbotLangButtons.forEach(button => {
         button.addEventListener('click', () => switchLanguage(button.dataset.lang));
     });
+    
+    // Expose changeLanguage to global scope for inline onclick attributes
+    window.changeLanguage = changeLanguage;
 
     openChatbotBtn.addEventListener('click', () => {
         chatbotContainer.classList.add('show');
@@ -212,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize
-    switchLanguage('ko');
+    // Initial language setup
+    const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+    switchLanguage(initialLang);
 });

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': '예약은 어떻게 하나요?', 'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
             'q2': '병원/의료인과 계약된 구조인가요?', 'a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
             'q3': '의료 행위나 진료 알선을 하나요?', 'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
-            'q4': '검진 당일 동행 서비스도 있나요?', 'a4': '네, 물론입니다. 저희 CHECKIT 매니저 또는 의료 전문 통역사가 검진 당일 병원에 동행하여 접수부터 수납, 의사와의 문진까지 모든 과정에서 원활한 소통을 도와드립니다. 언어 걱정 없이 편안하게 검진을 받으실 수 있습니다.',
+            'q4': '검진 당일 어떤 도움을 받을 수 있나요?', 'a4': '네, 저희 CHECKIT 매니저가 검진 당일, 병원 내에서 발생하는 모든 소통을 실시간으로 지원하여 불편함이 없도록 합니다. 접수, 수납, 의사와의 문진 등 언어 문제로 어려움을 겪는 모든 순간을 비대면으로 도와드립니다.', 
             'q5': '결과지는 어떻게 전달되나요?', 'a5': '검진이 끝나면 저희가 병원으로부터 결과지를 수령합니다. 이후 고객님의 모국어로 번역하여 상세한 설명과 함께 이메일이나 메신저 등 원하시는 방법으로 안전하게 전달해 드립니다. 더 이상 어려운 의학 용어로 고민하지 않으셔도 됩니다.',
             'unsupported_input': '죄송합니다. 현재는 준비된 질문에 대해서만 답변을 드릴 수 있습니다. 아래 목록에서 궁금한 점을 다시 선택해주세요.'
         },
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': 'How do I make a reservation?', 'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
             'q2': 'Are you contracted with hospitals/medical staff?', 'a2': 'No. CHECKIT does not have contractual relationships with any specific hospitals. We help you choose the most suitable hospital by providing objective information from your perspective. Your health and satisfaction are our top priorities.',
             'q3': 'Do you perform medical acts or arrange treatments?', 'a3': 'No, CHECKIT complies with the Medical Service Act and does not perform any medical acts or arrange treatments. We are a service that helps you focus solely on your health check-up by concentrating on \'non-medical processes\' such as hospital reservations, interpretation, and result translation.',
-            'q4': 'Is there an escort service on the day of the check-up?', 'a4': 'Yes, of course. A CHECKIT manager or a professional medical interpreter will accompany you to the hospital on the day of your check-up to assist with smooth communication throughout the entire process, from registration and payment to the consultation with the doctor. You can get your check-up comfortably without any language worries.',
+            'q4': 'What kind of help can I get on the day of the check-up?', 'a4': 'Yes, on the day of your check-up, a CHECKIT manager provides real-time communication support for all interactions within the hospital to ensure there is no inconvenience. We assist you remotely with all moments of language difficulty, such as registration, payment, and consultation with the doctor.',
             'q5': 'How are the results delivered?', 'a5': 'After your check-up, we will collect the results from the hospital. Then, we will translate them into your native language and securely deliver them to you with a detailed explanation via your preferred method, such as email or messenger. You no longer have to worry about difficult medical terms.',
             'unsupported_input': 'I am sorry, but I can only answer the prepared questions for now. Please select another question from the list below.'
         },
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': '如何预约？', 'a1': 'CHECKIT的专属经理将为您提供帮助。只需告诉我们您想要的检查项目和日程，我们将提供符合您条件的医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您的问题！',
             'q2': '是否与医院/医务人员签订了合同？', 'a2': '不是的。CHECKIT不与任何特定医院签订合同。我们完全从您的立场出发，通过提供客观信息来帮助您选择最合适的医院。您的健康和满意是我们的首要目标。',
             'q3': '你们是否提供医疗行为或安排治疗？', 'a3': '不，CHECKIT遵守医疗服务法，不进行任何医疗行为或安排治疗。我们是一项专注于\'非医疗过程\'的服务，如医院预约、口译和结果翻译，以帮助您专注于您的健康检查。',
-            'q4': '体检当天是否提供陪同服务？', 'a4': '是的，当然。CHECKIT经理或专业医疗口译员将在您体检当天陪同您到医院，协助从挂号、缴费到与医生会诊的整个过程中的顺利沟通。您可以毫无语言顾虑地舒适地接受检查。',
+            'q4': '体检当天能得到什么帮助？', 'a4': '是的，在您体检当天，CHECKIT的经理会为医院内的所有沟通提供实时支持，以确保没有不便。我们会远程协助您解决所有语言困难的时刻，例如挂号、缴费和与医生的会诊。', 
             'q5': '结果如何传递？', 'a5': '体检结束后，我们将从医院领取结果报告。然后，我们会将其翻译成您的母语，并通过您喜欢的方式（如电子邮件或即时通讯工具）安全地将其连同详细说明一起发送给您。您再也不用为困难的医学术语而烦恼了。',
             'unsupported_input': '很抱歉，目前我只能回答预设的问题。请从下面的列表中重新选择您的问题。'
         },
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': 'Làm cách nào để đặt lịch hẹn?', 'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
             'q2': 'Bạn có hợp đồng với bệnh viện/nhân viên y tế không?', 'a2': 'Không. CHECKIT không có mối quan hệ hợp đồng với bất kỳ bệnh viện cụ thể nào. Chúng tôi giúp bạn chọn bệnh viện phù hợp nhất một cách khách quan bằng cách cung cấp thông tin từ góc độ của bạn. Sức khỏe và sự hài lòng của bạn là ưu tiên hàng đầu của chúng tôi.',
             'q3': 'Bạn có thực hiện các hành vi y tế hoặc sắp xếp các phương pháp điều trị không?', 'a3': 'Không, CHECKIT tuân thủ Đạo luật Dịch vụ Y tế và không thực hiện bất kỳ hành vi y tế hoặc sắp xếp phương pháp điều trị nào. Chúng tôi là một dịch vụ giúp bạn chỉ tập trung vào việc kiểm tra sức khỏe bằng cách tập trung vào các \'quy trình phi y tế\' như đặt lịch hẹn bệnh viện, phiên dịch và dịch kết quả.',
-            'q4': 'Có dịch vụ hộ tống vào ngày khám không?', 'a4': 'Vâng, tất nhiên. Một người quản lý CHECKIT hoặc một thông dịch viên y tế chuyên nghiệp sẽ đi cùng bạn đến bệnh viện vào ngày khám để hỗ trợ giao tiếp thông suốt trong toàn bộ quá trình, từ đăng ký, thanh toán cho đến tư vấn với bác sĩ. Bạn có thể thoải mái đi khám mà không phải lo lắng về ngôn ngữ.',
+            'q4': 'Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?', 'a4': 'Vâng, vào ngày khám của bạn, một người quản lý của CHECKIT sẽ cung cấp hỗ trợ giao tiếp theo thời gian thực cho tất cả các tương tác trong bệnh viện để đảm bảo không có sự bất tiện nào. Chúng tôi hỗ trợ bạn từ xa trong mọi khoảnh khắc khó khăn về ngôn ngữ, chẳng hạn như đăng ký, thanh toán và tư vấn với bác sĩ.',
             'q5': 'Kết quả được gửi như thế nào?', 'a5': 'Sau khi bạn khám xong, chúng tôi sẽ nhận kết quả từ bệnh viện. Sau đó, chúng tôi sẽ dịch chúng sang ngônGLISH mẹ đẻ của bạn và gửi chúng cho bạn một cách an toànพร้อมกับ lời giải thích chi tiết qua phương thức bạn muốn, chẳng hạn như email hoặc messenger. Bạn không còn phải lo lắng về các thuật ngữ y tế khó khăn nữa.',
             'unsupported_input': 'Xin lỗi, hiện tại tôi chỉ có thể trả lời các câu hỏi đã được chuẩn bị sẵn. Vui lòng chọn một câu hỏi khác từ danh sách dưới đây.'
         }

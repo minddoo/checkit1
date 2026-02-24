@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         zh: {
             'logo': 'CHECKIT',
             'nav-services': '服务', 'nav-process': '流程', 'nav-testimonials': '评价', 'nav-contact': '联系我们',
-            'hero-title': '为外国人提供健康体检，<br>无语言障碍，舒适便捷。',
+            'hero-title': '为外国人提供健康体检，无语言障碍，舒适便捷。',
             'hero-subtitle': '从错过日程、难以理解的检查指南，到只有韩文的结果报告。CHECKIT为您解决所有非医疗过程。',
             'hero-cta': '立即申请咨询',
             'services-title': '这项服务适合谁？',

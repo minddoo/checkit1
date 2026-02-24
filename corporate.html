@@ -3,76 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - For Business</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CHECKIT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1000006">
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="/">CHECKIT</a>
+            <a href="/" data-i18n="logo">CHECKIT</a>
         </div>
         <nav>
             <ul>
-                <li><a href="/#process">Process</a></li>
-                <li><a href="/#testimonials">Reviews</a></li>
-                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/individual.html" data-i18n="nav-services">Services</a></li>
+                <li><a href="#process" data-i18n="nav-process">Process</a></li>
+                <li><a href="#testimonials" data-i18n="nav-testimonials">Reviews</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
             </ul>
+            <div class="lang-switcher header-lang-switcher">
+                <button data-lang="ko">KR</button>
+                <button data-lang="en">EN</button>
+                <button data-lang="zh">CN</button>
+                <button data-lang="vi">VI</button>
+            </div>
         </nav>
         <button class="hamburger"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <section class="hero corporate-hero">
+        <section id="corporate-hero" class="hero-text">
             <div class="content-wrapper">
-                <h1 data-i18n="corporate-hero-title">Streamline Employee Health Management</h1>
-                <p data-i18n="corporate-hero-subtitle">Comprehensive health check-up solutions for your international workforce.</p>
-                <a href="#contact" class="cta-button" data-i18n="corporate-hero-cta">Request a Proposal</a>
+                <h1 data-i18n="corporate-hero-title">Managing health for<br>your international employees is<br>no longer a burden.</h1>
             </div>
         </section>
 
-        <section class="corporate-benefits">
+        <section id="story-intro">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="benefits-title">Why CHECKIT for Your Business?</h2>
-                <div class="benefit-cards">
-                    <div class="benefit-card">
-                        <div class="card-icon"><i class="fas fa-tasks"></i></div>
-                        <h3 data-i18n="benefit-1-title">Simplified Management</h3>
-                        <p data-i18n="benefit-1-desc">A dedicated manager handles all scheduling and communication, freeing up your HR team.</p>
+                <h2 data-i18n="story-intro-title">The HR manager's headache,<br>the foreign employee's anxiety.<br>We've all been there.</h2>
+                <p data-i18n="story-intro-subtitle">Stop wasting time with inefficient communication and tedious administrative tasks. CHECKIT provides a definitive solution.</p>
+            </div>
+        </section>
+
+        <section id="corporate-flow">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="flow-title">This is how CHECKIT solves your problems.</h2>
+                <div class="flow-container">
+                    <div class="flow-column problem-column">
+                        <h3>Problem</h3>
+                        <ul>
+                            <li data-i18n="problem-1">Language barriers</li>
+                            <li data-i18n="problem-2">Lack of information</li>
+                            <li data-i18n="problem-3">Complex procedures</li>
+                            <li data-i18n="problem-4">Wasted time</li>
+                        </ul>
                     </div>
-                    <div class="benefit-card">
-                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-                        <h3 data-i18n="benefit-2-title">Reduced Workplace Risk</h3>
-                        <p data-i18n="benefit-2-desc">Proactive health management helps prevent accidents and ensures a safer work environment.</p>
+                    <div class="flow-column solution-column">
+                        <h3>Solution</h3>
+                        <ul>
+                            <li data-i18n="solution-1">Multilingual service</li>
+                            <li data-i18n="solution-2">Customized guidance</li>
+                            <li data-i18n="solution-3">Process automation</li>
+                            <li data-i18n="solution-4">Dedicated manager</li>
+                        </ul>
                     </div>
-                    <div class="benefit-card">
-                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                        <h3 data-i18n="benefit-3-title">Improved Productivity</h3>
-                        <p data-i18n="benefit-3-desc">Healthy, well-cared-for employees are more focused, productive, and have higher morale.</p>
+                    <div class="flow-column effect-column">
+                        <h3>Effect</h3>
+                        <ul>
+                            <li data-i18n="effect-1">Smooth communication</li>
+                            <li data-i18n="effect-2">Employee satisfaction</li>
+                            <li data-i18n="effect-3">HR efficiency</li>
+                            <li data-i18n="effect-4">Risk reduction</li>
+                        </ul>
+                    </div>
+                    <div class="flow-column result-column">
+                        <h3>Result</h3>
+                        <ul>
+                            <li data-i18n="result-1">Happy Employees</li>
+                            <li data-i18n="result-2">Productive Company</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="contact-section">
+        <section id="corporate-benefits">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="corporate-contact-title">Get a Custom Proposal</h2>
-                <p class="section-subtitle" data-i18n="corporate-contact-subtitle">Let's build a health management plan that fits your company's needs.</p>
-                <form>
-                    <input type="text" placeholder="Company Name" data-i18n-placeholder="form-company-name">
-                    <input type="text" placeholder="Your Name" data-i18n-placeholder="form-your-name">
-                    <input type="email" placeholder="Work Email" data-i18n-placeholder="form-work-email">
-                    <input type="number" placeholder="Number of Employees" data-i18n-placeholder="form-employee-count">
-                    <button type="submit" class="cta-button" data-i18n="corporate-contact-submit">Submit</button>
+                <h2 class="section-title" data-i18n="benefits-title">CHECKIT Corporate Service Benefits</h2>
+                <div class="benefits-container">
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-tasks"></i></div>
+                        <h3 data-i18n="benefit-1-title">Streamlined HR Tasks</h3>
+                        <p data-i18n="benefit-1-desc">Simply provide a list of employees. CHECKIT handles everything from hospital scheduling to result delivery.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-language"></i></div>
+                        <h3 data-i18n="benefit-2-title">Overcoming Language Barriers</h3>
+                        <p data-i18n="benefit-2-desc">All guidance and results are provided in the employee's native language for clear understanding.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3 data-i18n="benefit-3-title">Increased Employee Satisfaction & Productivity</h3>
+                        <p data-i18n="benefit-3-desc">A hassle-free health check-up process boosts employee morale and allows them to focus on their work.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3 data-i18n="benefit-4-title">Proactive Risk Management</h3>
+                        <p data-i18n="benefit-4-desc">Early detection and management of health issues for visa renewal and workplace safety.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="corporate-process" class="process-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="corporate-process-title">Simple & Efficient Process</h2>
+                <div class="process-steps corporate-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 data-i18n="corp-step-1-title">Request Service</h3>
+                        <p data-i18n="corp-step-1-desc">Submit a request with the number of employees and required services.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 data-i18n="corp-step-2-title">Submit Employee List</h3>
+                        <p data-i18n="corp-step-2-desc">We'll provide a customized quote. Upon confirmation, share the employee list.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 data-i18n="corp-step-3-title">Check-up Conducted</h3>
+                        <p data-i18n="corp-step-3-desc">CHECKIT manages the entire process for each employee.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3 data-i18n="corp-step-4-title">Receive Results</h3>
+                        <p data-i18n="corp-step-4-desc">Translated results are delivered to the HR manager and individual employees.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="corporate-contact" class="contact">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="corp-contact-title">Get a Free Proposal</h2>
+                <p class="section-subtitle" data-i18n="corp-contact-subtitle">Let us know your needs. We'll design the perfect health management plan for your company.</p>
+                <form action="#">
+                    <input type="text" placeholder="Company Name" data-i18n-placeholder="corp-form-company">
+                    <input type="text" placeholder="Your Name" data-i18n-placeholder="corp-form-name">
+                    <input type="email" placeholder="Work Email" data-i18n-placeholder="corp-form-email">
+                    <input type="number" placeholder="Number of Employees" data-i18n-placeholder="corp-form-employees">
+                    <button type="submit" class="cta-button" data-i18n="corp-form-submit">Request Proposal</button>
                 </form>
             </div>
         </section>
+
     </main>
 
     <footer>
-        <p>&copy; 2024 CHECKIT. All rights reserved.</p>
+        <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="corporate.js"></script>
+    <div id="chatbot-container">
+        <button id="chat-toggle"><i class="fas fa-comment-dots"></i></button>
+        <div id="chat-window" class="hidden">
+            <div class="chat-header">
+                <h3 data-i18n="chat-title">CHECKIT Bot</h3>
+                <div class="lang-switcher chat-lang-switcher">
+                    <button data-lang="ko">KR</button>
+                    <button data-lang="en">EN</button>
+                    <button data-lang="zh">CN</button>
+                    <button data-lang="vi">VI</button>
+                </div>
+                <button id="chat-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+            </div>
+            <div class="chat-footer">
+                <div id="faq-options" class="faq-options">
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" data-i18n-placeholder="chat-input-placeholder">
+                    <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

@@ -1,78 +1,247 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - For Individuals</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CHECKIT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1000006">
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="/">CHECKIT</a>
+            <a href="/" data-i18n="logo">CHECKIT</a>
         </div>
         <nav>
             <ul>
-                <li><a href="/#process">Process</a></li>
-                <li><a href="/#testimonials">Reviews</a></li>
-                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/individual.html" data-i18n="nav-services">Services</a></li>
+                <li><a href="#process" data-i18n="nav-process">Process</a></li>
+                <li><a href="#testimonials" data-i18n="nav-testimonials">Reviews</a></li>
+                <li><a href="#contact" data-i18n="nav-contact">Contact</a></li>
             </ul>
+            <div class="lang-switcher header-lang-switcher">
+                <button data-lang="ko">KR</button>
+                <button data-lang="en">EN</button>
+                <button data-lang="zh">CN</button>
+                <button data-lang="vi">VI</button>
+            </div>
         </nav>
         <button class="hamburger"><i class="fas fa-bars"></i></button>
     </header>
 
     <main>
-        <section class="hero individual-hero">
+        <section class="personal-story-section">
             <div class="content-wrapper">
-                <h1 data-i18n="individual-hero-title">Your Health, Your Language.</h1>
-                <p data-i18n="individual-hero-subtitle">Personalized health check-up services for foreign residents and medical tourists in Korea.</p>
-                <a href="#contact" class="cta-button" data-i18n="individual-hero-cta">Get Your Personal Plan</a>
+                <div class="story-intro-text">
+                    <p data-i18n="story-intro-1">A hospital visit in a foreign land can be daunting.</p>
+                    <p data-i18n="story-intro-2">Miscommunications, confusing procedures, uncertain results – the stress is overwhelming.</p>
+                </div>
+                <div class="story-card">
+                    <p data-i18n="story-card-1">You receive a notice for a mandatory health check-up, but it's all in Korean. You use a translation app, but the medical terms are confusing and you're not sure what tests you need or why.</p>
+                    <div class="story-highlight">
+                        <span class="arrow" data-i18n="story-arrow-1">↓</span>
+                        <p data-i18n="story-highlight-1">Anxiety and uncertainty build up.</p>
+                    </div>
+                    <p data-i18n="story-card-2">At the hospital, you face a crowded reception and complex forms. You wait for a long time, only to find it difficult to communicate your needs. You end up getting unnecessary tests and miss the ones you actually needed.</p>
+                    <div class="story-highlight">
+                        <span class="arrow" data-i18n="story-arrow-2">↓</span>
+                        <p data-i18n="story-highlight-2">You feel frustrated and helpless.</p>
+                    </div>
+                    <p data-i18n="story-card-3">A few days later, you receive the results, but they are only in Korean. The brief English summary provided by the hospital is insufficient. You're left wondering about your health status and what to do next.</p>
+                </div>
             </div>
         </section>
 
-        <section class="individual-services">
+        <section class="solution-outro">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="individual-services-title">What We Offer</h2>
-                <div class="service-cards">
-                    <div class="service-card">
-                        <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
-                        <h3 data-i18n="service-1-title">Effortless Scheduling</h3>
-                        <p data-i18n="service-1-desc">We find the right hospital and handle your entire booking process based on your needs.</p>
+                <h2 data-i18n="solution-title">CHECKIT offers a clear solution.</h2>
+                <p data-i18n="solution-subtitle">We handle the entire non-medical process, so you can focus solely on your health.</p>
+            </div>
+        </section>
+
+        <section class="pricing-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="pricing-title">CHECKIT Service Plans</h2>
+                <div class="pricing-container">
+                    <div class="pricing-card plan-no-confusion">
+                        <div class="pricing-header">
+                            <h3 data-i18n="plan-1-title">Plan `No Confusion`</h3>
+                            <p class="price">33,000 KRW</p>
+                        </div>
+                        <div class="features-container">
+                            <strong data-i18n="plan-includes">Includes:</strong>
+                            <ul class="pricing-features">
+                                <li data-i18n="plan-1-feat-1">Essential document translation & guidance</li>
+                                <li data-i18n="plan-1-feat-2">Hospital reservation assistance</li>
+                                <li data-i18n="plan-1-feat-3">Pre-examination reminders</li>
+                            </ul>
+                        </div>
+                        <div class="best-for">
+                            <strong data-i18n="plan-1-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-1-best-for-desc">Those who can navigate the hospital visit on their own but need help with documents and booking.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-cta">Choose Plan</a>
                     </div>
-                    <div class="service-card">
-                        <div class="card-icon"><i class="fas fa-language"></i></div>
-                        <h3 data-i18n="service-2-title">Multilingual Support</h3>
-                        <p data-i18n="service-2-desc">Receive all communication, pre-examination guides, and results in your preferred language.</p>
+                    <div class="pricing-card plan-zero-mistake">
+                        <div class="pricing-header">
+                            <h3 data-i18n="plan-2-title">Plan `Zero Mistake`</h3>
+                            <p class="price">110,000 KRW</p>
+                        </div>
+                        <div class="features-container">
+                            <strong data-i18n="plan-includes">Includes:</strong>
+                            <ul class="pricing-features">
+                                <li data-i18n="plan-2-feat-1">Everything in Plan `No Confusion`</li>
+                                <li data-i18n="plan-2-feat-2">On-site support (1 hour)</li>
+                                <li data-i18n="plan-2-feat-3">Real-time interpretation service</li>
+                            </ul>
+                        </div>
+                        <div class="best-for">
+                            <strong data-i18n="plan-2-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-2-best-for-desc">First-time visitors or those who need an interpreter for a smooth process at the hospital.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-cta">Choose Plan</a>
                     </div>
-                    <div class="service-card">
-                        <div class="card-icon"><i class="fas fa-file-medical-alt"></i></div>
-                        <h3 data-i18n="service-3-title">Translated Results</h3>
-                        <p data-i18n="service-3-desc">Get your check-up results accurately translated and delivered to you digitally.</p>
+                    <div class="pricing-card plan-total-safe">
+                        <div class="pricing-header">
+                            <h3 data-i18n="plan-3-title">Plan `Total Safe`</h3>
+                            <p class="price">165,000 KRW</p>
+                        </div>
+                        <div class="features-container">
+                            <strong data-i18n="plan-includes">Includes:</strong>
+                            <ul class="pricing-features">
+                                <li data-i18n="plan-3-feat-1">Everything in Plan `Zero Mistake`</li>
+                                <li data-i18n="plan-3-feat-2">Full translation of result paper</li>
+                                <li data-i18n="plan-3-feat-3">Personalized result consultation (Online)</li>
+                            </ul>
+                        </div>
+                        <div class="best-for">
+                            <strong data-i18n="plan-3-best-for-title">Best For:</strong>
+                            <p data-i18n="plan-3-best-for-desc">Those who want a complete, stress-free experience from start to finish, including understanding the results.</p>
+                        </div>
+                        <a href="#contact" class="cta-button" data-i18n="plan-cta">Choose Plan</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="contact-section">
+        <section class="options-section">
             <div class="content-wrapper">
-                <h2 class="section-title" data-i18n="contact-title">Start Your Journey</h2>
-                <p class="section-subtitle" data-i18n="contact-subtitle-individual">Tell us about your needs, and we'll create a personalized plan for you.</p>
-                <form>
-                    <input type="text" placeholder="Your Name" data-i18n-placeholder="form-name">
-                    <input type="email" placeholder="Your Email" data-i18n-placeholder="form-email">
-                    <textarea rows="5" placeholder="What are you looking for? (e.g., visa check-up, annual screening)" data-i18n-placeholder="form-message-individual"></textarea>
-                    <button type="submit" class="cta-button" data-i18n="contact-submit-individual">Request Plan</button>
+                <h2 class="section-title" data-i18n="options-title">Flexible Additional Services</h2>
+                <p class="section-subtitle" data-i18n="options-subtitle">Customize your plan with services you need.</p>
+                <div class="options-container">
+                    <div class="pricing-card option-card">
+                        <div class="pricing-header">
+                            <h3 data-i18n="option-1-title">On-site Support Extension</h3>
+                            <p class="price">55,000 KRW / hour</p>
+                        </div>
+                        <div class="features-container">
+                            <ul class="pricing-features">
+                                <li data-i18n="option-1-desc">Extend the on-site interpretation and support service as needed.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing-card option-card schedule-options">
+                        <div class="pricing-header">
+                            <h3 data-i18n="option-2-title">Schedule Change / Cancellation</h3>
+                        </div>
+                        <div class="features-container">
+                            <ul class="pricing-features">
+                                <li data-i18n="option-2-feat-1"><span class="price">33,000 KRW</span>: Within 24 hours of reservation</li>
+                                <li data-i18n="option-2-feat-2"><span class="price">Free</span>: Before 24 hours of reservation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="notice-section">
+            <div class="content-wrapper">
+                <div class="notice-card">
+                    <div class="notice-header">
+                        <span class="notice-icon">⚠️</span>
+                        <h2 data-i18n="notice-title">Important Notice</h2>
+                    </div>
+                    <div class="notice-body">
+                        <h3 data-i18n="notice-h3">CHECKIT is a facilitator, not a medical provider.</h3>
+                        <p data-i18n="notice-p1">Our service fees cover reservation, translation, and interpretation to solve non-medical problems. All medical examination fees are separate and paid directly to the hospital.</p>
+                        <p class="question" data-i18n="notice-q">Unsure which plan is right for you?</p>
+                        <h4 data-i18n="notice-h4">Contact us for a free consultation!</h4>
+                        <p data-i18n="notice-p2">We will help you build the most suitable plan based on your visa type, personal needs, and language.</p>
+                        <a href="#contact" class="cta-button" data-i18n="notice-cta">Request Consultation</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="refund-section">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="refund-title">Refund Policy</h2>
+                <div class="refund-container">
+                    <div class="refund-column">
+                        <h3 data-i18n="refund-h3-non">Non-Refundable</h3>
+                        <ul>
+                            <li data-i18n="refund-li-1">Cancellations made within 24 hours of the hospital appointment.</li>
+                            <li data-i18n="refund-li-2">No-shows on the day of the appointment.</li>
+                            <li data-i18n="refund-li-3">After using any part of the service (e.g., after receiving translated documents).</li>
+                        </ul>
+                    </div>
+                    <div class="refund-column">
+                        <h3 data-i18n="refund-h3-full">Full Refund</h3>
+                        <ul>
+                            <li data-i18n="refund-li-4">Cancellations made more than 24 hours before the hospital appointment.</li>
+                            <li data-i18n="refund-li-5">If CHECKIT is unable to provide the service due to our own circumstances.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="content-wrapper">
+                <h2 class="section-title" data-i18n="contact-title-2">Get Your Personal Plan</h2>
+                <p class="section-subtitle" data-i18n="contact-subtitle-2">We will design the most efficient and comfortable health check-up journey for you.</p>
+                <form action="#">
+                    <input type="text" placeholder="Name" data-i18n-placeholder="contact-name">
+                    <input type="email" placeholder="Email" data-i18n-placeholder="contact-email-2">
+                    <textarea placeholder="Please tell us your visa type, required tests, and preferred language." data-i18n-placeholder="contact-message-2"></textarea>
+                    <button type="submit" class="cta-button" data-i18n="contact-submit-2">Request a Free Consultation</button>
                 </form>
             </div>
         </section>
+
     </main>
 
     <footer>
-        <p>&copy; 2024 CHECKIT. All rights reserved.</p>
+        <p data-i18n="footer-copy">&copy; 2024 CHECKIT. All rights reserved.</p>
     </footer>
 
-    <script src="individual.js"></script>
+    <div id="chatbot-container">
+        <button id="chat-toggle"><i class="fas fa-comment-dots"></i></button>
+        <div id="chat-window" class="hidden">
+            <div class="chat-header">
+                <h3 data-i18n="chat-title">CHECKIT Bot</h3>
+                <div class="lang-switcher chat-lang-switcher">
+                    <button data-lang="ko">KR</button>
+                    <button data-lang="en">EN</button>
+                    <button data-lang="zh">CN</button>
+                    <button data-lang="vi">VI</button>
+                </div>
+                <button id="chat-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+            </div>
+            <div class="chat-footer">
+                <div id="faq-options" class="faq-options">
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chat-input" data-i18n-placeholder="chat-input-placeholder">
+                    <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
 </body>
 </html>

@@ -106,6 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.classList.add('message', sender);
         messageElement.innerHTML = text.replace(/\n/g, '<br>');
         chatbotMessages.appendChild(messageElement);
+        scrollToBottom();
+        return messageElement;
+    };
+    
+    const addLoadingIndicator = () => {
+        const loadingElement = document.createElement('div');
+        loadingElement.classList.add('message', 'bot', 'loading-indicator');
+        loadingElement.innerHTML = '<span></span><span></span><span></span>';
+        chatbotMessages.appendChild(loadingElement);
+        scrollToBottom();
+        return loadingElement;
+    };
+
+    const scrollToBottom = () => {
         chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
     };
 
@@ -121,18 +135,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 questionBtn.addEventListener('click', () => {
                     addMessage(langData[qKey], 'user');
                     suggestedQuestionsContainer.style.display = 'none';
+                    const loadingIndicator = addLoadingIndicator();
 
                     setTimeout(() => {
+                        chatbotMessages.removeChild(loadingIndicator);
                         addMessage(langData[`a${i}`], 'bot');
                         setTimeout(() => {
                            showSuggestedQuestions();
                         }, 800);
-                    }, 600);
+                    }, 1200); // Simulate thinking time
                 });
                 suggestedQuestionsContainer.appendChild(questionBtn);
             }
         }
         suggestedQuestionsContainer.style.display = 'flex';
+        scrollToBottom();
     };
     
     const resetAndShowGreeting = () => {
@@ -166,12 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage(userMessage, 'user');
             chatbotInput.value = '';
             suggestedQuestionsContainer.style.display = 'none';
+            const loadingIndicator = addLoadingIndicator();
             
             setTimeout(() => {
+                chatbotMessages.removeChild(loadingIndicator);
                 const unsupportedMsg = translations[currentLang]['unsupported_input'];
                 addMessage(unsupportedMsg, 'bot');
                 showSuggestedQuestions();
-            }, 600);
+            }, 1200);
         }
     };
 

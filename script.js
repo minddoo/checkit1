@@ -1,11 +1,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. COMPREHENSIVE TRANSLATION DATA ---
+    // --- 1. COMPREHENSIVE & COMPLETE TRANSLATION DATA ---
     const translations = {
         ko: {
             // Main Page
-            'nav_home': '홈', 'nav_services': '서비스', 'nav_about': '회사소개', 'nav_contact': '문의하기',
             'hero_title': '외국인 건강검진, CHECKIT과 함께라면 복잡하지 않아요',
             'hero_subtitle': '언어 장벽, 복잡한 예약, 보험 처리까지 CHECKIT의 전문 매니저가 당신의 건강검진 여정을 처음부터 끝까지 함께합니다.',
             'hero_cta': '지금 바로 상담 받기',
@@ -36,12 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
             'q6': '병원 선택에 제한이 있나요?', 'a6': '아니요, 전혀 없습니다. 병원 선택은 매우 자유롭습니다.'
         },
         en: {
-            // Main Page
             'hero_title': 'Health Check-ups for Foreigners, Simplified with CHECKIT', 
             'hero_subtitle': 'From language barriers to complex reservations and insurance processing, CHECKIT’s dedicated managers are with you from start to finish.',
-            // ... (All other main page translations)
+            'hero_cta': 'Get a Consultation Now',
+            'why_us_title': 'Why Choose CHECKIT?',
+            'why_us_subtitle': 'CHECKIT solves existing inconveniences and provides a health check-up service optimized for foreign clients.',
+            'feature_1_title': '1:1 Dedicated Manager', 'feature_1_desc': 'A dedicated manager meticulously handles everything from consultation to hospital reservations and result checking.',
+            'feature_2_title': 'Multilingual Support', 'feature_2_desc': 'We break down language barriers with multilingual interpretation services, including English, Chinese, and Vietnamese.',
+            'feature_3_title': 'Easy Insurance Claims', 'feature_3_desc': 'CHECKIT helps with the complex insurance claim process, from document preparation to submission.',
+            'process_title': 'Simple 4-Step Check-up Process',
+            'process_subtitle': 'Complete your health check-up reservation in just a few clicks and experience CHECKIT’s care.',
+            'process_step1_title': 'Consult & Book', 'process_step1_desc': 'A professional manager will find and book the optimal hospital for you based on your desired check-up items and schedule.',
+            'process_step2_title': 'Real-time Communication Support', 'process_step2_desc': 'On the day of your check-up, we provide a real-time communication service to prevent any difficulties.',
+            'process_step3_title': 'Check & Manage Results', 'process_step3_desc': 'After the check-up, view your translated results via app/web and continuously manage your health.',
+            'process_step4_title': 'Insurance Claim Support', 'process_step4_desc': 'We help you get your insurance reimbursement easily, from preparing necessary documents to filing the claim.',
+            'checkup_title': 'Not Sure Which Check-up to Get?',
+            'checkup_national_title': 'National Health Check-up', 'checkup_national_desc': 'If you are enrolled in the National Health Insurance Service, get your national health check-up conveniently at no extra cost.',
+            'checkup_comprehensive_title': 'Comprehensive Health Check-up', 'checkup_comprehensive_desc': 'If you want a more detailed examination, find affordable comprehensive check-ups at our partner hospitals.',
+            'contact_title_new': 'Do You Have Any Questions?', 'contact_subtitle_new': 'A CHECKIT professional manager will respond quickly and kindly.', 'contact_cta_new': 'Contact Us Now',
 
-            // Chatbot
             'chatbot_header': 'CHECKIT AI Chatbot', 'chatbot_placeholder': 'Type a message...', 'chatbot_send': 'Send',
             'chatbot_greeting': 'Hello! This is the CHECKIT chatbot. How can I help you?',
             'q1': 'What are the fees?', 'a1': 'CHECKIT does not receive brokerage fees from hospitals. You only pay for our service.',
@@ -51,16 +63,70 @@ document.addEventListener('DOMContentLoaded', () => {
             'q5': 'My company has a partner hospital, can I use your service?', 'a5': 'Yes, you can. We are not contracted with specific hospitals, so you can use our services freely.',
             'q6': 'Are there restrictions on hospital choice?', 'a6': 'No, not at all. You have complete freedom in choosing a hospital.'
         },
-        // CN and VN translations would be similarly structured
-        cn: {},
-        vn: {}
+        cn: {
+            'hero_title': '外国人体检，CHECKIT让一切变得简单', 
+            'hero_subtitle': '从语言障碍到复杂的预约和保险处理，CHECKIT的专业经理将全程陪伴您的体检之旅。',
+            'hero_cta': '立即咨询',
+            'why_us_title': '为什么选择CHECKIT？', 
+            'why_us_subtitle': 'CHECKIT解决了现有的不便，为外国客户提供优化的体检服务。',
+            'feature_1_title': '1:1专属经理', 'feature_1_desc': '从咨询到医院预约、结果确认，专属经理将为您精心管理一切。',
+            'feature_2_title': '多语言支持', 'feature_2_desc': '我们提供英语、中文、越南语等多语言翻译服务，打破语言障碍。',
+            'feature_3_title': '简便的保险报销', 'feature_3_desc': '复杂的保险报销流程，从文件准备到提交，CHECKIT都将为您提供帮助。',
+            'process_title': '简单的四步体检流程', 
+            'process_subtitle': '只需几次点击即可完成体检预约，体验CHECKIT的关怀。',
+            'process_step1_title': '咨询与预约', 'process_step1_desc': '专业经理将根据您希望的体检项目和日程，为您寻找并预约最合适的医院。',
+            'process_step2_title': '实时沟通支持', 'process_step2_desc': '体检当天，我们提供实时沟通服务，避免任何沟通困难。',
+            'process_step3_title': '结果确认与管理', 'process_step3_desc': '体检后，通过应用/网站查看翻译好的结果报告，持续管理您的健康。',
+            'process_step4_title': '保险报销支持', 'process_step4_desc': '从准备必要文件到向保险公司申请，我们帮助您轻松获得保险退款。',
+            'checkup_title': '不确定该接受哪种体检？', 
+            'checkup_national_title': '国民健康体检', 'checkup_national_desc': '如果您是国民健康保险的参保者，可以方便地免费接受国民健康体检。',
+            'checkup_comprehensive_title': '综合健康体检', 'checkup_comprehensive_desc': '如果您希望进行更详细的检查，可以在我们的合作医院以合理的费用进行综合体检。',
+            'contact_title_new': '您有任何疑问吗？', 'contact_subtitle_new': 'CHECKIT的专业经理将迅速、亲切地为您解答。', 'contact_cta_new': '立即咨询',
+
+            'chatbot_header': 'CHECKIT AI 聊天机器人', 'chatbot_placeholder': '输入消息...', 'chatbot_send': '发送',
+            'chatbot_greeting': '你好！我是CHECKIT聊天机器人。我能为您做些什么？',
+            'q1': '费用是多少？', 'a1': 'CHECKIT不向医院收取任何中介费。您只需支付我们的服务费。',
+            'q2': '你们提供医疗咨询吗？', 'a2': '不，我们遵守医疗法，不提供任何医疗建议、判断或推荐。',
+            'q3': '你们推荐医院吗？', 'a3': '我们不推荐特定医院，而是提供符合您所需检查项目的最佳医院列表，以帮助您做出选择。',
+            'q4': '体检当天你们会陪同吗？', 'a4': '我们不提供陪同服务，但在当天提供实时沟通支持，以缓解任何沟通困难。',
+            'q5': '我的公司有合作医院，我还能使用你们的服务吗？', 'a5': '是的，可以。我们不与特定医院签约，因此您可以自由使用我们的服务。',
+            'q6': '选择医院有限制吗？', 'a6': '不，完全没有。您可以完全自由地选择医院。'
+        },
+        vn: {
+            'hero_title': 'Khám sức khỏe cho người nước ngoài, đơn giản hơn với CHECKIT', 
+            'hero_subtitle': 'Từ rào cản ngôn ngữ đến các đặt hẹn phức tạp và xử lý bảo hiểm, các quản lý chuyên nghiệp của CHECKIT sẽ đồng hành cùng bạn từ đầu đến cuối.',
+            'hero_cta': 'Nhận tư vấn ngay',
+            'why_us_title': 'Tại sao nên chọn CHECKIT?', 
+            'why_us_subtitle': 'CHECKIT giải quyết những bất tiện hiện có và cung cấp dịch vụ khám sức khỏe tối ưu cho khách hàng nước ngoài.',
+            'feature_1_title': 'Quản lý riêng 1:1', 'feature_1_desc': 'Một quản lý riêng sẽ xử lý tỉ mỉ mọi thứ từ tư vấn đến đặt hẹn bệnh viện và kiểm tra kết quả.',
+            'feature_2_title': 'Hỗ trợ đa ngôn ngữ', 'feature_2_desc': 'Chúng tôi phá vỡ rào cản ngôn ngữ với các dịch vụ phiên dịch đa ngôn ngữ, bao gồm tiếng Anh, tiếng Trung và tiếng Việt.',
+            'feature_3_title': 'Yêu cầu bảo hiểm dễ dàng', 'feature_3_desc': 'CHECKIT giúp đỡ với quy trình yêu cầu bảo hiểm phức tạp, từ chuẩn bị tài liệu đến nộp hồ sơ.',
+            'process_title': 'Quy trình khám 4 bước đơn giản', 
+            'process_subtitle': 'Hoàn thành đặt hẹn khám sức khỏe của bạn chỉ trong vài cú nhấp chuột và trải nghiệm sự chăm sóc của CHECKIT.',
+            'process_step1_title': 'Tư vấn & Đặt hẹn', 'process_step1_desc': 'Một quản lý chuyên nghiệp sẽ tìm và đặt bệnh viện tối ưu cho bạn dựa trên các mục khám và lịch trình mong muốn của bạn.',
+            'process_step2_title': 'Hỗ trợ giao tiếp thời gian thực', 'process_step2_desc': 'Vào ngày khám, chúng tôi cung cấp dịch vụ giao tiếp thời gian thực để ngăn chặn bất kỳ khó khăn nào.',
+            'process_step3_title': 'Kiểm tra & Quản lý kết quả', 'process_step3_desc': 'Sau khi khám, xem kết quả đã được dịch của bạn qua ứng dụng/web và quản lý sức khỏe của bạn liên tục.',
+            'process_step4_title': 'Hỗ trợ yêu cầu bảo hiểm', 'process_step4_desc': 'Chúng tôi giúp bạn nhận tiền hoàn trả bảo hiểm một cách dễ dàng, từ việc chuẩn bị các tài liệu cần thiết đến việc nộp đơn yêu cầu.',
+            'checkup_title': 'Không chắc nên chọn loại khám nào?', 
+            'checkup_national_title': 'Khám sức khỏe quốc gia', 'checkup_national_desc': 'Nếu bạn đã đăng ký Dịch vụ Bảo hiểm Y tế Quốc gia, hãy khám sức khỏe quốc gia một cách tiện lợi mà không mất thêm chi phí.',
+            'checkup_comprehensive_title': 'Khám sức khỏe tổng quát', 'checkup_comprehensive_desc': 'Nếu bạn muốn một cuộc kiểm tra chi tiết hơn, hãy tìm các gói khám tổng quát giá cả phải chăng tại các bệnh viện đối tác của chúng tôi.',
+            'contact_title_new': 'Bạn có câu hỏi nào không?', 'contact_subtitle_new': 'Một quản lý chuyên nghiệp của CHECKIT sẽ trả lời nhanh chóng và thân thiện.', 'contact_cta_new': 'Liên hệ ngay',
+
+            'chatbot_header': 'Chatbot AI của CHECKIT', 'chatbot_placeholder': 'Nhập tin nhắn...', 'chatbot_send': 'Gửi',
+            'chatbot_greeting': 'Xin chào! Đây là chatbot của CHECKIT. Tôi có thể giúp gì cho bạn?',
+            'q1': 'Phí dịch vụ là bao nhiêu?', 'a1': 'CHECKIT không nhận phí môi giới từ bệnh viện. Bạn chỉ trả tiền cho dịch vụ của chúng tôi.',
+            'q2': 'Bạn có cung cấp tư vấn y tế không?', 'a2': 'Không, chúng tôi tuân thủ luật y tế và không cung cấp lời khuyên, phán đoán hoặc khuyến nghị y tế.',
+            'q3': 'Bạn có giới thiệu bệnh viện không?', 'a3': 'Thay vì giới thiệu các bệnh viện cụ thể, chúng tôi cung cấp danh sách các bệnh viện tối ưu phù hợp với các mục khám bạn mong muốn để giúp bạn lựa chọn.',
+            'q4': 'Bạn có đi cùng vào ngày khám không?', 'a4': 'Chúng tôi không cung cấp dịch vụ đi cùng, nhưng chúng tôi cung cấp hỗ trợ giao tiếp thời gian thực trong ngày để giảm bớt mọi khó khăn trong giao tiếp.',
+            'q5': 'Công ty của tôi có bệnh viện đối tác, tôi có thể sử dụng dịch vụ của bạn không?', 'a5': 'Vâng, bạn có thể. Chúng tôi không ký hợp đồng với các bệnh viện cụ thể, vì vậy bạn có thể tự do sử dụng dịch vụ của chúng tôi.',
+            'q6': 'Có giới hạn nào về việc lựa chọn bệnh viện không?', 'a6': 'Không, không hề. Bạn hoàn toàn có quyền tự do lựa chọn bệnh viện.'
+        }
     };
 
     const suggestedQuestionKeys = ["q1", "q2", "q3", "q4", "q5", "q6"];
     let currentLang = 'ko';
-    let chatHistory = []; // Stores {sender, key, text}
+    let chatHistory = [];
 
-    // --- 2. DOM Elements ---
     const allTranslatableElements = document.querySelectorAll('[data-lang-key]');
     const chatbotContainer = document.getElementById('chatbot-container');
     const openChatbotBtn = document.getElementById('open-chatbot');
@@ -71,26 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatbotLangButtons = document.querySelectorAll('.chatbot-lang-btn');
     const suggestedQuestionsContainer = document.getElementById('chatbot-suggested-questions');
 
-    // --- 3. Core Functions ---
     const switchLanguage = (newLang) => {
         currentLang = newLang;
         const langData = translations[newLang] || translations['ko'];
 
-        // A) Update all static text on the main page AND chatbot UI
         allTranslatableElements.forEach(element => {
             const key = element.getAttribute('data-lang-key');
             if (langData[key]) {
-                element.textContent = langData[key];
+                if (element.tagName === 'INPUT') {
+                    element.placeholder = langData[key];
+                } else {
+                    element.textContent = langData[key];
+                }
             }
         });
-        // Specific for placeholders/buttons
-        inputElem.placeholder = langData.chatbot_placeholder;
-        sendBtn.textContent = langData.chatbot_send;
 
-        // B) Re-render chat history in the new language
         messagesContainer.innerHTML = '';
         chatHistory.forEach(msg => {
-            const translatedText = langData[msg.key] || msg.text; // Use original text as fallback
+            const translatedText = (msg.key && langData[msg.key]) ? langData[msg.key] : msg.text;
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', msg.sender);
             messageDiv.textContent = translatedText;
@@ -98,10 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
         
-        // C) Re-render suggested questions in the new language
         displaySuggestedQuestions();
 
-        // D) Update active language button
         chatbotLangButtons.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.lang === newLang);
         });
@@ -116,8 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const addMessage = (sender, keyOrText, isKey = true) => {
-        const text = isKey ? (translations[currentLang][keyOrText] || keyOrText) : keyOrText;
-        chatHistory.push({ sender, key: isKey ? keyOrText : null, text: isKey ? null : keyOrText });
+        const langData = translations[currentLang] || translations['ko'];
+        const text = isKey ? (langData[keyOrText] || keyOrText) : keyOrText;
+        
+        chatHistory.push({ sender, key: isKey ? keyOrText : null, text: isKey ? null : text });
 
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', sender);
@@ -127,18 +191,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const displaySuggestedQuestions = () => {
+        const langData = translations[currentLang] || translations['ko'];
         suggestedQuestionsContainer.innerHTML = '';
         suggestedQuestionKeys.forEach(key => {
             const button = document.createElement('button');
             button.classList.add('suggested-question-btn');
-            button.textContent = translations[currentLang][key];
+            button.textContent = langData[key];
             button.addEventListener('click', () => {
                 addMessage('user', key);
                 suggestedQuestionsContainer.innerHTML = '';
                 setTimeout(() => {
                     addMessage('bot', key.replace('q', 'a'));
                     displaySuggestedQuestions();
-                }, 500);
+                }, 400);
             });
             suggestedQuestionsContainer.appendChild(button);
         });
@@ -155,7 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- 4. Event Listeners ---
     openChatbotBtn.addEventListener('click', () => toggleChatbot(true));
     closeChatbotBtn.addEventListener('click', () => toggleChatbot(false));
     sendBtn.addEventListener('click', handleSendMessage);
@@ -164,7 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => switchLanguage(button.dataset.lang));
     });
 
-    // --- 5. Initial Load ---
-    switchLanguage('ko'); // Set initial language for the whole page
-    toggleChatbot(false); // Ensure chatbot is hidden on load
+    switchLanguage('ko');
+    toggleChatbot(false);
 });

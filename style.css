@@ -55,7 +55,8 @@ body {
  * ------------------- */
 #main-header { background: var(--white); padding: 20px 0; border-bottom: 1px solid #e9e9e9; position: sticky; top: 0; z-index: 1000; }
 #main-header .container { display: flex; justify-content: space-between; align-items: center; }
-#main-header .logo { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); }
+.logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 800; color: var(--primary-color); }
+.header-logo { height: 32px; /* Adjust size as needed */ margin-right: 12px; }
 #language-switcher { text-align: right; } /* Align lang buttons to the right */
 #language-switcher .lang-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 8px 15px; margin-left: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
 #language-switcher .lang-btn.active { background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color); }

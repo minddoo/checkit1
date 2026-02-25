@@ -148,26 +148,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px; /* Space between title and character */
-    margin-bottom: 20px; /* Restore margin removed from h2 */
+    gap: 10px; /* Reduced space */
+    margin-bottom: 20px;
 }
 
-/* Remove bottom margin from the title inside the container */
 .section-title-container .section-title {
     margin-bottom: 0;
 }
 
 .blinking-character {
-    width: 80px;  /* Increased size */
-    height: 80px; /* Increased size */
-    background-image: url('assets/인종 캐릭터.png');
+    width: 90px;  /* Increased size */
+    height: 90px; /* Increased size */
+    background-image: url('assets/회색 .png'); /* Use the new single image */
     background-repeat: no-repeat;
-    /* Assuming 5 characters in the sprite, each 80px wide. Total width = 400px */
-    background-size: 400px 80px;
-    background-position: -80px 0; /* Move to the second character */
+    background-size: contain; /* Ensure the character fits perfectly */
+    background-position: center; /* Center the image */
     animation: blink 3s infinite;
     transform-origin: center;
-    flex-shrink: 0; /* Prevent character from shrinking */
+    flex-shrink: 0; 
 }
 
 @keyframes blink {

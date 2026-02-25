@@ -1,5 +1,5 @@
 /*==================================================
-  CHECKIT - Main Stylesheet (Restored & Updated)
+  CHECKIT - Main Stylesheet (FINAL FIX)
 ==================================================*/
 
 /* ------------------- 
@@ -21,8 +21,8 @@
     --chatbot-primary: #00c795;
     --chatbot-bg: #ffffff;
     --chatbot-header-text: #ffffff;
-    --bot-message-bg: #e0f8e9; /* Light green for bot messages */
-    --user-message-bg: #f1f1f1; /* Light grey for user messages */
+    --bot-message-bg: #e0f8e9; 
+    --user-message-bg: #f1f1f1; 
     --input-bg: #ffffff;
     --input-border: #e0e0e0;
 }
@@ -30,12 +30,12 @@
 body { 
     font-family: var(--font-family); 
     color: var(--text-color); 
-    line-height: 1.8; /* Increased for readability */
+    line-height: 1.8; 
     margin: 0; 
     padding: 0; 
     background-color: var(--white); 
-    text-align: center; /* Set global text alignment to center */
-    word-break: keep-all; /* Prevent awkward word breaks */
+    text-align: center; 
+    word-break: keep-all; 
 }
 
 :lang(cn) { font-family: var(--font-family-cn); }
@@ -129,14 +129,15 @@ body {
  * ------------------- */
 #service-for { background-color: #fff; } 
 #service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
-#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; /* Centered content */ transition: transform 0.3s; }
+#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; 
+ transition: transform 0.3s; }
 #service-for .card:hover { transform: translateY(-10px); }
 #service-for .card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
 #service-for .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
 #service-for .card p { color: var(--text-light); margin-bottom: 30px; }
 
 /* ------------------- 
- * 4. Section: Why Choose Us? (REVISED)
+ * 4. Section: Why Choose Us? (DEFINITIVE FIX)
  * ------------------- */
 #why-us-new { text-align: center; }
 #why-us-new .features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
@@ -146,9 +147,8 @@ body {
 
 .section-title-container {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* BUG FIX: This re-centers the whole block */
     align-items: center;
-    /* gap property removed for more direct control */
     margin-bottom: 20px;
 }
 
@@ -157,8 +157,8 @@ body {
 }
 
 .blinking-character {
-    width: 150px;  /* FREAKING HUGE SIZE */
-    height: 150px; /* FREAKING HUGE SIZE */
+    width: 250px;  /* 5X SIZE: Overwhelmingly large */
+    height: 250px; /* 5X SIZE: Overwhelmingly large */
     background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
     background-size: contain; 
@@ -166,7 +166,7 @@ body {
     animation: blink 3s infinite;
     transform-origin: center;
     flex-shrink: 0; 
-    margin-left: 20px; /* New direct spacing control */
+    margin-left: -40px; /* NO SPACING: Pull character to the left, overlapping space */
 }
 
 @keyframes blink {

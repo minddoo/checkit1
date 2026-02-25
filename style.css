@@ -136,7 +136,7 @@ body {
 #service-for .card p { color: var(--text-light); margin-bottom: 30px; }
 
 /* ------------------- 
- * 4. Section: Why Choose Us?
+ * 4. Section: Why Choose Us? (REVISED)
  * ------------------- */
 #why-us-new { text-align: center; }
 #why-us-new .features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
@@ -148,7 +148,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 5px; /* Drastically reduced space */
+    /* gap property removed for more direct control */
     margin-bottom: 20px;
 }
 
@@ -157,8 +157,8 @@ body {
 }
 
 .blinking-character {
-    width: 120px;  /* Drastically increased size */
-    height: 120px; /* Drastically increased size */
+    width: 150px;  /* FREAKING HUGE SIZE */
+    height: 150px; /* FREAKING HUGE SIZE */
     background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
     background-size: contain; 
@@ -166,6 +166,7 @@ body {
     animation: blink 3s infinite;
     transform-origin: center;
     flex-shrink: 0; 
+    margin-left: 20px; /* New direct spacing control */
 }
 
 @keyframes blink {

@@ -164,8 +164,8 @@ body {
     background-repeat: no-repeat;
     background-size: contain; 
     background-position: center; 
-    top: -200px; /* AGGRESSIVE: Reposition for new size */
-    left: 85%;   /* AGGRESSIVE: Forcefully pulled to the left */
+    top: -155px; /* FINAL: Align legs with question mark bottom */
+    left: 80%;   /* FINAL: Forcefully positioned next to question mark */
     /* ANIMATION REMOVED */
 }
 

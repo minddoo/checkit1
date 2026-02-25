@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ko: {
             'nav_home': '홈',
             'hero_title': '외국인을 위한 건강검진,\n언어의 장벽 없이 편안하게.',
-            'hero_subtitle': '일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지. CHECKIT이 모든 비의료 과정을 해결합니다.',
+            'hero_subtitle': '일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지.\nCHECKIT이 모든 비의료 과정을 해결합니다.',
             'hero_cta': '지금 바로 상담 신청',
             'service_for_title': '누구를 위한 서비스인가요?', 'individual_title': '개인 고객', 'individual_desc': '한국 거주/방문 외국인 개인이 언어 장벽 없이 편안하게 건강검진을 받을 수 있도록 지원합니다.', 'corporate_title': '기업 고객', 'corporate_desc': '외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여, 기업의 보건 관리 부담을 줄여드립니다.', 'learn_more': '더 알아보기',
             'why_us_title': '왜 CHECKIT을 선택해야 할까요?', 'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\'에서 어려움을 겪습니다. CHECKIT은 바로 이 공백을 채웁니다.',
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         en: {
             'nav_home': 'Home',
-            'hero_title': 'Health Check-ups for Foreigners,\nComfortable Without Language Barriers.', 'hero_subtitle': 'From missed schedules and difficult-to-understand check-up guides to results provided only in Korean. CHECKIT solves all non-medical processes.', 'hero_cta': 'Apply for a Consultation Now',
+            'hero_title': 'Health Check-ups for Foreigners,\nComfortable Without Language Barriers.', 'hero_subtitle': 'From missed schedules and difficult-to-understand check-up guides to results provided only in Korean.\nCHECKIT solves all non-medical processes.', 'hero_cta': 'Apply for a Consultation Now',
             'service_for_title': 'Who is this service for?', 'individual_title': 'Individual Clients', 'individual_desc': 'We support foreign individuals residing in or visiting Korea to receive health check-ups comfortably without language barriers.', 'corporate_title': 'Corporate Clients', 'corporate_desc': 'We manage group health check-ups for foreign employees easily and efficiently, reducing the burden of corporate health care.', 'learn_more': 'Learn More',
             'why_us_title': 'Why Choose CHECKIT?', 'why_us_subtitle_new': 'Despite the high quality of medical services, foreigners face difficulties in \'non-medical processes\' such as booking, registration, and result checking. CHECKIT fills this very gap.',
             'why_us_feature1_title': 'Communication Specialists', 'why_us_feature1_desc': 'From hospital selection to result translation, we solve all communication problems caused by language and cultural barriers.', 'why_us_feature2_title': '100% Client-Centric', 'why_us_feature2_desc': 'Without any contracts with hospitals, we solely represent our clients, proposing the best options and assisting in the process.', 'why_us_feature3_title': 'Focus on Non-Medical Processes', 'why_us_feature3_desc': 'We handle all auxiliary procedures, excluding medical practice, allowing clients to focus solely on their health check-up.',
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         cn: {
             'nav_home': '首页',
-            'hero_title': '为外国人提供健康体检，\n无语言障碍，舒心便捷。', 'hero_subtitle': '从错过日程、难以理解的体检指南，到仅提供韩语版本的结果报告。CHECKIT为您解决所有非医疗过程中的难题。', 'hero_cta': '立即申请咨询',
+            'hero_title': '为外国人提供健康体检，\n无语言障碍，舒心便捷。', 'hero_subtitle': '从错过日程、难以理解的体检指南，到仅提供韩语版本的结果报告。\nCHECKIT为您解决所有非医疗过程中的难题。', 'hero_cta': '立即申请咨询',
             'service_for_title': '这项服务是为谁准备的？', 'individual_title': '个人客户', 'individual_desc': '我们帮助居住或访问韩国的外国个人无语言障碍地舒适接受健康体检。', 'corporate_title': '企业客户', 'corporate_desc': '我们轻松高效地管理外国员工的团体健康体检，减轻企业保健管理的负担。', 'learn_more': '了解更多',
             'why_us_title': '为什么选择CHECKIT？', 'why_us_subtitle_new': '尽管医疗服务质量很高，但外国人在预约、登记、确认结果等“非医疗过程”中仍面临困难。CHECKIT正是填补了这一空白。',
             'why_us_feature1_title': '沟通专家', 'why_us_feature1_desc': '从选择医院到结果翻译，我们解决所有因语言和文化障碍引起的沟通问题。', 'why_us_feature2_title': '100%以客户为中心', 'why_us_feature2_desc': '我们不与任何医院签订合同，完全代表客户，提出最佳选择并协助整个过程。', 'why_us_feature3_title': '专注于非医疗过程', 'why_us_feature3_desc': '我们处理除医疗行为外的所有辅助程序，让客户可以专注于他们的健康体检。',
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         vn: {
             'nav_home': 'Trang chủ',
-            'hero_title': 'Khám sức khỏe cho người nước ngoài,\nThoải mái không rào cản ngôn ngữ.', 'hero_subtitle': 'Từ lịch trình bị bỏ lỡ, hướng dẫn khám khó hiểu, đến kết quả chỉ có bằng tiếng Hàn. CHECKIT giải quyết mọi quy trình phi y tế.', 'hero_cta': 'Đăng ký tư vấn ngay',
+            'hero_title': 'Khám sức khỏe cho người nước ngoài,\nThoải mái không rào cản ngôn ngữ.', 'hero_subtitle': 'Từ lịch trình bị bỏ lỡ, hướng dẫn khám khó hiểu, đến kết quả chỉ có bằng tiếng Hàn.\nCHECKIT giải quyết mọi quy trình phi y tế.', 'hero_cta': 'Đăng ký tư vấn ngay',
             'service_for_title': 'Dịch vụ này dành cho ai?', 'individual_title': 'Khách hàng cá nhân', 'individual_desc': 'Chúng tôi hỗ trợ người nước ngoài cư trú hoặc đến thăm Hàn Quốc nhận khám sức khỏe một cách thoải mái mà không có rào cản ngôn ngữ.', 'corporate_title': 'Khách hàng doanh nghiệp', 'corporate_desc': 'Chúng tôi quản lý các cuộc khám sức khỏe nhóm cho nhân viên nước ngoài một cách dễ dàng và hiệu quả, giảm bớt gánh nặng quản lý chăm sóc sức khỏe của doanh nghiệp.', 'learn_more': 'Tìm hiểu thêm',
             'why_us_title': 'Tại sao chọn CHECKIT?', 'why_us_subtitle_new': 'Mặc dù chất lượng dịch vụ y tế cao, người nước ngoài vẫn gặp khó khăn trong các “quy trình phi y tế” như đặt hẹn, đăng ký và kiểm tra kết quả. CHECKIT lấp đầy khoảng trống này.',
             'why_us_feature1_title': 'Chuyên gia giao tiếp', 'why_us_feature1_desc': 'Từ việc lựa chọn bệnh viện đến dịch kết quả, chúng tôi giải quyết mọi vấn đề giao tiếp do rào cản ngôn ngữ và văn hóa.', 'why_us_feature2_title': '100% lấy khách hàng làm trung tâm', 'why_us_feature2_desc': 'Không có bất kỳ hợp đồng nào với bệnh viện, chúng tôi hoàn toàn đại diện cho khách hàng của mình, đề xuất các lựa chọn tốt nhất và hỗ trợ trong quá trình này.', 'why_us_feature3_title': 'Tập trung vào các quy trình phi y tế', 'why_us_feature3_desc': 'Chúng tôi xử lý tất cả các thủ tục phụ trợ, không bao gồm hành nghề y tế, cho phép khách hàng chỉ tập trung vào việc khám sức khỏe của họ.',

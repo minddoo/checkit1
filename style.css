@@ -107,7 +107,7 @@ body {
  * ------------------- */
 #service-for { background-color: #fff; } 
 #service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
-#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; transition: transform 0.3s; }
+#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; transition: transform 0.3s; overflow-wrap: break-word; }
 #service-for .card:hover { transform: translateY(-10px); }
 #service-for .card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
 #service-for .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
@@ -118,7 +118,7 @@ body {
  * ------------------- */
 #why-us-new { text-align: center; }
 #why-us-new .features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
-#why-us-new .feature-item-new { background: var(--white); padding: 35px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); transition: transform 0.3s; }
+#why-us-new .feature-item-new { background: var(--white); padding: 35px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); transition: transform 0.3s; overflow-wrap: break-word; }
 #why-us-new .feature-item-new:hover { transform: translateY(-10px); }
 #why-us-new .feature-item-new i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
 #why-us-new .feature-item-new h3 { font-size: 1.5rem; margin-bottom: 10px; }
@@ -134,7 +134,7 @@ body {
  * 5. Section: Process
  * ------------------- */
 #process-new .process-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px; position: relative; }
-#process-new .step { background: var(--white); padding: 30px; border: 1px solid #e9e9e9; border-radius: var(--border-radius-md); transition: transform 0.3s, box-shadow 0.3s; }
+#process-new .step { background: var(--white); padding: 30px; border: 1px solid #e9e9e9; border-radius: var(--border-radius-md); transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; }
 #process-new .step:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
 #process-new .step-number { width: 50px; height: 50px; background-color: var(--primary-color); color: white; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; border: 4px solid var(--bg-light); }
 #process-new .step h3 { font-size: 1.4rem; }
@@ -144,7 +144,7 @@ body {
  * ------------------- */
 #testimonials { text-align: center; }
 .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-.testimonial-card { background: var(--white); padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; text-align: left; }
+.testimonial-card { background: var(--white); padding: 40px; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; text-align: left; overflow-wrap: break-word; }
 .testimonial-text { font-style: italic; color: var(--text-light); margin-bottom: 25px; position: relative; padding-left: 25px; }
 .testimonial-text::before { content: '\f10d'; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--primary-color); font-size: 1.5rem; position: absolute; left: -10px; top: -10px; opacity: 0.2; }
 .testimonial-author { margin-top: auto; text-align: right; }

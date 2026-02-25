@@ -3,39 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>개인 고객 - CHECKIT</title>
-    <link rel="stylesheet" href="style.css?v=1.10">
+    <title data-lang-key="individual_page_title">개인 고객 - CHECKIT</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 </head>
 <body>
-    <!-- HEADER -->
     <header id="main-header">
         <div class="container">
             <a href="index.html" class="logo">
-                <img src="assets/로고2.png" alt="CHECKIT Globe Logo" class="header-logo">
-                CHECKIT
+                <img src="assets/logo.png" alt="CHECKIT Logo" class="header-logo">
             </a>
-            <nav id="language-switcher">
-                <button class="lang-btn" data-lang="ko">KR</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="cn">CN</button>
-                <button class="lang-btn" data-lang="vn">VN</button>
-            </nav>
+            <div id="language-switcher">
+                <button class="lang-btn" data-lang="ko">🇰🇷 한국어</button>
+                <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+                <button class="lang-btn" data-lang="cn">🇨🇳 中文</button>
+                <button class="lang-btn" data-lang="vn">🇻🇳 Tiếng Việt</button>
+            </div>
         </div>
     </header>
 
     <main>
-        <section id="individual-hero" class="section">
+        <section id="individual-hero">
             <div class="container">
                 <div class="hero-text-content">
-                    <h1 class="section-title" data-lang-key="individual_page_title"></h1>
-                    <p class="section-subtitle" data-lang-key="individual_page_subtitle"></p>
+                    <h1 class="hero-title" data-lang-key="individual_page_title"></h1>
+                    <p class="hero-subtitle" data-lang-key="individual_page_subtitle"></p>
+                    <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
                 </div>
                 <div class="hero-character"></div>
+            </div>
+        </section>
+
+        <section id="checkit-solution" class="section alternate-bg">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="solution_title"></h2>
+                <p class="section-subtitle" data-lang-key="solution_subtitle"></p>
+                <div class="features-grid-new">
+                    <div class="feature-item-new">
+                        <i class="fas fa-user-tie"></i>
+                        <h3 data-lang-key="individual_service1_title"></h3>
+                        <p data-lang-key="individual_service1_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-comments"></i>
+                        <h3 data-lang-key="individual_service2_title_new"></h3>
+                        <p data-lang-key="individual_service2_desc_new"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-language"></i>
+                        <h3 data-lang-key="individual_service3_title_new"></h3>
+                        <p data-lang-key="individual_service3_desc_new"></p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -43,52 +66,47 @@
             <div class="container">
                 <h2 class="section-title" data-lang-key="expectation_title"></h2>
                 <p class="section-subtitle" data-lang-key="expectation_subtitle"></p>
-
                 <div class="expectation-item">
+                    <div class="expectation-image">
+                        <img src="assets/expectation1.jpg" alt="Cost efficiency concept image">
+                    </div>
                     <div class="expectation-text">
                         <h3 class="expectation-item-title" data-lang-key="expectation_item_title_1"></h3>
                         <p class="expectation-item-desc" data-lang-key="expectation_item_desc_1"></p>
                     </div>
-                    <div class="expectation-image">
-                        <img src="assets/레딧1.png" alt="Cost Efficiency Testimonial Screenshot">
-                    </div>
                 </div>
-
                 <div class="expectation-item">
                     <div class="expectation-image">
-                        <img src="assets/레딧2.png" alt="Convenience Testimonial Screenshot">
+                        <img src="assets/expectation2.jpg" alt="Convenience concept image">
                     </div>
                     <div class="expectation-text">
                         <h3 class="expectation-item-title" data-lang-key="expectation_item_title_2"></h3>
                         <p class="expectation-item-desc" data-lang-key="expectation_item_desc_2"></p>
                     </div>
                 </div>
-
                 <div class="expectation-item">
+                    <div class="expectation-image">
+                        <img src="assets/expectation3.jpg" alt="Professional quality concept image">
+                    </div>
                     <div class="expectation-text">
                         <h3 class="expectation-item-title" data-lang-key="expectation_item_title_3"></h3>
                         <p class="expectation-item-desc" data-lang-key="expectation_item_desc_3"></p>
                     </div>
-                    <div class="expectation-image">
-                        <img src="assets/레딧3.png" alt="Professional Quality Testimonial Screenshot">
-                    </div>
                 </div>
-
                 <div class="expectation-item">
                     <div class="expectation-image">
-                        <img src="assets/레딧4.png" alt="Time Safety Testimonial Screenshot">
+                        <img src="assets/expectation4.jpg" alt="Time saving concept image">
                     </div>
                     <div class="expectation-text">
                         <h3 class="expectation-item-title" data-lang-key="expectation_item_title_4"></h3>
                         <p class="expectation-item-desc" data-lang-key="expectation_item_desc_4"></p>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <div class="reality-wrapper">
-            <section id="korea-medical-reality">
+            <section id="korea-medical-reality" class="section">
                 <div class="container">
                     <h2 class="section-title" data-lang-key="reality_title"></h2>
                     <div class="reality-grid">
@@ -131,8 +149,8 @@
                     </div>
                 </div>
             </section>
-            
-            <section id="reality-overtime">
+    
+            <section id="reality-overtime" class="section">
                 <div class="container">
                     <h2 class="section-title" data-lang-key="reality_overtime_title"></h2>
                     <div class="overtime-content">
@@ -152,129 +170,225 @@
             </section>
         </div>
 
-        <section class="section alternate-bg">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="solution_title"></h2>
-                <p class="section-subtitle" data-lang-key="solution_subtitle"></p>
-                <div class="features-grid-new">
-                    <div class="feature-item-new">
-                        <i class="fas fa-user-tie"></i>
-                        <h3 data-lang-key="individual_service1_title"></h3>
-                        <p data-lang-key="individual_service1_desc"></p>
-                    </div>
-                    <div class="feature-item-new">
-                        <i class="fas fa-comments"></i>
-                        <h3 data-lang-key="individual_service2_title_new"></h3>
-                        <p data-lang-key="individual_service2_desc_new"></p>
-                    </div>
-                    <div class="feature-item-new">
-                        <i class="fas fa-language"></i>
-                        <h3 data-lang-key="individual_service3_title_new"></h3>
-                        <p data-lang-key="individual_service3_desc_new"></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="packages-section" class="section">
             <div class="container">
                 <h2 class="section-title" data-lang-key="packages_title"></h2>
                 <p class="section-subtitle" data-lang-key="packages_subtitle"></p>
                 <div class="packages-grid">
-                    <!-- Package 1: No-Confusion Plan -->
+                    <!-- No-Confusion Plan -->
                     <div class="package-card package-no-confusion">
                         <div class="package-header">
                             <h3 class="package-title" data-lang-key="package1_title"></h3>
                             <p class="package-price" data-lang-key="package1_price"></p>
                         </div>
                         <div class="package-body">
-                            <p class="includes-title" data-lang-key="package_includes"></p>
+                            <h4 class="includes-title" data-lang-key="package_includes"></h4>
                             <ul class="features-list">
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature1"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature2"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature3"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature4"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature5"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature6"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature7"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature8"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package1_feature9"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature1"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature2"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature3"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature4"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature5"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature6"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature7"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature8"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package1_feature9"></span></li>
                             </ul>
                         </div>
                         <div class="package-footer">
-                            <p class="recommend-title" data-lang-key="package_recommend_title"></p>
+                            <h4 class="recommend-title" data-lang-key="package_recommend_title"></h4>
                             <p class="recommend-desc" data-lang-key="package1_recommend_desc"></p>
                         </div>
                     </div>
-                    
-                    <!-- Package 2: Zero-Mistake Plan -->
+
+                    <!-- Zero-Mistake Plan -->
                     <div class="package-card package-zero-mistake">
                         <div class="package-header">
                             <h3 class="package-title" data-lang-key="package2_title"></h3>
                             <p class="package-price" data-lang-key="package2_price"></p>
                         </div>
                         <div class="package-body">
-                            <p class="includes-title" data-lang-key="package2_includes"></p>
+                            <h4 class="includes-title" data-lang-key="package2_includes"></h4>
                             <ul class="features-list">
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature1"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature2"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature3"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature4"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature5"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature6"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature7"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature8"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package2_feature9"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature1"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature2"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature3"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature4"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature5"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature6"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature7"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature8"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package2_feature9"></span></li>
                             </ul>
                         </div>
                         <div class="package-footer">
-                            <p class="recommend-title" data-lang-key="package_recommend_title"></p>
+                            <h4 class="recommend-title" data-lang-key="package_recommend_title"></h4>
                             <p class="recommend-desc" data-lang-key="package2_recommend_desc"></p>
                         </div>
                     </div>
 
-                    <!-- Package 3: Total-Safe Plan -->
+                    <!-- Total-Safe Plan -->
                     <div class="package-card package-total-safe">
                         <div class="package-header">
                             <h3 class="package-title" data-lang-key="package3_title"></h3>
                             <p class="package-price" data-lang-key="package3_price"></p>
                         </div>
                         <div class="package-body">
-                            <p class="includes-title" data-lang-key="package3_includes"></p>
+                            <h4 class="includes-title" data-lang-key="package3_includes"></h4>
                             <ul class="features-list">
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature1"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature2"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature3"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature4"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature5"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature6"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature7"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature8"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature9"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature10"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature11"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature12"></span></li>
-                                <li><i class="fas fa-check"></i><span data-lang-key="package3_feature13"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature1"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature2"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature3"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature4"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature5"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature6"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature7"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature8"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature9"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature10"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature11"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature12"></span></li>
+                                <li><i class="fas fa-check-circle"></i><span data-lang-key="package3_feature13"></span></li>
                             </ul>
                         </div>
                         <div class="package-footer">
-                            <p class="recommend-title" data-lang-key="package_recommend_title"></p>
+                            <h4 class="recommend-title" data-lang-key="package_recommend_title"></h4>
                             <p class="recommend-desc" data-lang-key="package3_recommend_desc"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <section id="contact-cta" class="section">
+
+        <section id="options-section" class="section alternate-bg">
             <div class="container">
-                 <h2 class="section-title" data-lang-key="contact_title_new"></h2>
-                <p class="section-subtitle" data-lang-key="contact_subtitle_new"></p>
-                <a href="index.html#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
+                <h2 class="section-title" data-lang-key="options_title">옵션 서비스</h2>
+                <div class="options-grid">
+                    <!-- Option 1 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option1_title">프로그램 & 사후관리 팩</h3>
+                            <p class="option-price" data-lang-key="option1_price">₩82,800</p>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option1_desc">검사 항목, 결과 구조 및 검사 후 관리에 대한 비의료적 가이드입니다.</p>
+                        </div>
+                    </div>
+                    <!-- Option 2 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option2_title">그래픽 동선 가이드</h3>
+                            <p class="option-price" data-lang-key="option2_price">₩27,600</p>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option2_desc">정확한 병원 내 동선과 이동 흐름을 보여줍니다. 첫 방문객에게 유용합니다.</p>
+                        </div>
+                    </div>
+                    <!-- Option 3 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option3_title">일정 변경</h3>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option3_desc">예약 후 예약을 변경해야 하는 고객을 위한 옵션입니다.</p>
+                            <ul class="option-details-list">
+                                <li><i class="fas fa-check"></i><span data-lang-key="option3_item1">1회 변경: ₩34,500</span></li>
+                                <li><i class="fas fa-check"></i><span data-lang-key="option3_item2">2회 패키지: ₩55,200</span></li>
+                                <li><i class="fas fa-check"></i><span data-lang-key="option3_item3">무제한 변경: ₩276,000</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Option 4 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option4_title">영문 영수증 요청</h3>
+                            <p class="option-price" data-lang-key="option4_price">₩27,600</p>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option4_desc">보험 목적에 적합한 영문 영수증을 대신 요청합니다.</p>
+                        </div>
+                    </div>
+                    <!-- Option 5 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option5_title">CD 결과 요청</h3>
+                            <p class="option-price" data-lang-key="option5_price">₩27,600</p>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option5_desc">검사 CD 또는 추가 영상 파일을 대신 요청합니다.</p>
+                        </div>
+                    </div>
+                    <!-- Option 6 -->
+                    <div class="option-card">
+                        <div class="option-header">
+                            <h3 class="option-title" data-lang-key="option6_title">긴급 결과 후속 조치</h3>
+                            <p class="option-price" data-lang-key="option6_price">₩27,600</p>
+                        </div>
+                        <div class="option-body">
+                            <p data-lang-key="option6_desc">병원에 긴급 후속 조치 메시지를 한 번 보냅니다.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <section id="contact-form" class="section">
+            <div class="container">
+                <div class="section-title-container">
+                    <h2 class="section-title" data-lang-key="contact_title_new"></h2>
+                </div>
+                <p class="section-subtitle" data-lang-key="contact_subtitle_new"></p>
+                <form class="contact-form-body">
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="email" data-lang-key="contact_form_email_label"></label>
+                            <input type="email" id="email" name="email" data-lang-key="contact_form_email_placeholder" required>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="phone">
+                                <span data-lang-key="contact_form_phone_label"></span>
+                            </label>
+                            <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="message" data-lang-key="contact_form_message_label"></label>
+                            <textarea id="message" name="message" rows="6" data-lang-key="contact_form_message_placeholder" required></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button"></button>
+                </form>
+            </div>
+        </section>
+
     </main>
 
-    <script src="script.js?v=1.6"></script>
+    <button id="open-chatbot">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <div>
+                <span class="chatbot-title" data-lang-key="chatbot_header"></span>
+            </div>
+            <div id="chatbot-lang-buttons">
+                <button class="chatbot-lang-btn active" data-lang="ko">🇰🇷</button>
+                <button class="chatbot-lang-btn" data-lang="en">🇺🇸</button>
+                <button class="chatbot-lang-btn" data-lang="cn">🇨🇳</button>
+                <button class="chatbot-lang-btn" data-lang="vn">🇻🇳</button>
+            </div>
+            <button id="close-chatbot">&times;</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-bottom-container">
+            <div id="chatbot-suggested-questions"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" data-lang-key="chatbot_placeholder">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

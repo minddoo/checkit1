@@ -14,6 +14,7 @@
     --bg-light: #f8f9fa;
     --white: #fff;
     --danger-color: #e74c3c;
+    --option-color: #3498db; /* Blue for options */
     --font-family: 'Pretendard', sans-serif;
     --font-family-cn: 'Noto Sans SC', sans-serif;
     --shadow-sm: 0 4px 15px rgba(0,0,0,0.07);
@@ -367,7 +368,7 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     justify-content: center;
-    align-items: stretch; /* Ensures cards in a row have the same height */
+    align-items: stretch; 
 }
 
 .package-card {
@@ -378,7 +379,7 @@ body {
     display: flex;
     flex-direction: column;
     transition: transform 0.3s, box-shadow 0.3s;
-    border-top: 6px solid transparent; /* Added for colored border */
+    border-top: 6px solid transparent;
 }
 
 .package-no-confusion { border-top-color: var(--package1-color); }
@@ -457,11 +458,84 @@ body {
     background-color: var(--bg-light);
     padding: 25px 35px;
     margin-top: auto;
-    min-height: 110px; /* Ensures all footers have the same height */
+    min-height: 110px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
+/* ------------------- 
+ * Options Section
+ * ------------------- */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.option-card {
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-top: 5px solid var(--option-color);
+}
+
+.option-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+}
+
+.option-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.option-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+.option-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--option-color);
+    margin: 0;
+    text-align: center;
+}
+
+.option-body {
+    padding: 25px 30px;
+    color: var(--text-light);
+    flex-grow: 1;
+    text-align: center;
+}
+
+.option-details-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0;
+    text-align: left;
+}
+
+.option-details-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.option-details-list li i {
+    color: var(--option-color);
+    margin-right: 10px;
+}
+
 
 .recommend-title {
     font-weight: 700;

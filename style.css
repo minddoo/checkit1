@@ -238,7 +238,7 @@ body {
  * 3.5. Individual Page: Reality Section
  * ---------------------------------- */
 #korea-medical-reality {
-    background: linear-gradient(160deg, rgba(85, 85, 85, 0.95) 0%, rgba(51, 51, 51, 0.98) 100%), var(--bg-light);
+    background: linear-gradient(160deg, rgba(69, 75, 84, 1) 0%, rgba(20, 24, 31, 1) 100%);
     color: var(--white);
 }
 

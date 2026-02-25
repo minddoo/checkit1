@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - 당신의 건강검진 매니저</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CHECKIT - 외국인 건강검진 예약</title>
+    <link rel="stylesheet" href="style.css?v=1.5">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,16 +12,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <!-- HEADER -->
     <header id="main-header">
         <div class="container">
-            <div class="logo">
+            <a href="#" class="logo">
                 <img src="assets/로고2.png" alt="CHECKIT Globe Logo" class="header-logo">
                 CHECKIT
-            </div>
+            </a>
             <nav id="language-switcher">
-                <button class="lang-btn" data-lang="ko">KR</button>
+                <button class="lang-btn active" data-lang="ko">KR</button>
                 <button class="lang-btn" data-lang="en">EN</button>
                 <button class="lang-btn" data-lang="cn">CN</button>
                 <button class="lang-btn" data-lang="vn">VN</button>
@@ -30,136 +29,160 @@
     </header>
 
     <main>
-        <!-- SECTION 0: HERO (NEW) -->
-        <section id="hero" class="section">
-            <div class="container hero-content">
-                <h1 class="hero-title" data-lang-key="hero_title">외국인을 위한 건강검진,<br>언어의 장벽 없이 편안하게.</h1>
-                <p class="hero-subtitle" data-lang-key="hero_subtitle">일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지. CHECKIT이 모든 비의료 과정을 해결합니다.</p>
-                <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta">지금 바로 상담 신청</a>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="hero-content">
+                <h1 class="hero-title" data-lang-key="hero_title"></h1>
+                <p class="hero-subtitle" data-lang-key="hero_subtitle"></p>
+                <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
             </div>
         </section>
 
-        <!-- SECTION 1: WHO IS THIS FOR? -->
+        <!-- SERVICE FOR -->
         <section id="service-for" class="section">
             <div class="container">
-                <h2 class="section-title" data-lang-key="service_for_title">누구를 위한 서비스인가요?</h2>
+                <h2 class="section-title" data-lang-key="service_for_title"></h2>
                 <div class="card-container">
                     <div class="card">
                         <i class="fas fa-user"></i>
-                        <h3 data-lang-key="individual_title">개인 고객</h3>
-                        <p data-lang-key="individual_desc">한국 거주/방문 외국인 개인이 언어 장벽 없이 편안하게 건강검진을 받을 수 있도록 지원합니다.</p>
-                        <a href="individual.html" class="cta-button-secondary" data-lang-key="learn_more">더 알아보기</a>
+                        <h3 data-lang-key="individual_title"></h3>
+                        <p data-lang-key="individual_desc"></p>
+                        <a href="individual.html" class="cta-button-secondary" data-lang-key="learn_more"></a>
                     </div>
                     <div class="card">
                         <i class="fas fa-building"></i>
-                        <h3 data-lang-key="corporate_title">기업 고객</h3>
-                        <p data-lang-key="corporate_desc">외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여, 기업의 보건 관리 부담을 줄여드립니다.</p>
-                        <a href="corporate.html" class="cta-button-secondary" data-lang-key="learn_more">더 알아보기</a>
+                        <h3 data-lang-key="corporate_title"></h3>
+                        <p data-lang-key="corporate_desc"></p>
+                        <a href="#contact-form" class="cta-button-secondary" data-lang-key="learn_more"></a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 2: WHY CHOOSE US? -->
-        <section id="why-us-new" class="section alternate-bg">
+        <!-- WHY CHOOSE US -->
+        <section id="why-us" class="section alternate-bg">
             <div class="container">
                 <div class="section-title-container">
-                    <h2 class="section-title" data-lang-key="why_us_title">왜 CHECKIT을 선택해야 할까요?</h2>
-                    <span class="blinking-character"></span>
+                    <h2 class="section-title" data-lang-key="why_us_title"></h2>
+                    <div class="blinking-character"></div>
                 </div>
-                <p class="section-subtitle" data-lang-key="why_us_subtitle_new">의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 '비의료 과정'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.</p>
+                <p class="section-subtitle" data-lang-key="why_us_subtitle_new"></p>
                 <div class="features-grid-new">
-                    <div class="feature-item-new"><i class="fas fa-comments"></i><h3 data-lang-key="why_us_feature1_title">커뮤니케이션 전문</h3><p data-lang-key="why_us_feature1_desc">병원 선택부터 결과 수령까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.</p></div>
-                    <div class="feature-item-new"><i class="fas fa-handshake-angle"></i><h3 data-lang-key="why_us_feature2_title">100% 고객 중심</h3><p data-lang-key="why_us_feature2_desc">병원과의 계약 없이 오직 고객의 입장에서, 고객에게 필요한 최적의 선택지를 제안하고 과정을 돕습니다.</p></div>
-                    <div class="feature-item-new"><i class="fas fa-puzzle-piece"></i><h3 data-lang-key="why_us_feature3_title">비의료 과정에 집중</h3><p data-lang-key="why_us_feature3_desc">의료 행위를 제외한 모든 부수적인 절차를 대행하여, 고객이 오직 건강검진에만 집중할 수 있도록 합니다.</p></div>
-                    <div class="feature-item-new"><i class="fas fa-coins"></i><h3 data-lang-key="why_us_feature4_title">합리적인 비용</h3><p data-lang-key="why_us_feature4_desc">의료기관과 연계 없이 독립적으로 운영되므로, 불필요한 중개 수수료가 없습니다. 순수 서비스 이용료만으로 이용 가능합니다.</p></div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-headset"></i>
+                        <h3 data-lang-key="why_us_feature1_title"></h3>
+                        <p data-lang-key="why_us_feature1_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h3 data-lang-key="why_us_feature2_title"></h3>
+                        <p data-lang-key="why_us_feature2_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-file-alt"></i>
+                        <h3 data-lang-key="why_us_feature3_title"></h3>
+                        <p data-lang-key="why_us_feature3_desc"></p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: PROCESS -->
+        <!-- PROCESS -->
         <section id="process-new" class="section">
-             <div class="container">
-                <h2 class="section-title" data-lang-key="process_title">CHECKIT 이용 과정</h2>
+            <div class="container">
+                <h2 class="section-title" data-lang-key="process_title"></h2>
                 <div class="process-steps">
-                    <div class="step"> <div class="step-number">1</div> <h3 data-lang-key="process_step1_title">상담 및 병원 선택 지원</h3> <p data-lang-key="process_step1_desc_new">원하는 검진 항목과 일정 상담 후, 조건에 맞는 최적의 병원 리스트를 제공하여 선택을 돕고 예약을 진행합니다.</p> </div>
-                    <div class="step"> <div class="step-number">2</div> <h3 data-lang-key="process_step2_title">실시간 소통 지원</h3> <p data-lang-key="process_step2_desc_new">검진 당일, 병원 내에서 발생하는 모든 소통을 실시간으로 지원하여 불편함이 없도록 합니다.</p> </div>
-                    <div class="step"> <div class="step-number">3</div> <h3 data-lang-key="process_step3_title_new">결과 번역 파일 전달</h3> <p data-lang-key="process_step3_desc_new">고객님께서 병원으로부터 수령한 한국어 결과지를 사진이나 파일로 전달해주시면, 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. (의료적 소견이나 상세 설명은 미포함)</p> </div>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 data-lang-key="process_step1_title"></h3>
+                        <p data-lang-key="process_step1_desc_new"></p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 data-lang-key="process_step2_title"></h3>
+                        <p data-lang-key="process_step2_desc_new"></p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 data-lang-key="process_step3_title_new"></h3>
+                        <p data-lang-key="process_step3_desc_new"></p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: TESTIMONIALS -->
+        <!-- TESTIMONIALS -->
         <section id="testimonials" class="section alternate-bg">
             <div class="container">
-                <h2 class="section-title" data-lang-key="testimonials_title">생생한 고객 후기</h2>
-                <p class="section-subtitle" data-lang-key="testimonials_subtitle">CHECKIT과 함께한 고객들의 목소리를 직접 들어보세요.</p>
+                <h2 class="section-title" data-lang-key="testimonials_title"></h2>
+                <p class="section-subtitle" data-lang-key="testimonials_subtitle"></p>
                 <div class="testimonial-grid">
                     <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial1_text">“한국에서 건강검진은 처음이라 막막했는데, CHECKIT 덕분에 병원 선택부터 예약, 검진 당일 소통까지 정말 편하게 진행했어요. 결과지도 모국어로 번역해주셔서 이해가 쉬웠습니다.”</p>
+                        <p class="testimonial-text" data-lang-key="testimonial1_text"></p>
                         <div class="testimonial-author">
-                            <strong data-lang-key="testimonial1_author">안나, 유학생</strong>
-                            <span data-lang-key="testimonial1_type">한국 거주 외국인</span>
+                            <strong data-lang-key="testimonial1_author"></strong>
+                            <span data-lang-key="testimonial1_type"></span>
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial2_text">“부모님을 한국에 초청해 건강검진을 시켜드리고 싶었는데, 언어와 절차 문제로 걱정이 많았어요. CHECKIT 매니저님이 모든 과정을 알아서 처리해주셔서 정말 든든했습니다.”</p>
+                        <p class="testimonial-text" data-lang-key="testimonial2_text"></p>
                         <div class="testimonial-author">
-                            <strong data-lang-key="testimonial2_author">데이비드, 해외 거주</strong>
-                            <span data-lang-key="testimonial2_type">해외 거주 외국인 가족</span>
+                            <strong data-lang-key="testimonial2_author"></strong>
+                            <span data-lang-key="testimonial2_type"></span>
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial3_text">“외국인 직원들의 단체 건강검진이 항상 골치 아픈 업무였는데, CHECKIT 덕분에 예약부터 결과 관리까지 정말 간편해졌습니다. 직원들의 만족도도 매우 높아요.”</p>
+                        <p class="testimonial-text" data-lang-key="testimonial3_text"></p>
                         <div class="testimonial-author">
-                            <strong data-lang-key="testimonial3_author">박팀장</strong>
-                            <span data-lang-key="testimonial3_type">기업 고객 담당자</span>
+                            <strong data-lang-key="testimonial3_author"></strong>
+                            <span data-lang-key="testimonial3_type"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Final CTA Section / Contact Form -->
+        <!-- CONTACT FORM -->
         <section id="contact-form" class="section">
             <div class="container">
-                <h2 class="section-title" data-lang-key="contact_title_new">궁금한 점이 있으신가요?</h2>
-                <p class="section-subtitle" data-lang-key="contact_subtitle_new">CHECKIT의 전문 매니저가 신속하고 친절하게 답변해 드립니다.</p>
-                <form class="contact-form-body" action="https://formspree.io/f/xaqdljye" method="POST">
+                <h2 class="section-title" data-lang-key="contact_title_new"></h2>
+                <p class="section-subtitle" data-lang-key="contact_subtitle_new"></p>
+                <form class="contact-form-body">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label for="email" data-lang-key="contact_form_email_label">이메일 주소</label>
-                            <input type="email" id="email" name="email" required data-lang-key="contact_form_email_placeholder" placeholder="예: example@checkit.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="phone" data-lang-key="contact_form_phone_label">연락처 (선택사항)</label>
-                            <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder" placeholder="예: 010-1234-5678">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="email" data-lang-key="contact_form_email_label"></label>
+                            <input type="email" id="email" name="email" required data-lang-key="contact_form_email_placeholder">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="message" data-lang-key="contact_form_message_label">문의 내용</label>
-                        <textarea id="message" name="message" rows="6" required data-lang-key="contact_form_message_placeholder" placeholder="궁금한 점을 자세히 적어주세요."></textarea>
+                        <label for="phone" data-lang-key="contact_form_phone_label"></label>
+                        <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder">
                     </div>
-                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button">문의하기</button>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="message" data-lang-key="contact_form_message_label"></label>
+                        <textarea id="message" name="message" rows="6" required data-lang-key="contact_form_message_placeholder"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button"></button>
                 </form>
             </div>
         </section>
     </main>
 
     <!-- CHATBOT -->
+    <button id="open-chatbot"><i class="fas fa-comment-dots"></i></button>
     <div id="chatbot-container">
         <div id="chatbot-header">
-            <span class="chatbot-title" data-lang-key="chatbot_header">CHECKIT봇</span>
+            <span class="chatbot-title" data-lang-key="chatbot_header"></span>
             <div id="chatbot-lang-buttons">
                 <button class="chatbot-lang-btn" data-lang="ko">KR</button>
                 <button class="chatbot-lang-btn" data-lang="en">EN</button>
                 <button class="chatbot-lang-btn" data-lang="cn">CN</button>
-                <button class="chatbot-lang-btn" data-lang="vn">VI</button>
+                 <button class="chatbot-lang-btn" data-lang="vn">VN</button>
             </div>
             <button id="close-chatbot">&times;</button>
         </div>
         <div id="chatbot-messages"></div>
-        <div id="chatbot-bottom-container"> 
+        <div id="chatbot-bottom-container">
             <div id="chatbot-suggested-questions"></div>
             <div id="chatbot-input-container">
                 <input type="text" id="chatbot-input" data-lang-key="chatbot_placeholder">
@@ -167,8 +190,7 @@
             </div>
         </div>
     </div>
-    <button id="open-chatbot"><i class="fas fa-comment-dots"></i></button>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=1.1"></script>
 </body>
 </html>

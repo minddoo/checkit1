@@ -235,16 +235,25 @@ body {
 #service-for .card p { color: var(--text-light); margin-bottom: 30px; }
 
 /* ----------------------------------
- * 3.5. Individual Page: Reality Section
+ * 3.5. Individual Page: Reality & Solution Section
  * ---------------------------------- */
-#korea-medical-reality {
+#korea-medical-reality,
+#solution-section {
     background: linear-gradient(160deg, rgba(69, 75, 84, 1) 0%, rgba(20, 24, 31, 1) 100%);
     color: var(--white);
 }
 
-#korea-medical-reality .section-title {
+#korea-medical-reality { padding-bottom: 0; }
+#solution-section { padding-top: 60px; }
+
+#korea-medical-reality .section-title,
+#solution-section .section-title {
     color: var(--white);
     margin-bottom: 40px;
+}
+
+#solution-section .section-subtitle {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .reality-grid {
@@ -255,18 +264,19 @@ body {
 }
 
 .reality-card {
-    background: var(--white);
-    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
     padding: 35px 40px;
     border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     text-align: left;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
 }
 
 .reality-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .reality-item-title {
@@ -281,7 +291,7 @@ body {
     padding-left: 0;
     font-size: 1rem;
     line-height: 1.8;
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .reality-list li {

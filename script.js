@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature5': '프리미엄 검진 전 팩 (상세 타임라인, 실수 대응 플로우)',
             'package3_feature6': '실시간 검진 당일 채팅 지원',
             'package3_feature7': '병원 내 동선 가이드 (그래픽)',
-            'package_feature8': '영문 영수증 요청 (대행)',
+            'package3_feature8': '영문 영수증 요청 (대행)',
             'package3_feature9': 'CD / 추가 서류 요청',
             'package3_feature10': '결과 나올 때까지 완전한 검진 후 후속 조치',
             'package3_feature11': '결과 구성 (비의료적, 내용 구성만)',

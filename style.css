@@ -158,14 +158,14 @@ body {
 
 .blinking-character {
     position: absolute; /* PERFECT ISOLATION: Does not affect layout AT ALL. */
-    width: 280px;       /* Micro Adjustment: Size up */
-    height: 280px;      
+    width: 450px;       /* AGGRESSIVE: 2x Size */
+    height: 450px;      
     background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
     background-size: contain; 
     background-position: center; 
-    top: -115px; /* Micro Adjustment: Position up */
-    left: 98%;   /* Micro Adjustment: Position closer */
+    top: -200px; /* AGGRESSIVE: Reposition for new size */
+    left: 85%;   /* AGGRESSIVE: Forcefully pulled to the left */
     /* ANIMATION REMOVED */
 }
 

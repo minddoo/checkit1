@@ -319,5 +319,5 @@ body.chatbot-open #open-chatbot { opacity: 0; visibility: hidden; transform: sca
 body.chatbot-open { overflow: hidden; }
 
 :lang(cn) .feature-item-new p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }

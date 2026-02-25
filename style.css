@@ -148,7 +148,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Reduced space */
+    gap: 5px; /* Drastically reduced space */
     margin-bottom: 20px;
 }
 
@@ -157,12 +157,12 @@ body {
 }
 
 .blinking-character {
-    width: 90px;  /* Increased size */
-    height: 90px; /* Increased size */
-    background-image: url('assets/회색 .png'); /* Use the new single image */
+    width: 120px;  /* Drastically increased size */
+    height: 120px; /* Drastically increased size */
+    background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
-    background-size: contain; /* Ensure the character fits perfectly */
-    background-position: center; /* Center the image */
+    background-size: contain; 
+    background-position: center; 
     animation: blink 3s infinite;
     transform-origin: center;
     flex-shrink: 0; 

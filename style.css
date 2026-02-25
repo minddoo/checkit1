@@ -261,7 +261,6 @@ body {
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
     text-align: left;
-    border-left: 5px solid var(--danger-color);
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
@@ -274,7 +273,7 @@ body {
     font-size: 1.6rem;
     font-weight: 700;
     margin-bottom: 20px;
-    color: var(--danger-color);
+    color: #ff3b30;
 }
 
 .reality-list {

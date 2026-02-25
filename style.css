@@ -320,4 +320,5 @@ body.chatbot-open { overflow: hidden; }
 
 :lang(cn) .feature-item-new p {
     font-size: 0.8rem;
+    word-break: break-all;
 }

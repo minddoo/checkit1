@@ -14,6 +14,7 @@
     --bg-light: #f8f9fa;
     --white: #fff;
     --font-family: 'Pretendard', sans-serif;
+    --font-family-cn: 'Noto Sans SC', sans-serif;
     --shadow-sm: 0 4px 15px rgba(0,0,0,0.07);
     --border-radius-md: 12px;
     /* Chatbot colors */
@@ -36,6 +37,8 @@ body {
     text-align: center; /* Set global text alignment to center */
     word-break: keep-all; /* Prevent awkward word breaks */
 }
+
+:lang(cn) { font-family: var(--font-family-cn); }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 .section { padding: 90px 0; }

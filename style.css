@@ -234,23 +234,30 @@ body {
 #service-for .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
 #service-for .card p { color: var(--text-light); margin-bottom: 30px; }
 
+
 /* ----------------------------------
  * 3.5. Individual Page: Reality & Overtime Section
  * ---------------------------------- */
-#korea-medical-reality, 
-#reality-overtime {
+.reality-wrapper {
     background: linear-gradient(180deg, #f8f9fa 0%, #3a3a3a 70%, #1c1c1c 100%);
     color: var(--white);
+    padding: 90px 0;
 }
 
-#korea-medical-reality { 
-    padding-bottom: 60px; 
-}
-
+#korea-medical-reality,
 #reality-overtime {
-    padding-top: 60px;
-    padding-bottom: 120px;
+    background: none;
+    padding: 0;
 }
+
+#korea-medical-reality .container {
+    padding-bottom: 60px;
+}
+
+#reality-overtime .container {
+    padding-top: 60px;
+}
+
 
 #korea-medical-reality .section-title {
     color: var(--text-color);

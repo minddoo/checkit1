@@ -163,6 +163,11 @@ body {
     transform: translateX(80px);
 }
 
+#individual-hero .hero-title,
+#individual-hero .hero-subtitle {
+    color: var(--text-color);
+}
+
 .hero-character {
     width: 450px;
     height: 450px;

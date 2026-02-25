@@ -145,7 +145,26 @@ body {
     background-color: var(--hero-bg-color);
 }
 
+#individual-hero .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+.hero-text-content {
+    flex: 0 0 60%;
+    text-align: left;
+}
+
+.hero-character {
+    width: 450px;
+    height: 450px;
+    background-image: url('assets/체킷 캐릭터.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: float-bounce 2.5s ease-in-out infinite;
+}
 
 /* ----------------------------------
  * 3. Individual Page: Story Sections

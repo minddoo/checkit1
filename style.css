@@ -13,6 +13,7 @@
     --text-light: #6c757d;
     --bg-light: #f8f9fa;
     --white: #fff;
+    --danger-color: #e74c3c;
     --font-family: 'Pretendard', sans-serif;
     --font-family-cn: 'Noto Sans SC', sans-serif;
     --shadow-sm: 0 4px 15px rgba(0,0,0,0.07);
@@ -184,7 +185,6 @@ body {
     text-align: left;
 }
 
-/* Add margin between items */
 .expectation-item + .expectation-item {
     margin-top: 80px; 
 }
@@ -200,19 +200,10 @@ body {
     flex-basis: 50%;
 }
 
-/* Alternating layout */
-.expectation-item:nth-child(odd) .expectation-text {
-    order: 1;
-}
-.expectation-item:nth-child(odd) .expectation-image {
-    order: 2;
-}
-.expectation-item:nth-child(even) .expectation-text {
-    order: 2;
-}
-.expectation-item:nth-child(even) .expectation-image {
-    order: 1;
-}
+.expectation-item:nth-child(odd) .expectation-text { order: 1; }
+.expectation-item:nth-child(odd) .expectation-image { order: 2; }
+.expectation-item:nth-child(even) .expectation-text { order: 2; }
+.expectation-item:nth-child(even) .expectation-image { order: 1; }
 
 
 .expectation-image img {
@@ -233,78 +224,60 @@ body {
     font-style: italic;
 }
 
-
-/* ------------------- 
- * 3. Section: Who is this for? / Cards
- * ------------------- */
-#service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
-#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; }
-#service-for .card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
-#service-for .card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
-#service-for .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
-#service-for .card p { color: var(--text-light); margin-bottom: 30px; }
-
 /* ----------------------------------
  * 3.5. Individual Page: Reality Section
  * ---------------------------------- */
 #korea-medical-reality {
-    padding: 90px 0;
-    background-color: #34495e; /* Dark blue-grey background */
+    background: linear-gradient(145deg, #464646, #333);
     color: var(--white);
 }
 
 #korea-medical-reality .section-title {
     color: var(--white);
+    margin-bottom: 40px;
 }
 
-.reality-item {
-    background-color: #2c3e50; /* Slightly darker background for the item */
-    border-radius: var(--border-radius-lg);
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+.reality-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.reality-card {
+    background: var(--white);
+    color: var(--text-color);
+    padding: 35px 40px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
     text-align: left;
-    max-width: 800px;
-    margin: 40px auto 0;
+    border-left: 5px solid var(--danger-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.reality-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
 }
 
 .reality-item-title {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
-    margin-bottom: 25px;
-    display: flex;
-    align-items: center;
-}
-
-.reality-item-title i {
-    font-size: 2.2rem;
-    margin-right: 15px;
-    color: #e74c3c; /* Red color for contrast */
+    margin-bottom: 20px;
+    color: var(--danger-color);
 }
 
 .reality-list {
-    list-style: none;
+    list-style-type: none;
     padding-left: 0;
-    font-size: 1.1rem;
-    line-height: 1.9;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-light);
 }
 
 .reality-list li {
-    position: relative;
-    padding-left: 25px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
-
-.reality-list li::before {
-    content: '\f00d'; /* Font Awesome close/times icon */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    position: absolute;
-    left: 0;
-    top: 5px;
-    color: #e74c3c; /* Red color for the icon */
-    font-size: 1rem;
-}
-
 
 
 /* ------------------- 

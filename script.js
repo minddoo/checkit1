@@ -482,9 +482,13 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': '如何预约？',
             'a1': 'CHECKIT的专属经理将为您提供帮助。只需告诉我们您想要的检查项目和日程，我们将提供符合您条件的医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您的问题！',
             'q2': '是否与医院/医务人员签订了合同？',
-            'a3': '不，CHECKIT遵守医疗服务法，不进行任何医疗行为或安排治疗。我们是一项专注于\'非医疗过程\'的服务，如医院预约、口译和结果翻译，以帮助您专注于您的健康检查。',
+            'a2': '不。CHECKIT不与任何特定医院签订合同。我们从您的角度出发，通过提供客观信息来帮助您选择最合适的医院。您的健康和满意是我们的首要任务。',
+            'q3': '你们是否从事医疗行为或安排治疗？',
+            'a3': '不，CHECKIT遵守医疗服务法，不从事任何医疗行为或安排治疗。我们是一项专注于“非医疗过程”的服务，例如医院预约、口译和结果翻译，以帮助您只专注于您的健康检查。',
             'q4': '体检当天能得到什么帮助？',
-            'a5': '当您向我们提供您从医院收到的韩文结果报告后,我们将以您的母语提供核心内容的简单翻译和摘要。为遵守医疗法,我们不提供医疗意见或详细解释。',
+            'a4': '在您体检当天，您的Check Bot经理会全程陪伴您，让您不会因为语言障碍而感到孤单。我们为医院内的所有沟通流程（如挂号、会诊和付款）提供实时支持，帮助您在没有语言问题造成的不便或孤独感的情况下舒适地专注于您的检查。',
+            'q5': '结果如何发送？',
+            'a5': '您将从医院收到的韩文结果单以照片或文件形式发送给我们，我们将为您翻译核心内容并提供摘要。为遵守医疗法，我们不提供医疗意见或详细解释。',
             'unsupported_input': '这是一个有趣的问题！目前我只能提供预设的答案，但如果您通过“申请咨询”进行查询，专业的经理会亲切地为您引导。'
         },
         vn: {
@@ -641,8 +645,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'q1': 'Làm cách nào để đặt lịch hẹn?',
             'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
             'q2': 'Bạn có hợp đồng với bệnh viện/nhân viên y tế không?',
+            'a2': 'Không. CHECKIT không có mối quan hệ hợp đồng với bất kỳ bệnh viện cụ thể nào. Chúng tôi giúp bạn chọn bệnh viện phù hợp nhất bằng cách cung cấp thông tin khách quan theo quan điểm của bạn. Sức khỏe và sự hài lòng của bạn là ưu tiên hàng đầu của chúng tôi.',
+            'q3': 'Bạn có thực hiện các hành vi y tế hoặc sắp xếp điều trị không?',
             'a3': 'Không, CHECKIT tuân thủ Đạo luật Dịch vụ Y tế và không thực hiện bất kỳ hành vi y tế hoặc sắp xếp phương pháp điều trị nào. Chúng tôi là một dịch vụ giúp bạn chỉ tập trung vào việc kiểm tra sức khỏe bằng cách tập trung vào các \'quy trình phi y tế\' như đặt lịch hẹn bệnh viện, phiên dịch và dịch kết quả.',
             'q4': 'Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?',
+            'a4': 'Vào ngày khám sức khỏe, người quản lý Check Bot của bạn sẽ đồng hành cùng bạn trên mọi nẻo đường để bạn không cảm thấy đơn độc do rào cản ngôn ngữ. Chúng tôi cung cấp hỗ trợ thời gian thực cho tất cả các quy trình giao tiếp trong bệnh viện, chẳng hạn như đăng ký, tư vấn và thanh toán, giúp bạn thoải mái tập trung vào việc kiểm tra sức khỏe mà không gặp bất tiện hay cô đơn do vấn đề ngôn ngữ.',
+            'q5': 'Kết quả được gửi như thế nào?',
             'a5': 'Sau khi bạn cung cấp cho chúng tôi kết quả bằng tiếng Hàn mà bạn nhận được từ bệnh viện, chúng tôi sẽ cung cấp một bản dịch và tóm tắt đơn giản về nội dung chính bằng tiếng mẹ đẻ của bạn. Để tuân thủ luật y tế, chúng tôi không cung cấp ý kiến y tế hoặc giải thích chi tiết.',
             'unsupported_input': 'Đó là một câu hỏi thú vị! Hiện tại tôi chỉ có thể cung cấp các câu trả lời được cài sẵn, nhưng nếu bạn yêu cầu thông qua \'Đăng ký tư vấn\', một người quản lý chuyên nghiệp sẽ vui lòng hướng dẫn bạn.'
         }

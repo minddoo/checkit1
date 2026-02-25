@@ -125,20 +125,20 @@
             <div class="container">
                 <h2 class="section-title" data-lang-key="contact_title_new">궁금한 점이 있으신가요?</h2>
                 <p class="section-subtitle" data-lang-key="contact_subtitle_new">CHECKIT의 전문 매니저가 신속하고 친절하게 답변해 드립니다.</p>
-                <form class="contact-form-body">
+                <form class="contact-form-body" action="https://formspree.io/f/xaqdljye" method="POST">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="email" data-lang-key="contact_form_email_label">이메일 주소</label>
-                            <input type="email" id="email" name="email" required data-lang-key="contact_form_email_placeholder">
+                            <input type="email" id="email" name="email" required data-lang-key="contact_form_email_placeholder" placeholder="예: example@checkit.com">
                         </div>
                         <div class="form-group">
                             <label for="phone" data-lang-key="contact_form_phone_label">연락처 <span class="optional-text" data-lang-key="contact_form_phone_optional">(선택)</span></label>
-                            <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder">
+                            <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder" placeholder="예: 010-1234-5678">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="message" data-lang-key="contact_form_message_label">문의 내용</label>
-                        <textarea id="message" name="message" rows="6" required data-lang-key="contact_form_message_placeholder"></textarea>
+                        <textarea id="message" name="message" rows="6" required data-lang-key="contact_form_message_placeholder" placeholder="궁금한 점을 자세히 적어주세요."></textarea>
                     </div>
                     <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button">문의하기</button>
                 </form>

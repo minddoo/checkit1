@@ -148,12 +148,12 @@ body {
 #individual-hero .container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 50px;
 }
 
 .hero-text-content {
-    flex: 0 0 60%;
-    text-align: left;
+    text-align: center;
 }
 
 .hero-character {

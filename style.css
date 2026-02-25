@@ -141,7 +141,7 @@ body {
 }
 
 #individual-hero {
-    padding: 90px 0;
+    padding: 50px 0;
     background-color: var(--hero-bg-color);
 }
 
@@ -149,7 +149,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 50px;
+    gap: 20px;
 }
 
 .hero-text-content {

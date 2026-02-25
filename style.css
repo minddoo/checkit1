@@ -142,7 +142,7 @@ body {
 
 #individual-hero {
     padding: 80px 0;
-    background: url('assets/개페.png') center/cover no-repeat !important; /* 배경 이미지, 위치, 크기, 반복 설정 및 !important 추가 */
+    background: url('assets/background-individual.png') center/cover no-repeat !important; /* 배경 이미지, 위치, 크기, 반복 설정 및 !important 추가 */
     position: relative;
     color: white; 
 }

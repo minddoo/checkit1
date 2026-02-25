@@ -224,6 +224,16 @@ body {
     font-style: italic;
 }
 
+/* ------------------- 
+ * 3. Section: Who is this for? / Cards
+ * ------------------- */
+#service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
+#service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; }
+#service-for .card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
+#service-for .card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
+#service-for .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+#service-for .card p { color: var(--text-light); margin-bottom: 30px; }
+
 /* ----------------------------------
  * 3.5. Individual Page: Reality Section
  * ---------------------------------- */

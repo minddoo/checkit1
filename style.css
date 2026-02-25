@@ -156,17 +156,26 @@ body {
     margin-bottom: 0;
 }
 
+@keyframes float-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
 .blinking-character {
-    position: absolute; /* PERFECT ISOLATION: Does not affect layout AT ALL. */
-    width: 450px;       /* AGGRESSIVE: 2x Size */
+    position: absolute; 
+    width: 450px;       
     height: 450px;      
     background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
     background-size: contain; 
     background-position: center; 
-    top: -155px; /* FINAL: Align legs with question mark bottom */
-    left: 80%;   /* FINAL: Forcefully positioned next to question mark */
-    /* ANIMATION REMOVED */
+    top: -165px; /* FINAL++: Slightly up */
+    left: 78%;   /* FINAL++: More to the left */
+    animation: float-bounce 2.5s ease-in-out infinite; /* FINAL ANIMATION: Bouncing effect */
 }
 
 /* ------------------- 

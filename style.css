@@ -144,6 +144,50 @@ body {
     padding: 80px 0;
 }
 
+/* ----------------------------------
+ * 3. Individual Page: Story Sections
+ * ---------------------------------- */
+#korea-medical-expectation .section-subtitle {
+    line-height: 1.6;
+}
+
+.expectation-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 50px;
+    text-align: left;
+}
+
+.expectation-text {
+    max-width: 50%;
+    flex-basis: 50%;
+}
+
+.expectation-image {
+    max-width: 50%;
+    flex-basis: 50%;
+}
+
+.expectation-image img {
+    width: 100%;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.expectation-item-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.expectation-item-desc {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
 
 /* ------------------- 
  * 3. Section: Who is this for? / Cards

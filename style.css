@@ -1,5 +1,5 @@
 /*==================================================
-  CHECKIT - Main Stylesheet (FINAL FIX)
+  CHECKIT - Main Stylesheet (DEFINITIVE FINAL FIX)
 ==================================================*/
 
 /* ------------------- 
@@ -157,8 +157,8 @@ body {
 }
 
 .blinking-character {
-    width: 250px;  /* 5X SIZE: Overwhelmingly large */
-    height: 250px; /* 5X SIZE: Overwhelmingly large */
+    width: 350px;  /* SUPER-MEGA-ULTRA-HUGE SIZE */
+    height: 350px; /* SUPER-MEGA-ULTRA-HUGE SIZE */
     background-image: url('assets/회색 .png'); 
     background-repeat: no-repeat;
     background-size: contain; 
@@ -166,7 +166,7 @@ body {
     animation: blink 3s infinite;
     transform-origin: center;
     flex-shrink: 0; 
-    margin-left: -40px; /* NO SPACING: Pull character to the left, overlapping space */
+    margin-left: -80px; /* AGGRESSIVE OVERLAP: Pull character to the left for zero spacing */
 }
 
 @keyframes blink {

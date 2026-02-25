@@ -142,7 +142,33 @@ body {
 
 #individual-hero {
     padding: 80px 0;
+    background-image: url('assets/개페.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white; /* 텍스트 색상을 흰색으로 변경하여 가독성 확보 */
 }
+
+#individual-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 어두운 오버레이 */
+    z-index: 1;
+}
+
+#individual-hero .container {
+    position: relative;
+    z-index: 2; /* 컨테이너를 오버레이 위에 위치시킴 */
+}
+
+#individual-hero .section-subtitle {
+    color: white; /* 부제목 텍스트 색상도 흰색으로 변경 */
+}
+
 
 /* ----------------------------------
  * 3. Individual Page: Story Sections

@@ -71,22 +71,6 @@ body {
     overflow: hidden;
 }
 
-.hero-bg-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: auto;
-    opacity: 0.25;
-    z-index: 0;
-}
-
-.hero-bg-image img {
-    filter: drop-shadow(0 0 15px rgba(46, 204, 113, 0.7)) 
-            drop-shadow(0 0 50px rgba(46, 204, 113, 0.5));
-}
-
 .hero-content {
     position: relative;
     z-index: 1;

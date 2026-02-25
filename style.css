@@ -143,33 +143,9 @@ body {
 #individual-hero {
     padding: 90px 0;
     background-color: var(--hero-bg-color);
-    position: relative;
-    overflow: hidden;
 }
 
-#individual-hero::after {
-    content: '';
-    position: absolute;
-    top: 10%;
-    left: -20%;
-    width: 800px;
-    height: 800px;
-    background-image: url('assets/핑크.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    animation: flyAcross 15s linear infinite;
-    opacity: 0.8;
-    z-index: 0;
-}
 
-@keyframes flyAcross {
-    0% {
-        transform: translateX(-100%) translateY(20%) rotate(-15deg);
-    }
-    100% {
-        transform: translateX(400%) translateY(-20%) rotate(15deg);
-    }
-}
 
 /* ----------------------------------
  * 3. Individual Page: Story Sections

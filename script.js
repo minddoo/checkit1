@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_service1_title': '1:1 전담 매니저', 'individual_service1_desc': '상담 요청 즉시, 고객님의 언어를 구사하는 전담 매니저가 배정됩니다. 병원 선택, 예약, 일정 조율까지 모든 과정을 책임지고 관리합니다.',
             'individual_service2_title_new': '실시간 소통 지원', 'individual_service2_desc_new': '검진 당일, 물리적 동행 대신 메신저를 통해 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여 불편함이나 외로움 없이 검진에만 집중하도록 돕습니다.',
             'individual_service3_title_new': '결과지 번역 · 요약', 'individual_service3_desc_new': '고객님께서 병원으로부터 수령한 한국어 결과지를 사진이나 파일로 전달해주시면, 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. (의료적 소견이나 상세 설명은 미포함)',
+            'expectation_title': '외국인들이 기대하는 한국 의료 서비스',
+            'expectation_subtitle': '"한국에서 건강검진을 받아볼까?"<br>해외 커뮤니티에서 자주 언급되는 한국 의료의 특징들',
+            'expectation_item_title_1': '#1. 비용 효율성',
+            'expectation_item_desc_1': '“미국에 비해 한국의 의료비가 훨씬 저렴하다는 것은 잘 알려져 있습니다.”',
             'chatbot_header': 'Check봇',
             'chatbot_placeholder': '메시지를 입력하세요...',
             'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
@@ -51,6 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_service1_title': '1:1 Dedicated Manager', 'individual_service1_desc': 'As soon as you request a consultation, a dedicated manager who speaks your language is assigned. They responsibly manage the entire process from hospital selection, reservation, to schedule coordination.',
             'individual_service2_title_new': 'Real-time Communication Support', 'individual_service2_desc_new': 'Instead of physical accompaniment on the day of the check-up, we provide real-time support for all communication processes like hospital reception, consultation, and payment via messenger to help you focus on your check-up without inconvenience or loneliness.',
             'individual_service3_title_new': 'Result Translation & Summary', 'individual_service3_desc_new': 'If you provide us with the Korean result sheet received from the hospital as a photo or file, we will translate and summarize the key contents into your native language. (Medical opinions or detailed explanations are not included.)',
+            'expectation_title': 'What Foreigners Expect from Korean Medical Services',
+            'expectation_subtitle': '"Should I get a health check-up in Korea?"<br>Features of Korean healthcare frequently mentioned in overseas communities',
+            'expectation_item_title_1': '#1. Cost Efficiency',
+            'expectation_item_desc_1': '“Medical care in Korea is known to be dramatically cheaper than in the U.S.”',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': 'Type a message...', 'chatbot_greeting': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
             'greeting_response': 'Hello! Nice to meet you. If you have any questions about CHECKIT, feel free to select a question below or ask me directly.',
             'q1': 'How do I make a reservation?', 'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
@@ -78,6 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_service1_title': '1:1专属经理', 'individual_service1_desc': '一旦您请求咨询，我们会立即为您指派一位能说您语言的专属经理。他们将负责管理从医院选择、预约到日程协调的整个过程。',
             'individual_service2_title_new': '实时沟通支持', 'individual_service2_desc_new': '体检当天，我们不提供实体陪同，而是通过即时通讯工具为医院接待、问诊、缴费等所有沟通环节提供实时支持，帮助您专注于体检，无任何不便或孤独感。',
             'individual_service3_title_new': '结果翻译与摘要', 'individual_service3_desc_new': '您将从医院收到的韩文结果单以照片或文件形式发送给我们，我们将为您翻译核心内容并提供摘要。（不包括医疗意见或详细解释。）',
+            'expectation_title': '外国人期待的韩国医疗服务',
+            'expectation_subtitle': '“要不要在韩国做个健康体检？”<br>海外社区经常提到的韩国医疗特点',
+            'expectation_item_title_1': '#1. 成本效益',
+            'expectation_item_desc_1': '“众所周知，韩国的医疗费用比美国便宜得多。”',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': '输入消息...', 'chatbot_greeting': '您好！对CHECKIT有什么疑问吗？请从下方选择问题或直接输入。',
             'greeting_response': '您好！很高兴见到您。如果您对CHECKIT有任何疑问，请随时从下方选择问题或直接提问。',
             'q1': '如何预约？', 'a1': 'CHECKIT的专属经理将为您提供帮助。只需告诉我们您想要的检查项目和日程，我们将提供符合您条件的医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您的问题！',
@@ -105,6 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_service1_title': 'Quản lý riêng 1:1', 'individual_service1_desc': 'Ngay khi bạn yêu cầu tư vấn, một quản lý riêng nói ngôn ngữ của bạn sẽ được chỉ định. Họ chịu trách nhiệm quản lý toàn bộ quy trình từ lựa chọn bệnh viện, đặt hẹn đến điều phối lịch trình.',
             'individual_service2_title_new': 'Hỗ trợ giao tiếp thời gian thực', 'individual_service2_desc_new': 'Thay vì đi cùng vào ngày khám, chúng tôi cung cấp hỗ trợ thời gian thực cho tất cả các quy trình giao tiếp như tiếp nhận tại bệnh viện, tư vấn và thanh toán qua ứng dụng nhắn tin để giúp bạn tập trung vào việc khám sức khỏe mà không gặp bất tiện hay cô đơn.',
             'individual_service3_title_new': 'Dịch và Tóm tắt Kết quả', 'individual_service3_desc_new': 'Nếu bạn cung cấp cho chúng tôi phiếu kết quả tiếng Hàn nhận được từ bệnh viện dưới dạng ảnh hoặc tệp, chúng tôi sẽ dịch và tóm tắt nội dung chính sang ngôn ngữ mẹ đẻ của bạn. (Không bao gồm ý kiến y tế hoặc giải thích chi tiết.)',
+            'expectation_title': 'Dịch vụ Y tế Hàn Quốc mà Người nước ngoài Mong đợi',
+            'expectation_subtitle': '"Tôi có nên đi khám sức khỏe ở Hàn Quốc không?"<br>Những đặc điểm của y tế Hàn Quốc thường được nhắc đến trong các cộng đồng nước ngoài',
+            'expectation_item_title_1': '#1. Hiệu quả về chi phí',
+            'expectation_item_desc_1': '“Chi phí chăm sóc y tế ở Hàn Quốc được biết là rẻ hơn đáng kể so với ở Mỹ.”',
             'chatbot_header': 'Check Bot', 'chatbot_placeholder': 'Nhập tin nhắn...', 'chatbot_greeting': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi dưới đây hoặc tự nhập câu hỏi của bạn.',
             'greeting_response': 'Xin chào! Rất vui được gặp bạn. Nếu bạn có bất kỳ câu hỏi nào về CHECKIT, hãy chọn một câu hỏi dưới đây hoặc hỏi trực tiếp.',
             'q1': 'Làm cách nào để đặt lịch hẹn?', 'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
@@ -145,9 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         mainLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
-        chatbotLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
         
-        if (chatbotContainer.classList.contains('show')) {
+        if (chatbotLangButtons) {
+            chatbotLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
+        }
+        
+        if (chatbotContainer && chatbotContainer.classList.contains('show')) {
             resetAndShowGreeting();
         }
     };
@@ -157,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const addMessage = (text, sender) => {
+        if (!chatbotMessages) return;
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', sender);
         messageElement.innerHTML = text.replace(/\n/g, '<br>');
@@ -166,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const addLoadingIndicator = () => {
+        if (!chatbotMessages) return null;
         const loadingElement = document.createElement('div');
         loadingElement.classList.add('message', 'bot', 'loading-indicator');
         loadingElement.innerHTML = '<span></span><span></span><span></span>';
@@ -175,10 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const scrollToBottom = () => {
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        if (chatbotMessages) {
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
     };
 
     const showSuggestedQuestions = () => {
+        if (!suggestedQuestionsContainer) return;
         suggestedQuestionsContainer.innerHTML = '';
         const langData = translations[currentLang];
         for (let i = 1; i <= 5; i++) {
@@ -192,9 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const loadingIndicator = addLoadingIndicator();
 
                     setTimeout(() => {
-                        chatbotMessages.removeChild(loadingIndicator);
+                        if(loadingIndicator) chatbotMessages.removeChild(loadingIndicator);
                         addMessage(langData[`a${i}`], 'bot');
-                    }, 1200); // Simulate thinking time
+                    }, 1200);
                 });
                 suggestedQuestionsContainer.appendChild(questionBtn);
             }
@@ -204,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     const resetAndShowGreeting = () => {
+        if (!chatbotMessages) return;
         chatbotMessages.innerHTML = '';
         const greeting = translations[currentLang]['chatbot_greeting'];
         addMessage(greeting, 'bot');
@@ -213,25 +238,36 @@ document.addEventListener('DOMContentLoaded', () => {
     mainLangButtons.forEach(button => {
         button.addEventListener('click', () => switchLanguage(button.dataset.lang));
     });
-    chatbotLangButtons.forEach(button => {
-        button.addEventListener('click', () => switchLanguage(button.dataset.lang));
-    });
+
+    if (chatbotLangButtons) {
+        chatbotLangButtons.forEach(button => {
+            button.addEventListener('click', () => switchLanguage(button.dataset.lang));
+        });
+    }
     
-    // Expose changeLanguage to global scope for inline onclick attributes
     window.changeLanguage = changeLanguage;
 
-    openChatbotBtn.addEventListener('click', () => {
-        chatbotContainer.classList.add('show');
-        document.body.classList.add('chatbot-open');
-        resetAndShowGreeting();
-    });
+    if (openChatbotBtn) {
+        openChatbotBtn.addEventListener('click', () => {
+            if (chatbotContainer) {
+                chatbotContainer.classList.add('show');
+                document.body.classList.add('chatbot-open');
+                resetAndShowGreeting();
+            }
+        });
+    }
 
-    closeChatbotBtn.addEventListener('click', () => {
-        chatbotContainer.classList.remove('show');
-        document.body.classList.remove('chatbot-open');
-    });
+    if (closeChatbotBtn) {
+        closeChatbotBtn.addEventListener('click', () => {
+            if (chatbotContainer) {
+                chatbotContainer.classList.remove('show');
+                document.body.classList.remove('chatbot-open');
+            }
+        });
+    }
 
     const handleSendMessage = () => {
+        if (!chatbotInput || !chatbotMessages) return;
         const userMessage = chatbotInput.value.trim();
         if (userMessage) {
             addMessage(userMessage, 'user');
@@ -239,18 +275,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadingIndicator = addLoadingIndicator();
     
             setTimeout(() => {
-                chatbotMessages.removeChild(loadingIndicator);
+                if(loadingIndicator) chatbotMessages.removeChild(loadingIndicator);
                 
                 const lowerCaseMessage = userMessage.toLowerCase();
                 const langData = translations[currentLang];
                 let response;
     
-                // Simple greeting check
                 const greetings = ['안녕', 'hi', 'hello', 'hey', '你好', 'xin chào'];
                 if (greetings.some(greeting => lowerCaseMessage.includes(greeting))) {
                     response = langData['greeting_response'];
                 } else {
-                    // Default to the more helpful "unsupported" message
                     response = langData['unsupported_input'];
                 }
                 
@@ -259,14 +293,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    chatbotSendBtn.addEventListener('click', handleSendMessage);
-    chatbotInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            handleSendMessage();
-        }
-    });
+    if (chatbotSendBtn) {
+        chatbotSendBtn.addEventListener('click', handleSendMessage);
+    }
 
-    // Initial language setup
+    if (chatbotInput) {
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    }
+
     const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
     switchLanguage(initialLang);
 });

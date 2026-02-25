@@ -64,30 +64,27 @@ body {
  * 2.5. Hero Section (NEW)
  * ------------------- */
 #hero {
-    background-image: url('https://lh3.googleusercontent.com/gg-dl/AOI_d__B8ytGHfCZpQVWUw8m7TXJn9uvrOUYWozg08-fqMFnlk2vEc761ZJN35oHoV1Plt-03KuvmHdIe2HgYvl0UVv8IcxW90Sh3D7ThNmUaRgtdi0h3eAAvpAHOvdR4uzz8-YICHP_OqVfp815F5Sa0er8TpjCZnikRIgPrbDm10Yn8b7NoA=s1024-rj');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: var(--hero-bg-color);
     text-align: center;
     padding: 120px 0;
     position: relative;
-    color: #fff;
+    overflow: hidden;
 }
 
-#hero::before {
-    content: '';
+.hero-bg-image {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: auto;
+    opacity: 0.1;
+    z-index: 0;
 }
 
-#hero .container {
+.hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
 .hero-title {
@@ -95,15 +92,13 @@ body {
     font-weight: 800;
     line-height: 1.4;
     margin-bottom: 25px;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #2c3e50;
 }
 .hero-subtitle {
     font-size: 1.2rem;
-    color: #fff;
+    color: var(--text-light);
     max-width: 700px;
     margin: 0 auto 40px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ------------------- 

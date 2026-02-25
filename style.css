@@ -149,6 +149,7 @@ body {
  * ---------------------------------- */
 #korea-medical-expectation .section-subtitle {
     line-height: 1.6;
+    margin-bottom: 80px;
 }
 
 .expectation-item {
@@ -156,9 +157,14 @@ body {
     align-items: center;
     justify-content: center;
     gap: 60px;
-    margin-top: 50px;
     text-align: left;
 }
+
+/* Add margin between items */
+.expectation-item + .expectation-item {
+    margin-top: 80px; 
+}
+
 
 .expectation-text {
     max-width: 50%;
@@ -169,6 +175,21 @@ body {
     max-width: 50%;
     flex-basis: 50%;
 }
+
+/* Alternating layout */
+.expectation-item:nth-child(odd) .expectation-text {
+    order: 1;
+}
+.expectation-item:nth-child(odd) .expectation-image {
+    order: 2;
+}
+.expectation-item:nth-child(even) .expectation-text {
+    order: 2;
+}
+.expectation-item:nth-child(even) .expectation-image {
+    order: 1;
+}
+
 
 .expectation-image img {
     width: 100%;

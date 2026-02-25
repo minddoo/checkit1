@@ -63,6 +63,7 @@ body {
     font-size: 2.0rem; 
     font-weight: 800;
     color: var(--primary-color);
+    text-decoration: none;
     position: relative; 
     overflow: hidden; 
 }
@@ -139,10 +140,14 @@ body {
     opacity: 0.9;
 }
 
+#individual-hero {
+    padding: 80px 0;
+}
+
+
 /* ------------------- 
- * 3. Section: Who is this for?
+ * 3. Section: Who is this for? / Cards
  * ------------------- */
-#service-for { background-color: #fff; } 
 #service-for .card-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
 #service-for .card { background: var(--white); padding: 40px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); text-align: center; transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; }
 #service-for .card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
@@ -151,14 +156,14 @@ body {
 #service-for .card p { color: var(--text-light); margin-bottom: 30px; }
 
 /* ------------------- 
- * 4. Section: Why Choose Us?
+ * 4. Section: Why Choose Us? & Feature Grids
  * ------------------- */
-#why-us-new { text-align: center; }
-#why-us-new .features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
-#why-us-new .feature-item-new { background: var(--white); padding: 35px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; }
-#why-us-new .feature-item-new:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
-#why-us-new .feature-item-new i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
-#why-us-new .feature-item-new h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
+.feature-item-new { background: var(--white); padding: 35px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-sm); transition: transform 0.3s, box-shadow 0.3s; overflow-wrap: break-word; display: flex; flex-direction: column; align-items: center;}
+.feature-item-new:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
+.feature-item-new i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
+.feature-item-new h3 { font-size: 1.5rem; margin-bottom: 10px; }
+.feature-item-new p { flex-grow: 1; }
 
 .section-title-container { display: inline-flex; align-items: center; position: relative; margin-bottom: 20px; }
 .section-title-container .section-title { margin-bottom: 0; }
@@ -190,7 +195,7 @@ body {
 .testimonial-author span { color: var(--text-light); font-size: 0.95rem; }
 
 /* ------------------- 
- * 7. Contact Form Section
+ * 7. Contact Form & CTA Sections
  * ------------------- */
 #contact-form { padding: 100px 0; }
 .contact-form-body { max-width: 800px; margin: 60px auto 0; text-align: left; }
@@ -202,6 +207,9 @@ body {
 .form-group textarea { resize: vertical; }
 .optional-text { font-size: 0.9rem; color: var(--text-light); font-weight: 400; margin-left: 5px; }
 #contact-form .cta-button-primary { width: 100%; text-align: center; margin-top: 10px; }
+
+#contact-cta { text-align: center; }
+#contact-cta .section-subtitle { margin-bottom: 40px; }
 
 /* ------------------- 
  * 8. Chatbot Styles

@@ -488,7 +488,7 @@ body {
 
 @keyframes float-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-.blinking-character { position: absolute; width: 450px; height: 450px; background-image: url('assets/회색 .png'); background-repeat: no-repeat; background-size: contain; background-position: center; top: -165px; left: 78%; animation: float-bounce 2.5s ease-in-out infinite; }
+.blinking-character { position: absolute; width: 450px; height: 450px; background-image: url('assets/안.png'); background-repeat: no-repeat; background-size: contain; background-position: center; top: -165px; left: 78%; animation: float-bounce 2.5s ease-in-out infinite; }
 
 /* ------------------- 
  * 5. Section: Process

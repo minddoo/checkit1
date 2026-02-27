@@ -587,3 +587,8 @@ body.chatbot-open { overflow: hidden; }
     font-size: 0.8rem;
     word-break: break-all;
 }
+
+:lang(cn) .logo,
+:lang(cn) .package-price {
+    font-family: var(--font-family);
+}

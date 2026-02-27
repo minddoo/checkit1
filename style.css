@@ -24,6 +24,7 @@
     --package1-color: #E67E22;
     --package2-color: #8B4513; /* Brown */
     --package3-color: #7f8c8d; /* Gray */
+    --option-price-color: #007bff;
 
     /* Chatbot colors */
     --chatbot-primary: #00c795;
@@ -591,4 +592,74 @@ body.chatbot-open { overflow: hidden; }
 :lang(cn) .logo,
 :lang(cn) .package-price {
     font-family: var(--font-family);
+}
+
+/* -------------------
+ * Options Section
+ * ------------------- */
+#options-section { 
+    background-color: var(--bg-light); 
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.option-card {
+    background: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    padding: 30px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.option-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
+}
+
+.option-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.option-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--option-price-color);
+    margin-bottom: 15px;
+}
+
+.option-desc {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
+
+.option-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.option-list li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.option-list li::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--primary-color);
+    margin-right: 10px;
 }

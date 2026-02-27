@@ -497,7 +497,7 @@ body {
     background-size: contain; 
     background-position: center; 
     top: -100px; 
-    left: 100%; 
+    left: 85%; 
     animation: float-bounce 2.5s ease-in-out infinite; 
 }
 

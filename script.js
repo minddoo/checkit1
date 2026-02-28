@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_desc': '외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여,<br>기업의 보건 관리 부담을 줄여드립니다.',
             'learn_more': '더 알아보기',
             'why_us_title': '왜 CHECKIT을 선택해야 할까요?',
-            'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\\'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.',
+            'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.',
             'why_us_feature1_title': '커뮤니케이션 전문',
             'why_us_feature1_desc': '병원 선택부터 결과 번역까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.',
             'why_us_feature2_title': '100% 고객 중심',

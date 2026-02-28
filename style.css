@@ -667,6 +667,5 @@ body.chatbot-open { overflow: hidden; }
 
 .option-list-price {
     font-weight: 600;
-    color: var(--text-color);
-    margin-left: auto;
+    color: var(--option-price-color);
 }

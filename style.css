@@ -603,7 +603,7 @@ body.chatbot-open { overflow: hidden; }
 
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     justify-content: center;
 }
@@ -663,7 +663,7 @@ body.chatbot-open { overflow: hidden; }
 
 .option-list li i {
     color: var(--option-price-color);
-    margin-right: 10px;
+    margin-right: 0;
 }
 
 .option-list-price {

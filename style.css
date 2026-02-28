@@ -674,7 +674,7 @@ body.chatbot-open { overflow: hidden; }
  * 9. Notice Section
  * ------------------- */
 #notice-section {
-    background: linear-gradient(180deg, #fff9e6 0%, #fdeec9 100%);
+    background: radial-gradient(ellipse at center, #fffbeb 0%, #fff0c7 100%);
 }
 
 .notice-content {
@@ -696,9 +696,14 @@ body.chatbot-open { overflow: hidden; }
 }
 
 .quote-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
     margin: 40px 0;
-    background-color: #fff9e6;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: var(--border-radius-md);
+    min-height: 80px;
 }
 
 .quote-box p {

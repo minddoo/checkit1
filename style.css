@@ -719,3 +719,18 @@ body.chatbot-open { overflow: hidden; }
     margin-top: 50px;
     margin-bottom: 20px;
 }
+
+/* ------------------- 
+ * 10. Refund Policy Section
+ * ------------------- */
+#refund-policy .section-title { margin-bottom: 60px; }
+.refund-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; text-align: left; }
+.refund-column h3 { font-size: 1.7rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #ddd; }
+.refund-column p { color: var(--text-light); margin-bottom: 30px; }
+.refund-column ul { list-style-type: none; padding-left: 0; line-height: 1.9; }
+.refund-column ul li { margin-bottom: 15px; padding-left: 25px; position: relative; }
+.refund-column ul li::before { content: '\2022'; color: #888; font-weight: bold; display: inline-block; width: 1em; margin-left: -1em; }
+
+#refund-policy .refund-column:first-child h3 { border-bottom-color: #ccc; }
+#refund-policy .refund-column:last-child h3 { border-bottom-color: #ccc; }
+

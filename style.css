@@ -658,7 +658,6 @@ body.chatbot-open { overflow: hidden; }
     margin-bottom: 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 .option-list li i {
@@ -669,4 +668,5 @@ body.chatbot-open { overflow: hidden; }
 .option-list-price {
     font-weight: 600;
     color: var(--text-color);
+    margin-left: auto;
 }

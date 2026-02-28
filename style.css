@@ -603,7 +603,7 @@ body.chatbot-open { overflow: hidden; }
 
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     justify-content: center;
 }
@@ -612,9 +612,11 @@ body.chatbot-open { overflow: hidden; }
     background: var(--white);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
-    text-align: center;
-    padding: 30px;
+    text-align: left;
+    padding: 35px;
     transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
 }
 
 .option-card:hover {
@@ -626,6 +628,7 @@ body.chatbot-open { overflow: hidden; }
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 15px;
+    min-height: 3.8rem;
 }
 
 .option-price {
@@ -639,6 +642,7 @@ body.chatbot-open { overflow: hidden; }
     color: var(--text-light);
     font-size: 0.95rem;
     margin-bottom: 15px;
+    flex-grow: 1;
 }
 
 .option-list {
@@ -646,20 +650,23 @@ body.chatbot-open { overflow: hidden; }
     padding: 0;
     margin: 0;
     text-align: left;
-    color: var(--text-light);
     font-size: 0.95rem;
+    flex-grow: 1; 
 }
 
 .option-list li {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
-.option-list li::before {
-    content: '\f00c';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    color: var(--primary-color);
+.option-list li i {
+    color: var(--option-price-color);
     margin-right: 10px;
+}
+
+.option-list-price {
+    font-weight: 600;
+    color: var(--text-color);
 }

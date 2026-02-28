@@ -669,3 +669,49 @@ body.chatbot-open { overflow: hidden; }
     font-weight: 600;
     color: var(--option-price-color);
 }
+
+/* ------------------- 
+ * 9. Notice Section
+ * ------------------- */
+#notice-section {
+    background: linear-gradient(135deg, #fffbe6, #fff5cc);
+}
+
+.notice-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.notice-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.notice-content p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.quote-box {
+    border-left: 4px solid #f0ad4e;
+    padding: 20px;
+    margin: 40px 0;
+    background-color: #fff9e6;
+}
+
+.quote-box p {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #c28f2c;
+    margin-bottom: 0;
+}
+
+.notice-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}

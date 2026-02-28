@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature8': '영문 영수증 요청 (대행)',
             'package3_feature9': 'CD / 추가 서류 요청',
             'package3_feature10': '결과 나올 때까지 완전한 검진 후 후속 조치',
-            'package3_feature11': '결果 구성 (비의료적, 내용 구성만)',
+            'package3_feature11': '결과 구성 (비의료적, 내용 구성만)',
             'package3_feature12': '병원 소통용 템플릿',
             'package3_feature13': '일정 변경 지원 (최대 3회 포함)',
             'package3_recommend_desc': '가장 안전하고 완벽하게 관리받고 싶은 분.',

@@ -882,6 +882,62 @@ body.chatbot-open { overflow: hidden; }
     color: var(--primary-color);
 }
 
+/* Section 5: Only Reason Grid */
+.only-reason-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.reason-item {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-align: left;
+    border-top: 4px solid var(--primary-color);
+}
+
+.reason-item h4 {
+    font-size: 1.3rem;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+}
+
+/* Section 6: Safety Grid */
+.safety-badge {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.safety-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.safety-card {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+}
+
+.safety-card i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.safety-card h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
 /* ------------------- 
  * 10. Refund Policy Section
  * ------------------- */

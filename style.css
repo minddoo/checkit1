@@ -189,15 +189,15 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 800px; /* Further increased size */
-    height: 800px;
+    width: 950px; /* Increased size */
+    height: 950px;
     filter: saturate(1.3) contrast(1.1);
-    margin-left: -50px;
+    margin-left: -100px; /* Bring them closer */
 }
 
 #corporate-hero .hero-text-content {
-    transform: none;
-    text-align: center; /* Revert to center-align as requested */
+    text-align: center;
+    transform: translateX(120px); /* Move text to the right towards character */
 }
 
 #corporate-hero .container {

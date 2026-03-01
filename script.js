@@ -100,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec5_item2_desc': '검진 현장에서 발생하는 돌발 상황에 즉각적으로 대응할 수 있는 시스템을 갖추고 있습니다.',
             'corp_sec5_item3_title': '고객 중심의 독립성',
             'corp_sec5_item3_desc': '특정 병원에 종속되지 않아 오직 근로자의 편의와 기업의 효율만을 위해 최적의 선택지를 제안합니다.',
-            'corp_sec5_item4_title': '산업재해 사전 예방',
-            'corp_sec5_item4_desc': '검진 결과에 따른 위험 신호를 조기에 발견하고 근로자에게 모국어로 직접 안내하여 중대 재해를 사전에 방지합니다.',
+            'corp_sec5_item4_title': '모국어 결과지 제공',
+            'corp_sec5_item4_desc': '검진 결과를 근로자의 모국어로 단순 번역하여 전달함으로써, 본인의 건강 상태를 정확히 파악하고 사후 관리에 적극 참여할 수 있도록 돕습니다.',
             'corp_sec6_title': '기존 프로세스를 바꿀 필요가 없습니다',
             'corp_sec6_subtitle': '의료법을 완벽히 준수하며, 기업의 운영 효율만을 극대화합니다.',
             'corp_sec6_item1_title': '의료법 위반 없음',
@@ -131,6 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_title': '최종 보고 및 데이터 업데이트',
             'corp_sec7_step6_1': '명단 파일에 개인별 진행 상황 및 특이사항 업데이트 저장',
             'corp_sec7_step6_2': '기업 요청 시 실시간 진행 현황 및 완료 명단 보고',
+            'corp_faq_title': '자주 묻는 질문 (FAQ)',
+            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
+            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
+            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
+            'corp_faq_q2': '의료법 위반 소지는 없나요?',
+            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 '비의료적 행정 지원'에만 집중하므로 법적으로 매우 안전합니다.',
+            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
+            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
+            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
+            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
+            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
+            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 '내용 전달' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
             'contact_form_company_label': '기업명',
             'chatbot_header': 'Check봇',
             'chatbot_placeholder': '메시지를 입력하세요...',
@@ -760,5 +772,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+    // FAQ Accordion Logic
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.parentElement;
+            item.classList.toggle('active');
+        });
+    });
+
     switchLanguage(initialLang);
 });

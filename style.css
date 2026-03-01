@@ -1061,3 +1061,82 @@ body.chatbot-open { overflow: hidden; }
 
 #refund-policy .refund-column:first-child h3 { border-bottom-color: #ccc; }
 #refund-policy .refund-column:last-child h3 { border-bottom-color: #ccc; }
+
+/* ----------------------------------
+ * 4.6. Corporate Page: Section 8 FAQ
+ * ---------------------------------- */
+.faq-accordion {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.faq-item {
+    background: var(--white);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+}
+
+.faq-question {
+    padding: 25px 30px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.faq-question:hover {
+    background-color: #fcfcfc;
+}
+
+.faq-q-badge {
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.faq-question h4 {
+    margin: 0;
+    flex-grow: 1;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.faq-question i {
+    color: #ccc;
+    transition: transform 0.3s;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 0 30px 0 82px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    padding: 0 30px 25px 82px;
+    max-height: 200px;
+}
+
+.faq-answer p {
+    margin: 0;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}

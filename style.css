@@ -147,12 +147,14 @@ body {
     opacity: 0.9;
 }
 
-#individual-hero {
+#individual-hero,
+#corporate-hero {
     padding: 0;
     background-color: var(--hero-bg-color);
 }
 
-#individual-hero .container {
+#individual-hero .container,
+#corporate-hero .container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,7 +167,9 @@ body {
 }
 
 #individual-hero .hero-title,
-#individual-hero .hero-subtitle {
+#individual-hero .hero-subtitle,
+#corporate-hero .hero-title,
+#corporate-hero .hero-subtitle {
     color: var(--text-color);
 }
 
@@ -178,23 +182,6 @@ body {
     background-position: center;
     animation: float-bounce 2.5s ease-in-out infinite;
     filter: saturate(1.3) contrast(1.1);
-}
-
-/* ----------------------------------
- * 2.6. Corporate Hero Section
- * ---------------------------------- */
-#corporate-hero {
-    background-color: #eef2ff; /* Light indigo/blue background for corporate feel */
-    padding: 120px 0;
-}
-
-#corporate-hero .hero-title,
-#corporate-hero .hero-subtitle {
-    color: var(--text-color);
-}
-
-#corporate-hero .hero-text-content {
-    transform: none; /* Reset transform for corporate hero */
 }
 
 /* ----------------------------------

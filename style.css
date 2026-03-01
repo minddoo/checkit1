@@ -1164,71 +1164,48 @@ html[lang="vn"] #corporate-hero .hero-title {
 /* ==================================================
 
 /* ==================================================
- * 11. Mobile Optimized Styles (Desktop Parity Final)
+
+/* ==================================================
+ * 11. Mobile Optimized Styles (App-Level Optimization)
  * ================================================== */
 @media (max-width: 768px) {
-    /* 11.1. Core Stability (Requirement 4) */
+    /* [Global Stability] */
     * {
         box-sizing: border-box !important;
     }
-
-    html, body {
+    
+    body, html {
         overflow-x: hidden !important;
         width: 100% !important;
         position: relative;
-        font-size: 16px; /* Base font for rem calculations */
+        font-size: 14px; /* Slight scale down for better card fitting */
     }
 
     .container {
         width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 20px !important;
+        padding: 0 12px !important;
     }
 
     .section {
-        padding: 50px 0 !important;
+        padding: 40px 0 !important;
         height: auto !important;
-        overflow: visible !important;
     }
 
-    /* 11.2. Header & Language Bar (Requirement 3) */
-    #main-header .container {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: nowrap !important;
+    .section-title {
+        font-size: 1.6rem !important;
+        margin-bottom: 10px !important;
     }
 
-    .logo {
-        font-size: 1.1rem !important;
-        flex-shrink: 0 !important;
+    img {
+        max-width: 100% !important;
+        height: auto !important;
     }
 
-    #language-switcher {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        gap: 4px !important;
-        margin-left: 10px !important;
-    }
-
-    #language-switcher .lang-btn {
-        padding: 6px 8px !important;
-        font-size: 0.75rem !important;
-        min-width: 42px !important;
-        min-height: 36px !important;
-        border-radius: 6px !important;
-        margin: 0 !important;
-        flex: 1 !important;
-        white-space: nowrap !important;
-    }
-
-    /* 11.3. Unified Hero Sections (Requirement 1 & 2) */
+    /* [1 & 2. Unified Hero Section - Individual & Corporate] */
     #individual-hero, #corporate-hero {
         min-height: auto !important;
         height: auto !important;
-        padding: 40px 0 !important;
+        padding: 30px 0 10px !important;
         display: block !important;
         background-color: var(--hero-bg-color) !important;
     }
@@ -1238,84 +1215,146 @@ html[lang="vn"] #corporate-hero .hero-title {
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
-        gap: 20px !important;
+        gap: 15px !important;
     }
 
     .hero-text-content {
         grid-column: auto !important;
         transform: none !important;
         max-width: 100% !important;
-        padding: 0 !important;
+        padding: 0 10px !important;
         order: 1 !important;
     }
 
-    /* Title Scale Down 5-10% */
     .hero-title {
-        font-size: 2.3rem !important;
+        font-size: 1.9rem !important; /* Scaled down 5-10% */
         line-height: 1.2 !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 10px !important;
         white-space: normal !important;
         word-break: keep-all !important;
-        overflow-wrap: break-word !important;
     }
 
     .hero-subtitle {
-        font-size: 1rem !important;
-        line-height: 1.5 !important;
-        padding: 0 10px !important;
+        font-size: 0.95rem !important;
+        line-height: 1.4 !important;
+        margin-bottom: 15px !important;
     }
 
+    /* Character: Larger & Positioned same */
     .hero-character {
         grid-column: auto !important;
         order: 2 !important;
-        width: 100% !important;
-        max-width: 320px !important;
-        height: 280px !important;
+        width: 95% !important;
+        max-width: 400px !important;
+        height: 320px !important; /* Enlarged 15-25% */
         margin: 0 auto !important;
         background-position: center bottom !important;
     }
-
+    
     #corporate-hero .hero-character {
-        height: 300px !important;
-        max-width: 380px !important;
+        height: 350px !important;
+        max-width: 420px !important;
     }
 
-    /* 11.4. Section Stability Fixes */
-    .card-container, .features-grid-new, .reality-grid, .packages-grid, .options-grid, .welfare-visual-grid, .safety-grid, .only-reason-grid, .testimonial-grid, .form-grid, .process-steps {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
+    /* [3. Grid & Card Alignment Rules] */
+    
+    /* 2 Cards (Main Page Section 1) -> Side by Side */
+    .services-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+    .service-card { padding: 15px 10px !important; }
+    .service-card h3 { font-size: 1.1rem !important; }
+
+    /* 4 Cards (Main Page Section 2) -> 2x2 */
+    .features-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+    .feature-item { padding: 15px 8px !important; }
+
+    /* 3 Cards (Individual Packages) -> 1 Row */
+    .packages-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 5px !important;
         width: 100% !important;
     }
+    .package-card {
+        padding: 10px !important;
+        border-radius: 12px !important;
+    }
+    .package-header { padding: 10px !important; }
+    .package-title { font-size: 0.9rem !important; }
+    .package-price { font-size: 1.1rem !important; }
+    .package-body { padding: 10px !important; }
+    .features-list li { font-size: 0.7rem !important; margin-bottom: 5px !important; }
+    .package-footer { padding: 8px !important; min-height: 60px !important; }
+    .recommend-title { font-size: 0.75rem !important; }
+    .recommend-desc { font-size: 0.65rem !important; }
 
-    .card, .feature-item-new, .reality-card, .package-card, .option-card, .welfare-card, .safety-card, .reason-item, .testimonial-card, .step {
+    /* 6 Cards (Options) -> 3x2 */
+    .options-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 6px !important;
+    }
+    .option-card {
+        padding: 12px 8px !important;
+        border-radius: 10px !important;
+    }
+    .option-title { font-size: 0.85rem !important; min-height: auto !important; margin-bottom: 5px !important; }
+    .option-price { font-size: 0.9rem !important; margin-bottom: 5px !important; }
+    .option-desc { font-size: 0.65rem !important; display: none; } /* Hide desc on ultra-small cards if needed */
+    .option-list { font-size: 0.65rem !important; }
+
+    /* [4. Chatbot Fixes] */
+    #chatbot-container {
         width: 100% !important;
-        margin-bottom: 0 !important;
-        height: auto !important;
+        height: 80vh !important; /* Optimal height */
+        bottom: 0 !important;
+        right: 0 !important;
+        border-radius: 20px 20px 0 0 !important;
+        z-index: 10002 !important;
+    }
+    #chatbot-messages {
+        height: calc(100% - 140px) !important;
+    }
+    #chatbot-bottom-container {
+        position: absolute !important;
+        bottom: 0;
+        width: 100%;
     }
 
-    /* Button Touch Targets */
-    .cta-button-primary, .cta-button-secondary {
-        min-height: 48px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+    /* [Header Language Bar One Row] */
+    #main-header .container {
+        flex-wrap: nowrap !important;
+    }
+    #language-switcher {
+        gap: 2px !important;
+    }
+    #language-switcher .lang-btn {
+        padding: 4px 6px !important;
+        font-size: 0.7rem !important;
+        min-width: 38px !important;
     }
 
-    /* Floating Buttons Fix */
-    #hero .cta-button-primary, 
-    #contact-form .cta-button-primary {
+    /* [General Components Scale Down] */
+    .features-grid-new, .welfare-visual-grid, .safety-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 5px !important;
+    }
+    .welfare-card h4, .feature-item-new h3, .safety-card h4 {
+        font-size: 0.8rem !important;
+    }
+
+    /* Floating CTA */
+    #hero .cta-button-primary, #contact-form .cta-button-primary {
         position: fixed !important;
-        bottom: calc(20px + env(safe-area-inset-bottom)) !important;
-        left: 20px !important;
-        right: 20px !important;
-        width: calc(100% - 40px) !important;
-        z-index: 1000 !important;
-    }
-
-    #open-chatbot {
-        bottom: calc(90px + env(safe-area-inset-bottom)) !important;
-        right: 20px !important;
-        z-index: 1001 !important;
+        bottom: 20px !important;
+        z-index: 10001 !important;
     }
 }

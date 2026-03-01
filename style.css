@@ -956,6 +956,7 @@ body.chatbot-open { overflow: hidden; }
     padding-bottom: 50px;
     display: flex;
     gap: 30px;
+    align-items: flex-start;
 }
 
 .roadmap-item:last-child {
@@ -966,9 +967,9 @@ body.chatbot-open { overflow: hidden; }
 .roadmap-item::before {
     content: '';
     position: absolute;
-    left: 20px;
-    top: 40px;
-    bottom: -10px;
+    left: 21px; /* 원의 정중앙 (42px/2) */
+    top: 42px; 
+    bottom: 0;
     width: 2px;
     background-color: #eee;
 }
@@ -979,8 +980,8 @@ body.chatbot-open { overflow: hidden; }
 
 .roadmap-number {
     flex-shrink: 0;
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     background-color: var(--white);
     border: 2px solid var(--primary-color);
     color: var(--primary-color);
@@ -992,6 +993,15 @@ body.chatbot-open { overflow: hidden; }
     font-size: 1.1rem;
     z-index: 2;
     box-shadow: var(--shadow-sm);
+    margin-top: -4px; /* 제목 텍스트 높이와 시각적 수평 맞춤 */
+}
+
+.roadmap-content h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-top: 0; /* 상단 마진 제거하여 숫자와 정렬 */
+    margin-bottom: 15px;
 }
 
 .roadmap-item.highlight .roadmap-number {

@@ -1160,245 +1160,21 @@ html[lang="vn"] #corporate-hero .hero-title {
 }
 
 
-/* ==================================================
 
 /* ==================================================
-
-/* ==================================================
-
-/* ==================================================
- * 11. Unified Mobile Design System (Mobile-First)
+ * 11. Mobile Optimized Styles (Stability & Alignment Fix)
  * ================================================== */
 @media (max-width: 768px) {
-    /* --- 11.1. Core Mobile Reset --- */
-    :root {
-        --m-padding: 24px;
-        --m-card-bg: #ffffff;
-        --m-card-radius: 24px;
-        --m-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        --safe-area-bottom: env(safe-area-inset-bottom);
-    }
-
+    /* 11.1. Core Stability */
     * {
         box-sizing: border-box !important;
-        -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-        font-size: 16px !important;
-        overflow-x: hidden !important;
-        width: 100% !important;
-        background-color: #fcfcfc !important;
-        color: #1a1a1a !important;
-    }
-
-    .container {
-        padding: 0 var(--m-padding) !important;
-        width: 100% !important;
-    }
-
-    .section {
-        padding: 60px 0 !important;
-    }
-
-    /* --- 11.2. Unified Typography Hierarchy --- */
-    .section-title {
-        font-size: 1.85rem !important;
-        font-weight: 800 !important;
-        line-height: 1.25 !important;
-        margin-bottom: 12px !important;
-        letter-spacing: -0.02em !important;
-        text-align: left !important;
-    }
-
-    .section-subtitle {
-        font-size: 1.05rem !important;
-        line-height: 1.6 !important;
-        color: #666 !important;
-        margin-bottom: 40px !important;
-        text-align: left !important;
-    }
-
-    /* --- 11.3. Unified Button System --- */
-    .cta-button-primary {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-height: 56px !important;
-        padding: 0 32px !important;
-        border-radius: 16px !important;
-        font-size: 1.1rem !important;
-        font-weight: 700 !important;
-        width: 100% !important;
-        box-shadow: 0 8px 20px rgba(46, 204, 113, 0.25) !important;
-        margin: 0 auto !important;
-    }
-
-    /* Floating Bottom CTA */
-    #hero .cta-button-primary, 
-    #contact-form .cta-button-primary {
-        position: fixed !important;
-        bottom: calc(20px + var(--safe-area-bottom)) !important;
-        left: 20px !important;
-        right: 20px !important;
-        width: calc(100% - 40px) !important;
-        z-index: 9999 !important;
-    }
-
-    /* --- 11.4. Unified Hero Structure (One Screen view) --- */
-    #individual-hero, #corporate-hero {
-        height: 90vh !important;
-        min-height: 600px !important;
-        display: flex !important;
-        align-items: center !important;
-        background-color: #fff !important;
-        padding: 0 !important;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    #individual-hero .container, #corporate-hero .container {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        text-align: left !important;
-    }
-
-    .hero-text-content {
-        order: 1 !important;
-        padding: 0 !important;
-        margin-bottom: 40px !important;
-        transform: none !important;
-    }
-
-    .hero-title {
-        font-size: 2.2rem !important;
-        font-weight: 800 !important;
-        line-height: 1.2 !important;
-        white-space: normal !important;
-        margin-bottom: 16px !important;
-    }
-
-    .hero-subtitle {
-        font-size: 1.1rem !important;
-        line-height: 1.5 !important;
-        color: #444 !important;
-        margin-bottom: 0 !important;
-    }
-
-    .hero-character {
-        order: 2 !important;
-        height: 220px !important;
-        width: 100% !important;
-        background-position: center bottom !important;
-        background-size: contain !important;
-    }
-
-    /* --- 11.5. Unified Card-Based Layout (Problem/Solution) --- */
-    /* Problem Section cards */
-    .expectation-item, .reality-card, .feature-item-new, .welfare-card, .safety-card {
-        background: var(--m-card-bg) !important;
-        border-radius: var(--m-card-radius) !important;
-        padding: 28px !important;
-        margin-bottom: 16px !important;
-        box-shadow: var(--m-shadow) !important;
-        border: 1px solid rgba(0,0,0,0.02) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        text-align: left !important;
-    }
-
-    .expectation-grid, .reality-grid, .features-grid-new, .welfare-visual-grid, .safety-grid, .only-reason-grid {
-        display: block !important;
-    }
-
-    .expectation-image {
-        display: none !important; /* Hide small images for clean look */
-    }
-
-    .expectation-item-title, .reality-item-title, .feature-item-new h3, .welfare-card h4, .safety-card h4 {
-        font-size: 1.3rem !important;
-        font-weight: 700 !important;
-        margin-bottom: 12px !important;
-        color: var(--primary-dark) !important;
-    }
-
-    .expectation-item-desc, .reality-list, .feature-item-new p, .welfare-card p, .safety-card p {
-        font-size: 1rem !important;
-        line-height: 1.6 !important;
-        color: #555 !important;
-        margin: 0 !important;
-    }
-
-    .reality-list {
-        padding-left: 20px !important;
-    }
-
-    /* --- 11.6. Unified Trust/Roadmap Elements --- */
-    /* Essay/Story section padding */
-    .reality-overtime-essay, .overtime-content {
-        padding: 32px 24px !important;
-        border-radius: var(--m-card-radius) !important;
-        font-size: 1.05rem !important;
-        line-height: 1.8 !important;
-        background: #f0fdf4 !important;
-    }
-
-    /* Roadmap Scaling */
-    .process-roadmap {
-        padding-left: 0 !important;
-    }
-    .roadmap-item {
-        background: #fff;
-        padding: 24px;
-        border-radius: 20px;
-        margin-bottom: 16px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        box-shadow: var(--m-shadow);
-    }
-    .roadmap-item::before { display: none !important; }
-
-    /* --- 11.7. Header & Language Fix --- */
-    #main-header .container {
-        padding: 0 16px !important;
-    }
-    .header-logo { height: 28px !important; }
-    .logo { font-size: 1.3rem !important; }
-
-    #language-switcher .lang-btn {
-        padding: 6px 12px !important;
-        font-size: 0.8rem !important;
-        border-radius: 100px !important;
-        background: #f0f0f0 !important;
-        color: #333 !important;
-        border: none !important;
-    }
-    #language-switcher .lang-btn.active {
-        background: #000 !important;
-        color: #fff !important;
-    }
-
-    /* FAQ optimization */
-    .faq-item { border: none !important; box-shadow: var(--m-shadow) !important; }
-    .faq-question { padding: 20px !important; }
-    .faq-answer { padding: 0 20px 24px 20px !important; }
-}
-
-/* ==================================================
- * 11. Mobile Optimized Styles (Restore Original Branding)
- * ================================================== */
-@media (max-width: 768px) {
-    /* Core Alignment Fixes */
-    * {
-        box-sizing: border-box !important;
-    }
-
-    body, html {
         overflow-x: hidden !important;
         width: 100% !important;
         position: relative;
+        scroll-behavior: smooth;
     }
 
     .container {
@@ -1409,16 +1185,14 @@ html[lang="vn"] #corporate-hero .hero-title {
 
     .section {
         padding: 60px 0 !important;
+        height: auto !important; /* Fix for cut-off sections */
+        overflow: visible !important;
     }
 
     .section-title {
         font-size: 1.8rem !important;
         line-height: 1.3 !important;
-    }
-
-    .section-subtitle {
-        font-size: 1rem !important;
-        margin-bottom: 40px !important;
+        word-break: keep-all;
     }
 
     img {
@@ -1426,66 +1200,119 @@ html[lang="vn"] #corporate-hero .hero-title {
         height: auto !important;
     }
 
-    /* Header Restoration */
+    /* 11.2. Hero & Header Fix */
     #main-header {
-        padding: 15px 0 !important;
+        padding: 10px 0 !important;
     }
-    .header-logo {
-        height: 3rem !important;
-    }
-    .logo {
-        font-size: 1.5rem !important;
-    }
-    #language-switcher .lang-btn {
-        padding: 6px 10px !important;
-        font-size: 0.8rem !important;
-        margin-left: 4px !important;
-    }
+    .header-logo { height: 2.5rem !important; }
+    .logo { font-size: 1.2rem !important; }
 
-    /* Hero Sections Restoration (Align items but keep desktop style) */
     #hero, #individual-hero, #corporate-hero {
         min-height: auto !important;
+        height: auto !important;
         padding: 60px 0 !important;
         display: block !important;
-    }
-
-    #hero .hero-title {
-        font-size: 2.2rem !important;
-        white-space: normal !important;
     }
 
     #individual-hero .container, #corporate-hero .container {
         display: flex !important;
         flex-direction: column !important;
         text-align: center !important;
-        gap: 30px !important;
+        gap: 20px !important;
     }
 
     .hero-text-content {
         grid-column: auto !important;
         transform: none !important;
         max-width: 100% !important;
+        margin-bottom: 20px;
     }
 
     .hero-character {
         grid-column: auto !important;
         width: 100% !important;
-        height: 300px !important;
-        margin: 0 !important;
+        height: 250px !important;
+        margin: 0 auto !important;
         background-position: center !important;
     }
 
-    /* Grid to Stack Restoration (Maintain original card look) */
-    .card-container, .features-grid-new, .reality-grid, .packages-grid, .options-grid, .welfare-visual-grid, .safety-grid, .only-reason-grid, .testimonial-grid, .form-grid {
-        display: block !important;
+    /* 11.3. Section: Process (Fix for cut-off items) */
+    #process-new .process-steps, .process-steps {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+        height: auto !important;
+        overflow: visible !important;
     }
 
-    .card, .feature-item-new, .reality-card, .package-card, .option-card, .welfare-card, .safety-card, .reason-item, .testimonial-card {
-        margin-bottom: 20px !important;
+    .process-roadmap {
+        padding-left: 10px !important;
+        height: auto !important;
+    }
+
+    .roadmap-item {
+        flex-direction: row !important;
+        padding-bottom: 30px !important;
+        gap: 15px !important;
+    }
+
+    .roadmap-content {
+        padding: 20px !important;
+    }
+
+    /* 11.4. Grids & Cards (Desktop feel, mobile alignment) */
+    .card-container, .features-grid-new, .reality-grid, .packages-grid, .options-grid, .welfare-visual-grid, .safety-grid, .only-reason-grid, .testimonial-grid, .form-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
         width: 100% !important;
     }
 
-    /* Comparison Table (Horizontal Scroll allowed locally for technical tables if needed, or stack) */
+    .card, .feature-item-new, .reality-card, .package-card, .option-card, .welfare-card, .safety-card, .reason-item, .testimonial-card {
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* 11.5. Buttons & Interactivity */
+    .cta-button-primary, .cta-button-secondary {
+        min-height: 48px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1rem !important;
+    }
+
+    /* Floating Bottom Contact Fix */
+    #hero .cta-button-primary, 
+    #contact-form .cta-button-primary {
+        position: fixed !important;
+        bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+        left: 20px !important;
+        right: 20px !important;
+        width: calc(100% - 40px) !important;
+        z-index: 1000 !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+    }
+
+    /* Chatbot Button: Move above contact button to avoid overlap */
+    #open-chatbot {
+        bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+        right: 20px !important;
+        width: 50px !important;
+        height: 50px !important;
+        z-index: 1001 !important;
+    }
+
+    #chatbot-container {
+        width: 100% !important;
+        height: 100% !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        border-radius: 0 !important;
+        z-index: 10002 !important;
+    }
+
+    /* Fix for comparison tables */
     .solution-comparison {
         flex-direction: column !important;
     }
@@ -1495,47 +1322,10 @@ html[lang="vn"] #corporate-hero .hero-title {
         transform: rotate(90deg) !important;
     }
 
-    /* Roadmap Restoration */
-    .process-roadmap {
-        padding-left: 10px !important;
-    }
-    .roadmap-item {
-        gap: 15px !important;
-    }
-    .roadmap-number {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 0.9rem !important;
-    }
-    .roadmap-item::before {
-        left: 18px !important;
-        top: 36px !important;
-    }
-
-    /* Touch Targets & Buttons */
-    .cta-button-primary, .cta-button-secondary, .lang-btn, .chatbot-lang-btn, #open-chatbot {
-        min-height: 48px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    .cta-button-primary {
-        width: 100% !important;
-    }
-
-    /* Chatbot Fix */
-    #chatbot-container {
-        width: 100% !important;
-        height: 100% !important;
-        bottom: 0 !important;
-        right: 0 !important;
-        max-height: none !important;
-        border-radius: 0 !important;
-    }
-
-    /* Safe Area */
-    body {
-        padding-bottom: env(safe-area-inset-bottom);
+    /* Language switcher to Black logic (as per previous turn) */
+    #language-switcher .lang-btn.active {
+        background-color: var(--primary-color) !important;
+        color: #000 !important;
+        border-color: var(--primary-color) !important;
     }
 }

@@ -157,6 +157,10 @@ body {
     overflow: visible;
 }
 
+#corporate-hero {
+    min-height: 450px; /* 기업 고객 페이지 배경 높이 축소 */
+}
+
 #individual-hero .container,
 #corporate-hero .container {
     display: grid;
@@ -173,7 +177,7 @@ body {
 }
 
 #corporate-hero .hero-text-content {
-    transform: translateX(150px); /* 텍스트를 오른쪽으로 대폭 이동 */
+    transform: translateX(250px); /* 텍스트를 오른쪽으로 더 이동 */
 }
 
 #corporate-hero .hero-title {
@@ -204,10 +208,10 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 950px; 
-    height: 850px;
+    width: 850px; 
+    height: 750px;
     margin-left: -50px; /* 텍스트와 더욱 밀착 */
-    filter: saturate(1.8) contrast(1.2); /* 채도 및 선명도 강화 */
+    filter: saturate(1.2) contrast(1.1); /* 채도 다시 낮춤 */
     image-rendering: -webkit-optimize-contrast;
 }
 

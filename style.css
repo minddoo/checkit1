@@ -1166,7 +1166,9 @@ html[lang="vn"] #corporate-hero .hero-title {
 /* ==================================================
 
 /* ==================================================
- * 11. Mobile Optimized Styles (App-Level Optimization)
+
+/* ==================================================
+ * 11. Mobile Optimized Styles (UX & Interaction Focus)
  * ================================================== */
 @media (max-width: 768px) {
     /* [Global Stability] */
@@ -1178,183 +1180,216 @@ html[lang="vn"] #corporate-hero .hero-title {
         overflow-x: hidden !important;
         width: 100% !important;
         position: relative;
-        font-size: 14px; /* Slight scale down for better card fitting */
+        font-size: 15px;
     }
 
     .container {
         width: 100% !important;
-        padding: 0 12px !important;
+        padding: 0 20px !important;
     }
 
     .section {
-        padding: 40px 0 !important;
+        padding: 50px 0 !important;
         height: auto !important;
+        overflow: visible !important;
     }
 
-    .section-title {
-        font-size: 1.6rem !important;
-        margin-bottom: 10px !important;
+    /* [1-1. Main Header] */
+    #main-header {
+        padding: 8px 0 !important;
+    }
+    #main-header .container {
+        justify-content: flex-start !important;
+        gap: 10px;
+    }
+    .header-logo {
+        height: 2.4rem !important; /* Scaled down ~30% */
+    }
+    .logo {
+        font-size: 1.2rem !important;
+        margin-right: auto;
     }
 
-    img {
-        max-width: 100% !important;
-        height: auto !important;
+    /* [Slide Interaction Common] */
+    .slider-container {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important;
+        padding: 20px !important;
+        margin: 0 -20px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    .slider-container::-webkit-scrollbar { display: none; }
+    
+    .slider-item {
+        flex: 0 0 85% !important;
+        scroll-snap-align: center !important;
+        transition: transform 0.3s ease !important;
     }
 
-    /* [1 & 2. Unified Hero Section - Individual & Corporate] */
-    #individual-hero, #corporate-hero {
-        min-height: auto !important;
-        height: auto !important;
-        padding: 30px 0 10px !important;
-        display: block !important;
-        background-color: var(--hero-bg-color) !important;
-    }
-
-    #individual-hero .container, #corporate-hero .container {
+    /* [1-2. Individual/Corporate Cards Main Page] */
+    #service-for .card-container {
         display: flex !important;
         flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
+        gap: 20px !important;
+    }
+    #service-for .card {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* [1-3. Main Page Section 2: 2x2 Grid] */
+    #why-us .features-grid-new {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 15px !important;
     }
-
-    .hero-text-content {
-        grid-column: auto !important;
-        transform: none !important;
-        max-width: 100% !important;
-        padding: 0 10px !important;
-        order: 1 !important;
+    #why-us .feature-item-new {
+        aspect-ratio: 1/1 !important;
+        justify-content: center !important;
+        padding: 15px !important;
     }
 
-    .hero-title {
-        font-size: 1.9rem !important; /* Scaled down 5-10% */
-        line-height: 1.2 !important;
-        margin-bottom: 10px !important;
-        white-space: normal !important;
-        word-break: keep-all !important;
+    /* [1-4. Process Section (Main Page)] */
+    #process-new .process-steps {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
     }
-
-    .hero-subtitle {
-        font-size: 0.95rem !important;
-        line-height: 1.4 !important;
-        margin-bottom: 15px !important;
-    }
-
-    /* Character: Larger & Positioned same */
-    .hero-character {
-        grid-column: auto !important;
-        order: 2 !important;
-        width: 95% !important;
-        max-width: 400px !important;
-        height: 320px !important; /* Enlarged 15-25% */
-        margin: 0 auto !important;
-        background-position: center bottom !important;
-    }
-    
-    #corporate-hero .hero-character {
-        height: 350px !important;
-        max-width: 420px !important;
-    }
-
-    /* [3. Grid & Card Alignment Rules] */
-    
-    /* 2 Cards (Main Page Section 1) -> Side by Side */
-    .services-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-    }
-    .service-card { padding: 15px 10px !important; }
-    .service-card h3 { font-size: 1.1rem !important; }
-
-    /* 4 Cards (Main Page Section 2) -> 2x2 */
-    .features-grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-    }
-    .feature-item { padding: 15px 8px !important; }
-
-    /* 3 Cards (Individual Packages) -> 1 Row */
-    .packages-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 5px !important;
+    #process-new .step {
+        aspect-ratio: 1/1 !important;
         width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* [1-5. Testimonials Slider] */
+    .testimonial-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important;
+        padding: 30px 20px !important;
+        margin: 0 -20px !important;
+    }
+    .testimonial-card {
+        flex: 0 0 80% !important;
+        scroll-snap-align: center !important;
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
+    }
+    /* Focus effect simulator */
+    .testimonial-card:nth-child(2) { transform: scale(1.05); z-index: 2; }
+
+    /* [2-1. Individual Page Reality Slider] */
+    .reality-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 15px !important;
+        padding: 20px 0 !important;
+    }
+    .reality-card {
+        flex: 0 0 85% !important;
+        aspect-ratio: 1/1 !important;
+        scroll-snap-align: center !important;
+    }
+
+    /* [2-2. Essay Title Wrap] */
+    #reality-overtime .section-title {
+        white-space: pre-line !important;
+        line-height: 1.5 !important;
+    }
+
+    /* [2-3. Solution Slider] */
+    #checkit-solution .features-grid-new {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 15px !important;
+    }
+    #checkit-solution .feature-item-new {
+        flex: 0 0 80% !important;
+        aspect-ratio: 1/1 !important;
+        scroll-snap-align: center !important;
+    }
+
+    /* [2-4. Package Slider] */
+    .packages-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important;
+        padding: 40px 20px !important;
+        margin: 0 -20px !important;
     }
     .package-card {
-        padding: 10px !important;
-        border-radius: 12px !important;
+        flex: 0 0 80% !important;
+        scroll-snap-align: center !important;
+        transform: scale(0.95);
     }
-    .package-header { padding: 10px !important; }
-    .package-title { font-size: 0.9rem !important; }
-    .package-price { font-size: 1.1rem !important; }
-    .package-body { padding: 10px !important; }
-    .features-list li { font-size: 0.7rem !important; margin-bottom: 5px !important; }
-    .package-footer { padding: 8px !important; min-height: 60px !important; }
-    .recommend-title { font-size: 0.75rem !important; }
-    .recommend-desc { font-size: 0.65rem !important; }
+    .package-card:nth-child(2) { transform: scale(1.1); }
 
-    /* 6 Cards (Options) -> 3x2 */
-    .options-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 6px !important;
+    /* [3-1. Corporate Hero] */
+    #corporate-hero {
+        min-height: 400px !important;
+        padding: 40px 0 !important;
     }
-    .option-card {
-        padding: 12px 8px !important;
-        border-radius: 10px !important;
-    }
-    .option-title { font-size: 0.85rem !important; min-height: auto !important; margin-bottom: 5px !important; }
-    .option-price { font-size: 0.9rem !important; margin-bottom: 5px !important; }
-    .option-desc { font-size: 0.65rem !important; display: none; } /* Hide desc on ultra-small cards if needed */
-    .option-list { font-size: 0.65rem !important; }
-
-    /* [4. Chatbot Fixes] */
-    #chatbot-container {
+    #corporate-hero .hero-character {
+        height: 400px !important; /* Enlarge character significantly */
+        max-width: 100% !important;
         width: 100% !important;
-        height: 80vh !important; /* Optimal height */
-        bottom: 0 !important;
-        right: 0 !important;
-        border-radius: 20px 20px 0 0 !important;
-        z-index: 10002 !important;
-    }
-    #chatbot-messages {
-        height: calc(100% - 140px) !important;
-    }
-    #chatbot-bottom-container {
-        position: absolute !important;
-        bottom: 0;
-        width: 100%;
     }
 
-    /* [Header Language Bar One Row] */
-    #main-header .container {
-        flex-wrap: nowrap !important;
+    /* [3-2 & 3-3. Corporate Section 1 & 2 Sliders] */
+    #corporate-necessity .features-grid-new, .welfare-visual-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 15px !important;
     }
-    #language-switcher {
-        gap: 2px !important;
-    }
-    #language-switcher .lang-btn {
-        padding: 4px 6px !important;
-        font-size: 0.7rem !important;
-        min-width: 38px !important;
+    .feature-item-new, .welfare-card {
+        flex: 0 0 80% !important;
+        aspect-ratio: 1/1 !important;
+        scroll-snap-align: center !important;
     }
 
-    /* [General Components Scale Down] */
-    .features-grid-new, .welfare-visual-grid, .safety-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 5px !important;
+    /* [3-4. Corporate Section 3: Long cards stack] */
+    .reality-grid {
+        flex-direction: column !important;
     }
-    .welfare-card h4, .feature-item-new h3, .safety-card h4 {
-        font-size: 0.8rem !important;
+    .reality-card {
+        aspect-ratio: auto !important;
+        width: 100% !important;
+    }
+
+    /* [3-5. Corporate Section 4: Title One Line] */
+    .comparison-column h3 {
+        font-size: 1rem !important;
+        white-space: nowrap !important;
+        overflow: hidden;
+    }
+
+    /* [3-6 & 3-7. Corporate Section 5 & 6 Stack] */
+    .only-reason-grid, .safety-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+    .reason-item, .safety-card {
+        width: 100% !important;
+    }
+
+    /* [3-8. Corporate Section 7 Padding] */
+    .process-roadmap {
+        padding: 0 20px !important;
     }
 
     /* Floating CTA */
-    #hero .cta-button-primary, #contact-form .cta-button-primary {
-        position: fixed !important;
-        bottom: 20px !important;
-        z-index: 10001 !important;
+    .cta-button-primary {
+        min-height: 44px !important;
     }
 }

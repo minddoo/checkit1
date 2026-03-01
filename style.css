@@ -102,7 +102,7 @@ body {
 
 #language-switcher { text-align: right; } 
 #language-switcher .lang-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 8px 15px; margin-left: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
-#language-switcher .lang-btn.active { background-color: #333; color: var(--white); border-color: #333; }
+#language-switcher .lang-btn.active { background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color); }
 
 /* ------------------- 
  * 2.5. Hero Section
@@ -1159,134 +1159,99 @@ html[lang="vn"] #corporate-hero .hero-title {
     margin-bottom: 20px;
 }
 
+
 /* ==================================================
-
+ * 11. Mobile Optimized Styles (Requirement Final)
+ * ================================================== */
 @media (max-width: 768px) {
-    /* 11.1. Global Mobile Scaling */
-    html {
-        font-size: 13px; /* Scale down everything using rem */
-    }
-    
-    .section {
-        padding: 40px 0;
-    }
-    
-    .section-title {
-        font-size: 1.6rem;
-    }
-    
-    .container {
-        padding: 0 10px;
-        max-width: 100%;
-    }
-
-    /* 11.2. Hero Sections Mobile (Preserve 3-column Grid) */
-    #individual-hero .container, #corporate-hero .container {
-        display: grid !important;
-        grid-template-columns: 0.1fr 1.8fr 1.1fr !important;
-        gap: 5px !important;
-        padding: 20px 5px !important;
-        min-height: 350px !important;
+    /* 1. Header: Logo and Buttons on one line */
+    #main-header .container {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
         align-items: center !important;
+        padding: 0 10px !important;
+    }
+    .logo {
+        font-size: 1.1rem !important;
+    }
+    .header-logo {
+        height: 2.2rem !important;
+    }
+    #language-switcher {
+        display: flex !important;
+        gap: 2px !important;
+    }
+    #language-switcher .lang-btn {
+        padding: 4px 6px !important;
+        font-size: 0.7rem !important;
+        color: #000 !important;
     }
 
-    .hero-text-content {
-        grid-column: 2 !important;
-        transform: none !important;
-        text-align: left !important;
-        padding-left: 10px;
+    /* 3. Language Buttons: Green fill, Black text when active */
+    #language-switcher .lang-btn.active {
+        background-color: var(--primary-color) !important;
+        color: #000 !important;
+        border-color: var(--primary-color) !important;
     }
 
-    .hero-character {
-        grid-column: 3 !important;
-        width: 100% !important;
-        height: 250px !important;
-        background-position: center right !important;
-        margin-top: 0 !important;
+    /* 2. Main Hero: Title larger, fit in view */
+    #hero {
+        padding: 80px 0 !important;
+    }
+    #hero .hero-title {
+        font-size: 2.6rem !important; /* Larger text */
+        white-space: normal !important;
     }
 
-    .hero-title {
-        font-size: 1.5rem !important;
-        white-space: nowrap !important; /* Keep on one line as requested */
+    /* 4. Main Page Section 1: Vertical Stack */
+    .services-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
     }
 
-    .hero-subtitle {
-        font-size: 0.85rem !important;
-        margin-bottom: 20px !important;
-    }
-
-    /* 11.3. Preserve Multi-column Grids but scale down */
-    .features-grid-new, .welfare-visual-grid, .safety-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 10px !important;
-    }
-
-    .reality-grid, .only-reason-grid, .expectation-grid, .refund-grid, .form-grid {
+    /* 5. Main Page Section 2: 2x2 Grid */
+    .features-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 10px !important;
     }
-
-    /* Individual card scaling */
-    .feature-item-new, .welfare-card, .reality-card, .reason-item, .safety-card, .expectation-item {
+    .feature-item {
         padding: 15px 10px !important;
     }
+    .feature-item i { font-size: 1.5rem !important; }
+    .feature-item h3 { font-size: 1rem !important; }
+    .feature-item p { font-size: 0.8rem !important; }
 
-    .welfare-icon-box {
-        width: 40px !important;
-        height: 40px !important;
-        font-size: 1.2rem !important;
+    /* Subpages scaling to maintain desktop structure but smaller */
+    #individual-hero .container, #corporate-hero .container {
+        display: grid !important;
+        grid-template-columns: 1.2fr 1fr !important;
+        gap: 10px !important;
+        padding: 30px 10px !important;
+    }
+    .hero-text-content {
+        grid-column: 1 !important;
+        transform: none !important;
+        text-align: left !important;
+    }
+    .hero-character {
+        grid-column: 2 !important;
+        height: 200px !important;
+    }
+    .hero-title {
+        font-size: 1.6rem !important;
     }
 
-    .solution-comparison {
-        display: flex !important;
-        flex-direction: row !important;
+    .welfare-visual-grid, .safety-grid, .features-grid-new {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
         gap: 5px !important;
     }
-
-    .comparison-column {
-        flex: 1;
-        padding: 10px !important;
-    }
-
-    .comparison-divider {
-        width: 30px !important;
-        transform: none !important;
-    }
-
-    .comparison-list li {
-        font-size: 0.75rem !important;
-        margin-bottom: 5px !important;
-    }
-
-    /* 11.4. Roadmap scaling */
-    .process-roadmap {
-        padding-left: 20px !important;
-    }
-    
-    .roadmap-item {
-        gap: 10px !important;
-    }
-    
-    .roadmap-content {
-        padding: 15px !important;
-    }
-
-    /* 11.5. Buttons & Inputs */
-    .cta-button-primary {
-        padding: 10px 20px !important;
-        font-size: 0.9rem !important;
-    }
-
-    /* 11.6. Language switcher to Black */
-    #language-switcher .lang-btn.active {
-        background-color: #000 !important;
-        border-color: #000 !important;
-    }
-    
-    .chatbot-lang-btn.active {
-        background-color: #000 !important;
-        border-color: #000 !important;
+    .reality-grid, .only-reason-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
     }
 }

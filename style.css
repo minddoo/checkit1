@@ -153,14 +153,14 @@ body {
 #corporate-hero {
     padding: 0;
     background-color: var(--hero-bg-color);
-    min-height: 700px; 
+    min-height: 400px; 
     display: flex;
     align-items: center;
     overflow: visible;
 }
 
 #corporate-hero {
-    min-height: 450px; /* 기업 고객 페이지 배경 높이 축소 */
+    min-height: 350px; /* 기업 고객 페이지 배경 높이 축소 */
 }
 
 #individual-hero .container,

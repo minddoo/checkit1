@@ -1131,7 +1131,7 @@ body.chatbot-open { overflow: hidden; }
 
 .faq-item.active .faq-answer {
     padding: 0 30px 25px 82px;
-    max-height: 200px;
+    max-height: 500px;
 }
 
 .faq-answer p {

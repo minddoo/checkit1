@@ -15,6 +15,7 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **Dedicated Client Pages:** 
     *   `individual.html` & `corporate.html` will be created to provide detailed information for each client type.
     *   "Learn More" buttons will be added to the main services section to link to these pages.
+    *   **Note:** The refund policy section has been removed from `individual.html` per user request.
 *   **Contact Form:** A new section will be added, featuring a simple and clean form for users to submit inquiries (Email, Phone, Message).
 
 ### **Feature 1: Expanded Language Support**

@@ -157,38 +157,23 @@ body {
     overflow: visible;
 }
 
-#corporate-hero {
-    min-height: 650px; /* 높이 축소 */
-}
-
 #individual-hero .container,
 #corporate-hero .container {
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* 1:1:1 비율로 텍스트를 정중앙에 고정 */
+    grid-template-columns: 1fr auto 1fr; /* 텍스트를 중앙에 고정하기 위한 3열 그리드 */
     align-items: center;
-    gap: 40px;
+    gap: 20px;
     width: 100%;
 }
 
-#corporate-hero .container {
-    display: flex; /* 기업용 특수 레이아웃 */
-    justify-content: center;
-    flex-direction: row-reverse; /* 캐릭터 왼쪽, 텍스트 오른쪽 */
-    gap: 10px; /* 간격 최소화 */
-}
-
 .hero-text-content {
-    grid-column: 2; /* 텍스트는 무조건 중앙 열에 위치 (individual) */
+    grid-column: 2; /* 텍스트를 중앙 열에 배치 */
     text-align: center;
-    max-width: 750px;
-}
-
-#corporate-hero .hero-text-content {
-    text-align: left; /* 우측 배치를 위해 왼쪽 정렬로 변경 가능성 고려 */
+    max-width: 800px;
 }
 
 #corporate-hero .hero-title {
-    white-space: nowrap; /* 제목 한 줄 고정 */
+    white-space: nowrap; /* 제목 한 줄 구성 */
 }
 
 #individual-hero .hero-title,
@@ -199,7 +184,7 @@ body {
 }
 
 .hero-character {
-    grid-column: 3; /* 캐릭터는 텍스트 오른쪽 열에 위치 (individual) */
+    grid-column: 3; /* 캐릭터를 우측 열에 배치 */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center left;
@@ -215,7 +200,7 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 700px; 
+    width: 650px; 
     height: 600px;
 }
 

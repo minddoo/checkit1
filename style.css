@@ -1158,3 +1158,169 @@ html[lang="vn"] #corporate-hero .hero-title {
     max-width: 600px;
     margin-bottom: 20px;
 }
+
+/* ==================================================
+ * 11. Mobile Optimized Styles (Mobile App Feel)
+ * ================================================== */
+@media (max-width: 768px) {
+    .section {
+        padding: 60px 0;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        padding: 0 10px;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+        padding: 0 20px;
+        margin-bottom: 40px;
+    }
+
+    .container {
+        padding: 0 15px;
+    }
+
+    #main-header {
+        padding: 10px 0;
+    }
+    
+    .header-logo {
+        height: 2.8rem;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
+    }
+    
+    #language-switcher .lang-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+        margin-left: 4px;
+    }
+
+    #hero {
+        padding: 80px 0;
+    }
+    
+    .hero-title {
+        font-size: 2rem !important;
+        white-space: normal !important;
+        line-height: 1.3;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+
+    #individual-hero, #corporate-hero {
+        min-height: auto;
+        padding: 50px 0;
+        display: block;
+    }
+
+    #individual-hero .container, #corporate-hero .container {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text-content {
+        grid-column: auto;
+        transform: none !important;
+        margin-bottom: 30px;
+        order: 1;
+    }
+
+    .hero-character {
+        grid-column: auto;
+        width: 100% !important;
+        height: 300px !important;
+        background-position: center !important;
+        order: 2;
+    }
+
+    .services-grid, .features-grid, .features-grid-new, .welfare-visual-grid, .reality-grid, .safety-grid, .only-reason-grid, .expectation-grid, .options-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px;
+    }
+
+    .solution-comparison {
+        flex-direction: column;
+    }
+    
+    .comparison-divider {
+        margin: 20px 0;
+        transform: rotate(90deg);
+    }
+    
+    .reality-overtime-essay {
+        padding: 30px 20px;
+        font-size: 1rem;
+    }
+
+    .package-card {
+        margin-bottom: 30px;
+    }
+
+    .process-roadmap {
+        padding-left: 10px;
+    }
+    
+    .roadmap-item {
+        gap: 15px;
+    }
+    
+    .roadmap-content {
+        padding: 20px;
+    }
+    
+    .roadmap-number {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .roadmap-item::before {
+        left: 18px;
+        top: 36px;
+    }
+
+    .faq-question {
+        padding: 20px;
+    }
+    
+    .faq-q-badge {
+        width: 28px;
+        height: 28px;
+        margin-right: 15px;
+    }
+    
+    .faq-answer {
+        padding-left: 63px !important;
+    }
+
+    .form-grid {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    #chatbot-container {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+    
+    #chatbot-messages {
+        height: calc(100% - 130px);
+    }
+    
+    body.chatbot-open {
+        overflow: hidden;
+    }
+}

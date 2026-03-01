@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_desc': '외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여,<br>기업의 보건 관리 부담을 줄여드립니다.',
             'learn_more': '더 알아보기',
             'why_us_title': '왜 CHECKIT을 선택해야 할까요?',
-            'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.',
+            'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 '비의료 과정'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.',
             'why_us_feature1_title': '커뮤니케이션 전문',
             'why_us_feature1_desc': '병원 선택부터 결과 번역까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.',
             'why_us_feature2_title': '100% 고객 중심',
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_item3_title': 'ESG 경영의 실천',
             'corp_sec2_item3_desc': '다양성을 존중하고 인권을 보호하는 선도적인 기업으로서의 가치를 증명하세요.',
             'corp_sec3_title': '하지만, 현장에서 마주하는 현실은 다릅니다',
-            'corp_sec3_subtitle': '병원을 예약하고 검진을 받는 \'당일\'보다 더 힘든 것은 그 전후의 \'관리 공백\'입니다.',
+            'corp_sec3_subtitle': '병원을 예약하고 검진을 받는 '당일'보다 더 힘든 것은 그 전후의 '관리 공백'입니다.',
             'corp_sec3_item1_title': '검진 전: 막막함과 두려움',
             'corp_sec3_item1_p1': '한국어로 된 문진표와 주의사항, 번역기로도 한계가 있습니다.',
             'corp_sec3_item1_p2': '금식 안내를 오해하여 검사가 취소되거나 사고가 발생하기도 합니다.',
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec3_item2_p2': '재검사가 필요한 위험 신호를 놓쳐 병을 키우는 경우가 빈번합니다.',
             'corp_sec3_item2_p3': '기업은 결과지만 보관할 뿐, 근로자와의 소통 공백은 여전합니다.',
             'corp_sec4_title': 'CHECKIT만이 채울 수 있는 관리의 공백',
-            'corp_sec4_subtitle': '병원은 의료 행위만 하고, 기업은 결과만 받습니다. 그 사이의 \'모든 과정\'은 CHECKIT이 책임집니다.',
+            'corp_sec4_subtitle': '병원은 의료 행위만 하고, 기업은 결과만 받습니다. 그 사이의 '모든 과정'은 CHECKIT이 책임집니다.',
             'corp_sec4_side1_title': '병원과 기업의 영역',
             'corp_sec4_side1_p1': '전문적인 의료 검사 시행',
             'corp_sec4_side1_p2': '검진 결과 데이터 생성',
@@ -149,16 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
             'greeting_response': '안녕하세요! 만나서 반가워요. CHECKIT에 대해 궁금한 점이 있으시면 아래 질문을 선택하거나 직접 물어보세요.',
             'q1': '예약은 어떻게 하나요?',
-            'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
+            'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. '지금 바로 상담 신청' 버튼을 눌러 문의를 남겨주세요!',
             'q2': '병원/의료인과 계약된 구조인가요?',
             'a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
             'q3': '의료 행위나 진료 알선을 하나요?',
-            'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
+            'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 '비의료 과정'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
             'q4': '검진 당일 어떤 도움을 받을 수 있나요?',
             'a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
             'q5': '결과지는 어떻게 전달되나요?',
             'a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
-            'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 \'상담 신청\'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.'
+            'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 '상담 신청'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.'
         },
         en: {
             'nav_home': 'Home',
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_desc': 'We manage group health check-ups for foreign employees easily and efficiently,<br>reducing the burden of corporate health care.',
             'learn_more': 'Learn More',
             'why_us_title': 'Why Choose CHECKIT?',
-            'why_us_subtitle_new': 'Despite the high quality of medical services, foreigners face difficulties in \'non-medical processes\' such as booking, registration, and result checking.<br>CHECKIT fills this very gap.',
+            'why_us_subtitle_new': 'Despite the high quality of medical services, foreigners face difficulties in 'non-medical processes' such as booking, registration, and result checking.<br>CHECKIT fills this very gap.',
             'why_us_feature1_title': 'Communication Specialists',
             'why_us_feature1_desc': 'From hospital selection to result translation, we solve all communication problems caused by language and cultural barriers.',
             'why_us_feature2_title': '100% Client-Centric',
@@ -219,27 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec1_item2_title': 'Strengthened Legal Protection',
             'corp_sec1_item2_desc': 'Foreign workers are subject to the same Occupational Safety and Health Act and examination requirements as domestic workers.',
             'corp_sec1_item3_title': 'Core of Corporate Competitiveness',
-            'corp_sec1_item3_desc': 'Retaining excellent foreign talent directly correlates with a company\'s productivity.',
+            'corp_sec1_item3_desc': 'Retaining excellent foreign talent directly correlates with a company's productivity.',
             'corp_sec2_title': 'Health Check-ups Become the Most Powerful Welfare Benefit',
             'corp_sec2_subtitle': 'Differentiated health check-up support increases employee loyalty and enhances the corporate image.',
             'corp_sec2_item1_title': 'A Company People Want to Work For',
             'corp_sec2_item1_desc': 'Health management without language barriers is the #1 welfare benefit preferred by foreign workers.',
             'corp_sec2_item2_title': 'Maximizing Productivity',
-            'corp_sec2_item2_desc': 'When healthy workers work stably, a company\'s production efficiency is maximized.',
+            'corp_sec2_item2_desc': 'When healthy workers work stably, a company's production efficiency is maximized.',
             'corp_sec2_item3_title': 'Practice of ESG Management',
             'corp_sec2_item3_desc': 'Prove your value as a leading company that respects diversity and protects human rights.',
             'corp_sec3_title': 'However, the Reality Faced on the Ground is Different',
-            'corp_sec3_subtitle': 'What is harder than the \'day\' of booking and receiving a check-up is the \'management gap\' before and after.',
+            'corp_sec3_subtitle': 'What is harder than the 'day' of booking and receiving a check-up is the 'management gap' before and after.',
             'corp_sec3_item1_title': 'Before Check-up: Helplessness and Fear',
             'corp_sec3_item1_p1': 'Questionnaires and precautions in Korean have limits even with translators.',
             'corp_sec3_item1_p2': 'Misunderstanding fasting instructions leads to cancelled tests or accidents.',
             'corp_sec3_item1_p3': 'They feel severe anxiety about communication even on the way to the hospital.',
             'corp_sec3_item2_title': 'After Check-up: Neglected Results',
-            'corp_sec3_item2_p1': 'They can\'t read a single word of the result sheets they worked hard to get.',
+            'corp_sec3_item2_p1': 'They can't read a single word of the result sheets they worked hard to get.',
             'corp_sec3_item2_p2': 'Missing red flags for re-examination frequently causes illnesses to worsen.',
             'corp_sec3_item2_p3': 'Companies only store the results; the communication gap with workers remains.',
             'corp_sec4_title': 'The Management Gap that Only CHECKIT Can Fill',
-            'corp_sec4_subtitle': 'Hospitals only perform medical acts, and companies only receive results. CHECKIT handles \'every process\' in between.',
+            'corp_sec4_subtitle': 'Hospitals only perform medical acts, and companies only receive results. CHECKIT handles 'every process' in between.',
             'corp_sec4_side1_title': 'Domain of Hospitals & Companies',
             'corp_sec4_side1_p1': 'Conduct professional medical examinations',
             'corp_sec4_side1_p2': 'Generate check-up result data',
@@ -265,9 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec6_item1_title': 'No Violation of Medical Law',
             'corp_sec6_item1_desc': 'We do not engage in patient solicitation or referral; there is zero legal risk as we only act as a proxy for non-medical communication.',
             'corp_sec6_item2_title': 'No Hospital Contract Structure',
-            'corp_sec6_item2_desc': 'We do not have a structure of exchanging fees with hospitals. You may continue to use your company\'s existing affiliated hospitals.',
+            'corp_sec6_item2_desc': 'We do not have a structure of exchanging fees with hospitals. You may continue to use your company's existing affiliated hospitals.',
             'corp_sec6_item3_title': 'Immediate Implementation Possible',
-            'corp_sec6_item3_desc': 'Without complex system integration, foreign workers\' check-up environments improve from tomorrow just by applying.',
+            'corp_sec6_item3_desc': 'Without complex system integration, foreign workers' check-up environments improve from tomorrow just by applying.',
             'corp_sec7_title': 'Sophisticated & Systematic Operating Process',
             'corp_sec7_subtitle': 'From list receipt to final reporting, CHECKIT manages and takes responsibility for every step.',
             'corp_sec7_step1_title': 'List Receipt & Analysis',
@@ -307,16 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_greeting': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
             'greeting_response': 'Hello! Nice to meet you. If you have any questions about CHECKIT, feel free to select a question below or ask me directly.',
             'q1': 'How do I make a reservation?',
-            'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
+            'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the 'Apply for a Consultation Now' button to leave an inquiry!',
             'q2': 'Are you contracted with hospitals/medical staff?',
             'a2': 'No. CHECKIT does not have contractual relationships with any specific hospitals. We help you choose the most suitable hospital by providing objective information from your perspective. Your health and satisfaction are our top priorities.',
             'q3': 'Do you perform medical acts or arrange treatments?',
-            'a3': 'No, CHECKIT complies with the Medical Service Act and does not perform any medical acts or arrange treatments. We are a service that helps you focus solely on your health check-up by concentrating on \'non-medical processes\' such as hospital reservations, interpretation, and result translation.',
+            'a3': 'No, CHECKIT complies with the Medical Service Act and does not perform any medical acts or arrange treatments. We are a service that helps you focus solely on your health check-up by concentrating on 'non-medical processes' such as hospital reservations, interpretation, and result translation.',
             'q4': 'What kind of help can I get on the day of the check-up?',
-            'a4': 'On the day of your check-up, your Check Bot manager is with you every step of the way so you don\'t feel alone due to language barriers. We provide real-time support for all communication processes within the hospital, such as registration, consultations, and payment, helping you focus comfortably on your check-up without inconvenience or loneliness caused by language issues.',
+            'a4': 'On the day of your check-up, your Check Bot manager is with you every step of the way so you don't feel alone due to language barriers. We provide real-time support for all communication processes within the hospital, such as registration, consultations, and payment, helping you focus comfortably on your check-up without inconvenience or loneliness caused by language issues.',
             'q5': 'How are the results delivered?',
             'a5': 'Once you provide us with the Korean results you received from the hospital, we will provide a simple translation and summary of the key contents in your native language. To comply with medical law, we do not provide medical opinions or detailed explanations.',
-            'unsupported_input': 'That\'s an interesting question! I can only provide pre-set answers for now, but if you inquire through \'Apply for a Consultation\', a professional manager will kindly guide you.'
+            'unsupported_input': 'That's an interesting question! I can only provide pre-set answers for now, but if you inquire through 'Apply for a Consultation', a professional manager will kindly guide you.'
         },
         cn: {
             'nav_home': '首页',
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'process_step3_title_new': '翻译结果文件交付',
             'process_step3_desc_new': '我们将您提供的结果报告进行简单的翻译及摘要,然后通过电子邮件或即时通讯工具以文件形式交付.',
             'testimonials_title': '真实客户评价',
-            'testimonials_subtitle': '听听CHECKIT客户的真实心声.',
+            'testimonials_subtitle': '听听CHECKIT客户的真实心聲.',
             'testimonial1_text': '“这是我第一次在韩国做健康检查，本来很迷茫，但多亏了CHECKIT，从选择医院、预约到检查当天的沟通，一切都进行得非常顺利. 结果报告也用我的母语进行了翻译，很容易理解.”',
             'testimonial1_author': '安娜，留学生',
             'testimonial1_type': '居住在韩国的外国人',
@@ -416,6 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec5_item2_desc': '拥有能够立即应对体检现场发生的突发状况的体系.',
             'corp_sec5_item3_title': '以客户为中心的独立性',
             'corp_sec5_item3_desc': '不隶属于特定医院，仅为员工的便利 and 企业的效率提供最佳选择.',
+            'corp_sec5_item4_title': '提供母语结果单',
+            'corp_sec5_item4_desc': '通过将体检结果简单翻译成员工의母语，帮助其准确了解自己的健康状况，并积极参与后续管理。',
             'corp_sec6_title': '无需改变现有流程',
             'corp_sec6_subtitle': '完美遵守医疗法，仅最大化企业的运营效率.',
             'corp_sec6_item1_title': '无违反医疗法行为',
@@ -486,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_desc': 'Chúng tôi quản lý các cuộc khám sức khỏe nhóm cho nhân viên nước ngoài một cách dễ dàng và hiệu quả,<br>giảm bớt gánh nặng quản lý chăm sóc sức khỏe của doanh nghiệp.',
             'learn_more': 'Tìm hiểu thêm',
             'why_us_title': 'Tại sao chọn CHECKIT?',
-            'why_us_subtitle_new': 'Mặc dù chất lượng dịch vụ y tế cao, người nước ngoài vẫn gặp khó khăn trong các “quy trình phi y tế” như đặt hẹn, đăng ký và kiểm tra kết quả.<br>CHECKIT lấp khoảng trống này.',
+            'why_us_subtitle_new': 'Mặc dù chất lượng dịch vụ y tế cao, người nước ngoài vẫn gặp khó khăn trong các “quy trình phi y tế” như đặt hẹn, đăng ký và kiểm tra kết quả.<br>CHECKIT lấp đầy khoảng trống này.',
             'why_us_feature1_title': 'Chuyên gia giao tiếp',
             'why_us_feature1_desc': 'Từ việc lựa chọn bệnh viện đến dịch kết quả, chúng tôi giải quyết mọi vấn đề giao tiếp do rào cản ngôn ngữ và văn hóa.',
             'why_us_feature2_title': '100% lấy khách hàng làm trung tâm',
@@ -543,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_item3_title': 'Thực hành quản trị ESG',
             'corp_sec2_item3_desc': 'Chứng minh giá trị của bạn như một công ty hàng đầu tôn trọng sự đa dạng và bảo vệ nhân quyền.',
             'corp_sec3_title': 'Tuy nhiên, thực tế tại hiện trường lại khác biệt',
-            'corp_sec3_subtitle': 'Điều khó khăn hơn cả \'ngày\' đặt hẹn và đi khám là \'khoảng trống quản lý\' trước và sau đó.',
+            'corp_sec3_subtitle': 'Điều khó khăn hơn cả 'ngày' đặt hẹn và đi khám là 'khoảng trống quản lý' trước và sau đó.',
             'corp_sec3_item1_title': 'Trước khi khám: Sự bất lực và sợ hãi',
             'corp_sec3_item1_p1': 'Các bảng câu hỏi và lưu ý bằng tiếng Hàn có giới hạn ngay cả khi sử dụng máy dịch.',
             'corp_sec3_item1_p2': 'Hiểu lầm hướng dẫn nhịn ăn dẫn đến việc hủy kiểm tra hoặc xảy ra tai nạn.',
@@ -553,7 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec3_item2_p2': 'Bỏ lỡ các cảnh báo đỏ về việc cần khám lại thường khiến bệnh tình trở nên trầm trọng hơn.',
             'corp_sec3_item2_p3': 'Các công ty chỉ lưu trữ kết quả; khoảng cách giao tiếp với công nhân vẫn còn đó.',
             'corp_sec4_title': 'Khoảng trống quản lý mà chỉ CHECKIT có thể lấp đầy',
-            'corp_sec4_subtitle': 'Bệnh viện chỉ thực hiện các hành vi y tế, và công ty chỉ nhận kết quả. CHECKIT xử lý \'mọi quy trình\' ở giữa.',
+            'corp_sec4_subtitle': 'Bệnh viện chỉ thực hiện các hành vi y tế, và công ty chỉ nhận kết quả. CHECKIT xử lý 'mọi quy trình' ở giữa.',
             'corp_sec4_side1_title': 'Lĩnh vực của Bệnh viện & Doanh nghiệp',
             'corp_sec4_side1_p1': 'Thực hiện các cuộc khám y tế chuyên nghiệp',
             'corp_sec4_side1_p2': 'Tạo dữ liệu kết quả khám sức khỏe',
@@ -621,16 +623,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_greeting': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi dưới đây hoặc tự nhập câu hỏi của bạn.',
             'greeting_response': 'Xin chào! Rất vui được gặp bạn. Nếu bạn có bất kỳ câu hỏi nào về CHECKIT, hãy chọn một câu hỏi dưới đây hoặc hỏi trực tiếp.',
             'q1': 'Làm cách nào để đặt lịch hẹn?',
-            'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
+            'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám và lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn và xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút 'Đăng ký tư vấn ngay' để để lại yêu cầu!',
             'q2': 'Bạn có hợp đồng với bệnh viện/nhân viên y tế không?',
             'a2': 'Không. CHECKIT không có mối quan hệ hợp đồng với bất kỳ bệnh viện cụ thể nào. Chúng tôi giúp bạn chọn bệnh viện phù hợp nhất bằng cách cung cấp thông tin khách quan theo quan điểm của bạn. Sức khỏe và sự hài lòng của bạn là ưu tiên hàng đầu của chúng tôi.',
             'q3': 'Bạn có thực hiện các hành vi y tế hoặc sắp xếp điều trị không?',
-            'a3': 'Không, CHECKIT tuân thủ Đạo luật Dịch vụ Y tế và không thực hiện bất kỳ hành vi y tế hoặc sắp xếp phương pháp điều trị nào. Chúng tôi là một dịch vụ giúp bạn chỉ tập trung vào việc kiểm tra sức khỏe bằng cách tập trung vào các \'quy trình phi y tế\' như đặt lịch hẹn bệnh viện, phiên dịch và dịch kết quả.',
+            'a3': 'Không, CHECKIT tuân thủ Đạo luật Dịch vụ Y tế và không thực hiện bất kỳ hành vi y tế hoặc sắp xếp phương pháp điều trị nào. Chúng tôi là một dịch vụ giúp bạn chỉ tập trung vào việc kiểm tra sức khỏe bằng cách tập trung vào các 'quy trình phi y tế' như đặt lịch hẹn bệnh viện, phiên dịch và dịch kết quả.',
             'q4': 'Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?',
             'a4': 'Vào ngày khám sức khỏe, người quản lý Check Bot của bạn sẽ đồng hành cùng bạn trên mọi nẻo đường để bạn không cảm thấy đơn độc do rào cản ngôn ngữ. Chúng tôi cung cấp hỗ trợ thời gian thực cho tất cả các quy trình giao tiếp trong bệnh viện, chẳng hạn như đăng ký, tư vấn và thanh toán, giúp bạn thoải mái tập trung vào việc kiểm tra sức khỏe mà không gặp bất tiện hay cô đơn do vấn đề ngôn ngữ.',
             'q5': 'Kết quả được gửi như thế nào?',
             'a5': 'Sau khi bạn cung cấp cho chúng tôi kết quả bằng tiếng Hàn mà bạn nhận được từ bệnh viện, chúng tôi sẽ cung cấp một bản dịch và tóm tắt đơn giản về nội dung chính bằng tiếng mẹ đẻ của bạn. Để tuân thủ luật y tế, chúng tôi không cung cấp ý kiến y tế hoặc giải thích chi tiết.',
-            'unsupported_input': 'Đó là một câu hỏi thú vị! Hiện tại tôi chỉ có thể cung cấp các câu trả lời được cài sẵn, nhưng nếu bạn yêu cầu thông qua \'Đăng ký tư vấn\', một người quản lý chuyên nghiệp sẽ vui lòng hướng dẫn bạn.'
+            'unsupported_input': 'Đó là một câu hỏi thú vị! Hiện tại tôi chỉ có thể cung cấp các câu trả lời được cài sẵn, nhưng nếu bạn yêu cầu thông qua 'Đăng ký tư vấn', một người quản lý chuyên nghiệp sẽ vui lòng hướng dẫn bạn.'
         }
     };
 
@@ -681,7 +683,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!chatbotMessages) return;
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', sender);
-        messageElement.innerHTML = text.replace(/\n/g, '<br>');
+        messageElement.innerHTML = text.replace(/
+/g, '<br>');
         chatbotMessages.appendChild(messageElement);
         scrollToBottom();
         return messageElement;
@@ -708,7 +711,7 @@ document.addEventListener('DOMContentLoaded', () => {
         suggestedQuestionsContainer.innerHTML = '';
         const langData = translations[currentLang];
         for (let i = 1; i <= 5; i++) {
-            const qKey = `q${i}`;
+            const qKey = \;
             if (langData[qKey]) {
                 const questionBtn = document.createElement('button');
                 questionBtn.classList.add('suggested-question-btn');
@@ -719,7 +722,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     setTimeout(() => {
                         if (loadingIndicator) chatbotMessages.removeChild(loadingIndicator);
-                        addMessage(langData[`a${i}`], 'bot');
+                        addMessage(langData[\], 'bot');
                     }, 1200);
                 });
                 suggestedQuestionsContainer.appendChild(questionBtn);
@@ -808,12 +811,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
+    
     // FAQ Accordion Logic
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
+        const question = e.target.closest('.faq-question');
+        if (question) {
             const item = question.parentElement;
             item.classList.toggle('active');
-        });
+        }
     });
 
     switchLanguage(initialLang);

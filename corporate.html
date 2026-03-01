@@ -332,21 +332,22 @@
             <h2 class="section-title" data-lang-key="contact_title_new">궁금한 점이 있으신가요?</h2>
             <p class="section-subtitle" data-lang-key="contact_subtitle_new">CHECKIT의 기업 전담 팀이 최적의 솔루션을 제안해 드립니다.</p>
             <div class="contact-form-body">
-                <form id="corporate-inquiry">
+                <form id="corporate-inquiry" action="https://formspree.io/f/xaqdljye" method="POST">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="company-name" data-lang-key="contact_form_company_label">기업명</label>
-                            <input type="text" id="company-name" required>
+                            <input type="text" id="company-name" name="company_name" required>
                         </div>
                         <div class="form-group">
                             <label for="email" data-lang-key="contact_form_email_label">이메일 주소</label>
-                            <input type="email" id="email" required>
+                            <input type="email" id="email" name="email" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="message" data-lang-key="contact_form_message_label">문의 내용</label>
-                        <textarea id="message" rows="5" required></textarea>
+                        <textarea id="message" name="message" rows="5" required></textarea>
                     </div>
+                    <input type="hidden" name="_subject" value="New Corporate Inquiry from CHECKIT">
                     <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button">문의하기</button>
                 </form>
             </div>

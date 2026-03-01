@@ -17,8 +17,11 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
     *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
     *   "Learn More" buttons on the main page link correctly to these dedicated pages.
-    *   **Note:** The refund policy section has been removed from `individual.html` per user request.
-*   **Contact Form:** A new section will be added, featuring a simple and clean form for users to submit inquiries (Email, Phone, Message).
+*   **Hero Section Standardization (March 2026):**
+    *   **Uniform Height:** Both individual and corporate hero sections are set to a consistent **400px height** for a balanced look across the site.
+    *   **Text Clarity:** Hero titles and subtitles are set to **absolute black (#000)** for maximum readability.
+    *   **Character Visibility:** Original character assets (`체킷 캐릭터.png` for individual, `기.png` for corporate) are restored and scaled to fit the standardized height.
+*   **Restored Design integrity:** All section paddings (90px), mobile sliders, and responsive grid layouts have been restored to their original stable state to maintain design consistency.
 
 ### **Feature 1: Expanded Language Support**
 
@@ -33,24 +36,8 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 ## 3. File Structure
 
 *   `index.html`: Updated with new sections (Process, Why CHECKIT, Reviews), a contact form, and links to the new pages.
-*   `individual.html`: **New file.** Dedicated page for individual client services.
-*   `corporate.html`: **New file.** Dedicated page for corporate client services.
-*   `style.css`: Updated with styles for the new sections, the contact form, and any necessary layout adjustments.
-*   `script.js`: Significantly updated to manage translations for four languages (KR, EN, CN, VN) across the entire site and the chatbot. It will also contain the logic for the new pages if needed.
-*   `blueprint.md`: This document, outlining the expanded project scope.
-
-## 4. Development Plan
-
-1.  **Phase 1: Structure & New Pages:** Update `blueprint.md`. Create `individual.html` and `corporate.html` with basic placeholder content. Update `index.html` with the new sections, contact form, and language buttons.
-2.  **Phase 2: Styling:** Update `style.css` to ensure all new elements are visually consistent with the existing design system.
-3.  **Phase 3: Translation & Logic:**
-    *   Populate the `translations` object in `script.js` with all text content in Korean, English, Chinese, and Vietnamese.
-    *   Update the chatbot's response object with translations for all four languages.
-## 5. Recent Design Updates (March 2026)
-
-*   **Design Restoration:** Successfully restored the overall design of individual and corporate client pages from a stable version after unintended style deletions.
-*   **Hero Section Optimization:**
-    *   **Individual Hero:** Fixed height at 400px for consistency.
-    *   **Corporate Hero:** Implemented an **ultra-slim (banner-like) design** with a minimum height of 40px, reduced padding, and significantly smaller font sizes and character images to minimize vertical space at the top of the page.
-*   **Vertical Spacing Compression:** Reduced the padding of all sections on the corporate page (`corporate.html`) from 90px to 20px to create a more compact and streamlined user experience.
-*   **Mobile Optimization:** All design restorations and hero optimizations have been applied to mobile views, ensuring consistent slim layouts across all devices.
+*   `individual.html`: Dedicated page for individual client services.
+*   `corporate.html`: Dedicated page for corporate client services.
+*   `style.css`: Restored to stable design with standardized 400px hero sections.
+*   `script.js`: Significantly updated to manage translations for four languages (KR, EN, CN, VN) across the entire site and the chatbot.
+*   `blueprint.md`: This document, outlining the project scope and design standards.

@@ -149,7 +149,8 @@ body {
     opacity: 0.9;
 }
 
-#individual-hero {
+#individual-hero,
+#corporate-hero {
     padding: 0;
     background-color: var(--hero-bg-color);
     min-height: 400px; 
@@ -158,41 +159,58 @@ body {
     overflow: visible;
 }
 
-#corporate-hero {
-    padding: 2px 0 !important;
-    background-color: var(--hero-bg-color);
-    min-height: 40px !important;
-    display: flex;
+#individual-hero .container,
+#corporate-hero .container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* 텍스트를 중앙에 고정하기 위한 3열 그리드 */
     align-items: center;
-    overflow: visible;
+    gap: 20px;
+    width: 100%;
+}
+
+.hero-text-content {
+    grid-column: 2; /* 텍스트는 무조건 중앙 열에 배치 */
+    text-align: center;
+    max-width: 800px;
+}
+
+#corporate-hero .hero-text-content {
+    transform: translateX(250px); /* 텍스트를 오른쪽으로 더 이동 */
 }
 
 #corporate-hero .hero-title {
-    font-size: 1.2rem !important;
-    margin-bottom: 0 !important;
-    line-height: 1.0;
+    white-space: nowrap; /* 제목 한 줄 구성 */
 }
 
+#individual-hero .hero-title,
+#individual-hero .hero-subtitle,
+#corporate-hero .hero-title,
 #corporate-hero .hero-subtitle {
-    font-size: 0.8rem !important;
-    margin-bottom: 2px !important;
-    line-height: 1.1;
+    color: #000; /* 명확한 검정색으로 변경 */
 }
 
-#corporate-hero .cta-button-primary {
-    padding: 4px 10px !important;
-    font-size: 0.75rem !important;
+.hero-character {
+    grid-column: 3; /* 캐릭터를 우측 열에 배치 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center left;
+    animation: float-bounce 2.5s ease-in-out infinite;
+    filter: saturate(1.3) contrast(1.1);
+}
+
+#individual-hero .hero-character {
+    background-image: url('assets/체킷 캐릭터.png');
+    width: 400px; /* 크기 조정 */
+    height: 400px; /* 크기 조정 */
 }
 
 #corporate-hero .hero-character {
-    width: 80px !important;
-    height: 60px !important;
-    margin-left: -2px !important;
-}
-
-#corporate-necessity, #corporate-welfare, #corporate-reality-pain, #corporate-solution-value, 
-#corporate-only-reason, #corporate-no-burden, #corporate-process-detail, #corporate-faq {
-    padding: 20px 0 !important; /* 초정밀 간격 */
+    background-image: url('assets/기.png');
+    width: 600px; /* 크기 조정 */
+    height: 500px; /* 크기 조정 (약간 큼직하게 유지하되 400px 배경에 맞춤) */
+    margin-left: -50px; /* 텍스트와 더욱 밀착 */
+    filter: saturate(1.2) contrast(1.1); /* 채도 다시 낮춤 */
+    image-rendering: -webkit-optimize-contrast;
 }
 
 /* ----------------------------------
@@ -1313,13 +1331,13 @@ html[lang="vn"] #corporate-hero .hero-title {
 
     /* [3-1. Corporate Hero] */
     #corporate-hero {
-        min-height: 60px !important;
-        padding: 10px 0 !important;
+        min-height: 400px !important;
+        padding: 40px 0 !important;
     }
     #corporate-hero .hero-character {
-        height: 100px !important; /* Enlarge character significantly */
+        height: 400px !important; /* Enlarge character significantly */
         max-width: 100% !important;
-        width: 120px !important;
+        width: 100% !important;
     }
 
     /* [3-2 & 3-3. Corporate Section 1 & 2 Sliders] */

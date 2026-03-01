@@ -189,6 +189,7 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
+    filter: saturate(1.3) contrast(1.1);
 }
 
 /* ----------------------------------

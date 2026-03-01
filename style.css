@@ -157,6 +157,10 @@ body {
     overflow: visible;
 }
 
+#corporate-hero {
+    min-height: 800px; /* 더 큰 캐릭터를 위해 높이 상향 */
+}
+
 #individual-hero .container,
 #corporate-hero .container {
     display: grid;
@@ -196,8 +200,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 600px; 
-    height: 550px;
+    width: 850px; 
+    height: 750px;
+    margin-left: -80px; /* 텍스트 쪽으로 더 밀착 */
 }
 
 /* ----------------------------------

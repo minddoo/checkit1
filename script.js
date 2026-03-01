@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_page_title': '개인 고객 맞춤 서비스',
             'individual_page_subtitle': 'CHECKIT은 한국에 거주하거나 방문하는 모든 외국인 개인이 언어의 장벽 없이 최상의 건강검진을 받을 수 있도록 돕습니다.',
             'corporate_page_title': '기업 고객을 위한 토탈 솔루션',
-            'corporate_page_subtitle': 'CHECKIT은 외국인 근로자의 건강을 체계적으로 관리하여 기업의 생산성 향상과 보건 관리 부담 경감에 기여합니다.',
+            'corporate_page_subtitle': 'CHECKIT은 외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 보건 관리 부담을 줄여드립니다.',
             'corporate_solutions_title': '기업을 위한 최적의 파트너',
             'corporate_service1_title': '보건 관리자 업무 경감',
             'corporate_service1_desc': '단체 예약, 일정 조율, 결과 관리 등 복잡한 행정 업무를 CHECKIT이 전담하여 보건 관리자의 효율을 높입니다.',

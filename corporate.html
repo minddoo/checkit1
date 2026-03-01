@@ -3,57 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기업 고객 - CHECKIT</title>
+    <title data-lang-key="corporate_page_title">기업 고객 - CHECKIT</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 </head>
 <body>
-    <header>
+    <header id="main-header">
         <div class="container">
-            <div class="logo">CHECKIT</div>
-            <nav>
-                <ul>
-                    <li><a href="index.html" data-lang-key="nav_home">홈</a></li>
-                </ul>
+            <a href="index.html" class="logo">
+                <img src="assets/로고2.png" alt="CHECKIT Logo" class="header-logo">
+                CHECKIT
+            </a>
+            <nav id="language-switcher">
+                <button class="lang-btn active" data-lang="ko">KR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="cn">CN</button>
+                <button class="lang-btn" data-lang="vn">VN</button>
             </nav>
-            <div class="lang-buttons">
-                <button onclick="changeLanguage('ko')">KR</button>
-                <button onclick="changeLanguage('en')">EN</button>
-                <button onclick="changeLanguage('cn')">CN</button>
-                <button onclick="changeLanguage('vn')">VN</button>
-            </div>
         </div>
     </header>
 
     <main>
-        <section class="section">
+        <section id="corporate-hero" class="section">
             <div class="container">
-                <h1 class="section-title" data-lang-key="corporate_page_title">기업 고객을 위한 토탈 헬스케어 솔루션</h1>
-                <p class="page-subtitle" data-lang-key="corporate_page_subtitle">CHECKIT은 외국인 근로자들의 건강을 체계적으로 관리하여 기업의 생산성 향상과 복지 만족도 증진에 기여합니다.</p>
+                <div class="hero-text-content">
+                    <h1 class="hero-title" data-lang-key="corporate_page_title"></h1>
+                    <p class="hero-subtitle" data-lang-key="corporate_page_subtitle"></p>
+                    <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
+                </div>
+            </div>
+        </section>
 
-                <div class="card-container">
-                    <div class="card">
-                        <h3 data-lang-key="corporate_service1_title">보건 관리자 업무 부담 경감</h3>
-                        <p data-lang-key="corporate_service1_desc">단체 예약, 일정 조율, 결과 관리 등 복잡하고 시간이 많이 소요되는 업무를 CHECKIT이 대행하여 보건 관리자의 효율적인 업무를 지원합니다.</p>
+        <section id="corporate-solutions" class="section">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="corporate_solutions_title">기업을 위한 최적의 파트너</h2>
+                <div class="features-grid-new">
+                    <div class="feature-item-new">
+                        <i class="fas fa-user-shield"></i>
+                        <h3 data-lang-key="corporate_service1_title"></h3>
+                        <p data-lang-key="corporate_service1_desc"></p>
                     </div>
-                    <div class="card">
-                        <h3 data-lang-key="corporate_service2_title">산업재해 예방 및 생산성 증대</h3>
-                        <p data-lang-key="corporate_service2_desc">정기적이고 정확한 건강검진을 통해 질병을 조기에 발견하고 예방함으로써, 근로자들의 건강을 지키고 산업재해 발생 위험을 낮춥니다.</p>
+                    <div class="feature-item-new">
+                        <i class="fas fa-chart-line"></i>
+                        <h3 data-lang-key="corporate_service2_title"></h3>
+                        <p data-lang-key="corporate_service2_desc"></p>
                     </div>
-                    <div class="card">
-                        <h3 data-lang-key="corporate_service3_title">높은 만족도와 검진 참여율</h3>
-                        <p data-lang-key="corporate_service3_desc">언어 장벽 없는 편안한 검진 과정은 외국인 근로자들의 검진 참여율을 자연스럽게 높이며, 이는 기업에 대한 긍정적인 인식과 만족도로 이어집니다.</p>
+                    <div class="feature-item-new">
+                        <i class="fas fa-smile-beam"></i>
+                        <h3 data-lang-key="corporate_service3_title"></h3>
+                        <p data-lang-key="corporate_service3_desc"></p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <section id="corporate-process" class="section alternate-bg">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="corporate_process_title">진행 프로세스</h2>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 data-lang-key="corporate_process_step1_title">도입 상담</h3>
+                        <p data-lang-key="corporate_process_step1_desc">기업의 규모와 필요 요구사항을 분석하여 최적의 플랜을 제안합니다.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 data-lang-key="corporate_process_step2_title">맞춤형 설계</h3>
+                        <p data-lang-key="corporate_process_step2_desc">외국인 근로자들을 위한 다국어 안내 자료와 검진 시스템을 준비합니다.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 data-lang-key="corporate_process_step3_title">운영 및 관리</h3>
+                        <p data-lang-key="corporate_process_step3_desc">검진 예약부터 결과 사후 관리까지 CHECKIT이 원스톱으로 지원합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-form" class="section">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="contact_title_new"></h2>
+                <p class="section-subtitle" data-lang-key="contact_subtitle_new"></p>
+                <form class="contact-form-body">
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="company-name" data-lang-key="contact_form_company_label">기업명</label>
+                            <input type="text" id="company-name" name="company-name" required placeholder="회사명을 입력해주세요.">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="email" data-lang-key="contact_form_email_label"></label>
+                            <input type="email" id="email" name="email" required data-lang-key="contact_form_email_placeholder">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" data-lang-key="contact_form_phone_label"></label>
+                            <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder">
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="message" data-lang-key="contact_form_message_label"></label>
+                            <textarea id="message" name="message" rows="6" required data-lang-key="contact_form_message_placeholder"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button"></button>
+                </form>
+            </div>
+        </section>
     </main>
 
-    <footer id="footer">
-        <div class="container">
-            <p>&copy; 2024 CHECKIT. All rights reserved.</p>
+    <button id="open-chatbot"><i class="fas fa-comment-dots"></i></button>
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <span class="chatbot-title" data-lang-key="chatbot_header"></span>
+            <div id="chatbot-lang-buttons">
+                <button class="chatbot-lang-btn" data-lang="ko">KR</button>
+                <button class="chatbot-lang-btn" data-lang="en">EN</button>
+                <button class="chatbot-lang-btn" data-lang="cn">CN</button>
+                <button class="chatbot-lang-btn" data-lang="vn">VN</button>
+            </div>
+            <button id="close-chatbot">&times;</button>
         </div>
-    </footer>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-bottom-container">
+            <div id="chatbot-suggested-questions"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" data-lang-key="chatbot_placeholder">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

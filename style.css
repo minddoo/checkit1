@@ -181,6 +181,23 @@ body {
 }
 
 /* ----------------------------------
+ * 2.6. Corporate Hero Section
+ * ---------------------------------- */
+#corporate-hero {
+    background-color: #eef2ff; /* Light indigo/blue background for corporate feel */
+    padding: 120px 0;
+}
+
+#corporate-hero .hero-title,
+#corporate-hero .hero-subtitle {
+    color: var(--text-color);
+}
+
+#corporate-hero .hero-text-content {
+    transform: none; /* Reset transform for corporate hero */
+}
+
+/* ----------------------------------
  * 3. Individual Page: Story Sections
  * ---------------------------------- */
 #korea-medical-expectation .section-subtitle {

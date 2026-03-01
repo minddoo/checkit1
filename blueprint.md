@@ -13,8 +13,10 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     2.  **Why CHECKIT:** Highlights key benefits and reasons to choose the service.
     3.  **Reviews:** Showcases testimonials from satisfied clients.
 *   **Dedicated Client Pages:** 
-    *   `individual.html` & `corporate.html` will be created to provide detailed information for each client type.
-    *   "Learn More" buttons will be added to the main services section to link to these pages.
+    *   `individual.html` & `corporate.html` have been implemented with modern, responsive designs tailored to each client type.
+    *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
+    *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
+    *   "Learn More" buttons on the main page link correctly to these dedicated pages.
     *   **Note:** The refund policy section has been removed from `individual.html` per user request.
 *   **Contact Form:** A new section will be added, featuring a simple and clean form for users to submit inquiries (Email, Phone, Message).
 

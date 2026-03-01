@@ -755,6 +755,133 @@ body.chatbot-open { overflow: hidden; }
     margin-bottom: 20px;
 }
 
+/* ----------------------------------
+ * 4. Corporate Page: New Sections
+ * ---------------------------------- */
+
+/* Welfare Cards (Positive Vibe) */
+.welfare-visual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.welfare-card {
+    background: var(--white);
+    padding: 40px 30px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.welfare-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(46, 204, 113, 0.15);
+    border-color: var(--primary-color);
+}
+
+.welfare-icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: var(--hero-bg-color);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 25px;
+}
+
+.welfare-card h4 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+/* Solution Comparison (Why Us?) */
+.solution-comparison {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    margin-top: 60px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.comparison-column {
+    flex: 1;
+    background: #fdfdfd;
+    padding: 50px 40px;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.comparison-column.highlight {
+    background: var(--white);
+    border: 2px solid var(--primary-color);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    z-index: 2;
+}
+
+.comparison-column h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.comparison-column.highlight h3 {
+    color: var(--primary-color);
+}
+
+.comparison-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    font-size: 1.5rem;
+    color: #ccc;
+    z-index: 1;
+}
+
+.comparison-list {
+    list-style: none;
+    padding: 0;
+}
+
+.comparison-list li {
+    margin-bottom: 18px;
+    padding-left: 30px;
+    position: relative;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.comparison-list.legacy li::before {
+    content: '\f057'; /* circle-xmark */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #bbb;
+}
+
+.comparison-list.checkit li::before {
+    content: '\f058'; /* circle-check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+}
+
 /* ------------------- 
  * 10. Refund Policy Section
  * ------------------- */

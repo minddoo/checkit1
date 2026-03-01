@@ -189,7 +189,20 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
+    width: 650px; /* Significantly increased size */
+    height: 650px;
     filter: saturate(1.3) contrast(1.1);
+    margin-left: -50px; /* Move it closer to the text */
+}
+
+#corporate-hero .hero-text-content {
+    transform: none; /* Remove translation to bring text and character closer */
+    text-align: left; /* Align text to left for better proximity to character */
+}
+
+#corporate-hero .container {
+    justify-content: center;
+    gap: 20px;
 }
 
 /* ----------------------------------

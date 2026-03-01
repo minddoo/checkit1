@@ -46,4 +46,11 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 3.  **Phase 3: Translation & Logic:**
     *   Populate the `translations` object in `script.js` with all text content in Korean, English, Chinese, and Vietnamese.
     *   Update the chatbot's response object with translations for all four languages.
-    *   Ensure the language-switching logic is robust and applies to all new content and pages.
+## 5. Recent Design Updates (March 2026)
+
+*   **Design Restoration:** Successfully restored the overall design of individual and corporate client pages from a stable version after unintended style deletions.
+*   **Hero Section Optimization:**
+    *   **Individual Hero:** Fixed height at 400px for consistency.
+    *   **Corporate Hero:** Implemented an **ultra-slim (banner-like) design** with a minimum height of 40px, reduced padding, and significantly smaller font sizes and character images to minimize vertical space at the top of the page.
+*   **Vertical Spacing Compression:** Reduced the padding of all sections on the corporate page (`corporate.html`) from 90px to 20px to create a more compact and streamlined user experience.
+*   **Mobile Optimization:** All design restorations and hero optimizations have been applied to mobile views, ensuring consistent slim layouts across all devices.

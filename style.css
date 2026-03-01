@@ -176,12 +176,15 @@ body {
 .hero-character {
     width: 450px;
     height: 450px;
-    background-image: url('assets/체킷 캐릭터.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     animation: float-bounce 2.5s ease-in-out infinite;
     filter: saturate(1.3) contrast(1.1);
+}
+
+#individual-hero .hero-character {
+    background-image: url('assets/체킷 캐릭터.png');
 }
 
 #corporate-hero .hero-character {

@@ -157,10 +157,6 @@ body {
     overflow: visible;
 }
 
-#corporate-hero {
-    min-height: 550px; /* 기업용 높이 대폭 축소 */
-}
-
 #individual-hero .container,
 #corporate-hero .container {
     display: grid;
@@ -171,7 +167,7 @@ body {
 }
 
 .hero-text-content {
-    grid-column: 2; /* 텍스트를 중앙 열에 배치 */
+    grid-column: 2; /* 텍스트는 무조건 중앙 열에 배치 */
     text-align: center;
     max-width: 800px;
 }
@@ -211,6 +207,8 @@ body {
     width: 950px; 
     height: 850px;
     margin-left: -50px; /* 텍스트와 더욱 밀착 */
+    filter: saturate(1.8) contrast(1.2); /* 채도 및 선명도 강화 */
+    image-rendering: -webkit-optimize-contrast;
 }
 
 /* ----------------------------------

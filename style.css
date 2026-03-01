@@ -1385,3 +1385,157 @@ html[lang="vn"] #corporate-hero .hero-title {
     .faq-question { padding: 20px !important; }
     .faq-answer { padding: 0 20px 24px 20px !important; }
 }
+
+/* ==================================================
+ * 11. Mobile Optimized Styles (Restore Original Branding)
+ * ================================================== */
+@media (max-width: 768px) {
+    /* Core Alignment Fixes */
+    * {
+        box-sizing: border-box !important;
+    }
+
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        position: relative;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 20px !important;
+    }
+
+    .section {
+        padding: 60px 0 !important;
+    }
+
+    .section-title {
+        font-size: 1.8rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .section-subtitle {
+        font-size: 1rem !important;
+        margin-bottom: 40px !important;
+    }
+
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Header Restoration */
+    #main-header {
+        padding: 15px 0 !important;
+    }
+    .header-logo {
+        height: 3rem !important;
+    }
+    .logo {
+        font-size: 1.5rem !important;
+    }
+    #language-switcher .lang-btn {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+        margin-left: 4px !important;
+    }
+
+    /* Hero Sections Restoration (Align items but keep desktop style) */
+    #hero, #individual-hero, #corporate-hero {
+        min-height: auto !important;
+        padding: 60px 0 !important;
+        display: block !important;
+    }
+
+    #hero .hero-title {
+        font-size: 2.2rem !important;
+        white-space: normal !important;
+    }
+
+    #individual-hero .container, #corporate-hero .container {
+        display: flex !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 30px !important;
+    }
+
+    .hero-text-content {
+        grid-column: auto !important;
+        transform: none !important;
+        max-width: 100% !important;
+    }
+
+    .hero-character {
+        grid-column: auto !important;
+        width: 100% !important;
+        height: 300px !important;
+        margin: 0 !important;
+        background-position: center !important;
+    }
+
+    /* Grid to Stack Restoration (Maintain original card look) */
+    .card-container, .features-grid-new, .reality-grid, .packages-grid, .options-grid, .welfare-visual-grid, .safety-grid, .only-reason-grid, .testimonial-grid, .form-grid {
+        display: block !important;
+    }
+
+    .card, .feature-item-new, .reality-card, .package-card, .option-card, .welfare-card, .safety-card, .reason-item, .testimonial-card {
+        margin-bottom: 20px !important;
+        width: 100% !important;
+    }
+
+    /* Comparison Table (Horizontal Scroll allowed locally for technical tables if needed, or stack) */
+    .solution-comparison {
+        flex-direction: column !important;
+    }
+    .comparison-divider {
+        height: 40px !important;
+        width: 100% !important;
+        transform: rotate(90deg) !important;
+    }
+
+    /* Roadmap Restoration */
+    .process-roadmap {
+        padding-left: 10px !important;
+    }
+    .roadmap-item {
+        gap: 15px !important;
+    }
+    .roadmap-number {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 0.9rem !important;
+    }
+    .roadmap-item::before {
+        left: 18px !important;
+        top: 36px !important;
+    }
+
+    /* Touch Targets & Buttons */
+    .cta-button-primary, .cta-button-secondary, .lang-btn, .chatbot-lang-btn, #open-chatbot {
+        min-height: 48px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .cta-button-primary {
+        width: 100% !important;
+    }
+
+    /* Chatbot Fix */
+    #chatbot-container {
+        width: 100% !important;
+        height: 100% !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+    }
+
+    /* Safe Area */
+    body {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}

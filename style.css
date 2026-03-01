@@ -151,28 +151,25 @@ body {
 #corporate-hero {
     padding: 0;
     background-color: var(--hero-bg-color);
-    min-height: 850px; 
+    min-height: 700px; 
     display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
+    overflow: visible;
 }
 
 #individual-hero .container,
 #corporate-hero .container {
-    position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* 1:1:1 비율로 텍스트를 정중앙에 고정 */
     align-items: center;
-    justify-content: center;
+    gap: 40px;
     width: 100%;
 }
 
 .hero-text-content {
+    grid-column: 2; /* 텍스트는 무조건 중앙 열에 위치 */
     text-align: center;
-    z-index: 2;
-    max-width: 800px;
-    position: relative;
+    max-width: 750px;
 }
 
 #individual-hero .hero-title,
@@ -183,27 +180,24 @@ body {
 }
 
 .hero-character {
-    position: absolute;
+    grid-column: 3; /* 캐릭터는 텍스트 오른쪽 열에 위치 */
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center left;
     animation: float-bounce 2.5s ease-in-out infinite;
     filter: saturate(1.3) contrast(1.1);
-    z-index: 1;
 }
 
 #individual-hero .hero-character {
     background-image: url('assets/체킷 캐릭터.png');
-    width: 800px;
-    height: 800px;
-    left: calc(50% + 250px); /* 중앙에서 오른쪽으로 배치 */
+    width: 500px;
+    height: 550px;
 }
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 1100px; 
-    height: 1100px;
-    left: calc(50% + 200px); /* 중앙에서 오른쪽으로 배치 */
+    width: 600px; 
+    height: 550px;
 }
 
 /* ----------------------------------
@@ -301,36 +295,6 @@ body {
 #reality-overtime .section-title {
     color: var(--white);
     margin-bottom: 50px;
-}
-
-.reality-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin-top: 50px;
-}
-
-.reality-card {
-    background: var(--white);
-    color: var(--text-color);
-    padding: 35px 40px;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
-    text-align: left;
-    border-left: 5px solid var(--danger-color);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.reality-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-md);
-}
-
-.reality-item-title {
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: var(--danger-color);
 }
 
 .reality-grid {

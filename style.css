@@ -206,8 +206,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
+    margin-left: -100px;
 }
 
 /* ----------------------------------

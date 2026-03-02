@@ -175,7 +175,7 @@ body {
 }
 
 #corporate-hero .hero-text-content {
-    transform: translateX(250px); /* 텍스트를 오른쪽으로 더 이동 */
+    /* transform removed to match individual hero text position */
 }
 
 #corporate-hero .hero-title {
@@ -206,9 +206,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 600px; /* 크기 조정 */
-    height: 500px; /* 크기 조정 (약간 큼직하게 유지하되 400px 배경에 맞춤) */
-    margin-left: -50px; /* 텍스트와 더욱 밀착 */
+    width: 400px; /* Standardized to match individual hero */
+    height: 400px; /* Standardized to match individual hero */
+    margin-left: 0; /* Standardized to match individual hero */
     filter: saturate(1.2) contrast(1.1); /* 채도 다시 낮춤 */
     image-rendering: -webkit-optimize-contrast;
 }

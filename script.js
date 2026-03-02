@@ -1487,7 +1487,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const overlay = modal.querySelector('.modal-overlay');
 
             // [방법] PPT를 이미지(PNG)로 저장하여 assets/ 폴더에 넣으세요.
-            // 파일명 규칙: process_01.png, process_02.png ... process_10.png
+            // 파일명 규칙: process_01.png, process_02.png ... process_18.png
             const processImages = [
                 "assets/process_01.png",
                 "assets/process_02.png",
@@ -1498,7 +1498,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 "assets/process_07.png",
                 "assets/process_08.png",
                 "assets/process_09.png",
-                "assets/process_10.png"
+                "assets/process_10.png",
+                "assets/process_11.png",
+                "assets/process_12.png",
+                "assets/process_13.png",
+                "assets/process_14.png",
+                "assets/process_15.png",
+                "assets/process_16.png",
+                "assets/process_17.png",
+                "assets/process_18.png"
             ];
 
             let currentIndex = 0;
@@ -1569,3 +1577,4 @@ document.addEventListener('DOMContentLoaded', () => {
         initB2BProcessSlide();
         }
         });
+   

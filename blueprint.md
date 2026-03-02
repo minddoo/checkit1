@@ -29,6 +29,12 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   **Dynamic Scaling:** The centered card is slightly larger (scale 1.05) than side cards (scale 0.95) for focus.
     *   **Scroll Stability:** Vertical scrolling is prioritized, ensuring horizontal sliders never block the user from moving down the page.
 
+*   **B2B Process Slide (March 2026):**
+    *   **Image-Based Slider:** Replaced the previous text-based Firestore logic with a modern PPT-style image slider in the corporate page.
+    *   **PPT to PNG Integration:** Designed to display high-quality PNG images exported from the official service process PPT.
+    *   **Interactive UI:** Includes a full-screen modal with an overlay, navigation buttons (Previous/Next), and a page indicator (e.g., 1 / 10).
+    *   **Firebase Storage:** Configured to fetch images from Firebase Storage via direct download URLs for optimal performance.
+
 ### **Feature 1: Expanded Language Support**
 
 *   **Languages Added:** Chinese (CN) and Vietnamese (VN) will be added to the existing Korean and English options.

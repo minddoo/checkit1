@@ -159,6 +159,10 @@ body {
     overflow: visible;
 }
 
+#corporate-hero {
+    height: 600px; /* Reduced fixed height for desktop */
+}
+
 #individual-hero .container,
 #corporate-hero .container {
     display: grid;

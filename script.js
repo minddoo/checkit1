@@ -1577,4 +1577,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initB2BProcessSlide();
-});2
+});

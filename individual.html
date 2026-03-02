@@ -379,6 +379,48 @@
         </div>
     </div>
 
+    <!-- CHECKIT Platform - My Page Overlay -->
+    <div id="mypage-overlay">
+        <div class="mypage-header">
+            <h2 data-lang-key="my_page_title">나의 서비스 현황</h2>
+            <button id="close-mypage" class="cta-button-secondary" style="padding: 8px 20px;">닫기</button>
+        </div>
+        
+        <div class="status-timeline" id="platform-status-timeline">
+            <!-- Steps will be injected by JS -->
+        </div>
+
+        <div class="dashboard-content">
+            <div class="main-dashboard-panel">
+                <div class="card" id="user-info-panel" style="text-align: left; margin-bottom: 20px;">
+                    <h3>기본 정보 입력</h3>
+                    <p>정확한 병원 매칭을 위해 아래 정보를 입력해주세요.</p>
+                    <!-- Intake Form injected by JS -->
+                </div>
+                <div class="card" id="hospital-list-panel" style="display: none;">
+                    <h3>제공된 병원 리스트</h3>
+                    <div id="hospital-items"></div>
+                </div>
+            </div>
+
+            <div class="admin-chat-container">
+                <div style="padding: 15px; border-bottom: 1px solid #eee; font-weight: bold;">1:1 행정 지원 채팅</div>
+                <div class="chat-messages" id="admin-chat-messages"></div>
+                <div class="chat-input-area">
+                    <button class="file-upload-btn"><i class="fas fa-paperclip"></i></button>
+                    <input type="text" placeholder="메시지를 입력하세요..." id="admin-chat-input">
+                    <button id="admin-chat-send" class="cta-button-primary" style="padding: 8px 20px;">전송</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+
     <script src="script.js"></script>
 </body>
 </html>

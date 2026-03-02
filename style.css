@@ -1393,3 +1393,107 @@ html[lang="vn"] #corporate-hero .hero-title {
         min-height: 44px !important;
     }
 }
+
+/* ------------------- 
+ * 12. CHECKIT Platform - My Page & Dashboard
+ * ------------------- */
+#mypage-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+body.platform-view-active #mypage-overlay {
+    display: flex;
+}
+
+.mypage-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: #fff;
+}
+
+.status-timeline {
+    display: flex;
+    justify-content: space-around;
+    padding: 40px 20px;
+    background: var(--bg-light);
+}
+
+.status-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+}
+
+.status-step.active {
+    opacity: 1;
+    color: var(--primary-color);
+}
+
+.status-step i {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.dashboard-content {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 30px;
+    padding: 30px;
+}
+
+.admin-chat-container {
+    border: 1px solid #eee;
+    border-radius: var(--border-radius-md);
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.file-upload-btn {
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+}

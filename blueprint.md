@@ -39,11 +39,22 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 
 *   The chatbot's Q&A database will be updated to include information from the new sections and will be fully translatable into all four supported languages.
 
-## 3. File Structure
+## 4. Platform Functionality (Implementation Plan)
 
-*   `index.html`: Updated with new sections, cleaned usage section (removed stray '2'), and mobile-optimized structure.
-*   `individual.html`: Dedicated page for individual client services.
-*   `corporate.html`: Dedicated page for corporate client services.
-*   `style.css`: Comprehensive update containing the "App-Like" mobile redesign and unified desktop layout.
-*   `script.js`: Significantly updated to manage translations for four languages (KR, EN, CN, VN) across the entire site and the chatbot.
-*   `blueprint.md`: This document, outlining the project scope and design standards.
+### **Process Flow**
+1.  **Authentication:** User registration and login (Firebase Auth).
+2.  **Package Selection:** Link existing package cards to the service flow.
+3.  **CHECKIT Service Payment:** Payment integration for CHECKIT fees only.
+4.  **Information Intake:** Collect user data (Name, DOB, Language, Travel dates, Budget).
+5.  **Service Execution:** Step-by-step progress from hospital list provision to result translation.
+6.  **My Page Dashboard:** Real-time status tracking, 1:1 administrative chat, and file management.
+
+### **Data Architecture**
+*   **Users:** Stores profile, selected package, and current status.
+*   **Applications:** Manages individual service requests and progress milestones.
+*   **Chats:** Real-time messaging for administrative support (non-medical).
+
+### **Service Scope Enforcement**
+*   Strictly non-medical administrative support.
+*   No hospital payment processing (direct payment to hospitals by users).
+*   No medical advice or recommendations.

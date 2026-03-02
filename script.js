@@ -1468,113 +1468,108 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (!user && lBtn) lBtn.remove();
             });
         };
-        initAuthUI();
+        initAuth();
         if (new URLSearchParams(window.location.search).get('view') === 'mypage') {
             auth.onAuthStateChanged(user => { if (user) document.body.classList.add('platform-view-active'); });
         }
+    }
 
-        // --- B2B 실무 과정 슬라이드 로직 (PPT 이미지 슬라이드 방식) ---
-        const initB2BProcessSlide = () => {
-            const openBtn = document.getElementById('openProcessSlide');
-            const modal = document.getElementById('processModal');
-            if (!openBtn || !modal) return;
+    // --- B2B 실무 과정 슬라이드 로직 (PPT 이미지 슬라이드 방식) ---
+    const initB2BProcessSlide = () => {
+        const openBtn = document.getElementById('openProcessSlide');
+        const modal = document.getElementById('processModal');
+        if (!openBtn || !modal) return;
 
-            const closeBtn = document.getElementById('closeProcess');
-            const processImage = document.getElementById('processImage');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const indicator = document.getElementById('indicator');
-            const overlay = modal.querySelector('.modal-overlay');
+        const closeBtn = document.getElementById('closeProcess');
+        const processImage = document.getElementById('processImage');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicator = document.getElementById('indicator');
+        const overlay = modal.querySelector('.modal-overlay');
 
-            // [방법] PPT를 이미지(PNG)로 저장하여 assets/ 폴더에 넣으세요.
-            // 파일명 규칙: process_01.png, process_02.png ... process_18.png
-            const processImages = [
-                "assets/process_01.png",
-                "assets/process_02.png",
-                "assets/process_03.png",
-                "assets/process_04.png",
-                "assets/process_05.png",
-                "assets/process_06.png",
-                "assets/process_07.png",
-                "assets/process_08.png",
-                "assets/process_09.png",
-                "assets/process_10.png",
-                "assets/process_11.png",
-                "assets/process_12.png",
-                "assets/process_13.png",
-                "assets/process_14.png",
-                "assets/process_15.png",
-                "assets/process_16.png",
-                "assets/process_17.png",
-                "assets/process_18.png"
-            ];
+        const processImages = [
+            "assets/process_01.png",
+            "assets/process_02.png",
+            "assets/process_03.png",
+            "assets/process_04.png",
+            "assets/process_05.png",
+            "assets/process_06.png",
+            "assets/process_07.png",
+            "assets/process_08.png",
+            "assets/process_09.png",
+            "assets/process_10.png",
+            "assets/process_11.png",
+            "assets/process_12.png",
+            "assets/process_13.png",
+            "assets/process_14.png",
+            "assets/process_15.png",
+            "assets/process_16.png",
+            "assets/process_17.png",
+            "assets/process_18.png"
+        ];
 
-            let currentIndex = 0;
+        let currentIndex = 0;
 
-            const updateSlide = () => {
-                if (processImage) {
-                    // 이미지가 바뀌는 동안 깜빡임을 방지하기 위해 로딩 처리 가능
-                    processImage.src = processImages[currentIndex];
-                }
-                if (indicator) {
-                    indicator.innerText = `${currentIndex + 1} / ${processImages.length}`;
-                }
-                
-                // 버튼 활성화/비활성화 시각적 피드백
-                if (prevBtn) {
-                    prevBtn.disabled = currentIndex === 0;
-                    prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
-                    prevBtn.style.cursor = currentIndex === 0 ? "not-allowed" : "pointer";
-                }
-                if (nextBtn) {
-                    nextBtn.disabled = currentIndex === processImages.length - 1;
-                    nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1";
-                    nextBtn.style.cursor = currentIndex === processImages.length - 1 ? "not-allowed" : "pointer";
-                }
-            };
-
-            openBtn.addEventListener('click', () => {
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
-                currentIndex = 0;
-                updateSlide();
-            });
-
-            const closeAction = () => {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto'; // 배경 스크롤 복구
-            };
-
-            closeBtn?.addEventListener('click', closeAction);
-            overlay?.addEventListener('click', closeAction);
-
-            nextBtn?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (currentIndex < processImages.length - 1) {
-                    currentIndex++;
-                    updateSlide();
-                }
-            });
-
-            prevBtn?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    updateSlide();
-                }
-            });
-
-            // 키보드 방향키 지원
-            document.addEventListener('keydown', (e) => {
-                if (modal.style.display === 'flex') {
-                    if (e.key === 'ArrowRight') nextBtn.click();
-                    if (e.key === 'ArrowLeft') prevBtn.click();
-                    if (e.key === 'Escape') closeAction();
-                }
-            });
+        const updateSlide = () => {
+            if (processImage) {
+                processImage.src = processImages[currentIndex];
+            }
+            if (indicator) {
+                indicator.innerText = `${currentIndex + 1} / ${processImages.length}`;
+            }
+            
+            if (prevBtn) {
+                prevBtn.disabled = currentIndex === 0;
+                prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
+                prevBtn.style.cursor = currentIndex === 0 ? "not-allowed" : "pointer";
+            }
+            if (nextBtn) {
+                nextBtn.disabled = currentIndex === processImages.length - 1;
+                nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1";
+                nextBtn.style.cursor = currentIndex === processImages.length - 1 ? "not-allowed" : "pointer";
+            }
         };
 
-        initB2BProcessSlide();
-        }
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.setProperty('display', 'flex', 'important');
+            document.body.style.overflow = 'hidden'; 
+            currentIndex = 0;
+            updateSlide();
         });
-   
+
+        const closeAction = () => {
+            modal.style.setProperty('display', 'none', 'important');
+            document.body.style.overflow = 'auto'; 
+        };
+
+        closeBtn?.addEventListener('click', closeAction);
+        overlay?.addEventListener('click', closeAction);
+
+        nextBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex < processImages.length - 1) {
+                currentIndex++;
+                updateSlide();
+            }
+        });
+
+        prevBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlide();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (modal.style.display === 'flex' || modal.style.display.includes('flex')) {
+                if (e.key === 'ArrowRight') nextBtn.click();
+                if (e.key === 'ArrowLeft') prevBtn.click();
+                if (e.key === 'Escape') closeAction();
+            }
+        });
+    };
+
+    initB2BProcessSlide();
+});

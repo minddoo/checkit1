@@ -1406,3 +1406,24 @@ body.platform-view-active #mypage-overlay { display: flex; }
 .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; }
 #login-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; justify-content: center; align-items: center; }
 .login-modal-box { background: #fff; padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
+
+/* B2B Process Slide Modal */
+#processModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s; }
+#processModal.hidden { display: none; opacity: 0; }
+.modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+.slide-container { position: relative; background: #fff; width: 90%; max-width: 600px; border-radius: 24px; padding: 50px 40px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.4); z-index: 1; }
+.close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 32px; cursor: pointer; color: #ccc; transition: color 0.2s; }
+.close-btn:hover { color: var(--primary-color); }
+.slide-content h3 { font-size: 1.8rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 25px; line-height: 1.3; word-break: keep-all; }
+.slide-content p { font-size: 1.1rem; color: #555; line-height: 1.7; word-break: keep-all; min-height: 100px; }
+.slide-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+.nav-btn { background: var(--bg-light); border: 1px solid #eee; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.nav-btn:hover:not(:disabled) { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: scale(1.1); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.slide-indicator { font-weight: 700; color: var(--text-light); font-size: 1.1rem; letter-spacing: 2px; }
+
+@media (max-width: 768px) {
+    .slide-container { width: 100%; height: 100%; border-radius: 0; padding: 80px 30px; display: flex; flex-direction: column; justify-content: center; }
+    .slide-content h3 { font-size: 1.5rem; }
+    .slide-content p { font-size: 1rem; }
+}

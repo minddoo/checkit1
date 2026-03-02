@@ -1468,9 +1468,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (!user && lBtn) lBtn.remove();
             });
         };
-        initAuth();
+        initAuthUI();
         if (new URLSearchParams(window.location.search).get('view') === 'mypage') {
             auth.onAuthStateChanged(user => { if (user) document.body.classList.add('platform-view-active'); });
         }
-    }
-});
+
+        // --- B2B 실무 과정 슬라이드 로직 ---
+        const initB2BProcessSlide = () => {
+            const openBtn = document.getElementById('openProcessSlide');
+            const modal = document.getElementById('processModal');
+            const closeBtn = document.getElementById('closeProcess');
+            const content = document.getElementById('slideContent');
+            const prevBtn = document.getElementById('prevSlide');
+            const nextBtn = document.getElementById('nextSlide');
+            const indicator = document.getElementById('slideIndicator');
+
+            let steps = [];
+            let currentIndex = 0;
+
+            // 기본 12단계 데이터 (Firestore 백업용 및 초기 로딩용)
+            const defaultSteps = [
+                { title: "검진 대상자 명단 전달", description: "기업이 엑셀 또는 구글시트로 작성한 검진 대상자 명단을 CHECKIT 담당자 메일로 전달합니다." },
+                { title: "우선순위 기반 명단 정리", description: "예약 가능 기한 기준으로 내림차순 정리. 기한 임박 대상자 상단 배치. 누락 없이 체계적 관리." },
+                { title: "검진 대상자 1:1 컨택 시작", description: "예약 가능 시작일부터 대상자와 소통 시작. 연락 수단 공란 시 모든 수단으로 시도." },
+                { title: "병원 및 일정 조율", description: "기업 연계 병원 리스트 제공. 프로그램 비교 안내. 희망 일정 조율 후 병원 선택 지원." },
+                { title: "예약 확정 및 번역 안내", description: "검진기관 확정 문자 수신 후 근로자 언어로 전달." },
+                { title: "검진 전 알림 관리", description: "7일·3일·2일·1일 전 및 당일 알림 제공. 필요 서류 및 준비물 사전 안내." },
+                { title: "검사 당일 실시간 소통 지원", description: "접수부터 종료까지 실시간 지원. 의사소통 어려움 최소화." },
+                { title: "당일 검사 완료 여부 관리", description: "미검 항목 확인. 필수 서류 수령 여부 관리. 재내원 최소화." },
+                { title: "결과 수령 방법 재확인", description: "이메일·우편·카톡 수령 방식 확인. 오류 발생 시 해결 안내." },
+                { title: "결과 번역 및 재검 여부 확인", description: "의료적 해석 없이 단순 번역 제공. 재검 대상자 분류." },
+                { title: "기업 제출 서류 관리", description: "기업 요구 서류 안내. 근로자 제출 완료까지 확인." },
+                { title: "진행 현황 정리 후 기업 공유", description: "우선순위 및 진행 상황 정리된 명단을 기업 담당자 메일로 전달." }
+            ];
+
+            const fetchSteps = async () => {
+                try {
+                    const snapshot = await db.collection('b2b_process_steps').orderBy('stepOrder', 'asc').get();
+                    if (!snapshot.empty) {
+                        steps = snapshot.docs.map(doc => doc.data());
+                    } else {
+                        steps = defaultSteps;
+                    }
+                    renderSlide();
+                } catch (e) {
+                    console.warn('Firestore fetch failed, using defaults:', e);
+                    steps = defaultSteps;
+                    renderSlide();
+                }
+            };
+
+            const renderSlide = () => {
+                if (steps.length === 0) return;
+                const step = steps[currentIndex];
+                content.innerHTML = `
+                    <div style="color: var(--primary-color); font-weight: 700; margin-bottom: 10px;">STEP ${currentIndex + 1}</div>
+                    <h3>${step.title}</h3>
+                    <p>${step.description}</p>
+                `;
+                indicator.textContent = `${currentIndex + 1} / ${steps.length}`;
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex === steps.length - 1;
+            };
+
+            openBtn?.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                fetchSteps();
+            });
+
+            closeBtn?.addEventListener('click', () => modal.classList.add('hidden'));
+            prevBtn?.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderSlide(); } });
+            nextBtn?.addEventListener('click', () => { if (currentIndex < steps.length - 1) { currentIndex++; renderSlide(); } });
+
+            // 오버레이 클릭 시 닫기
+            modal?.querySelector('.modal-overlay').addEventListener('click', () => modal.classList.add('hidden'));
+        };
+
+        initB2BProcessSlide();
+        }
+        });

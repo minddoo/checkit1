@@ -1493,24 +1493,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const overlay = modal.querySelector('.modal-overlay');
 
         const processImages = [
-            "assets/process_01.png",
-            "assets/process_02.png",
-            "assets/process_03.png",
-            "assets/process_04.png",
-            "assets/process_05.png",
-            "assets/process_06.png",
-            "assets/process_07.png",
-            "assets/process_08.png",
-            "assets/process_09.png",
-            "assets/process_10.png",
-            "assets/process_11.png",
-            "assets/process_12.png",
-            "assets/process_13.png",
-            "assets/process_14.png",
-            "assets/process_15.png",
-            "assets/process_16.png",
-            "assets/process_17.png",
-            "assets/process_18.png"
+            "assets/process_01.png?v=1.1",
+            "assets/process_02.png?v=1.1",
+            "assets/process_03.png?v=1.1",
+            "assets/process_04.png?v=1.1",
+            "assets/process_05.png?v=1.1",
+            "assets/process_06.png?v=1.1",
+            "assets/process_07.png?v=1.1",
+            "assets/process_08.png?v=1.1",
+            "assets/process_09.png?v=1.1",
+            "assets/process_10.png?v=1.1",
+            "assets/process_11.png?v=1.1",
+            "assets/process_12.png?v=1.1",
+            "assets/process_13.png?v=1.1",
+            "assets/process_14.png?v=1.1",
+            "assets/process_15.png?v=1.1",
+            "assets/process_16.png?v=1.1",
+            "assets/process_17.png?v=1.1",
+            "assets/process_18.png?v=1.1"
         ];
 
         let currentIndex = 0;

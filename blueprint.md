@@ -17,11 +17,16 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
     *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
     *   "Learn More" buttons on the main page link correctly to these dedicated pages.
-*   **Hero Section Standardization (March 2026):**
-    *   **Uniform Height:** Both individual and corporate hero sections are set to a consistent **400px height** for a balanced look across the site.
-    *   **Text Clarity:** Hero titles and subtitles are set to **absolute black (#000)** for maximum readability.
-    *   **Character Visibility:** Original character assets (`체킷 캐릭터.png` for individual, `기.png` for corporate) are restored and scaled to fit the standardized height.
-*   **Restored Design integrity:** All section paddings (90px), mobile sliders, and responsive grid layouts have been restored to their original stable state to maintain design consistency.
+*   **Design Standardization (March 2026):**
+    *   **Unified Margins:** All pages now use a standard `.container` with `max-width: 1200px` and consistent horizontal padding for a professional, centered look.
+    *   **Hero Alignment:** Corporate and Individual hero sections are now perfectly aligned. Spacing between text and characters is synchronized across both pages.
+    *   **Text Clarity:** Hero titles and subtitles are set to **absolute black (#000)** for maximum readability on the green hero background.
+*   **Mobile App-Like Experience:**
+    *   **Horizontal Sliders:** All multi-card sections (Packages, Features, Testimonials) are transformed into horizontal "App-like" sliders on mobile.
+    *   **Snap Behavior:** Uses `scroll-snap-type: x mandatory` to ensure cards always land centered.
+    *   **Preview Structure:** Cards are sized at 80% width with 10% preview of adjacent cards, creating a modern "swipable" feel.
+    *   **Dynamic Scaling:** The centered card is slightly larger (scale 1.05) than side cards (scale 0.95) for focus.
+    *   **Scroll Stability:** Vertical scrolling is prioritized, ensuring horizontal sliders never block the user from moving down the page.
 
 ### **Feature 1: Expanded Language Support**
 
@@ -35,9 +40,9 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 
 ## 3. File Structure
 
-*   `index.html`: Updated with new sections (Process, Why CHECKIT, Reviews), a contact form, and links to the new pages.
+*   `index.html`: Updated with new sections, cleaned usage section (removed stray '2'), and mobile-optimized structure.
 *   `individual.html`: Dedicated page for individual client services.
 *   `corporate.html`: Dedicated page for corporate client services.
-*   `style.css`: Restored to stable design with standardized 400px hero sections.
+*   `style.css`: Comprehensive update containing the "App-Like" mobile redesign and unified desktop layout.
 *   `script.js`: Significantly updated to manage translations for four languages (KR, EN, CN, VN) across the entire site and the chatbot.
 *   `blueprint.md`: This document, outlining the project scope and design standards.

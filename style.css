@@ -179,11 +179,12 @@ body {
 }
 
 #corporate-hero .hero-text-content {
-    /* transform removed to match individual hero text position */
+    text-align: left; /* 기업 페이지는 왼쪽 정렬 */
+    padding-left: 100px; /* 오른쪽으로 이동 */
 }
 
 #corporate-hero .hero-title {
-    white-space: nowrap; /* 제목 한 줄 구성 */
+    white-space: nowrap; /* 제목 한 줄 구성 (br 태그로 제어) */
 }
 
 #individual-hero .hero-title,

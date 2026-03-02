@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'notice_reality_p1': '대부분의 병원은 별도의 “외국인 패키지”를 만듭니다. 이 패키지에는 현지인이 지불하지 않는 서비스가 포함되어 총 가격이 올라갑니다.',
             'notice_situation_title': '외국인 고객에게서 흔히 볼 수 있는 상황',
             'notice_situation_p1': '한 고객은 외국인 패키지에 대해 1,800,000원을 견적 받았습니다. 저희의 안내를 통해 동일한 검사를 1,050,000원에 예약했습니다.',
-            'corporate_page_title': '기업 고객 - 토탈 솔루션',
+            'corporate_page_title': '기업 고객을 위한<br>토탈 솔루션',
             'corporate_page_subtitle': 'CHECKIT은 외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 보건 관리 부담을 줄여드립니다.',
             'corp_sec1_title': '외국인 근로자, 이제 선택이 아닌 필수입니다',
             'corp_sec1_subtitle': '변화하는 산업 현장, 기업의 지속 가능한 성장을 위해 외국인 인력 확보와 관리는 가장 중요한 과제가 되었습니다.',

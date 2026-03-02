@@ -20,6 +20,7 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **Design Standardization (March 2026):**
     *   **Unified Margins:** All pages now use a standard `.container` with `max-width: 1200px` and consistent horizontal padding for a professional, centered look.
     *   **Hero Alignment:** Corporate and Individual hero sections are now perfectly aligned. Spacing between text and characters is synchronized across both pages.
+    *   **Corporate Hero Character:** The character size in the corporate hero section has been increased by 1.5x (from 600px to 900px) to create a more impactful and professional first impression for business clients.
     *   **Text Clarity:** Hero titles and subtitles are set to **absolute black (#000)** for maximum readability on the green hero background.
 *   **Mobile App-Like Experience:**
     *   **Horizontal Sliders:** All multi-card sections (Packages, Features, Testimonials) are transformed into horizontal "App-like" sliders on mobile.

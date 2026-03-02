@@ -206,9 +206,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 600px;
-    height: 600px;
-    margin-left: -100px;
+    width: 900px;
+    height: 900px;
+    margin-left: -150px;
 }
 
 /* ----------------------------------
@@ -1333,7 +1333,7 @@ html[lang="vn"] #corporate-hero .hero-title {
         padding: 40px 0 !important;
     }
     #corporate-hero .hero-character {
-        height: 400px !important; /* Enlarge character significantly */
+        height: 600px !important; /* Increased to 600px (1.5x) */
         max-width: 100% !important;
         width: 100% !important;
     }

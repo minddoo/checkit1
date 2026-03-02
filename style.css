@@ -160,7 +160,7 @@ body {
 }
 
 #corporate-hero {
-    height: 600px; /* 섹션 높이 고정 */
+    height: 700px; /* 섹션 높이를 캐릭터 크기에 맞춰 확대 */
 }
 
 #individual-hero .container,
@@ -211,9 +211,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 600px; /* 개인용 400px의 1.5배 */
-    height: 600px; /* 섹션 높이와 일치시켜 튀어나가지 않게 함 */
-    margin-left: -50px; /* 중앙 텍스트와 적절한 거리 유지 */
+    width: 700px; /* 크기를 700px로 확대 */
+    height: 700px; /* 섹션 높이와 일치시켜 튀어나가지 않게 함 */
+    margin-left: -80px; /* 중앙 텍스트와의 간격 최적화 */
 }
 
 /* ----------------------------------

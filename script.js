@@ -1177,20 +1177,168 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         mainLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
+
         if (chatbotLangButtons) {
             chatbotLangButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
         }
+
+        if (chatbotContainer && chatbotContainer.classList.contains('show')) {
+            resetAndShowGreeting();
+        }
     };
 
-    // --- 텍스트 표시 보장 (최상단 실행) ---
+    function changeLanguage(lang) {
+        switchLanguage(lang);
+    }
+
+    const addMessage = (text, sender) => {
+        if (!chatbotMessages) return;
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender);
+        messageElement.innerHTML = text.replace(/\n/g, '<br>');
+        chatbotMessages.appendChild(messageElement);
+        scrollToBottom();
+        return messageElement;
+    };
+
+    const addLoadingIndicator = () => {
+        if (!chatbotMessages) return null;
+        const loadingElement = document.createElement('div');
+        loadingElement.classList.add('message', 'bot', 'loading-indicator');
+        loadingElement.innerHTML = '<span></span><span></span><span></span>';
+        chatbotMessages.appendChild(loadingElement);
+        scrollToBottom();
+        return loadingElement;
+    };
+
+    const scrollToBottom = () => {
+        if (chatbotMessages) {
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+    };
+
+    const showSuggestedQuestions = () => {
+        if (!suggestedQuestionsContainer) return;
+        suggestedQuestionsContainer.innerHTML = '';
+        const langData = translations[currentLang];
+        for (let i = 1; i <= 5; i++) {
+            const qKey = `q${i}`;
+            if (langData[qKey]) {
+                const questionBtn = document.createElement('button');
+                questionBtn.classList.add('suggested-question-btn');
+                questionBtn.textContent = langData[qKey];
+                questionBtn.addEventListener('click', () => {
+                    addMessage(langData[qKey], 'user');
+                    const loadingIndicator = addLoadingIndicator();
+
+                    setTimeout(() => {
+                        if (loadingIndicator) chatbotMessages.removeChild(loadingIndicator);
+                        addMessage(langData[`a${i}`], 'bot');
+                    }, 1200);
+                });
+                suggestedQuestionsContainer.appendChild(questionBtn);
+            }
+        }
+        suggestedQuestionsContainer.style.display = 'flex';
+        scrollToBottom();
+    };
+
+    const resetAndShowGreeting = () => {
+        if (!chatbotMessages) return;
+        chatbotMessages.innerHTML = '';
+        const greeting = translations[currentLang]['chatbot_greeting'];
+        addMessage(greeting, 'bot');
+        showSuggestedQuestions();
+    };
+
+    mainLangButtons.forEach(button => {
+        button.addEventListener('click', () => switchLanguage(button.dataset.lang));
+    });
+
+    if (chatbotLangButtons) {
+        chatbotLangButtons.forEach(button => {
+            button.addEventListener('click', () => switchLanguage(button.dataset.lang));
+        });
+    }
+
+    window.changeLanguage = changeLanguage;
+
+    if (openChatbotBtn) {
+        openChatbotBtn.addEventListener('click', () => {
+            if (chatbotContainer) {
+                chatbotContainer.classList.add('show');
+                document.body.classList.add('chatbot-open');
+                resetAndShowGreeting();
+            }
+        });
+    }
+
+    if (closeChatbotBtn) {
+        closeChatbotBtn.addEventListener('click', () => {
+            if (chatbotContainer) {
+                chatbotContainer.classList.remove('show');
+                document.body.classList.remove('chatbot-open');
+            }
+        });
+    }
+
+    const handleSendMessage = () => {
+        if (!chatbotInput || !chatbotMessages) return;
+        const userMessage = chatbotInput.value.trim();
+        if (userMessage) {
+            addMessage(userMessage, 'user');
+            chatbotInput.value = '';
+            const loadingIndicator = addLoadingIndicator();
+
+            setTimeout(() => {
+                if (loadingIndicator) chatbotMessages.removeChild(loadingIndicator);
+
+                const lowerCaseMessage = userMessage.toLowerCase();
+                const langData = translations[currentLang];
+                let response;
+
+                const greetings = ['안녕', 'hi', 'hello', 'hey', '你好', 'xin chào'];
+                if (greetings.some(greeting => lowerCaseMessage.includes(greeting))) {
+                    response = langData['greeting_response'];
+                } else {
+                    response = langData['unsupported_input'];
+                }
+
+                addMessage(response, 'bot');
+            }, 1200);
+        }
+    };
+
+    if (chatbotSendBtn) {
+        chatbotSendBtn.addEventListener('click', handleSendMessage);
+    }
+
+    if (chatbotInput) {
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+    }
+
     const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
-    switchLanguage(initialLang);
+    
+    // FAQ Accordion Logic
+    document.addEventListener('click', (e) => {
+        const question = e.target.closest('.faq-question');
+        if (question) {
+            const item = question.parentElement;
+            item.classList.toggle('active');
+        }
+    });
 
     // ====================================================
     // CHECKIT Platform Logic (Firebase Integration)
     // ====================================================
+    
+    // Firebase Configuration (Placeholder - assumes environment setup)
     const firebaseConfig = {
-        apiKey: "AIzaSy...", 
+        apiKey: "AIzaSy...", // Placeholder
         authDomain: "checkit-app.firebaseapp.com",
         projectId: "checkit-app",
         storageBucket: "checkit-app.appspot.com",
@@ -1198,12 +1346,219 @@ document.addEventListener('DOMContentLoaded', () => {
         appId: "..."
     };
 
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const storage = firebase.storage();
+
     let currentUser = null;
 
-    // 통합 로그인 모달 구현
+    // UI Elements for Auth (To be linked to existing header buttons if any)
+    // Design rule: Do not modify existing design. We will use dynamic buttons.
+    const createAuthButtons = () => {
+        const navContainer = document.querySelector('#language-switcher');
+        if (!navContainer) return;
+
+        let authBtn = document.getElementById('platform-auth-btn');
+        if (!authBtn) {
+            authBtn = document.createElement('button');
+            authBtn.id = 'platform-auth-btn';
+            authBtn.className = 'lang-btn'; // Use existing style
+            authBtn.style.marginLeft = '15px';
+            authBtn.style.backgroundColor = '#27ae60';
+            authBtn.style.color = '#fff';
+            authBtn.style.border = 'none';
+            navContainer.appendChild(authBtn);
+        }
+
+        auth.onAuthStateChanged(user => {
+            currentUser = user;
+            if (user) {
+                authBtn.textContent = currentLang === 'ko' ? '마이페이지' : 'My Page';
+                authBtn.onclick = () => showMyPage();
+            } else {
+                authBtn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
+                authBtn.onclick = () => showLoginModal();
+            }
+        });
+    };
+
+    const showLoginModal = () => {
+        // Implement simple login/signup modal adhering to site style
+        alert(currentLang === 'ko' ? '로그인이 필요한 서비스입니다.' : 'Login required.');
+        // For prototype, we use Google Login for simplicity
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(error => console.error(error));
+    };
+
+    const showMyPage = () => {
+        // Function to render My Page dashboard
+        document.body.classList.add('platform-view-active');
+        renderMyPage();
+    };
+
+    // --- Package Selection & Application Flow ---
+    const initPackageEvents = () => {
+        const packageCards = document.querySelectorAll('.package-card');
+        packageCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                if (!currentUser) {
+                    showLoginModal();
+                    return;
+                }
+
+                const packageType = card.classList.contains('package-no-confusion') ? 'basic' :
+                                   card.classList.contains('package-zero-mistake') ? 'standard' : 'premium';
+                
+                startServiceApplication(packageType);
+            });
+        });
+    };
+
+    const startServiceApplication = async (type) => {
+        const confirmMsg = currentLang === 'ko' ? 
+            `${type.toUpperCase()} 패키지를 신청하시겠습니까?\n(CHECKIT 서비스 비용 결제 단계로 이동합니다.)` : 
+            `Apply for ${type.toUpperCase()} package?\n(Proceeding to CHECKIT service fee payment.)`;
+        
+        if (confirm(confirmMsg)) {
+            // Step 3: Payment Mockup
+            alert(currentLang === 'ko' ? '결제가 완료되었습니다. 기본 정보를 입력해주세요.' : 'Payment successful. Please enter your details.');
+            
+            // Step 4: Save initial application to Firestore
+            const applicationRef = db.collection('applications').doc();
+            await applicationRef.set({
+                uid: currentUser.uid,
+                packageType: type,
+                status: 'PAYMENT_COMPLETE',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            showMyPage();
+        }
+    };
+
+    const renderMyPage = async () => {
+        if (!currentUser) return;
+
+        const myPageOverlay = document.getElementById('mypage-overlay');
+        const timelineContainer = document.getElementById('platform-status-timeline');
+        const infoPanel = document.getElementById('user-info-panel');
+        
+        // Fetch latest application
+        const snapshot = await db.collection('applications')
+            .where('uid', '==', currentUser.uid)
+            .orderBy('createdAt', 'desc')
+            .limit(1)
+            .get();
+
+        if (snapshot.empty) {
+            timelineContainer.innerHTML = '<p>신청 내역이 없습니다. 패키지를 먼저 선택해주세요.</p>';
+            return;
+        }
+
+        const appData = snapshot.docs[0].data();
+        const appId = snapshot.docs[0].id;
+        const status = appData.status;
+        const packageType = appData.packageType;
+
+        // 1. Render Timeline based on package
+        const steps = [
+            { id: 'PAYMENT_COMPLETE', label: '결제 완료', icon: 'fa-credit-card' },
+            { id: 'INFO_SUBMITTED', label: '정보 입력', icon: 'fa-user-edit' },
+            { id: 'HOSPITAL_LIST_PROVIDED', label: '병원 리스트', icon: 'fa-list-ul' },
+            { id: 'BOOKING_CONFIRMED', label: '예약 확정', icon: 'fa-calendar-check' }
+        ];
+
+        if (packageType === 'premium') {
+            steps.push({ id: 'RESULT_TRANSLATED', label: '결과 번역', icon: 'fa-language' });
+        }
+        steps.push({ id: 'COMPLETED', label: '종료', icon: 'fa-check-double' });
+
+        timelineContainer.innerHTML = steps.map(step => `
+            <div class="status-step ${steps.findIndex(s => s.id === status) >= steps.indexOf(step) ? 'active' : ''}">
+                <i class="fas ${step.icon}"></i>
+                <span>${step.label}</span>
+            </div>
+        `).join('');
+
+        // 2. Render Intake Form if needed
+        if (status === 'PAYMENT_COMPLETE') {
+            infoPanel.style.display = 'block';
+            infoPanel.innerHTML = `
+                <h3>기본 정보 입력</h3>
+                <div class="form-group"><label>이름</label><input type="text" id="intake-name"></div>
+                <div class="form-group"><label>생년월일</label><input type="date" id="intake-dob"></div>
+                <div class="form-group"><label>입국 날짜</label><input type="date" id="intake-arrival"></div>
+                <div class="form-group"><label>검진 예산 (KRW)</label><input type="number" id="intake-budget" placeholder="1,000,000"></div>
+                <button id="submit-intake" class="cta-button-primary">정보 제출하기</button>
+            `;
+            document.getElementById('submit-intake').onclick = async () => {
+                await db.collection('applications').doc(appId).update({
+                    status: 'INFO_SUBMITTED',
+                    profileData: {
+                        name: document.getElementById('intake-name').value,
+                        dob: document.getElementById('intake-dob').value,
+                        arrival: document.getElementById('intake-arrival').value,
+                        budget: document.getElementById('intake-budget').value
+                    }
+                });
+                renderMyPage();
+            };
+        } else {
+            infoPanel.innerHTML = `<h3>진행 중...</h3><p>관리자가 정보를 확인하고 병원 리스트를 준비 중입니다.</p>`;
+        }
+
+        // 3. Initialize Chat
+        initAdminChat(appId);
+    };
+
+    const initAdminChat = (appId) => {
+        const chatContainer = document.getElementById('admin-chat-messages');
+        const chatInput = document.getElementById('admin-chat-input');
+        const sendBtn = document.getElementById('admin-chat-send');
+
+        // Real-time listener
+        db.collection('chats').doc(appId).collection('messages')
+            .orderBy('timestamp', 'asc')
+            .onSnapshot(snapshot => {
+                chatContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `message ${msg.sender === currentUser.uid ? 'user' : 'bot'}`;
+                    msgDiv.textContent = msg.text;
+                    chatContainer.appendChild(msgDiv);
+                });
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+
+        sendBtn.onclick = async () => {
+            const text = chatInput.value.trim();
+            if (text) {
+                await db.collection('chats').doc(appId).collection('messages').add({
+                    uid: currentUser.uid,
+                    sender: currentUser.uid,
+                    text: text,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                chatInput.value = '';
+            }
+        };
+    };
+
+    const closeMyPage = () => {
+        document.body.classList.remove('platform-view-active');
+    };
+
+    document.getElementById('close-mypage')?.addEventListener('click', closeMyPage);
+
+    // ====================================================
+    // 통합 로그인 시스템 (Google, Naver, Kakao, Email)
+    // ====================================================
     const showLoginModal = () => {
         let overlay = document.getElementById('login-modal-overlay');
         if (!overlay) {
@@ -1213,7 +1568,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button id="close-login-modal" style="position:absolute;top:20px;right:20px;background:none;border:none;font-size:28px;cursor:pointer;color:#ccc;">&times;</button>
                         <h2 style="margin-bottom:10px;font-weight:800;font-size:1.8rem;color:#27ae60;">CHECKIT</h2>
                         <p style="color:#666;margin-bottom:30px;font-size:0.95rem;">건강검진 행정 지원 플랫폼 시작하기</p>
-                        
                         <div style="display:flex;flex-direction:column;gap:12px;">
                             <button id="login-google" style="background:#fff;border:1px solid #eee;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-weight:600;">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google로 시작하기
@@ -1235,7 +1589,6 @@ document.addEventListener('DOMContentLoaded', () => {
             overlay = document.getElementById('login-modal-overlay');
             document.getElementById('close-login-modal').onclick = () => overlay.style.display = 'none';
             
-            // 로그인 방식별 이벤트 연결
             document.getElementById('login-google').onclick = () => {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider).then(() => overlay.style.display = 'none').catch(e => alert(e.message));
@@ -1268,109 +1621,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const showMyPage = () => {
-        document.body.classList.add('platform-view-active');
-        renderMyPage();
-    };
-
-    // --- 마이페이지 및 기타 로직 (기존 유지) ---
-    const renderMyPage = async () => {
-        if (!currentUser) return;
-        const timelineContainer = document.getElementById('platform-status-timeline');
-        const infoPanel = document.getElementById('user-info-panel');
-        
-        const snapshot = await db.collection('applications')
-            .where('uid', '==', currentUser.uid)
-            .orderBy('createdAt', 'desc').limit(1).get();
-
-        if (snapshot.empty) {
-            timelineContainer.innerHTML = '<p style="padding:20px;">신청 내역이 없습니다. 패키지를 먼저 선택해주세요.</p>';
-            return;
-        }
-
-        const appData = snapshot.docs[0].data();
-        const appId = snapshot.docs[0].id;
-        const status = appData.status;
-
-        const steps = [
-            { id: 'PAYMENT_COMPLETE', label: '결제 완료', icon: 'fa-credit-card' },
-            { id: 'INFO_SUBMITTED', label: '정보 입력', icon: 'fa-user-edit' },
-            { id: 'HOSPITAL_LIST_PROVIDED', label: '병원 리스트', icon: 'fa-list-ul' },
-            { id: 'BOOKING_CONFIRMED', label: '예약 확정', icon: 'fa-calendar-check' },
-            { id: 'COMPLETED', label: '종료', icon: 'fa-check-double' }
-        ];
-
-        timelineContainer.innerHTML = steps.map(step => `
-            <div class="status-step ${steps.findIndex(s => s.id === status) >= steps.indexOf(step) ? 'active' : ''}">
-                <i class="fas ${step.icon}"></i>
-                <span>${step.label}</span>
-            </div>
-        `).join('');
-
-        initAdminChat(appId);
-    };
-
-    const initAdminChat = (appId) => {
-        const chatContainer = document.getElementById('admin-chat-messages');
-        const chatInput = document.getElementById('admin-chat-input');
-        const sendBtn = document.getElementById('admin-chat-send');
-        if(!chatContainer) return;
-
-        db.collection('chats').doc(appId).collection('messages').orderBy('timestamp', 'asc')
-            .onSnapshot(snapshot => {
-                chatContainer.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const msg = doc.data();
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = `message ${msg.sender === currentUser.uid ? 'user' : 'bot'}`;
-                    msgDiv.textContent = msg.text;
-                    chatContainer.appendChild(msgDiv);
-                });
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            });
-
-        sendBtn.onclick = async () => {
-            const text = chatInput.value.trim();
-            if (text) {
-                await db.collection('chats').doc(appId).collection('messages').add({
-                    uid: currentUser.uid, sender: currentUser.uid, text: text,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                chatInput.value = '';
-            }
-        };
-    };
-
-    const initPackageEvents = () => {
-        document.querySelectorAll('.package-card').forEach(card => {
-            card.style.cursor = 'pointer';
-            card.onclick = () => {
-                if (!currentUser) { showLoginModal(); return; }
-                const type = card.classList.contains('package-no-confusion') ? 'basic' :
-                             card.classList.contains('package-zero-mistake') ? 'standard' : 'premium';
-                if (confirm(`${type.toUpperCase()} 패키지를 신청하시겠습니까?`)) {
-                    db.collection('applications').add({
-                        uid: currentUser.uid, packageType: type, status: 'PAYMENT_COMPLETE',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => showMyPage());
-                }
-            };
-        });
-    };
-
-    document.getElementById('close-mypage')?.onclick = () => document.body.classList.remove('platform-view-active');
-
-    // --- 기존 챗봇 기능 초기화 ---
-    const resetAndShowGreeting = () => {
-        if (!chatbotMessages) return;
-        chatbotMessages.innerHTML = '';
-        addMessage(translations[currentLang]['chatbot_greeting'], 'bot');
-        showSuggestedQuestions();
-    };
-
+    // --- 초기화 순서 재정의 (디자인/텍스트 보호) ---
+    switchLanguage(initialLang); 
     createAuthButtons();
     initPackageEvents();
-
-    // ----------------------------------------------------
-    // [기존 챗봇 및 FAQ 로직 유지]
-    // ----------------------------------------------------
+});

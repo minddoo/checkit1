@@ -200,17 +200,14 @@ body {
 
 #individual-hero .hero-character {
     background-image: url('assets/체킷 캐릭터.png');
-    width: 400px; /* 크기 조정 */
-    height: 400px; /* 크기 조정 */
+    width: 400px;
+    height: 400px;
 }
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 400px; /* Standardized to match individual hero */
-    height: 400px; /* Standardized to match individual hero */
-    margin-left: 0; /* Standardized to match individual hero */
-    filter: saturate(1.2) contrast(1.1); /* 채도 다시 낮춤 */
-    image-rendering: -webkit-optimize-contrast;
+    width: 400px;
+    height: 400px;
 }
 
 /* ----------------------------------

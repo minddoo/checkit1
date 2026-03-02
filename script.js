@@ -1486,19 +1486,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const indicator = document.getElementById('indicator');
             const overlay = modal.querySelector('.modal-overlay');
 
-            // [사용자 필독] Firebase Storage 업로드 후 생성된 '다운로드 URL'을 아래에 순서대로 복사해서 넣으세요.
-            // 예: "https://firebasestorage.googleapis.com/.../process_01.png?alt=media&token=..."
+            // [방법] PPT를 이미지(PNG)로 저장하여 assets/ 폴더에 넣으세요.
+            // 파일명 규칙: process_01.png, process_02.png ... process_10.png
             const processImages = [
-                "FirebaseDownloadURL_01",
-                "FirebaseDownloadURL_02",
-                "FirebaseDownloadURL_03",
-                "FirebaseDownloadURL_04",
-                "FirebaseDownloadURL_05",
-                "FirebaseDownloadURL_06",
-                "FirebaseDownloadURL_07",
-                "FirebaseDownloadURL_08",
-                "FirebaseDownloadURL_09",
-                "FirebaseDownloadURL_10"
+                "assets/process_01.png",
+                "assets/process_02.png",
+                "assets/process_03.png",
+                "assets/process_04.png",
+                "assets/process_05.png",
+                "assets/process_06.png",
+                "assets/process_07.png",
+                "assets/process_08.png",
+                "assets/process_09.png",
+                "assets/process_10.png"
             ];
 
             let currentIndex = 0;

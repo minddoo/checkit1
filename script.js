@@ -1477,17 +1477,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const initB2BProcessSlide = () => {
             const openBtn = document.getElementById('openProcessSlide');
             const modal = document.getElementById('processModal');
+            if (!openBtn || !modal) return; // 요소가 없으면 실행 중단 (다른 페이지 등)
+
             const closeBtn = document.getElementById('closeProcess');
             const content = document.getElementById('slideContent');
             const prevBtn = document.getElementById('prevSlide');
             const nextBtn = document.getElementById('nextSlide');
             const indicator = document.getElementById('slideIndicator');
 
-            let steps = [];
-            let currentIndex = 0;
-
-            // 기본 12단계 데이터 (Firestore 백업용 및 초기 로딩용)
-            const defaultSteps = [
+            let steps = [
                 { title: "검진 대상자 명단 전달", description: "기업이 엑셀 또는 구글시트로 작성한 검진 대상자 명단을 CHECKIT 담당자 메일로 전달합니다." },
                 { title: "우선순위 기반 명단 정리", description: "예약 가능 기한 기준으로 내림차순 정리. 기한 임박 대상자 상단 배치. 누락 없이 체계적 관리." },
                 { title: "검진 대상자 1:1 컨택 시작", description: "예약 가능 시작일부터 대상자와 소통 시작. 연락 수단 공란 시 모든 수단으로 시도." },
@@ -1501,47 +1499,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 { title: "기업 제출 서류 관리", description: "기업 요구 서류 안내. 근로자 제출 완료까지 확인." },
                 { title: "진행 현황 정리 후 기업 공유", description: "우선순위 및 진행 상황 정리된 명단을 기업 담당자 메일로 전달." }
             ];
+            let currentIndex = 0;
+
+            const renderSlide = () => {
+                if (!content || steps.length === 0) return;
+                const step = steps[currentIndex];
+                content.innerHTML = `
+                    <div style="color: #27ae60; font-weight: 700; margin-bottom: 10px; font-size: 0.9rem;">STEP ${currentIndex + 1}</div>
+                    <h3 style="margin-top: 0;">${step.title}</h3>
+                    <p>${step.description}</p>
+                `;
+                if (indicator) indicator.textContent = `${currentIndex + 1} / ${steps.length}`;
+                if (prevBtn) prevBtn.disabled = currentIndex === 0;
+                if (nextBtn) nextBtn.disabled = currentIndex === steps.length - 1;
+            };
 
             const fetchSteps = async () => {
                 try {
                     const snapshot = await db.collection('b2b_process_steps').orderBy('stepOrder', 'asc').get();
                     if (!snapshot.empty) {
                         steps = snapshot.docs.map(doc => doc.data());
-                    } else {
-                        steps = defaultSteps;
+                        renderSlide();
                     }
-                    renderSlide();
-                } catch (e) {
-                    console.warn('Firestore fetch failed, using defaults:', e);
-                    steps = defaultSteps;
-                    renderSlide();
-                }
+                } catch (e) { console.warn('Firestore fetch failed, using default data.'); }
             };
 
-            const renderSlide = () => {
-                if (steps.length === 0) return;
-                const step = steps[currentIndex];
-                content.innerHTML = `
-                    <div style="color: var(--primary-color); font-weight: 700; margin-bottom: 10px;">STEP ${currentIndex + 1}</div>
-                    <h3>${step.title}</h3>
-                    <p>${step.description}</p>
-                `;
-                indicator.textContent = `${currentIndex + 1} / ${steps.length}`;
-                prevBtn.disabled = currentIndex === 0;
-                nextBtn.disabled = currentIndex === steps.length - 1;
-            };
-
-            openBtn?.addEventListener('click', () => {
+            openBtn.addEventListener('click', () => {
+                currentIndex = 0; // 항상 처음부터 시작
                 modal.classList.remove('hidden');
-                fetchSteps();
+                modal.style.display = 'flex'; // 확실하게 보이도록 설정
+                renderSlide(); // 즉시 렌더링 (기본값)
+                fetchSteps(); // 백그라운드에서 최신 데이터 동기화
             });
 
-            closeBtn?.addEventListener('click', () => modal.classList.add('hidden'));
-            prevBtn?.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderSlide(); } });
-            nextBtn?.addEventListener('click', () => { if (currentIndex < steps.length - 1) { currentIndex++; renderSlide(); } });
+            const closeAction = () => {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            };
 
-            // 오버레이 클릭 시 닫기
-            modal?.querySelector('.modal-overlay').addEventListener('click', () => modal.classList.add('hidden'));
+            closeBtn?.addEventListener('click', closeAction);
+            modal.querySelector('.modal-overlay')?.addEventListener('click', closeAction);
+
+            prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); if (currentIndex > 0) { currentIndex--; renderSlide(); } });
+            nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); if (currentIndex < steps.length - 1) { currentIndex++; renderSlide(); } });
         };
 
         initB2BProcessSlide();

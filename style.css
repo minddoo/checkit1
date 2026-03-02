@@ -156,11 +156,11 @@ body {
     min-height: 400px; 
     display: flex;
     align-items: center;
-    overflow: visible;
+    overflow: hidden; /* 배경 밖으로 튀어나가지 않도록 설정 */
 }
 
 #corporate-hero {
-    height: 600px; /* Reduced fixed height for desktop */
+    height: 600px; /* 섹션 높이 고정 */
 }
 
 #individual-hero .container,
@@ -174,24 +174,24 @@ body {
 
 .hero-text-content {
     grid-column: 2; /* 텍스트는 무조건 중앙 열에 배치 */
-    text-align: center;
+    text-align: center; /* 기본 중앙 정렬 */
     max-width: 800px;
+    z-index: 2;
 }
 
 #corporate-hero .hero-text-content {
-    text-align: left; /* 기업 페이지는 왼쪽 정렬 */
-    padding-left: 100px; /* 오른쪽으로 이동 */
+    text-align: center; /* 기업 페이지도 중앙 정렬로 복구 */
 }
 
 #corporate-hero .hero-title {
-    white-space: nowrap; /* 제목 한 줄 구성 (br 태그로 제어) */
+    white-space: normal; /* br 태그와 자연스러운 줄바꿈 허용 */
 }
 
 #individual-hero .hero-title,
 #individual-hero .hero-subtitle,
 #corporate-hero .hero-title,
 #corporate-hero .hero-subtitle {
-    color: #000; /* 명확한 검정색으로 변경 */
+    color: #000; /* 명확한 검정색 */
 }
 
 .hero-character {
@@ -211,9 +211,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 900px;
-    height: 900px;
-    margin-left: -150px;
+    width: 600px; /* 개인용 400px의 1.5배 */
+    height: 600px; /* 섹션 높이와 일치시켜 튀어나가지 않게 함 */
+    margin-left: -50px; /* 중앙 텍스트와 적절한 거리 유지 */
 }
 
 /* ----------------------------------

@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'notice_reality_p1': 'Most hospitals create a separate “foreigner package.” This package includes services that locals don\'t pay for, which drives up the total price.',
             'notice_situation_title': 'A common situation for foreign clients',
             'notice_situation_p1': 'One client was quoted 1,800,000 KRW for a foreigner package. Through our guidance, they booked the same tests for 1,050,000 KRW.',
-            'corporate_page_title': 'Corporate Clients - Total Solutions',
+            'corporate_page_title': 'Corporate Clients<br>Total Solutions',
             'corporate_page_subtitle': 'CHECKIT contributes to increasing productivity and reducing health management burdens by systematically managing the health of foreign employees.',
             'corp_sec1_title': 'Foreign Workers: Now a Necessity, Not an Option',
             'corp_sec1_subtitle': 'In a changing industrial landscape, securing and managing foreign talent has become the most critical task for sustainable growth.',

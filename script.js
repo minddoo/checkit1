@@ -1486,11 +1486,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const indicator = document.getElementById('indicator');
             const overlay = modal.querySelector('.modal-overlay');
 
-            // [중요] Firebase Storage에 업로드한 이미지들의 다운로드 URL을 여기에 순서대로 넣으세요.
+            // [사용자 필독] Firebase Storage 업로드 후 생성된 '다운로드 URL'을 아래에 순서대로 복사해서 넣으세요.
+            // 예: "https://firebasestorage.googleapis.com/.../process_01.png?alt=media&token=..."
             const processImages = [
-                "FirebaseDownloadURL_01", // /b2b-process/process_01.png
-                "FirebaseDownloadURL_02", // /b2b-process/process_02.png
-                "FirebaseDownloadURL_03", // /b2b-process/process_03.png
+                "FirebaseDownloadURL_01",
+                "FirebaseDownloadURL_02",
+                "FirebaseDownloadURL_03",
                 "FirebaseDownloadURL_04",
                 "FirebaseDownloadURL_05",
                 "FirebaseDownloadURL_06",
@@ -1504,24 +1505,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const updateSlide = () => {
                 if (processImage) {
+                    // 이미지가 바뀌는 동안 깜빡임을 방지하기 위해 로딩 처리 가능
                     processImage.src = processImages[currentIndex];
                 }
                 if (indicator) {
                     indicator.innerText = `${currentIndex + 1} / ${processImages.length}`;
                 }
-                // 버튼 활성화/비활성화 상태 제어 (선택 사항)
-                if (prevBtn) prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
-                if (nextBtn) nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1";
+                
+                // 버튼 활성화/비활성화 시각적 피드백
+                if (prevBtn) {
+                    prevBtn.disabled = currentIndex === 0;
+                    prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
+                    prevBtn.style.cursor = currentIndex === 0 ? "not-allowed" : "pointer";
+                }
+                if (nextBtn) {
+                    nextBtn.disabled = currentIndex === processImages.length - 1;
+                    nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1";
+                    nextBtn.style.cursor = currentIndex === processImages.length - 1 ? "not-allowed" : "pointer";
+                }
             };
 
             openBtn.addEventListener('click', () => {
                 modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
                 currentIndex = 0;
                 updateSlide();
             });
 
             const closeAction = () => {
                 modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // 배경 스크롤 복구
             };
 
             closeBtn?.addEventListener('click', closeAction);
@@ -1540,6 +1553,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (currentIndex > 0) {
                     currentIndex--;
                     updateSlide();
+                }
+            });
+
+            // 키보드 방향키 지원
+            document.addEventListener('keydown', (e) => {
+                if (modal.style.display === 'flex') {
+                    if (e.key === 'ArrowRight') nextBtn.click();
+                    if (e.key === 'ArrowLeft') prevBtn.click();
+                    if (e.key === 'Escape') closeAction();
                 }
             });
         };

@@ -1335,49 +1335,169 @@ document.addEventListener('DOMContentLoaded', () => {
     switchLanguage(initialLang);
 
     // ====================================================
-    // CHECKIT Platform - Login & Multi-Provider Auth
+    // [CHECKIT Platform] Firebase Auth & User Management
     // ====================================================
-    const firebaseConfig = { apiKey: "AIzaSy...", authDomain: "checkit-app.firebaseapp.com", projectId: "checkit-app" };
+    const firebaseConfig = {
+        apiKey: "AIzaSy...", // Firebase 콘솔에서 발급받은 실제 키로 대체 필요
+        authDomain: "checkit-app.firebaseapp.com",
+        projectId: "checkit-app",
+        storageBucket: "checkit-app.appspot.com",
+        messagingSenderId: "...",
+        appId: "..."
+    };
+
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         let currentUser = null;
 
+        // --- Firestore 사용자 동기화 ---
+        const syncUserToFirestore = async (user, provider) => {
+            const userRef = db.collection('users').doc(user.uid);
+            const doc = await userRef.get();
+            if (!doc.exists) {
+                await userRef.set({
+                    email: user.email,
+                    name: user.displayName || 'User',
+                    provider: provider,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: "가입완료",
+                    emailVerified: user.emailVerified
+                });
+            }
+        };
+
+        // --- 로그인 모달 UI (기존 유지 + 이메일 폼 확장) ---
         const showLoginModal = () => {
             let overlay = document.getElementById('login-modal-overlay');
             if (!overlay) {
                 const modalHtml = `
-                    <div id="login-modal-overlay">
-                        <div class="login-modal-box">
+                    <div id="login-modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:3000;display:flex;justify-content:center;align-items:center;">
+                        <div class="login-modal-box" style="background:#fff;padding:40px;border-radius:24px;width:90%;max-width:400px;text-align:center;position:relative;">
                             <button id="close-login-modal" style="position:absolute;top:20px;right:20px;background:none;border:none;font-size:28px;cursor:pointer;color:#ccc;">&times;</button>
                             <h2 style="margin-bottom:10px;font-weight:800;color:#27ae60;">CHECKIT</h2>
-                            <p style="color:#666;margin-bottom:30px;font-size:0.95rem;">건강검진 행정 지원 플랫폼 시작하기</p>
-                            <div style="display:flex;flex-direction:column;gap:12px;">
+                            <p style="color:#666;margin-bottom:30px;font-size:0.9rem;">외국인 건강검진 행정 지원 플랫폼</p>
+                            
+                            <div id="login-main-methods" style="display:flex;flex-direction:column;gap:12px;">
                                 <button id="login-google" style="background:#fff;border:1px solid #eee;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-weight:600;">
                                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google로 시작하기
                                 </button>
-                                <button id="login-naver" style="background:#03C75A;color:#fff;border:none;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-weight:600;">
-                                    <span style="font-weight:900;font-size:1.2rem;">N</span> 네이버로 시작하기
-                                </button>
-                                <button id="login-kakao" style="background:#FEE500;color:#3C1E1E;border:none;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-weight:600;">
-                                    <i class="fas fa-comment" style="font-size:1.2rem;"></i> 카카오톡으로 시작하기
-                                </button>
-                                <div style="margin:10px 0;display:flex;align-items:center;gap:10px;color:#eee;"><hr style="flex:1;border:0;border-top:1px solid #eee;"> <span style="color:#aaa;font-size:0.8rem;">또는 이메일</span> <hr style="flex:1;border:0;border-top:1px solid #eee;"></div>
-                                <input type="email" id="login-email" placeholder="이메일 주소" style="padding:14px;border:1px solid #eee;border-radius:12px;outline:none;">
-                                <button id="login-email-btn" style="background:#27ae60;color:#fff;border:none;padding:14px;border-radius:12px;cursor:pointer;font-weight:600;">이메일로 계속하기</button>
+                                <button id="btn-show-email-login" style="background:#f8f9fa;border:1px solid #eee;padding:14px;border-radius:12px;cursor:pointer;font-weight:600;">이메일로 계속하기</button>
+                            </div>
+
+                            <div id="email-auth-section" style="display:none; flex-direction:column; gap:12px; text-align:left;">
+                                <input type="email" id="auth-email" placeholder="이메일" style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+                                <input type="password" id="auth-pw" placeholder="비밀번호" style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+                                <div id="signup-extra-fields" style="display:none; flex-direction:column; gap:12px;">
+                                    <input type="password" id="auth-pw-confirm" placeholder="비밀번호 확인" style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+                                </div>
+                                <button id="btn-email-action" style="background:#27ae60; color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700;">로그인</button>
+                                <p style="text-align:center; font-size:0.85rem; color:#666; cursor:pointer;" id="toggle-auth-mode">아직 계정이 없으신가요? 회원가입</p>
+                                <button id="btn-back-to-main" style="background:none; border:none; color:#999; font-size:0.85rem; cursor:pointer;">뒤로 가기</button>
                             </div>
                         </div>
                     </div>
                 `;
                 document.body.insertAdjacentHTML('beforeend', modalHtml);
                 overlay = document.getElementById('login-modal-overlay');
+                
+                const mainMethods = document.getElementById('login-main-methods');
+                const emailSection = document.getElementById('email-auth-section');
+                const signupFields = document.getElementById('signup-extra-fields');
+                const actionBtn = document.getElementById('btn-email-action');
+                const toggleMode = document.getElementById('toggle-auth-mode');
+                let isSignupMode = false;
+
                 document.getElementById('close-login-modal').onclick = () => overlay.style.display = 'none';
-                document.getElementById('login-google').onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => overlay.style.display = 'none');
-                document.getElementById('login-naver').onclick = () => alert('네이버 로그인을 시작합니다.');
-                document.getElementById('login-kakao').onclick = () => alert('카카오 로그인을 시작합니다.');
+                document.getElementById('btn-show-email-login').onclick = () => {
+                    mainMethods.style.display = 'none';
+                    emailSection.style.display = 'flex';
+                };
+                document.getElementById('btn-back-to-main').onclick = () => {
+                    mainMethods.style.display = 'flex';
+                    emailSection.style.display = 'none';
+                };
+
+                toggleMode.onclick = () => {
+                    isSignupMode = !isSignupMode;
+                    signupFields.style.display = isSignupMode ? 'flex' : 'none';
+                    actionBtn.textContent = isSignupMode ? '회원가입' : '로그인';
+                    toggleMode.textContent = isSignupMode ? '이미 계정이 있으신가요? 로그인' : '아직 계정이 없으신가요? 회원가입';
+                };
+
+                // --- Auth Actions ---
+                // Google
+                document.getElementById('login-google').onclick = () => {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    auth.signInWithPopup(provider).then(res => {
+                        syncUserToFirestore(res.user, 'google');
+                        overlay.style.display = 'none';
+                    }).catch(e => alert(e.message));
+                };
+
+                // Email
+                actionBtn.onclick = async () => {
+                    const email = document.getElementById('auth-email').value;
+                    const pw = document.getElementById('auth-pw').value;
+                    
+                    try {
+                        if (isSignupMode) {
+                            const pwConfirm = document.getElementById('auth-pw-confirm').value;
+                            if (pw !== pwConfirm) throw new Error('비밀번호가 일치하지 않습니다.');
+                            const res = await auth.createUserWithEmailAndPassword(email, pw);
+                            await res.user.sendEmailVerification();
+                            await syncUserToFirestore(res.user, 'email');
+                            alert('인증 메일이 발송되었습니다. 메일 확인 후 로그인해주세요.');
+                            isSignupMode = false; signupFields.style.display = 'none'; actionBtn.textContent = '로그인';
+                        } else {
+                            const res = await auth.signInWithEmailAndPassword(email, pw);
+                            if (!res.user.emailVerified) {
+                                alert('이메일 인증이 완료되지 않았습니다. 메일을 확인해주세요.');
+                                await auth.signOut();
+                            } else {
+                                overlay.style.display = 'none';
+                            }
+                        }
+                    } catch (e) { alert(e.message); }
+                };
             }
             overlay.style.display = 'flex';
+        };
+
+        // --- 로그인 상태 감지 및 UI 업데이트 ---
+        const updateAuthUI = (user) => {
+            const authBtn = document.getElementById('platform-auth-btn');
+            if (!authBtn) return;
+
+            if (user) {
+                authBtn.textContent = currentLang === 'ko' ? '마이페이지' : 'My Page';
+                authBtn.onclick = () => {
+                    if (window.location.pathname.includes('individual.html')) {
+                        document.body.classList.add('platform-view-active');
+                        if (typeof renderMyPage === 'function') renderMyPage();
+                    } else {
+                        window.location.href = 'individual.html?view=mypage';
+                    }
+                };
+                
+                // 로그아웃 버튼 추가 (디자인 유지하며 동적 생성)
+                let logoutBtn = document.getElementById('platform-logout-btn');
+                if (!logoutBtn) {
+                    logoutBtn = document.createElement('button');
+                    logoutBtn.id = 'platform-logout-btn';
+                    logoutBtn.className = 'lang-btn';
+                    logoutBtn.style.cssText = 'margin-left:10px; background:#e74c3c; color:#fff; border:none; padding:8px 15px; font-weight:600; cursor:pointer;';
+                    logoutBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
+                    logoutBtn.onclick = () => auth.signOut().then(() => window.location.href = 'index.html');
+                    authBtn.parentNode.appendChild(logoutBtn);
+                }
+            } else {
+                authBtn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
+                authBtn.onclick = showLoginModal;
+                const logoutBtn = document.getElementById('platform-logout-btn');
+                if (logoutBtn) logoutBtn.remove();
+            }
         };
 
         const createAuthButtons = () => {
@@ -1393,10 +1513,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             auth.onAuthStateChanged(user => {
                 currentUser = user;
-                authBtn.textContent = user ? (currentLang === 'ko' ? '마이페이지' : 'My Page') : (currentLang === 'ko' ? '로그인' : 'Login');
-                authBtn.onclick = () => user ? alert('마이페이지 준비 중') : showLoginModal();
+                updateAuthUI(user);
             });
         };
+
         createAuthButtons();
+
+        // 페이지 진입 시 뷰 제어
+        if (new URLSearchParams(window.location.search).get('view') === 'mypage') {
+            auth.onAuthStateChanged(user => {
+                if (user) document.body.classList.add('platform-view-active');
+            });
+        }
     }
 });

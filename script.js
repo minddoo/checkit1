@@ -1476,9 +1476,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- B2B 실무 과정 슬라이드 로직 (PPT 이미지 슬라이드 방식) ---
     const initB2BProcessSlide = () => {
+        console.log("Initializing B2B Process Slide...");
         const openBtn = document.getElementById('openProcessSlide');
         const modal = document.getElementById('processModal');
-        if (!openBtn || !modal) return;
+        if (!openBtn || !modal) {
+            console.log("Slider elements not found:", { openBtn, modal });
+            return;
+        }
+        console.log("Slider elements found, setting up listeners.");
 
         const closeBtn = document.getElementById('closeProcess');
         const processImage = document.getElementById('processImage');
@@ -1572,4 +1577,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initB2BProcessSlide();
-});
+});2

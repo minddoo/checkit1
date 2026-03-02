@@ -181,6 +181,7 @@ body {
 
 #corporate-hero .hero-text-content {
     text-align: center; /* 중앙 정렬 유지 */
+    margin-left: 40px; /* 정렬 수정 없이 오른쪽으로 살짝 이동 */
 }
 
 #corporate-hero .hero-title {
@@ -211,9 +212,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 900px; /* 요청하신 대로 캐릭터 크기 대폭 확대 */
+    width: 900px; 
     height: 900px; 
-    margin-left: -150px; /* 늘어난 크기에 맞춰 위치 미세 조정 */
+    margin-left: -50px; /* 캐릭터를 오른쪽으로 조정 */
 }
 
 /* ----------------------------------

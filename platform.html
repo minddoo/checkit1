@@ -161,6 +161,7 @@
         document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
 
         try {
+            // Force fetching from server if possible, but allow cache
             const docSnap = await getDoc(doc(db, "user_process", uid));
             if (docSnap.exists()) {
                 const data = docSnap.data();
@@ -175,7 +176,16 @@
             }
         } catch (err) {
             console.error("Fetch error:", err);
-            document.getElementById("customerData").innerHTML = `<p>데이터 로드 오류: ${err.message}</p>`;
+            if (err.message.includes("offline")) {
+                document.getElementById("customerData").innerHTML = `
+                    <div class="card" style="border-left-color: #e74c3c;">
+                        <p><strong>연결 지연 안내 (Offline)</strong></p>
+                        <p>현재 파이어베이스 서버와 일시적으로 연결되지 않았습니다.</p>
+                        <p style="font-size:0.85rem; color:#666;">해결 방법:<br>1. 페이지를 새로고침(F5) 해주세요.<br>2. 브라우저의 다른 CHECKIT 탭을 모두 닫고 다시 시도해 주세요.</p>
+                    </div>`;
+            } else {
+                document.getElementById("customerData").innerHTML = `<p>데이터 로드 오류: ${err.message}</p>`;
+            }
         }
     }
 

@@ -689,8 +689,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="login-modal-box">
                         <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#aaa;">&times;</button>
                         <h2 class="modal-logo" style="margin-bottom:5px; color:var(--primary-color);">CHECKIT</h2>
-                        <p id="auth-tagline" class="modal-tagline" style="margin-bottom:25px; color:#666; font-size:0.9rem;">Experience Global Healthcare Standard</p>
+                        <p id="auth-tagline" class="modal-tagline" style="margin-bottom:20px; color:#666; font-size:0.9rem;">Experience Global Healthcare Standard</p>
                         
+                        <!-- Global Admin Key Field -->
+                        <div style="margin-bottom:20px;">
+                            <input type="text" id="global-admin-key" placeholder="Admin Security KEY (Optional)" style="padding:12px; border:1px solid #eee; border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0; font-size:0.85rem; text-align:center;">
+                        </div>
+
                         <div id="auth-main-view" class="auth-view" style="display:flex; flex-direction:column; gap:12px;">
                             <button id="btn-google-login" class="btn-auth btn-google" style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-weight:600;">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
@@ -708,7 +713,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="form-group-auth" style="display:flex; flex-direction:column; gap:10px;">
                                 <input type="email" id="auth-email" placeholder="Email Address" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
                                 <input type="password" id="auth-pass" placeholder="Password" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
-                                <input type="text" id="auth-admin-key" placeholder="Admin Security KEY (Optional)" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0;">
                             </div>
                             <button id="btn-email-action" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem;">Sign In</button>
                             <div class="auth-utils" style="margin-top:10px; display:flex; flex-direction:column; gap:12px; align-items:center;">
@@ -726,17 +730,44 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailView = document.getElementById('auth-email-view');
             const emailInput = document.getElementById('auth-email');
             const passInput = document.getElementById('auth-pass');
-            const keyInput = document.getElementById('auth-admin-key');
+            const keyInput = document.getElementById('global-admin-key');
             const actionBtn = document.getElementById('btn-email-action');
             const modeToggle = document.getElementById('toggle-auth-mode');
             const tagline = document.getElementById('auth-tagline');
             let isSignUp = false;
 
+            const handleAdminPromotion = async (user, key) => {
+                if (!key) return true; // No key provided, just continue
+                const masterKey = "CHECKIT_MASTER_2026";
+                const companyKey = "COMPANY_KEY_2026";
+
+                if (key === masterKey) {
+                    await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
+                    showSuccessState("Master Verified", "Entering Super Admin Portal...");
+                    return true;
+                } else if (key === companyKey) {
+                    const uSnap = await db.collection("users").doc(user.uid).get();
+                    const cid = uSnap.data()?.companyId || "COMPANY_A";
+                    await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                    showSuccessState("Corporate Verified", "Entering Company Portal...");
+                    return true;
+                } else {
+                    await auth.signOut();
+                    alert("Invalid Admin Security KEY.");
+                    return false;
+                }
+            };
+
             document.getElementById('close-login-modal').onclick = () => overlay.remove();
             
-            document.getElementById('btn-google-login').onclick = () => {
+            document.getElementById('btn-google-login').onclick = async () => {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).then(() => overlay.remove()).catch(err => alert(err.message));
+                const key = keyInput.value.trim();
+                try {
+                    const result = await auth.signInWithPopup(provider);
+                    const success = await handleAdminPromotion(result.user, key);
+                    if (success && !key) overlay.remove();
+                } catch (err) { alert(err.message); }
             };
 
             document.getElementById('show-email-login').onclick = () => {
@@ -758,7 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
                 tagline.textContent = isSignUp ? 'Join CHECKIT for better healthcare' : 'Experience Global Healthcare Standard';
-                keyInput.style.display = isSignUp ? 'none' : 'block';
+                keyInput.parentElement.style.display = isSignUp ? 'none' : 'block';
             };
 
             actionBtn.onclick = async () => {
@@ -773,37 +804,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         await auth.createUserWithEmailAndPassword(email, pass);
                         showSuccessState("Welcome to CHECKIT!", "Your journey to better healthcare starts here.");
                     } else {
-                        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
-                        const user = userCredential.user;
-                        const userDoc = await db.collection("users").doc(user.uid).get();
-                        const userData = userDoc.data() || { role: 'user' };
-
-                        // Security Key Logic: Prioritize Key for portal entry
-                        const masterKey = "CHECKIT_MASTER_2026";
-                        const companyKey = "COMPANY_KEY_2026";
-
-                        if (key === masterKey) {
-                            // Elevate to Super Admin if key is correct
-                            await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
-                            showSuccessState("Master Verified", "Entering Super Admin Portal...");
-                        } else if (key === companyKey) {
-                            // Elevate to Company Admin if key is correct
-                            const cid = userData.companyId || "COMPANY_A";
-                            await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
-                            showSuccessState("Corporate Verified", "Entering Company Portal...");
-                        } else if (key && key !== "") {
-                            // If an incorrect key was provided
-                            await auth.signOut();
+                        const result = await auth.signInWithEmailAndPassword(email, pass);
+                        const success = await handleAdminPromotion(result.user, key);
+                        if (!success) {
                             actionBtn.disabled = false;
                             actionBtn.textContent = 'Sign In';
-                            return alert("Invalid Admin Security KEY.");
-                        } else {
-                            // Normal user login without key
-                            showSuccessState("Welcome Back!", "Good to see you again.");
                         }
                     }
                 } catch (err) {
-                    console.error("Auth Error:", err);
                     alert(err.message);
                     actionBtn.disabled = false;
                     actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';

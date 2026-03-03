@@ -281,6 +281,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.changeLanguage = switchLanguage;
 
+    // --- Language Switcher Initialization ---
+    const initLangSwitch = () => {
+        document.querySelectorAll('#language-switcher .lang-btn').forEach(btn => {
+            btn.onclick = () => switchLanguage(btn.dataset.lang);
+        });
+        switchLanguage('ko'); // Initial call to populate text
+    };
+    initLangSwitch();
+
     // --- Firebase Setup ---
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",

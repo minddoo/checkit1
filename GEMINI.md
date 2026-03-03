@@ -166,3 +166,12 @@ When requested for Firebase add the following the server configurations to .idx/
         }
     }
 }
+
+# Protected Files & Design Constraints
+
+The following files and design elements are **LOCKED**. The AI must **NOT** modify the structure, design, layout, or content of these files unless explicitly overridden by a "Force Override" command from the user.
+
+*   **`individual.html`**: The entire individual customer page design, including the hero section, expectation section, reality section (diary style), solution section, and price structure section, is finalized.
+    *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
+    *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
+    *   **Preserve**: The specific card-less design for text sections and the image-only card design for the expectation section.

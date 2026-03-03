@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'onboarding_title': '프로필 완성하기', 'onboarding_subtitle': '정확한 상담을 위해 기본 정보를 입력해 주세요.',
             'onboarding_name': '이름 (여권 영문)', 'onboarding_nat': '국적', 'onboarding_birth': '생년월일 (YYYY-MM-DD)',
             'onboarding_submit': '저장하고 시작하기',
-            'chatbot_manager_btn': '전담 매니저와 채팅하기'
+            'chatbot_manager_btn': '전담 매니저와 채팅하기',
+            'tab_files': '나의 파일', 'file_upload_btn': '파일 업로드', 'file_no_files': '등록된 파일이 없습니다.',
+            'file_translated': '번역본', 'file_original': '원본 결과지'
         },
         en: {
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
@@ -30,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'onboarding_title': 'Complete Your Profile', 'onboarding_subtitle': 'Please provide basic info for better service.',
             'onboarding_name': 'Full Name (Passport)', 'onboarding_nat': 'Nationality', 'onboarding_birth': 'Date of Birth (YYYY-MM-DD)',
             'onboarding_submit': 'Save & Start',
-            'chatbot_manager_btn': 'Chat with Manager'
+            'chatbot_manager_btn': 'Chat with Manager',
+            'tab_files': 'My Files', 'file_upload_btn': 'Upload File', 'file_no_files': 'No files uploaded yet.',
+            'file_translated': 'Translation', 'file_original': 'Original'
         }
     };
 
@@ -63,16 +67,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.firestore();
+        const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
 
-        // --- Onboarding Flow ---
+        // 1. Unified Inquiry Logic
+        document.querySelectorAll('.contact-form').forEach(form => {
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                try {
+                    await db.collection("contact_inquiries").add({
+                        email: form.querySelector('input[type="email"]')?.value || "",
+                        phone: form.querySelector('input[placeholder*="010"], input[placeholder*="Phone"]')?.value || "",
+                        company: form.querySelector('input[placeholder*="기업명"], input[placeholder*="Company"]')?.value || "",
+                        message: form.querySelector('textarea')?.value || "",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        source: window.location.pathname,
+                        language: currentLang,
+                        status: "new"
+                    });
+                    alert(translations[currentLang]['contact_success']);
+                    form.reset();
+                } catch (err) { alert("Error submitting inquiry."); }
+                finally { btn.disabled = false; }
+            };
+        });
+
+        // 2. Onboarding Flow
         const checkOnboarding = async (user) => {
             const uRef = db.collection("users").doc(user.uid);
             const uSnap = await uRef.get();
             const data = uSnap.data();
-            if (!data || !data.fullName) {
-                showOnboardingModal(user);
-            }
+            if (!data || !data.fullName) showOnboardingModal(user);
         };
 
         const showOnboardingModal = (user) => {
@@ -100,16 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nat = document.getElementById('ob-nat').value;
                 const birth = document.getElementById('ob-birth').value;
                 if (!name || !nat) return alert("Please fill essential fields.");
-                
-                await db.collection("users").doc(user.uid).update({
-                    fullName: name, nationality: nat, dob: birth, onboardingComplete: true
-                });
+                await db.collection("users").doc(user.uid).update({ fullName: name, nationality: nat, dob: birth, onboardingComplete: true });
                 location.reload();
             };
         };
 
-        // --- Platform Dashboards ---
-        let platformSub = null, chatSub = null;
+        // 3. Platform Dashboards & File Management
+        let platformSub = null, chatSub = null, filesSub = null;
 
         const renderMyPage = async (user) => {
             const overlay = document.getElementById('mypage-overlay');
@@ -122,18 +145,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderAdmin = (admin) => {
             const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `<div class="mypage-header"><h2>Admin Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div>
-                <div class="admin-main" id="admin-detail-view">Select a client to manage.</div></div>`;
-            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
+            const lang = translations[currentLang];
+            overlay.innerHTML = `
+                <div class="mypage-header"><h2>Admin Dashboard</h2>
+                    <div style="display:flex; gap:10px;"><button class="lang-btn active" id="tab-users">Clients</button><button class="lang-btn" id="tab-leads">Inquiries</button><button id="close-mypage" class="lang-btn">Close</button></div>
+                </div>
+                <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div><div class="admin-main" id="admin-detail-view">Select a client.</div></div>
+            `;
+            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
             platformSub = db.collection("users").where("role", "==", "user").onSnapshot(snap => {
-                const list = document.getElementById('admin-user-list'); list.innerHTML = "<h3>Active Clients</h3>";
+                const list = document.getElementById('admin-user-list'); list.innerHTML = "<h3>Clients</h3>";
                 snap.forEach(doc => {
                     const u = doc.data();
                     const div = document.createElement('div'); div.className = 'safety-card'; div.style.padding='15px'; div.style.cursor='pointer'; div.style.marginBottom='10px';
-                    div.innerHTML = `<strong>${u.fullName || u.email}</strong><br><small>${u.nationality || 'Unknown'} | ${u.selectedPlan || 'No Plan'}</small>`;
-                    div.onclick = () => selectUser(doc.id, u);
-                    list.appendChild(div);
+                    div.innerHTML = `<strong>${u.fullName || u.email}</strong><br><small>${u.nationality || '...'} | ${u.selectedPlan || 'No Plan'}</small>`;
+                    div.onclick = () => selectUser(doc.id, u); list.appendChild(div);
                 });
             });
         };
@@ -141,75 +167,113 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectUser = (uid, userData) => {
             const view = document.getElementById('admin-detail-view');
             view.innerHTML = `
-                <div style="text-align:left; background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:var(--shadow-sm);">
-                    <h3 style="margin:0;">${userData.fullName || userData.email}</h3>
-                    <p style="color:#888;">${userData.nationality} | ${userData.dob} | ${userData.email}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h3>Managing: ${userData.fullName || userData.email}</h3>
+                    <div class="platform-tabs" style="border:none; margin:0;"><div class="p-tab active" id="adm-tab-chat">Chat</div><div class="p-tab" id="adm-tab-files">Files</div></div>
                 </div>
-                <div id="status-btns" style="margin-bottom:20px; display:flex; gap:10px;"></div>
-                <div class="admin-chat-container" style="height:400px; width:100%; margin:0;"><div class="chat-messages" id="admin-msgs"></div>
-                <div class="chat-input-area"><input type="text" id="admin-chat-input"><button id="admin-send" class="lang-btn active">Send</button></div></div>
+                <div id="adm-dynamic-view">
+                    <div style="background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; gap:10px; justify-content:center;">
+                        <button class="lang-btn" onclick="updateStatus('${uid}', 0)">Step 1</button>
+                        <button class="lang-btn" onclick="updateStatus('${uid}', 1)">Step 2</button>
+                        <button class="lang-btn" onclick="updateStatus('${uid}', 2)">Step 3</button>
+                    </div>
+                    <div class="admin-chat-container" style="height:400px; width:100%; margin:0;"><div class="chat-messages" id="adm-msgs"></div>
+                    <div class="chat-input-area"><input type="text" id="adm-input"><button id="adm-send" class="lang-btn active">Send</button></div></div>
+                </div>
             `;
-            const btnContainer = document.getElementById('status-btns');
-            [0,1,2,3].forEach(i => {
-                const b = document.createElement('button'); b.innerText = `Step ${i+1}`; b.className='lang-btn';
-                b.onclick = () => updateUserStatus(uid, i); btnContainer.appendChild(b);
-            });
-            if(chatSub) chatSub();
-            chatSub = db.collection("user_process").doc(uid).collection("messages").orderBy("timestamp", "asc").onSnapshot(snap => {
-                const el = document.getElementById('admin-msgs'); el.innerHTML = "";
-                snap.forEach(m => {
-                    const d = document.createElement('div'); d.className = `message ${m.data().sender === 'user' ? 'bot' : 'user'}`;
-                    d.textContent = m.data().text; el.appendChild(d);
-                });
-                el.scrollTop = el.scrollHeight;
-            });
-            document.getElementById('admin-send').onclick = async () => {
-                const inp = document.getElementById('admin-chat-input');
-                if(inp.value.trim()){
-                    await db.collection("user_process").doc(uid).collection("messages").add({ text: inp.value.trim(), sender: "bot", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                    inp.value = "";
-                }
-            };
-        };
-
-        const updateUserStatus = async (uid, idx) => {
-            const ref = db.collection("user_process").doc(uid);
-            const steps = (await ref.get()).data().steps;
-            steps.forEach((s, i) => s.status = i < idx ? 'completed' : (i === idx ? 'active' : 'pending'));
-            await ref.update({ steps }); alert("Status Updated!");
+            document.getElementById('adm-tab-chat').onclick = () => selectUser(uid, userData);
+            document.getElementById('adm-tab-files').onclick = () => renderFiles(uid, true);
+            setupChat(uid, 'adm-msgs', 'adm-input', 'adm-send', 'bot');
         };
 
         const renderUser = (user) => {
-            const overlay = document.getElementById('mypage-overlay');
-            const lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2><button id="close-mypage" class="lang-btn">${lang['platform_close']}</button></div>
-                <div class="status-timeline" id="u-timeline"></div><div class="platform-grid"><div class="info-panel" id="u-info"></div>
-                <div class="admin-chat-container"><div class="chat-header"><i class="fas fa-headset"></i> ${lang['platform_chat_title']}</div>
-                <div class="chat-messages" id="u-msgs"></div><div class="chat-input-area">
-                <input type="text" id="u-chat-input"><button id="u-send" class="lang-btn active">Send</button></div></div></div>`;
-            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); if(chatSub) chatSub(); };
+            const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
+            overlay.innerHTML = `
+                <div class="mypage-header"><h2>${lang['platform_title']}</h2>
+                    <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div>
+                </div>
+                <div class="container" id="u-dynamic-view" style="padding:20px 0;">
+                    <div class="status-timeline" id="u-timeline"></div>
+                    <div class="platform-grid"><div class="info-panel" id="u-info"></div>
+                    <div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
+                    <div class="chat-input-area"><input type="text" id="u-input"><button id="u-send" class="lang-btn active">Send</button></div></div></div>
+                </div>
+            `;
+            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
+            document.getElementById('u-tab-status').onclick = () => renderUser(user);
+            document.getElementById('u-tab-files').onclick = () => renderFiles(user.uid, false);
+            
             platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
                 const data = doc.data(); if(!data) return;
                 document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
                 const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                document.getElementById('u-info').innerHTML = `<h3>${lang['platform_status_title']}</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
+                document.getElementById('u-info').innerHTML = `<h3>Status</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
             });
-            chatSub = db.collection("user_process").doc(user.uid).collection("messages").orderBy("timestamp", "asc").onSnapshot(snap => {
-                const el = document.getElementById('u-msgs'); el.innerHTML = "";
+            setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
+        };
+
+        const setupChat = (uid, msgsId, inpId, sendId, sender) => {
+            if(chatSub) chatSub();
+            chatSub = db.collection("user_process").doc(uid).collection("messages").orderBy("timestamp", "asc").onSnapshot(snap => {
+                const el = document.getElementById(msgsId); if(!el) return; el.innerHTML = "";
                 snap.forEach(m => {
-                    const d = document.createElement('div'); d.className = `message ${m.data().sender === 'user' ? 'user' : 'bot'}`;
+                    const d = document.createElement('div'); d.className = `message ${m.data().sender === sender ? 'user' : 'bot'}`;
                     d.textContent = m.data().text; el.appendChild(d);
                 });
                 el.scrollTop = el.scrollHeight;
             });
-            document.getElementById('u-send').onclick = async () => {
-                const inp = document.getElementById('u-chat-input');
+            document.getElementById(sendId).onclick = async () => {
+                const inp = document.getElementById(inpId);
                 if(inp.value.trim()){
-                    await db.collection("user_process").doc(user.uid).collection("messages").add({ text: inp.value.trim(), sender: "user", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    await db.collection("user_process").doc(uid).collection("messages").add({ text: inp.value.trim(), sender: sender, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                     inp.value = "";
                 }
             };
         };
+
+        const renderFiles = (uid, isAdmin) => {
+            const container = document.getElementById('adm-dynamic-view') || document.getElementById('u-dynamic-view');
+            container.innerHTML = `
+                <div class="info-panel"><h3>Files</h3><input type="file" id="file-input" style="display:none;">
+                <button class="cta-button-primary" onclick="document.getElementById('file-input').click()">Upload File</button>
+                <div id="file-progress" style="margin-top:10px; display:none; height:5px; background:#eee; border-radius:5px;"><div id="file-bar" style="width:0; height:100%; background:var(--primary-color);"></div></div>
+                <div class="file-list" id="platform-file-list"></div></div>
+            `;
+            document.getElementById('file-input').onchange = (e) => uploadFile(uid, e.target.files[0], isAdmin);
+            if(filesSub) filesSub();
+            filesSub = db.collection("user_process").doc(uid).collection("files").orderBy("timestamp", "desc").onSnapshot(snap => {
+                const list = document.getElementById('platform-file-list'); list.innerHTML = "";
+                snap.forEach(fDoc => {
+                    const f = fDoc.data();
+                    const div = document.createElement('div'); div.className = 'file-item';
+                    div.innerHTML = `<div class="file-info"><i class="fas fa-file-pdf"></i><div><div class="file-name">${f.name}</div><small>${f.type}</small></div></div>
+                        <div class="file-actions"><a href="${f.url}" target="_blank" class="btn-icon"><i class="fas fa-download"></i></a><button class="btn-icon delete" onclick="deleteFile('${uid}', '${fDoc.id}')"><i class="fas fa-trash"></i></button></div>`;
+                    list.appendChild(div);
+                });
+            });
+        };
+
+        const uploadFile = (uid, file, isAdmin) => {
+            if(!file) return;
+            const path = (isAdmin ? 'translated_results/' : 'user_files/') + uid + '/' + file.name;
+            const ref = storage.ref(path), task = ref.put(file);
+            const prog = document.getElementById('file-progress'), bar = document.getElementById('file-bar');
+            prog.style.display = 'block';
+            task.on('state_changed', s => bar.style.width = (s.bytesTransferred/s.totalBytes)*100 + '%', 
+                e => alert("Error uploading"), async () => {
+                    const url = await ref.getDownloadURL();
+                    await db.collection("user_process").doc(uid).collection("files").add({ name: file.name, url: url, type: isAdmin ? "Translation" : "Original", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    prog.style.display = 'none';
+                });
+        };
+
+        window.updateStatus = async (uid, idx) => {
+            const steps = (await db.collection("user_process").doc(uid).get()).data().steps;
+            steps.forEach((s, i) => s.status = i < idx ? 'completed' : (i === idx ? 'active' : 'pending'));
+            await db.collection("user_process").doc(uid).update({ steps }); alert("Updated!");
+        };
+        window.deleteFile = (uid, fid) => confirm("Delete file?") && db.collection("user_process").doc(uid).collection("files").doc(fid).delete();
+        const clearSubs = () => { [platformSub, chatSub, filesSub].forEach(s => s && s()); };
 
         const initAuthNav = () => {
             const nav = document.querySelector('#language-switcher');
@@ -224,30 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                     }
                 } else {
-                    btn.textContent = 'Login'; btn.onclick = () => { const p = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p); };
+                    btn.textContent = 'Login'; btn.onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
                     document.getElementById('logout-btn')?.remove();
                 }
             });
         };
         initAuthNav();
-    }
-
-    // --- Chatbot Upgrades ---
-    const chatbotMessages = document.getElementById('chatbot-messages');
-    if (chatbotMessages) {
-        const obs = new MutationObserver(() => {
-            const botMsgs = chatbotMessages.querySelectorAll('.message.bot');
-            const last = botMsgs[botMsgs.length - 1];
-            if (last && (last.innerText.includes('도움') || last.innerText.includes('help')) && !last.querySelector('.suggested-question-btn')) {
-                const btn = document.createElement('button');
-                btn.className = 'suggested-question-btn';
-                btn.style.marginTop = '10px';
-                btn.innerText = translations[currentLang]['chatbot_manager_btn'];
-                btn.onclick = () => renderMyPage(firebase.auth().currentUser);
-                last.appendChild(btn);
-            }
-        });
-        obs.observe(chatbotMessages, { childList: true });
     }
 
     // --- B2B Slider ---

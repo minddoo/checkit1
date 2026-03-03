@@ -701,32 +701,32 @@ document.addEventListener('DOMContentLoaded', () => {
             const modalHtml = `
                 <div id="login-modal-overlay" style="display:flex;">
                     <div class="login-modal-box">
-                        <button id="close-login-modal">&times;</button>
-                        <h2 class="modal-logo">CHECKIT</h2>
-                        <p class="modal-tagline">Experience Global Healthcare Standard</p>
+                        <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#aaa;">&times;</button>
+                        <h2 class="modal-logo" style="margin-bottom:5px; color:var(--primary-color);">CHECKIT</h2>
+                        <p id="auth-tagline" class="modal-tagline" style="margin-bottom:25px; color:#666; font-size:0.9rem;">Experience Global Healthcare Standard</p>
                         
-                        <div id="auth-main-view" class="auth-view">
-                            <button id="btn-google-login" class="btn-auth btn-google">
+                        <div id="auth-main-view" class="auth-view" style="display:flex; flex-direction:column; gap:12px;">
+                            <button id="btn-google-login" class="btn-auth btn-google" style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-weight:600;">
                                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
                                 Continue with Google
                             </button>
-                            <div style="margin:15px 0; color:#ccc; display:flex; align-items:center; gap:10px;">
-                                <hr style="flex:1; border:none; border-top:1px solid #eee;"> OR <hr style="flex:1; border:none; border-top:1px solid #eee;">
+                            <div style="margin:10px 0; color:#eee; display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700;">
+                                <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;"> OR <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;">
                             </div>
-                            <button id="show-email-login" class="btn-auth btn-email">
+                            <button id="show-email-login" class="btn-auth btn-email" style="background:#f8f9fa; border:1px solid #eee; padding:12px; border-radius:12px; cursor:pointer; font-weight:600;">
                                 <i class="fas fa-envelope"></i> Continue with Email
                             </button>
                         </div>
 
-                        <div id="auth-email-view" class="auth-view" style="display:none;">
-                            <div class="form-group-auth">
-                                <input type="email" id="auth-email" placeholder="Email Address">
-                                <input type="password" id="auth-pass" placeholder="Password">
+                        <div id="auth-email-view" class="auth-view" style="display:none; flex-direction:column; gap:15px;">
+                            <div class="form-group-auth" style="display:flex; flex-direction:column; gap:10px;">
+                                <input type="email" id="auth-email" placeholder="Email Address" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
+                                <input type="password" id="auth-pass" placeholder="Password" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
                             </div>
-                            <button id="btn-email-action" class="btn-auth btn-primary">Sign In</button>
-                            <div class="auth-utils">
-                                <span id="toggle-auth-mode">Don't have an account? Sign Up</span>
-                                <button id="btn-auth-back" style="background:none; border:none; color:#888; cursor:pointer; margin-top:10px;">&larr; Back</button>
+                            <button id="btn-email-action" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem;">Sign In</button>
+                            <div class="auth-utils" style="margin-top:10px; display:flex; flex-direction:column; gap:12px; align-items:center;">
+                                <span id="toggle-auth-mode" style="font-size:0.85rem; color:var(--primary-color); cursor:pointer; font-weight:600; text-decoration:underline;">Don't have an account? Sign Up</span>
+                                <button id="btn-auth-back" style="background:none; border:none; color:#888; cursor:pointer; font-size:0.85rem;">&larr; Back to options</button>
                             </div>
                         </div>
                     </div>
@@ -741,36 +741,58 @@ document.addEventListener('DOMContentLoaded', () => {
             const passInput = document.getElementById('auth-pass');
             const actionBtn = document.getElementById('btn-email-action');
             const modeToggle = document.getElementById('toggle-auth-mode');
+            const tagline = document.getElementById('auth-tagline');
             let isSignUp = false;
 
             document.getElementById('close-login-modal').onclick = () => overlay.remove();
+            
             document.getElementById('btn-google-login').onclick = () => {
-                auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => overlay.remove());
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).then(() => overlay.remove()).catch(err => alert(err.message));
             };
+
             document.getElementById('show-email-login').onclick = () => {
                 mainView.style.display = 'none';
                 emailView.style.display = 'flex';
             };
+
             document.getElementById('btn-auth-back').onclick = () => {
                 emailView.style.display = 'none';
                 mainView.style.display = 'flex';
+                // Reset to sign in mode when going back
+                isSignUp = false;
+                actionBtn.textContent = 'Sign In';
+                modeToggle.textContent = "Don't have an account? Sign Up";
+                tagline.textContent = 'Experience Global Healthcare Standard';
             };
 
             modeToggle.onclick = () => {
                 isSignUp = !isSignUp;
-                actionBtn.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+                actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
+                tagline.textContent = isSignUp ? 'Join CHECKIT for better healthcare' : 'Experience Global Healthcare Standard';
             };
 
             actionBtn.onclick = async () => {
-                const email = emailInput.value, pass = passInput.value;
+                const email = emailInput.value.trim(), pass = passInput.value;
                 if(!email || !pass) return alert("Please enter both email and password.");
+                if(pass.length < 6) return alert("Password should be at least 6 characters.");
+                
+                actionBtn.disabled = true;
+                actionBtn.textContent = isSignUp ? 'Creating...' : 'Signing In...';
+
                 try {
-                    if(isSignUp) await auth.createUserWithEmailAndPassword(email, pass);
-                    else await auth.signInWithEmailAndPassword(email, pass);
+                    if(isSignUp) {
+                        await auth.createUserWithEmailAndPassword(email, pass);
+                    } else {
+                        await auth.signInWithEmailAndPassword(email, pass);
+                    }
                     overlay.remove();
                 } catch (err) {
+                    console.error("Auth Error:", err);
                     alert(err.message);
+                    actionBtn.disabled = false;
+                    actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 }
             };
         };

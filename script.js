@@ -361,15 +361,25 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('platform-view-active');
             
             try {
-                const uSnap = await db.collection("users").doc(user.uid).get();
+                // 1. Ensure user doc exists
+                const uRef = db.collection("users").doc(user.uid);
+                let uSnap = await uRef.get();
+                
+                if (!uSnap.exists) {
+                    console.log("Creating missing user document...");
+                    await initUserDoc(user);
+                    uSnap = await uRef.get();
+                }
+
                 const userData = uSnap.data() || { role: "user" };
+                console.log("Logged in as:", userData.role);
 
                 if (userData.role === 'super_admin') renderAdmin(user);
                 else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
             } catch (e) {
-                console.error("Error loading profile:", e);
-                alert("프로필 로딩 중 오류가 발생했습니다.");
+                console.error("Detailed Profile Error:", e);
+                alert("프로필 로딩 중 오류가 발생했습니다: " + e.message);
             }
         };
 

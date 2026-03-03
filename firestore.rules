@@ -2,6 +2,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    match /users/{userId} {
+      // Allow users to read and write their own profile without needing to call getUserRole() first
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "super_admin";
+    }
+
     function getUserRole() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
     }
@@ -11,37 +17,27 @@ service cloud.firestore {
     }
 
     match /user_process/{userId} {
-
-      allow read, write: if request.auth != null
-                         && request.auth.uid == userId;
-
-      allow read: if request.auth != null
-                  && getUserRole() == "company_admin"
-                  && resource.data.companyId == getUserCompany();
-
-      allow read, write: if request.auth != null
-                         && getUserRole() == "super_admin";
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && getUserRole() == "company_admin" && resource.data.companyId == getUserCompany();
+      allow read, write: if request.auth != null && getUserRole() == "super_admin";
                          
-      // Allow access to messages subcollection
       match /messages/{messageId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, write: if request.auth != null && getUserRole() == "super_admin";
+      }
+      match /files/{fileId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
         allow read, write: if request.auth != null && getUserRole() == "super_admin";
       }
     }
     
     match /contact_inquiries/{inquiryId} {
-      allow create: if true; // Public can submit inquiries
-      allow read, write: if request.auth != null && getUserRole() == "super_admin";
-    }
-
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow create: if true;
       allow read, write: if request.auth != null && getUserRole() == "super_admin";
     }
 
     match /{document=**} {
-      allow read, write: if request.auth != null
-                         && getUserRole() == "super_admin";
+      allow read, write: if request.auth != null && getUserRole() == "super_admin";
     }
   }
 }

@@ -31,6 +31,11 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   **Image-Based Slider:** PPT-style image slider displaying PNG exports of the official service process.
     *   **Interactive UI:** Full-screen modal with navigation buttons and a page indicator.
 
+*   **Contact Us Section (March 2026):**
+    *   **Formspree Integration:** Inquiries are now sent directly to `checkit082@gmail.com` via Formspree (`https://formspree.io/f/xaqdljye`).
+    *   **Updated Form Structure:** Simplified to capture Email, Phone (Optional), and Message.
+    *   **Multilingual UI:** Title, subtitle, and button text update instantly based on language selection.
+
 ## 3. Multilingual Support
 
 *   **Languages:** Korean (KO), English (EN), Chinese (CN), Vietnamese (VN).
@@ -48,7 +53,7 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **Automatic Initialization:** New users automatically receive a default service process template upon registration.
 
 ### **Lead Management (Contact Forms)**
-*   **Centralized Inquiries:** All "Contact Us" submissions are saved to the `contact_inquiries` collection.
+*   **Centralized Inquiries:** All "Contact Us" submissions are saved to the `contact_inquiries` collection (and now additionally via Formspree).
 *   **Metadata Tracking:** Captures email, phone, company, message, timestamp, source URL, and user language preference.
 
 ### **Data Schema (Firestore) - v2.0 (March 2026)**

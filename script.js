@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'btn_export_csv': '리포트 다운로드 (CSV)',
             'btn_convert_client': '고객으로 등록',
             'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
+            'platform_step1': '신청 완료', 'platform_step1_desc': '문의가 정상적으로 접수되었습니다.',
+            'platform_step2': '예약 진행', 'platform_step2_desc': '희망하시는 지역의 병원과 일정을 조율 중입니다.',
+            'platform_step3': '검진 안내', 'platform_step3_desc': '검진 당일 주의사항과 위치를 안내해 드립니다.',
+            'platform_step4': '결과 확인', 'platform_step4_desc': '검진 결과 요약본이 준비되었습니다.',
             'hero_title': '외국인을 위한 전문 건강검진 예약 서비스',
             'hero_subtitle': '어려운 한국 병원 예약과 건강검진, CHECKIT이 모국어로 완벽하게 도와드립니다.',
             'service_for_title': '누구를 위한 서비스인가요?',
@@ -123,6 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'btn_export_csv': 'Download CSV',
             'btn_convert_client': 'Convert to Client',
             'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
+            'platform_step1': 'Applied', 'platform_step1_desc': 'Your inquiry has been successfully received.',
+            'platform_step2': 'Booking', 'platform_step2_desc': 'Coordinating with hospitals in your preferred area.',
+            'platform_step3': 'Check-up Guide', 'platform_step3_desc': 'Providing precautions and location for your visit.',
+            'platform_step4': 'Result', 'platform_step4_desc': 'Your health report summary is now available.',
             'hero_title': 'Specialized Health Check-up Booking for Foreigners',
             'hero_subtitle': 'Complex Korean hospital bookings and check-ups, CHECKIT helps you perfectly in your native language.',
             'service_for_title': 'Who is this service for?',
@@ -207,6 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'btn_export_csv': '下载 CSV',
             'btn_convert_client': '注册为客户',
             'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
+            'platform_step1': '申请完成', 'platform_step1_desc': '您的咨询已成功受理。',
+            'platform_step2': '正在预约', 'platform_step2_desc': '正在为您协调偏好地区的医院和时间。',
+            'platform_step3': '体检指南', 'platform_step3_desc': '为您提供体检当天的注意事项和位置。',
+            'platform_step4': '结果确认', 'platform_step4_desc': '体检结果摘要已准备就绪。',
             'hero_title': '面向外国人的专业健康检查预约服务',
             'hero_subtitle': '复杂的韩国医院预约和健康检查，CHECKIT 用您的母语为您提供完美帮助。',
             'service_for_title': '该服务面向谁？',
@@ -276,6 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'btn_export_csv': 'Tải xuống CSV',
             'btn_convert_client': 'Đăng ký khách hàng',
             'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
+            'platform_step1': 'Đã đăng ký', 'platform_step1_desc': 'Yêu cầu của bạn đã được tiếp nhận thành công.',
+            'platform_step2': 'Đang đặt lịch', 'platform_step2_desc': 'Đang điều phối với bệnh viện tại khu vực bạn mong muốn.',
+            'platform_step3': 'Hướng dẫn khám', 'platform_step3_desc': 'Cung cấp các lưu ý và địa điểm cho ngày khám.',
+            'platform_step4': 'Kết quả', 'platform_step4_desc': 'Bản tóm tắt kết quả khám sức khỏe đã sẵn sàng.',
             'hero_title': 'Dịch vụ đặt lịch khám sức khỏe chuyên nghiệp cho người nước ngoài',
             'hero_subtitle': 'Đặt lịch bệnh viện và khám sức khỏe tại Hàn Quốc không còn khó khăn, CHECKIT hỗ trợ bạn hoàn hảo bằng tiếng mẹ đẻ.',
             'service_for_title': 'Dịch vụ này dành cho ai?',
@@ -382,10 +398,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
 
-        // ENABLE PERSISTENCE
         db.enablePersistence({ synchronizeTabs: true }).catch(err => console.error("Persistence fail:", err.code));
 
-        // 1. Unified Inquiry Logic
         document.querySelectorAll('.contact-form, .contact-form-body').forEach(form => {
             form.onsubmit = async (e) => {
                 e.preventDefault();
@@ -408,7 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-        // 2. Onboarding Flow
         const checkOnboarding = async (user) => {
             const uRef = db.collection("users").doc(user.uid);
             try {
@@ -434,7 +447,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         };
 
-        // 3. Platform Dashboards
         let platformSub = null, chatSub = null, filesSub = null, leadsSub = null, statsSub = null;
 
         const renderMyPage = async (user) => {
@@ -448,12 +460,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('platform-view-active');
             
             try {
-                // Standard get (will use cache automatically if offline)
                 const uSnap = await db.collection("users").doc(user.uid).get();
                 const userData = uSnap.data();
                 
                 if (!userData) {
-                    console.log("New user detected, redirecting to onboarding.");
                     overlay.style.display = 'none';
                     document.body.classList.remove('platform-view-active');
                     showOnboardingModal(user);
@@ -470,18 +480,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="container" style="padding:50px; text-align:center;">
                         <i class="fas fa-exclamation-triangle" style="font-size:3rem; color:#f1c40f; margin-bottom:20px;"></i>
                         <p><strong>Unable to sync your profile.</strong></p>
-                        <p>This happens when you\'re offline and visiting for the first time, or a security tool is blocking the connection.</p>
-                        <div style="margin:20px 0; padding:15px; background:#eee; border-radius:8px; text-align:left; font-family:monospace; font-size:0.8rem; max-height:100px; overflow-y:auto;">
-                            ${err.message}
-                        </div>
-                        <div style="display:flex; gap:10px; justify-content:center;">
-                            <button class="lang-btn active" onclick="location.reload()">Retry Connection</button>
-                            <button class="lang-btn" id="force-onboarding">Try First-time Login</button>
-                        </div>
+                        <p>Please check your connection and try again.</p>
+                        <button class="lang-btn active" onclick="location.reload()">Retry Connection</button>
                     </div>
                 `;
                 document.getElementById('close-error').onclick = () => { overlay.style.display = 'none'; document.body.classList.remove('platform-view-active'); };
-                document.getElementById('force-onboarding').onclick = () => { overlay.style.display = 'none'; document.body.classList.remove('platform-view-active'); showOnboardingModal(user); };
             }
         };
 
@@ -610,8 +613,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderUser = (user) => {
             const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title'] || 'CHECKIT PLATFORM'}</h2>
-                <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
+            overlay.innerHTML = `<div class="mypage-header"><h2 data-lang-key="platform_title">${lang['platform_title'] || 'CHECKIT PLATFORM'}</h2>
+                <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn" data-lang-key="platform_close">${lang['platform_close'] || 'Close'}</button></div></div>
                 <div class="container" id="u-dynamic-view" style="padding:20px 0;"><div class="status-timeline" id="u-timeline"></div>
                 <div class="platform-grid"><div class="info-panel" id="u-info"></div><div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
                 <div class="chat-input-area"><input type="text" id="u-input" placeholder="Type message..."><button id="u-send" class="lang-btn active">Send</button></div></div></div></div>`;
@@ -627,11 +630,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     { title: 'Check-up', status: 'pending', icon: 'fas fa-hospital-user', description: 'Support on the day of visit.' },
                     { title: 'Result', status: 'pending', icon: 'fas fa-poll-h', description: 'Translating and summarizing results.' }
                 ]};
-                document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
-                const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                document.getElementById('u-info').innerHTML = `<h3>Current Status</h3><div style="margin-top:20px; padding:20px; background:var(--hero-bg-color); border-radius:12px; border-left:5px solid var(--primary-color);">
-                    <h4 style="color:var(--primary-dark); margin-bottom:10px;">${active.title}</h4><p>${active.description}</p></div>
-                    <div style="margin-top:30px;"><h4>Help Center</h4><p style="color:#666; font-size:0.9rem;">Need assistance? Use the 1:1 chat to speak with your manager.</p></div>`;
+                document.getElementById('u-timeline').innerHTML = data.steps.map((s, i) => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span data-lang-key="platform_step${i+1}">${translations[currentLang]['platform_step' + (i+1)] || s.title}</span></div>`).join('');
+                const activeIdx = data.steps.findIndex(s => s.status === 'active');
+                const active = data.steps[activeIdx !== -1 ? activeIdx : 0];
+                document.getElementById('u-info').innerHTML = `<h3 data-lang-key="platform_status_title">${lang['platform_status_title'] || 'Current Status'}</h3><div style="margin-top:20px; padding:20px; background:var(--hero-bg-color); border-radius:12px; border-left:5px solid var(--primary-color);">
+                    <h4 style="color:var(--primary-dark); margin-bottom:10px;" data-lang-key="platform_step${activeIdx + 1}">${translations[currentLang]['platform_step' + (activeIdx + 1)] || active.title}</h4>
+                    <p data-lang-key="platform_step${activeIdx + 1}_desc">${translations[currentLang]['platform_step' + (activeIdx + 1) + '_desc'] || active.description}</p></div>`;
             });
             setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
         };

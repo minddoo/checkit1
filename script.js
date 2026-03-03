@@ -437,13 +437,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const renderMyPage = async (user) => {
             const overlay = document.getElementById('mypage-overlay');
             if(!overlay) return;
+            
+            // 1. Show immediate feedback
+            overlay.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f7f6;"><h3>Loading...</h3></div>';
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
-            const uSnap = await db.collection("users").doc(user.uid).get();
-            const userData = uSnap.data();
-            if (userData?.role === 'super_admin') renderAdmin(user);
-            else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
-            else renderUser(user);
+            
+            try {
+                // 2. Fetch user data with timeout/error check
+                const uSnap = await db.collection("users").doc(user.uid).get();
+                const userData = uSnap.data();
+                
+                if (userData?.role === 'super_admin') renderAdmin(user);
+                else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
+                else renderUser(user);
+            } catch (err) {
+                console.error("Platform Error:", err);
+                overlay.innerHTML = `
+                    <div class="mypage-header"><h2>Error</h2><button id="close-error" class="lang-btn">Close</button></div>
+                    <div class="container" style="padding:50px; text-align:center;">
+                        <p>Unable to load dashboard. Please try again.</p>
+                        <small style="color:#888;">${err.message}</small>
+                    </div>
+                `;
+                document.getElementById('close-error').onclick = () => {
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('platform-view-active');
+                };
+            }
         };
 
         const renderAdmin = (admin) => {

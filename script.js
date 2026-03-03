@@ -438,26 +438,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('mypage-overlay');
             if(!overlay) return;
             
-            // 1. Show immediate feedback
-            overlay.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; background:#f4f7f6;"><h3>Loading...</h3></div>';
+            overlay.innerHTML = '<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#f4f7f6; gap:20px;">' +
+                                '<div class="loader"></div><h3>Loading Dashboard...</h3>' +
+                                '<p style="color:#666; font-size:0.9rem;">Checking connection to server</p></div>';
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
             
             try {
-                // 2. Fetch user data with timeout/error check
-                const uSnap = await db.collection("users").doc(user.uid).get();
-                const userData = uSnap.data();
+                // Try to force network if it was previously disabled or failed
+                await db.enableNetwork();
                 
-                if (userData?.role === 'super_admin') renderAdmin(user);
-                else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
+                // Fetch with a timeout or handled error
+                const uSnap = await db.collection("users").doc(user.uid).get().catch(async (err) => {
+                    if (err.code === 'unavailable' || err.message.includes('offline')) {
+                        console.warn("Firestore offline, trying cache...");
+                        return await db.collection("users").doc(user.uid).get({ source: 'cache' });
+                    }
+                    throw err;
+                });
+
+                const userData = uSnap.data();
+                if (!userData) {
+                    // Fallback for new users who might not have a doc yet
+                    console.log("No user document found, showing onboarding.");
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('platform-view-active');
+                    showOnboardingModal(user);
+                    return;
+                }
+                
+                if (userData.role === 'super_admin') renderAdmin(user);
+                else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
             } catch (err) {
                 console.error("Platform Error:", err);
                 overlay.innerHTML = `
-                    <div class="mypage-header"><h2>Error</h2><button id="close-error" class="lang-btn">Close</button></div>
+                    <div class="mypage-header"><h2>Connection Issue</h2><button id="close-error" class="lang-btn">Close</button></div>
                     <div class="container" style="padding:50px; text-align:center;">
-                        <p>Unable to load dashboard. Please try again.</p>
-                        <small style="color:#888;">${err.message}</small>
+                        <i class="fas fa-wifi-slash" style="font-size:3rem; color:#e74c3c; margin-bottom:20px;"></i>
+                        <p><strong>Failed to reach the server.</strong></p>
+                        <p>This could be due to a poor internet connection or a security extension (like an AdBlocker) blocking Firebase.</p>
+                        <div style="margin:20px 0; padding:15px; background:#eee; border-radius:8px; text-align:left; font-family:monospace; font-size:0.8rem; overflow-x:auto;">
+                            ${err.message}
+                        </div>
+                        <button class="lang-btn active" onclick="location.reload()">Refresh Page</button>
                     </div>
                 `;
                 document.getElementById('close-error').onclick = () => {

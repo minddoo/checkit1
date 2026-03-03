@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'expectation_title': 'Y tế Hàn Quốc: Kỳ vọng và Thực tế',
             'reality_title': 'Nhưng thực tế lại khác',
             'solution_title': 'Giải pháp CHECKIT',
-            'solution_subtitle': 'Hãy để chúng tôi lo những việc khó khăn. Bạn chỉ cần lo cho sức khỏe của mình.',
+            'solution_subtitle': 'Hãy để chúng tôi lo những việc khó khăn. Bạn chỉ cần lo cho sức khỏe의 mình.',
             'individual_service1_title': 'Quản lý riêng 1:1',
             'individual_service2_title_new': 'Giao tiếp thời gian thực',
             'individual_service3_title_new': 'Tóm tắt kết quả đơn giản',
@@ -453,9 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('mypage-overlay');
             if(!overlay) return;
             
-            overlay.innerHTML = '<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#f4f7f6; gap:20px;">' +
-                                '<div class="loader"></div><h3>Checking connection...</h3>' +
-                                '<p style="color:#666; font-size:0.9rem;">Syncing with CHECKIT server</p></div>';
+            // Show structure immediately to prevent empty window
+            renderUser(user);
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
             
@@ -463,28 +462,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const uSnap = await db.collection("users").doc(user.uid).get();
                 const userData = uSnap.data();
                 
-                if (!userData) {
-                    overlay.style.display = 'none';
-                    document.body.classList.remove('platform-view-active');
+                if (userData) {
+                    if (userData.role === 'super_admin') renderAdmin(user);
+                    else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
+                    // Standard user already rendered
+                } else {
                     showOnboardingModal(user);
-                    return;
                 }
-                
-                if (userData.role === 'super_admin') renderAdmin(user);
-                else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
-                else renderUser(user);
             } catch (err) {
-                console.error("Dashboard Load Error:", err);
-                overlay.innerHTML = `
-                    <div class="mypage-header"><h2>System Connection</h2><button id="close-error" class="lang-btn">Close</button></div>
-                    <div class="container" style="padding:50px; text-align:center;">
-                        <i class="fas fa-exclamation-triangle" style="font-size:3rem; color:#f1c40f; margin-bottom:20px;"></i>
-                        <p><strong>Unable to sync your profile.</strong></p>
-                        <p>Please check your connection and try again.</p>
-                        <button class="lang-btn active" onclick="location.reload()">Retry Connection</button>
-                    </div>
-                `;
-                document.getElementById('close-error').onclick = () => { overlay.style.display = 'none'; document.body.classList.remove('platform-view-active'); };
+                console.warn("MyPage sync deferred:", err.message);
             }
         };
 
@@ -759,7 +745,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btn-auth-back').onclick = () => {
                 emailView.style.display = 'none';
                 mainView.style.display = 'flex';
-                // Reset to sign in mode when going back
                 isSignUp = false;
                 actionBtn.textContent = 'Sign In';
                 modeToggle.textContent = "Don't have an account? Sign Up";
@@ -810,7 +795,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 setTimeout(() => {
                     overlay.remove();
-                    // Onboarding will be triggered by onAuthStateChanged if needed
                 }, 2000);
             };
         };

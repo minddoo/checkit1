@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_title': '프리미엄 플랜', 'package3_price': '₩200,000',
             'package_includes': '포함 내역', 'package_recommend_title': '추천 대상',
             'package1_feature1': '병원 예약 대행', 'package1_feature2': '기본 문진표 번역', 'package1_feature3': '결과지 요약 (PDF)',
-            'package1_feature1': '병원 예약 대행', 'package1_feature2': '기본 문진표 번역', 'package1_feature3': '결과지 요약 (PDF)',
             'package1_feature4': '1:1 전담 매니저 매칭', 'package1_feature5': '병원 위치 안내', 'package1_feature6': '검진 주의사항 안내',
             'package1_feature7': '검진 일정 리마인드', 'package1_feature8': '병원 행정 지원', 'package1_feature9': '기본 사후 관리',
             'package1_recommend_desc': '검진 경험이 있고 행정 지원만 필요한 분',
@@ -109,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature7': 'VIP 전용 대기실 안내', 'package3_feature8': '프리미엄 건강 검진 설계', 'package3_feature9': '사후 정밀 추적 관리',
             'package3_feature10': '전문 통역사 배정', 'package3_feature11': '맞춤 식단 제공 (검진 후)', 'package3_feature12': '교통편 예약 지원', 'package3_feature13': '전담 간호사 상담',
             'package3_recommend_desc': '최고 수준의 의료 서비스와 완벽한 케어를 원하는 분',
-            'package_includes': '포함 내역', 'package_recommend_title': '추천 대상',
             'options_title_new': '추가 옵션 서비스'
         },
         en: {
@@ -215,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_title': '个人客户',
             'individual_desc': '从困难的预约到结果翻译，1:1 专属经理为您提供全方位照顾。',
             'corporate_title': '企业客户',
-            'corporate_desc': '系统管理外籍员工健康，提高企业生产力。',
+            'corporate_desc': '系统管理外籍员工 health，提高企业生产力。',
             'why_us_title': '为什么选择 CHECKIT？',
             'why_us_subtitle_new': '外籍员工和企业都满意的健康检查管理新标准',
             'why_us_feature1_title': '母语 1:1 咨询',
@@ -247,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact_form_submit_button': '提交咨询',
             'chatbot_header': 'CHECKIT 帮助中心', 'chatbot_placeholder': '请问有什么可以帮您...',
             'corporate_page_title': '企业客户整体解决方案',
-            'corporate_page_subtitle': '系统管理外籍员工健康，提高企业生产力，减轻健康管理负担。',
+            'corporate_page_subtitle': '系统管理外籍员工 health，提高企业生产力，减轻健康管理负担。',
             'view_workflow': '查看业务流程',
             'individual_page_title': '个人客户服务',
             'individual_page_subtitle': '复杂的健康检查，现在用母语轻松完成。',
@@ -350,7 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.querySelectorAll('#language-switcher .lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
         
-        // Update dynamic button text if it exists
         const authBtn = document.getElementById('platform-auth-btn');
         if (authBtn) {
             const user = firebase.auth().currentUser;
@@ -362,7 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.changeLanguage = switchLanguage;
 
-    // --- Language Switcher Initialization ---
     const initLangSwitch = () => {
         document.querySelectorAll('#language-switcher .lang-btn').forEach(btn => {
             btn.onclick = () => switchLanguage(btn.dataset.lang);
@@ -385,6 +381,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
+
+        // ENABLE PERSISTENCE
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => console.error("Persistence fail:", err.code));
 
         // 1. Unified Inquiry Logic
         document.querySelectorAll('.contact-form, .contact-form-body').forEach(form => {
@@ -412,9 +411,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Onboarding Flow
         const checkOnboarding = async (user) => {
             const uRef = db.collection("users").doc(user.uid);
-            const uSnap = await uRef.get();
-            const data = uSnap.data();
-            if (!data || !data.fullName) showOnboardingModal(user);
+            try {
+                const uSnap = await uRef.get();
+                const data = uSnap.data();
+                if (!data || !data.fullName) showOnboardingModal(user);
+            } catch (e) {
+                console.warn("Onboarding check deferred due to offline state.");
+            }
         };
 
         const showOnboardingModal = (user) => {
@@ -439,28 +442,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!overlay) return;
             
             overlay.innerHTML = '<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:#f4f7f6; gap:20px;">' +
-                                '<div class="loader"></div><h3>Loading Dashboard...</h3>' +
-                                '<p style="color:#666; font-size:0.9rem;">Checking connection to server</p></div>';
+                                '<div class="loader"></div><h3>Checking connection...</h3>' +
+                                '<p style="color:#666; font-size:0.9rem;">Syncing with CHECKIT server</p></div>';
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
             
             try {
-                // Try to force network if it was previously disabled or failed
-                await db.enableNetwork();
-                
-                // Fetch with a timeout or handled error
-                const uSnap = await db.collection("users").doc(user.uid).get().catch(async (err) => {
-                    if (err.code === 'unavailable' || err.message.includes('offline')) {
-                        console.warn("Firestore offline, trying cache...");
-                        return await db.collection("users").doc(user.uid).get({ source: 'cache' });
-                    }
-                    throw err;
-                });
-
+                // Standard get (will use cache automatically if offline)
+                const uSnap = await db.collection("users").doc(user.uid).get();
                 const userData = uSnap.data();
+                
                 if (!userData) {
-                    // Fallback for new users who might not have a doc yet
-                    console.log("No user document found, showing onboarding.");
+                    console.log("New user detected, redirecting to onboarding.");
                     overlay.style.display = 'none';
                     document.body.classList.remove('platform-view-active');
                     showOnboardingModal(user);
@@ -471,23 +464,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
             } catch (err) {
-                console.error("Platform Error:", err);
+                console.error("Dashboard Load Error:", err);
                 overlay.innerHTML = `
-                    <div class="mypage-header"><h2>Connection Issue</h2><button id="close-error" class="lang-btn">Close</button></div>
+                    <div class="mypage-header"><h2>System Connection</h2><button id="close-error" class="lang-btn">Close</button></div>
                     <div class="container" style="padding:50px; text-align:center;">
-                        <i class="fas fa-wifi-slash" style="font-size:3rem; color:#e74c3c; margin-bottom:20px;"></i>
-                        <p><strong>Failed to reach the server.</strong></p>
-                        <p>This could be due to a poor internet connection or a security extension (like an AdBlocker) blocking Firebase.</p>
-                        <div style="margin:20px 0; padding:15px; background:#eee; border-radius:8px; text-align:left; font-family:monospace; font-size:0.8rem; overflow-x:auto;">
+                        <i class="fas fa-exclamation-triangle" style="font-size:3rem; color:#f1c40f; margin-bottom:20px;"></i>
+                        <p><strong>Unable to sync your profile.</strong></p>
+                        <p>This happens when you\'re offline and visiting for the first time, or a security tool is blocking the connection.</p>
+                        <div style="margin:20px 0; padding:15px; background:#eee; border-radius:8px; text-align:left; font-family:monospace; font-size:0.8rem; max-height:100px; overflow-y:auto;">
                             ${err.message}
                         </div>
-                        <button class="lang-btn active" onclick="location.reload()">Refresh Page</button>
+                        <div style="display:flex; gap:10px; justify-content:center;">
+                            <button class="lang-btn active" onclick="location.reload()">Retry Connection</button>
+                            <button class="lang-btn" id="force-onboarding">Try First-time Login</button>
+                        </div>
                     </div>
                 `;
-                document.getElementById('close-error').onclick = () => {
-                    overlay.style.display = 'none';
-                    document.body.classList.remove('platform-view-active');
-                };
+                document.getElementById('close-error').onclick = () => { overlay.style.display = 'none'; document.body.classList.remove('platform-view-active'); };
+                document.getElementById('force-onboarding').onclick = () => { overlay.style.display = 'none'; document.body.classList.remove('platform-view-active'); showOnboardingModal(user); };
             }
         };
 

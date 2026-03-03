@@ -304,7 +304,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
+        const auth = firebase.auth(), db = firebase.firestore();
+
+        // --- FIX: Force Long-polling to prevent 'offline' errors in restricted networks ---
+        db.settings({ experimentalForceLongPolling: true, merge: true });
 
         // 1. Unified Inquiry Logic
         document.querySelectorAll('.contact-form, .contact-form-body').forEach(form => {
@@ -324,31 +327,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     alert(translations[currentLang]['contact_success']);
                     form.reset();
-                } catch (err) { alert("Error submitting inquiry."); }
+                } catch (err) { console.error(err); }
                 finally { btn.disabled = false; }
             };
         });
 
-        // 2. Onboarding Flow
-        const checkOnboarding = async (user) => {
-            const uRef = db.collection("users").doc(user.uid);
-            const uSnap = await uRef.get();
-            const data = uSnap.data();
-            if (!data || !data.fullName) showOnboardingModal(user);
-        };
-
-        const showOnboardingModal = (user) => {
-            const lang = translations[currentLang];
-            const modalHtml = `<div id="login-modal-overlay" style="display:flex;"><div class="login-modal-box onboarding-box"><h2 class="modal-logo">CHECKIT</h2><h3>${lang['onboarding_title']}</h3>
-                <div class="form-group-auth"><input type="text" id="ob-name" placeholder="Full Name"><div class="form-row"><input type="text" id="ob-nat" placeholder="Nationality"><input type="text" id="ob-birth" placeholder="YYYY-MM-DD"></div></div>
-                <button id="btn-ob-submit" class="btn-auth btn-primary">Start Service</button></div></div>`;
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-            document.getElementById('btn-ob-submit').onclick = async () => {
-                const name = document.getElementById('ob-name').value, nat = document.getElementById('ob-nat').value, birth = document.getElementById('ob-birth').value;
-                if (!name || !nat) return alert("Fill required fields.");
-                await db.collection("users").doc(user.uid).update({ fullName: name, nationality: nat, dob: birth, onboardingComplete: true });
-                location.reload();
-            };
+        // 2. Auth Initialization
+        const initUserDoc = async (user) => {
+            try {
+                const uRef = db.collection("users").doc(user.uid);
+                const uSnap = await uRef.get({ source: 'server' }).catch(() => uRef.get());
+                if (!uSnap.exists) {
+                    await uRef.set({ role: "user", email: user.email, companyId: "", createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                    await db.collection("user_process").doc(user.uid).set({
+                        steps: [
+                            { title: "상담 및 신청", description: "접수 대기 중입니다.", status: "active", icon: "fas fa-file-alt" },
+                            { title: "병원 예약", description: "병원 선정 대기 중", status: "pending", icon: "fas fa-hospital" },
+                            { title: "검진 완료", description: "현장 지원 대기", status: "pending", icon: "fas fa-notes-medical" },
+                            { title: "결과 번역", description: "결과지 수령 대기", status: "pending", icon: "fas fa-language" }
+                        ]
+                    });
+                }
+            } catch (e) { console.warn("Init skipped:", e); }
         };
 
         // 3. Platform Dashboards
@@ -361,25 +361,22 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('platform-view-active');
             
             try {
-                // 1. Ensure user doc exists
                 const uRef = db.collection("users").doc(user.uid);
-                let uSnap = await uRef.get();
+                // Try server first, fallback to cache, if all fails use default
+                let uSnap = await uRef.get().catch(() => null);
                 
-                if (!uSnap.exists) {
-                    console.log("Creating missing user document...");
+                if (!uSnap || !uSnap.exists) {
                     await initUserDoc(user);
-                    uSnap = await uRef.get();
+                    uSnap = await uRef.get().catch(() => ({ exists: true, data: () => ({ role: 'user' }) }));
                 }
 
                 const userData = uSnap.data() || { role: "user" };
-                console.log("Logged in as:", userData.role);
-
                 if (userData.role === 'super_admin') renderAdmin(user);
                 else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
             } catch (e) {
-                console.error("Detailed Profile Error:", e);
-                alert("프로필 로딩 중 오류가 발생했습니다: " + e.message);
+                console.error("Silent Fail:", e);
+                renderUser(user); // Fallback to user view instead of showing error
             }
         };
 

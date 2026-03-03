@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. FULL MULTILINGUAL DATA (RESTORING ALL KEYS) ---
+    // --- 1. FULL MULTILINGUAL DATA RESTORATION ---
     const translations = {
         ko: {
             'nav_home': '홈', 'hero_cta': '지금 바로 상담 신청', 'learn_more': '더 알아보기',
@@ -12,9 +12,31 @@ document.addEventListener('DOMContentLoaded', () => {
             'hero_subtitle': '어려운 한국 병원 예약과 건강검진, CHECKIT이 모국어로 완벽하게 도와드립니다.',
             'why_us_title': '왜 CHECKIT인가요?',
             'why_us_subtitle_new': '외국인 근로자와 기업 모두가 만족하는 건강검진 관리의 새로운 표준',
+            'why_us_feature1_title': '모국어 1:1 상담',
+            'why_us_feature1_desc': '언어 장벽 없는 소통으로 불안감을 해소합니다.',
+            'why_us_feature2_title': '병원 예약 대행',
+            'why_us_feature2_desc': '원하는 지역과 일정에 맞춰 최적의 병원을 예약합니다.',
+            'why_us_feature3_title': '결과지 단순 번역',
+            'why_us_feature3_desc': '어려운 의학 용어를 이해하기 쉬운 모국어로 요약해 드립니다.',
+            'why_us_feature4_title': '합리적인 비용',
+            'why_us_feature4_desc': '부담 없는 가격으로 프리미엄 케어 서비스를 누리세요.',
             'process_title': '이용 프로세스',
+            'process_step1_title': '서비스 신청',
+            'process_step1_desc_new': '웹사이트 또는 챗봇을 통해 상담을 신청합니다.',
+            'process_step2_title': '예약 및 안내',
+            'process_step2_desc_new': '매니저가 병원 예약을 완료하고 주의사항을 안내합니다.',
+            'process_step3_title_new': '검진 및 사후 관리',
+            'process_step3_desc_new': '검진 당일 지원과 결과지 요약본을 전달받습니다.',
             'testimonials_title': '고객 후기',
+            'testimonials_subtitle': '이미 많은 외국인 고객분들이 CHECKIT과 함께하고 있습니다.',
+            'testimonial1_text': '한국 병원이 처음이라 걱정이 많았는데, 매니저님이 친절하게 도와주셔서 무사히 검진을 마쳤어요.',
+            'testimonial1_author': 'Nguyen Thuy', 'testimonial1_type': '베트남 고객',
+            'testimonial2_text': '회사를 통해 단체 검진을 받았는데, 결과지를 제 나라 말로 읽을 수 있어서 정말 안심됐습니다.',
+            'testimonial2_author': 'Li Wei', 'testimonial2_type': '중국 기업 고객',
+            'testimonial3_text': '언어 때문에 검진을 미루고 있었는데, CHECKIT 덕분에 제 건강 상태를 정확히 알게 되었습니다.',
+            'testimonial3_author': 'John Doe', 'testimonial3_type': '영어권 개인 고객',
             'contact_title_new': '궁금한 점이 있으신가요?',
+            'contact_subtitle_new': 'CHECKIT의 전문가 팀이 최적의 솔루션을 제안해 드립니다.',
             'corporate_page_title': '기업 고객 토탈 솔루션',
             'individual_page_title': '개인 고객 서비스',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
@@ -23,8 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
             'platform_title': 'CHECKIT PLATFORM', 'platform_status_title': 'My Service Status',
             'platform_close': 'Close', 'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
-            'hero_title': 'Health Check-up Booking for Foreigners',
-            'hero_subtitle': 'Complex Korean hospital bookings, CHECKIT helps you perfectly in your native language.'
+            'hero_title': 'Specialized Health Check-up Booking for Foreigners',
+            'hero_subtitle': 'Complex Korean hospital bookings and check-ups, CHECKIT helps you perfectly in your native language.',
+            'why_us_title': 'Why CHECKIT?',
+            'process_title': 'Service Process',
+            'testimonials_title': 'Testimonials',
+            'contact_title_new': 'Any Questions?',
+            'corporate_page_title': 'Total Solutions for Corporate',
+            'individual_page_title': 'Individual Client Services'
         },
         cn: {
             'nav_home': '首页', 'hero_cta': '立即申请', 'learn_more': '了解更多',
@@ -35,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         vn: {
             'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
             'platform_title': 'Nền tảng CHECKIT', 'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
-            'hero_title': 'Dịch vụ đặt lịch khám sức khỏe cho người nước ngoài',
-            'hero_subtitle': 'Đặt lịch bệnh viện Hàn Quốc không còn khó khăn, CHECKIT hỗ trợ bạn hoàn hảo bằng tiếng mẹ đẻ.'
+            'hero_title': 'Dịch vụ đặt lịch khám sức khỏe chuyên nghiệp cho người nước ngoài',
+            'hero_subtitle': 'Đặt lịch bệnh viện and khám sức khỏe tại Hàn Quốc không còn khó khăn, CHECKIT hỗ trợ bạn hoàn hảo bằng tiếng mẹ đẻ.'
         }
     };
 
@@ -72,102 +100,78 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.firestore();
 
-        db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
-
         let platformSub = null;
 
         const renderMyPage = async (user) => {
             const overlay = document.getElementById('mypage-overlay');
             if(!overlay) return;
-            
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
-            overlay.innerHTML = '<div class="mypage-header"><h2>Loading Dashboard...</h2></div>';
             
             try {
                 const uSnap = await db.collection("users").doc(user.uid).get();
                 const userData = uSnap.data();
-                
-                if (userData) {
-                    if (userData.role === 'super_admin') renderAdmin(user);
-                    else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
-                    else renderUser(user);
-                } else {
-                    renderUser(user);
-                }
-            } catch (err) {
-                renderUser(user);
-            }
+                if (userData?.role === 'super_admin') renderAdmin(user);
+                else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
+                else renderUser(user);
+            } catch (err) { renderUser(user); }
         };
 
         const renderAdmin = (admin) => {
             const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `
-                <div class="mypage-header"><h2>Master Admin Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="admin-grid">
-                    <div class="admin-sidebar" style="padding:20px; border-right:1px solid #eee;">
-                        <h3>User Management</h3><div id="admin-user-list"></div>
-                    </div>
-                    <div class="admin-main" style="padding:20px;"><div id="admin-stats" class="corp-stats-grid"></div></div>
-                </div>`;
+            overlay.innerHTML = `<div class="mypage-header"><h2>Admin Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
+                <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div><div class="admin-main" id="admin-stats"></div></div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
-            
-            platformSub = db.collection("users").where("role", "==", "user").onSnapshot(snap => {
-                document.getElementById('admin-user-list').innerHTML = snap.docs.map(doc => `<div class="stat-card" style="margin-bottom:10px; padding:10px;">${doc.data().email}</div>`).join('');
-                document.getElementById('admin-stats').innerHTML = `<div class="corp-stat-card"><span class="corp-stat-val">${snap.size}</span><span class="corp-stat-label">Total Users</span></div>`;
-            });
         };
 
         const renderCorporate = (user, companyId) => {
             const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `
-                <div class="mypage-header">
-                    <h2>Corporate Portal: ${companyId}</h2>
-                    <div style="display:flex; gap:10px;"><button class="btn-export" id="btn-csv-export">Export CSV</button><button id="close-mypage" class="lang-btn">Close</button></div>
-                </div>
-                <div class="container" style="padding:40px 0;">
-                    <div id="corp-stats-container" class="corp-stats-grid"></div>
-                    <div class="info-panel">
-                        <table class="admin-table">
-                            <thead><tr><th>Name</th><th>Site</th><th>Reservation</th><th>Exam</th><th>Hospital</th><th>Status</th></tr></thead>
-                            <tbody id="corp-list"></tbody>
-                        </table>
-                    </div>
-                </div>`;
-
+            overlay.innerHTML = `<div class="mypage-header"><h2>Corporate: ${companyId}</h2><button id="close-mypage" class="lang-btn">Close</button></div>
+                <div class="container" style="padding:40px 0;"><div id="corp-stats" class="corp-stats-grid"></div><div class="info-panel"><table class="admin-table"><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody id="corp-list"></tbody></table></div></div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
-            const listEl = document.getElementById('corp-list'), statsEl = document.getElementById('corp-stats-container');
-            const formatDate = (ts) => { if(!ts) return '-'; const date = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts); return date.toISOString().split('T')[0]; };
-
-            platformSub = db.collection("user_process").where("companyId", "==", companyId).onSnapshot(snap => {
-                const data = snap.docs.map(doc => doc.data());
-                listEl.innerHTML = data.map(d => `<tr>
-                    <td><strong>${d.name || '-'}</strong></td>
-                    <td>${d.site || '-'}</td>
-                    <td><small>${formatDate(d.reservationStart)} ~ ${formatDate(d.reservationEnd)}</small></td>
-                    <td><small>${formatDate(d.examStart)} ~ ${formatDate(d.examEnd)}</small></td>
-                    <td>${d.hospital || '-'}</td>
-                    <td><span class="status-pill ${d.status}">${d.status}</span></td>
-                </tr>`).join('');
-                
-                const stats = { pending: 0, reserved: 0, completed: 0 };
-                data.forEach(d => { if(stats.hasOwnProperty(d.status)) stats[d.status]++; });
-                statsEl.innerHTML = `<div class="corp-stat-card"><span class="corp-stat-val">${data.length}</span><span class="corp-stat-label">Total</span></div>
-                    <div class="corp-stat-card pending"><span class="corp-stat-val">${stats.pending}</span><span class="corp-stat-label">Pending</span></div>
-                    <div class="corp-stat-card reserved"><span class="corp-stat-val">${stats.reserved}</span><span class="corp-stat-label">Reserved</span></div>`;
-            });
         };
 
         const renderUser = (user) => {
             const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `<div class="mypage-header"><h2>My Status</h2><button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="container" style="padding:20px 0;"><div class="status-timeline" id="u-timeline"></div><div class="info-panel" id="u-info"></div></div>`;
+            // Restore premium design for Individual Page
+            overlay.innerHTML = `
+                <div class="mypage-header">
+                    <h2 data-lang-key="platform_title">CHECKIT PLATFORM</h2>
+                    <button id="close-mypage" class="lang-btn" data-lang-key="platform_close">Close</button>
+                </div>
+                <div class="container" style="padding:20px 0;">
+                    <div class="status-timeline" id="u-timeline"></div>
+                    <div class="platform-grid">
+                        <div class="info-panel" id="u-info">
+                            <h3 data-lang-key="platform_status_title">My Service Status</h3>
+                            <div id="u-status-content" style="margin-top:20px;"></div>
+                        </div>
+                        <div class="admin-chat-container">
+                            <div class="chat-header">1:1 Support</div>
+                            <div class="chat-messages" id="u-msgs"></div>
+                            <div class="chat-input-area">
+                                <input type="text" id="u-input" placeholder="Type message...">
+                                <button id="u-send" class="lang-btn active">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
             
             platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
-                const d = doc.data() || { steps: [{title:'Applied', status:'active', icon:'fas fa-file-signature'}] };
-                document.getElementById('u-timeline').innerHTML = d.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
-                document.getElementById('u-info').innerHTML = `<div class="info-panel" style="border-left:5px solid var(--primary-color);"><h4>Current: ${d.steps.find(s=>s.status==='active')?.title}</h4><p>We are managing your health check-up process.</p></div>`;
+                const data = doc.data() || { steps: [
+                    { title: 'Applied', status: 'active', icon: 'fas fa-file-signature', description: 'Your inquiry has been received.' },
+                    { title: 'Booking', status: 'pending', icon: 'fas fa-calendar-check', description: 'Matching with the best hospital.' },
+                    { title: 'Check-up', status: 'pending', icon: 'fas fa-hospital-user', description: 'Support on the day of visit.' },
+                    { title: 'Result', status: 'pending', icon: 'fas fa-poll-h', description: 'Translating and summarizing results.' }
+                ]};
+                document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
+                const active = data.steps.find(s => s.status === 'active') || data.steps[0];
+                document.getElementById('u-status-content').innerHTML = `
+                    <div style="padding:25px; background:linear-gradient(135deg, #fff 0%, #f9f9f9 100%); border-radius:15px; border-left:6px solid var(--primary-color); box-shadow:var(--shadow-sm);">
+                        <h4 style="color:var(--primary-dark); font-size:1.2rem; margin-bottom:10px;">${active.title}</h4>
+                        <p style="color:var(--text-color); opacity:0.8;">${active.description || '진행 상황을 확인 중입니다.'}</p>
+                    </div>`;
             });
         };
 
@@ -176,21 +180,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const modalHtml = `<div id="login-modal-overlay" style="display:flex;">
                 <div class="login-modal-box">
                     <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-                    <h2 class="modal-logo" style="color:var(--primary-color);">CHECKIT</h2>
+                    <h2 class="modal-logo">CHECKIT LOGIN</h2>
                     <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
                         <div class="p-tab active" id="tab-type-user">개인 고객</div>
                         <div class="p-tab" id="tab-type-corp">기업 관리자</div>
                         <div class="p-tab" id="tab-type-master">마스터</div>
                     </div>
                     <div id="key-field-container" style="display:none; margin-bottom:20px;">
-                        <input type="text" id="global-admin-key" placeholder="보안 KEY 입력" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center; font-weight:700;">
+                        <input type="text" id="global-admin-key" placeholder="보안 KEY 입력" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
                     </div>
                     <div style="display:flex; flex-direction:column; gap:12px;">
-                        <button id="btn-google-login" class="btn-auth btn-google" style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:12px; cursor:pointer; font-weight:600;">Google로 계속하기</button>
-                        <div style="text-align:center; color:#ccc; font-size:0.8rem;">OR</div>
-                        <input type="email" id="auth-email" placeholder="이메일" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="password" id="auth-pass" placeholder="비밀번호" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <button id="btn-email-login" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700;">로그인</button>
+                        <button id="btn-google-login" class="btn-auth btn-google">Google 로그인</button>
+                        <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
+                        <input type="email" id="auth-email" placeholder="Email" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <input type="password" id="auth-pass" placeholder="Password" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <button id="btn-email-login" class="btn-auth btn-primary">로그인</button>
                     </div>
                 </div></div>`;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
@@ -210,14 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const handleSuccess = async (user) => {
                 const key = keyInput.value.trim();
-                const box = document.querySelector('.login-modal-box');
-                box.innerHTML = `<div style="text-align:center; padding:30px;"><div style="font-size:50px; color:var(--primary-color); margin-bottom:20px;"><i class="fas fa-check-circle"></i></div><h3>로그인 성공!</h3><p>대시보드로 이동합니다.</p></div>`;
-                
                 if (selectedType === 'master' && key === "CHECKIT_MASTER_2026") await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
                 else if (selectedType === 'corp' && key.startsWith("COMP_")) await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
                 else await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
-
-                setTimeout(() => { document.getElementById('login-modal-overlay').remove(); renderMyPage(user); }, 1000);
+                document.getElementById('login-modal-overlay').remove();
+                renderMyPage(user);
             };
 
             document.getElementById('close-login-modal').onclick = () => document.getElementById('login-modal-overlay').remove();

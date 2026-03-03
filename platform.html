@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT Platform Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2ECC71;
+            --secondary: #3498DB;
+            --dark: #2C3E50;
+            --bg: #f4f7f6;
+        }
+        body { font-family: 'Pretendard', Arial, sans-serif; padding: 40px; background: var(--bg); color: var(--dark); line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: var(--dark); margin-bottom: 30px; }
+        .hidden { display: none; }
+        .card { border: 1px solid #eee; padding: 20px; margin: 15px 0; border-radius: 10px; background: #f9f9f9; border-left: 5px solid var(--primary); }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        button { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        button:hover { background: #27ae60; transform: translateY(-2px); }
+        .logout-btn { background: #e74c3c; margin-top: 20px; }
+        .logout-btn:hover { background: #c0392b; }
+        pre { background: #eee; padding: 10px; border-radius: 5px; font-size: 0.85rem; overflow-x: auto; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 로그인 화면 -->
+    <div id="loginSection">
+        <h2><i class="fas fa-shield-alt"></i> CHECKIT 로그인</h2>
+        <input type="email" id="email" placeholder="이메일">
+        <input type="password" id="password" placeholder="비밀번호">
+        <input type="text" id="adminKey" placeholder="관리자 보안 KEY (선택)">
+        <button id="loginBtn">로그인</button>
+    </div>
+
+    <!-- 고객 화면 -->
+    <div id="customerSection" class="hidden">
+        <h2><i class="fas fa-user"></i> 내 진행상황</h2>
+        <div id="customerData"></div>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+
+    <!-- 기업 관리자 화면 -->
+    <div id="companySection" class="hidden">
+        <h2><i class="fas fa-building"></i> 우리 회사 고객 목록</h2>
+        <div id="companyData"></div>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+
+    <!-- CHECKIT 관리자 화면 -->
+    <div id="superSection" class="hidden">
+        <h2><i class="fas fa-user-shield"></i> 전체 기업 고객 데이터</h2>
+        <div id="superData"></div>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.firebasestorage.app",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09",
+        measurementId: "G-WVDWXTJ1TR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginSection = document.getElementById("loginSection");
+    const customerSection = document.getElementById("customerSection");
+    const companySection = document.getElementById("companySection");
+    const superSection = document.getElementById("superSection");
+
+    document.getElementById("loginBtn").onclick = async () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const key = document.getElementById("adminKey").value;
+
+        if (!email || !password) return alert("이메일과 비밀번호를 입력해주세요.");
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            const userData = userDoc.data() || { role: "user" };
+
+            if (userData.role === "super_admin" || userData.role === "company_admin") {
+                if (key === "CHECKIT_MASTER_2026" && userData.role === "super_admin") {
+                    showSuperAdmin();
+                    return;
+                }
+                if (key === "COMPANY_KEY_2026" && userData.role === "company_admin") {
+                    showCompanyAdmin(userData.companyId);
+                    return;
+                }
+                alert("관리자 KEY가 일치하지 않습니다.");
+                await signOut(auth);
+                return;
+            }
+
+            showCustomer(user.uid);
+        } catch (e) {
+            alert("로그인 실패: " + e.message);
+        }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) resetUI();
+    });
+
+    async function showCustomer(uid) {
+        resetUI();
+        loginSection.classList.add("hidden");
+        customerSection.classList.remove("hidden");
+        const docSnap = await getDoc(doc(db, "user_process", uid));
+        if (docSnap.exists()) {
+            document.getElementById("customerData").innerHTML = `<div class="card"><pre>${JSON.stringify(docSnap.data(), null, 2)}</pre></div>`;
+        } else {
+            document.getElementById("customerData").innerHTML = "<p>진행 중인 데이터가 없습니다.</p>";
+        }
+    }
+
+    async function showCompanyAdmin(companyId) {
+        resetUI();
+        loginSection.classList.add("hidden");
+        companySection.classList.remove("hidden");
+        const q = query(collection(db, "users"), where("companyId", "==", companyId));
+        const snapshot = await getDocs(q);
+        let html = "";
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            html += `<div class="card"><strong>${d.email}</strong><br>플랜: ${d.selectedPlan || '미정'}</div>`;
+        });
+        document.getElementById("companyData").innerHTML = html || "<p>소속된 고객이 없습니다.</p>";
+    }
+
+    async function showSuperAdmin() {
+        resetUI();
+        loginSection.classList.add("hidden");
+        superSection.classList.remove("hidden");
+        const snapshot = await getDocs(collection(db, "users"));
+        let html = "";
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            html += `<div class="card"><strong>${d.email}</strong> - ${d.role}<br>기업: ${d.companyId || 'N/A'}</div>`;
+        });
+        document.getElementById("superData").innerHTML = html;
+    }
+
+    window.logout = async function() {
+        await signOut(auth);
+        resetUI();
+    }
+
+    function resetUI() {
+        loginSection.classList.remove("hidden");
+        customerSection.classList.add("hidden");
+        companySection.classList.add("hidden");
+        superSection.classList.add("hidden");
+    }
+</script>
+</body>
+</html>

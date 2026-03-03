@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_4_point_1': '당신이 없는 주소로 결과가 우편 발송됩니다.',
             'reality_item_4_point_2': '한국을 떠난 후에도 결과가 몇 주 동안 지연됩니다.',
             'reality_item_4_point_3': '해외 전화 인증 제한으로 영수증을 받을 수 없습니다.',
-            'reality_item_4_point_4': 'No explanation of post-examination rules (e.g., flying after polyp removal).',
+            'reality_item_4_point_4': '검사 후 주의사항(용종 제거 후 비행기 탑승 등)에 대한 설명이 없습니다.',
             'reality_overtime_title': '글로는 사소해 보이는 문제들. 현실은 이렇습니다.',
             'reality_overtime_p1': '한국에 오기 전에는 모든 것이 안심되었습니다.',
             'reality_overtime_p2': '다국어 지원이 가능하고, 외국인들이 자주 이용하며, 전체 과정이 순조롭고 잘 안내될 것이라고 들었습니다.',
@@ -287,7 +287,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
             'q5': '결과지는 어떻게 전달되나요?',
             'a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
-            'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 \'상담 신청\'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.'
+            'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 \'상담 신청\'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.',
+            'platform_title': 'CHECKIT 플랫폼',
+            'platform_status_title': '나의 서비스 현황',
+            'platform_current_step': '현재 단계',
+            'platform_details': '상세 안내',
+            'platform_manager_title': '전담 매니저 매칭 완료',
+            'platform_chat_title': '1:1 행정 지원 채팅',
+            'platform_chat_placeholder': '메시지를 입력하세요...',
+            'platform_chat_send': '전송',
+            'platform_close': '닫기',
+            'platform_loading': '데이터를 불러오는 중입니다...',
+            'platform_error': '서버 연결 지연 (Firestore 설정 확인 필요)',
+            'platform_manager_spec': '영어/한국어 전문 매니저'
         },
         en: {
             'nav_home': 'Home',
@@ -546,34 +558,46 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_title': 'Final Reporting & Data Update',
             'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
             'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
-            'corp_faq_title': '자주 묻는 질문 (FAQ)',
-            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
-            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
-            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
-            'corp_faq_q2': '의료법 위반 소지는 없나요?',
-            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 \'비의료적 행정 지원\'에만 집중하므로 법적으로 매우 안전합니다.',
-            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
-            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
-            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
-            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
-            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
-            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
-            'contact_form_company_label': '기업명',
-            'chatbot_header': 'Check봇',
-            'chatbot_placeholder': '메시지를 입력하세요...',
-            'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
-            'greeting_response': '안녕하세요! 만나서 반가워요. CHECKIT에 대해 궁금한 점이 있으시면 아래 질문을 선택하거나 직접 물어보세요.',
-            'q1': '예약은 어떻게 하나요?',
-            'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
-            'q2': '병원/의료인과 계약된 구조인가요?',
-            'a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
-            'q3': '의료 행위나 진료 알선을 하나요?',
-            'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
-            'q4': '검진 당일 어떤 도움을 받을 수 있나요?',
-            'a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
-            'q5': '결과지는 어떻게 전달되나요?',
-            'a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
-            'unsupported_input': 'That\'s an interesting question! Hiện tại tôi chỉ có thể cung cấp các câu trả lời được cài sẵn, nhưng nếu bạn yêu cầu thông qua \'Đăng ký tư vấn\', một người quản lý chuyên nghiệp sẽ vui lòng hướng dẫn bạn.'
+            'corp_faq_title': 'Frequently Asked Questions (FAQ)',
+            'corp_faq_subtitle': 'We have gathered the questions most frequently asked by our corporate clients.',
+            'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
+            'corp_faq_a1': 'Yes, you can. CHECKIT is an independent service not tied to any specific hospital. You don’t need to change the hospitals you already use; we simply fill the communication and management gap between you and the hospital.',
+            'corp_faq_q2': 'Is there any risk of violating medical laws?',
+            'corp_faq_a2': 'CHECKIT strictly prohibits acts that violate medical law, such as patient solicitation or referral. We focus solely on non-medical administrative support like booking, interpretation, and simple translation of result sheets, making it legally very safe.',
+            'corp_faq_q3': 'How is worker personal information managed?',
+            'corp_faq_a3': 'We comply with personal information protection laws in every process. Lists are received via secure methods and safely disposed of according to regulations once the necessary period after the check-up has passed.',
+            'corp_faq_q4': 'Does implementation require complex system integration?',
+            'corp_faq_a4': 'Not at all. Implementation is possible immediately with just a candidate list and simple schedule coordination, without the need for any software installation or system linking.',
+            'corp_faq_q5': 'What level of translation is provided for result sheets?',
+            'corp_faq_a5': 'We provide a core summary in the worker’s native language of the Korean result sheet, which is often filled with technical terms. This is a simple translation for the purpose of conveying information, ensuring the worker’s right to know, rather than a medical opinion.',
+            'contact_form_company_label': 'Company Name',
+            'chatbot_header': 'Check Bot',
+            'chatbot_placeholder': 'Type a message...',
+            'chatbot_greeting': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
+            'greeting_response': 'Hello! Nice to meet you. If you have any questions about CHECKIT, feel free to select a question below or ask me directly.',
+            'q1': 'How do I make a reservation?',
+            'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
+            'q2': 'Are you contracted with hospitals/medical staff?',
+            'a2': 'No. CHECKIT does not have contractual relationships with any specific hospitals. We help you choose the most suitable hospital by providing objective information from your perspective. Your health and satisfaction are our top priorities.',
+            'q3': 'Do you perform medical acts or arrange treatments?',
+            'a3': 'No, CHECKIT complies with the Medical Service Act and does not perform any medical acts or arrange treatments. We are a service that helps you focus solely on your health check-up by concentrating on \'non-medical processes\' such as hospital reservations, interpretation, and result translation.',
+            'q4': 'What kind of help can I get on the day of the check-up?',
+            'a4': 'On the day of your check-up, your Check Bot manager is with you every step of the way so you don\'t feel alone due to language barriers. We provide real-time support for all communication processes within the hospital, such as registration, consultations, and payment, helping you focus comfortably on your check-up without inconvenience or loneliness caused by language issues.',
+            'q5': 'How are the results delivered?',
+            'a5': 'Once you provide us with the Korean results you received from the hospital, we will provide a simple translation and summary of the key contents in your native language. To comply with medical law, we do not provide medical opinions or detailed explanations.',
+            'unsupported_input': 'That\'s an interesting question! I can only provide pre-set answers for now, but if you inquire through \'Apply for a Consultation\', a professional manager will kindly guide you.',
+            'platform_title': 'CHECKIT PLATFORM',
+            'platform_status_title': 'My Service Status',
+            'platform_current_step': 'Current Step',
+            'platform_details': 'Details',
+            'platform_manager_title': 'Manager Matched',
+            'platform_chat_title': '1:1 Support Chat',
+            'platform_chat_placeholder': 'Type a message...',
+            'platform_chat_send': 'Send',
+            'platform_close': 'Close',
+            'platform_loading': 'Loading data...',
+            'platform_error': 'Server connection delay (Check Firestore settings)',
+            'platform_manager_spec': 'English/Korean Specialist'
         }
     };
 
@@ -613,6 +637,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (chatbotContainer && chatbotContainer.classList.contains('show')) {
             resetAndShowGreeting();
+        }
+        
+        // Re-render platform if open
+        const platformOverlay = document.getElementById('mypage-overlay');
+        if (platformOverlay && document.body.classList.contains('platform-view-active')) {
+            const auth = firebase.auth();
+            if (auth.currentUser) renderMyPage(auth.currentUser);
         }
     };
 
@@ -863,14 +894,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const initUserDoc = async (user) => {
                 try {
-                    // 1. 규칙에서 요구하는 users 문서 생성 (필수)
+                    // 1. Create users doc required by rules
                     await db.collection("users").doc(user.uid).set({
                         role: "user",
                         email: user.email,
                         companyId: ""
                     }, { merge: true });
 
-                    // 2. 서비스 프로세스 문서 생성
+                    // 2. Create service process doc
                     const docRef = db.collection("user_process").doc(user.uid);
                     const docSnap = await docRef.get();
                     if (!docSnap.exists) {
@@ -925,8 +956,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             document.body.classList.add('platform-view-active');
+            const langData = translations[currentLang];
             
-            // 기본 데이터 설정 (데이터베이스 에러 대비)
+            // Show loading initially
+            overlay.innerHTML = `<div style="padding:100px; text-align:center; font-size:1.2rem; color:var(--primary-color);">${langData['platform_loading']}</div>`;
+            
             let steps = [
                 { title: "상담 및 신청", description: "서비스 상담 요청이 접수되었습니다.", status: "completed", icon: "fas fa-file-alt" },
                 { title: "병원 예약 지원", description: "담당 매니저가 병원 예약을 진행 중입니다.", status: "active", icon: "fas fa-hospital" },
@@ -941,7 +975,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (docSnap.exists) {
                     steps = docSnap.data().steps;
                 } else {
-                    // 문서가 없으면 생성 시도 (구 규칙 준수)
                     const uRef = db.collection("users").doc(user.uid);
                     const uSnap = await uRef.get();
                     if (!uSnap.exists) {
@@ -951,13 +984,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error("Firestore Read Error:", error);
-                setTimeout(() => {
-                    const notice = document.createElement('div');
-                    notice.style.cssText = "position:fixed; bottom:20px; left:20px; background:rgba(231, 76, 60, 0.9); color:#fff; padding:10px 20px; border-radius:8px; z-index:3000; font-size:0.85rem;";
-                    notice.innerHTML = `서버 연결 지연 (Firestore 설정 확인 필요: ${error.code})`;
-                    document.body.appendChild(notice);
-                    setTimeout(() => notice.remove(), 5000);
-                }, 500);
+                const notice = document.createElement('div');
+                notice.style.cssText = "position:fixed; bottom:20px; left:20px; background:rgba(231, 76, 60, 0.9); color:#fff; padding:10px 20px; border-radius:8px; z-index:3000; font-size:0.85rem;";
+                notice.innerHTML = `${langData['platform_error']} (${error.code})`;
+                document.body.appendChild(notice);
+                setTimeout(() => notice.remove(), 5000);
             }
 
             const stepsHtml = steps.map(step => `
@@ -971,37 +1002,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
             overlay.innerHTML = `
                 <div class="mypage-header">
-                    <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
+                    <h2 style="margin:0; color:var(--primary-color);">${langData['platform_title']}</h2>
                     <div style="display:flex; gap:15px; align-items:center;">
-                        <span style="font-weight:600;">${user.email}님</span>
-                        <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
+                        <span style="font-weight:600;">${user.email}</span>
+                        <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">${langData['platform_close']}</button>
                     </div>
                 </div>
                 <div class="status-timeline">${stepsHtml}</div>
-                <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
+                <div class="platform-grid">
                     <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
-                        <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
+                        <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">${langData['platform_status_title']}</h3>
                         <div style="margin-top:20px;">
-                            <p><strong>현재 단계:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
-                            <p><strong>상세 안내:</strong> <span>${activeStep.description}</span></p>
+                            <p><strong>${langData['platform_current_step']}:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
+                            <p><strong>${langData['platform_details']}:</strong> <span>${activeStep.description}</span></p>
                             <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-                            <h4>전담 매니저 매칭 완료</h4>
+                            <h4>${langData['platform_manager_title']}</h4>
                             <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
                                 <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
-                                <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div></div>
+                                <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">${langData['platform_manager_spec']}</div></div>
                             </div>
                         </div>
                     </div>
                     <div class="admin-chat-container">
                         <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
-                            <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
+                            <i class="fas fa-headset" style="color:var(--primary-color);"></i> ${langData['platform_chat_title']}
                         </div>
                         <div class="chat-messages" id="platform-chat-messages">
-                            <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! 현재 ${activeStep.title} 단계 진행 중입니다. 궁금하신 점이 있으시면 말씀해 주세요.</div>
+                            <div class="message bot">Hello ${user.email.split('@')[0]}! Current step: ${activeStep.title}. Feel free to ask any questions.</div>
                         </div>
                         <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
-                            <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
-                            <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">전송</button>
+                            <input type="text" id="platform-chat-input" placeholder="${langData['platform_chat_placeholder']}" style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
+                            <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">${langData['platform_chat_send']}</button>
                         </div>
                     </div>
                 </div>
@@ -1015,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = val;
                     chatMsgs.appendChild(msg); chatInput.value = ''; chatMsgs.scrollTop = chatMsgs.scrollHeight;
                     setTimeout(() => {
-                        const r = document.createElement('div'); r.className = 'message bot'; r.textContent = "매니저가 확인 중입니다.";
+                        const r = document.createElement('div'); r.className = 'message bot'; r.textContent = currentLang === 'ko' ? "매니저가 확인 중입니다." : "Manager is checking your message.";
                         chatMsgs.appendChild(r); chatMsgs.scrollTop = chatMsgs.scrollHeight;
                     }, 1000);
                 }
@@ -1073,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initAuth();
     }
 
-    // --- B2B 실무 과정 슬라이드 로직 ---
+    // --- B2B Slide Logic ---
     const initB2BProcessSlide = () => {
         const openBtn = document.getElementById('openProcessSlide'), modal = document.getElementById('processModal');
         if (!openBtn || !modal) return;

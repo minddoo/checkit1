@@ -115,7 +115,15 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, collection, query, where, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // 1. [강력 조치] 파이어베이스 오프라인 에러 팝업 강제 차단
+    window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && event.reason.message.includes('client is offline')) {
+            event.preventDefault(); // 에러 창이 뜨지 않게 차단
+            console.warn("Firestore is working in offline mode.");
+        }
+    });
 
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -131,7 +139,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Persistence
+    // Persistence 설정
     enableIndexedDbPersistence(db).catch(() => {});
 
     const loginSection = document.getElementById("loginSection");
@@ -149,22 +157,21 @@
         if (!email || !password) return alert("이메일과 비밀번호를 입력해주세요.");
 
         try {
+            // 인증 단계 (서버 연결 필수)
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // [핵심 개선] 키가 있으면 데이터베이스 확인 전 UI부터 즉시 전환
+            // 2. [로직 개편] 데이터베이스 응답 대기 없이 키 확인 후 즉시 화면 전환
             if (key === "CHECKIT_MASTER_2026") {
-                showSuperAdmin(); // 즉시 마스터 페이지 표시
-                // 백그라운드에서 권한 업데이트 (실패해도 화면은 유지)
-                setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true }).catch(console.warn);
+                showSuperAdmin();
+                setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true }).catch(() => {});
                 return;
             } 
             
             if (key === "COMPANY_KEY_2026") {
-                const cid = "COMPANY_A"; // 기본값 설정
-                showCompanyAdmin(cid); // 즉시 기업 페이지 표시
-                // 백그라운드에서 권한 업데이트
-                setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true }).catch(console.warn);
+                const cid = "COMPANY_A"; 
+                showCompanyAdmin(cid);
+                setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true }).catch(() => {});
                 return;
             }
 
@@ -174,57 +181,59 @@
                 return;
             }
 
-            // 일반 사용자는 에러 핸들링을 포함하여 진행
+            // 일반 유저도 즉시 화면 전환 (데이터는 리스너가 채움)
             showCustomer(user.uid);
         } catch (e) {
             alert("로그인 실패: " + e.message);
         }
     };
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
         if (!user) {
             resetUI();
-            if(activeUnsubscribe) activeUnsubscribe();
+            if(activeUnsubscribe) { activeUnsubscribe(); activeUnsubscribe = null; }
         } else {
-            // 자동 로그인 시에도 키 없이 들어온 일반 사용자는 본인 페이지로
-            const urlParams = new URLSearchParams(window.location.search);
-            if (!urlParams.has('admin')) {
-                 // 일반적인 경우에만 데이터 확인
-                 getDoc(doc(db, "users", user.uid)).then(snap => {
-                     const role = snap.data()?.role;
-                     if(role === "user") showCustomer(user.uid);
-                 }).catch(() => showCustomer(user.uid)); // 에러나도 일단 고객창은 띄움
-            }
+            // 자동 로그인 시 권한 확인을 위해 리스너 사용 (에러 방지)
+            onSnapshot(doc(db, "users", user.uid), (snap) => {
+                if (snap.exists()) {
+                    const role = snap.data().role;
+                    if (role === "super_admin") showSuperAdmin();
+                    else if (role === "company_admin") showCompanyAdmin(snap.data().companyId || "COMPANY_A");
+                    else showCustomer(user.uid);
+                } else {
+                    showCustomer(user.uid);
+                }
+            }, (err) => {
+                showCustomer(user.uid); // 에러 시 기본 화면이라도 노출
+            });
         }
     });
 
-    async function showCustomer(uid) {
+    function showCustomer(uid) {
         resetUI();
         loginSection.classList.add("hidden");
         customerSection.classList.remove("hidden");
         document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
 
-        // getDoc 대신 가급적 에러에 강한 방식으로 시도
-        try {
-            const docSnap = await getDoc(doc(db, "user_process", uid));
-            if (docSnap.exists()) {
-                document.getElementById("customerData").innerHTML = `<div class="card"><pre>${JSON.stringify(docSnap.data(), null, 2)}</pre></div>`;
+        if(activeUnsubscribe) activeUnsubscribe();
+        activeUnsubscribe = onSnapshot(doc(db, "user_process", uid), (snap) => {
+            if (snap.exists()) {
+                document.getElementById("customerData").innerHTML = `<div class="card"><pre>${JSON.stringify(snap.data(), null, 2)}</pre></div>`;
             } else {
                 document.getElementById("customerData").innerHTML = `<div class="card">반갑습니다! 현재 배정된 매니저가 곧 진행 상황을 업데이트할 예정입니다.</div>`;
             }
-        } catch (err) {
-            // 오프라인 에러 시에도 멈추지 않고 안내 문구 표시
-            document.getElementById("customerData").innerHTML = `<div class="card">현재 오프라인 모드입니다. 연결이 복구되면 자동으로 데이터를 불러옵니다.</div>`;
-        }
+        }, () => {}); // 에러 발생 시에도 팝업을 띄우지 않음
     }
 
-    async function showCompanyAdmin(companyId) {
+    function showCompanyAdmin(companyId) {
         resetUI();
         loginSection.classList.add("hidden");
         companySection.classList.remove("hidden");
+        document.getElementById("tableBody").innerHTML = '<tr><td colspan="5" style="text-align:center;"><div class="loader"></div></td></tr>';
         
         const q = query(collection(db, "user_process"), where("companyId", "==", companyId));
         
+        if(activeUnsubscribe) activeUnsubscribe();
         activeUnsubscribe = onSnapshot(q, (snapshot) => {
             let total = 0, expired = 0, html = "";
             snapshot.forEach(doc => {
@@ -247,21 +256,53 @@
             document.getElementById("totalCount").innerText = total;
             document.getElementById("expiredCount").innerText = expired;
             document.getElementById("tableBody").innerHTML = html || "<tr><td colspan='5' style='text-align:center;'>데이터가 없습니다.</td></tr>";
-        });
+        }, () => {});
     }
 
-    async function showSuperAdmin() {
+    function showSuperAdmin() {
         resetUI();
         loginSection.classList.add("hidden");
         superSection.classList.remove("hidden");
-        const snapshot = await getDocs(collection(db, "user_process"));
-        let html = "";
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            html += `<div class="card"><strong>${data.name}</strong> (${data.companyId}) - ${data.status}</div>`;
-        });
-        document.getElementById("superData").innerHTML = html || "데이터가 없습니다.";
+        document.getElementById("superData").innerHTML = '<div class="loader"></div>';
+
+        if(activeUnsubscribe) activeUnsubscribe();
+        activeUnsubscribe = onSnapshot(collection(db, "user_process"), (snapshot) => {
+            let html = "";
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                html += `<div class="card"><strong>${data.name || "이름없음"}</strong> (${data.companyId || "개인"}) - ${data.status || "상태없음"}</div>`;
+            });
+            document.getElementById("superData").innerHTML = html || "데이터가 없습니다.";
+        }, () => {});
     }
+
+    window.exportExcel = function() {
+        const table = document.getElementById("dataTable");
+        let csv = "\uFEFF"; 
+        for (let row of table.rows) {
+            let cols = [];
+            for (let cell of row.cells) cols.push('"' + cell.innerText.replace(/"/g, '""') + '"');
+            csv += cols.join(",") + "\r\n";
+        }
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `checkit_report_${new Date().toISOString().slice(0,10)}.csv`;
+        link.click();
+    };
+
+    window.logout = async function() {
+        await signOut(auth);
+        resetUI();
+    }
+
+    function resetUI() {
+        loginSection.classList.remove("hidden");
+        customerSection.classList.add("hidden");
+        companySection.classList.add("hidden");
+        superSection.classList.add("hidden");
+    }
+</script>
 
     window.exportExcel = function() {
         const table = document.getElementById("dataTable");

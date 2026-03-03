@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_filter_all': '전체 보기',
             'btn_export_csv': '리포트 다운로드 (CSV)',
             'btn_convert_client': '고객으로 등록',
+            'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
             'hero_title': '외국인을 위한 전문 건강검진 예약 서비스',
             'hero_subtitle': '어려운 한국 병원 예약과 건강검진, CHECKIT이 모국어로 완벽하게 도와드립니다.',
             'service_for_title': '누구를 위한 서비스인가요?',
@@ -70,13 +71,45 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_title_1': '의사소통의 벽',
             'reality_item_1_point_1': '전문 의학 용어의 이해 한계', 'reality_item_1_point_2': '증상 설명의 어려움',
             'reality_item_1_point_3': '주의사항 오해로 인한 검사 취소', 'reality_item_1_point_4': '병원 내 길 찾기 및 소통 불안',
+            'reality_item_title_2': '예약의 어려움',
+            'reality_item_2_point_1': '외국인 전용 예약 창구 부족', 'reality_item_2_point_2': '본인 인증 절차의 번거로움',
+            'reality_item_2_point_3': '희망 일정 조율의 어려움', 'reality_item_2_point_4': '대기 시간 발생에 대한 안내 부족',
+            'reality_item_title_3': '사후 관리 부재',
+            'reality_item_3_point_1': '결과지 수령 방법의 복잡함', 'reality_item_3_point_2': '이상 소견 발견 시 대처 미흡',
+            'reality_item_3_point_3': '재검사 필요 시 안내 부족', 'reality_item_3_point_4': '지속적인 건강 관리의 한계',
+            'reality_item_title_4': '심리적 불안감',
+            'reality_item_4_point_1': '낯선 환경에서의 소외감', 'reality_item_4_point_2': '잘못된 진단에 대한 걱정',
+            'reality_item_4_point_3': '비용 과다 청구에 대한 우려', 'reality_item_4_point_4': '정보 부족으로 인한 막연한 두려움',
+            'reality_overtime_title': '시간이 지날수록 늘어나는 고민',
+            'reality_overtime_p1': '검진을 미룰수록 건강에 대한 불안은 커져만 갑니다.',
+            'reality_overtime_p2': '작은 증상을 방치하다 더 큰 병으로 이어지기도 합니다.',
+            'reality_overtime_p3': '한국 생활의 안정은 건강에서 시작됩니다.',
             'solution_title': 'CHECKIT 솔루션',
             'solution_subtitle': '어려운 과정은 저희가 맡겠습니다. 당신은 건강만 생각하세요.',
+            'individual_service1_title': '1:1 전담 매니저', 'individual_service1_desc': '당신의 모국어로 모든 과정을 안내하는 든든한 파트너입니다.',
+            'individual_service2_title_new': '실시간 커뮤니케이션', 'individual_service2_desc_new': '병원 현장에서 발생하는 모든 상황을 즉시 해결해 드립니다.',
+            'individual_service3_title_new': '결과지 단순 요약', 'individual_service3_desc_new': '복잡한 의학 용어를 이해하기 쉬운 단어로 요약해 드립니다.',
             'packages_title': '추천 패키지',
             'packages_subtitle': '나에게 꼭 필요한 구성으로 선택하세요.',
             'package1_title': '안심 플랜', 'package1_price': '₩50,000',
             'package2_title': '표준 플랜', 'package2_price': '₩100,000',
             'package3_title': '프리미엄 플랜', 'package3_price': '₩200,000',
+            'package_includes': '포함 내역', 'package_recommend_title': '추천 대상',
+            'package1_feature1': '병원 예약 대행', 'package1_feature2': '기본 문진표 번역', 'package1_feature3': '결과지 요약 (PDF)',
+            'package1_feature1': '병원 예약 대행', 'package1_feature2': '기본 문진표 번역', 'package1_feature3': '결과지 요약 (PDF)',
+            'package1_feature4': '1:1 전담 매니저 매칭', 'package1_feature5': '병원 위치 안내', 'package1_feature6': '검진 주의사항 안내',
+            'package1_feature7': '검진 일정 리마인드', 'package1_feature8': '병원 행정 지원', 'package1_feature9': '기본 사후 관리',
+            'package1_recommend_desc': '검진 경험이 있고 행정 지원만 필요한 분',
+            'package2_feature1': '안심 플랜 모든 기능 포함', 'package2_feature2': '전문 의료 번역 (심화)', 'package2_feature3': '병원 현장 실시간 서포트',
+            'package2_feature4': '이상 소견 발생 시 즉시 안내', 'package2_feature5': '추가 검사 예약 지원', 'package2_feature6': '의료진 소통 중개',
+            'package2_feature7': '맞춤형 건강 리포트', 'package2_feature8': '영양 및 생활 가이드', 'package2_feature9': '우선 상담 혜택',
+            'package2_recommend_desc': '한국 병원이 낯설고 꼼꼼한 케어를 원하는 분',
+            'package3_feature1': '표준 플랜 모든 기능 포함', 'package3_feature2': '병원 현장 동행 서비스', 'package3_feature3': '결과지 심층 분석 및 상담',
+            'package3_feature4': '24시간 응급 핫라인', 'package3_feature5': '대학병원 연계 서비스', 'package3_feature6': '가족 건강 관리 지원',
+            'package3_feature7': 'VIP 전용 대기실 안내', 'package3_feature8': '프리미엄 건강 검진 설계', 'package3_feature9': '사후 정밀 추적 관리',
+            'package3_feature10': '전문 통역사 배정', 'package3_feature11': '맞춤 식단 제공 (검진 후)', 'package3_feature12': '교통편 예약 지원', 'package3_feature13': '전담 간호사 상담',
+            'package3_recommend_desc': '최고 수준의 의료 서비스와 완벽한 케어를 원하는 분',
+            'package_includes': '포함 내역', 'package_recommend_title': '추천 대상',
             'options_title_new': '추가 옵션 서비스'
         },
         en: {
@@ -91,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_filter_all': 'All Stages',
             'btn_export_csv': 'Download CSV',
             'btn_convert_client': 'Convert to Client',
+            'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
             'hero_title': 'Specialized Health Check-up Booking for Foreigners',
             'hero_subtitle': 'Complex Korean hospital bookings and check-ups, CHECKIT helps you perfectly in your native language.',
             'service_for_title': 'Who is this service for?',
@@ -144,13 +178,22 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_title_1': 'Communication Barriers',
             'reality_item_1_point_1': 'Limited understanding of medical terms', 'reality_item_1_point_2': 'Difficulty in explaining symptoms',
             'reality_item_1_point_3': 'Canceled tests due to misunderstandings', 'reality_item_1_point_4': 'Anxiety about navigating hospitals',
+            'reality_item_title_2': 'Booking Difficulties',
+            'reality_item_2_point_1': 'Lack of dedicated reservation counters', 'reality_item_2_point_2': 'Cumbersome authentication procedures',
+            'reality_item_2_point_3': 'Difficulty in coordinating schedules', 'reality_item_2_point_4': 'Insufficient information about waiting times',
+            'reality_overtime_title': 'Growing Concerns Over Time',
             'solution_title': 'CHECKIT Solution',
             'solution_subtitle': 'We\'ll handle the difficult process. You just think about your health.',
+            'individual_service1_title': '1:1 Dedicated Manager', 'individual_service1_desc': 'A reliable partner guiding you in your native language.',
+            'individual_service2_title_new': 'Real-time Communication', 'individual_service2_desc_new': 'We immediately resolve any situations at the hospital.',
+            'individual_service3_title_new': 'Simple Result Summary', 'individual_service3_desc_new': 'We summarize complex medical terms into easy words.',
             'packages_title': 'Recommended Packages',
-            'packages_subtitle': 'Choose the configuration that\'s right for you.',
-            'package1_title': 'Safe Plan', 'package1_price': '₩50,000',
+            'package1_title': 'Safety Plan', 'package1_price': '₩50,000',
             'package2_title': 'Standard Plan', 'package2_price': '₩100,000',
             'package3_title': 'Premium Plan', 'package3_price': '₩200,000',
+            'package_includes': 'Includes', 'package_recommend_title': 'Recommended For',
+            'package1_feature1': 'Hospital Booking Agency', 'package1_feature2': 'Questionnaire Translation', 'package1_feature3': 'Result Summary (PDF)',
+            'package1_recommend_desc': 'Those who need administrative support only.',
             'options_title_new': 'Additional Optional Services'
         },
         cn: {
@@ -165,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_filter_all': '所有阶段',
             'btn_export_csv': '下载 CSV',
             'btn_convert_client': '注册为客户',
+            'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
             'hero_title': '面向外国人的专业健康检查预约服务',
             'hero_subtitle': '复杂的韩国医院预约和健康检查，CHECKIT 用您的母语为您提供完美帮助。',
             'service_for_title': '该服务面向谁？',
@@ -206,7 +250,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_page_subtitle': '系统管理外籍员工健康，提高企业生产力，减轻健康管理负担。',
             'view_workflow': '查看业务流程',
             'individual_page_title': '个人客户服务',
-            'individual_page_subtitle': '复杂的健康检查，现在用母语轻松完成。'
+            'individual_page_subtitle': '复杂的健康检查，现在用母语轻松完成。',
+            'expectation_title': '韩国医疗：期待与现实',
+            'reality_title': '但现实并非如此',
+            'solution_title': 'CHECKIT 解决方案',
+            'solution_subtitle': '把困难交给由于我们，您只需关注健康。',
+            'individual_service1_title': '1:1 专属经理',
+            'individual_service2_title_new': '实时沟通',
+            'individual_service3_title_new': '结果单简易摘要',
+            'packages_title': '推荐套餐',
+            'package1_title': '安心计划', 'package1_price': '₩50,000',
+            'package2_title': '标准计划', 'package2_price': '₩100,000',
+            'package3_title': '至尊计划', 'package3_price': '₩200,000',
+            'package_includes': '包含内容', 'package_recommend_title': '推荐对象',
+            'options_title_new': '附加可选服务'
         },
         vn: {
             'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
@@ -220,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_filter_all': 'Tất cả giai đoạn',
             'btn_export_csv': 'Tải xuống CSV',
             'btn_convert_client': 'Đăng ký khách hàng',
+            'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
             'hero_title': 'Dịch vụ đặt lịch khám sức khỏe chuyên nghiệp cho người nước ngoài',
             'hero_subtitle': 'Đặt lịch bệnh viện và khám sức khỏe tại Hàn Quốc không còn khó khăn, CHECKIT hỗ trợ bạn hoàn hảo bằng tiếng mẹ đẻ.',
             'service_for_title': 'Dịch vụ này dành cho ai?',
@@ -261,7 +319,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_page_subtitle': 'Quản lý sức khỏe lao động nước ngoài một cách hệ thống, tăng năng suất và giảm gánh nặng quản lý y tế.',
             'view_workflow': 'Xem quy trình làm việc',
             'individual_page_title': 'Dịch vụ khách hàng cá nhân',
-            'individual_page_subtitle': 'Khám sức khỏe phức tạp, giờ đây hãy thực hiện thoải mái bằng tiếng mẹ đẻ.'
+            'individual_page_subtitle': 'Khám sức khỏe phức tạp, giờ đây hãy thực hiện thoải mái bằng tiếng mẹ đẻ.',
+            'expectation_title': 'Y tế Hàn Quốc: Kỳ vọng và Thực tế',
+            'reality_title': 'Nhưng thực tế lại khác',
+            'solution_title': 'Giải pháp CHECKIT',
+            'solution_subtitle': 'Hãy để chúng tôi lo những việc khó khăn. Bạn chỉ cần lo cho sức khỏe của mình.',
+            'individual_service1_title': 'Quản lý riêng 1:1',
+            'individual_service2_title_new': 'Giao tiếp thời gian thực',
+            'individual_service3_title_new': 'Tóm tắt kết quả đơn giản',
+            'packages_title': 'Gói dịch vụ đề xuất',
+            'package1_title': 'Gói An Tâm', 'package1_price': '₩50,000',
+            'package2_title': 'Gói Tiêu Chuẩn', 'package2_price': '₩100,000',
+            'package3_title': 'Gói Cao Cấp', 'package3_price': '₩200,000',
+            'package_includes': 'Bao gồm', 'package_recommend_title': 'Dành cho',
+            'options_title_new': 'Dịch vụ tùy chọn thêm'
         }
     };
 
@@ -278,6 +349,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         document.querySelectorAll('#language-switcher .lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === newLang));
+        
+        // Update dynamic button text if it exists
+        const authBtn = document.getElementById('platform-auth-btn');
+        if (authBtn) {
+            const user = firebase.auth().currentUser;
+            if (user) authBtn.textContent = data['nav_mypage'] || 'My Page';
+            else authBtn.textContent = data['nav_login'] || 'Login';
+        }
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) logoutBtn.textContent = data['nav_logout'] || 'Logout';
     };
     window.changeLanguage = switchLanguage;
 
@@ -286,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('#language-switcher .lang-btn').forEach(btn => {
             btn.onclick = () => switchLanguage(btn.dataset.lang);
         });
-        switchLanguage('ko'); // Initial call to populate text
+        switchLanguage('ko'); 
     };
     initLangSwitch();
 
@@ -345,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btn-ob-submit').onclick = async () => {
                 const name = document.getElementById('ob-name').value, nat = document.getElementById('ob-nat').value, birth = document.getElementById('ob-birth').value;
                 if (!name || !nat) return alert("Fill required fields.");
-                await db.collection("users").doc(user.uid).update({ fullName: name, nationality: nat, dob: birth, onboardingComplete: true });
+                await db.collection("users").doc(user.uid).set({ fullName: name, nationality: nat, dob: birth, onboardingComplete: true, role: 'user', email: user.email }, { merge: true });
                 location.reload();
             };
         };
@@ -444,8 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        window.convertLead = (email) => { if(confirm(`Invite ${email} as a new user?`)) alert(`Invite sent to ${email}. (Logic: Admin would now create Firestore record manually or send magic link)`); };
-
         const selectUser = (uid, userData) => {
             const view = document.getElementById('admin-detail-view');
             view.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -490,16 +569,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        window.downloadCSV = async (companyId) => {
-            const snap = await db.collection("users").where("companyId", "==", companyId).get();
-            let csv = "Email,Name,Status\n";
-            for(const doc of snap.docs) {
-                const u = doc.data(), p = await db.collection("user_process").doc(doc.id).get();
-                const step = p.data()?.steps.find(s => s.status === 'active')?.title || "Done";
-                csv += `${u.email},${u.fullName || '-'},${step}\n`;
-            }
-            const blob = new Blob([csv], { type: 'text/csv' }), url = window.URL.createObjectURL(blob), a = document.createElement('a');
-            a.href = url; a.download = `checkit_report_${companyId}.csv`; a.click();
+        const renderUser = (user) => {
+            const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
+            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2>
+                <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
+                <div class="container" id="u-dynamic-view" style="padding:20px 0;"><div class="status-timeline" id="u-timeline"></div>
+                <div class="platform-grid"><div class="info-panel" id="u-info"></div><div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
+                <div class="chat-input-area"><input type="text" id="u-input"><button id="u-send" class="lang-btn active">Send</button></div></div></div></div>`;
+            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
+            document.getElementById('u-tab-status').onclick = () => renderUser(user);
+            document.getElementById('u-tab-files').onclick = () => renderFiles(user.uid, false);
+            platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
+                const data = doc.data(); if(!data) return;
+                document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
+                const active = data.steps.find(s => s.status === 'active') || data.steps[0];
+                document.getElementById('u-info').innerHTML = `<h3>Status</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
+            });
+            setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
         };
 
         const setupChat = (uid, msgsId, inpId, sendId, sender) => {
@@ -563,14 +649,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!btn){ btn = document.createElement('button'); btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
             auth.onAuthStateChanged(user => {
                 if(user){
-                    btn.textContent = currentLang === 'ko' ? '마이페이지' : 'My Page'; btn.onclick = () => renderMyPage(user);
+                    btn.textContent = translations[currentLang]['nav_mypage'] || 'My Page'; btn.onclick = () => renderMyPage(user);
                     checkOnboarding(user);
                     if(!document.getElementById('logout-btn')){
-                        const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent='Logout';
+                        const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]['nav_logout'] || 'Logout';
                         lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                     }
                 } else {
-                    btn.textContent = 'Login'; btn.onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+                    btn.textContent = translations[currentLang]['nav_login'] || 'Login'; btn.onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
                     document.getElementById('logout-btn')?.remove();
                 }
             });

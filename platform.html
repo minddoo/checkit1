@@ -115,20 +115,29 @@
             const userDoc = await getDoc(doc(db, "users", user.uid));
             const userData = userDoc.exists() ? userDoc.data() : { role: "user" };
 
-            if (key) {
-                if (key === "CHECKIT_MASTER_2026" && userData.role === "super_admin") {
-                    showSuperAdmin();
-                    return;
-                }
-                if (key === "COMPANY_KEY_2026" && userData.role === "company_admin") {
-                    showCompanyAdmin(userData.companyId);
-                    return;
-                }
-                alert("권한이 없거나 관리자 KEY가 일치하지 않습니다.");
+            // Security Key Logic: Prioritize Key for access
+            if (key === "CHECKIT_MASTER_2026") {
+                // If master key is correct, allow access and sync role
+                await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
+                showSuperAdmin();
+                return;
+            } 
+            
+            if (key === "COMPANY_KEY_2026") {
+                // If company key is correct, allow access and sync role/company
+                const cid = userData.companyId || "COMPANY_A";
+                await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                showCompanyAdmin(cid);
+                return;
+            }
+
+            if (key && key !== "") {
+                alert("관리자 보안 KEY가 일치하지 않습니다.");
                 await signOut(auth);
                 return;
             }
 
+            // Default behavior for standard users
             showCustomer(user.uid);
         } catch (e) {
             alert("로그인 실패: " + e.message);

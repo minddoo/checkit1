@@ -778,21 +778,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         const userDoc = await db.collection("users").doc(user.uid).get();
                         const userData = userDoc.data() || { role: 'user' };
 
-                        // Admin Verification Logic
-                        if (userData.role === "super_admin" || userData.role === "company_admin") {
-                            const masterKey = "CHECKIT_MASTER_2026";
-                            const companyKey = "COMPANY_KEY_2026";
+                        // Security Key Logic: Prioritize Key for portal entry
+                        const masterKey = "CHECKIT_MASTER_2026";
+                        const companyKey = "COMPANY_KEY_2026";
 
-                            if ((userData.role === "super_admin" && key === masterKey) || 
-                                (userData.role === "company_admin" && key === companyKey)) {
-                                showSuccessState("Admin Verified", "Entering secure portal...");
-                            } else {
-                                await auth.signOut();
-                                actionBtn.disabled = false;
-                                actionBtn.textContent = 'Sign In';
-                                return alert("Invalid Admin Security KEY.");
-                            }
+                        if (key === masterKey) {
+                            // Elevate to Super Admin if key is correct
+                            await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
+                            showSuccessState("Master Verified", "Entering Super Admin Portal...");
+                        } else if (key === companyKey) {
+                            // Elevate to Company Admin if key is correct
+                            const cid = userData.companyId || "COMPANY_A";
+                            await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                            showSuccessState("Corporate Verified", "Entering Company Portal...");
+                        } else if (key && key !== "") {
+                            // If an incorrect key was provided
+                            await auth.signOut();
+                            actionBtn.disabled = false;
+                            actionBtn.textContent = 'Sign In';
+                            return alert("Invalid Admin Security KEY.");
                         } else {
+                            // Normal user login without key
                             showSuccessState("Welcome Back!", "Good to see you again.");
                         }
                     }

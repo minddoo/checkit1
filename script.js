@@ -281,6 +281,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     window.changeLanguage = switchLanguage;
 
+    // --- ADD BUTTON LISTENERS & INITIAL CALL ---
+    const initLangSwitch = () => {
+        const btns = document.querySelectorAll('#language-switcher .lang-btn');
+        btns.forEach(btn => {
+            btn.onclick = () => switchLanguage(btn.dataset.lang);
+        });
+        switchLanguage('ko'); // Initial render
+    };
+    initLangSwitch();
+
     // --- Firebase Setup ---
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -349,11 +359,43 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!overlay) return;
             overlay.style.display = 'flex';
             document.body.classList.add('platform-view-active');
-            const uSnap = await db.collection("users").doc(user.uid).get();
-            const userData = uSnap.data();
-            if (userData?.role === 'super_admin') renderAdmin(user);
-            else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
-            else renderUser(user);
+            
+            try {
+                const uSnap = await db.collection("users").doc(user.uid).get();
+                const userData = uSnap.data() || { role: "user" };
+
+                if (userData.role === 'super_admin') renderAdmin(user);
+                else if (userData.role === 'company_admin') renderCorporate(user, userData.companyId);
+                else renderUser(user);
+            } catch (e) {
+                console.error("Error loading profile:", e);
+                alert("프로필 로딩 중 오류가 발생했습니다.");
+            }
+        };
+
+        const renderUser = (user) => {
+            const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
+            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2>
+                <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
+                <div class="container" id="u-dynamic-view" style="padding:20px 0;">
+                    <div id="u-status-content">Loading status...</div>
+                </div>`;
+            
+            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
+            document.getElementById('u-tab-status').onclick = () => renderUser(user);
+            document.getElementById('u-tab-files').onclick = () => renderFiles(user.uid, false);
+
+            if(platformSub) platformSub();
+            platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
+                const data = doc.data(), content = document.getElementById('u-status-content');
+                if(!data || !content) return;
+                const activeStep = data.steps.find(s => s.status === 'active') || data.steps[0];
+                content.innerHTML = `<div class="info-panel"><h3>${lang['platform_status_title']}</h3>
+                    <p><strong>${activeStep.title}</strong></p><p>${activeStep.description}</p></div>
+                    <div class="admin-chat-container" style="margin-top:20px; height:300px;"><div class="chat-messages" id="u-msgs"></div>
+                    <div class="chat-input-area"><input type="text" id="u-input" placeholder="Type message..."><button id="u-send" class="lang-btn active">Send</button></div></div>`;
+                setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
+            });
         };
 
         const renderAdmin = (admin) => {
@@ -560,8 +602,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent='Logout';
                         lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                     }
+                    // Auto-open if redirected with ?view=mypage
+                    if (new URLSearchParams(window.location.search).get('view') === 'mypage') renderMyPage(user);
                 } else {
-                    btn.textContent = 'Login'; btn.onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+                    btn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
+                    btn.onclick = () => {
+                        const p = new firebase.auth.GoogleAuthProvider();
+                        auth.signInWithPopup(p).then(res => {
+                            initUserDoc(res.user);
+                            renderMyPage(res.user);
+                        });
+                    };
                     document.getElementById('logout-btn')?.remove();
                 }
             });

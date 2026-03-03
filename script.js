@@ -36,23 +36,50 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonials_subtitle': '이미 많은 외국인 고객분들이 CHECKIT과 함께하고 있습니다.',
             'contact_title_new': '궁금한 점이 있으신가요?',
             'contact_subtitle_new': 'CHECKIT의 전문가 팀이 최적의 솔루션을 제안해 드립니다.',
-            'contact_form_email_label': '이메일 주소',
-            'contact_form_phone_label': '전화번호',
-            'contact_form_message_label': '문의 내용',
+            'contact_form_email_label': '이메일 주소', 'contact_form_email_placeholder': '이메일을 입력하세요',
+            'contact_form_phone_label': '전화번호', 'contact_form_phone_placeholder': '전화번호를 입력하세요',
+            'contact_form_message_label': '문의 내용', 'contact_form_message_placeholder': '문의하실 내용을 입력하세요',
             'contact_form_submit_button': '문의하기',
-            'corporate_page_title': '기업 고객용 토탈 솔루션',
-            'corporate_page_subtitle': '외국인 근로자의 건강을 체계적으로 관리하여, 기업의 생산성을 높이고 보건 관리 부담을 덜어드립니다.',
+            'chatbot_header': 'CHECKIT 고객센터', 'chatbot_placeholder': '궁금한 점을 물어보세요...',
+            
+            // Individual Page Original Phrasing
             'individual_page_title': '개인 고객 서비스',
             'individual_page_subtitle': '복잡한 건강검진, 이제 모국어로 편안하게 받으세요.',
             'expectation_title': '한국 의료, 기대와 현실의 차이',
             'expectation_subtitle': '우수한 한국 의료 시스템, 하지만 외국인에게는 여전히 높기만 한 벽입니다.',
-            'expectation_item_title_1': '합리적인 비용',
-            'expectation_item_title_2': '편리한 접근성',
-            'expectation_item_title_3': '첨단 의료 장비',
-            'expectation_item_title_4': '신속한 프로세스',
+            'expectation_item_title_1': '합리적인 비용', 'expectation_item_desc_1': '세계 최고 수준의 의료 서비스를 합리적인 가격에 누릴 수 있습니다.',
+            'expectation_item_title_2': '편리한 접근성', 'expectation_item_desc_2': '어디서나 가까운 곳에 전문 병원이 위치하고 있습니다.',
+            'expectation_item_title_3': '첨단 의료 장비', 'expectation_item_desc_3': '최신 기술과 장비로 정확한 진단이 가능합니다.',
+            'expectation_item_title_4': '신속한 프로세스', 'expectation_item_desc_4': '예약부터 검진까지 기다림 없이 빠르게 진행됩니다.',
             'reality_title': '하지만 현실은 다릅니다',
+            'reality_item_title_1': '의사소통의 벽',
+            'reality_item_1_point_1': '전문 의학 용어의 이해 한계', 'reality_item_1_point_2': '증상 설명의 어려움',
+            'reality_item_1_point_3': '주의사항 오해로 인한 검사 취소', 'reality_item_1_point_4': '병원 내 길 찾기 및 소통 불안',
+            'reality_item_title_2': '복잡한 예약 시스템',
+            'reality_item_2_point_1': '외국인 전용 예약 창구 부족', 'reality_item_2_point_2': '본인 인증 절차의 번거로움',
+            'reality_item_2_point_3': '희망 일정 조율의 어려움', 'reality_item_2_point_4': '대기 시간 발생에 대한 안내 부족',
+            'reality_item_title_3': '사후 관리의 공백',
+            'reality_item_3_point_1': '한국어로만 된 결과지', 'reality_item_3_point_2': '이상 소견 발생 시 설명 부족',
+            'reality_item_3_point_3': '추가 검사 필요성 이해 불가', 'reality_item_3_point_4': '결과지 수령 방법의 복잡함',
+            'reality_item_title_4': '심리적 장벽',
+            'reality_item_4_point_1': '낯선 병원 환경에 대한 두려움', 'reality_item_4_point_2': '문화 차이로 인한 오해',
+            'reality_item_4_point_3': '도움을 청할 곳이 없다는 고립감', 'reality_item_4_point_4': '개인정보 유출에 대한 우려',
+            'reality_overtime_title': '시간이 지날수록 늘어나는 고민',
+            'reality_overtime_p1': '검진을 미룰수록 건강에 대한 불안은 커져만 갑니다.',
+            'reality_overtime_p2': '작은 증상을 방치하다 더 큰 병으로 이어지기도 합니다.',
             'solution_title': 'CHECKIT 솔루션',
+            'solution_subtitle': '어려운 과정은 저희가 맡겠습니다. 당신은 건강만 생각하세요.',
+            'individual_service1_title': '1:1 전담 매니저', 'individual_service1_desc': '당신의 모국어로 모든 과정을 안내하는 든든한 파트너입니다.',
+            'individual_service2_title_new': '실시간 커뮤니케이션', 'individual_service2_desc_new': '병원 현장에서 발생하는 모든 상황을 즉시 해결해 드립니다.',
+            'individual_service3_title_new': '결과지 단순 요약', 'individual_service3_desc_new': '복잡한 의학 용어를 이해하기 쉬운 단어로 요약해 드립니다.',
             'packages_title': '추천 패키지',
+            'packages_subtitle': '나에게 꼭 필요한 구성으로 선택하세요.',
+            'package1_title': '안심 플랜', 'package1_price': '₩50,000',
+            'package2_title': '표준 플랜', 'package2_price': '₩100,000',
+            'package3_title': '프리미엄 플랜', 'package3_price': '₩200,000',
+            'package_includes': '포함 내역', 'package_recommend_title': '추천 대상',
+            'package1_feature1': '병원 예약 대행', 'package1_feature2': '기본 문진표 번역', 'package1_feature3': '결과지 요약 (PDF)',
+            'package1_recommend_desc': '검진 경험이 있고 행정 지원만 필요한 분',
             'options_title_new': '추가 옵션 서비스'
         },
         en: {
@@ -101,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     initLangSwitch();
 
-    // --- Firebase Setup ---
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
         authDomain: "checkit-43341.firebaseapp.com",
@@ -117,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const auth = firebase.auth(), db = firebase.firestore();
         db.settings({ experimentalForceLongPolling: true, merge: true });
 
-        // 1. Unified Inquiry Logic
+        // Contact Form
         document.querySelectorAll('.contact-form, .contact-form-body').forEach(form => {
             form.onsubmit = async (e) => {
                 e.preventDefault();
@@ -135,19 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     alert(translations[currentLang]['contact_success']);
                     form.reset();
-                } catch (err) { console.error(err); }
+                } catch (err) { alert("Error."); }
                 finally { btn.disabled = false; }
             };
         });
 
-        // 2. Onboarding Flow
-        const checkOnboarding = async (user) => {
-            const uRef = db.collection("users").doc(user.uid);
-            const uSnap = await uRef.get();
-            const data = uSnap.data();
-            if (!data || !data.fullName) showOnboardingModal(user);
-        };
-
+        // Onboarding
         const showOnboardingModal = (user) => {
             const lang = translations[currentLang];
             const modalHtml = `<div id="login-modal-overlay" style="display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:10000; justify-content:center; align-items:center;">
@@ -165,31 +184,20 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         };
 
-        // 3. Platform Dashboards
-        let platformSub = null;
-
-        const renderMyPage = async (user) => {
-            const overlay = document.getElementById('mypage-overlay');
-            if(!overlay) return;
-            overlay.style.display = 'flex';
-            document.body.classList.add('platform-view-active');
-            
-            try {
-                const uRef = db.collection("users").doc(user.uid);
-                let uSnap = await uRef.get().catch(() => null);
-                if (!uSnap || !uSnap.exists) {
-                    await initUserDoc(user);
-                    uSnap = await uRef.get().catch(() => ({ exists: true, data: () => ({ role: 'user' }) }));
-                }
-                const userData = uSnap.data() || { role: "user" };
-                renderUser(user);
-            } catch (e) { renderUser(user); }
+        const checkOnboarding = async (user) => {
+            const uRef = db.collection("users").doc(user.uid);
+            const uSnap = await uRef.get();
+            if (uSnap.exists && !uSnap.data().fullName) showOnboardingModal(user);
         };
 
-        const renderUser = (user) => {
+        // My Page / Dashboard
+        let platformSub = null;
+        const renderUserDashboard = (user) => {
             const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
             overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2><div style="display:flex; gap:10px;"><button id="close-mypage" class="lang-btn">${lang['platform_close']}</button></div></div>
                 <div class="container" id="u-dynamic-view" style="padding:20px 0;"><div id="u-status-content">Loading status...</div></div>`;
+            overlay.style.display = 'flex';
+            document.body.classList.add('platform-view-active');
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
             platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
                 const data = doc.data(); if(!data) return;
@@ -198,22 +206,27 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const renderMyPage = async (user) => {
+            const uSnap = await db.collection("users").doc(user.uid).get();
+            const userData = uSnap.data() || { role: "user" };
+            if (userData.role === 'super_admin') window.location.href = 'platform.html';
+            else renderUserDashboard(user);
+        };
+
         const initUserDoc = async (user) => {
-            try {
-                const uRef = db.collection("users").doc(user.uid);
-                const uSnap = await uRef.get({ source: 'server' }).catch(() => uRef.get());
-                if (!uSnap.exists) {
-                    await uRef.set({ role: "user", email: user.email, companyId: "", createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
-                    await db.collection("user_process").doc(user.uid).set({
-                        steps: [
-                            { title: "상담 및 신청", description: "접수 대기 중입니다.", status: "active", icon: "fas fa-file-alt" },
-                            { title: "병원 예약", description: "병원 선정 대기 중", status: "pending", icon: "fas fa-hospital" },
-                            { title: "검진 완료", description: "현장 지원 대기", status: "pending", icon: "fas fa-notes-medical" },
-                            { title: "결과 번역", description: "결과지 수령 대기", status: "pending", icon: "fas fa-language" }
-                        ]
-                    });
-                }
-            } catch (e) { console.warn("Init skipped:", e); }
+            const uRef = db.collection("users").doc(user.uid);
+            const uSnap = await uRef.get();
+            if (!uSnap.exists) {
+                await uRef.set({ role: "user", email: user.email, companyId: "", createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                await db.collection("user_process").doc(user.uid).set({
+                    steps: [
+                        { title: "상담 및 신청", description: "접수 대기 중입니다.", status: "active", icon: "fas fa-file-alt" },
+                        { title: "병원 예약", description: "병원 선정 대기 중", status: "pending", icon: "fas fa-hospital" },
+                        { title: "검진 완료", description: "현장 지원 대기", status: "pending", icon: "fas fa-notes-medical" },
+                        { title: "결과 번역", description: "결과지 수령 대기", status: "pending", icon: "fas fa-language" }
+                    ]
+                });
+            }
         };
 
         const initAuthNav = () => {
@@ -229,10 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent='Logout';
                         lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                     }
-                    if (new URLSearchParams(window.location.search).get('view') === 'mypage') renderMyPage(user);
                 } else {
                     btn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
-                    btn.onclick = () => { const p = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p); };
+                    btn.onclick = () => { const p = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p).then(res => { initUserDoc(res.user); renderMyPage(res.user); }); };
                     document.getElementById('logout-btn')?.remove();
                 }
             });

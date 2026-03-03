@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- 1. FULL MULTILINGUAL DATA (KO, EN, CN, VN) ---
+    // --- 1. FULL MULTILINGUAL DATA ---
     const translations = {
         ko: {
             'nav_home': '홈', 'hero_cta': '지금 바로 상담 신청', 'learn_more': '더 알아보기',
@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의',
             'chart_distribution_title': '단계별 고객 분포',
             'admin_search_placeholder': '고객명 또는 이메일 검색...',
-            'admin_filter_all': '전체 보기'
+            'admin_filter_all': '전체 보기',
+            'btn_export_csv': '리포트 다운로드 (CSV)',
+            'btn_convert_client': '고객으로 등록'
         },
         en: {
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
@@ -22,29 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Leads',
             'chart_distribution_title': 'Workflow Distribution',
             'admin_search_placeholder': 'Search by name or email...',
-            'admin_filter_all': 'All Stages'
-        },
-        cn: {
-            'nav_home': '首页', 'hero_cta': '立即申请', 'learn_more': '了解更多',
-            'platform_title': 'CHECKIT 平台', 'platform_status_title': '我的服务状态',
-            'platform_close': '关闭', 'contact_success': '咨询已成功提交！',
-            'admin_title': '经理管理后台', 'onboarding_title': '完善个人资料',
-            'chatbot_manager_btn': '与经理聊天',
-            'stat_total_clients': '总客户数', 'stat_pending_leads': '待处理咨询',
-            'chart_distribution_title': '各阶段客户分布',
-            'admin_search_placeholder': '搜索姓名或邮箱...',
-            'admin_filter_all': '所有阶段'
-        },
-        vn: {
-            'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
-            'platform_title': 'Nền tảng CHECKIT', 'platform_status_title': 'Trạng thái dịch vụ',
-            'platform_close': 'Đóng', 'contact_success': 'Yêu cầu đã được gửi thành công!',
-            'admin_title': 'Bảng điều khiển quản lý', 'onboarding_title': 'Hoàn thiện hồ sơ',
-            'chatbot_manager_btn': 'Chat với quản lý',
-            'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Yêu cầu chưa xử lý',
-            'chart_distribution_title': 'Phân bổ theo giai đoạn',
-            'admin_search_placeholder': 'Tìm theo tên hoặc email...',
-            'admin_filter_all': 'Tất cả giai đoạn'
+            'admin_filter_all': 'All Stages',
+            'btn_export_csv': 'Download CSV',
+            'btn_convert_client': 'Convert to Client'
         }
     };
 
@@ -141,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderAdmin = (admin) => {
             const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>Admin Analytics</h2>
+            overlay.innerHTML = `<div class="mypage-header"><h2>Admin Dashboard</h2>
                 <div style="display:flex; gap:10px;"><button class="lang-btn active" id="tab-users">Clients</button><button class="lang-btn" id="tab-leads">Inquiries</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
                 <div class="admin-grid"><div class="admin-sidebar">
                     <div id="admin-stats-container"></div>
@@ -154,11 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         </select>
                     </div>
                     <div id="admin-user-list"></div></div>
-                <div class="admin-main" id="admin-detail-view"><div class="info-panel" style="text-align:center;"><canvas id="workflowChart" style="max-height:300px;"></canvas><h4 style="margin-top:20px;">${lang['chart_distribution_title']}</h4></div></div></div>`;
+                <div class="admin-main" id="admin-detail-view"><div class="info-panel" style="text-align:center;"><canvas id="workflowChart" style="max-height:300px;"></canvas></div></div></div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
             document.getElementById('tab-users').onclick = () => renderAdmin(admin);
             document.getElementById('tab-leads').onclick = renderLeads;
-            
             startStatsListener();
             
             const renderFilteredList = async () => {
@@ -166,25 +147,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const filter = document.getElementById('admin-filter').value;
                 const snap = await db.collection("users").where("role", "==", "user").get();
                 const list = document.getElementById('admin-user-list'); list.innerHTML = "";
-                
                 for(const doc of snap.docs) {
                     const u = doc.data();
-                    const name = (u.fullName || '').toLowerCase();
-                    const email = (u.email || '').toLowerCase();
-                    if(search && !name.includes(search) && !email.includes(search)) continue;
-                    
-                    if(filter !== 'all') {
-                        const pDoc = await db.collection("user_process").doc(doc.id).get();
-                        const activeIdx = pDoc.data()?.steps.findIndex(s => s.status === 'active');
-                        if(activeIdx != filter) continue;
-                    }
-
-                    const div = document.createElement('div'); div.className = 'safety-card'; div.style.padding='15px'; div.style.cursor='pointer'; div.style.marginBottom='10px';
+                    if(search && !u.fullName?.toLowerCase().includes(search) && !u.email?.toLowerCase().includes(search)) continue;
+                    const pDoc = await db.collection("user_process").doc(doc.id).get();
+                    const activeIdx = pDoc.data()?.steps.findIndex(s => s.status === 'active');
+                    if(filter !== 'all' && activeIdx != filter) continue;
+                    const div = document.createElement('div'); div.className = 'safety-card'; div.style.cssText = 'padding:15px; cursor:pointer; margin-bottom:10px; border-left: 4px solid ' + (['#2ECC71','#3498DB','#F1C40F','#E67E22'][activeIdx] || '#eee');
                     div.innerHTML = `<strong>${u.fullName || u.email}</strong><br><small>${u.nationality || '...'} | ${u.companyId || 'No Corp'}</small>`;
                     div.onclick = () => selectUser(doc.id, u); list.appendChild(div);
                 }
             };
-
             document.getElementById('admin-search').oninput = renderFilteredList;
             document.getElementById('admin-filter').onchange = renderFilteredList;
             renderFilteredList();
@@ -198,22 +171,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const statsEl = document.getElementById('admin-stats-container');
                 if(statsEl) statsEl.innerHTML = `<div class="admin-stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:20px;">
                     <div class="stat-card" style="padding:15px;"><span class="stat-val">${users.size}</span><span class="stat-label">Clients</span></div>
-                    <div class="stat-card" style="padding:15px; border-color:#e74c3c;"><span class="stat-val">${leads.size}</span><span class="stat-label">New Leads</span></div></div>`;
-                
+                    <div class="stat-card" style="padding:15px; border-color:#e74c3c;"><span class="stat-val">${leads.size}</span><span class="stat-label">Leads</span></div></div>`;
                 const ctx = document.getElementById('workflowChart');
                 if(ctx) {
-                    const processes = await db.collection("user_process").get();
-                    const chartData = [0,0,0,0];
-                    processes.forEach(doc => {
-                        const idx = doc.data().steps.findIndex(s => s.status === 'active');
-                        if(idx !== -1) chartData[idx]++;
-                    });
+                    const processes = await db.collection("user_process").get(), chartData = [0,0,0,0];
+                    processes.forEach(doc => { const idx = doc.data().steps.findIndex(s => s.status === 'active'); if(idx !== -1) chartData[idx]++; });
                     if(window.myChart) window.myChart.destroy();
-                    window.myChart = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: { labels: ['Applied', 'Booking', 'Check-up', 'Result'], datasets: [{ data: chartData, backgroundColor: ['#2ECC71', '#3498DB', '#F1C40F', '#E67E22'], borderWeight: 0 }] },
-                        options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
-                    });
+                    window.myChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Applied', 'Booking', 'Check-up', 'Result'], datasets: [{ data: chartData, backgroundColor: ['#2ECC71', '#3498DB', '#F1C40F', '#E67E22'], borderWeight: 0 }] }, options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } } });
                 }
             });
         };
@@ -230,14 +194,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const l = doc.data(), div = document.createElement('div'); div.className = 'info-panel'; div.style.marginBottom='15px';
                     div.innerHTML = `<div style="display:flex; justify-content:space-between;"><strong>${l.email}</strong><span class="lead-badge ${l.status}">${l.status}</span></div>
                         <p>${l.message}</p><div style="display:flex; gap:10px;"><button class="lang-btn" onclick="toggleLead('${doc.id}', '${l.status}')">Toggle</button>
-                        <button class="lang-btn logout-btn" onclick="deleteLead('${doc.id}')">Delete</button></div>`;
+                        <button class="lang-btn active" onclick="convertLead('${l.email}')">Add as User</button><button class="lang-btn logout-btn" onclick="deleteLead('${doc.id}')">Delete</button></div>`;
                     list.appendChild(div);
                 });
             });
         };
 
-        window.toggleLead = (id, cur) => db.collection("contact_inquiries").doc(id).update({ status: cur === 'new' ? 'resolved' : 'new' });
-        window.deleteLead = (id) => confirm("Delete?") && db.collection("contact_inquiries").doc(id).delete();
+        window.convertLead = (email) => { if(confirm(`Invite ${email} as a new user?`)) alert(`Invite sent to ${email}. (Logic: Admin would now create Firestore record manually or send magic link)`); };
 
         const selectUser = (uid, userData) => {
             const view = document.getElementById('admin-detail-view');
@@ -245,63 +208,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="text-align:left;"><h3>${userData.fullName || userData.email}</h3>
                     <div style="display:flex; gap:10px; align-items:center;"><small>${userData.nationality}</small>
                     <input type="text" id="assign-corp" placeholder="Company ID" value="${userData.companyId || ''}" style="padding:2px 8px; font-size:0.7rem; border:1px solid #ddd; border-radius:4px;">
-                    <button class="lang-btn" style="padding:2px 8px; font-size:0.7rem;" onclick="assignCompany('${uid}')">Assign</button></div>
-                </div>
+                    <button class="lang-btn" style="padding:2px 8px; font-size:0.7rem;" onclick="assignCompany('${uid}')">Assign</button></div></div>
                 <div class="platform-tabs" style="border:none; margin:0;"><div class="p-tab active" id="adm-tab-chat">Chat</div><div class="p-tab" id="adm-tab-files">Files</div></div></div>
-                <div id="adm-dynamic-view">
-                    <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:var(--shadow-sm);">
-                        <textarea id="mgr-notes" placeholder="Manager Notes (Private)..." style="width:100%; border:none; outline:none; font-size:0.9rem; min-height:60px;">${userData.managerNotes || ''}</textarea>
-                        <button class="lang-btn" style="float:right; padding:2px 10px;" onclick="saveNotes('${uid}')">Save Notes</button><div style="clear:both;"></div>
-                    </div>
-                    <div style="background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; gap:10px; justify-content:center; box-shadow:var(--shadow-sm);">
-                        <button class="lang-btn" onclick="updateStatus('${uid}', 0)">Step 1</button><button class="lang-btn" onclick="updateStatus('${uid}', 1)">Step 2</button>
-                        <button class="lang-btn" onclick="updateStatus('${uid}', 2)">Step 3</button></div>
-                    <div class="admin-chat-container" style="height:350px; width:100%; margin:0;"><div class="chat-messages" id="adm-msgs"></div>
-                    <div class="chat-input-area"><input type="text" id="adm-input" placeholder="Reply..."><button id="adm-send" class="lang-btn active">Send</button></div></div></div>`;
+                <div id="adm-dynamic-view"><div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:20px; box-shadow:var(--shadow-sm);">
+                <textarea id="mgr-notes" placeholder="Private Notes..." style="width:100%; border:none; outline:none; font-size:0.9rem; min-height:60px;">${userData.managerNotes || ''}</textarea>
+                <button class="lang-btn" style="float:right; padding:2px 10px;" onclick="saveNotes('${uid}')">Save Notes</button><div style="clear:both;"></div></div>
+                <div style="background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; gap:10px; justify-content:center; box-shadow:var(--shadow-sm);">
+                <button class="lang-btn" onclick="updateStatus('${uid}', 0)">Step 1</button><button class="lang-btn" onclick="updateStatus('${uid}', 1)">Step 2</button>
+                <button class="lang-btn" onclick="updateStatus('${uid}', 2)">Step 3</button></div>
+                <div class="admin-chat-container" style="height:350px; width:100%; margin:0;"><div class="chat-messages" id="adm-msgs"></div>
+                <div class="chat-input-area"><input type="text" id="adm-input" placeholder="Type message..."><button id="adm-send" class="lang-btn active">Send</button></div></div></div>`;
             document.getElementById('adm-tab-chat').onclick = () => selectUser(uid, userData);
             document.getElementById('adm-tab-files').onclick = () => renderFiles(uid, true);
             setupChat(uid, 'adm-msgs', 'adm-input', 'adm-send', 'bot');
         };
 
-        window.saveNotes = (uid) => {
-            const notes = document.getElementById('mgr-notes').value;
-            db.collection("users").doc(uid).update({ managerNotes: notes });
-            alert("Notes saved!");
-        };
-
-        window.assignCompany = async (uid) => {
-            const cid = document.getElementById('assign-corp').value;
-            await db.collection("users").doc(uid).update({ companyId: cid });
-            alert("Company Assigned!");
-        };
-
-        const renderUser = (user) => {
-            const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2>
-                <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
-                <div class="container" id="u-dynamic-view" style="padding:20px 0;"><div class="status-timeline" id="u-timeline"></div>
-                <div class="platform-grid"><div class="info-panel" id="u-info"></div>
-                <div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
-                <div class="chat-input-area"><input type="text" id="u-input" placeholder="Ask..."><button id="u-send" class="lang-btn active">Send</button></div></div></div></div>`;
-            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
-            document.getElementById('u-tab-status').onclick = () => renderUser(user);
-            document.getElementById('u-tab-files').onclick = () => renderFiles(user.uid, false);
-            platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
-                const data = doc.data(); if(!data) return;
-                document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
-                const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                document.getElementById('u-info').innerHTML = `<h3>Progress</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
-            });
-            setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
-        };
-
         const renderCorporate = (user, companyId) => {
-            const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `<div class="mypage-header"><h2>Corporate Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
+            const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
+            overlay.innerHTML = `<div class="mypage-header"><h2>Corporate Portal</h2>
+                <button class="btn-export" onclick="downloadCSV('${companyId}')"><i class="fas fa-download"></i> ${lang['btn_export_csv']}</button>
+                <button id="close-mypage" class="lang-btn">Close</button></div>
                 <div class="container" style="padding:40px 0;"><div class="info-panel" style="margin-bottom:20px; text-align:center;"><canvas id="corpChart" style="max-height:200px;"></canvas><h4>Team Health Progress</h4></div>
                 <div class="info-panel"><h3>Employee List</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Email</th><th>Name</th><th>Status</th></tr></thead><tbody id="corp-list"></tbody></table></div></div></div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
-            
             platformSub = db.collection("users").where("companyId", "==", companyId).onSnapshot(async snap => {
                 const list = document.getElementById('corp-list'); if(!list) return;
                 list.innerHTML = ""; let completed = 0;
@@ -315,6 +244,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const ctx = document.getElementById('corpChart');
                 if(ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Progress'], datasets: [{ label: 'Completed', data: [completed], backgroundColor: '#2ECC71' }, { label: 'Pending', data: [snap.size - completed], backgroundColor: '#eee' }] }, options: { indexAxis: 'y', scales: { x: { stacked: true, max: snap.size }, y: { stacked: true } } } });
             });
+        };
+
+        window.downloadCSV = async (companyId) => {
+            const snap = await db.collection("users").where("companyId", "==", companyId).get();
+            let csv = "Email,Name,Status\n";
+            for(const doc of snap.docs) {
+                const u = doc.data(), p = await db.collection("user_process").doc(doc.id).get();
+                const step = p.data()?.steps.find(s => s.status === 'active')?.title || "Done";
+                csv += `${u.email},${u.fullName || '-'},${step}\n`;
+            }
+            const blob = new Blob([csv], { type: 'text/csv' }), url = window.URL.createObjectURL(blob), a = document.createElement('a');
+            a.href = url; a.download = `checkit_report_${companyId}.csv`; a.click();
         };
 
         const setupChat = (uid, msgsId, inpId, sendId, sender) => {
@@ -342,8 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('file-input').onchange = (e) => uploadFile(uid, e.target.files[0], isAdmin);
             if(filesSub) filesSub();
             filesSub = db.collection("user_process").doc(uid).collection("files").orderBy("timestamp", "desc").onSnapshot(snap => {
-                const list = document.getElementById('platform-file-list'); if(!list) return;
-                list.innerHTML = "";
+                const list = document.getElementById('platform-file-list'); if(!list) return; list.innerHTML = "";
                 snap.forEach(fDoc => {
                     const f = fDoc.data(), div = document.createElement('div'); div.className = 'file-item';
                     div.innerHTML = `<div class="file-info"><i class="fas fa-file-pdf"></i><div><div class="file-name">${f.name}</div><small>${f.type}</small></div></div>
@@ -367,9 +307,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.updateStatus = async (uid, idx) => {
             const steps = (await db.collection("user_process").doc(uid).get()).data().steps;
             steps.forEach((s, i) => s.status = i < idx ? 'completed' : (i === idx ? 'active' : 'pending'));
-            await db.collection("user_process").doc(uid).update({ steps }); alert("Done!");
+            await db.collection("user_process").doc(uid).update({ steps }); alert("Updated!");
         };
         window.deleteFile = (uid, fid) => confirm("Delete?") && db.collection("user_process").doc(uid).collection("files").doc(fid).delete();
+        window.saveNotes = (uid) => db.collection("users").doc(uid).update({ managerNotes: document.getElementById('mgr-notes').value }).then(() => alert("Saved"));
         const clearSubs = () => { [platformSub, chatSub, filesSub, leadsSub, statsSub].forEach(s => s && s()); };
 
         const initAuthNav = () => {

@@ -347,9 +347,7 @@
                             <input type="email" id="email" name="email" data-lang-key="contact_form_email_placeholder" required>
                         </div>
                         <div class="form-group" style="grid-column: 1 / -1;">
-                            <label for="phone">
-                                <span data-lang-key="contact_form_phone_label"></span>
-                            </label>
+                            <label for="phone" data-lang-key="contact_form_phone_label"></label>
                             <input type="tel" id="phone" name="phone" data-lang-key="contact_form_phone_placeholder">
                         </div>
                         <div class="form-group" style="grid-column: 1 / -1;">
@@ -357,6 +355,8 @@
                             <textarea id="message" name="message" rows="6" data-lang-key="contact_form_message_placeholder" required></textarea>
                         </div>
                     </div>
+                    <!-- Formspree success redirect (optional) -->
+                    <input type="hidden" name="_next" value="https://checkit-43341.web.app/individual.html">
                     <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button"></button>
                 </form>
             </div>

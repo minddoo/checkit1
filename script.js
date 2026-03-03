@@ -183,7 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = translations[newLang] || translations['ko'];
         document.querySelectorAll('[data-lang-key]').forEach(el => {
             const key = el.getAttribute('data-lang-key');
-            if (data[key]) el.innerHTML = data[key];
+            if (data[key]) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    if (key.includes('placeholder')) el.setAttribute('placeholder', data[key]);
+                    else el.value = data[key];
+                } else {
+                    el.innerHTML = data[key];
+                }
+            }
         });
         const authBtn = document.getElementById('platform-auth-btn');
         if (authBtn) {

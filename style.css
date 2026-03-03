@@ -375,6 +375,7 @@ body {
     text-align: left;
     font-size: 1.15rem;
     line-height: 2;
+    color: var(--white);
 }
 
 .overtime-content p {

@@ -1729,7 +1729,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                     const res = await firebase.auth().createUserWithEmailAndPassword(email, pw);
-                    // 가입 성공 시 알림 후 모달 닫기
                     alert('회원가입이 완료되었습니다!');
                     overlay.style.display = 'none';
                 } else {
@@ -1742,6 +1741,108 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         overlay.style.display = 'flex';
+    };
+
+    // --- 마이페이지(플랫폼 뷰) 렌더링 ---
+    const renderMyPage = (user) => {
+        const overlay = document.getElementById('mypage-overlay');
+        if (!overlay) return;
+
+        const isKo = currentLang === 'ko';
+        
+        overlay.innerHTML = `
+            <div class="mypage-header">
+                <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <span style="font-weight:600;">${user.email}님</span>
+                    <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
+                </div>
+            </div>
+            <div class="status-timeline">
+                <div class="status-step active">
+                    <i class="fas fa-file-alt" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>상담/신청</span>
+                </div>
+                <div class="status-step">
+                    <i class="fas fa-hospital" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>병원예약</span>
+                </div>
+                <div class="status-step">
+                    <i class="fas fa-notes-medical" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>검진대기</span>
+                </div>
+                <div class="status-step">
+                    <i class="fas fa-language" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>결과번역</span>
+                </div>
+                <div class="status-step">
+                    <i class="fas fa-check-circle" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>완료</span>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
+                <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
+                    <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
+                    <div style="margin-top:20px;">
+                        <p><strong>선택한 패키지:</strong> <span style="color:var(--primary-color);">Total-Safe Plan (가정)</span></p>
+                        <p><strong>진행 상태:</strong> <span style="background:var(--hero-bg-color); color:var(--primary-dark); padding:4px 10px; border-radius:20px; font-size:0.85rem;">행정 지원 대기 중</span></p>
+                        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+                        <h4>담당 매니저 안내</h4>
+                        <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
+                            <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
+                            <div>
+                                <div style="font-weight:700;">Sarah Manager</div>
+                                <div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-chat-container">
+                    <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
+                        <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
+                    </div>
+                    <div class="chat-messages" id="platform-chat-messages">
+                        <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! CHECKIT 행정 지원 팀입니다. 궁금하신 점을 남겨주시면 담당 매니저가 확인 후 답변 드리겠습니다.</div>
+                    </div>
+                    <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
+                        <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px; outline:none;">
+                        <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">전송</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('close-mypage').onclick = () => {
+            document.body.classList.remove('platform-view-active');
+        };
+
+        const chatInput = document.getElementById('platform-chat-input');
+        const chatSend = document.getElementById('platform-chat-send');
+        const chatMsgs = document.getElementById('platform-chat-messages');
+
+        const sendMsg = () => {
+            const val = chatInput.value.trim();
+            if (val) {
+                const msg = document.createElement('div');
+                msg.className = 'message user';
+                msg.textContent = val;
+                chatMsgs.appendChild(msg);
+                chatInput.value = '';
+                chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                
+                // 가짜 답변
+                setTimeout(() => {
+                    const reply = document.createElement('div');
+                    reply.className = 'message bot';
+                    reply.textContent = "매니저가 메시지를 확인 중입니다. 잠시만 기다려주세요.";
+                    chatMsgs.appendChild(reply);
+                    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                }, 1000);
+            }
+        };
+
+        chatSend.onclick = sendMsg;
+        chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
     };
 
     // ====================================================
@@ -1776,7 +1877,14 @@ document.addEventListener('DOMContentLoaded', () => {
             auth.onAuthStateChanged(user => {
                 if (user) {
                     authBtn.textContent = currentLang === 'ko' ? '마이페이지' : 'My Page';
-                    authBtn.onclick = () => window.location.href = 'individual.html?view=mypage';
+                    authBtn.onclick = () => {
+                        if (window.location.pathname.includes('individual.html')) {
+                            document.body.classList.add('platform-view-active');
+                            renderMyPage(user);
+                        } else {
+                            window.location.href = 'individual.html?view=mypage';
+                        }
+                    };
                     
                     let logoutBtn = document.getElementById('platform-logout-btn');
                     if (!logoutBtn) {
@@ -1784,14 +1892,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         logoutBtn.id = 'platform-logout-btn';
                         logoutBtn.className = 'lang-btn logout-btn';
                         logoutBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
-                        logoutBtn.onclick = () => auth.signOut().then(() => location.reload());
+                        logoutBtn.onclick = () => auth.signOut().then(() => {
+                            if (window.location.pathname.includes('individual.html')) {
+                                window.location.href = 'index.html';
+                            } else {
+                                location.reload();
+                            }
+                        });
                         authBtn.parentNode.appendChild(logoutBtn);
+                    }
+
+                    // URL 파라미터 체크 (마이페이지 바로가기)
+                    if (new URLSearchParams(window.location.search).get('view') === 'mypage' && window.location.pathname.includes('individual.html')) {
+                        document.body.classList.add('platform-view-active');
+                        renderMyPage(user);
                     }
                 } else {
                     authBtn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
                     authBtn.onclick = () => showLoginModal();
                     const logoutBtn = document.getElementById('platform-logout-btn');
                     if (logoutBtn) logoutBtn.remove();
+                    document.body.classList.remove('platform-view-active');
                 }
             });
         };

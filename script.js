@@ -610,19 +610,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderUser = (user) => {
             const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title']}</h2>
+            overlay.innerHTML = `<div class="mypage-header"><h2>${lang['platform_title'] || 'CHECKIT PLATFORM'}</h2>
                 <div style="display:flex; gap:10px;"><button class="lang-btn active" id="u-tab-status">Status</button><button class="lang-btn" id="u-tab-files">Files</button><button id="close-mypage" class="lang-btn">Close</button></div></div>
                 <div class="container" id="u-dynamic-view" style="padding:20px 0;"><div class="status-timeline" id="u-timeline"></div>
                 <div class="platform-grid"><div class="info-panel" id="u-info"></div><div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
-                <div class="chat-input-area"><input type="text" id="u-input"><button id="u-send" class="lang-btn active">Send</button></div></div></div></div>`;
+                <div class="chat-input-area"><input type="text" id="u-input" placeholder="Type message..."><button id="u-send" class="lang-btn active">Send</button></div></div></div></div>`;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
             document.getElementById('u-tab-status').onclick = () => renderUser(user);
             document.getElementById('u-tab-files').onclick = () => renderFiles(user.uid, false);
+            
+            if(platformSub) platformSub();
             platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
-                const data = doc.data(); if(!data) return;
+                const data = doc.data() || { steps: [
+                    { title: 'Applied', status: 'active', icon: 'fas fa-file-signature', description: 'Your inquiry has been received.' },
+                    { title: 'Booking', status: 'pending', icon: 'fas fa-calendar-check', description: 'Matching with the best hospital.' },
+                    { title: 'Check-up', status: 'pending', icon: 'fas fa-hospital-user', description: 'Support on the day of visit.' },
+                    { title: 'Result', status: 'pending', icon: 'fas fa-poll-h', description: 'Translating and summarizing results.' }
+                ]};
                 document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
                 const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                document.getElementById('u-info').innerHTML = `<h3>Status</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
+                document.getElementById('u-info').innerHTML = `<h3>Current Status</h3><div style="margin-top:20px; padding:20px; background:var(--hero-bg-color); border-radius:12px; border-left:5px solid var(--primary-color);">
+                    <h4 style="color:var(--primary-dark); margin-bottom:10px;">${active.title}</h4><p>${active.description}</p></div>
+                    <div style="margin-top:30px;"><h4>Help Center</h4><p style="color:#666; font-size:0.9rem;">Need assistance? Use the 1:1 chat to speak with your manager.</p></div>`;
             });
             setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
         };

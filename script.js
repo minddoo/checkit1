@@ -894,14 +894,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const initUserDoc = async (user) => {
                 try {
-                    // 1. Create users doc required by rules
                     await db.collection("users").doc(user.uid).set({
                         role: "user",
                         email: user.email,
                         companyId: ""
                     }, { merge: true });
 
-                    // 2. Create service process doc
                     const docRef = db.collection("user_process").doc(user.uid);
                     const docSnap = await docRef.get();
                     if (!docSnap.exists) {
@@ -946,7 +944,10 @@ document.addEventListener('DOMContentLoaded', () => {
             overlay.style.display = 'flex';
         };
 
-        // --- 마이페이지(플랫폼 뷰) 렌더링 ---
+        // --- 마이페이지(플랫폼 뷰) 렌더링 (Real-time) ---
+        let platformUnsubscribe = null;
+        let chatUnsubscribe = null;
+
         const renderMyPage = async (user) => {
             let overlay = document.getElementById('mypage-overlay');
             if (!overlay) {
@@ -958,48 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('platform-view-active');
             const langData = translations[currentLang];
             
-            // Show loading initially
-            overlay.innerHTML = `<div style="padding:100px; text-align:center; font-size:1.2rem; color:var(--primary-color);">${langData['platform_loading']}</div>`;
-            
-            let steps = [
-                { title: "상담 및 신청", description: "서비스 상담 요청이 접수되었습니다.", status: "completed", icon: "fas fa-file-alt" },
-                { title: "병원 예약 지원", description: "담당 매니저가 병원 예약을 진행 중입니다.", status: "active", icon: "fas fa-hospital" },
-                { title: "검진 안내 대기", description: "예약 확정 후 검진 가이드를 발송해 드립니다.", status: "pending", icon: "fas fa-notes-medical" },
-                { title: "결과 번역 대기", description: "검진 완료 후 결과지를 번역해 드립니다.", status: "pending", icon: "fas fa-language" },
-                { title: "서비스 완료", description: "모든 행정 지원 절차가 마무리됩니다.", status: "pending", icon: "fas fa-check-circle" }
-            ];
-
-            try {
-                const docRef = db.collection("user_process").doc(user.uid);
-                const docSnap = await docRef.get();
-                if (docSnap.exists) {
-                    steps = docSnap.data().steps;
-                } else {
-                    const uRef = db.collection("users").doc(user.uid);
-                    const uSnap = await uRef.get();
-                    if (!uSnap.exists) {
-                        await uRef.set({ role: "user", email: user.email, companyId: "" });
-                    }
-                    await docRef.set({ steps: steps });
-                }
-            } catch (error) {
-                console.error("Firestore Read Error:", error);
-                const notice = document.createElement('div');
-                notice.style.cssText = "position:fixed; bottom:20px; left:20px; background:rgba(231, 76, 60, 0.9); color:#fff; padding:10px 20px; border-radius:8px; z-index:3000; font-size:0.85rem;";
-                notice.innerHTML = `${langData['platform_error']} (${error.code})`;
-                document.body.appendChild(notice);
-                setTimeout(() => notice.remove(), 5000);
-            }
-
-            const stepsHtml = steps.map(step => `
-                <div class="status-step ${step.status}">
-                    <i class="${step.icon}" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>${step.title}</span>
-                </div>
-            `).join('');
-
-            const activeStep = steps.find(s => s.status === 'active') || steps[0];
-
+            // Show shell immediately
             overlay.innerHTML = `
                 <div class="mypage-header">
                     <h2 style="margin:0; color:var(--primary-color);">${langData['platform_title']}</h2>
@@ -1008,49 +968,101 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">${langData['platform_close']}</button>
                     </div>
                 </div>
-                <div class="status-timeline">${stepsHtml}</div>
-                <div class="platform-grid">
-                    <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
-                        <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">${langData['platform_status_title']}</h3>
-                        <div style="margin-top:20px;">
-                            <p><strong>${langData['platform_current_step']}:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
-                            <p><strong>${langData['platform_details']}:</strong> <span>${activeStep.description}</span></p>
-                            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-                            <h4>${langData['platform_manager_title']}</h4>
-                            <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
-                                <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
-                                <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">${langData['platform_manager_spec']}</div></div>
+                <div id="platform-content-loading" style="padding:100px; text-align:center;">${langData['platform_loading']}</div>
+                <div id="platform-dynamic-content" style="display:none; flex-direction:column; flex-grow:1;">
+                    <div class="status-timeline" id="realtime-timeline"></div>
+                    <div class="platform-grid">
+                        <div class="info-panel" id="realtime-info-panel"></div>
+                        <div class="admin-chat-container">
+                            <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
+                                <i class="fas fa-headset" style="color:var(--primary-color);"></i> ${langData['platform_chat_title']}
                             </div>
-                        </div>
-                    </div>
-                    <div class="admin-chat-container">
-                        <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
-                            <i class="fas fa-headset" style="color:var(--primary-color);"></i> ${langData['platform_chat_title']}
-                        </div>
-                        <div class="chat-messages" id="platform-chat-messages">
-                            <div class="message bot">Hello ${user.email.split('@')[0]}! Current step: ${activeStep.title}. Feel free to ask any questions.</div>
-                        </div>
-                        <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
-                            <input type="text" id="platform-chat-input" placeholder="${langData['platform_chat_placeholder']}" style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
-                            <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">${langData['platform_chat_send']}</button>
+                            <div class="chat-messages" id="platform-chat-messages"></div>
+                            <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
+                                <input type="text" id="platform-chat-input" placeholder="${langData['platform_chat_placeholder']}" style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
+                                <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">${langData['platform_chat_send']}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
 
-            document.getElementById('close-mypage').onclick = () => document.body.classList.remove('platform-view-active');
-            const chatInput = document.getElementById('platform-chat-input'), chatSend = document.getElementById('platform-chat-send'), chatMsgs = document.getElementById('platform-chat-messages');
-            const sendMsg = () => {
-                const val = chatInput.value.trim();
-                if (val) {
-                    const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = val;
-                    chatMsgs.appendChild(msg); chatInput.value = ''; chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                    setTimeout(() => {
-                        const r = document.createElement('div'); r.className = 'message bot'; r.textContent = currentLang === 'ko' ? "매니저가 확인 중입니다." : "Manager is checking your message.";
-                        chatMsgs.appendChild(r); chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                    }, 1000);
+            document.getElementById('close-mypage').onclick = () => {
+                document.body.classList.remove('platform-view-active');
+                if (platformUnsubscribe) platformUnsubscribe();
+                if (chatUnsubscribe) chatUnsubscribe();
+            };
+
+            const timelineEl = document.getElementById('realtime-timeline');
+            const infoEl = document.getElementById('realtime-info-panel');
+            const loadingEl = document.getElementById('platform-content-loading');
+            const contentEl = document.getElementById('platform-dynamic-content');
+            const chatMsgsEl = document.getElementById('platform-chat-messages');
+
+            // 1. Real-time Status Update
+            platformUnsubscribe = db.collection("user_process").doc(user.uid).onSnapshot((doc) => {
+                if (!doc.exists) return;
+                const data = doc.data();
+                const steps = data.steps || [];
+                
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'flex';
+
+                timelineEl.innerHTML = steps.map(step => `
+                    <div class="status-step ${step.status}">
+                        <i class="${step.icon}" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                        <span>${step.title}</span>
+                    </div>
+                `).join('');
+
+                const activeStep = steps.find(s => s.status === 'active') || steps[steps.length-1] || {title: "...", description: "..."};
+                infoEl.innerHTML = `
+                    <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">${langData['platform_status_title']}</h3>
+                    <div style="margin-top:20px;">
+                        <p><strong>${langData['platform_current_step']}:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
+                        <p><strong>${langData['platform_details']}:</strong> <span>${activeStep.description}</span></p>
+                        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+                        <h4>${langData['platform_manager_title']}</h4>
+                        <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
+                            <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
+                            <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">${langData['platform_manager_spec']}</div></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 2. Real-time Chat Persistence
+            chatUnsubscribe = db.collection("user_process").doc(user.uid).collection("messages").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
+                chatMsgsEl.innerHTML = "";
+                if (snapshot.empty) {
+                    chatMsgsEl.innerHTML = `<div class="message bot">Hello ${user.email.split('@')[0]}! How can we help you today?</div>`;
+                } else {
+                    snapshot.forEach(doc => {
+                        const m = doc.data();
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = `message ${m.sender === 'user' ? 'user' : 'bot'}`;
+                        msgDiv.textContent = m.text;
+                        chatMsgsEl.appendChild(msgDiv);
+                    });
+                }
+                chatMsgsEl.scrollTop = chatMsgsEl.scrollHeight;
+            });
+
+            const chatInput = document.getElementById('platform-chat-input');
+            const chatSend = document.getElementById('platform-chat-send');
+
+            const sendMsg = async () => {
+                const text = chatInput.value.trim();
+                if (text) {
+                    chatInput.value = "";
+                    await db.collection("user_process").doc(user.uid).collection("messages").add({
+                        text: text,
+                        sender: "user",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                 }
             };
+
             chatSend.onclick = sendMsg;
             chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
         };

@@ -588,18 +588,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div id="corp-stats-container" class="corp-stats-grid"></div>
                     
                     <div class="corp-filter-bar">
-                        <input type="text" id="corp-search" class="corp-search" placeholder="Search by name or site ID...">
-                        <select id="corp-status-filter" class="corp-select">
-                            <option value="all">All Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="reserved">Reserved</option>
-                            <option value="completed">Completed</option>
-                            <option value="expired">Expired</option>
-                        </select>
+                        <div style="display:flex; gap:10px; flex-grow:1;">
+                            <input type="text" id="corp-search" class="corp-search" placeholder="Search by name or site ID...">
+                            <select id="corp-site-filter" class="corp-select">
+                                <option value="all">All Sites</option>
+                            </select>
+                            <select id="corp-status-filter" class="corp-select">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="reserved">Reserved</option>
+                                <option value="completed">Completed</option>
+                                <option value="expired">Expired</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="info-panel">
-                        <h3>Employee Management List</h3>
+                        <h3 id="site-display-title">Employee Management List (All Sites)</h3>
                         <div class="admin-table-container">
                             <table class="admin-table">
                                 <thead>
@@ -624,20 +629,27 @@ document.addEventListener('DOMContentLoaded', () => {
             const listEl = document.getElementById('corp-list');
             const statsEl = document.getElementById('corp-stats-container');
             const searchInp = document.getElementById('corp-search');
+            const siteFilt = document.getElementById('corp-site-filter');
             const statusFilt = document.getElementById('corp-status-filter');
             const exportBtn = document.getElementById('btn-csv-export');
+            const siteTitle = document.getElementById('site-display-title');
 
             let allData = [];
+            let availableSites = new Set();
 
             const renderUI = () => {
                 const search = searchInp.value.toLowerCase();
                 const status = statusFilt.value;
+                const siteId = siteFilt.value;
 
                 const filtered = allData.filter(d => {
                     const matchesSearch = !search || d.name?.toLowerCase().includes(search) || d.siteId?.toLowerCase().includes(search);
                     const matchesStatus = status === 'all' || d.status === status;
-                    return matchesSearch && matchesStatus;
+                    const matchesSite = siteId === 'all' || d.siteId === siteId;
+                    return matchesSearch && matchesStatus && matchesSite;
                 });
+
+                siteTitle.textContent = `Employee Management List (${siteId === 'all' ? 'All Sites' : 'Site: ' + siteId})`;
 
                 listEl.innerHTML = filtered.map(d => `
                     <tr>
@@ -651,14 +663,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     </tr>
                 `).join('');
 
-                // Update Stats
+                // Update Stats for the CURRENT filtered view (by Site)
                 const stats = { pending: 0, reserved: 0, completed: 0, expired: 0 };
-                allData.forEach(d => { if(stats[d.status]) stats[d.status]++; else if(!d.status) stats.pending++; });
+                const statsSource = siteId === 'all' ? allData : allData.filter(d => d.siteId === siteId);
+                
+                statsSource.forEach(d => { 
+                    const s = d.status || 'pending';
+                    if(stats.hasOwnProperty(s)) stats[s]++; 
+                });
                 
                 statsEl.innerHTML = `
                     <div class="corp-stat-card">
-                        <span class="corp-stat-val">${allData.length}</span>
-                        <span class="corp-stat-label">Total Employees</span>
+                        <span class="corp-stat-val">${statsSource.length}</span>
+                        <span class="corp-stat-label">Total (${siteId === 'all' ? 'All' : siteId})</span>
                     </div>
                     <div class="corp-stat-card pending">
                         <span class="corp-stat-val">${stats.pending}</span>
@@ -679,11 +696,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             };
 
+            const updateSiteFilter = () => {
+                const currentSelection = siteFilt.value;
+                siteFilt.innerHTML = '<option value="all">All Sites</option>';
+                Array.from(availableSites).sort().forEach(site => {
+                    const opt = document.createElement('option');
+                    opt.value = site;
+                    opt.textContent = site;
+                    siteFilt.appendChild(opt);
+                });
+                siteFilt.value = availableSites.has(currentSelection) ? currentSelection : 'all';
+            };
+
             searchInp.oninput = renderUI;
             statusFilt.onchange = renderUI;
+            siteFilt.onchange = renderUI;
+
             exportBtn.onclick = () => {
+                const status = statusFilt.value;
+                const siteId = siteFilt.value;
+                const dataToExport = allData.filter(d => {
+                    const matchesStatus = status === 'all' || d.status === status;
+                    const matchesSite = siteId === 'all' || d.siteId === siteId;
+                    return matchesStatus && matchesSite;
+                });
+
                 const headers = ["Name", "SiteID", "Status", "ExamDate", "ExpiryDate", "Language", "UpdatedAt"];
-                const rows = allData.map(d => [
+                const rows = dataToExport.map(d => [
                     d.name, d.siteId, d.status, d.examDate, d.expiryDate, d.language, 
                     d.updatedAt ? new Date(d.updatedAt.seconds * 1000).toISOString() : ""
                 ]);
@@ -691,13 +730,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `checkit_report_${companyId}.csv`);
+                link.setAttribute("download", `checkit_report_${companyId}_${siteId}.csv`);
                 document.body.appendChild(link);
                 link.click();
             };
 
+            // Real-time listener for the company's employee data
             platformSub = db.collection("user_process").where("companyId", "==", companyId).onSnapshot(snap => {
                 allData = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+                
+                // Update site list
+                const oldSiteCount = availableSites.size;
+                availableSites = new Set();
+                allData.forEach(d => { if(d.siteId) availableSites.add(d.siteId); });
+                
+                if (availableSites.size !== oldSiteCount) {
+                    updateSiteFilter();
+                }
+                
                 renderUI();
             });
         };

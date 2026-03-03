@@ -64,11 +64,14 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **`contact_inquiries/{id}`**: `{ email, phone, company, message, timestamp, source, language, status: "new" | "resolved" }`
 
 ### **Corporate Portal (Enriched)**
-*   **Real-time Dashboard:** Displays summary statistics (Total, Pending, Reserved, Completed, Expired).
+*   **Real-time Dashboard:** Displays summary statistics (Total, Pending, Reserved, Completed, Expired) globally or per site.
+*   **Site-Specific Management (Step 2):** 
+    *   **Dynamic Site Filtering:** A dedicated filter that automatically populates based on active `siteId` values in the employee data.
+    *   **Contextual Stats:** Summary cards automatically recalculate statistics based on the selected site.
+    *   **Granular Reporting:** CSV exports now support exporting data for a specific site or all sites combined.
 *   **Employee Management Table:** Detailed view of employee status, site assignments, and examination dates.
 *   **Search & Filtering:** Dynamic filtering by name, site ID, and service status.
-*   **Reporting:** CSV export functionality for corporate administrators to download health check-up status reports.
-*   **Secure Access:** Promotion to `company_admin` via specialized security keys during authentication.
+*   **Secure Access:** Promotion to `company_admin` via specialized security keys (`COMP_ID` format) during authentication.
 
 ### **Security Rules**
 *   **Role-Based Access Control (RBAC)**: Defined in `firestore.rules`.

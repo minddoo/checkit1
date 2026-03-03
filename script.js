@@ -843,31 +843,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="login-modal-overlay" style="display:flex;">
                     <div class="login-modal-box">
                         <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#aaa;">&times;</button>
-                        <h2 class="modal-logo" style="margin-bottom:5px; color:var(--primary-color);">CHECKIT</h2>
-                        <p id="auth-tagline" class="modal-tagline" style="margin-bottom:20px; color:#666; font-size:0.9rem;">Experience Global Healthcare Standard</p>
-                        <div style="margin-bottom:20px;">
-                            <input type="text" id="global-admin-key" placeholder="Admin Security KEY (Optional)" style="padding:12px; border:1px solid #eee; border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0; font-size:0.85rem; text-align:center;">
+                        <h2 class="modal-logo" style="margin-bottom:10px; color:var(--primary-color);">CHECKIT</h2>
+                        
+                        <!-- User Type Selection Tabs -->
+                        <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
+                            <div class="p-tab active" id="tab-type-user">개인 고객</div>
+                            <div class="p-tab" id="tab-type-corp">기업 관리자</div>
+                            <div class="p-tab" id="tab-type-master">CHECKIT 관리자</div>
                         </div>
+
+                        <p id="auth-tagline" class="modal-tagline" style="margin-bottom:20px; color:#666; font-size:0.9rem;">외국인 건강검진의 새로운 표준, 체킷</p>
+                        
+                        <!-- Security KEY Field (Initially hidden for Individual) -->
+                        <div id="key-field-container" style="display:none; margin-bottom:20px;">
+                            <input type="text" id="global-admin-key" placeholder="관리자 보안 KEY 입력" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0; font-size:0.85rem; text-align:center; font-weight:700;">
+                        </div>
+
                         <div id="auth-main-view" class="auth-view" style="display:flex; flex-direction:column; gap:12px;">
                             <button id="btn-google-login" class="btn-auth btn-google" style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-weight:600;">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Continue with Google
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google로 계속하기
                             </button>
                             <div style="margin:10px 0; color:#eee; display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700;">
-                                <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;"> OR <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;">
+                                <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;"> 또는 <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;">
                             </div>
                             <button id="show-email-login" class="btn-auth btn-email" style="background:#f8f9fa; border:1px solid #eee; padding:12px; border-radius:12px; cursor:pointer; font-weight:600;">
-                                <i class="fas fa-envelope"></i> Continue with Email
+                                <i class="fas fa-envelope"></i> 이메일로 계속하기
                             </button>
                         </div>
+
                         <div id="auth-email-view" class="auth-view" style="display:none; flex-direction:column; gap:15px;">
                             <div class="form-group-auth" style="display:flex; flex-direction:column; gap:10px;">
-                                <input type="email" id="auth-email" placeholder="Email Address" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
-                                <input type="password" id="auth-pass" placeholder="Password" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
+                                <input type="email" id="auth-email" placeholder="이메일 주소" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
+                                <input type="password" id="auth-pass" placeholder="비밀번호" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
                             </div>
-                            <button id="btn-email-action" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem;">Sign In</button>
+                            <button id="btn-email-action" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem;">로그인</button>
                             <div class="auth-utils" style="margin-top:10px; display:flex; flex-direction:column; gap:12px; align-items:center;">
-                                <span id="toggle-auth-mode" style="font-size:0.85rem; color:var(--primary-color); cursor:pointer; font-weight:600; text-decoration:underline;">Don't have an account? Sign Up</span>
-                                <button id="btn-auth-back" style="background:none; border:none; color:#888; cursor:pointer; font-size:0.85rem;">&larr; Back to options</button>
+                                <span id="toggle-auth-mode" style="font-size:0.85rem; color:var(--primary-color); cursor:pointer; font-weight:600; text-decoration:underline;">계정이 없으신가요? 회원가입</span>
+                                <button id="btn-auth-back" style="background:none; border:none; color:#888; cursor:pointer; font-size:0.85rem;">&larr; 뒤로 가기</button>
                             </div>
                         </div>
                     </div>
@@ -875,8 +887,32 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-            const overlay = document.getElementById('login-modal-overlay'), mainView = document.getElementById('auth-main-view'), emailView = document.getElementById('auth-email-view'), emailInput = document.getElementById('auth-email'), passInput = document.getElementById('auth-pass'), keyInput = document.getElementById('global-admin-key'), actionBtn = document.getElementById('btn-email-action'), modeToggle = document.getElementById('toggle-auth-mode'), tagline = document.getElementById('auth-tagline');
-            let isSignUp = false;
+            const overlay = document.getElementById('login-modal-overlay');
+            const keyContainer = document.getElementById('key-field-container');
+            const keyInput = document.getElementById('global-admin-key');
+            let selectedType = 'user'; // 'user', 'corp', 'master'
+
+            // Tab Switching Logic
+            const updateTabs = (type) => {
+                selectedType = type;
+                document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+                if(type === 'user') {
+                    document.getElementById('tab-type-user').classList.add('active');
+                    keyContainer.style.display = 'none';
+                } else if(type === 'corp') {
+                    document.getElementById('tab-type-corp').classList.add('active');
+                    keyContainer.style.display = 'block';
+                    keyInput.placeholder = "기업 보안 KEY (COMP_아이디)";
+                } else {
+                    document.getElementById('tab-type-master').classList.add('active');
+                    keyContainer.style.display = 'block';
+                    keyInput.placeholder = "CHECKIT 마스터 KEY 입력";
+                }
+            };
+
+            document.getElementById('tab-type-user').onclick = () => updateTabs('user');
+            document.getElementById('tab-type-corp').onclick = () => updateTabs('corp');
+            document.getElementById('tab-type-master').onclick = () => updateTabs('master');
 
             const finalizeAuth = (user) => {
                 overlay.remove();
@@ -887,66 +923,94 @@ document.addEventListener('DOMContentLoaded', () => {
                 const box = document.querySelector('.login-modal-box');
                 if(!box) return finalizeAuth(user);
                 box.innerHTML = `<div style="padding: 20px 0; animation: fadeIn 0.5s ease-out;"><div style="width: 80px; height: 80px; background: #e8f5e9; color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 40px;"><i class="fas fa-check"></i></div><h2 class="modal-logo" style="color: #333;">${title}</h2><p style="color: #666; margin-bottom: 0;">${subtitle}</p></div>`;
-                setTimeout(() => finalizeAuth(user), 600);
+                setTimeout(() => finalizeAuth(user), 650);
             };
 
             const handleAdminPromotion = async (user, key) => {
-                if (!key) return true; 
-                const masterKey = "CHECKIT_MASTER_2026";
-                if (key === masterKey) {
-                    await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
-                    showSuccessState("Master Verified", "Entering Super Admin Portal...", user);
-                    return true;
-                } else if (key.startsWith("COMP_")) {
-                    const cid = key.replace("COMP_", "");
-                    if (!cid) { alert("기업 아이디를 입력해주세요."); return false; }
-                    await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
-                    showSuccessState("Corporate Verified", `Entering ${cid} Portal...`, user);
-                    return true;
-                } else {
-                    const companyKey = "COMPANY_KEY_2026";
-                    if (key === companyKey) {
-                        const snap = await db.collection("users").doc(user.uid).get();
-                        const cid = snap.data()?.companyId || "COMPANY_A";
-                        await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
-                        showSuccessState("Corporate Verified", "Entering Company Portal...", user);
+                // Strict enforcing: If Master/Corp tab selected but key is missing
+                if (selectedType !== 'user' && !key) {
+                    alert("관리자 로그인을 위해 보안 KEY를 입력해주세요.");
+                    await auth.signOut();
+                    return false;
+                }
+
+                if (selectedType === 'master') {
+                    if (key === "CHECKIT_MASTER_2026") {
+                        await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
+                        showSuccessState("Master Verified", "마스터 대시보드로 진입합니다.", user);
                         return true;
                     }
-                    await auth.signOut(); alert("Admin Security KEY가 일치하지 않습니다."); return false;
+                } else if (selectedType === 'corp') {
+                    if (key.startsWith("COMP_")) {
+                        const cid = key.replace("COMP_", "");
+                        if (!cid) { alert("기업 코드를 입력해주세요."); await auth.signOut(); return false; }
+                        await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                        showSuccessState("Corporate Verified", `${cid} 기업 포털로 진입합니다.`, user);
+                        return true;
+                    }
+                } else {
+                    // Regular user login - explicitly set role to user to prevent accidental admin access
+                    // But check if they were already admins - if they login via 'user' tab, they stay as user for this session
+                    const uSnap = await db.collection("users").doc(user.uid).get();
+                    if(!uSnap.exists || uSnap.data().role !== 'super_admin' && !uSnap.data().companyId) {
+                        await db.collection("users").doc(user.uid).set({ role: "user" }, { merge: true });
+                    }
+                    showSuccessState("반갑습니다!", "체킷 플랫폼에 접속합니다.", user);
+                    return true;
                 }
+
+                // If key didn't match the required format for the selected type
+                alert("입력하신 보안 KEY가 선택한 유형과 일치하지 않습니다.");
+                await auth.signOut();
+                return false;
             };
 
             document.getElementById('close-login-modal').onclick = () => overlay.remove();
+            
             document.getElementById('btn-google-login').onclick = async () => {
                 const provider = new firebase.auth.GoogleAuthProvider(), key = keyInput.value.trim();
                 try {
                     const result = await auth.signInWithPopup(provider);
-                    const success = await handleAdminPromotion(result.user, key);
-                    if (success && !key) showSuccessState("Welcome!", "Login Successful", result.user);
+                    await handleAdminPromotion(result.user, key);
                 } catch (err) { console.error(err); }
             };
-            document.getElementById('show-email-login').onclick = () => { mainView.style.display = 'none'; emailView.style.display = 'flex'; };
-            document.getElementById('btn-auth-back').onclick = () => { emailView.style.display = 'none'; mainView.style.display = 'flex'; isSignUp = false; actionBtn.textContent = 'Sign In'; modeToggle.textContent = "Don't have an account? Sign Up"; tagline.textContent = 'Experience Global Healthcare Standard'; };
-            modeToggle.onclick = () => { isSignUp = !isSignUp; actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In'; modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"; tagline.textContent = isSignUp ? 'Join CHECKIT' : 'Experience Global Healthcare Standard'; keyInput.parentElement.style.display = isSignUp ? 'none' : 'block'; };
-            actionBtn.onclick = async () => {
-                const email = emailInput.value.trim(), pass = passInput.value, key = keyInput.value.trim();
+
+            document.getElementById('show-email-login').onclick = () => {
+                document.getElementById('auth-main-view').style.display = 'none';
+                document.getElementById('auth-email-view').style.display = 'flex';
+            };
+
+            document.getElementById('btn-auth-back').onclick = () => {
+                document.getElementById('auth-email-view').style.display = 'none';
+                document.getElementById('auth-main-view').style.display = 'flex';
+            };
+
+            let isSignUp = false;
+            document.getElementById('toggle-auth-mode').onclick = () => {
+                isSignUp = !isSignUp;
+                const actionBtn = document.getElementById('btn-email-action');
+                actionBtn.textContent = isSignUp ? '회원가입' : '로그인';
+                document.getElementById('toggle-auth-mode').textContent = isSignUp ? '이미 계정이 있으신가요? 로그인' : '계정이 없으신가요? 회원가입';
+            };
+
+            document.getElementById('btn-email-action').onclick = async () => {
+                const email = document.getElementById('auth-email').value.trim(), pass = document.getElementById('auth-pass').value, key = keyInput.value.trim();
                 if(!email || !pass) return alert("이메일과 비밀번호를 입력해주세요.");
-                actionBtn.disabled = true; actionBtn.textContent = isSignUp ? 'Creating...' : 'Signing In...';
+                
+                const btn = document.getElementById('btn-email-action');
+                btn.disabled = true; btn.textContent = isSignUp ? '가입 중...' : '로그인 중...';
+
                 try {
                     if(isSignUp) {
                         const result = await auth.createUserWithEmailAndPassword(email, pass);
-                        showSuccessState("Welcome!", "Starting your journey.", result.user);
+                        showSuccessState("가입 환영합니다!", "성공적으로 계정이 생성되었습니다.", result.user);
                     } else {
                         const result = await auth.signInWithEmailAndPassword(email, pass);
-                        const success = await handleAdminPromotion(result.user, key);
-                        if (success && !key) showSuccessState("Welcome Back!", "Login Successful", result.user);
-                        else if (!success) { actionBtn.disabled = false; actionBtn.textContent = 'Sign In'; }
+                        await handleAdminPromotion(result.user, key);
                     }
                 } catch (err) {
-                    console.error("Auth Error:", err);
-                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') alert("로그인 정보가 올바르지 않습니다.");
-                    else if (err.code === 'auth/email-already-in-use') alert("이미 사용 중인 이메일입니다.");
-                    actionBtn.disabled = false; actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+                    alert("오류가 발생했습니다: " + err.message);
+                    btn.disabled = false; btn.textContent = isSignUp ? '회원가입' : '로그인';
                 }
             };
         };

@@ -560,18 +560,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_title': '최종 보고 및 데이터 업데이트',
             'corp_sec7_step6_1': '명단 파일에 개인별 진행 상황 및 특이사항 업데이트 저장',
             'corp_sec7_step6_2': '기업 요청 시 실시간 진행 현황 및 완료 명단 보고',
-            'corp_faq_title': '자주 묻는 질문 (FAQ)',
-            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
-            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
-            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
-            'corp_faq_q2': '의료법 위반 소지는 없나요?',
-            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 \'비의료적 행정 지원\'에만 집중하므로 법적으로 매우 안전합니다.',
-            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
-            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
-            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
-            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
-            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
-            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
+            'corp_faq_title': 'Frequently Asked Questions (FAQ)',
+            'corp_faq_subtitle': 'We have gathered the questions most frequently asked by our corporate clients.',
+            'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
+            'corp_faq_a1': 'Yes, you can. CHECKIT is an independent service not tied to any specific hospital. You don’t need to change the hospitals you already use; we simply fill the communication and management gap between you and the hospital.',
+            'corp_faq_q2': 'Is there any risk of violating medical laws?',
+            'corp_faq_a2': 'CHECKIT strictly prohibits acts that violate medical law, such as patient solicitation or referral. We focus solely on non-medical administrative support like booking, interpretation, and simple translation of result sheets, making it legally very safe.',
+            'corp_faq_q3': 'How is worker personal information managed?',
+            'corp_faq_a3': 'We comply with personal information protection laws in every process. Lists are received via secure methods and safely disposed of according to regulations once the necessary period after the check-up has passed.',
+            'corp_faq_q4': 'Does implementation require complex system integration?',
+            'corp_faq_a4': 'Not at all. Implementation is possible immediately with just a candidate list and simple schedule coordination, without the need for any software installation or system linking.',
+            'corp_faq_q5': 'What level of translation is provided for result sheets?',
+            'corp_faq_a5': 'We provide a core summary in the worker’s native language of the Korean result sheet, which is often filled with technical terms. This is a simple translation for the purpose of conveying information, ensuring the worker’s right to know, rather than a medical opinion.',
             'contact_form_company_label': 'Company Name',
             'chatbot_header': 'Check Bot',
             'chatbot_placeholder': 'Type a message...',
@@ -602,6 +602,52 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_manager_spec': 'English/Korean Specialist',
             'contact_success': 'Inquiry submitted successfully. A manager will contact you soon!',
             'contact_error': 'An error occurred. Please try again.'
+        },
+        cn: {
+            'nav_home': '首页',
+            'hero_title': '为外国人提供的健康体检，<br>跨越语言障碍，轻松自在。',
+            'hero_subtitle': '从错过预约、难以理解的体检指南，到仅提供韩语的结果报告。<br>CHECKIT 为您解决所有非医疗流程。',
+            'hero_cta': '立即申请咨询',
+            'service_for_title': '我们的服务面向谁？',
+            'individual_title': '个人客户',
+            'individual_desc': '支持在韩居住或访问的外国个人，<br>无语言障碍地进行健康体检。',
+            'corporate_title': '企业客户',
+            'corporate_desc': '轻松高效地管理外籍员工的团体体检，<br>减轻企业的健康管理负担。',
+            'learn_more': '了解更多',
+            'platform_title': 'CHECKIT 平台',
+            'platform_status_title': '我的服务状态',
+            'platform_current_step': '当前阶段',
+            'platform_details': '详情',
+            'platform_manager_title': '专职经理已匹配',
+            'platform_chat_title': '1:1 行政支持聊天',
+            'platform_chat_placeholder': '输入消息...',
+            'platform_chat_send': '发送',
+            'platform_close': '关闭',
+            'contact_success': '咨询已成功提交。经理将很快与您联系！',
+            'contact_error': '提交咨询时出错。请重试。'
+        },
+        vn: {
+            'nav_home': 'Trang chủ',
+            'hero_title': 'Kiểm tra sức khỏe cho người nước ngoài,<br>Thoải mái mà không có rào cản ngôn ngữ.',
+            'hero_subtitle': 'Từ việc lỡ lịch hẹn, hướng dẫn khó hiểu đến kết quả chỉ có tiếng Hàn.<br>CHECKIT giải quyết mọi quy trình phi y tế.',
+            'hero_cta': 'Đăng ký tư vấn ngay',
+            'service_for_title': 'Dịch vụ này dành cho ai?',
+            'individual_title': 'Khách hàng cá nhân',
+            'individual_desc': 'Hỗ trợ cá nhân người nước ngoài sinh sống hoặc làm việc tại Hàn Quốc<br>kiểm tra sức khỏe mà không gặp rào cản ngôn ngữ.',
+            'corporate_title': 'Khách hàng doanh nghiệp',
+            'corporate_desc': 'Quản lý kiểm tra sức khỏe định kỳ cho nhân viên nước ngoài dễ dàng và hiệu quả,<br>giảm bớt gánh nặng quản lý y tế của doanh nghiệp.',
+            'learn_more': 'Tìm hiểu thêm',
+            'platform_title': 'Nền tảng CHECKIT',
+            'platform_status_title': 'Trạng thái dịch vụ của tôi',
+            'platform_current_step': 'Giai đoạn hiện tại',
+            'platform_details': 'Chi tiết',
+            'platform_manager_title': 'Đã kết nối với quản lý riêng',
+            'platform_chat_title': 'Chat hỗ trợ 1:1',
+            'platform_chat_placeholder': 'Nhập tin nhắn...',
+            'platform_chat_send': 'Gửi',
+            'platform_close': 'Đóng',
+            'contact_success': 'Yêu cầu của bạn đã được gửi thành công. Quản lý sẽ liên hệ sớm!',
+            'contact_error': 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại.'
         }
     };
 
@@ -850,6 +896,48 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         handleContactForm();
+
+        // --- Package Selection Interaction ---
+        const handlePackageSelection = () => {
+            document.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.package-card button');
+                if (!btn) return;
+
+                const user = auth.currentUser;
+                if (!user) {
+                    alert(currentLang === 'ko' ? "먼저 로그인이 필요합니다." : "Please login first.");
+                    showLoginModal();
+                    return;
+                }
+
+                const card = btn.closest('.package-card');
+                const planName = card.querySelector('h3').textContent;
+                
+                btn.disabled = true;
+                btn.textContent = '...';
+
+                try {
+                    await db.collection("users").doc(user.uid).update({
+                        selectedPlan: planName,
+                        planUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    // Update initial step in process
+                    await db.collection("user_process").doc(user.uid).update({
+                        "steps.0.description": `${planName} 선택 완료. 상담을 시작합니다.`
+                    });
+
+                    alert(currentLang === 'ko' ? `${planName}이 선택되었습니다! 마이페이지에서 확인하세요.` : `${planName} selected! Check your status in My Page.`);
+                    window.location.href = 'individual.html?view=mypage';
+                } catch (err) {
+                    console.error("Plan update error:", err);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = translations[currentLang]['learn_more'] || "Select";
+                }
+            });
+        };
+        handlePackageSelection();
 
         const showLoginModal = () => {
             let overlay = document.getElementById('login-modal-overlay');

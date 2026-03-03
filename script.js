@@ -546,34 +546,34 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_title': 'Final Reporting & Data Update',
             'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
             'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
-            'corp_faq_title': 'Frequently Asked Questions (FAQ)',
-            'corp_faq_subtitle': 'We have gathered the questions most frequently asked by our corporate clients.',
-            'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
-            'corp_faq_a1': 'Yes, you can. CHECKIT is an independent service not tied to any specific hospital. You don’t need to change the hospitals you already use; we simply fill the communication and management gap between you and the hospital.',
-            'corp_faq_q2': 'Is there any risk of violating medical laws?',
-            'corp_faq_a2': 'CHECKIT strictly prohibits acts that violate medical law, such as patient solicitation or referral. We focus solely on non-medical administrative support like booking, interpretation, and simple translation of result sheets, making it legally very safe.',
-            'corp_faq_q3': 'How is worker personal information managed?',
-            'corp_faq_a3': 'We comply with personal information protection laws in every process. Lists are received via secure methods and safely disposed of according to regulations once the necessary period after the check-up has passed.',
-            'corp_faq_q4': 'Does implementation require complex system integration?',
-            'corp_faq_a4': 'Not at all. Implementation is possible immediately with just a candidate list and simple schedule coordination, without the need for any software installation or system linking.',
-            'corp_faq_q5': 'What level of translation is provided for result sheets?',
-            'corp_faq_a5': 'We provide a core summary in the worker’s native language of the Korean result sheet, which is often filled with technical terms. This is a simple translation for the purpose of conveying information, ensuring the worker’s right to know, rather than a medical opinion.',
-            'contact_form_company_label': 'Company Name',
-            'chatbot_header': 'Check Bot',
-            'chatbot_placeholder': 'Type a message...',
-            'chatbot_greeting': 'Hello! Do you have any questions about CHECKIT? Please select a question below or type your own.',
-            'greeting_response': 'Hello! Nice to meet you. If you have any questions about CHECKIT, feel free to select a question below or ask me directly.',
-            'q1': 'How do I make a reservation?',
-            'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
-            'q2': 'Are you contracted with hospitals/medical staff?',
-            'a2': 'No. CHECKIT does not have contractual relationships with any specific hospitals. We help you choose the most suitable hospital by providing objective information from your perspective. Your health and satisfaction are our top priorities.',
-            'q3': 'Do you perform medical acts or arrange treatments?',
-            'a3': 'No, CHECKIT complies with the Medical Service Act and does not perform any medical acts or arrange treatments. We are a service that helps you focus solely on your health check-up by concentrating on \'non-medical processes\' such as hospital reservations, interpretation, and result translation.',
-            'q4': 'What kind of help can I get on the day of the check-up?',
-            'a4': 'On the day of your check-up, your Check Bot manager is with you every step of the way so you don\'t feel alone due to language barriers. We provide real-time support for all communication processes within the hospital, such as registration, consultations, and payment, helping you focus comfortably on your check-up without inconvenience or loneliness caused by language issues.',
-            'q5': 'How are the results delivered?',
-            'a5': 'Once you provide us with the Korean results you received from the hospital, we will provide a simple translation and summary of the key contents in your native language. To comply with medical law, we do not provide medical opinions or detailed explanations.',
-            'unsupported_input': 'That\'s an interesting question! I can only provide pre-set answers for now, but if you inquire through \'Apply for a Consultation\', a professional manager will kindly guide you.'
+            'corp_faq_title': '자주 묻는 질문 (FAQ)',
+            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
+            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
+            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
+            'corp_faq_q2': '의료법 위반 소지는 없나요?',
+            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 \'비의료적 행정 지원\'에만 집중하므로 법적으로 매우 안전합니다.',
+            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
+            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
+            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
+            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
+            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
+            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
+            'contact_form_company_label': '기업명',
+            'chatbot_header': 'Check봇',
+            'chatbot_placeholder': '메시지를 입력하세요...',
+            'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
+            'greeting_response': '안녕하세요! 만나서 반가워요. CHECKIT에 대해 궁금한 점이 있으시면 아래 질문을 선택하거나 직접 물어보세요.',
+            'q1': '예약은 어떻게 하나요?',
+            'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
+            'q2': '병원/의료인과 계약된 구조인가요?',
+            'a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
+            'q3': '의료 행위나 진료 알선을 하나요?',
+            'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
+            'q4': '검진 당일 어떤 도움을 받을 수 있나요?',
+            'a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
+            'q5': '결과지는 어떻게 전달되나요?',
+            'a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
+            'unsupported_input': 'That\'s an interesting question! Hiện tại tôi chỉ có thể cung cấp các câu trả lời được cài sẵn, nhưng nếu bạn yêu cầu thông qua \'Đăng ký tư vấn\', một người quản lý chuyên nghiệp sẽ vui lòng hướng dẫn bạn.'
         }
     };
 
@@ -863,6 +863,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const initUserDoc = async (user) => {
                 try {
+                    // 1. 규칙에서 요구하는 users 문서 생성 (필수)
+                    await db.collection("users").doc(user.uid).set({
+                        role: "user",
+                        email: user.email,
+                        companyId: ""
+                    }, { merge: true });
+
+                    // 2. 서비스 프로세스 문서 생성
                     const docRef = db.collection("user_process").doc(user.uid);
                     const docSnap = await docRef.get();
                     if (!docSnap.exists) {
@@ -932,10 +940,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const docSnap = await docRef.get();
                 if (docSnap.exists) {
                     steps = docSnap.data().steps;
+                } else {
+                    // 문서가 없으면 생성 시도 (구 규칙 준수)
+                    const uRef = db.collection("users").doc(user.uid);
+                    const uSnap = await uRef.get();
+                    if (!uSnap.exists) {
+                        await uRef.set({ role: "user", email: user.email, companyId: "" });
+                    }
+                    await docRef.set({ steps: steps });
                 }
             } catch (error) {
                 console.error("Firestore Read Error:", error);
-                // 에러 발생 시 안내 문구 추가 (하지만 기본 데이터로 렌더링 진행)
                 setTimeout(() => {
                     const notice = document.createElement('div');
                     notice.style.cssText = "position:fixed; bottom:20px; left:20px; background:rgba(231, 76, 60, 0.9); color:#fff; padding:10px 20px; border-radius:8px; z-index:3000; font-size:0.85rem;";

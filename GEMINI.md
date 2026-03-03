@@ -175,3 +175,8 @@ The following files and design elements are **LOCKED**. The AI must **NOT** modi
     *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
     *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
     *   **Preserve**: The specific card-less design for text sections and the image-only card design for the expectation section.
+
+*   **`index.html` (Main Page)**: The entire main page design, including the hero section, Why CHECKIT section, process section, testimonials section, and contact section, is finalized.
+    *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
+    *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
+    *   **Preserve**: The specific hero section styling (white text), card layouts, and responsive behaviors.

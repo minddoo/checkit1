@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact_subtitle_new': 'CHECKIT의 전문가 팀이 최적의 솔루션을 제안해 드립니다.',
             'corporate_page_title': '기업 고객 토탈 솔루션',
             'individual_page_title': '개인 고객 서비스',
+            'individual_page_subtitle': 'CHECKIT은 한국에 거주하거나 방문하는 모든 외국인 개인이<br><br>언어의 장벽 없이 최상의 건강검진을 받을 수 있도록 돕습니다.',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {

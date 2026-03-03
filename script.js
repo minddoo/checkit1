@@ -708,6 +708,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="form-group-auth" style="display:flex; flex-direction:column; gap:10px;">
                                 <input type="email" id="auth-email" placeholder="Email Address" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
                                 <input type="password" id="auth-pass" placeholder="Password" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
+                                <input type="text" id="auth-admin-key" placeholder="Admin Security KEY (Optional)" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0;">
                             </div>
                             <button id="btn-email-action" class="btn-auth btn-primary" style="background:var(--primary-color); color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem;">Sign In</button>
                             <div class="auth-utils" style="margin-top:10px; display:flex; flex-direction:column; gap:12px; align-items:center;">
@@ -725,6 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailView = document.getElementById('auth-email-view');
             const emailInput = document.getElementById('auth-email');
             const passInput = document.getElementById('auth-pass');
+            const keyInput = document.getElementById('auth-admin-key');
             const actionBtn = document.getElementById('btn-email-action');
             const modeToggle = document.getElementById('toggle-auth-mode');
             const tagline = document.getElementById('auth-tagline');
@@ -756,12 +758,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
                 tagline.textContent = isSignUp ? 'Join CHECKIT for better healthcare' : 'Experience Global Healthcare Standard';
+                keyInput.style.display = isSignUp ? 'none' : 'block';
             };
 
             actionBtn.onclick = async () => {
-                const email = emailInput.value.trim(), pass = passInput.value;
+                const email = emailInput.value.trim(), pass = passInput.value, key = keyInput.value.trim();
                 if(!email || !pass) return alert("Please enter both email and password.");
-                if(pass.length < 6) return alert("Password should be at least 6 characters.");
                 
                 actionBtn.disabled = true;
                 actionBtn.textContent = isSignUp ? 'Creating...' : 'Signing In...';
@@ -771,8 +773,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         await auth.createUserWithEmailAndPassword(email, pass);
                         showSuccessState("Welcome to CHECKIT!", "Your journey to better healthcare starts here.");
                     } else {
-                        await auth.signInWithEmailAndPassword(email, pass);
-                        showSuccessState("Welcome Back!", "Good to see you again.");
+                        const userCredential = await auth.signInWithEmailAndPassword(email, pass);
+                        const user = userCredential.user;
+                        const userDoc = await db.collection("users").doc(user.uid).get();
+                        const userData = userDoc.data() || { role: 'user' };
+
+                        // Admin Verification Logic
+                        if (userData.role === "super_admin" || userData.role === "company_admin") {
+                            const masterKey = "CHECKIT_MASTER_2026";
+                            const companyKey = "COMPANY_KEY_2026";
+
+                            if ((userData.role === "super_admin" && key === masterKey) || 
+                                (userData.role === "company_admin" && key === companyKey)) {
+                                showSuccessState("Admin Verified", "Entering secure portal...");
+                            } else {
+                                await auth.signOut();
+                                actionBtn.disabled = false;
+                                actionBtn.textContent = 'Sign In';
+                                return alert("Invalid Admin Security KEY.");
+                            }
+                        } else {
+                            showSuccessState("Welcome Back!", "Good to see you again.");
+                        }
                     }
                 } catch (err) {
                     console.error("Auth Error:", err);

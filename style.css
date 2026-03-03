@@ -225,49 +225,62 @@ body {
     margin-bottom: 80px;
 }
 
+.expectation-list {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
 .expectation-item {
     display: flex;
-    flex-direction: column; /* Changed to vertical layout */
-    align-items: center;    /* Center items */
-    gap: 20px;              /* Adjust gap */
-    text-align: center;     /* Center text within items */
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    text-align: center;
+    padding: 40px;
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease;
 }
 
-.expectation-item + .expectation-item {
-    margin-top: 100px; /* Increase space between items */
-}
-
-.expectation-text {
-    max-width: 100%;
-    flex-basis: auto;
+.expectation-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
 }
 
 .expectation-image {
-    max-width: 100%;
-    flex-basis: auto;
-    order: -1; /* Image always comes first */
+    width: 100%;
+    max-width: 800px;
 }
 
 .expectation-image img {
     width: 100%;
-    max-width: 750px; /* Set a max-width for the image */
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    margin: 0 auto;
-    height: 300px; /* 이미지 높이 고정 */
-    object-fit: contain; /* 이미지 비율 유지하며 채우기 */
+    height: auto;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.expectation-text {
+    max-width: 700px;
 }
 
 .expectation-item-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--primary-dark);
 }
 
 .expectation-item-desc {
-    font-size: 1.1rem;
-    color: var(--text-light);
-    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    line-height: 1.7;
+    word-break: keep-all;
 }
 
 /* ------------------- 
@@ -1391,6 +1404,20 @@ html[lang="vn"] #corporate-hero .hero-title {
     /* Floating CTA */
     .cta-button-primary {
         min-height: 44px !important;
+    }
+
+    /* Expectation Section Mobile Adjustment */
+    .expectation-list {
+        gap: 40px !important;
+    }
+    .expectation-item {
+        padding: 20px !important;
+    }
+    .expectation-item-title {
+        font-size: 1.5rem !important;
+    }
+    .expectation-item-desc {
+        font-size: 1rem !important;
     }
 }
 

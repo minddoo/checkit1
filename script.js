@@ -132,6 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature12': '병원 소통용 템플릿',
             'package3_feature13': '일정 변경 지원 (최대 3회 포함)',
             'package3_recommend_desc': '가장 안전하고 완벽하게 관리받고 싶은 분.',
+            'price_structure_title': '왜 외국인은 한국에서 동일한 건강검진에 더 많은 비용을 지불할까요?',
+            'price_structure_q': '저희는 종종 이런 질문을 받습니다. “왜 당신의 옵션이 병원에서 제공하는 것보다 저렴한가요?”',
+            'price_structure_a_title': '간단한 답변',
+            'price_structure_a_text': '검사가 달라서가 아닙니다. 가격 구조 때문입니다.',
+            'price_structure_reality_title': '실제 많은 병원에서 일어나는 일',
+            'price_structure_reality_text': '대부분의 병원은 별도의 “외국인 패키지”를 만듭니다. 이 패키지에는 현지인이 지불하지 않는 서비스가 포함되어 총 가격이 올라갑니다.',
+            'price_structure_example_title': '외국인 고객에게서 흔히 볼 수 있는 상황',
+            'price_structure_example_text': '한 고객은 외국인 패키지에 대해 1,800,000원을 견적 받았습니다. 저희의 안내를 통해 동일한 검사를 1,050,000원에 예약했습니다.',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {

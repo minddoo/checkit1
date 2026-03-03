@@ -30,8 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_user_list': '활성 고객 리스트',
             'admin_select_user': '고객을 선택하여 관리를 시작하세요.',
             'admin_status_updated': '상태가 업데이트되었습니다.',
-            'reality_overtime_title': '글로는 사소해 보이는 문제들. 현실은 이렇습니다.'
-            // ... (기타 상세 번역 데이터는 내부 로직에서 data-lang-key로 유지됨)
+            'corp_admin_title': '기업 보건 관리 대시보드',
+            'corp_admin_subtitle': '소속 임직원의 건강검진 진행 현황을 실시간으로 확인하세요.',
+            'corp_admin_table_name': '이메일',
+            'corp_admin_table_plan': '선택 패키지',
+            'corp_admin_table_status': '현재 단계',
+            'corp_admin_no_employees': '현재 등록된 임직원이 없습니다.'
         },
         en: {
             'nav_home': 'Home',
@@ -60,7 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
             'admin_tab_leads': 'Inquiries',
             'admin_user_list': 'Active Client List',
             'admin_select_user': 'Select a client to start management.',
-            'admin_status_updated': 'Status Updated!'
+            'admin_status_updated': 'Status Updated!',
+            'corp_admin_title': 'Corporate Health Dashboard',
+            'corp_admin_subtitle': 'Monitor your employees\' health check-up status in real-time.',
+            'corp_admin_table_name': 'Email',
+            'corp_admin_table_plan': 'Selected Plan',
+            'corp_admin_table_status': 'Current Step',
+            'corp_admin_no_employees': 'No employees found.'
         },
         cn: {
             'nav_home': '首页',
@@ -139,12 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-        // 2. Auth Initialization
+        // 2. Auth & User Init
         const initUserDoc = async (user) => {
             const uRef = db.collection("users").doc(user.uid);
             const uSnap = await uRef.get();
             if (!uSnap.exists) {
-                await uRef.set({ role: "user", email: user.email, createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                await uRef.set({ role: "user", email: user.email, companyId: "", createdAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
                 await db.collection("user_process").doc(user.uid).set({
                     steps: [
                         { title: "상담 및 신청", description: "접수 대기 중입니다.", status: "active", icon: "fas fa-file-alt" },
@@ -156,8 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // 3. Platform & Admin Dashboard
-        let platformSub = null, chatSub = null, leadsSub = null;
+        // 3. Platform Dashboards (User, Admin, Corp Admin)
+        let platformSub = null, chatSub = null, leadsSub = null, notificationSub = null;
 
         const renderMyPage = async (user) => {
             const overlay = document.getElementById('mypage-overlay');
@@ -168,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const userData = uSnap.data() || { role: "user" };
 
             if (userData.role === 'super_admin') renderAdminDashboard(user);
+            else if (userData.role === 'company_admin') renderCorporateDashboard(user, userData.companyId);
             else renderUserDashboard(user);
         };
 
@@ -234,6 +245,53 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const renderCorporateDashboard = async (admin, companyId) => {
+            const overlay = document.getElementById('mypage-overlay');
+            const lang = translations[currentLang];
+            overlay.innerHTML = `
+                <div class="mypage-header">
+                    <h2>${lang['corp_admin_title']}</h2>
+                    <button id="close-mypage" class="lang-btn">${lang['platform_close']}</button>
+                </div>
+                <div class="container" style="padding:40px 0;">
+                    <div class="info-panel" style="text-align:left;">
+                        <h3>${lang['corp_admin_subtitle']}</h3>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>${lang['corp_admin_table_name']}</th>
+                                        <th>${lang['corp_admin_table_plan']}</th>
+                                        <th>${lang['corp_admin_table_status']}</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corp-user-list">
+                                    <tr><td colspan="3">Loading employee data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
+
+            platformSub = db.collection("users").where("companyId", "==", companyId).onSnapshot(async snap => {
+                const list = document.getElementById('corp-user-list');
+                list.innerHTML = "";
+                if(snap.empty) { list.innerHTML = `<tr><td colspan="3">${lang['corp_admin_no_employees']}</td></tr>`; return; }
+                
+                snap.forEach(async doc => {
+                    const u = doc.data();
+                    const pSnap = await db.collection("user_process").doc(doc.id).get();
+                    const pData = pSnap.data();
+                    const activeStep = pData?.steps.find(s => s.status === 'active')?.title || "Pending";
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${u.email}</td><td>${u.selectedPlan || '-'}</td><td><span class="status-pill active">${activeStep}</span></td>`;
+                    list.appendChild(tr);
+                });
+            });
+        };
+
         const selectUserForAdmin = (uid, email) => {
             const view = document.getElementById('admin-content-view');
             view.style.color = 'inherit'; view.style.justifyContent = 'flex-start';
@@ -261,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 snap.forEach(mDoc => {
                     const m = mDoc.data();
                     const d = document.createElement('div');
-                    d.className = `message ${m.sender === 'user' ? 'bot' : 'user'}`; // Inverted for admin
+                    d.className = `message ${m.sender === 'user' ? 'bot' : 'user'}`;
                     d.textContent = m.text; msgsEl.appendChild(d);
                 });
                 msgsEl.scrollTop = msgsEl.scrollHeight;
@@ -341,7 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const initAuthNav = () => {
             const nav = document.querySelector('#language-switcher');
             let btn = document.getElementById('platform-auth-btn');
-            if(!btn){ btn = document.createElement('button'); btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
+            if(!btn){ btn = document.createElement('button'); btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); 
+                const badge = document.createElement('span'); badge.className='notification-badge'; badge.id='msg-badge'; nav.appendChild(badge);
+            }
             
             auth.onAuthStateChanged(user => {
                 if(user){
@@ -352,6 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         lo.onclick = () => auth.signOut().then(() => location.reload());
                         nav.appendChild(lo);
                     }
+                    // Message Notification Logic
+                    notificationSub = db.collection("user_process").doc(user.uid).collection("messages").where("sender", "==", "bot").orderBy("timestamp", "desc").limit(1).onSnapshot(snap => {
+                        const badge = document.getElementById('msg-badge');
+                        if(!snap.empty && !document.body.classList.contains('platform-view-active')) {
+                            badge.style.display = 'block'; badge.innerText = "N";
+                        } else { badge.style.display = 'none'; }
+                    });
                 } else {
                     btn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
                     btn.onclick = () => {
@@ -359,13 +426,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         auth.signInWithPopup(p).then(res => initUserDoc(res.user));
                     };
                     document.getElementById('logout-btn')?.remove();
+                    if(notificationSub) notificationSub();
                 }
             });
         };
         initAuthNav();
     }
 
-    // --- Package Selection Interaction ---
+    // --- Package Selection ---
     document.addEventListener('click', async (e) => {
         const btn = e.target.closest('.package-card button');
         if(!btn || typeof firebase === 'undefined') return;

@@ -49,10 +49,26 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **Metadata Tracking:** Captures email, phone, company, message, timestamp, source URL, and user language preference.
 
 ### **Data Schema (Firestore)**
-*   **`users/{uid}`**: `{ role: "user" | "admin", email: string, companyId: string }`
-*   **`user_process/{uid}`**: `{ steps: [{ title, description, status, icon }] }`
+*   **`users/{uid}`**: `{ role: "user" | "super_admin" | "company_admin", email: string, companyId: string, fullName: string, nationality: string, dob: string, onboardingComplete: boolean, managerNotes: string }`
+*   **`user_process/{uid}`**: 
+    *   `name`: string
+    *   `companyId`: string
+    *   `siteId`: string
+    *   `status`: "pending" | "reserved" | "completed" | "expired"
+    *   `examDate`: string (YYYY-MM-DD)
+    *   `expiryDate`: string (YYYY-MM-DD)
+    *   `language`: string (KO, EN, CN, VN)
+    *   `updatedAt`: serverTimestamp
+    *   `steps`: [{ title, description, status, icon }] // Legacy support
 *   **`user_process/{uid}/messages/{msgId}`**: `{ text, sender: "user" | "bot", timestamp: serverTimestamp }`
-*   **`contact_inquiries/{id}`**: `{ email, phone, company, message, timestamp, source, language }`
+*   **`contact_inquiries/{id}`**: `{ email, phone, company, message, timestamp, source, language, status: "new" | "resolved" }`
+
+### **Corporate Portal (Enriched)**
+*   **Real-time Dashboard:** Displays summary statistics (Total, Pending, Reserved, Completed, Expired).
+*   **Employee Management Table:** Detailed view of employee status, site assignments, and examination dates.
+*   **Search & Filtering:** Dynamic filtering by name, site ID, and service status.
+*   **Reporting:** CSV export functionality for corporate administrators to download health check-up status reports.
+*   **Secure Access:** Promotion to `company_admin` via specialized security keys during authentication.
 
 ### **Security Rules**
 *   **Role-Based Access Control (RBAC)**: Defined in `firestore.rules`.

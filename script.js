@@ -576,24 +576,129 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderCorporate = (user, companyId) => {
             const overlay = document.getElementById('mypage-overlay'), lang = translations[currentLang];
-            overlay.innerHTML = `<div class="mypage-header"><h2>Corporate Portal</h2>
-                <button class="btn-export" onclick="downloadCSV('${companyId}')"><i class="fas fa-download"></i> ${lang['btn_export_csv']}</button>
-                <button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="container" style="padding:40px 0;"><div class="info-panel" style="margin-bottom:20px; text-align:center;"><canvas id="corpChart" style="max-height:200px;"></canvas><h4>Team Health Progress</h4></div>
-                <div class="info-panel"><h3>Employee List</h3><div class="admin-table-container"><table class="admin-table"><thead><tr><th>Email</th><th>Name</th><th>Status</th></tr></thead><tbody id="corp-list"></tbody></table></div></div></div>`;
+            overlay.innerHTML = `
+                <div class="mypage-header">
+                    <h2>Corporate Portal: ${companyId}</h2>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-export" id="btn-csv-export"><i class="fas fa-download"></i> ${lang['btn_export_csv'] || 'Download CSV'}</button>
+                        <button id="close-mypage" class="lang-btn">Close</button>
+                    </div>
+                </div>
+                <div class="container" style="padding:40px 0;">
+                    <div id="corp-stats-container" class="corp-stats-grid"></div>
+                    
+                    <div class="corp-filter-bar">
+                        <input type="text" id="corp-search" class="corp-search" placeholder="Search by name or site ID...">
+                        <select id="corp-status-filter" class="corp-select">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="completed">Completed</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+
+                    <div class="info-panel">
+                        <h3>Employee Management List</h3>
+                        <div class="admin-table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Site ID</th>
+                                        <th>Status</th>
+                                        <th>Exam Date</th>
+                                        <th>Expiry Date</th>
+                                        <th>Lang</th>
+                                        <th>Updated</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corp-list"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>`;
+
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
-            platformSub = db.collection("users").where("companyId", "==", companyId).onSnapshot(async snap => {
-                const list = document.getElementById('corp-list'); if(!list) return;
-                list.innerHTML = ""; let completed = 0;
-                const rows = await Promise.all(snap.docs.map(async d => {
-                    const u = d.data(), p = await db.collection("user_process").doc(d.id).get();
-                    const activeStep = p.data()?.steps.find(s => s.status === 'active')?.title || "Done";
-                    if(activeStep === "Done") completed++;
-                    return `<tr><td>${u.email}</td><td>${u.fullName || '-'}</td><td><span class="status-pill active">${activeStep}</span></td></tr>`;
-                }));
-                list.innerHTML = rows.join('');
-                const ctx = document.getElementById('corpChart');
-                if(ctx) new Chart(ctx, { type: 'bar', data: { labels: ['Progress'], datasets: [{ label: 'Completed', data: [completed], backgroundColor: '#2ECC71' }, { label: 'Pending', data: [snap.size - completed], backgroundColor: '#eee' }] }, options: { indexAxis: 'y', scales: { x: { stacked: true, max: snap.size }, y: { stacked: true } } } });
+            
+            const listEl = document.getElementById('corp-list');
+            const statsEl = document.getElementById('corp-stats-container');
+            const searchInp = document.getElementById('corp-search');
+            const statusFilt = document.getElementById('corp-status-filter');
+            const exportBtn = document.getElementById('btn-csv-export');
+
+            let allData = [];
+
+            const renderUI = () => {
+                const search = searchInp.value.toLowerCase();
+                const status = statusFilt.value;
+
+                const filtered = allData.filter(d => {
+                    const matchesSearch = !search || d.name?.toLowerCase().includes(search) || d.siteId?.toLowerCase().includes(search);
+                    const matchesStatus = status === 'all' || d.status === status;
+                    return matchesSearch && matchesStatus;
+                });
+
+                listEl.innerHTML = filtered.map(d => `
+                    <tr>
+                        <td><strong>${d.name || 'Unknown'}</strong></td>
+                        <td>${d.siteId || '-'}</td>
+                        <td><span class="status-pill ${d.status || 'pending'}">${d.status || 'pending'}</span></td>
+                        <td>${d.examDate || '-'}</td>
+                        <td>${d.expiryDate || '-'}</td>
+                        <td>${d.language || 'KO'}</td>
+                        <td><small>${d.updatedAt ? new Date(d.updatedAt.seconds * 1000).toLocaleDateString() : '-'}</small></td>
+                    </tr>
+                `).join('');
+
+                // Update Stats
+                const stats = { pending: 0, reserved: 0, completed: 0, expired: 0 };
+                allData.forEach(d => { if(stats[d.status]) stats[d.status]++; else if(!d.status) stats.pending++; });
+                
+                statsEl.innerHTML = `
+                    <div class="corp-stat-card">
+                        <span class="corp-stat-val">${allData.length}</span>
+                        <span class="corp-stat-label">Total Employees</span>
+                    </div>
+                    <div class="corp-stat-card pending">
+                        <span class="corp-stat-val">${stats.pending}</span>
+                        <span class="corp-stat-label">Pending</span>
+                    </div>
+                    <div class="corp-stat-card reserved">
+                        <span class="corp-stat-val">${stats.reserved}</span>
+                        <span class="corp-stat-label">Reserved</span>
+                    </div>
+                    <div class="corp-stat-card completed">
+                        <span class="corp-stat-val">${stats.completed}</span>
+                        <span class="corp-stat-label">Completed</span>
+                    </div>
+                    <div class="corp-stat-card expired">
+                        <span class="corp-stat-val">${stats.expired}</span>
+                        <span class="corp-stat-label">Expired</span>
+                    </div>
+                `;
+            };
+
+            searchInp.oninput = renderUI;
+            statusFilt.onchange = renderUI;
+            exportBtn.onclick = () => {
+                const headers = ["Name", "SiteID", "Status", "ExamDate", "ExpiryDate", "Language", "UpdatedAt"];
+                const rows = allData.map(d => [
+                    d.name, d.siteId, d.status, d.examDate, d.expiryDate, d.language, 
+                    d.updatedAt ? new Date(d.updatedAt.seconds * 1000).toISOString() : ""
+                ]);
+                let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `checkit_report_${companyId}.csv`);
+                document.body.appendChild(link);
+                link.click();
+            };
+
+            platformSub = db.collection("user_process").where("companyId", "==", companyId).onSnapshot(snap => {
+                allData = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+                renderUI();
             });
         };
 
@@ -739,29 +844,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const handleAdminPromotion = async (user, key) => {
                 if (!key) return true; 
                 const masterKey = "CHECKIT_MASTER_2026";
-                const companyKey = "COMPANY_KEY_2026";
-
-                // Fire-and-forget DB updates to prevent blocking/errors
+                
                 if (key === masterKey) {
-                    db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true }).catch(console.warn);
+                    await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
                     showSuccessState("Master Verified", "Entering Super Admin Portal...");
                     return true;
-                } else if (key === companyKey) {
-                    // Try to get companyId, default to A if fails, don't wait/block
-                    db.collection("users").doc(user.uid).get()
-                        .then(snap => {
-                            const cid = snap.data()?.companyId || "COMPANY_A";
-                            db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
-                        })
-                        .catch(() => {
-                            db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: "COMPANY_A" }, { merge: true });
-                        });
+                } else if (key.startsWith("COMP_")) {
+                    const customCompanyId = key.replace("COMP_", "");
+                    if (!customCompanyId) {
+                        alert("기업 아이디를 입력해주세요. (예: COMP_SAMSUNG)");
+                        return false;
+                    }
+                    await db.collection("users").doc(user.uid).set({ 
+                        role: "company_admin", 
+                        companyId: customCompanyId 
+                    }, { merge: true });
                     
-                    showSuccessState("Corporate Verified", "Entering Company Portal...");
+                    showSuccessState("Corporate Verified", `Entering ${customCompanyId} Portal...`);
                     return true;
                 } else {
+                    const companyKey = "COMPANY_KEY_2026"; // Legacy support
+                    if (key === companyKey) {
+                        const snap = await db.collection("users").doc(user.uid).get();
+                        const cid = snap.data()?.companyId || "COMPANY_A";
+                        await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                        showSuccessState("Corporate Verified", "Entering Company Portal...");
+                        return true;
+                    }
                     await auth.signOut();
-                    alert("Admin Security KEY가 일치하지 않습니다."); // This alert is intentional logic
+                    alert("Admin Security KEY가 일치하지 않습니다.");
                     return false;
                 }
             };

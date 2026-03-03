@@ -48,19 +48,42 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 *   **Centralized Inquiries:** All "Contact Us" submissions are saved to the `contact_inquiries` collection.
 *   **Metadata Tracking:** Captures email, phone, company, message, timestamp, source URL, and user language preference.
 
-### **Data Schema (Firestore)**
-*   **`users/{uid}`**: `{ role: "user" | "super_admin" | "company_admin", email: string, companyId: string, fullName: string, nationality: string, dob: string, onboardingComplete: boolean, managerNotes: string }`
-*   **`user_process/{uid}`**: 
-    *   `name`: string
-    *   `companyId`: string
-    *   `siteId`: string
-    *   `status`: "pending" | "reserved" | "completed" | "expired"
-    *   `examDate`: string (YYYY-MM-DD)
-    *   `expiryDate`: string (YYYY-MM-DD)
-    *   `language`: string (KO, EN, CN, VN)
-    *   `updatedAt`: serverTimestamp
-    *   `steps`: [{ title, description, status, icon }] // Legacy support
-*   **`user_process/{uid}/messages/{msgId}`**: `{ text, sender: "user" | "bot", timestamp: serverTimestamp }`
+### **Data Schema (Firestore) - v2.0 (March 2026)**
+
+#### **`users/{uid}`**
+*   `role`: "user" | "super_admin" | "company_admin"
+*   `email`: string
+*   `companyId`: string (For corporate admins)
+*   `fullName`: string
+*   `nationality`: string
+*   `dob`: string
+*   `onboardingComplete`: boolean
+
+#### **`user_process/{docId}` (Restructured)**
+*   **Basic Info**
+    *   `name`: string (Employee name)
+    *   `companyId`: string (SAMSUNG, HYUNDAI, etc.)
+    *   `site`: string (Worksite/Branch location)
+*   **Schedule (Timestamps)**
+    *   `reservationStart`: timestamp (Start of booking window)
+    *   `reservationEnd`: timestamp (End of booking window)
+    *   `examStart`: timestamp (Actual examination start date)
+    *   `examEnd`: timestamp (Actual examination end date)
+*   **Service Details**
+    *   `contactMethod`: string (Prefered communication channel)
+    *   `hospital`: string (Assigned hospital name)
+    *   `examType`: string (e.g., General, Special, New-hire)
+    *   `supportAmount`: number (Subsidy/Support amount in KRW)
+*   **Administrative**
+    *   `requiredDocument`: string (List of documents needed)
+    *   `specialNote`: string (Notes for the manager/admin)
+    *   `status`: string (pending, reserved, completed, expired)
+    *   `updatedAt`: timestamp (Auto-updated on change)
+
+#### **`user_process/{docId}/messages/{msgId}`**
+*   `text`: string
+*   `sender`: "user" | "bot"
+*   `timestamp`: serverTimestamp
 *   **`contact_inquiries/{id}`**: `{ email, phone, company, message, timestamp, source, language, status: "new" | "resolved" }`
 
 ### **Corporate Portal (Enriched)**

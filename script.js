@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="mypage-header">
                     <h2>Corporate Portal: ${companyId}</h2>
                     <div style="display:flex; gap:10px;">
-                        <button class="btn-export" id="btn-csv-export"><i class="fas fa-download"></i> ${lang['btn_export_csv'] || 'Download CSV'}</button>
+                        <button class="btn-export" id="btn-csv-export"><i class="fas fa-download"></i> 리포트 다운로드 (CSV)</button>
                         <button id="close-mypage" class="lang-btn">Close</button>
                     </div>
                 </div>
@@ -589,33 +589,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <div class="corp-filter-bar">
                         <div style="display:flex; gap:10px; flex-grow:1;">
-                            <input type="text" id="corp-search" class="corp-search" placeholder="Search by name or site ID...">
+                            <input type="text" id="corp-search" class="corp-search" placeholder="직원 성명 또는 현장 검색...">
                             <select id="corp-site-filter" class="corp-select">
-                                <option value="all">All Sites</option>
+                                <option value="all">모든 현장</option>
                             </select>
                             <select id="corp-status-filter" class="corp-select">
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="reserved">Reserved</option>
-                                <option value="completed">Completed</option>
-                                <option value="expired">Expired</option>
+                                <option value="all">전체 상태</option>
+                                <option value="pending">대기 (Pending)</option>
+                                <option value="reserved">예약 (Reserved)</option>
+                                <option value="completed">완료 (Completed)</option>
+                                <option value="expired">만료 (Expired)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="info-panel">
-                        <h3 id="site-display-title">Employee Management List (All Sites)</h3>
+                        <h3 id="site-display-title">직원 검진 관리 명단</h3>
                         <div class="admin-table-container">
                             <table class="admin-table">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Site ID</th>
-                                        <th>Status</th>
-                                        <th>Exam Date</th>
-                                        <th>Expiry Date</th>
-                                        <th>Lang</th>
-                                        <th>Updated</th>
+                                        <th>성명</th>
+                                        <th>현장</th>
+                                        <th>예약 기간</th>
+                                        <th>검진 기간</th>
+                                        <th>병원 / 타입</th>
+                                        <th>지원금</th>
+                                        <th>상태</th>
+                                        <th>최종 업데이트</th>
                                     </tr>
                                 </thead>
                                 <tbody id="corp-list"></tbody>
@@ -637,73 +638,64 @@ document.addEventListener('DOMContentLoaded', () => {
             let allData = [];
             let availableSites = new Set();
 
+            const formatDate = (ts) => {
+                if(!ts) return '-';
+                try {
+                    const date = ts.seconds ? new Date(ts.seconds * 1000) : new Date(ts);
+                    return date.toISOString().split('T')[0];
+                } catch(e) { return '-'; }
+            };
+
             const renderUI = () => {
                 const search = searchInp.value.toLowerCase();
                 const status = statusFilt.value;
                 const siteId = siteFilt.value;
 
                 const filtered = allData.filter(d => {
-                    const matchesSearch = !search || d.name?.toLowerCase().includes(search) || d.siteId?.toLowerCase().includes(search);
+                    const matchesSearch = !search || d.name?.toLowerCase().includes(search) || d.site?.toLowerCase().includes(search);
                     const matchesStatus = status === 'all' || d.status === status;
-                    const matchesSite = siteId === 'all' || d.siteId === siteId;
+                    const matchesSite = siteId === 'all' || d.site === siteId;
                     return matchesSearch && matchesStatus && matchesSite;
                 });
 
-                siteTitle.textContent = `Employee Management List (${siteId === 'all' ? 'All Sites' : 'Site: ' + siteId})`;
+                siteTitle.textContent = `검진 관리 명단 (${siteId === 'all' ? '전체 현장' : siteId})`;
 
                 listEl.innerHTML = filtered.map(d => `
                     <tr>
                         <td><strong>${d.name || 'Unknown'}</strong></td>
-                        <td>${d.siteId || '-'}</td>
+                        <td><small>${d.site || '-'}</small></td>
+                        <td><small>${formatDate(d.reservationStart)} ~ ${formatDate(d.reservationEnd)}</small></td>
+                        <td><small>${formatDate(d.examStart)} ~ ${formatDate(d.examEnd)}</small></td>
+                        <td>
+                            <div>${d.hospital || '-'}</div>
+                            <small style="color:var(--text-light)">${d.examType || '-'}</small>
+                        </td>
+                        <td>${d.supportAmount ? '₩' + Number(d.supportAmount).toLocaleString() : '-'}</td>
                         <td><span class="status-pill ${d.status || 'pending'}">${d.status || 'pending'}</span></td>
-                        <td>${d.examDate || '-'}</td>
-                        <td>${d.expiryDate || '-'}</td>
-                        <td>${d.language || 'KO'}</td>
-                        <td><small>${d.updatedAt ? new Date(d.updatedAt.seconds * 1000).toLocaleDateString() : '-'}</small></td>
+                        <td><small>${formatDate(d.updatedAt)}</small></td>
                     </tr>
                 `).join('');
 
-                // Update Stats for the CURRENT filtered view (by Site)
+                // Update Stats
                 const stats = { pending: 0, reserved: 0, completed: 0, expired: 0 };
-                const statsSource = siteId === 'all' ? allData : allData.filter(d => d.siteId === siteId);
-                
-                statsSource.forEach(d => { 
-                    const s = d.status || 'pending';
-                    if(stats.hasOwnProperty(s)) stats[s]++; 
-                });
+                const statsSource = siteId === 'all' ? allData : allData.filter(d => d.site === siteId);
+                statsSource.forEach(d => { if(stats.hasOwnProperty(d.status)) stats[d.status]++; });
                 
                 statsEl.innerHTML = `
-                    <div class="corp-stat-card">
-                        <span class="corp-stat-val">${statsSource.length}</span>
-                        <span class="corp-stat-label">Total (${siteId === 'all' ? 'All' : siteId})</span>
-                    </div>
-                    <div class="corp-stat-card pending">
-                        <span class="corp-stat-val">${stats.pending}</span>
-                        <span class="corp-stat-label">Pending</span>
-                    </div>
-                    <div class="corp-stat-card reserved">
-                        <span class="corp-stat-val">${stats.reserved}</span>
-                        <span class="corp-stat-label">Reserved</span>
-                    </div>
-                    <div class="corp-stat-card completed">
-                        <span class="corp-stat-val">${stats.completed}</span>
-                        <span class="corp-stat-label">Completed</span>
-                    </div>
-                    <div class="corp-stat-card expired">
-                        <span class="corp-stat-val">${stats.expired}</span>
-                        <span class="corp-stat-label">Expired</span>
-                    </div>
+                    <div class="corp-stat-card"><span class="corp-stat-val">${statsSource.length}</span><span class="corp-stat-label">전체 대상</span></div>
+                    <div class="corp-stat-card pending"><span class="corp-stat-val">${stats.pending}</span><span class="corp-stat-label">대기</span></div>
+                    <div class="corp-stat-card reserved"><span class="corp-stat-val">${stats.reserved}</span><span class="corp-stat-label">예약</span></div>
+                    <div class="corp-stat-card completed"><span class="corp-stat-val">${stats.completed}</span><span class="corp-stat-label">완료</span></div>
+                    <div class="corp-stat-card expired"><span class="corp-stat-val">${stats.expired}</span><span class="corp-stat-label">만료</span></div>
                 `;
             };
 
             const updateSiteFilter = () => {
                 const currentSelection = siteFilt.value;
-                siteFilt.innerHTML = '<option value="all">All Sites</option>';
+                siteFilt.innerHTML = '<option value="all">모든 현장</option>';
                 Array.from(availableSites).sort().forEach(site => {
                     const opt = document.createElement('option');
-                    opt.value = site;
-                    opt.textContent = site;
-                    siteFilt.appendChild(opt);
+                    opt.value = site; opt.textContent = site; siteFilt.appendChild(opt);
                 });
                 siteFilt.value = availableSites.has(currentSelection) ? currentSelection : 'all';
             };
@@ -713,41 +705,27 @@ document.addEventListener('DOMContentLoaded', () => {
             siteFilt.onchange = renderUI;
 
             exportBtn.onclick = () => {
-                const status = statusFilt.value;
-                const siteId = siteFilt.value;
-                const dataToExport = allData.filter(d => {
-                    const matchesStatus = status === 'all' || d.status === status;
-                    const matchesSite = siteId === 'all' || d.siteId === siteId;
-                    return matchesStatus && matchesSite;
-                });
-
-                const headers = ["Name", "SiteID", "Status", "ExamDate", "ExpiryDate", "Language", "UpdatedAt"];
-                const rows = dataToExport.map(d => [
-                    d.name, d.siteId, d.status, d.examDate, d.expiryDate, d.language, 
-                    d.updatedAt ? new Date(d.updatedAt.seconds * 1000).toISOString() : ""
+                const headers = ["성명", "현장", "예약시작", "예약종료", "검진시작", "검진종료", "통신방법", "병원", "검진타입", "지원금액", "상태"];
+                const rows = allData.map(d => [
+                    d.name, d.site, formatDate(d.reservationStart), formatDate(d.reservationEnd),
+                    formatDate(d.examStart), formatDate(d.examEnd), d.contactMethod, d.hospital,
+                    d.examType, d.supportAmount, d.status
                 ]);
-                let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
-                const encodedUri = encodeURI(csvContent);
+                let csvContent = "\uFEFF" + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", `checkit_report_${companyId}_${siteId}.csv`);
+                link.href = URL.createObjectURL(blob);
+                link.setAttribute("download", `Checkit_Report_${companyId}.csv`);
                 document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
             };
 
-            // Real-time listener for the company's employee data
             platformSub = db.collection("user_process").where("companyId", "==", companyId).onSnapshot(snap => {
                 allData = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
-                
-                // Update site list
-                const oldSiteCount = availableSites.size;
                 availableSites = new Set();
-                allData.forEach(d => { if(d.siteId) availableSites.add(d.siteId); });
-                
-                if (availableSites.size !== oldSiteCount) {
-                    updateSiteFilter();
-                }
-                
+                allData.forEach(d => { if(d.site) availableSites.add(d.site); });
+                updateSiteFilter();
                 renderUI();
             });
         };

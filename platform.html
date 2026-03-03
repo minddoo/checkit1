@@ -71,7 +71,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -86,6 +86,15 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    // Enable Offline Persistence
+    enableIndexedDbPersistence(db).catch((err) => {
+        if (err.code == 'failed-precondition') {
+            console.warn("Persistence failed: Multiple tabs open.");
+        } else if (err.code == 'unimplemented') {
+            console.warn("Persistence is not supported by this browser.");
+        }
+    });
 
     const loginSection = document.getElementById("loginSection");
     const customerSection = document.getElementById("customerSection");
@@ -130,7 +139,6 @@
         if (!user) {
             resetUI();
         } else {
-            // Auto-login persistence check
             const userDoc = await getDoc(doc(db, "users", user.uid));
             const userData = userDoc.exists() ? userDoc.data() : { role: "user" };
             if (userData.role === "user") showCustomer(user.uid);
@@ -157,7 +165,8 @@
                     </div>`;
             }
         } catch (err) {
-            document.getElementById("customerData").innerHTML = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
+            console.error("Fetch error:", err);
+            document.getElementById("customerData").innerHTML = `<p>데이터 로드 오류: ${err.message}</p>`;
         }
     }
 
@@ -177,7 +186,8 @@
             });
             document.getElementById("companyData").innerHTML = html || "<p>소속된 고객 데이터가 없습니다.</p>";
         } catch (err) {
-            document.getElementById("companyData").innerHTML = "<p>데이터 조회 중 오류가 발생했습니다.</p>";
+            console.error("Fetch error:", err);
+            document.getElementById("companyData").innerHTML = `<p>데이터 로드 오류: ${err.message}</p>`;
         }
     }
 
@@ -196,7 +206,8 @@
             });
             document.getElementById("superData").innerHTML = html || "<p>전체 고객 데이터가 없습니다.</p>";
         } catch (err) {
-            document.getElementById("superData").innerHTML = "<p>데이터 조회 중 오류가 발생했습니다.</p>";
+            console.error("Fetch error:", err);
+            document.getElementById("superData").innerHTML = `<p>데이터 로드 오류: ${err.message}</p>`;
         }
     }
 

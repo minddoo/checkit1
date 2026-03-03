@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'onboarding_submit': '저장하고 시작하기',
             'chatbot_manager_btn': '전담 매니저와 채팅하기',
             'tab_files': '나의 파일', 'file_upload_btn': '파일 업로드', 'file_no_files': '등록된 파일이 없습니다.',
-            'file_translated': '번역본', 'file_original': '원본 결과지'
+            'file_translated': '번역본', 'file_original': '원본 결과지',
+            'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의', 'stat_active_files': '대기중인 파일'
         },
         en: {
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
@@ -34,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'onboarding_submit': 'Save & Start',
             'chatbot_manager_btn': 'Chat with Manager',
             'tab_files': 'My Files', 'file_upload_btn': 'Upload File', 'file_no_files': 'No files uploaded yet.',
-            'file_translated': 'Translation', 'file_original': 'Original'
+            'file_translated': 'Translation', 'file_original': 'Original',
+            'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Leads', 'stat_active_files': 'Active Files'
         }
     };
 
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
 
         // 1. Unified Inquiry Logic
-        document.querySelectorAll('.contact-form').forEach(form => {
+        document.querySelectorAll('.contact-form, .contact-form-body').forEach(form => {
             form.onsubmit = async (e) => {
                 e.preventDefault();
                 const btn = form.querySelector('button[type="submit"]');
@@ -78,8 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     await db.collection("contact_inquiries").add({
                         email: form.querySelector('input[type="email"]')?.value || "",
-                        phone: form.querySelector('input[placeholder*="010"], input[placeholder*="Phone"]')?.value || "",
-                        company: form.querySelector('input[placeholder*="기업명"], input[placeholder*="Company"]')?.value || "",
+                        phone: form.querySelector('input[type="tel"]')?.value || "",
                         message: form.querySelector('textarea')?.value || "",
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         source: window.location.pathname,
@@ -131,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         };
 
-        // 3. Platform Dashboards & File Management
-        let platformSub = null, chatSub = null, filesSub = null;
+        // 3. Platform Dashboards
+        let platformSub = null, chatSub = null, filesSub = null, leadsSub = null;
 
         const renderMyPage = async (user) => {
             const overlay = document.getElementById('mypage-overlay');
@@ -150,11 +151,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="mypage-header"><h2>Admin Dashboard</h2>
                     <div style="display:flex; gap:10px;"><button class="lang-btn active" id="tab-users">Clients</button><button class="lang-btn" id="tab-leads">Inquiries</button><button id="close-mypage" class="lang-btn">Close</button></div>
                 </div>
-                <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div><div class="admin-main" id="admin-detail-view">Select a client.</div></div>
+                <div class="admin-grid">
+                    <div class="admin-sidebar">
+                        <div id="admin-stats-container"></div>
+                        <div id="admin-user-list"></div>
+                    </div>
+                    <div class="admin-main" id="admin-detail-view">Select a client to manage.</div>
+                </div>
             `;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
+            document.getElementById('tab-users').onclick = () => renderAdmin(admin);
+            document.getElementById('tab-leads').onclick = renderLeads;
+
+            renderStats();
             platformSub = db.collection("users").where("role", "==", "user").onSnapshot(snap => {
-                const list = document.getElementById('admin-user-list'); list.innerHTML = "<h3>Clients</h3>";
+                const list = document.getElementById('admin-user-list'); list.innerHTML = "<h3>Active Clients</h3>";
                 snap.forEach(doc => {
                     const u = doc.data();
                     const div = document.createElement('div'); div.className = 'safety-card'; div.style.padding='15px'; div.style.cursor='pointer'; div.style.marginBottom='10px';
@@ -164,21 +175,72 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
+        const renderStats = async () => {
+            const statsEl = document.getElementById('admin-stats-container');
+            const lang = translations[currentLang];
+            const users = await db.collection("users").where("role", "==", "user").get();
+            const leads = await db.collection("contact_inquiries").where("status", "==", "new").get();
+            
+            statsEl.innerHTML = `
+                <div class="admin-stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom:20px;">
+                    <div class="stat-card" style="padding:15px;"><span class="stat-val">${users.size}</span><span class="stat-label">${lang['stat_total_clients']}</span></div>
+                    <div class="stat-card" style="padding:15px; border-color:#e74c3c;"><span class="stat-val">${leads.size}</span><span class="stat-label">${lang['stat_pending_leads']}</span></div>
+                </div>
+            `;
+        };
+
+        const renderLeads = () => {
+            document.getElementById('tab-users').classList.remove('active');
+            document.getElementById('tab-leads').classList.add('active');
+            const main = document.getElementById('admin-detail-view');
+            const sidebar = document.getElementById('admin-user-list');
+            sidebar.innerHTML = "<h3>Inquiries</h3><p style='font-size:0.8rem; color:#888;'>Recent Lead Activities</p>";
+            main.innerHTML = `<div id="leads-list">Loading...</div>`;
+            
+            if(leadsSub) leadsSub();
+            leadsSub = db.collection("contact_inquiries").orderBy("timestamp", "desc").limit(50).onSnapshot(snap => {
+                const list = document.getElementById('leads-list'); list.innerHTML = "";
+                snap.forEach(doc => {
+                    const l = doc.data();
+                    const date = l.timestamp ? new Date(l.timestamp.seconds*1000).toLocaleString() : "Just now";
+                    const div = document.createElement('div'); div.className = 'info-panel'; div.style.marginBottom='15px';
+                    div.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <div><span class="lead-badge ${l.status}">${l.status}</span> <strong>${l.email}</strong></div>
+                            <small style="color:#aaa;">${date}</small>
+                        </div>
+                        <p style="margin:10px 0;">${l.message}</p>
+                        <div style="display:flex; gap:10px;">
+                            <button class="lang-btn" onclick="toggleLeadStatus('${doc.id}', '${l.status}')">${l.status === 'new' ? 'Mark Resolved' : 'Reopen'}</button>
+                            <button class="lang-btn logout-btn" onclick="deleteLead('${doc.id}')">Delete</button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            });
+        };
+
+        window.toggleLeadStatus = (id, cur) => db.collection("contact_inquiries").doc(id).update({ status: cur === 'new' ? 'resolved' : 'new' });
+        window.deleteLead = (id) => confirm("Delete this lead?") && db.collection("contact_inquiries").doc(id).delete();
+
         const selectUser = (uid, userData) => {
             const view = document.getElementById('admin-detail-view');
             view.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h3>Managing: ${userData.fullName || userData.email}</h3>
+                    <div style="text-align:left;">
+                        <h3 style="margin:0;">${userData.fullName || userData.email}</h3>
+                        <small style="color:#888;">${userData.nationality} | ${userData.dob} | ${userData.email}</small>
+                    </div>
                     <div class="platform-tabs" style="border:none; margin:0;"><div class="p-tab active" id="adm-tab-chat">Chat</div><div class="p-tab" id="adm-tab-files">Files</div></div>
                 </div>
                 <div id="adm-dynamic-view">
-                    <div style="background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; gap:10px; justify-content:center;">
+                    <div style="background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; display:flex; gap:10px; justify-content:center; box-shadow:var(--shadow-sm);">
                         <button class="lang-btn" onclick="updateStatus('${uid}', 0)">Step 1</button>
                         <button class="lang-btn" onclick="updateStatus('${uid}', 1)">Step 2</button>
                         <button class="lang-btn" onclick="updateStatus('${uid}', 2)">Step 3</button>
                     </div>
-                    <div class="admin-chat-container" style="height:400px; width:100%; margin:0;"><div class="chat-messages" id="adm-msgs"></div>
-                    <div class="chat-input-area"><input type="text" id="adm-input"><button id="adm-send" class="lang-btn active">Send</button></div></div>
+                    <div class="admin-chat-container" style="height:450px; width:100%; margin:0;"><div class="chat-messages" id="adm-msgs"></div>
+                    <div class="chat-input-area"><input type="text" id="adm-input" placeholder="Type reply..."><button id="adm-send" class="lang-btn active">Send</button></div></div>
                 </div>
             `;
             document.getElementById('adm-tab-chat').onclick = () => selectUser(uid, userData);
@@ -195,8 +257,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="container" id="u-dynamic-view" style="padding:20px 0;">
                     <div class="status-timeline" id="u-timeline"></div>
                     <div class="platform-grid"><div class="info-panel" id="u-info"></div>
-                    <div class="admin-chat-container"><div class="chat-header">1:1 Support</div><div class="chat-messages" id="u-msgs"></div>
-                    <div class="chat-input-area"><input type="text" id="u-input"><button id="u-send" class="lang-btn active">Send</button></div></div></div>
+                    <div class="admin-chat-container"><div class="chat-header">1:1 Support Chat</div><div class="chat-messages" id="u-msgs"></div>
+                    <div class="chat-input-area"><input type="text" id="u-input" placeholder="Ask anything..."><button id="u-send" class="lang-btn active">Send</button></div></div></div>
                 </div>
             `;
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); clearSubs(); };
@@ -207,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = doc.data(); if(!data) return;
                 document.getElementById('u-timeline').innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
                 const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                document.getElementById('u-info').innerHTML = `<h3>Status</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
+                document.getElementById('u-info').innerHTML = `<h3>Current Progress</h3><p><strong>${active.title}</strong></p><p>${active.description}</p>`;
             });
             setupChat(user.uid, 'u-msgs', 'u-input', 'u-send', 'user');
         };
@@ -217,8 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
             chatSub = db.collection("user_process").doc(uid).collection("messages").orderBy("timestamp", "asc").onSnapshot(snap => {
                 const el = document.getElementById(msgsId); if(!el) return; el.innerHTML = "";
                 snap.forEach(m => {
-                    const d = document.createElement('div'); d.className = `message ${m.data().sender === sender ? 'user' : 'bot'}`;
-                    d.textContent = m.data().text; el.appendChild(d);
+                    const d = m.data();
+                    const time = d.timestamp ? new Date(d.timestamp.seconds*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : "";
+                    const div = document.createElement('div'); div.className = `message ${d.sender === sender ? 'user' : 'bot'}`;
+                    div.innerHTML = `${d.text}<span class="msg-time">${time}</span>`;
+                    el.appendChild(div);
                 });
                 el.scrollTop = el.scrollHeight;
             });
@@ -234,15 +299,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const renderFiles = (uid, isAdmin) => {
             const container = document.getElementById('adm-dynamic-view') || document.getElementById('u-dynamic-view');
             container.innerHTML = `
-                <div class="info-panel"><h3>Files</h3><input type="file" id="file-input" style="display:none;">
-                <button class="cta-button-primary" onclick="document.getElementById('file-input').click()">Upload File</button>
+                <div class="info-panel"><h3>Documents</h3><input type="file" id="file-input" style="display:none;">
+                <button class="cta-button-primary" onclick="document.getElementById('file-input').click()">Upload New Document</button>
                 <div id="file-progress" style="margin-top:10px; display:none; height:5px; background:#eee; border-radius:5px;"><div id="file-bar" style="width:0; height:100%; background:var(--primary-color);"></div></div>
-                <div class="file-list" id="platform-file-list"></div></div>
+                <div class="file-list" id="platform-file-list" style="margin-top:20px;"></div></div>
             `;
             document.getElementById('file-input').onchange = (e) => uploadFile(uid, e.target.files[0], isAdmin);
             if(filesSub) filesSub();
             filesSub = db.collection("user_process").doc(uid).collection("files").orderBy("timestamp", "desc").onSnapshot(snap => {
                 const list = document.getElementById('platform-file-list'); list.innerHTML = "";
+                if(snap.empty) list.innerHTML = "<p style='color:#888;'>No documents exchanged yet.</p>";
                 snap.forEach(fDoc => {
                     const f = fDoc.data();
                     const div = document.createElement('div'); div.className = 'file-item';
@@ -260,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const prog = document.getElementById('file-progress'), bar = document.getElementById('file-bar');
             prog.style.display = 'block';
             task.on('state_changed', s => bar.style.width = (s.bytesTransferred/s.totalBytes)*100 + '%', 
-                e => alert("Error uploading"), async () => {
+                e => alert("Upload failed"), async () => {
                     const url = await ref.getDownloadURL();
                     await db.collection("user_process").doc(uid).collection("files").add({ name: file.name, url: url, type: isAdmin ? "Translation" : "Original", timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                     prog.style.display = 'none';
@@ -270,10 +336,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.updateStatus = async (uid, idx) => {
             const steps = (await db.collection("user_process").doc(uid).get()).data().steps;
             steps.forEach((s, i) => s.status = i < idx ? 'completed' : (i === idx ? 'active' : 'pending'));
-            await db.collection("user_process").doc(uid).update({ steps }); alert("Updated!");
+            await db.collection("user_process").doc(uid).update({ steps }); alert("Status Updated!");
         };
         window.deleteFile = (uid, fid) => confirm("Delete file?") && db.collection("user_process").doc(uid).collection("files").doc(fid).delete();
-        const clearSubs = () => { [platformSub, chatSub, filesSub].forEach(s => s && s()); };
+        const clearSubs = () => { [platformSub, chatSub, filesSub, leadsSub].forEach(s => s && s()); };
 
         const initAuthNav = () => {
             const nav = document.querySelector('#language-switcher');

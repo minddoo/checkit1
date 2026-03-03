@@ -695,6 +695,86 @@ document.addEventListener('DOMContentLoaded', () => {
         window.saveNotes = (uid) => db.collection("users").doc(uid).update({ managerNotes: document.getElementById('mgr-notes').value }).then(() => alert("Saved"));
         const clearSubs = () => { [platformSub, chatSub, filesSub, leadsSub, statsSub].forEach(s => s && s()); };
 
+        const showLoginModal = () => {
+            if(document.getElementById('login-modal-overlay')) return;
+            const lang = translations[currentLang];
+            const modalHtml = `
+                <div id="login-modal-overlay" style="display:flex;">
+                    <div class="login-modal-box">
+                        <button id="close-login-modal">&times;</button>
+                        <h2 class="modal-logo">CHECKIT</h2>
+                        <p class="modal-tagline">Experience Global Healthcare Standard</p>
+                        
+                        <div id="auth-main-view" class="auth-view">
+                            <button id="btn-google-login" class="btn-auth btn-google">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+                                Continue with Google
+                            </button>
+                            <div style="margin:15px 0; color:#ccc; display:flex; align-items:center; gap:10px;">
+                                <hr style="flex:1; border:none; border-top:1px solid #eee;"> OR <hr style="flex:1; border:none; border-top:1px solid #eee;">
+                            </div>
+                            <button id="show-email-login" class="btn-auth btn-email">
+                                <i class="fas fa-envelope"></i> Continue with Email
+                            </button>
+                        </div>
+
+                        <div id="auth-email-view" class="auth-view" style="display:none;">
+                            <div class="form-group-auth">
+                                <input type="email" id="auth-email" placeholder="Email Address">
+                                <input type="password" id="auth-pass" placeholder="Password">
+                            </div>
+                            <button id="btn-email-action" class="btn-auth btn-primary">Sign In</button>
+                            <div class="auth-utils">
+                                <span id="toggle-auth-mode">Don't have an account? Sign Up</span>
+                                <button id="btn-auth-back" style="background:none; border:none; color:#888; cursor:pointer; margin-top:10px;">&larr; Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            const overlay = document.getElementById('login-modal-overlay');
+            const mainView = document.getElementById('auth-main-view');
+            const emailView = document.getElementById('auth-email-view');
+            const emailInput = document.getElementById('auth-email');
+            const passInput = document.getElementById('auth-pass');
+            const actionBtn = document.getElementById('btn-email-action');
+            const modeToggle = document.getElementById('toggle-auth-mode');
+            let isSignUp = false;
+
+            document.getElementById('close-login-modal').onclick = () => overlay.remove();
+            document.getElementById('btn-google-login').onclick = () => {
+                auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => overlay.remove());
+            };
+            document.getElementById('show-email-login').onclick = () => {
+                mainView.style.display = 'none';
+                emailView.style.display = 'flex';
+            };
+            document.getElementById('btn-auth-back').onclick = () => {
+                emailView.style.display = 'none';
+                mainView.style.display = 'flex';
+            };
+
+            modeToggle.onclick = () => {
+                isSignUp = !isSignUp;
+                actionBtn.textContent = isSignUp ? 'Sign Up' : 'Sign In';
+                modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
+            };
+
+            actionBtn.onclick = async () => {
+                const email = emailInput.value, pass = passInput.value;
+                if(!email || !pass) return alert("Please enter both email and password.");
+                try {
+                    if(isSignUp) await auth.createUserWithEmailAndPassword(email, pass);
+                    else await auth.signInWithEmailAndPassword(email, pass);
+                    overlay.remove();
+                } catch (err) {
+                    alert(err.message);
+                }
+            };
+        };
+
         const initAuthNav = () => {
             const nav = document.querySelector('#language-switcher');
             let btn = document.getElementById('platform-auth-btn');
@@ -708,7 +788,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                     }
                 } else {
-                    btn.textContent = translations[currentLang]['nav_login'] || 'Login'; btn.onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+                    btn.textContent = translations[currentLang]['nav_login'] || 'Login'; 
+                    btn.onclick = () => showLoginModal();
                     document.getElementById('logout-btn')?.remove();
                 }
             });

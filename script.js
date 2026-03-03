@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
             overlay.style.display = 'flex';
         };
 
-        // --- 마이페이지(플랫폼 뷰) 렌더링 (Firestore 데이터 사용) ---
+        // --- 마이페이지(플랫폼 뷰) 렌더링 ---
         const renderMyPage = async (user) => {
             let overlay = document.getElementById('mypage-overlay');
             if (!overlay) {
@@ -626,76 +626,94 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.appendChild(overlay);
             }
 
-            // Firestore에서 데이터 가져오기
-            const docRef = db.collection("user_process").doc(user.uid);
-            const docSnap = await docRef.get();
-            let steps = [];
-            if (docSnap.exists) {
-                steps = docSnap.data().steps;
-            }
+            // [핵심수정] 일단 오버레이를 즉시 보여줌 (차단 방지)
+            document.body.classList.add('platform-view-active');
+            overlay.innerHTML = `<div style="padding:100px; font-size:1.5rem; color:var(--primary-color);">데이터를 불러오는 중입니다...</div>`;
 
-            const stepsHtml = steps.map(step => `
-                <div class="status-step ${step.status}">
-                    <i class="${step.icon}" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>${step.title}</span>
-                </div>
-            `).join('');
+            try {
+                // Firestore에서 데이터 가져오기
+                const docRef = db.collection("user_process").doc(user.uid);
+                const docSnap = await docRef.get();
+                
+                let steps = [
+                    { title: "상담 및 신청", description: "서비스 상담 요청이 접수되었습니다.", status: "completed", icon: "fas fa-file-alt" },
+                    { title: "병원 예약 지원", description: "담당 매니저가 병원 예약을 진행 중입니다.", status: "active", icon: "fas fa-hospital" },
+                    { title: "검진 안내 대기", description: "예약 확정 후 검진 가이드를 발송해 드립니다.", status: "pending", icon: "fas fa-notes-medical" },
+                    { title: "결과 번역 대기", description: "검진 완료 후 결과지를 번역해 드립니다.", status: "pending", icon: "fas fa-language" },
+                    { title: "서비스 완료", description: "모든 행정 지원 절차가 마무리됩니다.", status: "pending", icon: "fas fa-check-circle" }
+                ];
 
-            const activeStep = steps.find(s => s.status === 'active') || steps[0];
+                if (docSnap.exists) {
+                    steps = docSnap.data().steps;
+                }
 
-            overlay.innerHTML = `
-                <div class="mypage-header">
-                    <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
-                    <div style="display:flex; gap:15px; align-items:center;">
-                        <span style="font-weight:600;">${user.email}님</span>
-                        <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
+                const stepsHtml = steps.map(step => `
+                    <div class="status-step ${step.status}">
+                        <i class="${step.icon}" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                        <span>${step.title}</span>
                     </div>
-                </div>
-                <div class="status-timeline">${stepsHtml}</div>
-                <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
-                    <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
-                        <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
-                        <div style="margin-top:20px;">
-                            <p><strong>현재 단계:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
-                            <p><strong>상세 안내:</strong> <span>${activeStep.description}</span></p>
-                            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-                            <h4>전담 매니저 매칭 완료</h4>
-                            <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
-                                <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
-                                <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div></div>
+                `).join('');
+
+                const activeStep = steps.find(s => s.status === 'active') || steps[0];
+
+                overlay.innerHTML = `
+                    <div class="mypage-header">
+                        <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
+                        <div style="display:flex; gap:15px; align-items:center;">
+                            <span style="font-weight:600;">${user.email}님</span>
+                            <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
+                        </div>
+                    </div>
+                    <div class="status-timeline">${stepsHtml}</div>
+                    <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
+                        <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
+                            <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
+                            <div style="margin-top:20px;">
+                                <p><strong>현재 단계:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
+                                <p><strong>상세 안내:</strong> <span>${activeStep.description}</span></p>
+                                <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+                                <h4>전담 매니저 매칭 완료</h4>
+                                <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
+                                    <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
+                                    <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="admin-chat-container">
+                            <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
+                                <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
+                            </div>
+                            <div class="chat-messages" id="platform-chat-messages">
+                                <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! 현재 ${activeStep.title} 단계 진행 중입니다. 궁금하신 점이 있으시면 말씀해 주세요.</div>
+                            </div>
+                            <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
+                                <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
+                                <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">전송</button>
                             </div>
                         </div>
                     </div>
-                    <div class="admin-chat-container">
-                        <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
-                            <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
-                        </div>
-                        <div class="chat-messages" id="platform-chat-messages">
-                            <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! 현재 ${activeStep.title} 단계 진행 중입니다. 궁금하신 점이 있으시면 말씀해 주세요.</div>
-                        </div>
-                        <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
-                            <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
-                            <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">전송</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+                `;
 
-            document.getElementById('close-mypage').onclick = () => document.body.classList.remove('platform-view-active');
-            const chatInput = document.getElementById('platform-chat-input'), chatSend = document.getElementById('platform-chat-send'), chatMsgs = document.getElementById('platform-chat-messages');
-            const sendMsg = () => {
-                const val = chatInput.value.trim();
-                if (val) {
-                    const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = val;
-                    chatMsgs.appendChild(msg); chatInput.value = ''; chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                    setTimeout(() => {
-                        const r = document.createElement('div'); r.className = 'message bot'; r.textContent = "매니저가 확인 중입니다.";
-                        chatMsgs.appendChild(r); chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                    }, 1000);
-                }
-            };
-            chatSend.onclick = sendMsg;
-            chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
+                document.getElementById('close-mypage').onclick = () => document.body.classList.remove('platform-view-active');
+                const chatInput = document.getElementById('platform-chat-input'), chatSend = document.getElementById('platform-chat-send'), chatMsgs = document.getElementById('platform-chat-messages');
+                const sendMsg = () => {
+                    const val = chatInput.value.trim();
+                    if (val) {
+                        const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = val;
+                        chatMsgs.appendChild(msg); chatInput.value = ''; chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                        setTimeout(() => {
+                            const r = document.createElement('div'); r.className = 'message bot'; r.textContent = "매니저가 확인 중입니다.";
+                            chatMsgs.appendChild(r); chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                        }, 1000);
+                    }
+                };
+                chatSend.onclick = sendMsg;
+                chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
+
+            } catch (error) {
+                console.error("MyPage Data Error:", error);
+                overlay.innerHTML = `<div style="padding:50px;">서비스 현황을 불러오는 중 오류가 발생했습니다. (Firestore 설정 확인 필요) <button onclick="location.reload()" style="padding:10px 20px; cursor:pointer;">새로고침</button></div>`;
+            }
         };
 
         const initAuth = () => {
@@ -715,7 +733,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     authBtn.onclick = (e) => {
                         e.preventDefault();
                         if (window.location.href.toLowerCase().indexOf('individual') > -1) {
-                            document.body.classList.add('platform-view-active');
                             renderMyPage(user);
                         } else {
                             window.location.href = 'individual.html?view=mypage';
@@ -734,7 +751,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.get('view') === 'mypage' && window.location.href.toLowerCase().indexOf('individual') > -1) {
-                        document.body.classList.add('platform-view-active');
                         renderMyPage(user);
                     }
                 } else {

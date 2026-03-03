@@ -179,19 +179,31 @@ body {
     margin-left: 0; /* 모든 임의 이동 제거 */
 }
 
+/* Main Page Hero Text (White) */
+#hero .hero-title,
+#hero .hero-subtitle {
+    color: var(--white);
+}
+
+/* Individual & Corporate Page Hero Text (Black - Fixed) */
+#individual-hero .hero-title,
+#individual-hero .hero-subtitle,
+#corporate-hero .hero-title,
+#corporate-hero .hero-subtitle {
+    color: #000;
+}
+
 .hero-title {
     font-size: 3rem; /* 겹침 방지를 위해 크기 소폭 조절 */
     font-weight: 800;
     line-height: 1.3;
     margin-bottom: 20px;
-    color: var(--white); /* Changed to white */
     white-space: normal;
 }
 
 .hero-subtitle {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: var(--white); /* Changed to white */
     margin: 0 auto 30px; /* Added margin-bottom to move button down */
 }
 

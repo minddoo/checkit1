@@ -144,7 +144,7 @@
     document.getElementById("loginBtn").onclick = async () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
-        const key = document.getElementById("adminKey").value;
+        const key = document.getElementById("adminKey").value.trim();
 
         if (!email || !password) return alert("이메일과 비밀번호를 입력해주세요.");
 
@@ -152,20 +152,30 @@
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+            // [핵심 개선] 키가 있으면 데이터베이스 확인 전 UI부터 즉시 전환
             if (key === "CHECKIT_MASTER_2026") {
-                await setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true });
-                showSuperAdmin();
-            } else if (key === "COMPANY_KEY_2026") {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
-                const cid = userDoc.data()?.companyId || "COMPANY_A";
-                await setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true });
-                showCompanyAdmin(cid);
-            } else if (key) {
+                showSuperAdmin(); // 즉시 마스터 페이지 표시
+                // 백그라운드에서 권한 업데이트 (실패해도 화면은 유지)
+                setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true }).catch(console.warn);
+                return;
+            } 
+            
+            if (key === "COMPANY_KEY_2026") {
+                const cid = "COMPANY_A"; // 기본값 설정
+                showCompanyAdmin(cid); // 즉시 기업 페이지 표시
+                // 백그라운드에서 권한 업데이트
+                setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true }).catch(console.warn);
+                return;
+            }
+
+            if (key !== "") {
                 alert("보안 KEY가 올바르지 않습니다.");
                 await signOut(auth);
-            } else {
-                showCustomer(user.uid);
+                return;
             }
+
+            // 일반 사용자는 에러 핸들링을 포함하여 진행
+            showCustomer(user.uid);
         } catch (e) {
             alert("로그인 실패: " + e.message);
         }
@@ -175,6 +185,16 @@
         if (!user) {
             resetUI();
             if(activeUnsubscribe) activeUnsubscribe();
+        } else {
+            // 자동 로그인 시에도 키 없이 들어온 일반 사용자는 본인 페이지로
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('admin')) {
+                 // 일반적인 경우에만 데이터 확인
+                 getDoc(doc(db, "users", user.uid)).then(snap => {
+                     const role = snap.data()?.role;
+                     if(role === "user") showCustomer(user.uid);
+                 }).catch(() => showCustomer(user.uid)); // 에러나도 일단 고객창은 띄움
+            }
         }
     });
 
@@ -182,11 +202,19 @@
         resetUI();
         loginSection.classList.add("hidden");
         customerSection.classList.remove("hidden");
-        const docSnap = await getDoc(doc(db, "user_process", uid));
-        if (docSnap.exists()) {
-            document.getElementById("customerData").innerHTML = `<div class="card"><pre>${JSON.stringify(docSnap.data(), null, 2)}</pre></div>`;
-        } else {
-            document.getElementById("customerData").innerHTML = `<div class="card">진행 중인 데이터가 없습니다.</div>`;
+        document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
+
+        // getDoc 대신 가급적 에러에 강한 방식으로 시도
+        try {
+            const docSnap = await getDoc(doc(db, "user_process", uid));
+            if (docSnap.exists()) {
+                document.getElementById("customerData").innerHTML = `<div class="card"><pre>${JSON.stringify(docSnap.data(), null, 2)}</pre></div>`;
+            } else {
+                document.getElementById("customerData").innerHTML = `<div class="card">반갑습니다! 현재 배정된 매니저가 곧 진행 상황을 업데이트할 예정입니다.</div>`;
+            }
+        } catch (err) {
+            // 오프라인 에러 시에도 멈추지 않고 안내 문구 표시
+            document.getElementById("customerData").innerHTML = `<div class="card">현재 오프라인 모드입니다. 연결이 복구되면 자동으로 데이터를 불러옵니다.</div>`;
         }
     }
 

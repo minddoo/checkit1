@@ -217,7 +217,7 @@ body {
 }
 
 #individual-hero .hero-character {
-    background-image: url('assets/체킷 캐릭터.png');
+    background-image: url('assets/hero_character.png');
     width: 400px;
     height: 400px;
 }
@@ -1182,14 +1182,6 @@ html[lang="vn"] #corporate-hero .hero-title {
     max-width: 600px;
     margin-bottom: 20px;
 }
-
-
-
-/* ==================================================
-
-/* ==================================================
-
-/* ==================================================
 
 /* ==================================================
  * 11. Mobile Optimized Styles (UX & Interaction Focus)

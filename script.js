@@ -845,16 +845,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#aaa;">&times;</button>
                         <h2 class="modal-logo" style="margin-bottom:5px; color:var(--primary-color);">CHECKIT</h2>
                         <p id="auth-tagline" class="modal-tagline" style="margin-bottom:20px; color:#666; font-size:0.9rem;">Experience Global Healthcare Standard</p>
-                        
-                        <!-- Global Admin Key Field -->
                         <div style="margin-bottom:20px;">
                             <input type="text" id="global-admin-key" placeholder="Admin Security KEY (Optional)" style="padding:12px; border:1px solid #eee; border-radius:10px; width:100%; box-sizing:border-box; background:#fffcf0; font-size:0.85rem; text-align:center;">
                         </div>
-
                         <div id="auth-main-view" class="auth-view" style="display:flex; flex-direction:column; gap:12px;">
                             <button id="btn-google-login" class="btn-auth btn-google" style="background:#fff; border:1px solid #ddd; padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; font-weight:600;">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
-                                Continue with Google
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Continue with Google
                             </button>
                             <div style="margin:10px 0; color:#eee; display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700;">
                                 <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;"> OR <hr style="flex:1; border:none; border-top:1px solid #f0f0f0;">
@@ -863,7 +859,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fas fa-envelope"></i> Continue with Email
                             </button>
                         </div>
-
                         <div id="auth-email-view" class="auth-view" style="display:none; flex-direction:column; gap:15px;">
                             <div class="form-group-auth" style="display:flex; flex-direction:column; gap:10px;">
                                 <input type="email" id="auth-email" placeholder="Email Address" style="padding:14px; border:1px solid #ddd; border-radius:10px; width:100%; box-sizing:border-box;">
@@ -880,144 +875,79 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
 
-            const overlay = document.getElementById('login-modal-overlay');
-            const mainView = document.getElementById('auth-main-view');
-            const emailView = document.getElementById('auth-email-view');
-            const emailInput = document.getElementById('auth-email');
-            const passInput = document.getElementById('auth-pass');
-            const keyInput = document.getElementById('global-admin-key');
-            const actionBtn = document.getElementById('btn-email-action');
-            const modeToggle = document.getElementById('toggle-auth-mode');
-            const tagline = document.getElementById('auth-tagline');
+            const overlay = document.getElementById('login-modal-overlay'), mainView = document.getElementById('auth-main-view'), emailView = document.getElementById('auth-email-view'), emailInput = document.getElementById('auth-email'), passInput = document.getElementById('auth-pass'), keyInput = document.getElementById('global-admin-key'), actionBtn = document.getElementById('btn-email-action'), modeToggle = document.getElementById('toggle-auth-mode'), tagline = document.getElementById('auth-tagline');
             let isSignUp = false;
+
+            const finalizeAuth = (user) => {
+                overlay.remove();
+                renderMyPage(user);
+            };
+
+            const showSuccessState = (title, subtitle, user) => {
+                const box = document.querySelector('.login-modal-box');
+                if(!box) return finalizeAuth(user);
+                box.innerHTML = `<div style="padding: 20px 0; animation: fadeIn 0.5s ease-out;"><div style="width: 80px; height: 80px; background: #e8f5e9; color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 40px;"><i class="fas fa-check"></i></div><h2 class="modal-logo" style="color: #333;">${title}</h2><p style="color: #666; margin-bottom: 0;">${subtitle}</p></div>`;
+                setTimeout(() => finalizeAuth(user), 600);
+            };
 
             const handleAdminPromotion = async (user, key) => {
                 if (!key) return true; 
                 const masterKey = "CHECKIT_MASTER_2026";
-                
                 if (key === masterKey) {
                     await db.collection("users").doc(user.uid).set({ role: "super_admin" }, { merge: true });
-                    showSuccessState("Master Verified", "Entering Super Admin Portal...");
+                    showSuccessState("Master Verified", "Entering Super Admin Portal...", user);
                     return true;
                 } else if (key.startsWith("COMP_")) {
-                    const customCompanyId = key.replace("COMP_", "");
-                    if (!customCompanyId) {
-                        alert("기업 아이디를 입력해주세요. (예: COMP_SAMSUNG)");
-                        return false;
-                    }
-                    await db.collection("users").doc(user.uid).set({ 
-                        role: "company_admin", 
-                        companyId: customCompanyId 
-                    }, { merge: true });
-                    
-                    showSuccessState("Corporate Verified", `Entering ${customCompanyId} Portal...`);
+                    const cid = key.replace("COMP_", "");
+                    if (!cid) { alert("기업 아이디를 입력해주세요."); return false; }
+                    await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
+                    showSuccessState("Corporate Verified", `Entering ${cid} Portal...`, user);
                     return true;
                 } else {
-                    const companyKey = "COMPANY_KEY_2026"; // Legacy support
+                    const companyKey = "COMPANY_KEY_2026";
                     if (key === companyKey) {
                         const snap = await db.collection("users").doc(user.uid).get();
                         const cid = snap.data()?.companyId || "COMPANY_A";
                         await db.collection("users").doc(user.uid).set({ role: "company_admin", companyId: cid }, { merge: true });
-                        showSuccessState("Corporate Verified", "Entering Company Portal...");
+                        showSuccessState("Corporate Verified", "Entering Company Portal...", user);
                         return true;
                     }
-                    await auth.signOut();
-                    alert("Admin Security KEY가 일치하지 않습니다.");
-                    return false;
+                    await auth.signOut(); alert("Admin Security KEY가 일치하지 않습니다."); return false;
                 }
             };
 
             document.getElementById('close-login-modal').onclick = () => overlay.remove();
-            
             document.getElementById('btn-google-login').onclick = async () => {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                const key = keyInput.value.trim();
+                const provider = new firebase.auth.GoogleAuthProvider(), key = keyInput.value.trim();
                 try {
                     const result = await auth.signInWithPopup(provider);
                     const success = await handleAdminPromotion(result.user, key);
-                    if (success && !key) overlay.remove();
-                } catch (err) { console.error(err); } // Silent fail on google popup close etc
+                    if (success && !key) showSuccessState("Welcome!", "Login Successful", result.user);
+                } catch (err) { console.error(err); }
             };
-
-            document.getElementById('show-email-login').onclick = () => {
-                mainView.style.display = 'none';
-                emailView.style.display = 'flex';
-            };
-
-            document.getElementById('btn-auth-back').onclick = () => {
-                emailView.style.display = 'none';
-                mainView.style.display = 'flex';
-                isSignUp = false;
-                actionBtn.textContent = 'Sign In';
-                modeToggle.textContent = "Don't have an account? Sign Up";
-                tagline.textContent = 'Experience Global Healthcare Standard';
-            };
-
-            modeToggle.onclick = () => {
-                isSignUp = !isSignUp;
-                actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
-                modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
-                tagline.textContent = isSignUp ? 'Join CHECKIT for better healthcare' : 'Experience Global Healthcare Standard';
-                keyInput.parentElement.style.display = isSignUp ? 'none' : 'block';
-            };
-
+            document.getElementById('show-email-login').onclick = () => { mainView.style.display = 'none'; emailView.style.display = 'flex'; };
+            document.getElementById('btn-auth-back').onclick = () => { emailView.style.display = 'none'; mainView.style.display = 'flex'; isSignUp = false; actionBtn.textContent = 'Sign In'; modeToggle.textContent = "Don't have an account? Sign Up"; tagline.textContent = 'Experience Global Healthcare Standard'; };
+            modeToggle.onclick = () => { isSignUp = !isSignUp; actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In'; modeToggle.textContent = isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"; tagline.textContent = isSignUp ? 'Join CHECKIT' : 'Experience Global Healthcare Standard'; keyInput.parentElement.style.display = isSignUp ? 'none' : 'block'; };
             actionBtn.onclick = async () => {
                 const email = emailInput.value.trim(), pass = passInput.value, key = keyInput.value.trim();
                 if(!email || !pass) return alert("이메일과 비밀번호를 입력해주세요.");
-                
-                actionBtn.disabled = true;
-                actionBtn.textContent = isSignUp ? 'Creating...' : 'Signing In...';
-
+                actionBtn.disabled = true; actionBtn.textContent = isSignUp ? 'Creating...' : 'Signing In...';
                 try {
                     if(isSignUp) {
-                        await auth.createUserWithEmailAndPassword(email, pass);
-                        showSuccessState("Welcome to CHECKIT!", "Your journey to better healthcare starts here.");
+                        const result = await auth.createUserWithEmailAndPassword(email, pass);
+                        showSuccessState("Welcome!", "Starting your journey.", result.user);
                     } else {
                         const result = await auth.signInWithEmailAndPassword(email, pass);
-                        // Auth Success. Now try promotion (never throws)
                         const success = await handleAdminPromotion(result.user, key);
-                        if (!success) {
-                            actionBtn.disabled = false;
-                            actionBtn.textContent = 'Sign In';
-                        }
+                        if (success && !key) showSuccessState("Welcome Back!", "Login Successful", result.user);
+                        else if (!success) { actionBtn.disabled = false; actionBtn.textContent = 'Sign In'; }
                     }
                 } catch (err) {
                     console.error("Auth Error:", err);
-                    // Only alert on specific Auth failures, suppress offline/DB errors
-                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') {
-                        alert("로그인 정보가 올바르지 않습니다.");
-                    } else if (err.code === 'auth/email-already-in-use') {
-                        alert("이미 사용 중인 이메일입니다.");
-                    } else {
-                        // For offline or other errors, assuming Auth might have actually passed or it's a temp glitch.
-                        // If it was a hard Auth error, it's caught above. 
-                        // If it's "client is offline", we proceed as if success to let persistence handle it.
-                        if (err.message && err.message.includes("offline")) {
-                             showSuccessState("Welcome Back!", "Offline Mode Active");
-                        } else {
-                             // Fallback: don't alert garbage, just reset
-                             console.warn("Suppressed error:", err.message);
-                        }
-                    }
-                    actionBtn.disabled = false;
-                    actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
+                    if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-email') alert("로그인 정보가 올바르지 않습니다.");
+                    else if (err.code === 'auth/email-already-in-use') alert("이미 사용 중인 이메일입니다.");
+                    actionBtn.disabled = false; actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 }
-            };
-
-            const showSuccessState = (title, subtitle) => {
-                const box = document.querySelector('.login-modal-box');
-                box.innerHTML = `
-                    <div style="padding: 20px 0; animation: fadeIn 0.5s ease-out;">
-                        <div style="width: 80px; height: 80px; background: #e8f5e9; color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 40px;">
-                            <i class="fas fa-check"></i>
-                        </div>
-                        <h2 class="modal-logo" style="color: #333;">${title}</h2>
-                        <p style="color: #666; margin-bottom: 0;">${subtitle}</p>
-                    </div>
-                `;
-                setTimeout(() => {
-                    overlay.remove();
-                }, 2000);
             };
         };
 

@@ -477,236 +477,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     switchLanguage(initialLang);
 
-    // --- 통합 로그인/가입 모달 ---
-    const showLoginModal = () => {
-        let overlay = document.getElementById('login-modal-overlay');
-        if (!overlay) {
-            const modalHtml = `
-                <div id="login-modal-overlay">
-                    <div class="login-modal-box">
-                        <button id="close-login-modal">&times;</button>
-                        <h2 class="modal-logo">CHECKIT</h2>
-                        <p class="modal-tagline">외국인 건강검진 행정 지원 플랫폼</p>
-                        
-                        <div id="login-view-main" class="auth-view">
-                            <button id="login-google" class="btn-auth btn-google">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> 
-                                <span data-lang-key="login_google">Google로 시작하기</span>
-                            </button>
-                            <button id="btn-goto-email" class="btn-auth btn-email">
-                                <span data-lang-key="login_email">이메일로 계속하기</span>
-                            </button>
-                        </div>
-
-                        <div id="login-view-email" class="auth-view" style="display:none;">
-                            <div class="form-group-auth">
-                                <input type="email" id="auth-email" placeholder="이메일 주소" required>
-                                <input type="password" id="auth-pw" placeholder="비밀번호" required>
-                                <div id="signup-fields" style="display:none;">
-                                    <input type="password" id="auth-pw-confirm" placeholder="비밀번호 확인">
-                                </div>
-                            </div>
-                            <button id="btn-submit" class="btn-auth btn-primary">로그인</button>
-                            <div class="auth-utils">
-                                <p id="toggle-mode">회원가입 하기</p>
-                                <button id="btn-back">뒤로 가기</button>
-                            </div>
-                        </div>
-                        <div id="auth-error-msg" style="color: #e74c3c; font-size: 0.85rem; margin-top: 10px; min-height: 1.2rem;"></div>
-                    </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-            overlay = document.getElementById('login-modal-overlay');
-        }
-
-        const viewMain = document.getElementById('login-view-main');
-        const viewEmail = document.getElementById('login-view-email');
-        const signupFields = document.getElementById('signup-fields');
-        const submitBtn = document.getElementById('btn-submit');
-        const toggleBtn = document.getElementById('toggle-mode');
-        const errorMsg = document.getElementById('auth-error-msg');
-        const emailInput = document.getElementById('auth-email');
-        const pwInput = document.getElementById('auth-pw');
-        const pwConfirmInput = document.getElementById('auth-pw-confirm');
-        
-        let mode = 'LOGIN';
-        errorMsg.textContent = '';
-        viewMain.style.display = 'flex';
-        viewEmail.style.display = 'none';
-        signupFields.style.display = 'none';
-        submitBtn.textContent = '로그인';
-        toggleBtn.textContent = '회원가입 하기';
-
-        document.getElementById('close-login-modal').onclick = () => { overlay.style.display = 'none'; };
-        document.getElementById('btn-goto-email').onclick = () => { viewMain.style.display = 'none'; viewEmail.style.display = 'flex'; };
-        document.getElementById('btn-back').onclick = () => { viewMain.style.display = 'flex'; viewEmail.style.display = 'none'; errorMsg.textContent = ''; };
-        
-        toggleBtn.onclick = () => {
-            mode = (mode === 'LOGIN') ? 'SIGNUP' : 'LOGIN';
-            signupFields.style.display = (mode === 'SIGNUP') ? 'flex' : 'none';
-            submitBtn.textContent = (mode === 'SIGNUP') ? '회원가입' : '로그인';
-            toggleBtn.textContent = (mode === 'SIGNUP') ? '로그인 하기' : '회원가입 하기';
-            errorMsg.textContent = '';
-        };
-
-        const handleAuthError = (e) => {
-            console.error("Auth Error:", e);
-            let msg = e.message;
-            if (e.code === 'auth/email-already-in-use') msg = '이미 사용 중인 이메일입니다.';
-            if (e.code === 'auth/wrong-password') msg = '비밀번호가 일치하지 않습니다.';
-            if (e.code === 'auth/user-not-found') msg = '등록되지 않은 이메일입니다.';
-            if (e.code === 'auth/weak-password') msg = '비밀번호는 6자리 이상이어야 합니다.';
-            if (e.code === 'auth/invalid-email') msg = '유효하지 않은 이메일 형식입니다.';
-            if (e.code === 'auth/popup-closed-by-user') msg = '로그인 팝업이 닫혔습니다.';
-            errorMsg.textContent = msg;
-        };
-
-        document.getElementById('login-google').onclick = () => {
-            if (typeof firebase === 'undefined') return alert('Firebase가 로드되지 않았습니다.');
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).then(() => {
-                overlay.style.display = 'none';
-            }).catch(handleAuthError);
-        };
-
-        submitBtn.onclick = async () => {
-            const email = emailInput.value.trim();
-            const pw = pwInput.value.trim();
-            if (!email || !pw) {
-                errorMsg.textContent = '이메일과 비밀번호를 입력해주세요.';
-                return;
-            }
-
-            try {
-                if (mode === 'SIGNUP') {
-                    if (pw !== pwConfirmInput.value.trim()) {
-                        errorMsg.textContent = '비밀번호 확인이 일치하지 않습니다.';
-                        return;
-                    }
-                    const res = await firebase.auth().createUserWithEmailAndPassword(email, pw);
-                    alert('회원가입이 완료되었습니다!');
-                    overlay.style.display = 'none';
-                } else {
-                    await firebase.auth().signInWithEmailAndPassword(email, pw);
-                    overlay.style.display = 'none';
-                }
-            } catch (e) {
-                handleAuthError(e);
-            }
-        };
-
-        overlay.style.display = 'flex';
-    };
-
-    // --- 마이페이지(플랫폼 뷰) 렌더링 ---
-    const renderMyPage = (user) => {
-        let overlay = document.getElementById('mypage-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'mypage-overlay';
-            document.body.appendChild(overlay);
-        }
-
-        const isKo = currentLang === 'ko';
-        
-        overlay.innerHTML = `
-            <div class="mypage-header">
-                <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
-                <div style="display:flex; gap:15px; align-items:center;">
-                    <span style="font-weight:600;">${user.email}님</span>
-                    <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
-                </div>
-            </div>
-            <div class="status-timeline">
-                <div class="status-step active">
-                    <i class="fas fa-file-alt" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>상담/신청</span>
-                </div>
-                <div class="status-step">
-                    <i class="fas fa-hospital" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>병원예약</span>
-                </div>
-                <div class="status-step">
-                    <i class="fas fa-notes-medical" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>검진대기</span>
-                </div>
-                <div class="status-step">
-                    <i class="fas fa-language" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>결과번역</span>
-                </div>
-                <div class="status-step">
-                    <i class="fas fa-check-circle" style="font-size:1.5rem; margin-bottom:10px;"></i>
-                    <span>완료</span>
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
-                <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
-                    <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
-                    <div style="margin-top:20px;">
-                        <p><strong>선택한 패키지:</strong> <span style="color:var(--primary-color);">Total-Safe Plan (가정)</span></p>
-                        <p><strong>진행 상태:</strong> <span style="background:var(--hero-bg-color); color:var(--primary-dark); padding:4px 10px; border-radius:20px; font-size:0.85rem;">행정 지원 대기 중</span></p>
-                        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-                        <h4>담당 매니저 안내</h4>
-                        <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
-                            <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
-                            <div>
-                                <div style="font-weight:700;">Sarah Manager</div>
-                                <div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="admin-chat-container">
-                    <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
-                        <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
-                    </div>
-                    <div class="chat-messages" id="platform-chat-messages">
-                        <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! CHECKIT 행정 지원 팀입니다. 궁금하신 점을 남겨주시면 담당 매니저가 확인 후 답변 드리겠습니다.</div>
-                    </div>
-                    <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
-                        <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px; outline:none;">
-                        <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">전송</button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        document.getElementById('close-mypage').onclick = () => {
-            document.body.classList.remove('platform-view-active');
-        };
-
-        const chatInput = document.getElementById('platform-chat-input');
-        const chatSend = document.getElementById('platform-chat-send');
-        const chatMsgs = document.getElementById('platform-chat-messages');
-
-        const sendMsg = () => {
-            const val = chatInput.value.trim();
-            if (val) {
-                const msg = document.createElement('div');
-                msg.className = 'message user';
-                msg.textContent = val;
-                chatMsgs.appendChild(msg);
-                chatInput.value = '';
-                chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                
-                // 가짜 답변
-                setTimeout(() => {
-                    const reply = document.createElement('div');
-                    reply.className = 'message bot';
-                    reply.textContent = "매니저가 메시지를 확인 중입니다. 잠시만 기다려주세요.";
-                    chatMsgs.appendChild(reply);
-                    chatMsgs.scrollTop = chatMsgs.scrollHeight;
-                }, 1000);
-            }
-        };
-
-        chatSend.onclick = sendMsg;
-        chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
-    };
-
     // ====================================================
-    // [CHECKIT Platform] Firebase Auth & Notification System
+    // [Firebase Initialization]
     // ====================================================
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -721,11 +493,214 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        
+        const db = firebase.firestore();
+
+        // --- 통합 로그인/가입 모달 ---
+        const showLoginModal = () => {
+            let overlay = document.getElementById('login-modal-overlay');
+            if (!overlay) {
+                const modalHtml = `
+                    <div id="login-modal-overlay">
+                        <div class="login-modal-box">
+                            <button id="close-login-modal">&times;</button>
+                            <h2 class="modal-logo">CHECKIT</h2>
+                            <p class="modal-tagline">외국인 건강검진 행정 지원 플랫폼</p>
+                            
+                            <div id="login-view-main" class="auth-view">
+                                <button id="login-google" class="btn-auth btn-google">
+                                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> 
+                                    <span>Google로 시작하기</span>
+                                </button>
+                                <button id="btn-goto-email" class="btn-auth btn-email">
+                                    <span>이메일로 계속하기</span>
+                                </button>
+                            </div>
+
+                            <div id="login-view-email" class="auth-view" style="display:none;">
+                                <div class="form-group-auth">
+                                    <input type="email" id="auth-email" placeholder="이메일 주소" required>
+                                    <input type="password" id="auth-pw" placeholder="비밀번호" required>
+                                    <div id="signup-fields" style="display:none;">
+                                        <input type="password" id="auth-pw-confirm" placeholder="비밀번호 확인">
+                                    </div>
+                                </div>
+                                <button id="btn-submit" class="btn-auth btn-primary">로그인</button>
+                                <div class="auth-utils">
+                                    <p id="toggle-mode">회원가입 하기</p>
+                                    <button id="btn-back">뒤로 가기</button>
+                                </div>
+                            </div>
+                            <div id="auth-error-msg" style="color: #e74c3c; font-size: 0.85rem; margin-top: 10px; min-height: 1.2rem;"></div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                overlay = document.getElementById('login-modal-overlay');
+            }
+
+            const viewMain = document.getElementById('login-view-main'),
+                  viewEmail = document.getElementById('login-view-email'),
+                  signupFields = document.getElementById('signup-fields'),
+                  submitBtn = document.getElementById('btn-submit'),
+                  toggleBtn = document.getElementById('toggle-mode'),
+                  errorMsg = document.getElementById('auth-error-msg'),
+                  emailInput = document.getElementById('auth-email'),
+                  pwInput = document.getElementById('auth-pw'),
+                  pwConfirmInput = document.getElementById('auth-pw-confirm');
+            
+            let mode = 'LOGIN';
+            errorMsg.textContent = '';
+            viewMain.style.display = 'flex';
+            viewEmail.style.display = 'none';
+            signupFields.style.display = 'none';
+            submitBtn.textContent = '로그인';
+            toggleBtn.textContent = '회원가입 하기';
+
+            document.getElementById('close-login-modal').onclick = () => { overlay.style.display = 'none'; };
+            document.getElementById('btn-goto-email').onclick = () => { viewMain.style.display = 'none'; viewEmail.style.display = 'flex'; };
+            document.getElementById('btn-back').onclick = () => { viewMain.style.display = 'flex'; viewEmail.style.display = 'none'; errorMsg.textContent = ''; };
+            
+            toggleBtn.onclick = () => {
+                mode = (mode === 'LOGIN') ? 'SIGNUP' : 'LOGIN';
+                signupFields.style.display = (mode === 'SIGNUP') ? 'flex' : 'none';
+                submitBtn.textContent = (mode === 'SIGNUP') ? '회원가입' : '로그인';
+                toggleBtn.textContent = (mode === 'SIGNUP') ? '로그인 하기' : '회원가입 하기';
+                errorMsg.textContent = '';
+            };
+
+            const handleAuthError = (e) => {
+                let msg = e.message;
+                if (e.code === 'auth/email-already-in-use') msg = '이미 사용 중인 이메일입니다.';
+                if (e.code === 'auth/wrong-password') msg = '비밀번호가 일치하지 않습니다.';
+                errorMsg.textContent = msg;
+            };
+
+            const initUserDoc = async (user) => {
+                const docRef = db.collection("user_process").doc(user.uid);
+                const docSnap = await docRef.get();
+                if (!docSnap.exists) {
+                    await docRef.set({
+                        steps: [
+                            { title: "상담 및 신청", description: "서비스 상담 요청이 접수되었습니다.", status: "completed", icon: "fas fa-file-alt" },
+                            { title: "병원 예약 지원", description: "담당 매니저가 병원 예약을 진행 중입니다.", status: "active", icon: "fas fa-hospital" },
+                            { title: "검진 안내 대기", description: "예약 확정 후 검진 가이드를 발송해 드립니다.", status: "pending", icon: "fas fa-notes-medical" },
+                            { title: "결과 번역 대기", description: "검진 완료 후 결과지를 번역해 드립니다.", status: "pending", icon: "fas fa-language" },
+                            { title: "서비스 완료", description: "모든 행정 지원 절차가 마무리됩니다.", status: "pending", icon: "fas fa-check-circle" }
+                        ]
+                    });
+                }
+            };
+
+            document.getElementById('login-google').onclick = () => {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).then(async (res) => {
+                    await initUserDoc(res.user);
+                    overlay.style.display = 'none';
+                }).catch(handleAuthError);
+            };
+
+            submitBtn.onclick = async () => {
+                const email = emailInput.value.trim(), pw = pwInput.value.trim();
+                if (!email || !pw) return errorMsg.textContent = '이메일과 비밀번호를 입력해주세요.';
+                try {
+                    if (mode === 'SIGNUP') {
+                        if (pw !== pwConfirmInput.value.trim()) return errorMsg.textContent = '비밀번호 확인이 일치하지 않습니다.';
+                        const res = await auth.createUserWithEmailAndPassword(email, pw);
+                        await initUserDoc(res.user);
+                        alert('회원가입이 완료되었습니다!');
+                    } else {
+                        await auth.signInWithEmailAndPassword(email, pw);
+                    }
+                    overlay.style.display = 'none';
+                } catch (e) { handleAuthError(e); }
+            };
+            overlay.style.display = 'flex';
+        };
+
+        // --- 마이페이지(플랫폼 뷰) 렌더링 (Firestore 데이터 사용) ---
+        const renderMyPage = async (user) => {
+            let overlay = document.getElementById('mypage-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'mypage-overlay';
+                document.body.appendChild(overlay);
+            }
+
+            // Firestore에서 데이터 가져오기
+            const docRef = db.collection("user_process").doc(user.uid);
+            const docSnap = await docRef.get();
+            let steps = [];
+            if (docSnap.exists) {
+                steps = docSnap.data().steps;
+            }
+
+            const stepsHtml = steps.map(step => `
+                <div class="status-step ${step.status}">
+                    <i class="${step.icon}" style="font-size:1.5rem; margin-bottom:10px;"></i>
+                    <span>${step.title}</span>
+                </div>
+            `).join('');
+
+            const activeStep = steps.find(s => s.status === 'active') || steps[0];
+
+            overlay.innerHTML = `
+                <div class="mypage-header">
+                    <h2 style="margin:0; color:var(--primary-color);">CHECKIT PLATFORM</h2>
+                    <div style="display:flex; gap:15px; align-items:center;">
+                        <span style="font-weight:600;">${user.email}님</span>
+                        <button id="close-mypage" class="lang-btn" style="background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">닫기</button>
+                    </div>
+                </div>
+                <div class="status-timeline">${stepsHtml}</div>
+                <div style="display:grid; grid-template-columns: 1fr 1.5fr; gap:20px; padding:20px; flex-grow:1;">
+                    <div class="info-panel" style="background:#fff; border-radius:12px; border:1px solid #eee; padding:25px; text-align:left;">
+                        <h3 style="margin-top:0; border-bottom:2px solid var(--primary-color); padding-bottom:10px;">나의 서비스 현황</h3>
+                        <div style="margin-top:20px;">
+                            <p><strong>현재 단계:</strong> <span style="color:var(--primary-color);">${activeStep.title}</span></p>
+                            <p><strong>상세 안내:</strong> <span>${activeStep.description}</span></p>
+                            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+                            <h4>전담 매니저 매칭 완료</h4>
+                            <div style="display:flex; align-items:center; gap:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
+                                <div style="width:50px; height:50px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem;"><i class="fas fa-user"></i></div>
+                                <div><div style="font-weight:700;">Sarah Manager</div><div style="font-size:0.85rem; color:#666;">English/Korean Specialist</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-chat-container">
+                        <div style="padding:15px 20px; border-bottom:1px solid #eee; font-weight:700; display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-headset" style="color:var(--primary-color);"></i> 1:1 행정 지원 채팅
+                        </div>
+                        <div class="chat-messages" id="platform-chat-messages">
+                            <div class="message bot">안녕하세요, ${user.email.split('@')[0]}님! 현재 ${activeStep.title} 단계 진행 중입니다. 궁금하신 점이 있으시면 말씀해 주세요.</div>
+                        </div>
+                        <div style="padding:15px; display:flex; gap:10px; background:#fff; border-top:1px solid #eee;">
+                            <input type="text" id="platform-chat-input" placeholder="메시지를 입력하세요..." style="flex-grow:1; border:1px solid #ddd; border-radius:8px; padding:10px 15px;">
+                            <button id="platform-chat-send" style="background:var(--primary-color); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-weight:700;">전송</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('close-mypage').onclick = () => document.body.classList.remove('platform-view-active');
+            const chatInput = document.getElementById('platform-chat-input'), chatSend = document.getElementById('platform-chat-send'), chatMsgs = document.getElementById('platform-chat-messages');
+            const sendMsg = () => {
+                const val = chatInput.value.trim();
+                if (val) {
+                    const msg = document.createElement('div'); msg.className = 'message user'; msg.textContent = val;
+                    chatMsgs.appendChild(msg); chatInput.value = ''; chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                    setTimeout(() => {
+                        const r = document.createElement('div'); r.className = 'message bot'; r.textContent = "매니저가 확인 중입니다.";
+                        chatMsgs.appendChild(r); chatMsgs.scrollTop = chatMsgs.scrollHeight;
+                    }, 1000);
+                }
+            };
+            chatSend.onclick = sendMsg;
+            chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMsg(); };
+        };
+
         const initAuth = () => {
             const nav = document.querySelector('#language-switcher');
             if (!nav) return;
-            
             let authBtn = document.getElementById('platform-auth-btn');
             if (!authBtn) {
                 authBtn = document.createElement('button');
@@ -753,13 +728,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         logoutBtn.id = 'platform-logout-btn';
                         logoutBtn.className = 'lang-btn logout-btn';
                         logoutBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
-                        logoutBtn.onclick = () => auth.signOut().then(() => {
-                            window.location.href = 'index.html';
-                        });
+                        logoutBtn.onclick = () => auth.signOut().then(() => window.location.href = 'index.html');
                         authBtn.parentNode.appendChild(logoutBtn);
                     }
 
-                    // URL 파라미터 체크 (마이페이지 바로가기)
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.get('view') === 'mypage' && window.location.href.toLowerCase().indexOf('individual') > -1) {
                         document.body.classList.add('platform-view-active');
@@ -775,86 +747,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
         initAuth();
-    } else {
-        console.warn("Firebase SDK not detected.");
     }
 
-    // --- B2B 실무 과정 슬라이드 로직 (이미지 버전 대폭 변경) ---
+    // --- B2B 실무 과정 슬라이드 로직 ---
     const initB2BProcessSlide = () => {
-        const openBtn = document.getElementById('openProcessSlide');
-        const modal = document.getElementById('processModal');
+        const openBtn = document.getElementById('openProcessSlide'), modal = document.getElementById('processModal');
         if (!openBtn || !modal) return;
-
-        const processImage = document.getElementById('processImage');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const indicator = document.getElementById('indicator');
-        const closeBtn = document.getElementById('closeProcess');
-        const overlay = modal.querySelector('.modal-overlay');
-
+        const processImage = document.getElementById('processImage'), prevBtn = document.getElementById('prevBtn'), nextBtn = document.getElementById('nextBtn'),
+              indicator = document.getElementById('indicator'), closeBtn = document.getElementById('closeProcess'), overlay = modal.querySelector('.modal-overlay');
         const cacheBuster = `?v=${new Date().getTime()}`;
-        const processImages = [
-            "assets/process_01.png" + cacheBuster,
-            "assets/process_02.png" + cacheBuster,
-            "assets/process_03.png" + cacheBuster,
-            "assets/process_04.png" + cacheBuster,
-            "assets/process_05.png" + cacheBuster,
-            "assets/process_06.png" + cacheBuster,
-            "assets/process_07.png" + cacheBuster,
-            "assets/process_08.png" + cacheBuster,
-            "assets/process_09.png" + cacheBuster,
-            "assets/process_10.png" + cacheBuster,
-            "assets/process_11.png" + cacheBuster,
-            "assets/process_12.png" + cacheBuster,
-            "assets/process_13.png" + cacheBuster,
-            "assets/process_14.png" + cacheBuster,
-            "assets/process_15.png" + cacheBuster,
-            "assets/process_16.png" + cacheBuster,
-            "assets/process_17.png" + cacheBuster,
-            "assets/process_18.png" + cacheBuster
-        ];
-
+        const processImages = Array.from({length: 18}, (_, i) => `assets/process_${(i+1).toString().padStart(2, '0')}.png${cacheBuster}`);
         let currentIndex = 0;
-
         const updateSlide = () => {
             if (processImage) processImage.src = processImages[currentIndex];
             if (indicator) indicator.innerText = `${currentIndex + 1} / ${processImages.length}`;
-            if (prevBtn) {
-                prevBtn.disabled = currentIndex === 0;
-                prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1";
-            }
-            if (nextBtn) {
-                nextBtn.disabled = currentIndex === processImages.length - 1;
-                nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1";
-            }
+            if (prevBtn) { prevBtn.disabled = currentIndex === 0; prevBtn.style.opacity = currentIndex === 0 ? "0.3" : "1"; }
+            if (nextBtn) { nextBtn.disabled = currentIndex === processImages.length - 1; nextBtn.style.opacity = currentIndex === processImages.length - 1 ? "0.3" : "1"; }
         };
-
-        openBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            modal.style.setProperty('display', 'flex', 'important');
-            document.body.style.overflow = 'hidden'; 
-            currentIndex = 0;
-            updateSlide();
-        });
-
-        const closeAction = () => {
-            modal.style.setProperty('display', 'none', 'important');
-            document.body.style.overflow = 'auto'; 
-        };
-
-        closeBtn?.addEventListener('click', closeAction);
-        overlay?.addEventListener('click', closeAction);
+        openBtn.addEventListener('click', (e) => { e.preventDefault(); modal.style.setProperty('display', 'flex', 'important'); document.body.style.overflow = 'hidden'; currentIndex = 0; updateSlide(); });
+        const closeAction = () => { modal.style.setProperty('display', 'none', 'important'); document.body.style.overflow = 'auto'; };
+        closeBtn?.addEventListener('click', closeAction); overlay?.addEventListener('click', closeAction);
         nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); if (currentIndex < processImages.length - 1) { currentIndex++; updateSlide(); } });
         prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); if (currentIndex > 0) { currentIndex--; updateSlide(); } });
-
-        document.addEventListener('keydown', (e) => {
-            if (modal.style.display === 'flex') {
-                if (e.key === 'ArrowRight') nextBtn.click();
-                if (e.key === 'ArrowLeft') prevBtn.click();
-                if (e.key === 'Escape') closeAction();
-            }
-        });
+        document.addEventListener('keydown', (e) => { if (modal.style.display === 'flex') { if (e.key === 'ArrowRight') nextBtn.click(); if (e.key === 'ArrowLeft') prevBtn.click(); if (e.key === 'Escape') closeAction(); } });
     };
-
     initB2BProcessSlide();
 });

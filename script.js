@@ -531,47 +531,47 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec5_item3_desc': 'Independent from specific hospitals, we propose optimal options solely for worker convenience and corporate efficiency.',
             'corp_sec5_item4_title': 'Native Language Result Delivery',
             'corp_sec5_item4_desc': 'By providing simple translations of check-up results in the worker’s native language, we help them accurately understand their health status and actively participate in follow-up care.',
-            'corp_sec6_title': 'No Need to Change Existing Processes',
-            'corp_sec6_subtitle': 'Perfectly complying with medical laws, we maximize only corporate operational efficiency.',
-            'corp_sec6_item1_title': 'No Violation of Medical Law',
-            'corp_sec6_item1_desc': 'We do not engage in patient solicitation or referral; there is zero legal risk as we only act as a proxy for non-medical communication.',
-            'corp_sec6_item2_title': 'No Hospital Contract Structure',
-            'corp_sec6_item2_desc': 'We do not have a structure of exchanging fees with hospitals. You may continue to use your company\'s existing affiliated hospitals.',
-            'corp_sec6_item3_title': 'Immediate Implementation Possible',
-            'corp_sec6_item3_desc': 'Without complex system integration, foreign workers\' check-up environments improve from tomorrow just by applying.',
-            'corp_sec7_title': 'Sophisticated & Systematic Operating Process',
-            'corp_sec7_subtitle': 'From list receipt to final reporting, CHECKIT manages and takes responsibility for every step.',
-            'corp_sec7_step1_title': 'List Receipt & Analysis',
-            'corp_sec7_step1_1': 'Receive candidate list from company',
-            'corp_sec7_step1_2': 'Verify list and organize priority by booking/check-up period',
-            'corp_sec7_step2_title': 'Individual Booking & Confirmation',
-            'corp_sec7_step2_1': '1:1 contact with workers; select preferred schedule/hospital',
-            'corp_sec7_step2_2': 'Quick reservation processing and confirmation SMS delivery',
-            'corp_sec7_step3_title': 'Intensive Pre-guidance',
-            'corp_sec7_step3_1': 'Detailed instructions on preparation and precautions',
-            'corp_sec7_step3_2': '1:1 real-time alerts (7, 3, 2, 1 days before & day of check-up)',
-            'corp_sec7_step4_title': 'On-site Support on Check-up Day',
-            'corp_sec7_step4_1': 'Real-time communication support and problem-solving',
-            'corp_sec7_step4_2': 'Monitor progress and manage completion (no missing items)',
-            'corp_sec7_step5_title': 'Result Management & Follow-up Care',
-            'corp_sec7_step5_1': 'Guide on result duration and receiving method after completion',
-            'corp_sec7_step5_2': 'Provide simple translation and check for re-examination need',
-            'corp_sec7_step5_3': 'Guide on required documents and manage until final submission',
-            'corp_sec7_step6_title': 'Final Reporting & Data Update',
-            'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
-            'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
-            'corp_faq_title': 'Frequently Asked Questions (FAQ)',
-            'corp_faq_subtitle': 'We have gathered the questions most frequently asked by our corporate clients.',
-            'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
-            'corp_faq_a1': 'Yes, you can. CHECKIT is an independent service not tied to any specific hospital. You don’t need to change the hospitals you already use; we simply fill the communication and management gap between you and the hospital.',
-            'corp_faq_q2': 'Is there any risk of violating medical laws?',
-            'corp_faq_a2': 'CHECKIT strictly prohibits acts that violate medical law, such as patient solicitation or referral. We focus solely on non-medical administrative support like booking, interpretation, and simple translation of result sheets, making it legally very safe.',
-            'corp_faq_q3': 'How is worker personal information managed?',
-            'corp_faq_a3': 'We comply with personal information protection laws in every process. Lists are received via secure methods and safely disposed of according to regulations once the necessary period after the check-up has passed.',
-            'corp_faq_q4': 'Does implementation require complex system integration?',
-            'corp_faq_a4': 'Not at all. Implementation is possible immediately with just a candidate list and simple schedule coordination, without the need for any software installation or system linking.',
-            'corp_faq_q5': 'What level of translation is provided for result sheets?',
-            'corp_faq_a5': 'We provide a core summary in the worker’s native language of the Korean result sheet, which is often filled with technical terms. This is a simple translation for the purpose of conveying information, ensuring the worker’s right to know, rather than a medical opinion.',
+            'corp_sec6_title': '기존 프로세스를 바꿀 필요가 없습니다',
+            'corp_sec6_subtitle': '의료법을 완벽히 준수하며, 기업의 운영 효율만을 극대화합니다.',
+            'corp_sec6_item1_title': '의료법 위반 없음',
+            'corp_sec6_item1_desc': '환자 유인·알선 행위를 하지 않으며, 비의료적 소통 및 행정 서비스만을 대행하여 법적 리스크가 전혀 없습니다.',
+            'corp_sec6_item2_title': '병원 계약 구조 없음',
+            'corp_sec6_item2_desc': '병원과 수수료를 주고받는 구조가 아닙니다. 기업이 기존에 이용하던 연계 병원을 그대로 사용하셔도 무방합니다.',
+            'corp_sec6_item3_title': '즉각 도입 가능',
+            'corp_sec6_item3_desc': '복잡한 시스템 연동 없이 서비스 신청만으로 내일부터 바로 외국인 근로자들의 검진 환경이 개선됩니다.',
+            'corp_sec7_title': '정교하고 체계적인 운영 프로세스',
+            'corp_sec7_subtitle': '명단 수령부터 최종 보고까지, CHECKIT이 모든 과정을 책임지고 관리합니다.',
+            'corp_sec7_step1_title': '명단 수령 및 분석',
+            'corp_sec7_step1_1': '기업으로부터 검진 대상자 명단 수령',
+            'corp_sec7_step1_2': '명단 확인 후 예약 및 검진 기간 우선순위 정리',
+            'corp_sec7_step2_title': '개인별 예약 및 확정',
+            'corp_sec7_step2_1': '근로자 대상 1:1 컨택 및 희망 일정·병원 선택',
+            'corp_sec7_step2_2': '신속한 예약 진행 및 확정 문자 발송',
+            'corp_sec7_step3_title': '집중 사전 가이드',
+            'corp_sec7_step3_1': '검진 전 준비사항 및 주의사항 상세 안내',
+            'corp_sec7_step3_2': '7일·3일·2일·1일 전 및 당일 실시간 1:1 알림 제공',
+            'corp_sec7_step4_title': '검진 당일 현장 지원',
+            'corp_sec7_step4_1': '검사 당일 실시간 소통 지원 및 불편 해소',
+            'corp_sec7_step4_2': '진행 상황 모니터링 및 미검 항목 없는 완료 관리',
+            'corp_sec7_step5_title': '결과 관리 및 사후 케어',
+            'corp_sec7_step5_1': '검진 완료 후 결과 소요 기간 및 수령 방법 안내',
+            'corp_sec7_step5_2': '결과 수령 후 단순 번역 제공 및 재검 여부 확인',
+            'corp_sec7_step5_3': '회사 필수 제출 서류 안내 및 최종 제출까지 관리',
+            'corp_sec7_step6_title': '최종 보고 및 데이터 업데이트',
+            'corp_sec7_step6_1': '명단 파일에 개인별 진행 상황 및 특이사항 업데이트 저장',
+            'corp_sec7_step6_2': '기업 요청 시 실시간 진행 현황 및 완료 명단 보고',
+            'corp_faq_title': '자주 묻는 질문 (FAQ)',
+            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
+            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
+            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
+            'corp_faq_q2': '의료법 위반 소지는 없나요?',
+            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 \'비의료적 행정 지원\'에만 집중하므로 법적으로 매우 안전합니다.',
+            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
+            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
+            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
+            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
+            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
+            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
             'contact_form_company_label': 'Company Name',
             'chatbot_header': 'Check Bot',
             'chatbot_placeholder': 'Type a message...',
@@ -1025,8 +1025,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.getElementById('close-mypage').onclick = () => {
                 document.body.classList.remove('platform-view-active');
-                if (platformUnsubscribe) platformUnsubscribe();
-                if (chatUnsubscribe) chatUnsubscribe();
+                if (platformUnsubscribe) { platformUnsubscribe(); platformUnsubscribe = null; }
+                if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
             };
 
             const timelineEl = document.getElementById('realtime-timeline');
@@ -1130,7 +1130,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         logoutBtn.id = 'platform-logout-btn';
                         logoutBtn.className = 'lang-btn logout-btn';
                         logoutBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
-                        logoutBtn.onclick = () => auth.signOut().then(() => window.location.href = 'index.html');
+                        logoutBtn.onclick = () => auth.signOut().then(() => {
+                            if (platformUnsubscribe) platformUnsubscribe();
+                            if (chatUnsubscribe) chatUnsubscribe();
+                            document.body.classList.remove('platform-view-active');
+                            window.location.href = 'index.html';
+                        });
                         authBtn.parentNode.appendChild(logoutBtn);
                     }
 
@@ -1144,6 +1149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const logoutBtn = document.getElementById('platform-logout-btn');
                     if (logoutBtn) logoutBtn.remove();
                     document.body.classList.remove('platform-view-active');
+                    if (platformUnsubscribe) { platformUnsubscribe(); platformUnsubscribe = null; }
+                    if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
                 }
             });
         };

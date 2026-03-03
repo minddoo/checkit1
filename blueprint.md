@@ -16,55 +16,50 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   `individual.html` & `corporate.html` have been implemented with modern, responsive designs tailored to each client type.
     *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
     *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
-    *   "Learn More" buttons on the main page link correctly to these dedicated pages.
 *   **Design Standardization (March 2026):**
-    *   **Unified Margins:** All pages now use a standard `.container` with `max-width: 1200px` and consistent horizontal padding for a professional, centered look.
-    *   **Hero Alignment:** Corporate and Individual hero sections are now perfectly aligned. Spacing between text and characters is synchronized across both pages.
-    *   **Corporate Hero Character:** The character size in the corporate hero section has been increased by 1.5x (from 600px to 900px) to create a more impactful and professional first impression for business clients.
-    *   **Text Clarity:** Hero titles and subtitles are set to **absolute black (#000)** for maximum readability on the green hero background.
+    *   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.
+    *   **Hero Alignment:** Corporate and Individual hero sections are perfectly aligned.
+    *   **Text Clarity:** Hero titles and subtitles use high-contrast colors for maximum readability.
 *   **Mobile App-Like Experience:**
-    *   **Horizontal Sliders:** All multi-card sections (Packages, Features, Testimonials) are transformed into horizontal "App-like" sliders on mobile.
-    *   **Snap Behavior:** Uses `scroll-snap-type: x mandatory` to ensure cards always land centered.
-    *   **Preview Structure:** Cards are sized at 80% width with 10% preview of adjacent cards, creating a modern "swipable" feel.
-    *   **Dynamic Scaling:** The centered card is slightly larger (scale 1.05) than side cards (scale 0.95) for focus.
-    *   **Scroll Stability:** Vertical scrolling is prioritized, ensuring horizontal sliders never block the user from moving down the page.
+    *   **Horizontal Sliders:** Multi-card sections (Packages, Features, Testimonials) use horizontal sliders on mobile with `scroll-snap-type`.
+    *   **Snap Behavior:** Cards land centered with a preview of adjacent cards.
 
 *   **B2B Process Slide (March 2026):**
-    *   **Image-Based Slider:** Replaced the previous text-based Firestore logic with a modern PPT-style image slider in the corporate page.
-    *   **PPT to PNG Integration:** Designed to display high-quality PNG images exported from the official service process PPT.
-    *   **Interactive UI:** Includes a full-screen modal with an overlay, navigation buttons (Previous/Next), and a page indicator (e.g., 1 / 10).
-    *   **Firebase Storage:** Configured to fetch images from Firebase Storage via direct download URLs for optimal performance.
+    *   **Image-Based Slider:** PPT-style image slider displaying PNG exports of the official service process.
+    *   **Interactive UI:** Full-screen modal with navigation buttons and a page indicator.
 
-### **Feature 1: Expanded Language Support**
+## 3. Multilingual Support
 
-*   **Languages Added:** Chinese (CN) and Vietnamese (VN) will be added to the existing Korean and English options.
-*   **Website Translation:** The header navigation will include buttons for all four languages (KR, EN, CN, VN). All text content on the main page and new dedicated pages will be translatable.
-*   **Chatbot Translation:** The "Check봇" will also support conversations in all four languages, with corresponding buttons in the chat window.
+*   **Languages:** Korean (KO), English (EN), Chinese (CN), Vietnamese (VN).
+*   **Real-time Switch:** Entire UI, including the Platform Dashboard and Chatbot, updates instantly when the language is changed.
 
-### **Feature 2: Check봇 (Chatbot)**
+## 4. Platform Backend & Data Architecture
 
-*   The chatbot's Q&A database will be updated to include information from the new sections and will be fully translatable into all four supported languages.
+### **Authentication System (Firebase Auth)**
+*   **Methods:** Google OAuth 2.0 and Email/Password authentication.
+*   **User Profiles:** Automatic creation of a profile in the `users` collection upon signup to store roles and metadata.
 
-## 4. Platform Functionality (Implementation Plan)
+### **Service Management Platform (My Page)**
+*   **Real-time Dashboard:** Uses Firestore `onSnapshot` to update the service timeline and active step details instantly when changed by a manager.
+*   **Persistent 1:1 Chat:** A dedicated support chat per user, stored in a subcollection. History is preserved across sessions.
+*   **Automatic Initialization:** New users automatically receive a default service process template upon registration.
 
-### **Process Flow**
-1.  **Authentication:** User registration and login (Firebase Auth).
-    *   **Google Login:** One-click authentication using Google accounts.
-    *   **Email/Password:** Traditional signup and login flow.
-    *   **Real-time State Sync:** Navigation buttons (Login/Logout/My Page) update instantly based on auth state.
-    *   **Error Handling:** Detailed user feedback for common errors (already in use, wrong password, etc.).
-2.  **Package Selection:** Link existing package cards to the service flow.
-3.  **CHECKIT Service Payment:** Payment integration for CHECKIT fees only.
-4.  **Information Intake:** Collect user data (Name, DOB, Language, Travel dates, Budget).
-5.  **Service Execution:** Step-by-step progress from hospital list provision to result translation.
-6.  **My Page Dashboard:** Real-time status tracking, 1:1 administrative chat, and file management.
+### **Lead Management (Contact Forms)**
+*   **Centralized Inquiries:** All "Contact Us" submissions are saved to the `contact_inquiries` collection.
+*   **Metadata Tracking:** Captures email, phone, company, message, timestamp, source URL, and user language preference.
 
-### **Data Architecture**
-*   **Users:** Stores profile, selected package, and current status.
-*   **Applications:** Manages individual service requests and progress milestones.
-*   **Chats:** Real-time messaging for administrative support (non-medical).
+### **Data Schema (Firestore)**
+*   **`users/{uid}`**: `{ role: "user" | "admin", email: string, companyId: string }`
+*   **`user_process/{uid}`**: `{ steps: [{ title, description, status, icon }] }`
+*   **`user_process/{uid}/messages/{msgId}`**: `{ text, sender: "user" | "bot", timestamp: serverTimestamp }`
+*   **`contact_inquiries/{id}`**: `{ email, phone, company, message, timestamp, source, language }`
 
-### **Service Scope Enforcement**
+### **Security Rules**
+*   **Role-Based Access Control (RBAC)**: Defined in `firestore.rules`.
+*   **Privacy**: Users can only read/write their own process and messages.
+*   **Admin Access**: `super_admin` can manage all documents; `company_admin` can view documents belonging to their `companyId`.
+
+## 5. Service Scope Enforcement
 *   Strictly non-medical administrative support.
 *   No hospital payment processing (direct payment to hospitals by users).
 *   No medical advice or recommendations.

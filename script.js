@@ -11,9 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_title': '개인 고객',
             'individual_desc': '한국 거주/방문 외국인 개인이 언어 장벽 없이<br>편안하게 건강검진을 받을 수 있도록 지원합니다.',
             'corporate_title': '기업 고객',
-            'corporate_desc': '외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여,<br>기업의 보건 관리 부담을 줄여드립니다.',
+            'corporate_desc': '외국인 근로자의 단체 건강검진을 쉽고 효율적으로 관리하여,<br>기업의 보건 관리 부담을 덜어드립니다.',
             'learn_more': '더 알아보기',
-            'why_us_title': '왜 CHECKIT을 선택해야 할까요?',
+            'view_workflow': '실무과정 보기',
+            'why_us_title': '왜 CHECKIT인가요?',
             'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\'에서 어려움을 겪습니다.<br>CHECKIT은 바로 이 공백을 채웁니다.',
             'why_us_feature1_title': '커뮤니케이션 전문',
             'why_us_feature1_desc': '병원 선택부터 결과 번역까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.',
@@ -545,6 +546,292 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_title': 'Final Reporting & Data Update',
             'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
             'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
+            'corp_faq_title': '자주 묻는 질문 (FAQ)',
+            'corp_faq_subtitle': '기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.',
+            'corp_faq_q1': '기존 제휴 병원을 그대로 이용할 수 있나요?',
+            'corp_faq_a1': '네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.',
+            'corp_faq_q2': '의료법 위반 소지는 없나요?',
+            'corp_faq_a2': 'CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 \'비의료적 행정 지원\'에만 집중하므로 법적으로 매우 안전합니다.',
+            'corp_faq_q3': '근로자 개인정보는 어떻게 관리되나요?',
+            'corp_faq_a3': '모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.',
+            'corp_faq_q4': '도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?',
+            'corp_faq_a4': '전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.',
+            'corp_faq_q5': '결과지 번역은 어느 수준까지 제공되나요?',
+            'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
+            'contact_form_company_label': '기업명',
+            'chatbot_header': 'Check봇',
+            'chatbot_placeholder': '메시지를 입력하세요...',
+            'chatbot_greeting': '안녕하세요! CHECKIT에 대해 궁금한 점이 있으신가요? 아래에서 질문을 선택하거나 직접 입력해주세요.',
+            'greeting_response': '안녕하세요! 만나서 반가워요. CHECKIT에 대해 궁금한 점이 있으시면 아래 질문을 선택하거나 직접 물어보세요.',
+            'q1': '예약은 어떻게 하나요?',
+            'a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
+            'q2': '병원/의료인과 계약된 구조인가요?',
+            'a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
+            'q3': '의료 행위나 진료 알선을 하나요?',
+            'a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
+            'q4': '검진 당일 어떤 도움을 받을 수 있나요?',
+            'a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
+            'q5': '결과지는 어떻게 전달되나요?',
+            'a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
+            'unsupported_input': '흥미로운 질문이네요! 현재는 정해진 답변만 드릴 수 있지만, 더 자세한 내용은 \'상담 신청\'을 통해 문의하시면, 전문 매니저가 친절하게 안내해 드릴 거예요.'
+        },
+        en: {
+            'nav_home': 'Home',
+            'hero_title': 'Health Check-ups for Foreigners,<br>Comfortable Without Language Barriers.',
+            'hero_subtitle': 'From missed schedules and difficult-to-understand check-up guides to results provided only in Korean.<br>CHECKIT solves all non-medical processes.',
+            'hero_cta': 'Apply for a Consultation Now',
+            'service_for_title': 'Who is this service for?',
+            'individual_title': 'Individual Clients',
+            'individual_desc': 'We support foreign individuals residing in or visiting Korea to receive health check-ups comfortably<br>without language barriers.',
+            'corporate_title': 'Corporate Clients',
+            'corporate_desc': 'We manage group health check-ups for foreign employees easily and efficiently,<br>reducing the burden of corporate health care.',
+            'learn_more': 'Learn More',
+            'why_us_title': 'Why Choose CHECKIT?',
+            'why_us_subtitle_new': 'Despite the high quality of medical services, foreigners face difficulties in \'non-medical processes\' such as booking, registration, and result checking.<br>CHECKIT fills this very gap.',
+            'why_us_feature1_title': 'Communication Specialists',
+            'why_us_feature1_desc': 'From hospital selection to result translation, we solve all communication problems caused by language and cultural barriers.',
+            'why_us_feature2_title': '100% Client-Centric',
+            'why_us_feature2_desc': 'Without any contracts with hospitals, we solely represent our clients, proposing the best options and assisting in the process.',
+            'why_us_feature3_title': 'Focus on Non-Medical Processes',
+            'why_us_feature3_desc': 'We handle all auxiliary procedures, excluding medical practice, allowing clients to focus solely on their health check-up.',
+            'why_us_feature4_title': 'Reasonable Cost',
+            'why_us_feature4_desc': 'We operate independently without ties to medical institutions, so there are no unnecessary brokerage fees. You can use our service with only a pure service fee.',
+            'process_title': 'CHECKIT Process',
+            'process_step1_title': 'Consultation & Hospital Selection Support',
+            'process_step1_desc_new': 'After consulting on desired check-up items and schedule, we provide a list of optimal hospitals that meet the conditions to help you choose and proceed with the reservation.',
+            'process_step2_title': 'Real-time Communication Support',
+            'process_step2_desc_new': 'On the day of the check-up, we provide real-time support for all communication within the hospital to ensure no inconvenience.',
+            'process_step3_title_new': 'Translated Result File Delivery',
+            'process_step3_desc_new': 'We provide a simple translation and summary of the result sheet you provide, and deliver it as a file via email or messenger.',
+            'testimonials_title': 'Real Customer Reviews',
+            'testimonials_subtitle': 'Hear directly from customers who have been with CHECKIT.',
+            'testimonial1_text': '“It was my first time getting a health check-up in Korea, so I was at a loss, but thanks to CHECKIT, the process from hospital selection to reservation and communication on the day of the check-up was really comfortable. The results were also easy to understand as they were translated into my native language.”',
+            'testimonial1_author': 'Anna, International Student',
+            'testimonial1_type': 'Foreign Resident in Korea',
+            'testimonial2_text': '“I wanted to invite my parents to Korea for a health check-up, but I was worried about the language and procedures. I was so relieved that the CHECKIT manager took care of the entire process.”',
+            'testimonial2_author': 'David, Living Abroad',
+            'testimonial2_type': 'Family of Foreigner Living Abroad',
+            'testimonial3_text': '“Group health check-ups for foreign employees were always a headache, but thanks to CHECKIT, everything from reservations to results management has become so simple. The employees are also very satisfied.”',
+            'testimonial3_author': 'Mr. Park',
+            'testimonial3_type': 'Corporate Client Manager',
+            'contact_title_new': 'Do You Have Any Questions?',
+            'contact_subtitle_new': 'A CHECKIT professional manager will respond quickly and kindly.',
+            'contact_form_email_label': 'Email Address',
+            'contact_form_email_placeholder': 'e.g., example@checkit.com',
+            'contact_form_phone_label': 'Phone Number (Optional)',
+            'contact_form_phone_placeholder': 'e.g., 010-1234-5678',
+            'contact_form_message_label': 'Your Message',
+            'contact_form_message_placeholder': 'Please write your inquiry in detail.',
+            'contact_form_submit_button': 'Submit Inquiry',
+            'individual_page_title': 'Personalized Services for Individual Clients',
+            'individual_page_subtitle': 'CHECKIT helps all foreign individuals residing in or visiting Korea receive the best health check-ups without language barriers.',
+            'expectation_title': 'What Foreigners Expect from Korean Medical Services',
+            'expectation_subtitle': '"Should I get a health check-up in Korea?"<br>Features of Korean healthcare frequently mentioned in overseas communities',
+            'expectation_item_title_1': '#1. Cost Efficiency',
+            'expectation_item_desc_1': '“Medical care in Korea is known to be dramatically cheaper than in the U.S.”',
+            'expectation_item_title_2': '#2. Convenience',
+            'expectation_item_desc_2': '“The entire process is expected to be simple and hassle-free.”',
+            'expectation_item_title_3': '#3. Professional Quality',
+            'expectation_item_desc_3': '“Facilities and medical standards are expected to be world-class.”',
+            'expectation_item_title_4': '#4. Time Safety',
+            'expectation_item_desc_4': '“It\'s expected to be quick, with minimal impact on your schedule.”',
+            'reality_title': 'But the reality is...',
+            'reality_item_title_1': 'Lack of Multilingual Support',
+            'reality_item_1_point_1': 'Staff avoid calls because they can\'t speak foreign languages.',
+            'reality_item_1_point_2': 'Instructions, preparation guides, and notifications are all in Korean.',
+            'reality_item_1_point_3': 'Sensitive questions (menstruation, surgery, symptoms) are not properly explained.',
+            'reality_item_1_point_4': 'All announcements during the check-up are only in Korean.',
+            'reality_item_title_2': 'Confusing Process',
+            'reality_item_2_point_1': 'You don\'t even know what\'s included in the check-up package.',
+            'reality_item_2_point_2': 'Preparation items arrive without instructions on how to use them.',
+            'reality_item_2_point_3': 'Colonoscopy medicine is explained only in Korean → leading to test failure.',
+            'reality_item_2_point_4': 'The pre-examination questionnaire is long, complicated, and entirely in Korean.',
+            'reality_item_title_3': 'Uncertain Scheduling',
+            'reality_item_3_point_1': 'It takes 2-3 days just to make an appointment.',
+            'reality_item_3_point_2': 'Different staff give different answers — no one takes responsibility.',
+            'reality_item_3_point_3': 'No Korean phone number → no notifications or preparation guides.',
+            'reality_item_3_point_4': 'Due to time differences abroad → calls fail and appointments are delayed.',
+            'reality_item_title_4': 'Delayed Results & Lack of Accountability',
+            'reality_item_4_point_1': 'Results are mailed to an address where you are not present.',
+            'reality_item_4_point_2': 'Results are delayed for weeks even after leaving Korea.',
+            'reality_item_4_point_3': 'Cannot receive receipts due to restrictions on overseas phone verification.',
+            'reality_item_4_point_4': 'No explanation of post-examination rules (e.g., flying after polyp removal).',
+            'reality_overtime_title': 'Problems that seem trivial in writing. This is the reality.',
+            'reality_overtime_p1': 'Before coming to Korea, I was reassured about everything.',
+            'reality_overtime_p2': 'I was told multilingual support was available, that foreigners used the service frequently, and that the entire process would be smooth and well-guided.',
+            'reality_overtime_p3': 'And then I tried to book an appointment.',
+            'reality_overtime_p4': 'That’s when everything started to fall apart.',
+            'reality_overtime_p5': 'There was no one who could actually speak my language.',
+            'reality_overtime_p6': 'Every guide, notification, and preparation note was in Korean only, which was so different from what I was promised.',
+            'reality_overtime_p7': 'It took days just to confirm a schedule. Calls went unanswered, and replies were late or never came. Every time I followed up, I felt like I was asking for too much... even though I was just trying to understand the basics.',
+            'reality_overtime_p8': 'On the day of the exam, the confusion was at its peak. I was told someone would guide me, but I had no idea where to go, what to bring, or who to ask.',
+            'reality_overtime_p9': 'Staff spoke quickly in Korean, pointed vaugely, and just left. One test was stopped midway with no explanation, just a simple gesture to go elsewhere.',
+            'reality_overtime_p10': 'In that moment, I realized I was completely alone.',
+            'reality_overtime_p11': 'I left Korea without even receiving my results. Days turned into weeks. No follow-up, no clear answers. No one seemed to feel responsible. And then I finally realized something important: the promises I heard before I came did not match the reality I faced upon arrival at all.',
+            'solution_title': 'CHECKIT\'s Solution',
+            'solution_subtitle': 'CHECKIT is with you throughout the entire health check-up process, ensuring you can focus solely on your health without any inconvenience, loneliness, or anxiety.',
+            'individual_service1_title': '1:1 Dedicated Manager',
+            'individual_service1_desc': 'As soon as you request a consultation, a dedicated manager who speaks your language is assigned. They responsibly manage the entire process from hospital selection, reservation, to schedule coordination.',
+            'individual_service2_title_new': 'Real-time Communication Support',
+            'individual_service2_desc_new': 'Instead of physical accompaniment on the day of the check-up, we provide real-time support for all communication processes like hospital reception, consultation, and payment via messenger to help you focus on your check-up without inconvenience or loneliness.',
+            'individual_service3_title_new': 'Result Translation & Summary',
+            'individual_service3_desc_new': 'If you provide us with the Korean result sheet received from the hospital as a photo or file, we will translate and summarize the key contents into your native language. (Medical opinions or detailed explanations are not included.)',
+            'packages_title': 'Our Packages',
+            'packages_subtitle': 'Choose the perfect plan that fits your needs.',
+            'package_includes': 'What\'s Included',
+            'package2_includes': '(Includes everything in the NO-CONFUSION PLAN +)',
+            'package3_includes': '(Includes everything in the ZERO-MISTAKE PLAN +)',
+            'package_recommend_title': 'Recommended For',
+            'package1_title': 'No-Confusion Plan',
+            'package1_price': '₩500,000',
+            'package1_feature1': 'Neutral hospital list (no recommendations)',
+            'package1_feature2': 'Program and price structure (official information translation only)',
+            'package1_feature3': 'Step-by-step reservation guide',
+            'package1_feature4': 'English translation of all hospital documents',
+            'package1_feature5': 'Essential pre-examination questionnaire guide (simple, error-prevention)',
+            'package1_feature6': 'Essential pre-examination instructions (fasting and basic preparation)',
+            'package1_feature7': 'Guidance on what to bring on the day of the exam',
+            'package1_feature8': 'Secure result delivery via email',
+            'package1_feature9': 'Includes one follow-up on result delays',
+            'package1_recommend_desc': 'Those who want to manage the process themselves with clear information.',
+            'package2_title': 'Zero-Mistake Plan',
+            'package2_price': '₩650,000',
+            'package2_feature1': 'Enhanced pre-exam guide (detailed, mistake prevention-focused)',
+            'package2_feature2': 'Alerts for common mistakes foreigners make',
+            'package2_feature3': '1 form check (missing items, signature, date)',
+            'package2_feature4': 'Pre-exam guide pack (timeline + delay factors)',
+            'package2_feature5': 'Basic colonoscopy prep (if applicable)',
+            'package2_feature6': 'Priority messaging for time-sensitive issues',
+            'package2_feature7': 'Post-result follow-up (1 time)',
+            'package2_feature8': 'Alert for missing or delayed documents',
+            'package2_feature9': 'Schedule change support (1 time included)',
+            'package2_recommend_desc': 'Those who want to minimize mistakes and not miss important alerts.',
+            'package3_title': 'Total-Safe Plan',
+            'package3_price': '₩800,000',
+            'package3_feature1': 'Premium pre-exam management',
+            'package3_feature2': 'Risk point explanation (non-medical, procedure-based)',
+            'package3_feature3': 'English answer templates for complex forms',
+            'package3_feature4': 'Full form check (all pages, signatures, attachments)',
+            'package3_feature5': 'Premium pre-exam pack (detailed timeline, mistake response flow)',
+            'package3_feature6': 'Real-time chat support on exam day',
+            'package3_feature7': 'Hospital navigation guide (graphic)',
+            'package3_feature8': 'Request for English receipt (proxy)',
+            'package3_feature9': 'Request for CD / additional documents',
+            'package3_feature10': 'Full post-exam follow-up until results are out',
+            'package3_feature11': 'Result organization (non-medical, content organization only)',
+            'package3_feature12': 'Hospital communication templates',
+            'package3_feature13': 'Schedule change support (up to 3 times included)',
+            'package3_recommend_desc': 'Those who want the safest and most perfectly managed experience.',
+            'options_title_new': 'Optional Services',
+            'option_card_title_1': 'Non-Medical Guide',
+            'option_card_price_1': '₩82,800',
+            'option_card_desc_1': 'A non-medical guide on examination items, result structure, and post-examination care.',
+            'option_card_title_2': 'Hospital Route Guide',
+            'option_card_price_2': '₩27,600',
+            'option_card_desc_2': 'Shows the precise route and movement flow within the hospital. Useful for first-time visitors.',
+            'option_card_title_3': 'Reservation Change Option',
+            'option_card_desc_3': 'An option for customers who need to change their reservation after it has been made.',
+            'option_card_3_item_1': '1 Change:',
+            'option_card_3_item_2': '2-Change Package:',
+            'option_card_3_item_3': 'Unlimited Changes:',
+            'option_card_title_4': 'English Receipt Request',
+            'option_card_price_4': '₩27,600',
+            'option_card_desc_4': 'We request an English receipt suitable for insurance purposes on your behalf.',
+            'option_card_title_5': 'CD Result Request',
+            'option_card_price_5': '₩27,600',
+            'option_card_desc_5': 'We request the examination CD or additional image files on your behalf.',
+            'option_card_title_6': 'Urgent Result Follow-up',
+            'option_card_price_6': '₩27,600',
+            'option_card_desc_6': 'A one-time urgent follow-up message will be sent to the hospital.',
+            'notice_title': 'Why do foreigners pay more for the same health check-up in Korea?',
+            'notice_subtitle': 'We often get this question.',
+            'notice_quote': '“Why is your option cheaper than what the hospital offers?”',
+            'notice_answer_title': 'Simple answer',
+            'notice_answer_p1': 'It\'s not because the tests are different.',
+            'notice_answer_p2': 'It\'s because of the pricing structure.',
+            'notice_reality_title': 'What happens at many hospitals',
+            'notice_reality_p1': 'Most hospitals create a separate “foreigner package.” This package includes services that locals don\'t pay for, which drives up the total price.',
+            'notice_situation_title': 'A common situation for foreign clients',
+            'notice_situation_p1': 'One client was quoted 1,800,000 KRW for a foreigner package. Through our guidance, they booked the same tests for 1,050,000 KRW.',
+            'corporate_page_title': 'Total Solutions for Corporate Clients',
+            'corporate_page_subtitle': 'Systematically manage foreign workers\' health<br>to increase productivity and reduce<br>the burden of healthcare management.',
+            'corp_sec1_title': 'Foreign Workers: Now a Necessity, Not an Option',
+            'corp_sec1_subtitle': 'In a changing industrial landscape, securing and managing foreign talent has become the most critical task for sustainable growth.',
+            'corp_sec1_item1_title': 'Surging Foreign Workforce',
+            'corp_sec1_item1_desc': 'The proportion of foreigners in domestic manufacturing, production, construction, and all field-based enterprises is hitting record highs every year.',
+            'corp_sec1_item2_title': 'Strengthened Legal Protection',
+            'corp_sec1_item2_desc': 'Foreign workers are subject to the same Occupational Safety and Health Act and examination requirements as domestic workers.',
+            'corp_sec1_item3_title': 'Core of Corporate Competitiveness',
+            'corp_sec1_item3_desc': 'Retaining excellent foreign talent directly correlates with a company\'s productivity.',
+            'corp_sec2_title': 'Health Check-ups Become the Most Powerful Welfare Benefit',
+            'corp_sec2_subtitle': 'Differentiated health check-up support increases employee loyalty and enhances the corporate image.',
+            'corp_sec2_item1_title': 'A Company People Want to Work For',
+            'corp_sec2_item1_desc': 'Health management without language barriers is the #1 welfare benefit preferred by foreign workers.',
+            'corp_sec2_item2_title': 'Maximizing Productivity',
+            'corp_sec2_item2_desc': 'When healthy workers work stably, a company\'s production efficiency is maximized.',
+            'corp_sec2_item3_title': 'Practice of ESG Management',
+            'corp_sec2_item3_desc': 'Prove your value as a leading company that respects diversity and protects human rights.',
+            'corp_sec3_title': 'However, the Reality Faced on the Ground is Different',
+            'corp_sec3_subtitle': 'What is harder than the \'day\' of booking and receiving a check-up is the \'management gap\' before and after.',
+            'corp_sec3_item1_title': 'Before Check-up: Helplessness and Fear',
+            'corp_sec3_item1_p1': 'Questionnaires and precautions in Korean have limits even with translators.',
+            'corp_sec3_item1_p2': 'Misunderstanding fasting instructions leads to cancelled tests or accidents.',
+            'corp_sec3_item1_p3': 'They feel severe anxiety about communication even on the way to the hospital.',
+            'corp_sec3_item2_title': 'After Check-up: Neglected Results',
+            'corp_sec3_item2_p1': 'They can\'t read a single word of the result sheets they worked hard to get.',
+            'corp_sec3_item2_p2': 'Missing red flags for re-examination frequently causes illnesses to worsen.',
+            'corp_sec3_item2_p3': 'Companies only store the results; the communication gap with workers remains.',
+            'corp_sec4_title': 'The Management Gap that Only CHECKIT Can Fill',
+            'corp_sec4_subtitle': 'Hospitals only perform medical acts, and companies only receive results. CHECKIT handles \'every process\' in between.',
+            'corp_sec4_side1_title': 'Domain of Hospitals & Companies',
+            'corp_sec4_side1_p1': 'Conduct professional medical examinations',
+            'corp_sec4_side1_p2': 'Generate check-up result data',
+            'corp_sec4_side1_p3': 'Maintain legal mandatory records',
+            'corp_sec4_side2_title': 'Domain of CHECKIT (Non-medical Processes)',
+            'corp_sec4_side2_p1': '1:1 Native language dedicated manager matching',
+            'corp_sec4_side2_p2': 'Perfect translation guide for questionnaires and precautions',
+            'corp_sec4_side2_p3': 'Real-time text communication support on check-up day',
+            'corp_sec4_side2_p4': 'Delivery of simple translation and summary files of results',
+            'corp_sec4_side2_p5': 'Communication proxy for follow-up care (re-exam guides)',
+            'corp_sec5_title': 'Why Only CHECKIT is Possible',
+            'corp_sec5_subtitle': 'We set the standard for foreign worker management with incomparable expertise and technology.',
+            'corp_sec5_item1_title': 'Multilingual Professional Talent Pool',
+            'corp_sec5_item1_desc': 'Beyond simple interpretation, professional managers handle every non-medical stage, from hospital bookings to result translation and follow-up care.',
+            'corp_sec5_item2_title': 'Real-time Operational Response',
+            'corp_sec5_item2_desc': 'Equipped with systems to respond immediately to unexpected situations occurring at the check-up site.',
+            'corp_sec5_item3_title': 'Client-Centric Independence',
+            'corp_sec5_item3_desc': 'Independent from specific hospitals, we propose optimal options solely for worker convenience and corporate efficiency.',
+            'corp_sec5_item4_title': 'Native Language Result Delivery',
+            'corp_sec5_item4_desc': 'By providing simple translations of check-up results in the worker’s native language, we help them accurately understand their health status and actively participate in follow-up care.',
+            'corp_sec6_title': 'No Need to Change Existing Processes',
+            'corp_sec6_subtitle': 'Perfectly complying with medical laws, we maximize only corporate operational efficiency.',
+            'corp_sec6_item1_title': 'No Violation of Medical Law',
+            'corp_sec6_item1_desc': 'We do not engage in patient solicitation or referral; there is zero legal risk as we only act as a proxy for non-medical communication.',
+            'corp_sec6_item2_title': 'No Hospital Contract Structure',
+            'corp_sec6_item2_desc': 'We do not have a structure of exchanging fees with hospitals. You may continue to use your company\'s existing affiliated hospitals.',
+            'corp_sec6_item3_title': 'Immediate Implementation Possible',
+            'corp_sec6_item3_desc': 'Without complex system integration, foreign workers\' check-up environments improve from tomorrow just by applying.',
+            'corp_sec7_title': 'Sophisticated & Systematic Operating Process',
+            'corp_sec7_subtitle': 'From list receipt to final reporting, CHECKIT manages and takes responsibility for every step.',
+            'corp_sec7_step1_title': 'List Receipt & Analysis',
+            'corp_sec7_step1_1': 'Receive candidate list from company',
+            'corp_sec7_step1_2': 'Verify list and organize priority by booking/check-up period',
+            'corp_sec7_step2_title': 'Individual Booking & Confirmation',
+            'corp_sec7_step2_1': '1:1 contact with workers; select preferred schedule/hospital',
+            'corp_sec7_step2_2': 'Quick reservation processing and confirmation SMS delivery',
+            'corp_sec7_step3_title': 'Intensive Pre-guidance',
+            'corp_sec7_step3_1': 'Detailed instructions on preparation and precautions',
+            'corp_sec7_step3_2': '1:1 real-time alerts (7, 3, 2, 1 days before & day of check-up)',
+            'corp_sec7_step4_title': 'On-site Support on Check-up Day',
+            'corp_sec7_step4_1': 'Real-time communication support and problem-solving',
+            'corp_sec7_step4_2': 'Monitor progress and manage completion (no missing items)',
+            'corp_sec7_step5_title': 'Result Management & Follow-up Care',
+            'corp_sec7_step5_1': 'Guide on result duration and receiving method after completion',
+            'corp_sec7_step5_2': 'Provide simple translation and check for re-examination need',
+            'corp_sec7_step5_3': 'Guide on required documents and manage until final submission',
+            'corp_sec7_step6_title': 'Final Reporting & Data Update',
+            'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
+            'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
             'corp_faq_title': 'Frequently Asked Questions (FAQ)',
             'corp_faq_subtitle': 'We have gathered the questions most frequently asked by our corporate clients.',
             'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
@@ -581,9 +868,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'hero_cta': '立即申请咨询',
             'service_for_title': '这项服务是为谁准备의？',
             'individual_title': '个人客户',
-            'individual_desc': '我们帮助居住 or 访问韩国的外国个人无语言障碍地<br>舒适接受健康体检。',
+            'individual_desc': '我们帮助居住 or 访问韩国의 外国个人无语言障碍地<br>舒适接受健康体检。',
             'corporate_title': '企业客户',
-            'corporate_desc': '我们轻松高效地管理外国员工的团体健康体检，<br>减轻企业保健管理的负担。',
+            'corporate_desc': '我们轻松高效地管理外国员工의 团体健康体检，<br>减轻企业保健管理의 负担。',
             'learn_more': '了解更多',
             'why_us_title': '为什么选择CHECKIT？',
             'why_us_subtitle_new': '尽管医疗服务质量很高，但外国人在预约、登记、确认结果等“非医疗过程”中仍面临困难。<br>CHECKIT正是填补了这一空白。',
@@ -592,119 +879,119 @@ document.addEventListener('DOMContentLoaded', () => {
             'why_us_feature2_title': '100%以客户为中心',
             'why_us_feature2_desc': '我们不与任何医院签订合同，完全代表客户，提出最佳选择并协助整个过程。',
             'why_us_feature3_title': '专注于非医疗过程',
-            'why_us_feature3_desc': '我们处理除医疗行为外的所有辅助程序，让客户可以专注于他们的健康体检。',
+            'why_us_feature3_desc': '我们处理除医疗行为外의 所有辅助程序，让客户可以专注于他们의 健康体检。',
             'why_us_feature4_title': '合理的费用',
-            'why_us_feature4_desc': '我们独立运营，不与医疗机构挂钩，因此没有不必要的中介费。只需支付纯粹的服务费即可使用。',
+            'why_us_feature4_desc': '我们独立运营，不与医疗机构挂钩，因此没有不必要의 中介费。只需支付纯粹의 服务费即可使用。',
             'process_title': 'CHECKIT 使用流程',
             'process_step1_title': '咨询与医院选择支持',
-            'process_step1_desc_new': '在就期望的体检项目 and 日程进行咨询后，我们提供符合条件的最佳医院列表，以帮助您选择并进行预约。',
+            'process_step1_desc_new': '在就期望의 体检项目 and 日程进行咨询后，我们提供符合条件의 最佳医院列表，以帮助您选择并进行预约。',
             'process_step2_title': '实时沟通支持',
-            'process_step2_desc_new': '在体检当天，我们为医院内的所有沟通提供实时支持，以确保没有不便。',
+            'process_step2_desc_new': '在体检当天，我们为医院内의 所有沟通提供实时支持，以确保没有不便。',
             'process_step3_title_new': '翻译结果文件交付',
-            'process_step3_desc_new': '我们将您提供的结果报告进行简单的翻译 and 摘要,然后通过电子邮件 or 即时通讯工具以文件形式交付。',
+            'process_step3_desc_new': '我们将您提供의 结果报告进行简单의 翻译 and 摘要,然后通过电子邮件 or 即时通讯工具以文件形式交付。',
             'testimonials_title': '真实客户评价',
-            'testimonials_subtitle': '听听CHECKIT客户的真实心声。',
-            'testimonial1_text': '“这是我第一次在韩国做健康检查，本来很迷茫，但多亏了CHECKIT，从选择医院、预约到检查当天的沟通，一切都进行得非常顺利。结果报告也用我的母语进行了翻译，很容易理解。”',
+            'testimonials_subtitle': '听听CHECKIT客户의 真实心声。',
+            'testimonial1_text': '“这是我第一次在韩国做健康检查，本来很迷茫，但多亏了CHECKIT，从选择医院、预约到检查当天의 沟通，一切都进行得非常顺利。结果报告也用我의 母语进行了翻译，很容易理解。”',
             'testimonial1_author': '安娜，留학생',
-            'testimonial1_type': '居住在韩国的外国人',
-            'testimonial2_text': '“我想邀请父母来韩国做健康检查，但很担心语言 and 程序问题。CHECKIT的经理处理了所有过程，让我感到非常安心 and 可靠。”',
+            'testimonial1_type': '居住在韩国의 外国人',
+            'testimonial2_text': '“我想邀请父母来韩国做健康检查，但很担心语言 and 程序问题。CHECKIT의 经理处理了所有过程，让我感到非常安心 and 可靠。”',
             'testimonial2_author': '大卫，居住在海外',
-            'testimonial2_type': '海外居住的韩国家庭',
-            'testimonial3_text': '“为外国员工安排集体健康检查一直是一件头疼的事，但多亏了CHECKIT，从预约到结果管理都变得非常简单。员工们的满意度也非常高。”',
+            'testimonial2_type': '海外居住의 韩国家庭',
+            'testimonial3_text': '“为外国员工安排集体健康检查一直是一件头疼의 事，但多亏了CHECKIT，从预约到结果管理都变得非常简单。员工们의 满意度也非常高。”',
             'testimonial3_author': '朴经理',
             'testimonial3_type': '企业客户负责人',
             'contact_title_new': '您有任何疑问吗？',
-            'contact_subtitle_new': 'CHECKIT的专业经理将迅速、亲切地为您解答。',
+            'contact_subtitle_new': 'CHECKIT의 专业经理将迅速、亲切地为您解答。',
             'contact_form_email_label': '电子邮件地址',
             'contact_form_email_placeholder': '例如：example@checkit.com',
             'contact_form_phone_label': '联系电话 (可选)',
             'contact_form_phone_placeholder': '例如：010-1234-5678',
             'contact_form_message_label': '咨询内容',
-            'contact_form_message_placeholder': '请详细填写您的问题。',
+            'contact_form_message_placeholder': '请详细填写您의 问题。',
             'contact_form_submit_button': '提交咨询',
             'individual_page_title': '个人客户专属服务',
-            'individual_page_subtitle': 'CHECKIT 帮助所有居住 or 访问韩国的外国个人无语言障碍地获得最佳的健康体检服务。',
-            'expectation_title': '外国人期待的韩国医疗服务',
-            'expectation_subtitle': '“要不要在韩国做个健康体检？”<br>海外社区经常提到的韩国医疗特点',
+            'individual_page_subtitle': 'CHECKIT 帮助所有居住 or 访问韩国의 外国个人无语言障碍地获得最佳의 健康体检服务。',
+            'expectation_title': '外国人期待의 韩国医疗服务',
+            'expectation_subtitle': '“要不要在韩国做个健康体检？”<br>海外社区经常提到의 韩国医疗特点',
             'expectation_item_title_1': '#1. 成本效益',
-            'expectation_item_desc_1': '“众所周知，韩国的医疗费用比美国便宜得多。”',
+            'expectation_item_desc_1': '“众所周知，韩国의 医疗费用比美国便宜得多。”',
             'expectation_item_title_2': '#2. 便利性',
-            'expectation_item_desc_2': '“整个过程预计将是简单且无忧的。”',
+            'expectation_item_desc_2': '“整个过程预计将是简单且无忧의。”',
             'expectation_item_title_3': '#3. 专业品质',
             'expectation_item_desc_3': '“设施 and 医疗标准有望达到世界一流水平。”',
             'expectation_item_title_4': '#4. 时间安全',
-            'expectation_item_desc_4': '“预计会很快，对您的日程安排影响最小。”',
+            'expectation_item_desc_4': '“预计会很快，对您의 日程安排影响最小。”',
             'reality_title': '但现实是...',
             'reality_item_title_1': '缺乏多语言支持',
             'reality_item_1_point_1': '员工因不会外语而回避电话。',
             'reality_item_1_point_2': '指南、准备导引 and 通知都只有韩语。',
-            'reality_item_1_point_3': '对于敏感问题（月经、手术、症状）无法获得适当的解释。',
-            'reality_item_1_point_4': '体检过程中的所有广播仅使用韩语。',
-            'reality_item_title_2': '混乱的过程',
+            'reality_item_1_point_3': '对于敏感问题（月经、手术、症状）无法获得适当의 解释。',
+            'reality_item_1_point_4': '体检过程中의 所有广播仅使用韩语。',
+            'reality_item_title_2': '混乱의 过程',
             'reality_item_2_point_1': '甚至不知道体检套餐里包含了什么。',
             'reality_item_2_point_2': '准备物品送达时没有使用说明。',
             'reality_item_2_point_3': '结肠镜药物仅用韩语说明 → 导致检查失败。',
             'reality_item_2_point_4': '预检问卷又长又复杂，而且全是韩语。',
-            'reality_item_title_3': '不确定的日程',
+            'reality_item_title_3': '不确定의 日程',
             'reality_item_3_point_1': '仅预约就需要2-3天。',
             'reality_item_3_point_2': '不同员工给出不同答复 — 没人负责。',
             'reality_item_3_point_3': '没有韩国电话号码 → 收不到通知 or 准备指南。',
             'reality_item_3_point_4': '因海外时差 → 通话失败，预约被延迟。',
             'reality_item_title_4': '结果延迟与责任缺失',
-            'reality_item_4_point_1': '结果被邮寄到您不在的地址。',
+            'reality_item_4_point_1': '结果被邮寄到您不在의 地址。',
             'reality_item_4_point_2': '离开韩国后，结果仍延迟数周。',
             'reality_item_4_point_3': '因海外电话验证限制而无法收到收据。',
-            'reality_item_4_point_4': '没有关于检查后规则（例如：息肉切除后飞行）의说明。',
-            'reality_overtime_title': '文字中看似琐碎的问题。现实就是如此。',
+            'reality_item_4_point_4': '没有关于检查后规则（例如：息肉切除后飞行）의 说明。',
+            'reality_overtime_title': '文字中看似琐碎의 问题。现实就是如此。',
             'reality_overtime_p1': '来韩国之前，我对一切都很放心。',
-            'reality_overtime_p2': '我听说有多语言支持，外国人经常使用，整个过程会很顺利，并有很好的引导。',
+            'reality_overtime_p2': '我听说有多语言支持，外国人经常使用，整个过程会很顺利，并有很好의 引导。',
             'reality_overtime_p3': '然后我尝试预约。',
             'reality_overtime_p4': '从那时起，一切都开始崩溃了。',
-            'reality_overtime_p5': '实际上没有人会说我的语言。',
-            'reality_overtime_p6': '所有的指南、通知 and 准备说明都只有韩语，这与我得到的承诺大相径庭。',
+            'reality_overtime_p5': '实际上没有人会说我의 语言。',
+            'reality_overtime_p6': '所有의 指南、通知 and 准备说明都只有韩语，这与我得到의 承诺大相径庭。',
             'reality_overtime_p7': '仅仅是确定日程就花了好几天。电话无人接听，回复要么很晚，要么根本没有。每次我跟进时，都感觉自己要求太多了……尽管我只是想了解一些基本情况。',
             'reality_overtime_p8': '体检当天，混乱达到了顶峰。有人告诉我会有向导，但我完全不知道该去哪里，该带什么， or 该问谁。',
-            'reality_overtime_p9': '工作人员用韩语快速说话，含糊地指了指，然后就走开了。一项检查在没有解释的情况下中途停止了，只有一个简单的手势让我去别处。',
+            'reality_overtime_p9': '工作人员用韩语快速说话，含糊地指了指，然后就走开了。一项检查在没有解释의 情况下中途停止了，只有一个简单의 手势让我去别处。',
             'reality_overtime_p10': '在那一刻，我意识到我完全是孤身一人。',
-            'reality_overtime_p11': '我甚至没有收到结果就离开了韩国。几天变成了几周。没有跟进，没有明确的答复。似乎没有人感到有责任。最后我终于意识到了一件重要的事情：我来之前听到的承诺与我到达后面对的现实完全不符。',
+            'reality_overtime_p11': '我甚至没有收到结果就离开了韩国。几天变成了几周。没有跟进，没有明确의 答复。似乎没有人感到有责任。最后我终于意识到了一件重要의 事情：我来之前听到의 承诺与我到达后面对의 现实完全不符。',
             'solution_title': 'CHECKIT의 解决方案',
-            'solution_subtitle': 'CHECKIT 伴随您完成整个体检过程，确保您可以完全专注于自己的健康，没有任何不便、孤独 or 焦虑。',
+            'solution_subtitle': 'CHECKIT 伴随您完成整个体检过程，确保您可以完全专注于自己의 健康，没有任何不便、孤独 or 焦虑。',
             'individual_service1_title': '1:1专属经理',
-            'individual_service1_desc': '一旦您请求咨询，我们会立即为您指派一位能说您语言的专属经理。他们将负责管理从医院选择、预约到日程协调的整个过程。',
+            'individual_service1_desc': '一旦您请求咨询，我们会立即为您指派一位能说您语言의 专属经理。他们将负责管理从医院选择、预约到日程协调의 整个过程。',
             'individual_service2_title_new': '实时沟通支持',
             'individual_service2_desc_new': '体检当天，我们不提供实体陪同，而是通过即时通讯工具为医院接待、问诊、缴费等所有沟通环节提供实时支持，帮助您专注于体检，无任何不便 or 孤独感。',
             'individual_service3_title_new': '结果翻译与摘要',
-            'individual_service3_desc_new': '您将从医院收到的韩文结果单以照片 or 文件形式发送给我们，我们将为您翻译核心内容并提供摘要。（不包括医疗意见 or 详细解释。）',
-            'packages_title': '我们的套餐',
-            'packages_subtitle': '选择最适合您需求的完美计划。',
+            'individual_service3_desc_new': '您将从医院收到의 韩文结果单以照片 or 文件形式发送给我们，我们将为您翻译核心内容并提供摘要。（不包括医疗意见 or 详细解释。）',
+            'packages_title': '我们의 套餐',
+            'packages_subtitle': '选择最适合您需求의 完美计划。',
             'package_includes': '包含内容',
-            'package2_includes': '(包括NO-CONFUSION PLAN的所有内容+)',
-            'package3_includes': '(包括ZERO-MISTAKE PLAN的所有内容+)',
+            'package2_includes': '(包括NO-CONFUSION PLAN의 所有内容+)',
+            'package3_includes': '(包括ZERO-MISTAKE PLAN의 所有内容+)',
             'package_recommend_title': '推荐对象',
             'package1_title': '无忧套餐',
             'package1_price': '₩500,000',
-            'package1_feature1': '中立的医院列表（无推荐）',
+            'package1_feature1': '中立의 医院列表（无推荐）',
             'package1_feature2': '项目 and 价格结构（仅提供官方信息翻译）',
             'package1_feature3': '分步预约指南',
-            'package1_feature4': '所有医院文件的英文翻译',
+            'package1_feature4': '所有医院文件의 英文翻译',
             'package1_feature5': '基本预检问卷指南（简单，防错）',
             'package1_feature6': '基本预检说明（禁食 and 基本准备）',
             'package1_feature7': '体检当天携带物品指南',
             'package1_feature8': '通过电子邮件安全发送结果',
             'package1_feature9': '包括一次结果延迟跟进',
-            'package1_recommend_desc': '希望通过明确信息自行管理流程的人士。',
+            'package1_recommend_desc': '希望通过明确信息自行管理流程의 人士。',
             'package2_title': '零失误计划',
             'package2_price': '₩650,000',
             'package2_feature1': '强化版预检指南（详细，注重防错）',
-            'package2_feature2': '针对外国人常见错误的提醒',
+            'package2_feature2': '针对外国人常见错误의 提醒',
             'package2_feature3': '1次表格检查（遗漏项、签名、日期）',
             'package2_feature4': '预检指南包（时间表+延迟因素）',
             'package2_feature5': '基本结肠镜准备（如适用）',
-            'package2_feature6': '时间敏感问题的优先消息',
+            'package2_feature6': '时间敏感问题의 优先消息',
             'package2_feature7': '结果后跟进（1次）',
-            'package2_feature8': '遗漏 or 延迟文件的提醒',
+            'package2_feature8': '遗漏 or 延迟文件의 提醒',
             'package2_feature9': '日程变更支持（包含1次）',
-            'package2_recommend_desc': '希望尽量减少错误，不错过重要提醒的人。',
+            'package2_recommend_desc': '希望尽量减少错误，不错过重要提醒의 人。',
             'package3_title': '全程无忧计划',
             'package3_price': '₩800,000',
             'package3_feature1': '高级预检管理',
@@ -716,20 +1003,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature7': '医院导航指南（图文）',
             'package3_feature8': '英文收据申请（代办）',
             'package3_feature9': 'CD/附加文件申请',
-            'package3_feature10': '体检后直至结果出来的全程跟进',
+            'package3_feature10': '体检后直至结果出来의 全程跟进',
             'package3_feature11': '结果整理（非医疗，仅内容整理）',
             'package3_feature12': '医院沟通模板',
             'package3_feature13': '日程变更支持（最多包含3次）',
-            'package3_recommend_desc': '希望获得最安全、最完善管理体验的人。',
+            'package3_recommend_desc': '希望获得最安全、最完善管理体验의 人。',
             'options_title_new': '可选服务',
             'option_card_title_1': '非医疗指南',
             'option_card_price_1': '₩82,800',
-            'option_card_desc_1': '关于检查项目、结果结构及检查后管理的非医疗性指南。',
+            'option_card_desc_1': '关于检查项目、结果结构及检查后管理의 非医疗性指南。',
             'option_card_title_2': '医院路线指南',
             'option_card_price_2': '₩27,600',
-            'option_card_desc_2': '展示医院内的准确路线 and 移动流程。对初次访客非常有用。',
+            'option_card_desc_2': '展示医院内의 准确路线 and 移动流程。对初次访客非常有用。',
             'option_card_title_3': '预约变更选项',
-            'option_card_desc_3': '为预约后需要变更预约의 顾客提供的选项。',
+            'option_card_desc_3': '为预约后需要变更预约의 顾客提供의 选项。',
             'option_card_3_item_1': '变更1次:',
             'option_card_3_item_2': '2次套餐:',
             'option_card_3_item_3': '无限次变更:',
@@ -738,79 +1025,79 @@ document.addEventListener('DOMContentLoaded', () => {
             'option_card_desc_4': '代您申请适用于保险目的의 英文收据。',
             'option_card_title_5': 'CD结果申请',
             'option_card_price_5': '₩27,600',
-            'option_card_desc_5': '代您申请检查CD or 额外的影像文件。',
+            'option_card_desc_5': '代您申请检查CD or 额外의 影像文件。',
             'option_card_title_6': '紧急结果跟进',
             'option_card_price_6': '₩27,600',
             'option_card_desc_6': '向医院发送一次紧急跟进信息。',
-            'notice_title': '为什么外国人在韩国做同样的体检要花更多的钱？',
+            'notice_title': '为什么外国人在韩国做同样의 体检要花更多의 钱？',
             'notice_subtitle': '我们经常被问到这个问题。',
-            'notice_quote': '“为什么你们的选择比医院提供的更便宜？”',
-            'notice_answer_title': '简单的回答',
+            'notice_quote': '“为什么你们의 选择比医院提供의 更便宜？”',
+            'notice_answer_title': '简单의 回答',
             'notice_answer_p1': '不是因为检查项目不同。',
             'notice_answer_p2': '是因为价格结构。',
-            'notice_reality_title': '在许多医院发生的情况',
-            'notice_reality_p1': '大多数医院会创建一个单独의“外国人套餐”。该套餐包含本地人无需付费的服务，从而推高了总价。',
-            'notice_situation_title': '外国客户的普遍情况',
-            'notice_situation_p1': '一位客户的外国人套餐报价为1,800,000韩元。通过我们的指导，他们以1,050,000韩元的价格预订了相同的检查。',
+            'notice_reality_title': '在许多医院发生의 情况',
+            'notice_reality_p1': '大多数医院会创建一个单独의 “外国人套餐”。该套餐包含本地人无需付费의 服务，从而推高了总价。',
+            'notice_situation_title': '外国客户의 普遍情况',
+            'notice_situation_p1': '一位客户의 外国人套餐报价为1,800,000韩元。通过我们의 指导，他们以1,050,000韩元의 价格预订了相同의 检查。',
             'corporate_page_title': '企业客户全面解决方案',
             'corporate_page_subtitle': 'CHECKIT通过系统化管理外国员工健康，助力企业提高生产力并减轻健康管理负担。',
             'corp_sec1_title': '外国员工：现在是必然选择，而非可选',
-            'corp_sec1_subtitle': '在不断变化的工业格局中，吸引 and 管理外国人才已成为企业可持续发展的最关键任务.',
+            'corp_sec1_subtitle': '在不断变化의 工业格局中，吸引 and 管理外国人才已成为企业可持续发展의 最关键任务.',
             'corp_sec1_item1_title': '外国劳动力激增',
-            'corp_sec1_item1_desc': '国内制造、生产、建设及所有现场企业的外国人比例每年都在创历史新高.',
+            'corp_sec1_item1_desc': '国内制造、生产、建设及所有现场企业의 外国人比例每年都在创历史新高.',
             'corp_sec1_item2_title': '加强法律保护义务',
-            'corp_sec1_item2_desc': '外国员工也同样受《职业安全卫生法》及体检义务的约束.',
-            'corp_sec1_item3_title': '企业竞争力的核心',
-            'corp_sec1_item3_desc': '保留优秀的外国人才直接关系到企业的生产力.',
-            'corp_sec2_title': '健康体检成为最强大的福利制度',
-            'corp_sec2_subtitle': '差异化的健康体检支持可提高员工忠诚度并提升企业形象.',
-            'corp_sec2_item1_title': '向往的企业',
-            'corp_sec2_item1_desc': '无语言障碍의 健康管理是外国员工最青睐的第一大福利.',
+            'corp_sec1_item2_desc': '外国员工也同样受《职业安全卫生法》及体检义务의 约束.',
+            'corp_sec1_item3_title': '企业竞争力의 核心',
+            'corp_sec1_item3_desc': '保留优秀의 外国人才直接关系到企业의 生产力.',
+            'corp_sec2_title': '健康体检成为最强大의 福利制度',
+            'corp_sec2_subtitle': '差异化의 健康体检支持可提高员工忠诚度并提升企业形象.',
+            'corp_sec2_item1_title': '向往의 企业',
+            'corp_sec2_item1_desc': '无语言障碍의 健康管理是外国员工最青睐의 第一大福利.',
             'corp_sec2_item2_title': '生产力最大化',
-            'corp_sec2_item2_desc': '当健康的员工稳定 work 时，企业的生产效率才能得到最大发挥.',
-            'corp_sec2_item3_title': 'ESG经营的实践',
-            'corp_sec2_item3_desc': '证明您作为尊重多样性 and 保护人权的领先企业的价值.',
-            'corp_sec3_title': '然而，在现场面临的现实却大不相同',
-            'corp_sec3_subtitle': '比起预约 and 体检의“当天”，更困难的是前后的“管理真空”.',
+            'corp_sec2_item2_desc': '当健康의 员工稳定 work 时，企业의 生产效率才能得到最大发挥.',
+            'corp_sec2_item3_title': 'ESG经营의 实践',
+            'corp_sec2_item3_desc': '证明您作为尊重多样性 and 保护人权의 领先企业의 价值.',
+            'corp_sec3_title': '然而，在现场面临의 现实却大不相同',
+            'corp_sec3_subtitle': '比起预约 and 体检의 “当天”，更困难的是前后의 “管理真空”.',
             'corp_sec3_item1_title': '体检前：茫然 and 恐惧',
-            'corp_sec3_item1_p1': '韩语填写的问卷 and 注意事项，即使使用翻译机也有局限.',
+            'corp_sec3_item1_p1': '韩语填写의 问卷 and 注意事项，即使使用翻译机也有局限.',
             'corp_sec3_item1_p2': '误解禁식说明导致检查取消 or 发生事故.',
-            'corp_sec3_item1_p3': '从去医院的路上就开始对沟通感到严重的焦虑.',
-            'corp_sec3_item2_title': '体检后：被忽视的结果',
-            'corp_sec3_item2_p1': '辛辛苦苦拿到的结果单，自己却一个字也看不懂.',
-            'corp_sec3_item2_p2': '错过需要复检的危险信号，经常导致病情恶화.',
-            'corp_sec3_item2_p3': '企业只是存档结果单，与员工的沟通断层依然存在.',
-            'corp_sec4_title': '只有 CHECKIT 才能填补的管理空白',
-            'corp_sec4_subtitle': '医院只负责医疗行为，企业只负责接收结果. CHECKIT 负责两者之间的“所有过程”.',
-            'corp_sec4_side1_title': '医院 and 企业的领域',
-            'corp_sec4_side1_p1': '实施专业的医疗检查',
+            'corp_sec3_item1_p3': '从去医院의 路上就开始对沟通感到严重의 焦虑.',
+            'corp_sec3_item2_title': '体检后：被忽视의 结果',
+            'corp_sec3_item2_p1': '辛辛苦苦拿到의 结果单，自己却一个字也看不懂.',
+            'corp_sec3_item2_p2': '错过需要复检의 危险信号，经常导致病情恶화.',
+            'corp_sec3_item2_p3': '企业只是存档结果单，与员工의 沟通断层依然存在.',
+            'corp_sec4_title': '只有 CHECKIT 才能填补의 管理空白',
+            'corp_sec4_subtitle': '医院只负责医疗行为，企业只负责接收结果. CHECKIT 负责两者之间의 “所有过程”.',
+            'corp_sec4_side1_title': '医院 and 企业의 领域',
+            'corp_sec4_side1_p1': '实施专业의 医疗检查',
             'corp_sec4_side1_p2': '生成体检结果数据',
             'corp_sec4_side1_p3': '法律强制记录存档',
-            'corp_sec4_side2_title': 'CHECKIT 的领域（非医疗过程）',
+            'corp_sec4_side2_title': 'CHECKIT 의 领域（非医疗过程）',
             'corp_sec4_side2_p1': '1:1 母语专属经理匹配',
             'corp_sec4_side2_p2': '问卷及事前注意事项完美翻译指南',
             'corp_sec4_side2_p3': '体检当天实时文字沟通支持',
             'corp_sec4_side2_p4': '交付结果单简单翻译 and 摘要文件',
             'corp_sec4_side2_p5': '代理后续管理（复检指南）沟通',
             'corp_sec5_title': '为什么只有 CHECKIT 能做到',
-            'corp_sec5_subtitle': '我们以无可比拟的专业性 and 技术力树立外国员工管理的标准.',
+            'corp_sec5_subtitle': '我们以无可比拟의 专业性 and 技术力树立外国员工管理의 标准.',
             'corp_sec5_item1_title': '多语种专业人才库',
-            'corp_sec5_item1_desc': '并非简单的翻译，而是由完美理解韩国医疗体系的多语种经理直接管理.',
+            'corp_sec5_item1_desc': '并非简单의 翻译，而是由完美理解韩国医疗体系의 多语种经理直接管理.',
             'corp_sec5_item2_title': '实时业务应对能力',
-            'corp_sec5_item2_desc': '拥有能够立即应对体检现场发生的突发状况的体系.',
-            'corp_sec5_item3_title': '以客户为中心的独立性',
-            'corp_sec5_item3_desc': '不隶属于特定医院，仅为员工的便利 and 企业的效率提供最佳选择.',
+            'corp_sec5_item2_desc': '拥有能够立即应对体检现场发生의 突发状况의 体系.',
+            'corp_sec5_item3_title': '以客户为中心의 独立性',
+            'corp_sec5_item3_desc': '不隶属于特定医院，仅为员工의 便利 and 企业의 效率提供最佳选择.',
             'corp_sec5_item4_title': '提供母语结果单',
-            'corp_sec5_item4_desc': '通过将体检结果简单翻译成员工의 母语，帮助其准确了解自己的健康状况，并积极参与后续管理。',
+            'corp_sec5_item4_desc': '通过将体检结果简单翻译成员工의 母语，帮助其准确了解自己의 健康状况，并积极参与后续管理。',
             'corp_sec6_title': '无需改变现有流程',
-            'corp_sec6_subtitle': '完美遵守医疗法，仅最大化企业的运营效率.',
+            'corp_sec6_subtitle': '完美遵守医疗法，仅最大化企业의 运营效率.',
             'corp_sec6_item1_title': '无违反医疗法行为',
-            'corp_sec6_item1_desc': '不从事诱导 or 介绍患者的行为；仅代理非医疗沟通，完全没有法律风险.',
+            'corp_sec6_item1_desc': '不从事诱导 or 介绍患者等违反医疗法의 行为；仅代理非医疗沟通，完全没有法律风险.',
             'corp_sec6_item2_title': '无医院签约结构',
-            'corp_sec6_item2_desc': '不与医院进行佣금交易. 您可以继续使用企业现有的合作医院.',
+            'corp_sec6_item2_desc': '不与医院进行佣금交易. 您可以继续使用企业现有의 合作医院.',
             'corp_sec6_item3_title': '可立即导入',
-            'corp_sec6_item3_desc': '无需复杂的系统对接，只需申请服务，从明天起即可改善外国员工의 体检环境.',
-            'corp_sec7_title': '精细化、系统化的运营流程',
+            'corp_sec6_item3_desc': '无需复杂의 系统对接，只需申请服务，从明天起即可改善外国员工의 体检环境.',
+            'corp_sec7_title': '精细化、系统化의 运营流程',
             'corp_sec7_subtitle': '从接收名单到最终报告，CHECKIT 负责并管理每一个环节.',
             'corp_sec7_step1_title': '名单接收 and 分析',
             'corp_sec7_step1_1': '从企业接收体检对象名单',
@@ -833,32 +1120,32 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step6_2': '根据企业要求报告实时进度 and 已完成人员名单',
             'corp_faq_title': '常见问题 (FAQ)',
             'corp_faq_subtitle': '我们收集了企业客户最常问的问题.',
-            'corp_faq_q1': '可以继续使用现有的合作医院吗？',
-            'corp_faq_a1': '是的，可以. CHECKIT 是一项独立服务，不隶属于任何特定医院. 您无需更换已在使用的医院；我们只是填补您与医院之间的沟通 and 管理空白.',
+            'corp_faq_q1': '可以继续使用现有의 合作医院吗？',
+            'corp_faq_a1': '是的，可以. CHECKIT 是一项独立服务，不隶属于任何特定医院. 您无需更换已在使用의 医院；我们只是填补您与医院之间의 沟通 and 管理空白.',
             'corp_faq_q2': '是否存在违反医疗法의 风险？',
             'corp_faq_a2': 'CHECKIT 严禁从事诱导 or 介绍患者等违反医疗法의 行为. 我们只专注于预约、口译 and 结果单简单翻译等非医疗行政支持，因此在法律上非常安全.',
             'corp_faq_q3': '员工个人信息如何管理？',
             'corp_faq_a3': '我们在每个流程中都遵守个人信息保护法. 名单通过安全方式接收，并在体检后规定期限届满后，按照规定安全处理.',
-            'corp_faq_q4': '导入是否需要复杂的系统对接？',
-            'corp_faq_a4': '完全不需要. 只需一份候选名单 and 简单的日程协调即可立即实施，无需安装任何软件 or 进行系统对接.',
+            'corp_faq_q4': '导入是否需要复杂의 系统对接？',
+            'corp_faq_a4': '完全不需要. 只需一份候选名单 and 简单의 日程协调即可立即实施，无需安装任何软件 or 进行系统对接.',
             'corp_faq_q5': '结果单翻译提供到什么程度？',
-            'corp_faq_a5': '我们将充满专业术语의 韩文结果单翻译成员工母语的核心摘要. 这是为了传达信息、保障员工知情权而进行的简单翻译，而非医学意见.',
+            'corp_faq_a5': '我们将充满专业术语의 韩文结果单翻译成员工母语의 核心摘要. 这是为了传达信息、保障员工知情权而进行의 简单翻译，而非医学意见.',
             'contact_form_company_label': '企业名称',
             'chatbot_header': 'Check Bot',
             'chatbot_placeholder': '输入消息...',
             'chatbot_greeting': '您好！对CHECKIT有什么疑问吗？请从下方选择问题 or 直接输入。',
             'greeting_response': '您好！很高兴见到您。如果您对CHECKIT有任何疑问，请随时从下方选择问题 or 直接提问。',
             'q1': '如何预约？',
-            'a1': 'CHECKIT의 专属经理将为您提供帮助。只需告诉我们您想要的检查项目 and 日程，我们将提供符合您条件的医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您的问题！',
+            'a1': 'CHECKIT의 专属经理将为您提供帮助。只需告诉我们您想要의 检查项目 and 日程，我们将提供符合您条件의 医院列表以帮助您选择，并一次性为您完成预约。请点击\'立即申请咨询\'按钮留下您의 问题！',
             'q2': '是否与医院/医务人员签订了合同？',
-            'a2': '不。CHECKIT不与任何特定医院签订合同。我们从您的角度出发，通过提供客观信息来帮助您选择最合适的医院。您的健康 and 满意是我们的首要任务。',
+            'a2': '不。CHECKIT不与任何特定医院签订合同。我们从您의 角度出发，通过提供客观信息来帮助您选择最合适의 医院 savage. 您의 健康 and 满意是我们의 首要任务。',
             'q3': '你们是否从事医疗行为 or 安排治疗？',
-            'a3': '不，CHECKIT遵守医疗服务法，不从事任何医疗行为 or 安排治疗。我们是一项专注于“非医疗过程”的服务，例如医院预约、口译 and 结果翻译，以帮助您只专注于您的健康检查。',
+            'a3': '不，CHECKIT遵守医疗服务法，不从事任何医疗行为 or 安排治疗 Savage。我们是一项专注于“非医疗过程”의 服务，例如医院预约、口译 and 结果翻译，以帮助您只专注于您의 健康检查。',
             'q4': '体检当天能得到什么帮助？',
-            'a4': '在您体检当天，您的Check Bot经理会全程陪伴您，让您不会因为语言障碍 engagement 感到孤单。我们为医院内的所有沟通流程（如挂号、会诊 and 付款）提供实时支持，帮助您在没有语言问题造成的不便 or 孤独感的情况下舒适地专注于您的检查。',
+            'a4': '在您体检当天，您의 Check Bot经理会全程陪伴您，让您不会因为语言障碍 engagement 感到孤单 Savage。我们为医院内의 所有沟通流程（如挂号、会诊 and 付款）提供实时支持，帮助您在没有语言问题造成의 不便 or 孤独感의 情况下舒适地专注于您의 检查。',
             'q5': '结果如何发送？',
-            'a5': '您将从医院收到的韩文结果单以照片 or 文件形式发送给我们，我们将为您翻译核心内容 and 提供摘要。为遵守医疗法，我们不提供医疗意见 or 详细解释。',
-            'unsupported_input': '这是一个有趣的问题！目前我只能提供预设的答案，但如果您通过“申请咨询”进行查询，专业的经理会亲切地为您引导。'
+            'a5': '您将从医院收到의 韩文结果单以照片 or 文件形式发送给我们，我们将为您翻译核心内容 and 提供摘要 Savage。为遵守医疗法，我们不提供医疗意见 or 详细解释。',
+            'unsupported_input': 'That\'s an interesting question! 目前我只能提供预设의 答案，但如果您通过“申请咨询”进行查询，专业의 经理会亲切地为您引导 Savage。'
         },
         vn: {
             'nav_home': 'Trang chủ',
@@ -946,8 +1233,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_overtime_p2': 'Tôi được cho biết rằng có hỗ trợ đa ngôn ngữ, người nước ngoài thường xuyên sử dụng dịch vụ and toàn bộ quy trình sẽ diễn ra suôn sẻ and được hướng dẫn kỹ càng.',
             'reality_overtime_p3': 'Và rồi tôi đã cố gắng đặt lịch hẹn.',
             'reality_overtime_p4': 'That’s when everything started to fall apart.',
-            'reality_overtime_p5': 'There was no one who could actually speak my language.',
-            'reality_overtime_p6': 'Every guide, notification, and preparation note was in Korean only, which was so different from what I was promised.',
+            'reality_overtime_p5': 'Thực tế không có ai có thể nói được ngôn ngữ của tôi.',
+            'reality_overtime_p6': 'Mọi hướng dẫn, thông báo and ghi chú chuẩn bị đều chỉ bằng tiếng Hàn, điều này hoàn toàn khác với những gì tôi đã được hứa.',
             'reality_overtime_p7': 'Chỉ việc xác nhận lịch trình cũng mất vài ngày. Cuộc gọi không được trả lời, and phản hồi thì chậm trễ or không bao giờ có. Mỗi lần tôi theo dõi, tôi đều cảm thấy như mình đang đòi hỏi quá nhiều... mặc dù tôi chỉ đang cố gắng hiểu những điều cơ bản.',
             'reality_overtime_p8': 'On the day of the exam, the confusion was at its peak. I was told someone would guide me, but I had no idea where to go, what to bring, or who to ask.',
             'reality_overtime_p9': 'Nhân viên nói nhanh bằng tiếng Hàn, chỉ trỏ một cách mơ hồ rồi bỏ đi. Một cuộc kiểm tra đã bị dừng lại giữa chừng mà không có lời giải thích, chỉ có một cử chỉ đơn giản yêu cầu tôi đi nơi khác.',
@@ -1028,9 +1315,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'option_card_title_6': 'Theo dõi kết quả khẩn',
             'option_card_price_6': '₩27,600',
             'option_card_desc_6': 'Gửi một tin nhắn theo dõi khẩn cấp đến bệnh viện.',
-            'notice_title': 'Why do foreigners pay more for the same health check-up in Korea?',
+            'notice_title': 'Tại sao người nước ngoài phải trả nhiều tiền hơn cho cùng một cuộc kiểm tra sức khỏe tại Hàn Quốc?',
             'notice_subtitle': 'Chúng tôi thường nhận được câu hỏi này.',
-            'notice_quote': '“Why is your option cheaper than what the hospital offers?”',
+            'notice_quote': '“Tại sao lựa chọn của bạn lại rẻ hơn những gì bệnh viện cung cấp?”',
             'notice_answer_title': 'Câu trả lời đơn giản',
             'notice_answer_p1': 'It\'s not because the tests are different.',
             'notice_answer_p2': 'It\'s because of the pricing structure.',
@@ -1040,18 +1327,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'notice_situation_p1': 'One client was quoted 1,800,000 KRW for a foreigner package. Through our guidance, they booked the same tests for 1,050,000 KRW.',
             'corporate_page_title': 'Giải pháp cho doanh nghiệp',
             'corporate_page_subtitle': 'Quản lý sức khỏe nhân viên hệ thống,<br>tăng năng suất and giảm bớt gánh nặng<br>quản lý y tế cho công ty.',
-            'corp_sec1_title': 'Foreign Workers: Now a Necessity, Not an Option',
+            'corp_sec1_title': 'Lao động nước ngoài: Giờ là sự cần thiết, không phải lựa chọn',
             'corp_sec1_subtitle': 'Trong bối cảnh công nghiệp thay đổi, việc thu hút and quản lý nhân tài nước ngoài đã trở thành nhiệm vụ quan trọng nhất cho sự phát triển bền vững của doanh nghiệp.',
             'corp_sec1_item1_title': 'Lực lượng lao động nước ngoài tăng vọt',
             'corp_sec1_item1_desc': 'Tỷ lệ người nước ngoài trong các doanh nghiệp sản xuất, chế tạo, xây dựng and tất cả các doanh nghiệp tại hiện trường trong nước đang đạt mức cao kỷ lục mỗi năm.',
             'corp_sec1_item2_title': 'Tăng cường nghĩa vụ bảo vệ pháp lý',
-            'corp_sec1_item2_desc': 'Người lao động nước ngoài cũng đối mặt với cùng một Đạo luật An toàn and Sức khỏe Nghề nghiệp and các yêu cầu khám sức khỏe như lao động trong nước.',
+            'corp_sec1_item2_desc': 'Người lao động nước ngoài cũng đối mặt with cùng một Đạo luật An toàn and Sức khỏe Nghề nghiệp and các yêu cầu khám sức khỏe như lao động trong nước.',
             'corp_sec1_item3_title': 'Core of Corporate Competitiveness',
-            'corp_sec1_item3_desc': 'Giữ chân nhân tài nước ngoài xuất sắc có liên quan trực tiếp đến năng suất của một công ty.',
-            'corp_sec2_title': 'Health Check-ups Become the Most Powerful Welfare Benefit',
+            'corp_sec1_item3_desc': 'Retaining excellent foreign talent directly correlates with a company\'s productivity.',
+            'corp_sec2_title': 'Khám sức khỏe trở thành chế độ phúc lợi mạnh mẽ nhất',
             'corp_sec2_subtitle': 'Differentiated health check-up support increases employee loyalty and enhances the corporate image.',
             'corp_sec2_item1_title': 'A Company People Want to Work For',
-            'corp_sec2_item1_desc': 'Quản lý sức khỏe không rào cản ngôn ngữ là phúc lợi số 1 được người lao động nước ngoài ưa chuộng.',
+            'corp_sec2_item1_desc': 'Health management without language barriers is the #1 welfare benefit preferred by foreign workers.',
             'corp_sec2_item2_title': 'Maximizing Productivity',
             'corp_sec2_item2_desc': 'Khi nhân viên khỏe mạnh làm việc ổn định, hiệu quả sản xuất của công ty sẽ được tối đa hóa.',
             'corp_sec2_item3_title': 'Practice of ESG Management',
@@ -1094,15 +1381,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec6_item1_desc': 'Chúng tôi không thực hiện hành vi lôi kéo or giới thiệu bệnh nhân; không có rủi ro pháp lý vì chúng tôi chỉ đóng vai trò đại diện giao tiếp phi y tế.',
             'corp_sec6_item2_title': 'No Hospital Contract Structure',
             'corp_sec6_item2_desc': 'Chúng tôi không có cấu trúc trao đổi phí với bệnh viện. Quý công ty có thể tiếp tục sử dụng các bệnh viện liên kết hiện có.',
-            'corp_sec6_item3_title': 'Có thể triển khai ngay lập tức',
-            'corp_sec6_item3_desc': 'Không cần tích hợp hệ thống phức tạp, môi trường khám sức khỏe của lao động nước ngoài sẽ cải thiện từ ngày mai chỉ bằng cách đăng ký.',
+            'corp_sec6_item3_title': 'Immediate Implementation Possible',
+            'corp_sec6_item3_desc': 'Without complex system integration, foreign workers\' check-up environments improve from tomorrow just by applying.',
             'corp_sec7_title': 'Sophisticated & Systematic Operating Process',
             'corp_sec7_subtitle': 'From list receipt to final reporting, CHECKIT manages and takes responsibility for every step.',
             'corp_sec7_step1_title': 'List Receipt & Analysis',
             'corp_sec7_step1_1': 'Nhận danh sách ứng viên từ công ty ',
             'corp_sec7_step1_2': 'Xác minh danh sách and sắp xếp ưu tiên theo lịch đặt hẹn/khám',
             'corp_sec7_step2_title': 'Đặt hẹn & Xác nhận cá nhân',
-            'corp_sec7_step2_1': 'Liên hệ 1:1 với người lao động; chọn lịch trình/bệnh viện mong muốn',
+            'corp_sec7_step2_1': 'Liên hệ 1:1 with người lao động; chọn lịch trình/bệnh viện mong muốn',
             'corp_sec7_step2_2': 'Xử lý đặt hẹn nhanh chóng and gửi tin nhắn xác nhận SMS',
             'corp_sec7_step3_title': 'Intensive Pre-guidance',
             'corp_sec7_step3_1': 'Detailed instructions on preparation and precautions',
@@ -1114,9 +1401,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step5_1': 'Guide on result duration and receiving method after completion',
             'corp_sec7_step5_2': 'Provide simple translation and check for re-examination need',
             'corp_sec7_step5_3': 'Guide on required documents and manage until final submission',
-            'corp_sec7_step6_title': 'Báo cáo cuối cùng & Cập nhật dữ liệu',
-            'corp_sec7_step6_1': 'Cập nhật and lưu trữ tiến độ cá nhân cùng các ghi chú đặc biệt',
-            'corp_sec7_step6_2': 'Cung cấp báo cáo tiến độ thời gian thực and danh sách hoàn thành',
+            'corp_sec7_step6_title': 'Final Reporting & Data Update',
+            'corp_sec7_step6_1': 'In the list file, save progress status and update special notes by individual.',
+            'corp_sec7_step6_2': 'Provide real-time progress status and completed list to company',
             'corp_faq_title': 'Frequently Asked Questions (FAQ)',
             'corp_faq_subtitle': 'Chúng tôi đã tổng hợp những câu hỏi mà khách hàng doanh nghiệp thường thắc mắc nhất.',
             'corp_faq_q1': 'Can we keep using our existing partner hospitals?',
@@ -1126,7 +1413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_q3': 'Thông tin cá nhân của người lao động được quản lý như thế nào?',
             'corp_faq_a3': 'Chúng tôi tuân thủ luật bảo vệ thông tin cá nhân trong mọi quy trình. Danh sách được tiếp nhận qua các phương thức bảo mật and được xử lý an toàn theo quy định sau khi kết thúc thời hạn cần thiết kể từ khi khám xong.',
             'corp_faq_q4': 'Việc triển khai có cần quy trình phức tạp như tích hợp hệ thống không?',
-            'corp_faq_a4': 'Hoàn toàn không cần thiết. Quý công ty có thể triển khai ngay lập tức chỉ với việc gửi danh sách đối tượng khám and thảo luận lịch trình đơn giản, không cần cài đặt phần mềm or liên kết hệ thống.',
+            'corp_faq_a4': 'Hoàn toàn không cần thiết. Quý công ty có thể triển khai ngay lập tức chỉ with việc gửi danh sách đối tượng khám and thảo luận lịch trình đơn giản, không cần cài đặt phần mềm or liên kết hệ thống.',
             'corp_faq_q5': 'Mức độ dịch thuật bảng kết quả được cung cấp như thế nào?',
             'corp_faq_a5': 'Chúng tôi cung cấp bản tóm tắt cốt lõi bằng tiếng mẹ đẻ của người lao động từ bảng kết quả tiếng Hàn vốn có nhiều thuật ngữ chuyên môn. Đây là bản dịch đơn giản nhằm mục đích truyền đạt nội dung, đảm bảo quyền được biết của người lao động, không phải là ý kiến y khoa.',
             'contact_form_company_label': 'Tên công ty',
@@ -1134,8 +1421,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_placeholder': 'Nhập tin nhắn...',
             'chatbot_greeting': 'Xin chào! Bạn có câu hỏi nào về CHECKIT không? Vui lòng chọn một câu hỏi dưới đây or tự nhập câu hỏi của bạn.',
             'greeting_response': 'Xin chào! Rất vui được gặp bạn. Nếu bạn có bất kỳ câu hỏi nào về CHECKIT, hãy chọn một câu hỏi dưới đây hoặc hỏi trực tiếp.',
-            'q1': 'Làm cách nào để đặt lịch hẹn?',
-            'a1': 'Quản lý CHECKIT tận tâm của bạn sẽ hỗ trợ bạn. Chỉ cần cho chúng tôi biết các mục khám and lịch trình mong muốn của bạn, chúng tôi sẽ cung cấp danh sách các bệnh viện phù hợp với tiêu chí của bạn để giúp bạn lựa chọn and xử lý việc đặt lịch hẹn cho bạn. Nhấp vào nút \'Đăng ký tư vấn ngay\' để để lại yêu cầu!',
+            'q1': 'How do I make a reservation?',
+            'a1': 'Your dedicated CHECKIT manager will assist you. Just tell us your desired check-up items and schedule, and we will provide a list of hospitals that fit your criteria to help you choose, and then handle the reservation for you. Click the \'Apply for a Consultation Now\' button to leave an inquiry!',
             'q2': 'Are you contracted with hospitals/medical staff?',
             'a2': 'No. CHECKIT does not have contractual relationships with any specific hospitals. We help you choose the most suitable hospital by providing objective information from your perspective. Your health and satisfaction are our top priorities.',
             'q3': 'Bạn có thực hiện các hành vi y tế or sắp xếp điều trị không?',
@@ -1334,81 +1621,126 @@ document.addEventListener('DOMContentLoaded', () => {
 
     switchLanguage(initialLang);
 
-    // --- 통합 로그인/가입 모달 (파이어베이스 로드 전에도 UI는 뜨도록 외부로 노출) ---
+    // --- 통합 로그인/가입 모달 ---
     const showLoginModal = () => {
         let overlay = document.getElementById('login-modal-overlay');
         if (!overlay) {
             const modalHtml = `
-                <div id="login-modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:10000;display:flex;justify-content:center;align-items:center;font-family:inherit;">
-                    <div class="login-modal-box" style="background:#fff;padding:40px;border-radius:24px;width:90%;max-width:400px;text-align:center;position:relative;">
-                        <button id="close-login-modal" style="position:absolute;top:20px;right:20px;background:none;border:none;font-size:28px;cursor:pointer;color:#ccc;">&times;</button>
-                        <h2 style="margin-bottom:10px;font-weight:800;color:#27ae60;">CHECKIT</h2>
-                        <p style="color:#666;margin-bottom:30px;font-size:0.9rem;">외국인 건강검진 행정 지원 플랫폼</p>
-                        <div id="login-view-main" style="display:flex;flex-direction:column;gap:12px;">
-                            <button id="login-google" style="background:#fff;border:1px solid #eee;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;font-weight:600;">
-                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Google로 시작하기
+                <div id="login-modal-overlay">
+                    <div class="login-modal-box">
+                        <button id="close-login-modal">&times;</button>
+                        <h2 class="modal-logo">CHECKIT</h2>
+                        <p class="modal-tagline">외국인 건강검진 행정 지원 플랫폼</p>
+                        
+                        <div id="login-view-main" class="auth-view">
+                            <button id="login-google" class="btn-auth btn-google">
+                                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> 
+                                <span data-lang-key="login_google">Google로 시작하기</span>
                             </button>
-                            <button id="btn-goto-email" style="background:#f8f9fa;border:1px solid #eee;padding:14px;border-radius:12px;cursor:pointer;font-weight:600;">이메일로 계속하기</button>
+                            <button id="btn-goto-email" class="btn-auth btn-email">
+                                <span data-lang-key="login_email">이메일로 계속하기</span>
+                            </button>
                         </div>
-                        <div id="login-view-email" style="display:none; flex-direction:column; gap:12px; text-align:left;">
-                            <input type="email" id="auth-email" placeholder="이메일" style="padding:14px; border:1px solid #ddd; border-radius:10px;">
-                            <input type="password" id="auth-pw" placeholder="비밀번호" style="padding:14px; border:1px solid #ddd; border-radius:10px;">
-                            <div id="signup-fields" style="display:none; flex-direction:column; gap:12px;">
-                                <input type="password" id="auth-pw-confirm" placeholder="비밀번호 확인" style="padding:14px; border:1px solid #ddd; border-radius:10px;">
+
+                        <div id="login-view-email" class="auth-view" style="display:none;">
+                            <div class="form-group-auth">
+                                <input type="email" id="auth-email" placeholder="이메일 주소" required>
+                                <input type="password" id="auth-pw" placeholder="비밀번호" required>
+                                <div id="signup-fields" style="display:none;">
+                                    <input type="password" id="auth-pw-confirm" placeholder="비밀번호 확인">
+                                </div>
                             </div>
-                            <button id="btn-submit" style="background:#27ae60; color:#fff; border:none; padding:14px; border-radius:12px; cursor:pointer; font-weight:700;">로그인</button>
-                            <p style="text-align:center; font-size:0.85rem; color:#666; cursor:pointer; margin-top:10px;" id="toggle-mode">회원가입 하기</p>
-                            <button id="btn-back" style="background:none; border:none; color:#aaa; font-size:0.85rem; cursor:pointer; margin-top:10px;">뒤로 가기</button>
+                            <button id="btn-submit" class="btn-auth btn-primary">로그인</button>
+                            <div class="auth-utils">
+                                <p id="toggle-mode">회원가입 하기</p>
+                                <button id="btn-back">뒤로 가기</button>
+                            </div>
                         </div>
+                        <div id="auth-error-msg" style="color: #e74c3c; font-size: 0.85rem; margin-top: 10px; min-height: 1.2rem;"></div>
                     </div>
                 </div>
             `;
             document.body.insertAdjacentHTML('beforeend', modalHtml);
             overlay = document.getElementById('login-modal-overlay');
-            const viewMain = document.getElementById('login-view-main'), viewEmail = document.getElementById('login-view-email'), signupFields = document.getElementById('signup-fields'), submitBtn = document.getElementById('btn-submit'), toggleBtn = document.getElementById('toggle-mode');
-            let mode = 'LOGIN';
-            
-            document.getElementById('close-login-modal').onclick = () => { overlay.style.display = 'none'; };
-            document.getElementById('btn-goto-email').onclick = () => { viewMain.style.display = 'none'; viewEmail.style.display = 'flex'; };
-            document.getElementById('btn-back').onclick = () => { viewMain.style.display = 'flex'; viewEmail.style.display = 'none'; };
-            
-            toggleBtn.onclick = () => {
-                mode = (mode === 'LOGIN') ? 'SIGNUP' : 'LOGIN';
-                signupFields.style.display = (mode === 'SIGNUP') ? 'flex' : 'none';
-                submitBtn.textContent = (mode === 'SIGNUP') ? '회원가입' : '로그인';
-                toggleBtn.textContent = (mode === 'SIGNUP') ? '로그인 하기' : '회원가입 하기';
-            };
-
-            const handleAuthError = (e) => { alert(e.message); };
-
-            document.getElementById('login-google').onclick = () => {
-                if (typeof firebase === 'undefined') return alert('Firebase Loading...');
-                const provider = new firebase.auth.GoogleAuthProvider();
-                firebase.auth().signInWithPopup(provider).then(res => { 
-                    overlay.style.display = 'none'; 
-                    location.reload(); 
-                }).catch(handleAuthError);
-            };
-
-            submitBtn.onclick = async () => {
-                if (typeof firebase === 'undefined') return alert('Firebase Loading...');
-                const auth = firebase.auth();
-                const email = document.getElementById('auth-email').value, pw = document.getElementById('auth-pw').value;
-                try {
-                    if (mode === 'SIGNUP') {
-                        if (pw !== document.getElementById('auth-pw-confirm').value) throw new Error('비밀번호가 다릅니다.');
-                        const res = await auth.createUserWithEmailAndPassword(email, pw);
-                        await res.user.sendEmailVerification();
-                        alert('인증 메일이 발송되었습니다. 메일 확인 후 로그인해 주세요.'); 
-                        overlay.style.display = 'none';
-                    } else {
-                        const res = await auth.signInWithEmailAndPassword(email, pw);
-                        if (!res.user.emailVerified) { alert('이메일 인증이 필요합니다.'); await auth.signOut(); }
-                        else { overlay.style.display = 'none'; location.reload(); }
-                    }
-                } catch (e) { handleAuthError(e); }
-            };
         }
+
+        const viewMain = document.getElementById('login-view-main');
+        const viewEmail = document.getElementById('login-view-email');
+        const signupFields = document.getElementById('signup-fields');
+        const submitBtn = document.getElementById('btn-submit');
+        const toggleBtn = document.getElementById('toggle-mode');
+        const errorMsg = document.getElementById('auth-error-msg');
+        const emailInput = document.getElementById('auth-email');
+        const pwInput = document.getElementById('auth-pw');
+        const pwConfirmInput = document.getElementById('auth-pw-confirm');
+        
+        let mode = 'LOGIN';
+        errorMsg.textContent = '';
+        viewMain.style.display = 'flex';
+        viewEmail.style.display = 'none';
+        signupFields.style.display = 'none';
+        submitBtn.textContent = '로그인';
+        toggleBtn.textContent = '회원가입 하기';
+
+        document.getElementById('close-login-modal').onclick = () => { overlay.style.display = 'none'; };
+        document.getElementById('btn-goto-email').onclick = () => { viewMain.style.display = 'none'; viewEmail.style.display = 'flex'; };
+        document.getElementById('btn-back').onclick = () => { viewMain.style.display = 'flex'; viewEmail.style.display = 'none'; errorMsg.textContent = ''; };
+        
+        toggleBtn.onclick = () => {
+            mode = (mode === 'LOGIN') ? 'SIGNUP' : 'LOGIN';
+            signupFields.style.display = (mode === 'SIGNUP') ? 'flex' : 'none';
+            submitBtn.textContent = (mode === 'SIGNUP') ? '회원가입' : '로그인';
+            toggleBtn.textContent = (mode === 'SIGNUP') ? '로그인 하기' : '회원가입 하기';
+            errorMsg.textContent = '';
+        };
+
+        const handleAuthError = (e) => {
+            console.error("Auth Error:", e);
+            let msg = e.message;
+            if (e.code === 'auth/email-already-in-use') msg = '이미 사용 중인 이메일입니다.';
+            if (e.code === 'auth/wrong-password') msg = '비밀번호가 일치하지 않습니다.';
+            if (e.code === 'auth/user-not-found') msg = '등록되지 않은 이메일입니다.';
+            if (e.code === 'auth/weak-password') msg = '비밀번호는 6자리 이상이어야 합니다.';
+            if (e.code === 'auth/invalid-email') msg = '유효하지 않은 이메일 형식입니다.';
+            if (e.code === 'auth/popup-closed-by-user') msg = '로그인 팝업이 닫혔습니다.';
+            errorMsg.textContent = msg;
+        };
+
+        document.getElementById('login-google').onclick = () => {
+            if (typeof firebase === 'undefined') return alert('Firebase가 로드되지 않았습니다.');
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider).then(() => {
+                overlay.style.display = 'none';
+            }).catch(handleAuthError);
+        };
+
+        submitBtn.onclick = async () => {
+            const email = emailInput.value.trim();
+            const pw = pwInput.value.trim();
+            if (!email || !pw) {
+                errorMsg.textContent = '이메일과 비밀번호를 입력해주세요.';
+                return;
+            }
+
+            try {
+                if (mode === 'SIGNUP') {
+                    if (pw !== pwConfirmInput.value.trim()) {
+                        errorMsg.textContent = '비밀번호 확인이 일치하지 않습니다.';
+                        return;
+                    }
+                    const res = await firebase.auth().createUserWithEmailAndPassword(email, pw);
+                    // 가입 성공 시 알림 후 모달 닫기
+                    alert('회원가입이 완료되었습니다!');
+                    overlay.style.display = 'none';
+                } else {
+                    await firebase.auth().signInWithEmailAndPassword(email, pw);
+                    overlay.style.display = 'none';
+                }
+            } catch (e) {
+                handleAuthError(e);
+            }
+        };
+
         overlay.style.display = 'flex';
     };
 
@@ -1416,60 +1748,56 @@ document.addEventListener('DOMContentLoaded', () => {
     // [CHECKIT Platform] Firebase Auth & Notification System
     // ====================================================
     const firebaseConfig = {
-        apiKey: "AIzaSy...",
-        authDomain: "checkit-app.firebaseapp.com",
-        projectId: "checkit-app",
-        storageBucket: "checkit-app.appspot.com",
-        messagingSenderId: "...",
-        appId: "..."
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.firebasestorage.app",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09",
+        measurementId: "G-WVDWXTJ1TR"
     };
 
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
-        let currentUser = null;
-
+        
         const initAuth = () => {
             const nav = document.querySelector('#language-switcher');
             if (!nav) return;
+            
             let authBtn = document.getElementById('platform-auth-btn');
             if (!authBtn) {
-                authBtn = document.createElement('button'); authBtn.id = 'platform-auth-btn'; authBtn.className = 'lang-btn';
-                authBtn.style.cssText = 'margin-left:15px; background:#27ae60; color:#fff; border:none; padding:8px 20px; font-weight:700; cursor:pointer;';
+                authBtn = document.createElement('button');
+                authBtn.id = 'platform-auth-btn';
+                authBtn.className = 'lang-btn auth-main-btn';
                 nav.appendChild(authBtn);
             }
+
             auth.onAuthStateChanged(user => {
-                currentUser = user;
-                authBtn.textContent = user ? (currentLang === 'ko' ? '마이페이지' : 'My Page') : (currentLang === 'ko' ? '로그인' : 'Login');
-                authBtn.onclick = () => user ? (window.location.href = 'individual.html?view=mypage') : showLoginModal();
-                let lBtn = document.getElementById('platform-logout-btn');
-                if (user && !lBtn) {
-                    lBtn = document.createElement('button'); lBtn.id = 'platform-logout-btn'; lBtn.className = 'lang-btn';
-                    lBtn.style.cssText = 'margin-left:10px; background:#e74c3c; color:#fff; border:none; padding:8px 15px; font-weight:600; cursor:pointer;';
-                    lBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
-                    lBtn.onclick = () => auth.signOut().then(() => window.location.href = 'index.html');
-                    authBtn.parentNode.appendChild(lBtn);
-                } else if (!user && lBtn) lBtn.remove();
+                if (user) {
+                    authBtn.textContent = currentLang === 'ko' ? '마이페이지' : 'My Page';
+                    authBtn.onclick = () => window.location.href = 'individual.html?view=mypage';
+                    
+                    let logoutBtn = document.getElementById('platform-logout-btn');
+                    if (!logoutBtn) {
+                        logoutBtn = document.createElement('button');
+                        logoutBtn.id = 'platform-logout-btn';
+                        logoutBtn.className = 'lang-btn logout-btn';
+                        logoutBtn.textContent = currentLang === 'ko' ? '로그아웃' : 'Logout';
+                        logoutBtn.onclick = () => auth.signOut().then(() => location.reload());
+                        authBtn.parentNode.appendChild(logoutBtn);
+                    }
+                } else {
+                    authBtn.textContent = currentLang === 'ko' ? '로그인' : 'Login';
+                    authBtn.onclick = () => showLoginModal();
+                    const logoutBtn = document.getElementById('platform-logout-btn');
+                    if (logoutBtn) logoutBtn.remove();
+                }
             });
         };
         initAuth();
-        if (new URLSearchParams(window.location.search).get('view') === 'mypage') {
-            auth.onAuthStateChanged(user => { if (user) document.body.classList.add('platform-view-active'); });
-        }
     } else {
-        // Firebase가 없더라도 로그인 버튼은 생성 (UI 상으로 활성화 보여주기 위함)
-        const nav = document.querySelector('#language-switcher');
-        if (nav) {
-            let authBtn = document.getElementById('platform-auth-btn');
-            if (!authBtn) {
-                authBtn = document.createElement('button'); authBtn.id = 'platform-auth-btn'; authBtn.className = 'lang-btn';
-                authBtn.style.cssText = 'margin-left:15px; background:#27ae60; color:#fff; border:none; padding:8px 20px; font-weight:700; cursor:pointer;';
-                authBtn.textContent = '로그인';
-                authBtn.onclick = () => showLoginModal();
-                nav.appendChild(authBtn);
-            }
-        }
+        console.warn("Firebase SDK not detected.");
     }
 
     // --- B2B 실무 과정 슬라이드 로직 (이미지 버전 대폭 변경) ---
@@ -1485,7 +1813,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const closeBtn = document.getElementById('closeProcess');
         const overlay = modal.querySelector('.modal-overlay');
 
-        // 캐시 방지를 위해 랜덤 버전(v=현재시간) 추가
         const cacheBuster = `?v=${new Date().getTime()}`;
         const processImages = [
             "assets/process_01.png" + cacheBuster,

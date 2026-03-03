@@ -49,6 +49,10 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
 
 ### **Process Flow**
 1.  **Authentication:** User registration and login (Firebase Auth).
+    *   **Google Login:** One-click authentication using Google accounts.
+    *   **Email/Password:** Traditional signup and login flow.
+    *   **Real-time State Sync:** Navigation buttons (Login/Logout/My Page) update instantly based on auth state.
+    *   **Error Handling:** Detailed user feedback for common errors (already in use, wrong password, etc.).
 2.  **Package Selection:** Link existing package cards to the service flow.
 3.  **CHECKIT Service Payment:** Payment integration for CHECKIT fees only.
 4.  **Information Intake:** Collect user data (Name, DOB, Language, Travel dates, Budget).

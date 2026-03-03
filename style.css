@@ -1404,8 +1404,183 @@ body.platform-view-active #mypage-overlay { display: flex; }
 .status-step.active { opacity: 1; color: #2ecc71; font-weight: 700; }
 .admin-chat-container { border: 1px solid #eee; border-radius: 12px; background: #fff; display: flex; flex-direction: column; height: 500px; margin: 20px; }
 .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f9f9f9; }
-#login-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; justify-content: center; align-items: center; }
-.login-modal-box { background: #fff; padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
+#login-modal-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    z-index: 10000; 
+    display: none; 
+    justify-content: center; 
+    align-items: center; 
+    font-family: inherit;
+    backdrop-filter: blur(8px);
+}
+
+.login-modal-box { 
+    background: #fff; 
+    padding: 40px; 
+    border-radius: 24px; 
+    width: 90%; 
+    max-width: 400px; 
+    text-align: center; 
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+#close-login-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+#close-login-modal:hover {
+    color: var(--primary-color);
+}
+
+.modal-logo {
+    margin-bottom: 10px;
+    font-weight: 800;
+    color: var(--primary-color);
+    font-size: 2rem;
+}
+
+.modal-tagline {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.auth-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-auth {
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 1rem;
+    border: 1px solid #eee;
+}
+
+.btn-google {
+    background: #fff;
+    color: #333;
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    border-color: #ddd;
+}
+
+.btn-email {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.btn-email:hover {
+    background: #f0f1f2;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.form-group-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.form-group-auth input {
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+}
+
+.form-group-auth input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.auth-utils {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#toggle-mode {
+    font-size: 0.85rem;
+    color: #666;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#toggle-mode:hover {
+    color: var(--primary-color);
+}
+
+#btn-back {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+#btn-back:hover {
+    color: #666;
+}
+
+.auth-main-btn {
+    margin-left: 15px;
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 8px 20px !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+}
+
+.logout-btn {
+    margin-left: 10px;
+    background: #e74c3c !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 8px 15px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+}
 
 /* B2B Process Slide Modal */
 #processModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4000; display: flex; justify-content: center; align-items: center; transition: opacity 0.3s; }

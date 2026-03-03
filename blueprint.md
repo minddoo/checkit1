@@ -16,6 +16,7 @@ This project expands the CHECKIT website into a comprehensive, multilingual plat
     *   `individual.html` & `corporate.html` have been implemented with modern, responsive designs tailored to each client type.
     *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
         *   **Expectation Section (March 2026):** A new vertical-stack section highlighting what foreigners expect from Korean medical services: Cost Efficiency, Convenience, Professionalism, and Time Saving. Each item features a large image and description.
+        *   **Reality Section (March 2026):** A contrasting section highlighting the common difficulties foreigners face in Korean hospitals: Language barriers, confusing processes, scheduling uncertainties, and post-checkup accountability issues.
     *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
 *   **Design Standardization (March 2026):**
     *   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.

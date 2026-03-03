@@ -784,16 +784,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     if(isSignUp) {
                         await auth.createUserWithEmailAndPassword(email, pass);
+                        showSuccessState("Welcome to CHECKIT!", "Your journey to better healthcare starts here.");
                     } else {
                         await auth.signInWithEmailAndPassword(email, pass);
+                        showSuccessState("Welcome Back!", "Good to see you again.");
                     }
-                    overlay.remove();
                 } catch (err) {
                     console.error("Auth Error:", err);
                     alert(err.message);
                     actionBtn.disabled = false;
                     actionBtn.textContent = isSignUp ? 'Create Account' : 'Sign In';
                 }
+            };
+
+            const showSuccessState = (title, subtitle) => {
+                const box = document.querySelector('.login-modal-box');
+                box.innerHTML = `
+                    <div style="padding: 20px 0; animation: fadeIn 0.5s ease-out;">
+                        <div style="width: 80px; height: 80px; background: #e8f5e9; color: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 40px;">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h2 class="modal-logo" style="color: #333;">${title}</h2>
+                        <p style="color: #666; margin-bottom: 0;">${subtitle}</p>
+                    </div>
+                `;
+                setTimeout(() => {
+                    overlay.remove();
+                    // Onboarding will be triggered by onAuthStateChanged if needed
+                }, 2000);
             };
         };
 

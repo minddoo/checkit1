@@ -239,16 +239,14 @@ body {
     align-items: center;
     gap: 30px;
     text-align: center;
-    padding: 40px;
-    background: var(--white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.3s ease;
+    padding: 0; /* Removed padding */
+    background: none; /* Removed background */
+    border-radius: 0; /* Removed border-radius */
+    box-shadow: none; /* Removed box-shadow */
 }
 
 .expectation-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    transform: none; /* Removed hover effect */
 }
 
 .expectation-image {
@@ -261,8 +259,8 @@ body {
     height: auto;
     max-height: 450px;
     object-fit: cover;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
+    border-radius: var(--border-radius-lg); /* Card-like radius for image */
+    box-shadow: var(--shadow-md); /* Card-like shadow for image */
 }
 
 .expectation-text {
@@ -273,7 +271,7 @@ body {
     font-size: 2.2rem;
     font-weight: 800;
     margin-bottom: 20px;
-    color: var(--primary-dark);
+    color: #000; /* Changed to black */
 }
 
 .expectation-item-desc {

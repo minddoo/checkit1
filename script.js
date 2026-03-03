@@ -299,7 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_close': '닫기',
             'platform_loading': '데이터를 불러오는 중입니다...',
             'platform_error': '서버 연결 지연 (Firestore 설정 확인 필요)',
-            'platform_manager_spec': '영어/한국어 전문 매니저'
+            'platform_manager_spec': '영어/한국어 전문 매니저',
+            'contact_success': '문의가 성공적으로 접수되었습니다. 곧 담당 매니저가 연락드리겠습니다!',
+            'contact_error': '문의 접수 중 오류가 발생했습니다. 다시 시도해 주세요.'
         },
         en: {
             'nav_home': 'Home',
@@ -597,7 +599,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_close': 'Close',
             'platform_loading': 'Loading data...',
             'platform_error': 'Server connection delay (Check Firestore settings)',
-            'platform_manager_spec': 'English/Korean Specialist'
+            'platform_manager_spec': 'English/Korean Specialist',
+            'contact_success': 'Inquiry submitted successfully. A manager will contact you soon!',
+            'contact_error': 'An error occurred. Please try again.'
         }
     };
 
@@ -639,7 +643,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resetAndShowGreeting();
         }
         
-        // Re-render platform if open
         const platformOverlay = document.getElementById('mypage-overlay');
         if (platformOverlay && document.body.classList.contains('platform-view-active')) {
             const auth = firebase.auth();
@@ -783,7 +786,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const initialLang = new URLSearchParams(window.location.search).get('lang') || 'ko';
     
-    // FAQ Accordion Logic
     document.addEventListener('click', (e) => {
         const question = e.target.closest('.faq-question');
         if (question) {
@@ -812,7 +814,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- 통합 로그인/가입 모달 ---
+        // --- Contact Form Logic ---
+        const handleContactForm = () => {
+            const forms = document.querySelectorAll('.contact-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '...';
+
+                    const formData = {
+                        email: form.querySelector('input[type="email"]')?.value || "",
+                        phone: form.querySelector('input[type="text"][placeholder*="010"], input[type="text"][data-lang-key*="phone"]')?.value || "",
+                        company: form.querySelector('input[type="text"][placeholder*="기업명"], input[type="text"][data-lang-key*="company"]')?.value || "",
+                        message: form.querySelector('textarea')?.value || "",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        source: window.location.pathname,
+                        language: currentLang
+                    };
+
+                    try {
+                        await db.collection("contact_inquiries").add(formData);
+                        alert(translations[currentLang]['contact_success']);
+                        form.reset();
+                    } catch (err) {
+                        console.error("Form error:", err);
+                        alert(translations[currentLang]['contact_error']);
+                    } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalText;
+                    }
+                });
+            });
+        };
+        handleContactForm();
+
         const showLoginModal = () => {
             let overlay = document.getElementById('login-modal-overlay');
             if (!overlay) {
@@ -944,7 +982,6 @@ document.addEventListener('DOMContentLoaded', () => {
             overlay.style.display = 'flex';
         };
 
-        // --- 마이페이지(플랫폼 뷰) 렌더링 (Real-time) ---
         let platformUnsubscribe = null;
         let chatUnsubscribe = null;
 
@@ -959,7 +996,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('platform-view-active');
             const langData = translations[currentLang];
             
-            // Show shell immediately
             overlay.innerHTML = `
                 <div class="mypage-header">
                     <h2 style="margin:0; color:var(--primary-color);">${langData['platform_title']}</h2>
@@ -999,7 +1035,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const contentEl = document.getElementById('platform-dynamic-content');
             const chatMsgsEl = document.getElementById('platform-chat-messages');
 
-            // 1. Real-time Status Update
             platformUnsubscribe = db.collection("user_process").doc(user.uid).onSnapshot((doc) => {
                 if (!doc.exists) return;
                 const data = doc.data();
@@ -1031,7 +1066,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             });
 
-            // 2. Real-time Chat Persistence
             chatUnsubscribe = db.collection("user_process").doc(user.uid).collection("messages").orderBy("timestamp", "asc").onSnapshot((snapshot) => {
                 chatMsgsEl.innerHTML = "";
                 if (snapshot.empty) {
@@ -1116,7 +1150,6 @@ document.addEventListener('DOMContentLoaded', () => {
         initAuth();
     }
 
-    // --- B2B Slide Logic ---
     const initB2BProcessSlide = () => {
         const openBtn = document.getElementById('openProcessSlide'), modal = document.getElementById('processModal');
         if (!openBtn || !modal) return;

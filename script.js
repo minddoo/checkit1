@@ -1559,9 +1559,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
 
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
+                            alert('Auth Success!'); // Temporary alert
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                            handleSuccess(res.user); // Automatically logs in and directs to My Page
+                            alert('Firestore Set Success!'); // Temporary alert
+                            alert(d['signup_welcome_message']); // This should display the welcome message
+                            overlay.remove(); // This should close the modal
+                            currentView = 'login';
+                            showLoginModal(); // This should re-open the login modal
                         } else if (currentView === 'find') {
                             await auth.sendPasswordResetEmail(email);
                             alert(d['find_pass_success']);

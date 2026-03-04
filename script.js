@@ -262,6 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
             'chatbot_q5': '5. 결과지는 어떻게 전달이 되나요?',
             'chatbot_a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
+            'chatbot_greeting_reply': '안녕하세요! 만나서 반갑습니다. 무엇을 도와드릴까요?',
+            'chatbot_fallback_reply': '소중한 문의 감사합니다! 현재 입력하신 내용은 담당 매니저가 확인 후 답변 드릴 예정입니다. 보다 상세한 안내를 원하시면 메인 페이지 하단의 \'문의하기\'를 통해 메시지를 남겨주시면 더욱 정확한 답변이 가능합니다.',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
@@ -523,6 +525,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a4': 'On the day of the check-up, our CheckBot manager will be with you every moment so you don\'t feel alone due to language barriers. We support all communication processes in real-time.',
             'chatbot_q5': '5. How are the results delivered?',
             'chatbot_a5': 'Provide the Korean result you received from the hospital, and we will translate and summarize the core content into your native language. We do not provide medical opinions or detailed medical explanations.',
+            'chatbot_greeting_reply': 'Hello! Nice to meet you. How can I help you today?',
+            'chatbot_fallback_reply': 'Thank you for your valuable inquiry! A dedicated manager will check your message and respond soon. For a more detailed response, please leave a message via the \'Contact Us\' section at the bottom of the main page.',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
         },
         cn: {
@@ -558,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonials_title': '客户评价',
             'testimonials_subtitle': '听听使用过 CHECKIT 的客户的声音。',
             'testimonial1_text': '“第一次在韩国体检，多亏了 CHECKIT，从预约到沟通都很顺利。结果也翻译成了母语。”',
-            'testimonial1_author': 'Anna, 留学生', 'testimonial1_type': '在韩外国人',
+            'testimonial1_author': 'Anna, 留학생', 'testimonial1_type': '在韩外国人',
             'testimonial2_text': '“想给父母预约体检，语言问题很头疼. CHECKIT 经理帮我处理了一切。”',
             'testimonial2_author': 'David, 海外', 'testimonial2_type': '海外客户',
             'testimonial3_text': '“外国员工体检一直很麻烦，多亏了 CHECKIT，变得非常简单。”',
@@ -596,14 +600,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_2_point_1': '甚至不知道体检套餐包含什么内容。',
             'reality_item_2_point_2': '准备物品送达时没有使用说明。',
             'reality_item_2_point_3': '肠镜药说明仅提供韩文 → 导致检查失败。',
-            'reality_item_2_point_4': '问卷长且复杂，且全部是韩文。',
+            'reality_item_2_point_4': '问卷长且复杂，且全部是韩文. ',
             'reality_item_title_3': '3. 日程不确定',
             'reality_item_3_point_1': '仅预约就需要2-3天。',
             'reality_item_3_point_2': '职员回答各异 — 无人负责。',
             'reality_item_3_point_3': '收不到通知。',
             'reality_item_3_point_4': '由于海外时差 → 通话失败且预约延迟。',
             'reality_item_title_4': '4. 结果延迟且责任缺失',
-            'reality_item_4_point_1': '结果被邮寄到您不在的地址。',
+            'reality_item_4_point_1': '结果被邮寄到您不在의地址。',
             'reality_item_4_point_2': '离开韩国后结果仍延迟数周。',
             'reality_item_4_point_3': '无法获取收据。',
             'reality_item_4_point_4': '没有关于检查后规则（如飞行）的说明。',
@@ -692,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_title': '健康检查是强大福利',
             'corp_sec2_subtitle': '差异化的支持可提高忠诚度。',
             'corp_sec2_item1_title': '向往的企业',
-            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一的福利. ',
+            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一의福利. ',
             'corp_sec2_item2_title': '生产力最大化',
             'corp_sec2_item2_desc': '健康的工人能带来最佳生产力。',
             'corp_sec2_item3_title': 'ESG 经营',
@@ -732,7 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec6_title': '无需更改流程',
             'corp_sec6_subtitle': '遵守法律同时提高效率。',
             'corp_sec6_item1_title': '无违规',
-            'corp_sec6_item1_desc': '严格行政支持。',
+            'corp_sec6_item1_desc': '严格行政支持. ',
             'corp_sec6_item2_title': '无合同',
             'corp_sec6_item2_desc': '使用现有医院。',
             'corp_sec6_item3_title': '立即引入',
@@ -784,6 +788,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感。我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
             'chatbot_q5': '5. 结果报告如何交付？',
             'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语。我们遵守医疗法，不提供医疗建议。',
+            'chatbot_greeting_reply': '您好！见到您很高兴。有什么我可以帮您的吗？',
+            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复。如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复。',
             'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
@@ -936,7 +942,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_recommend_desc': 'Người muốn quản lý tốt nhất.',
             'price_structure_title': 'Tại sao trả nhiều tiền hơn?',
             'price_structure_q': '"Tại sao dịch vụ của bạn rẻ hơn?"',
-            'price_structure_a_title': 'Trả lời ngắn',
+            'price_structure_a_title': 'Câu trả lời ngắn',
             'price_structure_a_text': 'Do cấu trúc giá.',
             'price_structure_reality_title': 'Thực tế bệnh viện',
             'price_structure_reality_text': 'Bệnh viện tạo gói người nước ngoài giá cao.',
@@ -1045,6 +1051,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a4': 'Vào ngày khám, quản lý CheckBot của chúng tôi sẽ đồng hành cùng bạn để bạn không cảm thấy cô đơn do rào cản ngôn ngữ. Chúng tôi hỗ trợ tất cả quy trình giao tiếp trong bệnh viện theo thời gian thực.',
             'chatbot_q5': '5. Kết quả được giao như thế nào?',
             'chatbot_a5': 'Hãy gửi cho chúng tôi kết quả tiếng Hàn bạn nhận được từ bệnh viện, chúng tôi sẽ dịch và tóm tắt nội dung cốt lõi sang ngôn ngữ của bạn. Chúng tôi không cung cấp ý kiến y khoa.',
+            'chatbot_greeting_reply': 'Xin chào! Rất vui được gặp bạn. Tôi có thể giúp gì cho bạn?',
+            'chatbot_fallback_reply': 'Cảm ơn sự tư vấn quý báu của bạn! Nội dung bạn nhập sẽ được quản lý phụ trách kiểm tra và phản hồi sớm. Để được phản hồi chính xác hơn, vui lòng để lại lời nhắn qua mục \'Liên hệ\' ở cuối trang chủ.',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
         }
     };
@@ -1119,8 +1127,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function handleUserInput(question, presetAnswer = null) {
-        addUserMessage(question);
+    const greetingKeywords = {
+        ko: ['안녕', '반가', '하이', '헬로'],
+        en: ['hi', 'hello', 'hey', 'greetings'],
+        cn: ['你好', '您好'],
+        vn: ['xin chào', 'chào']
+    };
+
+    async function handleUserInput(userInput, presetAnswer = null) {
+        addUserMessage(userInput);
         
         // Show loading indicator
         const loadingMsg = document.createElement('div');
@@ -1132,11 +1147,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Simulate delay
         setTimeout(() => {
             loadingMsg.remove();
+            const data = translations[currentLang] || translations['ko'];
             if (presetAnswer) {
                 addBotMessage(presetAnswer);
             } else {
-                const data = translations[currentLang] || translations['ko'];
-                addBotMessage(currentLang === 'ko' ? "문의 감사합니다! 곧 매니저가 답변해 드릴 예정입니다. 급한 용무는 '지금 바로 상담 신청'을 이용해 주세요." : "Thank you for your inquiry! A manager will respond shortly. For urgent matters, please use 'Apply Now'.");
+                const lowerInput = userInput.toLowerCase();
+                const keywords = greetingKeywords[currentLang] || greetingKeywords['ko'];
+                const isGreeting = keywords.some(k => lowerInput.includes(k));
+
+                if (isGreeting) {
+                    addBotMessage(data['chatbot_greeting_reply']);
+                } else {
+                    addBotMessage(data['chatbot_fallback_reply']);
+                }
             }
         }, 1000);
     }

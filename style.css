@@ -241,7 +241,7 @@ body {
     background-image: url('assets/기.png');
     width: 750px;
     height: 750px;
-    margin-left: -450px; /* 캐릭터만 텍스트 쪽으로 과감하게 왼쪽 이동 */
+    margin-left: -150px; /* 왼쪽으로 너무 쏠렸던 캐릭터를 오른쪽으로 이동시켜 텍스트 옆에 배치 */
 }
 
 /* ----------------------------------

@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_1_point_3': '민감한 질문(생리, 수술, 증상)에 대해 제대로 된 설명을 받지 못합니다.',
             'reality_item_1_point_4': '검진 중 모든 안내 방송은 한국어로만 나옵니다.',
             'reality_item_title_2': '2. 혼란스러운 과정',
-            'reality_item_2_point_1': '은 무엇이 포함되어 있는지조차 모릅니다.',
+            'reality_item_2_point_1': '검진 패키지에 무엇이 포함되어 있는지조차 모릅니다.',
             'reality_item_2_point_2': '준비 물품이 사용법에 대한 설명 없이 도착합니다.',
             'reality_item_2_point_3': '대장내시경 약은 한국어로만 설명되어 → 검사에 실패합니다.',
             'reality_item_2_point_4': '사전 문진표는 길고 복잡하며 전부 한국어입니다.',
@@ -252,6 +252,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'view_workflow': '실무과정 보기',
             'chatbot_header': 'Check봇',
             'chatbot_placeholder': '메시지를 입력하세요...',
+            'chatbot_q1': '1. 예약은 어떻게 하나요?',
+            'chatbot_a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
+            'chatbot_q2': '2. 병원/의료인과 계약 구조인가요?',
+            'chatbot_a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
+            'chatbot_q3': '3. 의료행위나 진료 알선도 하나요?',
+            'chatbot_a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
+            'chatbot_q4': '4. 검진 당일 어떤 도움을 받을 수 있나요?',
+            'chatbot_a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
+            'chatbot_q5': '5. 결과지는 어떻게 전달이 되나요?',
+            'chatbot_a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
@@ -503,6 +513,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'view_workflow': 'View Workflow',
             'chatbot_header': 'CheckBot',
             'chatbot_placeholder': 'Type a message...',
+            'chatbot_q1': '1. How do I make a reservation?',
+            'chatbot_a1': 'A CHECKIT dedicated manager will help you. Let us know the desired check-up items and schedule, and we will provide a list of hospitals that meet your conditions and handle the booking. Click \'Apply Now\' to leave an inquiry!',
+            'chatbot_q2': '2. Do you have contracts with hospitals/doctors?',
+            'chatbot_a2': 'No. CHECKIT does not have contract relationships with specific hospitals. We provide objective information to help you find the most suitable hospital from your perspective.',
+            'chatbot_q3': '3. Do you perform medical acts or referrals?',
+            'chatbot_a3': 'No, CHECKIT complies with medical laws and does not perform any medical acts or referrals. We focus on "non-medical processes" like booking, interpretation, and result translation.',
+            'chatbot_q4': '4. What help can I get on the day of check-up?',
+            'chatbot_a4': 'On the day of the check-up, our CheckBot manager will be with you every moment so you don\'t feel alone due to language barriers. We support all communication processes in real-time.',
+            'chatbot_q5': '5. How are the results delivered?',
+            'chatbot_a5': 'Provide the Korean result you received from the hospital, and we will translate and summarize the core content into your native language. We do not provide medical opinions or detailed medical explanations.',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
         },
         cn: {
@@ -539,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'testimonials_subtitle': '听听使用过 CHECKIT 的客户的声音。',
             'testimonial1_text': '“第一次在韩国体检，多亏了 CHECKIT，从预约到沟通都很顺利。结果也翻译成了母语。”',
             'testimonial1_author': 'Anna, 留学生', 'testimonial1_type': '在韩外国人',
-            'testimonial2_text': '“想给父母预约体检，语言问题很头疼。CHECKIT 经理帮我处理了一切。”',
+            'testimonial2_text': '“想给父母预约体检，语言问题很头疼. CHECKIT 经理帮我处理了一切。”',
             'testimonial2_author': 'David, 海外', 'testimonial2_type': '海外客户',
             'testimonial3_text': '“外国员工体检一直很麻烦，多亏了 CHECKIT，变得非常简单。”',
             'testimonial3_author': '朴经理', 'testimonial3_type': '企业客户',
@@ -569,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_title': '但现实是....',
             'reality_item_title_1': '1. 缺乏多语言支持',
             'reality_item_1_point_1': '职员因为不会外语而回避电话。',
-            'reality_item_1_point_2': '指南、准备指南、通知全部是韩文。',
+            'reality_item_1_point_2': '指南、准备指南、通知全部是韩文. ',
             'reality_item_1_point_3': '敏感问题无法得到妥善解释。',
             'reality_item_1_point_4': '体检中的所有广播仅提供韩语。',
             'reality_item_title_2': '2. 流程混乱',
@@ -580,12 +600,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_title_3': '3. 日程不确定',
             'reality_item_3_point_1': '仅预约就需要2-3天。',
             'reality_item_3_point_2': '职员回答各异 — 无人负责。',
-            'reality_item_3_point_3': '没有韩国电话号码 → 收不到通知。',
+            'reality_item_3_point_3': '收不到通知。',
             'reality_item_3_point_4': '由于海外时差 → 通话失败且预约延迟。',
             'reality_item_title_4': '4. 结果延迟且责任缺失',
             'reality_item_4_point_1': '结果被邮寄到您不在的地址。',
             'reality_item_4_point_2': '离开韩国后结果仍延迟数周。',
-            'reality_item_4_point_3': '因本地电话认证限制无法获取收据。',
+            'reality_item_4_point_3': '无法获取收据。',
             'reality_item_4_point_4': '没有关于检查后规则（如飞行）的说明。',
             'reality_overtime_title': '纸面上看似微小的问题。现实却是如此。',
             'reality_overtime_p1': '来韩国之前，一切都令人安心。',
@@ -652,9 +672,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature11': '结构指南',
             'package3_feature12': '沟通模板',
             'package3_feature13': '变更支持',
-            'package3_recommend_desc': '希望获得最安全管理的人。',
+            'package3_recommend_desc': '希望获得最安全管理的人. ',
             'price_structure_title': '为什么外国人在韩国支付更多？',
-            'price_structure_q': '“为什么您的选项比医院的便宜？”',
+            'price_structure_q': '“为什么您的选项比医院의便宜？”',
             'price_structure_a_title': '简单回答',
             'price_structure_a_text': '不是检查不同，而是价格结构。',
             'price_structure_reality_title': '医院真实情况',
@@ -672,7 +692,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_title': '健康检查是强大福利',
             'corp_sec2_subtitle': '差异化的支持可提高忠诚度。',
             'corp_sec2_item1_title': '向往的企业',
-            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一的福利。',
+            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一的福利. ',
             'corp_sec2_item2_title': '生产力最大化',
             'corp_sec2_item2_desc': '健康的工人能带来最佳生产力。',
             'corp_sec2_item3_title': 'ESG 经营',
@@ -754,11 +774,21 @@ document.addEventListener('DOMContentLoaded', () => {
             'view_workflow': '查看流程',
             'chatbot_header': '机器人',
             'chatbot_placeholder': '输入消息...',
+            'chatbot_q1': '1. 如何预约？',
+            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助。请告知我们您希望的检查项目和日程，我们将提供符合您条件的医院列表并协助您完成预约。点击“立即申请”留下您的咨询！',
+            'chatbot_q2': '2. 你们与医院/医生有合同关系吗？',
+            'chatbot_a2': '不。CHECKIT 与特定医院没有合同关系。我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
+            'chatbot_q3': '3. 你们也提供医疗行为或医疗中介吗？',
+            'chatbot_a3': '不，CHECKIT 遵守医疗法，不提供任何医疗行为或中介。我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
+            'chatbot_q4': '4. 检查当天我可以得到什么帮助？',
+            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感。我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
+            'chatbot_q5': '5. 结果报告如何交付？',
+            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语。我们遵守医疗法，不提供医疗建议。',
             'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
-            'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Tìm hiểu thêm',
+            'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
             'platform_title': 'Nền tảng CHECKIT', 'platform_status_title': 'Trạng thái dịch vụ',
             'platform_close': 'Đóng', 'contact_success': 'Đã gửi yêu cầu!',
             'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
@@ -983,9 +1013,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step4_1': 'Giải quyết bất tiện',
             'corp_sec7_step4_2': 'Quản lý hoàn thành',
             'corp_sec7_step5_title': '05. Quản lý kết quả',
-            'corp_sec7_step5_1': 'Hướng dẫn kết quả',
+            'corp_sec7_step5_1': 'Hướng dẫn về kết quả',
             'corp_sec7_step5_2': 'Dịch tóm tắt',
-            'corp_sec7_step5_3': 'Nộp hồ sơ',
+            'corp_sec7_step5_3': 'Quản lý nộp hồ sơ',
             'corp_sec7_step6_title': '06. Báo cáo cuối cùng',
             'corp_sec7_step6_1': 'Cập nhật danh sách',
             'corp_sec7_step6_2': 'Báo cáo tiến độ',
@@ -1002,9 +1032,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_q5': 'Mức độ dịch?',
             'corp_faq_a5': 'Tóm tắt tiếng mẹ đẻ.',
             'contact_form_company_label': 'Tên doanh nghiệp',
-            'view_workflow': 'Quy trình 실무',
+            'view_workflow': 'Quy trình thực vụ',
             'chatbot_header': 'CheckBot',
             'chatbot_placeholder': 'Nhập tin nhắn...',
+            'chatbot_q1': '1. Làm thế nào để đặt lịch?',
+            'chatbot_a1': 'Quản lý tận tâm của CHECKIT sẽ giúp bạn. Hãy cho chúng tôi biết các hạng mục khám và lịch trình mong muốn, chúng tôi sẽ cung cấp danh sách bệnh viện phù hợp và xử lý việc đặt lịch. Nhấn \'Đăng ký ngay\' để gửi yêu cầu!',
+            'chatbot_q2': '2. Các bạn có hợp đồng với bệnh viện/bác sĩ không?',
+            'chatbot_a2': 'Không. CHECKIT không có quan hệ hợp đồng với các bệnh viện cụ thể. Chúng tôi cung cấp thông tin khách quan để giúp bạn tìm thấy bệnh viện phù hợp nhất từ góc độ của mình.',
+            'chatbot_q3': '3. Các bạn có thực hiện hành vi y tế hoặc giới thiệu bệnh nhân không?',
+            'chatbot_a3': 'Không, CHECKIT tuân thủ luật y tế và không thực hiện bất kỳ hành vi y tế hoặc giới thiệu nào. Chúng tôi tập trung vào "quy trình phi y tế" như đặt lịch, thông dịch và dịch kết quả.',
+            'chatbot_q4': '4. Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?',
+            'chatbot_a4': 'Vào ngày khám, quản lý CheckBot của chúng tôi sẽ đồng hành cùng bạn để bạn không cảm thấy cô đơn do rào cản ngôn ngữ. Chúng tôi hỗ trợ tất cả quy trình giao tiếp trong bệnh viện theo thời gian thực.',
+            'chatbot_q5': '5. Kết quả được giao như thế nào?',
+            'chatbot_a5': 'Hãy gửi cho chúng tôi kết quả tiếng Hàn bạn nhận được từ bệnh viện, chúng tôi sẽ dịch và tóm tắt nội dung cốt lõi sang ngôn ngữ của bạn. Chúng tôi không cung cấp ý kiến y khoa.',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
         }
     };
@@ -1042,6 +1082,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const user = firebase.auth().currentUser;
             authBtn.textContent = user ? (data['nav_mypage'] || 'My Page') : (data['nav_login'] || 'Login');
         }
+
+        // Update suggested questions if chatbot is initialized
+        renderSuggestedQuestions();
     };
     window.changeLanguage = switchLanguage;
 
@@ -1059,6 +1102,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const openChatbotBtn = document.getElementById('open-chatbot');
     const closeChatbotBtn = document.getElementById('close-chatbot');
     const chatbotMessages = document.getElementById('chatbot-messages');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const suggestedContainer = document.getElementById('chatbot-suggested-questions');
+
+    function renderSuggestedQuestions() {
+        if (!suggestedContainer) return;
+        const data = translations[currentLang] || translations['ko'];
+        suggestedContainer.innerHTML = '';
+        for (let i = 1; i <= 5; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'suggested-question-btn';
+            btn.textContent = data[`chatbot_q${i}`];
+            btn.onclick = () => handleUserInput(data[`chatbot_q${i}`], data[`chatbot_a${i}`]);
+            suggestedContainer.appendChild(btn);
+        }
+    }
+
+    async function handleUserInput(question, presetAnswer = null) {
+        addUserMessage(question);
+        
+        // Show loading indicator
+        const loadingMsg = document.createElement('div');
+        loadingMsg.className = 'message bot loading-indicator';
+        loadingMsg.innerHTML = '<span></span><span></span><span></span>';
+        chatbotMessages.appendChild(loadingMsg);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+        // Simulate delay
+        setTimeout(() => {
+            loadingMsg.remove();
+            if (presetAnswer) {
+                addBotMessage(presetAnswer);
+            } else {
+                const data = translations[currentLang] || translations['ko'];
+                addBotMessage(currentLang === 'ko' ? "문의 감사합니다! 곧 매니저가 답변해 드릴 예정입니다. 급한 용무는 '지금 바로 상담 신청'을 이용해 주세요." : "Thank you for your inquiry! A manager will respond shortly. For urgent matters, please use 'Apply Now'.");
+            }
+        }, 1000);
+    }
+
+    function addUserMessage(text) {
+        if (!chatbotMessages) return;
+        const msg = document.createElement('div');
+        msg.className = 'message user';
+        msg.innerHTML = text;
+        chatbotMessages.appendChild(msg);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
 
     if (openChatbotBtn && chatbotContainer && closeChatbotBtn) {
         openChatbotBtn.addEventListener('click', () => {
@@ -1066,12 +1156,32 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('chatbot-open');
             if (chatbotMessages && chatbotMessages.children.length === 0) {
                 addBotMessage(getWelcomeMessage(currentLang));
+                renderSuggestedQuestions();
             }
         });
 
         closeChatbotBtn.addEventListener('click', () => {
             chatbotContainer.classList.remove('show');
             document.body.classList.remove('chatbot-open');
+        });
+    }
+
+    if (chatbotSend && chatbotInput) {
+        chatbotSend.addEventListener('click', () => {
+            const text = chatbotInput.value.trim();
+            if (text) {
+                handleUserInput(text);
+                chatbotInput.value = '';
+            }
+        });
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const text = chatbotInput.value.trim();
+                if (text) {
+                    handleUserInput(text);
+                    chatbotInput.value = '';
+                }
+            }
         });
     }
 

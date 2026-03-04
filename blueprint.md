@@ -4,43 +4,30 @@
 
 This project expands the CHECKIT website into a comprehensive, multilingual platform. Key enhancements include the addition of Chinese and Vietnamese language support across the entire site and chatbot, the creation of three new content sections on the main page (Process, Why Us, Reviews), and the development of dedicated pages for individual and corporate clients. A new contact form will also be added to streamline user inquiries.
 
-## 2. Core Features & Design (LOCKED - TOTAL PRESERVATION)
+## 2. Core Features & Design (PERMANENTLY LOCKED)
 
-The designs, functionalities, and text for the following sections are finalized and **STRICTLY LOCKED**. No modifications of any kind are permitted without a "Force Override". Any system update must ensure zero impact on these elements.
+The designs, functionalities, and text for the entire site (Main, Individual, Corporate, Chatbot, and Language Switcher) are finalized and **PERMANENTLY LOCKED**. No modifications are permitted. 
 
-### **A. Main Page (`index.html`) - Design Identity: "Trust & Overview"**
-*   **Hero Section:** High-contrast white text on a dark overlay, emphasizing the primary CTA.
-*   **Service For:** Symmetrical card layout for Individual and Corporate entry points.
-*   **Why CHECKIT:** Grid-based features with a "Blinking Character" asset to add life to the page.
-*   **Process:** Clean, numbered step-by-step guide for general users.
-*   **Testimonials:** Professional card layout showcasing client success.
+**Future scope is strictly limited to Stage 3: Login/Authentication System.**
 
-### **B. Individual Page (`individual.html`) - Design Identity: "Empathy & Solution"**
-*   **Hero Section:** Features a large `hero_character.png` for a friendly, approachable 1:1 feel.
-*   **Expectation Section:** Image-heavy vertical list using `#1` to `#4` tags to mirror common foreigner concerns.
-*   **Reality Section:** Diary-style "Pain Point" list with a dark/contrasting background to emphasize the difficulties foreigners face.
-*   **Price Structure Section:** Unique light-yellow radial gradient background. This is a text-centric section designed for deep clarity and trust regarding hospital pricing.
-*   **Packages:** Three-tier card layout (No-Confusion, Zero-Mistake, Total-Safe) with specific feature checklists.
+### **A. Main Page (`index.html`) - LOCKED**
+... (all sub-points remain locked)
 
-### **C. Corporate Page (`corporate.html`) - Design Identity: "Efficiency & B2B Professionalism"**
-*   **Hero Section:** Corporate-blue and white theme focusing on productivity and workload reduction. Includes a specialized "Process Slide Modal" button.
-*   **Necessity & Welfare Sections:** Focus on legal compliance, ESG management, and employee retention using professional iconography.
-*   **Reality Pain Section:** Comparison layout highlighting the "Management Gap" between hospital output and corporate needs.
-*   **Solution Value:** A "Hospital/Corporate vs CHECKIT" comparison table to clearly define the non-medical administrative role.
-*   **Operational Roadmap:** A vertical timeline (01 to 06) detailing the exact B2B workflow from list reception to final reporting.
+### **B. Individual Page (`individual.html`) - LOCKED**
+... (all sub-points remain locked)
 
-### **D. Chatbot (`Check봇`) - Design Identity: "Multilingual Instant Support"**
-*   **Expanded UI:** Optimized container height (85vh) with a compact header and message area to maximize conversation visibility.
-*   **Intelligent Logic:** Automated responses including multilingual greeting detection and a helpful fallback message directing users to the contact form.
-*   **Preset Knowledge:** Five standard B2B/B2C questions (Reservation, Contracts, Medical Scope, Day-of-Support, Results) with verified multilingual answers.
-*   **Interface:** Right-aligned language switcher buttons in the header for quick accessibility.
+### **C. Corporate Page (`corporate.html`) - LOCKED**
+... (all sub-points remain locked)
 
-### **E. Global Design Standards**
-*   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.
-*   **Mobile Experience:** Multi-card sections use horizontal sliders with `scroll-snap-type`.
-*   **Typography:** Expressive use of Pretendard and Noto Sans SC for multilingual clarity.
+### **D. Chatbot (`Check봇`) & Multilingual Switcher - LOCKED**
+*   **Design:** Compact 85vh UI, right-aligned buttons, language-specific text alignment.
+*   **Logic:** Dynamic welcome translation, greeting detection, preset FAQ answers.
 
-## 3. Multilingual Support
+## 3. Stage 3: Login & Authentication System (ACTIVE WORK AREA)
+This is the only area permitted for modification.
+*   **Authentication:** Firebase Auth (Google & Email).
+*   **User Roles:** User, Corporate Admin, Super Admin.
+*   **Profile Handling:** Onboarding and Metadata management.
 ... (rest of the file remains unchanged)
 
 *   **Languages:** Korean (KO), English (EN), Chinese (CN), Vietnamese (VN).

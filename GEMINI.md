@@ -167,30 +167,19 @@ When requested for Firebase add the following the server configurations to .idx/
     }
 }
 
-# Protected Files & Design Constraints (TOTAL LOCK)
+# Protected Files & Design Constraints (TOTAL LOCK - STAGE 2)
 
-The following files, design elements, and functionalities are **STRICTLY LOCKED**. The AI must **NOT** modify the structure, design, layout, text content, or core functional logic of these elements unless explicitly overridden by a "Force Override" command from the user. Any indirect impact during other modifications must be immediately reverted.
+The following elements are **PERMANENTLY LOCKED**. The AI must **NOT** modify the structure, design, layout, text, or logic of these elements. The ONLY area permitted for modification is the **Login/Authentication System** as explicitly directed by the user.
 
-*   **`index.html` (Main Page)**: Identity: "Trust & Overview".
-    *   **LOCKED**: All layout, color schemes, font styles, image placements, and section ordering.
-    *   **LOCKED**: All text content across Hero, Service For, Why CHECKIT, Process, Testimonials, and Contact sections.
-    *   **LOCKED**: Specific styling for white text hero and responsive card behaviors.
+*   **ALL PAGES (`index.html`, `individual.html`, `corporate.html`)**: 
+    *   **LOCKED**: All hero sections, character placements, margins, text structures, and line breaks.
+    *   **LOCKED**: All sub-sections (Necessity, Welfare, Reality, Solutions, Pricing, Testimonials).
+    *   **LOCKED**: Multilingual content and `data-lang-key` mappings.
 
-*   **`individual.html` (Individual Page)**: Identity: "Empathy & Solution".
-    *   **LOCKED**: Hero section with character asset, Expectation vertical list, Reality diary-style pain points.
-    *   **LOCKED**: Price structure section (light-yellow radial gradient and clarity text).
-    *   **LOCKED**: Three-tier package card layout and specific checklists.
+*   **CHATBOT & LANGUAGE SWITCHER**:
+    *   **LOCKED**: Chatbot UI height, position, header layout, and intelligent response logic.
+    *   **LOCKED**: Language buttons' design, position, and functional real-time switching logic.
 
-*   **`corporate.html` (Corporate Page)**: Identity: "Efficiency & B2B Professionalism".
-    *   **LOCKED**: Corporate-blue theme, Necessity/Welfare sections, Reality Management Gap layout.
-    *   **LOCKED**: Solution Value comparison table and the 6-step Operational Roadmap.
-    *   **LOCKED**: B2B Process Slide Modal functionality and imagery.
-
-*   **Chatbot Design & Functionality (`Check봇`)**: Identity: "Multilingual Instant Support".
-    *   **LOCKED**: Container height (85vh), header layout (right-aligned lang buttons), and compact message UI.
-    *   **LOCKED**: Dynamic translation logic for the initial welcome greeting.
-    *   **LOCKED**: Intelligent response logic (greeting detection and fallback messaging).
-    *   **LOCKED**: The 5 standard preset questions and their verified multilingual answers.
-
-*   **Global Elements**:
-    *   **LOCKED**: Navigation structure, multi-language switching mechanisms, and CSS variables for core branding.
+*   **AUTHORIZATION FOR MODIFICATION**:
+    *   **ONLY PERMITTED**: Login/Authentication logic, Login Modals, and associated User Profile (RBAC) handling.
+    *   **STRICT RULE**: Any modification to Login must have ZERO impact on the visual or structural integrity of the locked pages.

@@ -1398,17 +1398,31 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('tab-type-master').onclick = () => updateTabs('master');
 
             const handleSuccess = async (user) => {
-                const key = keyInput.value.trim();
-                if (selectedType === 'master' && key === "CHECKIT_MASTER_2026") await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
-                else if (selectedType === 'corp' && key.startsWith("COMP_")) await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
-                else await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
-                
-                const langData = translations[currentLang] || translations['ko'];
-                alert(langData['login_success_msg']); // Multi-language Welcome Alert
+                if (!user) return;
                 
                 const modal = document.getElementById('login-modal-overlay');
-                if(modal) modal.remove(); // Remove login window
-                renderMyPage(user);
+                if(modal) modal.remove(); // Remove login window IMMEDIATELY
+
+                const key = keyInput ? keyInput.value.trim() : "";
+                try {
+                    if (selectedType === 'master' && key === "CHECKIT_MASTER_2026") {
+                        await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
+                    } else if (selectedType === 'corp' && key.startsWith("COMP_")) {
+                        await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
+                    } else {
+                        await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
+                    }
+                } catch (dbErr) {
+                    console.error("DB Error during login:", dbErr);
+                }
+                
+                const langData = translations[currentLang] || translations['ko'];
+                const msg = langData['login_success_msg'] || "Login successful!";
+                
+                setTimeout(() => {
+                    alert(msg); // Multi-language Welcome Alert after modal is gone
+                    renderMyPage(user);
+                }, 100);
             };
 
             document.getElementById('close-login-modal').onclick = () => document.getElementById('login-modal-overlay').remove();

@@ -1563,10 +1563,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                             alert('Firestore Set Success!'); // Temporary alert
-                            alert(d['signup_welcome_message']); // This should display the welcome message
-                            overlay.remove(); // This should close the modal
-                            currentView = 'login';
-                            showLoginModal(); // This should re-open the login modal
+                            alert(d['signup_welcome_message']);
+                            currentView = 'login'; // Keep current modal open, just switch view
+                            renderModal(); // Re-render existing modal with login view
                         } else if (currentView === 'find') {
                             await auth.sendPasswordResetEmail(email);
                             alert(d['find_pass_success']);

@@ -181,7 +181,7 @@ body {
     grid-column: 2;
     text-align: center;
     max-width: 1000px;
-    padding-left: 200px; /* 강제로 오른쪽으로 추가 이동 */
+    padding-left: 350px; /* 200px에서 350px로 더 이동 */
     z-index: 2;
 }
 

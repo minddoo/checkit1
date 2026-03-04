@@ -176,7 +176,7 @@ body {
 }
 
 #corporate-hero .hero-text-content {
-    margin-left: 0; /* 모든 임의 이동 제거 */
+    margin-left: 20px; /* 텍스트를 살짝만 오른쪽으로 이동 */
 }
 
 /* Main Page Hero Text (White) */

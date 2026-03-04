@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact_form_message_placeholder': '궁금하신 내용을 입력해주세요.',
             'contact_form_submit_button': '문의하기',
             'corporate_page_title': '기업 고객 토탈 솔루션',
-            'corporate_page_subtitle': '외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 생산성을 높이고<br>보건 관리 부담을 덜어드립니다.',
+            'corporate_page_subtitle': '외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 생산성을 높이고 보건 관리 부담을 덜어드립니다.',
             'individual_page_title': '개인 고객 서비스',
             'individual_page_subtitle': 'CHECKIT은 한국에 거주하거나 방문하는 모든 외국인 개인이<br><br>언어의 장벽 없이 최상의 건강검진을 받을 수 있도록 돕습니다.',
             'expectation_title': '외국인들이 기대하는 한국 의료 서비스',

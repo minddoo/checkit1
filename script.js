@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec3_item1_title': '검진 전: 막막함과 두려움',
             'corp_sec3_item1_p1': '한국어로 된 문진표와 주의사항, 번역기로도 한계가 있습니다.',
             'corp_sec3_item1_p2': '금식 안내를 오해하여 검사가 취소되거나 사고가 발생하기도 합니다.',
-            'corp_sec3_item1_p3': '병원을 찾아가는 길부터 소통에 대한 심한 불안감을 느낍니다.',
+            'corp_sec3_item1_p3': '병원을 찾아가는 길부터 소통에 대한 심한 불안감을 느깁니다.',
             'corp_sec3_item2_title': '검진 후: 방치된 결과',
             'corp_sec3_item2_p1': '어렵게 받은 결과지, 정작 본인은 내용을 한 글자도 읽지 못합니다.',
             'corp_sec3_item2_p2': '재검사가 필요한 위험 신호를 놓쳐 병을 키우는 경우가 빈번합니다.',
@@ -211,10 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec6_subtitle': '의료법을 완벽히 준수하며, 기업의 운영 효율만을 극대화합니다.',
             'corp_sec6_item1_title': '의료법 위반 없음',
             'corp_sec6_item1_desc': '환자 유인·알선 행위를 하지 않으며, 비의료적 소통 및 행정 서비스만을 대행하여 법적 리스크가 전혀 없습니다.',
-            'corp_sec6_item2_title': '병원 계약 구조 없음',
-            'corp_sec6_item2_desc': '병원과 수수료를 주고받는 구조가 아닙니다. 기업이 기존에 이용하던 연계 병원을 그대로 사용하셔도 무방합니다.',
-            'corp_sec6_item3_title': '즉각 도입 가능',
-            'corp_sec6_item3_desc': '복잡한 시스템 연동 없이 서비스 신청만으로 내일부터 바로 외국인 근로자들의 검진 환경이 개선됩니다.',
+            'corp_sec6_item2_title': 'No Hospital Contract Structure',
+            'corp_sec6_item2_desc': 'No commission structure with hospitals. Use your existing hospitals.',
+            'corp_sec6_item3_title': 'Immediate Introduction',
+            'corp_sec6_item3_desc': 'Improve environments from tomorrow just by applying.',
             'corp_sec7_title': '정교하고 체계적인 운영 프로세스',
             'corp_sec7_subtitle': '명단 수령부터 최종 보고까지, CHECKIT이 모든 과정을 책임지고 관리합니다.',
             'corp_sec7_step1_title': '01. 명단 수령 및 분석',
@@ -226,9 +226,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step3_title': '03. 집중 사전 가이드',
             'corp_sec7_step3_1': '검진 전 준비사항 및 주의사항 상세 안내',
             'corp_sec7_step3_2': '7일·3일·2일·1일 전 및 당일 실시간 1:1 알림 제공',
-            'corp_sec7_step4_title': '04. 검진 당일 현장 지원',
-            'corp_sec7_step4_1': '검사 당일 실시간 소통 지원 및 불편 해소',
-            'corp_sec7_step4_2': '진행 상황 모니터링 및 미검 항목 없는 완료 관리',
+            'corp_sec7_step4_title': '04. 당태 지원',
+            'corp_sec7_step4_1': 'Giải quyết bất tiện',
+            'corp_sec7_step4_2': 'Quản lý hoàn thành',
             'corp_sec7_step5_title': '05. 결과 관리 및 사후 케어',
             'corp_sec7_step5_1': '검진 완료 후 결과 소요 기간 및 수령 방법 안내',
             'corp_sec7_step5_2': '결과지 단순 번역 제공 및 재검 필요 여부 확인',
@@ -275,6 +275,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_pass_placeholder': '비밀번호',
             'login_btn': '로그인',
             'login_success_msg': '로그인에 성공했습니다! 환영합니다.',
+            'signup_title': '회원가입',
+            'signup_btn': '회원가입하기',
+            'signup_success': '회원가입이 완료되었습니다! 로그인해 주세요.',
+            'find_pass_title': '비밀번호 재설정',
+            'find_pass_btn': '재설정 메일 보내기',
+            'find_pass_success': '비밀번호 재설정 이메일을 보냈습니다.',
+            'switch_to_signup': '계정이 없으신가요? 회원가입',
+            'switch_to_login': '이미 계정이 있으신가요? 로그인',
+            'switch_to_find': '비밀번호를 잊으셨나요?',
+            'signup_name_placeholder': '이름',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
@@ -500,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step3_title': '03. Intensive Prep Guide',
             'corp_sec7_step3_1': 'Detailed prep and caution guidance',
             'corp_sec7_step3_2': 'Real-time 1:1 notifications (7d/3d/2d/1d before)',
-            'corp_sec7_step4_title': '04. Day of Check-up Support',
+            'corp_sec7_step4_title': '04. 당태 지원',
             'corp_sec7_step4_1': 'Real-time communication and discomfort resolution',
             'corp_sec7_step4_2': 'Monitoring and completion management',
             'corp_sec7_step5_title': '05. Result Management & Follow-up',
@@ -549,10 +559,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_pass_placeholder': 'Password',
             'login_btn': 'Login',
             'login_success_msg': 'Login successful! Welcome.',
+            'signup_title': 'Sign Up',
+            'signup_btn': 'Create Account',
+            'signup_success': 'Sign up complete! Please login.',
+            'find_pass_title': 'Reset Password',
+            'find_pass_btn': 'Send Reset Email',
+            'find_pass_success': 'Reset email has been sent.',
+            'switch_to_signup': 'No account? Sign Up',
+            'switch_to_login': 'Have an account? Login',
+            'switch_to_find': 'Forgot password?',
+            'signup_name_placeholder': 'Full Name',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
         },
         cn: {
-            'main_page_title': 'CHECKIT - 外国人健康检查预约',
+            'main_page_title': 'CHECKIT - 外국인 건강검진 예약',
             'nav_home': '首页', 'hero_cta': '立即申请', 'learn_more': '了解更多',
             'platform_title': 'CHECKIT 平台', 'platform_status_title': '我的服务状态',
             'platform_close': '关闭', 'contact_success': '咨询已成功受理！',
@@ -682,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'package2_feature8': '文件警报',
             'package2_feature9': '日程变更',
             'package2_recommend_desc': '希望最大限度减少失误的人. ',
-            'package3_title': '全安计划',
+            'package3_title': '全안计划',
             'package3_price': '₩800,000',
             'package3_includes': '(包含零失误计划所有内容 +)',
             'package3_feature1': '高级管理',
@@ -699,9 +719,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature12': '沟通模板',
             'package3_feature13': '变更支持',
             'package3_recommend_desc': '希望获得最安全管理的人. ',
-            'price_structure_title': '为什么外国人在韩国支付更多？',
-            'price_structure_q': '“为什么您的选项比医院의便宜？”',
-            'price_structure_a_title': '简单回答',
+            'price_structure_title': '왜 외국인은 한국에서 동일한 건강검진에 더 많은 비용을 지불할까요?',
+            'price_structure_q': '“왜 당신의 옵션이 병원에서 제공하는 것보다 저렴한가요?”',
+            'price_structure_a_title': '간단한 답변',
             'price_structure_a_text': '不是检查不同，而是价格结构. ',
             'price_structure_reality_title': '医院真实情况',
             'price_structure_reality_text': '大多数医院创建“外国人套餐”，包含额外服务费用. ',
@@ -737,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec4_subtitle': '医院负责医疗，CHECKIT 处理“其余部分”. ',
             'corp_sec4_side1_title': '医院与公司',
             'corp_sec4_side1_p1': '专业医疗检查',
-            'corp_sec4_side1_p2': '生成结果数据',
+            'corp_sec4_side1_p2': '生成结果 data',
             'corp_sec4_side1_p3': '保留法律记录',
             'corp_sec4_side2_title': 'CHECKIT 领域',
             'corp_sec4_side2_p1': '母语经理匹配',
@@ -774,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step3_title': '03. 准备指南',
             'corp_sec7_step3_1': '详细指导',
             'corp_sec7_step3_2': '实时通知',
-            'corp_sec7_step4_title': '04. 当태 지원',
+            'corp_sec7_step4_title': '04. 당태 지원',
             'corp_sec7_step4_1': '沟通解决',
             'corp_sec7_step4_2': '完成管理',
             'corp_sec7_step5_title': '05. 결과 관리',
@@ -802,7 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_placeholder': '输入消息...',
             'chatbot_welcome': '您好！我是 CHECKIT 咨询机器人。有什么我可以帮您的吗？',
             'chatbot_q1': '1. 如何预约？',
-            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助。请告知我们您希望的检查项目 and 日程，我们将提供符合您条件的医院列表并协助您完成预约。点击“立即申请”留下您的咨询！',
+            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助. 请告知我们您希望的检查项目 and 日程，我们将提供符合您条件的医院列表并协助您完成预约. 点击“立即申请”留下您的咨询！',
             'chatbot_q2': '2. 你们与医院/医生有合同关系吗？',
             'chatbot_a2': '不. CHECKIT 与特定医院没有合同关系. 我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
             'chatbot_q3': '3. 你们也提供医疗行为 or 医疗中介吗？',
@@ -823,6 +843,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_pass_placeholder': '密码',
             'login_btn': '登录',
             'login_success_msg': '登录成功！欢迎。',
+            'signup_title': '注册',
+            'signup_btn': '立即注册',
+            'signup_success': '注册成功！请登录。',
+            'find_pass_title': '重置密码',
+            'find_pass_btn': '发送重置邮件',
+            'find_pass_success': '重置邮件已发送。',
+            'switch_to_signup': '没有账号？立即注册',
+            'switch_to_login': '已有账号？登录',
+            'switch_to_find': '忘记密码？',
+            'signup_name_placeholder': '姓名',
             'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
@@ -1051,13 +1081,13 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step4_title': '04. 당태 지원',
             'corp_sec7_step4_1': 'Giải quyết bất tiện',
             'corp_sec7_step4_2': 'Quản lý hoàn thành',
-            'corp_sec7_step5_title': '05. Quản lý kết quả',
-            'corp_sec7_step5_1': 'Hướng dẫn kết quả',
-            'corp_sec7_step5_2': 'Dịch tóm tắt',
-            'corp_sec7_step5_3': 'Nộp hồ sơ',
-            'corp_sec7_step6_title': '06. Báo cáo cuối cùng',
-            'corp_sec7_step6_1': 'Cập nhật danh sách',
-            'corp_sec7_step6_2': 'Báo cáo tiến độ',
+            'corp_sec7_step5_title': '05. 결과 관리',
+            'corp_sec7_step5_1': '周期指南',
+            'corp_sec7_step5_2': '摘要翻譯',
+            'corp_sec7_step5_3': '提交管理',
+            'corp_sec7_step6_title': '06. 最終報告',
+            'corp_sec7_step6_1': '更新备注',
+            'corp_sec7_step6_2': '进度报告',
             'corp_faq_title': 'Câu hỏi thường gặp',
             'corp_faq_subtitle': 'Thắc mắc doanh nghiệp.',
             'corp_faq_q1': 'Bệnh viện hiện có?',
@@ -1097,6 +1127,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_pass_placeholder': 'Mật khẩu',
             'login_btn': 'Đăng nhập',
             'login_success_msg': 'Đăng nhập thành công! Chào mừng.',
+            'signup_title': 'Đăng ký',
+            'signup_btn': 'Đăng ký ngay',
+            'signup_success': 'Đăng ký thành công! Vui lòng đăng nhập.',
+            'find_pass_title': 'Đặt lại mật khẩu',
+            'find_pass_btn': 'Gửi email đặt lại',
+            'find_pass_success': 'Email đặt lại đã được gửi.',
+            'switch_to_signup': 'Chưa có tài khoản? Đăng ký',
+            'switch_to_login': 'Đã có tài khoản? Đăng nhập',
+            'switch_to_find': 'Quên mật khẩu?',
+            'signup_name_placeholder': 'Họ và tên',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
         }
     };
@@ -1362,58 +1402,116 @@ document.addEventListener('DOMContentLoaded', () => {
         const showLoginModal = () => {
             if(document.getElementById('login-modal-overlay')) return;
             const data = translations[currentLang] || translations['ko'];
-            const modalHtml = `<div id="login-modal-overlay" style="display:flex;">
+            let currentView = 'login'; // 'login', 'signup', 'find'
+            let selectedType = 'user'; // 'user', 'corp', 'master'
+
+            const createModalContent = () => {
+                const d = translations[currentLang] || translations['ko'];
+                let viewTitle = d['login_title'];
+                if(currentView === 'signup') viewTitle = d['signup_title'];
+                if(currentView === 'find') viewTitle = d['find_pass_title'];
+
+                return `
                 <div class="login-modal-box">
                     <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-                    <h2 class="modal-logo" data-lang-key="login_title">${data['login_title']}</h2>
+                    <h2 class="modal-logo">${viewTitle}</h2>
+                    
+                    ${currentView === 'login' ? `
                     <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
-                        <div class="p-tab active" id="tab-type-user" data-lang-key="login_tab_user">${data['login_tab_user']}</div>
-                        <div class="p-tab" id="tab-type-corp" data-lang-key="login_tab_corp">${data['login_tab_corp']}</div>
-                        <div class="p-tab" id="tab-type-master" data-lang-key="login_tab_master">${data['login_tab_master']}</div>
+                        <div class="p-tab ${selectedType === 'user' ? 'active' : ''}" id="tab-type-user" data-lang-key="login_tab_user">${d['login_tab_user']}</div>
+                        <div class="p-tab ${selectedType === 'corp' ? 'active' : ''}" id="tab-type-corp" data-lang-key="login_tab_corp">${d['login_tab_corp']}</div>
+                        <div class="p-tab ${selectedType === 'master' ? 'active' : ''}" id="tab-type-master" data-lang-key="login_tab_master">${d['login_tab_master']}</div>
+                    </div>` : ''}
+
+                    <div id="key-field-container" style="display:${(currentView === 'login' && selectedType !== 'user') ? 'block' : 'none'}; margin-bottom:20px;">
+                        <input type="text" id="global-admin-key" placeholder="${d['login_key_placeholder']}" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
                     </div>
-                    <div id="key-field-container" style="display:none; margin-bottom:20px;">
-                        <input type="text" id="global-admin-key" data-lang-key="login_key_placeholder" placeholder="${data['login_key_placeholder']}" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
-                    </div>
+
                     <div style="display:flex; flex-direction:column; gap:12px;">
-                        <button id="btn-google-login" class="btn-auth btn-google" data-lang-key="login_google">${data['login_google']}</button>
+                        ${currentView === 'signup' ? `<input type="text" id="signup-name" placeholder="${d['signup_name_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">` : ''}
+                        <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        ${currentView !== 'find' ? `<input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">` : ''}
+                        
+                        <button id="btn-main-action" class="btn-auth btn-primary">
+                            ${currentView === 'login' ? d['login_btn'] : (currentView === 'signup' ? d['signup_btn'] : d['find_pass_btn'])}
+                        </button>
+
+                        ${currentView === 'login' ? `
+                        <button id="btn-google-login" class="btn-auth btn-google">${d['login_google']}</button>
                         <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
-                        <input type="email" id="auth-email" data-lang-key="login_email_placeholder" placeholder="${data['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="password" id="auth-pass" data-lang-key="login_pass_placeholder" placeholder="${data['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <button id="btn-email-login" class="btn-auth btn-primary" data-lang-key="login_btn">${data['login_btn']}</button>
+                        <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                            <span id="go-signup" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_signup']}</span>
+                            <span id="go-find" style="color:#888; cursor:pointer;">${d['switch_to_find']}</span>
+                        </div>` : `
+                        <div style="text-align:center; font-size:0.85rem; margin-top:10px;">
+                            <span id="go-login" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_login']}</span>
+                        </div>`}
                     </div>
-                </div></div>`;
-            document.body.insertAdjacentHTML('beforeend', modalHtml);
-
-            const keyContainer = document.getElementById('key-field-container'), keyInput = document.getElementById('global-admin-key');
-            let selectedType = 'user';
-
-            const updateTabs = (type) => {
-                selectedType = type;
-                document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
-                document.getElementById(`tab-type-${type}`).classList.add('active');
-                keyContainer.style.display = type === 'user' ? 'none' : 'block';
+                </div>`;
             };
-            document.getElementById('tab-type-user').onclick = () => updateTabs('user');
-            document.getElementById('tab-type-corp').onclick = () => updateTabs('corp');
-            document.getElementById('tab-type-master').onclick = () => updateTabs('master');
 
-            const handleSuccess = async (user) => {
+            const overlay = document.createElement('div');
+            overlay.id = 'login-modal-overlay';
+            overlay.style.display = 'flex';
+            document.body.appendChild(overlay);
+
+            const renderModal = () => {
+                overlay.innerHTML = createModalContent();
+                attachEvents();
+            };
+
+            const attachEvents = () => {
+                const d = translations[currentLang] || translations['ko'];
+                document.getElementById('close-login-modal').onclick = () => overlay.remove();
+                
+                if(currentView === 'login') {
+                    document.getElementById('tab-type-user').onclick = () => { selectedType = 'user'; renderModal(); };
+                    document.getElementById('tab-type-corp').onclick = () => { selectedType = 'corp'; renderModal(); };
+                    document.getElementById('tab-type-master').onclick = () => { selectedType = 'master'; renderModal(); };
+                    document.getElementById('go-signup').onclick = () => { currentView = 'signup'; renderModal(); };
+                    document.getElementById('go-find').onclick = () => { currentView = 'find'; renderModal(); };
+                    document.getElementById('btn-google-login').onclick = async () => {
+                        try { const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); handleSuccess(res.user); } 
+                        catch(e) { alert(e.message); }
+                    };
+                } else {
+                    document.getElementById('go-login').onclick = () => { currentView = 'login'; renderModal(); };
+                }
+
+                document.getElementById('btn-main-action').onclick = async () => {
+                    const email = document.getElementById('auth-email').value.trim();
+                    const pass = document.getElementById('auth-pass')?.value;
+                    const name = document.getElementById('signup-name')?.value;
+                    const key = document.getElementById('global-admin-key')?.value.trim();
+
+                    try {
+                        if (currentView === 'login') {
+                            const res = await auth.signInWithEmailAndPassword(email, pass);
+                            handleSuccess(res.user, key);
+                        } else if (currentView === 'signup') {
+                            const res = await auth.createUserWithEmailAndPassword(email, pass);
+                            await db.collection("users").doc(res.user.uid).set({ fullName: name, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                            alert(d['signup_success']);
+                            currentView = 'login';
+                            renderModal();
+                        } else if (currentView === 'find') {
+                            await auth.sendPasswordResetEmail(email);
+                            alert(d['find_pass_success']);
+                            currentView = 'login';
+                            renderModal();
+                        }
+                    } catch(e) { alert(e.message); }
+                };
+            };
+
+            const handleSuccess = async (user, key = "") => {
                 if (!user) return;
-                
-                // 1. Capture values first while elements exist
-                const key = keyInput ? keyInput.value.trim() : "";
                 const loginType = selectedType;
-                
-                // 2. Remove modal IMMEDIATELY
-                const modal = document.getElementById('login-modal-overlay');
-                if(modal) modal.remove(); 
+                overlay.remove(); 
 
-                // 3. Show welcome alert IMMEDIATELY
-                const langData = translations[currentLang] || translations['ko'];
-                const msg = langData['login_success_msg'] || "Welcome!";
-                alert(msg);
+                const d = translations[currentLang] || translations['ko'];
+                alert(d['login_success_msg']);
 
-                // 4. Process DB updates and redirection in the background
                 try {
                     if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
                         await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
@@ -1422,19 +1520,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
                     }
-                } catch (dbErr) {
-                    console.error("Background DB Error:", dbErr);
-                }
+                } catch (dbErr) { console.error("DB Error:", dbErr); }
                 
                 renderMyPage(user);
             };
 
-            document.getElementById('close-login-modal').onclick = () => document.getElementById('login-modal-overlay').remove();
-            document.getElementById('btn-google-login').onclick = async () => { try { const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); handleSuccess(res.user); } catch(e) { alert(e.message); } };
-            document.getElementById('btn-email-login').onclick = async () => {
-                const email = document.getElementById('auth-email').value.trim(), pass = document.getElementById('auth-pass').value;
-                try { const res = await auth.signInWithEmailAndPassword(email, pass); handleSuccess(res.user); } catch(e) { alert(e.message); }
-            };
+            renderModal();
         };
 
         const initAuthNav = () => {
@@ -1442,10 +1533,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nav = document.querySelector('#language-switcher');
                 let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
                 if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
-                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || 'My Page') : (translations[currentLang]?.['nav_login'] || 'Login');
+                const d = translations[currentLang] || translations['ko'];
+                btn.textContent = user ? (d['nav_mypage'] || 'My Page') : (d['nav_login'] || 'Login');
                 btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
                 if(user && !document.getElementById('logout-btn')) {
-                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || 'Logout';
+                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=d['nav_logout'] || 'Logout';
                     lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                 }
             });

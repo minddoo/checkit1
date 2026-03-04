@@ -288,9 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_title': '개인정보 수집 및 이용 동의',
             'signup_privacy_agree': '개인정보 수집 및 이용에 동의합니다 (필수)',
             'signup_privacy_error': '개인정보 수집 및 이용에 동의해주세요.',
-            'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호\n2. 수집 목적: 회원 가입 및 서비스 제공, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 법령에 따른 보존 필요 시 해당 기간까지)',
-            'stat_pending_leads': '미처리 문의',
-            'signup_dob_placeholder': '생년월일'
+            'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호, 생년월일\n2. 수집 목적: 회원 가입 및 서비스 제공, 연령 확인, 본인 식별, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 관련 법령에 따른 보존 의무가 있는 경우 해당 법령에 따름)',
+            'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
             'main_page_title': 'CHECKIT - Health Check-up for Foreigners',
@@ -577,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_title': 'Privacy Policy Agreement',
             'signup_privacy_agree': 'I agree to the collection and use of personal info (Required)',
             'signup_privacy_error': 'Please agree to the privacy policy.',
-            'signup_privacy_content': '1. Items: Name, Email, Phone\n2. Purpose: Sign-up, Service provision, Consultation\n3. Period: Until account deletion (unless required by law)',
+            'signup_privacy_content': '1. Items: Name, Email, Phone, Date of Birth\n2. Purpose: Sign-up, Service provision, Age verification, Identity confirmation, Consultation\n3. Period: Until account deletion (unless legal retention obligations apply)',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries',
             'signup_dob_placeholder': 'Date of Birth'
         },
@@ -866,9 +865,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_title': '个人信息收集及使用同意',
             'signup_privacy_agree': '我同意收集和使用个人信息 (必填)',
             'signup_privacy_error': '请同意个人信息收集及使用条约。',
-            'signup_privacy_content': '1. 收集项目：姓名、邮箱、电话\n2. 收集目的：会员注册、提供服务、咨询回复\n3. 保有期间：注销会员为止',
-            'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询',
-            'signup_dob_placeholder': '出生日期'
+            'signup_privacy_content': '1. 收集项目: 姓名、邮箱、电话、出生日期\n2. 收集目的: 会员注册、提供服务、年龄确认、身份识别、咨询回复\n3. 保有期间: 注销会员为止 (但法律规定需保留时，按相关法律执行)',
+            'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
@@ -1155,7 +1153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_title': '개인정보 수집 및 이용 동의',
             'signup_privacy_agree': '개인정보 수집 및 이용에 동의합니다 (필수)',
             'signup_privacy_error': '개인정보 수집 및 이용에 동의해주세요.',
-            'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호\n2. 수집 목적: 회원 가입 및 서비스 제공, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 법령에 따른 보존 필요 시 해당 기간까지)',
+            'signup_privacy_content': '1. Các mục: Tên, Email, Số điện thoại, Ngày sinh\n2. Mục đích: Đăng ký, Cung cấp dịch vụ, Xác minh tuổi, Xác nhận danh tính, Tư vấn\n3. Thời hạn: Cho đến khi hủy tài khoản (trừ khi có nghĩa vụ lưu giữ theo quy định pháp luật)',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý',
             'signup_dob_placeholder': 'Ngày sinh'
         }

@@ -1560,7 +1560,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
                             const dob = document.getElementById('signup-dob')?.value;
-                            await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                            // Temporarily comment out Firestore set to debug silent failure
+                            // await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                             alert(d['signup_welcome_message']);
                             overlay.remove(); // Close the current (signup) modal
                             currentView = 'login';

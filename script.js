@@ -1579,6 +1579,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const handleSuccess = async (user, key = "") => {
                 if (!user) return;
+                alert('handleSuccess Called!'); // Temporary alert
                 const loginType = selectedType;
                 
                 // 1. Remove modal IMMEDIATELY

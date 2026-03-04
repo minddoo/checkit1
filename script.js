@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_q1': '1. 예약은 어떻게 하나요?',
             'chatbot_a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
             'chatbot_q2': '2. 병원/의료인과 계약 구조인가요?',
-            'chatbot_a2': '아닙니다. CHECKIT은 특정 병원과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
+            'chatbot_a2': '아닙니다. CHECKIT은 특정 병과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
             'chatbot_q3': '3. 의료행위나 진료 알선도 하나요?',
             'chatbot_a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
             'chatbot_q4': '4. 검진 당일 어떤 도움을 받을 수 있나요?',
@@ -274,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': '이메일',
             'login_pass_placeholder': '비밀번호',
             'login_btn': '로그인',
+            'login_success_msg': '로그인에 성공했습니다! 환영합니다.',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
@@ -547,6 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': 'Email',
             'login_pass_placeholder': 'Password',
             'login_btn': 'Login',
+            'login_success_msg': 'Login successful! Welcome.',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
         },
         cn: {
@@ -719,7 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一의福利. ',
             'corp_sec2_item2_title': '生产力最大化',
             'corp_sec2_item2_desc': '健康的工人能带来最佳生产力. ',
-            'corp_sec2_item3_title': 'ESG 经营',
+            'corp_sec2_item3_title': 'ESG 경영',
             'corp_sec2_item3_desc': '证明您是一家尊重多样性的公司. ',
             'corp_sec3_title': '现场的现实不同',
             'corp_sec3_subtitle': '前后的“管理真空”很难处理. ',
@@ -810,7 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_q5': '5. 结果报告如何交付？',
             'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语. 我们遵守医疗法，不提供医疗建议. ',
             'chatbot_greeting_reply': '您好！见到您很高兴. 有什么我可以帮您的吗？',
-            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复. 如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复. ',
+            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复. 如需更详细的说明，请通过首页下方の“联系我们”留下信息，以便我们提供更准确的回复. ',
             'login_title': 'CHECKIT 登录',
             'login_tab_user': '个人客户',
             'login_tab_corp': '企业管理员',
@@ -820,6 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': '电子邮箱',
             'login_pass_placeholder': '密码',
             'login_btn': '登录',
+            'login_success_msg': '登录成功！欢迎。',
             'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
@@ -878,7 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'expectation_item_title_1': '#1. Hiệu quả chi phí',
             'expectation_item_desc_1': '"Chi phí y tế tại Hàn rẻ hơn nhiều so với Mỹ."',
             'expectation_item_title_2': '#2. Tiện lợi',
-            'expectation_item_desc_2': '"Quy trình đơn giản và không gặp rắc rối."',
+            'expectation_item_desc_2': '"Quy trình đơn giản and không gặp rắc rối."',
             'expectation_item_title_3': '#3. Chuyên nghiệp',
             'expectation_item_desc_3': '"Tiêu chuẩn y tế đẳng cấp thế giới."',
             'expectation_item_title_4': '#4. Tiết kiệm thời gian',
@@ -1093,6 +1096,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': 'Email',
             'login_pass_placeholder': 'Mật khẩu',
             'login_btn': 'Đăng nhập',
+            'login_success_msg': 'Đăng nhập thành công! Chào mừng.',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
         }
     };
@@ -1398,7 +1402,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (selectedType === 'master' && key === "CHECKIT_MASTER_2026") await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
                 else if (selectedType === 'corp' && key.startsWith("COMP_")) await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
                 else await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
-                document.getElementById('login-modal-overlay').remove();
+                
+                const langData = translations[currentLang] || translations['ko'];
+                alert(langData['login_success_msg']); // Multi-language Welcome Alert
+                
+                const modal = document.getElementById('login-modal-overlay');
+                if(modal) modal.remove(); // Remove login window
                 renderMyPage(user);
             };
 
@@ -1415,10 +1424,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nav = document.querySelector('#language-switcher');
                 let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
                 if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
-                btn.textContent = user ? 'My Page' : 'Login';
+                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || 'My Page') : (translations[currentLang]?.['nav_login'] || 'Login');
                 btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
                 if(user && !document.getElementById('logout-btn')) {
-                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent='Logout';
+                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || 'Logout';
                     lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                 }
             });

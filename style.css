@@ -190,7 +190,7 @@ body {
     grid-column: 2;
     text-align: center;
     max-width: 800px;
-    margin-left: 150px; /* 요청하신 위치 유지 */
+    margin-left: 250px; /* 150px에서 250px로 더 과감하게 이동 */
     z-index: 2;
 }
 

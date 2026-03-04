@@ -1366,13 +1366,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
             } catch (err) { 
-                // If reading the user data fails, default to the user view
-                // but first check if we are already on the mypage, to avoid loops
-                if (window.location.pathname.includes('mypage_individual.html')) {
-                    renderUser(user);
-                } else {
-                    window.location.href = 'mypage_individual.html';
-                }
+                // If reading the user data fails for a 'user' role, directly redirect to mypage_individual.html
+                window.location.href = 'mypage_individual.html';
             }
         };
 
@@ -1390,69 +1385,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
         };
 
-        const renderUser = (user) => {
-            let overlay = document.getElementById('mypage-overlay');
-            if (!overlay) { // If overlay doesn't exist, create it dynamically to preserve main content
-                overlay = document.createElement('div');
-                overlay.id = 'mypage-overlay';
-                overlay.className = 'mypage-overlay';
-                document.body.appendChild(overlay);
-            }
-            
-            // Restore premium design for Individual Page - My Page Content ONLY
-            overlay.innerHTML = `
-                <div class="mypage-header">
-                    <h2 data-lang-key="platform_title">CHECKIT PLATFORM</h2>
-                    <button id="close-mypage" class="lang-btn" data-lang-key="platform_close">Close</button>
-                </div>
-                <div class="container" style="padding:20px 0;">
-                    <div class="status-timeline" id="u-timeline"></div>
-                    <div class="platform-grid">
-                        <div class="info-panel" id="u-info">
-                            <h3 data-lang-key="platform_status_title">My Service Status</h3>
-                            <div id="u-status-content" style="margin-top:20px;"></div>
-                        </div>
-                        <div class="admin-chat-container">
-                            <div class="chat-header">1:1 Support</div>
-                            <div class="chat-messages" id="u-msgs"></div>
-                            <div class="chat-input-area">
-                                <input type="text" id="u-input" placeholder="Type message...">
-                                <button id="u-send" class="lang-btn active">Send</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            
-            overlay.style.display = 'flex'; // Show overlay
-            document.body.classList.add('platform-view-active'); // Lock body scroll
 
-            document.getElementById('close-mypage').onclick = () => { 
-                overlay.style.display='none'; 
-                document.body.classList.remove('platform-view-active'); 
-                if(platformSub) platformSub(); 
-            };
-            
-            platformSub = db.collection("user_process").doc(user.uid).onSnapshot(doc => {
-                const data = doc.data() || { steps: [
-                    { title: 'Applied', status: 'active', icon: 'fas fa-file-signature', description: 'Your inquiry has been received.' },
-                    { title: 'Booking', status: 'pending', icon: 'fas fa-calendar-check', description: 'Matching with the best hospital.' },
-                    { title: 'Check-up', status: 'pending', icon: 'fas fa-hospital-user', description: 'Support on the day of visit.' },
-                    { title: 'Result', status: 'pending', icon: 'fas fa-poll-h', description: 'Translating and summarizing results.' }
-                ]};
-                const timeline = document.getElementById('u-timeline');
-                if(timeline) timeline.innerHTML = data.steps.map(s => `<div class="status-step ${s.status}"><i class="${s.icon}"></i><span>${s.title}</span></div>`).join('');
-                
-                const statusContent = document.getElementById('u-status-content');
-                if(statusContent) {
-                    const active = data.steps.find(s => s.status === 'active') || data.steps[0];
-                    statusContent.innerHTML = `
-                        <div style="padding:25px; background:linear-gradient(135deg, #fff 0%, #f9f9f9 100%); border-radius:15px; border-left:6px solid var(--primary-color); box-shadow:var(--shadow-sm);">
-                            <h4 style="color:var(--primary-dark); font-size:1.2rem; margin-bottom:10px;">${active.title}</h4>
-                            <p style="color:var(--text-color); opacity:0.8;">${active.description || '진행 상황을 확인 중입니다.'}</p>
-                        </div>`;
-                }
-            });
-        };
 
         const showLoginModal = () => {
             if(document.getElementById('login-modal-overlay')) return;
@@ -1615,6 +1548,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             fullName: user.displayName || "User", 
                             email: user.email,
                             role: 'user', 
+                            packageName: '기본 패키지', // Default package name for new users
+                            packageItems: ['상담 지원', '예약 대행'], // Default package items
                             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                         }, { merge: true });
                     }
@@ -1637,6 +1572,50 @@ document.addEventListener('DOMContentLoaded', () => {
             renderModal();
         };
 
+        const loadMyPageIndividualData = async (user, db) => {
+            if (!user) {
+                // If no user is logged in, redirect to the main page or login
+                window.location.href = 'index.html'; 
+                return;
+            }
+
+            const nameElement = document.getElementById('user-profile-name');
+            const emailElement = document.getElementById('user-profile-email');
+            const packageNameElement = document.getElementById('user-package-name');
+            const packageItemsElement = document.getElementById('user-package-items');
+
+            if (nameElement) nameElement.textContent = user.displayName || user.email;
+            if (emailElement) emailElement.textContent = user.email;
+            
+            try {
+                const userRef = db.collection("users").doc(user.uid);
+                const doc = await userRef.get();
+                const userData = doc.data();
+
+                if (userData) {
+                    if (nameElement) nameElement.textContent = userData.fullName || user.displayName || user.email;
+                    
+                    const packageName = userData.packageName || "기본 패키지"; // Default package name
+                    const packageItems = userData.packageItems || ["기본 서비스 1", "기본 서비스 2"]; // Default package items
+
+                    if (packageNameElement) packageNameElement.textContent = packageName;
+                    if (packageItemsElement) {
+                        packageItemsElement.innerHTML = '';
+                        packageItems.forEach(item => {
+                            const li = document.createElement('li');
+                            li.textContent = item;
+                            packageItemsElement.appendChild(li);
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading individual my page data:", error);
+                // Fallback to basic info if Firestore fetch fails
+                if (packageNameElement) packageNameElement.textContent = "정보를 불러올 수 없습니다.";
+                if (packageItemsElement) packageItemsElement.innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
+            }
+        };
+
         const initAuthNav = () => {
             auth.onAuthStateChanged(user => {
                 const nav = document.querySelector('#language-switcher');
@@ -1648,6 +1627,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(user && !document.getElementById('logout-btn')) {
                     const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
                     lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
+                }
+
+                // Check if current page is mypage_individual.html and user is logged in
+                if (window.location.pathname.includes('mypage_individual.html') && user) {
+                    loadMyPageIndividualData(user, db);
                 }
             });
         };

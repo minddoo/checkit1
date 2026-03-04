@@ -2013,16 +2013,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
     margin-bottom: 30px;
 }
 
-.profile-picture-container {
-    margin-right: 30px;
-}
 
-.profile-picture {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-}
 
 .profile-info {
     flex-grow: 1;

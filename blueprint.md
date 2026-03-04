@@ -29,12 +29,14 @@ This is the only area permitted for modification.
 *   **User Roles:** User, Corporate Admin, Super Admin.
 *   **Profile Handling:** Onboarding and Metadata management.
 *   **Individual Customer My Page:**
-    *   **File:** `mypage_individual.html` created for individual user profiles.
-    *   **Styling:** Basic CSS added to `style.css` for the profile page layout.
-    *   **Redirection Logic (`script.js`):**
-        *   Upon successful login as an 'Individual' user (`loginType === 'user'`), users are now redirected to `mypage_individual.html`.
-        *   The `renderMyPage` function has been modified to redirect individual users (`userData.role === 'user'`) to `mypage_individual.html`.
-        *   Ensured that the user's role is explicitly set to 'user' in the database if `loginType` is 'user' during the `handleSuccess` process.
+    *   **File (`mypage_individual.html`):** Modified to remove the profile picture and include placeholders for "패키지 이름" (Package Name) and "패키지 서비스 항목" (Package Service Items).
+    *   **Styling (`style.css`):** Styles related to `.profile-picture-container` and `.profile-picture` were removed.
+    *   **Logic (`script.js`):**
+        *   The `renderMyPage` function's error handling for individual users was simplified to directly redirect to `mypage_individual.html`.
+        *   The `renderUser` function, which previously handled generic user My Page rendering, was removed as its functionality is now directly integrated into `mypage_individual.html`.
+        *   A new asynchronous function, `loadMyPageIndividualData(user, db)`, was created. This function fetches the current user's profile data (including `fullName`, `email`, `packageName`, and `packageItems`) from Firestore and dynamically populates the corresponding elements on `mypage_individual.html`.
+        *   `loadMyPageIndividualData` is called upon `DOMContentLoaded` when `mypage_individual.html` is the active page, ensuring the profile is populated with personalized data.
+        *   The `handleSuccess` function was updated to set default values for `packageName` ("기본 패키지") and `packageItems` (e.g., ["상담 지원", "예약 대행"]) in the user's Firestore document when a new user signs up.
 
 ... (rest of the file remains unchanged)
 
@@ -66,6 +68,8 @@ This is the only area permitted for modification.
 *   `nationality`: string
 *   `dob`: string
 *   `onboardingComplete`: boolean
+*   `packageName`: string (Name of the package purchased by the customer)
+*   `packageItems`: array of strings (List of service items included in the package)
 
 #### **`user_process/{docId}` (Restructured)**
 *   **Basic Info**

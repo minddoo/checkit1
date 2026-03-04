@@ -1968,3 +1968,4 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .slide-content h3 { font-size: 1.5rem; }
     .slide-content p { font-size: 1rem; }
 }
+/* Trigger build refresh */

@@ -1559,13 +1559,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
 
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
-                            alert('Auth Success!'); // Temporary alert
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                            alert('Firestore Set Success!'); // Temporary alert
                             alert(d['signup_welcome_message']);
-                            currentView = 'login'; // Keep current modal open, just switch view
-                            renderModal(); // Re-render existing modal with login view
+                            overlay.remove(); // Close the current (signup) modal
+                            currentView = 'login';
+                            showLoginModal(); // Open a *new* modal, showing login form
                         } else if (currentView === 'find') {
                             await auth.sendPasswordResetEmail(email);
                             alert(d['find_pass_success']);
@@ -1583,7 +1582,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const handleSuccess = async (user, key = "") => {
                 if (!user) return;
-                alert('handleSuccess Called!'); // Temporary alert
                 const loginType = selectedType;
                 
                 // 1. Remove modal IMMEDIATELY

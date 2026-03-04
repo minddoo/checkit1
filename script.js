@@ -1182,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chatbotContainer.classList.add('show');
             document.body.classList.add('chatbot-open');
             if (chatbotMessages && chatbotMessages.children.length === 0) {
-                addBotMessage(getWelcomeMessage(currentLang));
+                addBotMessage(getWelcomeMessage(currentLang), 'chatbot_welcome');
                 renderSuggestedQuestions();
             }
         });
@@ -1212,10 +1212,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function addBotMessage(text) {
+    function addBotMessage(text, langKey = null) {
         if (!chatbotMessages) return;
         const msg = document.createElement('div');
         msg.className = 'message bot';
+        if (langKey) {
+            msg.setAttribute('data-lang-key', langKey);
+        }
         msg.innerHTML = text;
         chatbotMessages.appendChild(msg);
         chatbotMessages.scrollTop = chatbotMessages.scrollHeight;

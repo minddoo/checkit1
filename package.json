@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "http-server -c-1"
+    "dev": "http-server -c-1",
+    "build": "mkdir -p dist && cp -R ./* dist/ && cp -R ./.idx dist/.idx && cp -R ./assets dist/assets"
   },
   "keywords": [],
   "author": "",

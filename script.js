@@ -265,6 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
             'chatbot_greeting_reply': '안녕하세요! 만나서 반갑습니다. 무엇을 도와드릴까요?',
             'chatbot_fallback_reply': '소중한 문의 감사합니다! 현재 입력하신 내용은 담당 매니저가 확인 후 답변 드릴 예정입니다. 보다 상세한 안내를 원하시면 메인 페이지 하단의 \'문의하기\'를 통해 메시지를 남겨주시면 더욱 정확한 답변이 가능합니다.',
+            'login_title': 'CHECKIT 로그인',
+            'login_tab_user': '개인 고객',
+            'login_tab_corp': '기업 관리자',
+            'login_tab_master': '마스터',
+            'login_key_placeholder': '보안 KEY 입력',
+            'login_google': 'Google 로그인',
+            'login_email_placeholder': '이메일',
+            'login_pass_placeholder': '비밀번호',
+            'login_btn': '로그인',
             'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         },
         en: {
@@ -529,6 +538,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_a5': 'Provide the Korean result you received from the hospital, and we will translate and summarize the core content into your native language. We do not provide medical opinions or detailed medical explanations.',
             'chatbot_greeting_reply': 'Hello! Nice to meet you. How can I help you today?',
             'chatbot_fallback_reply': 'Thank you for your valuable inquiry! A dedicated manager will check your message and respond soon. For a more detailed response, please leave a message via the \'Contact Us\' section at the bottom of the main page.',
+            'login_title': 'CHECKIT LOGIN',
+            'login_tab_user': 'Individual',
+            'login_tab_corp': 'Corporate Admin',
+            'login_tab_master': 'Master',
+            'login_key_placeholder': 'Security KEY',
+            'login_google': 'Login with Google',
+            'login_email_placeholder': 'Email',
+            'login_pass_placeholder': 'Password',
+            'login_btn': 'Login',
             'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
         },
         cn: {
@@ -581,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_page_title': '企业客户全面解决方案',
             'corporate_page_subtitle': '系统管理外国员工健康，提高生产力，减轻管理负担。',
             'individual_page_title': '个人客户服务',
-            'individual_page_subtitle': 'CHECKIT 帮助所有在韩或访韩的外国人，在没有语言障碍的情况下接受最好的健康检查。',
+            'individual_page_subtitle': 'CHECKIT 帮助所有在韩 or 访韩的外国人，在没有语言障碍的情况下接受最好的健康检查。',
             'expectation_title': '对韩国医疗服务的期待',
             'expectation_subtitle': '“要在韩国做体检吗？”<br>海外社区经常提到的韩国医疗特色',
             'expectation_item_title_1': '#1. 成本效益',
@@ -626,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_overtime_p10': '那一刻，我意识到我完全是孤身一人. ',
             'reality_overtime_p11': '离开韩国时甚至没收到结果. ',
             'solution_title': 'CHECKIT 的解决方案',
-            'solution_subtitle': 'CHECKIT 与您同行，让您在无不适或焦虑的情况下专注于体检流程。',
+            'solution_subtitle': 'CHECKIT 与您同行，让您在无不适 or 焦虑的情况下专注于体检流程。',
             'individual_service1_title': '1:1 专属经理',
             'individual_service1_desc': '申请后立即分配专属经理，负责从医院选择到预约的一切事务。',
             'individual_service2_title_new': '实时沟通支持',
@@ -767,9 +785,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_title': '常见问题',
             'corp_faq_subtitle': '企业客户关注的问题. ',
             'corp_faq_q1': '现有医院？',
-            'corp_faq_a1': '可以。独立服务. ',
+            'corp_faq_a1': '可以. 独立服务. ',
             'corp_faq_q2': '法律风险？',
-            'corp_faq_a2': '无。专注行政. ',
+            'corp_faq_a2': '无. 专注行政. ',
             'corp_faq_q3': '信息管理？',
             'corp_faq_a3': '遵守法律. ',
             'corp_faq_q4': '系统集成？',
@@ -782,17 +800,26 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_placeholder': '输入消息...',
             'chatbot_welcome': '您好！我是 CHECKIT 咨询机器人。有什么我可以帮您的吗？',
             'chatbot_q1': '1. 如何预约？',
-            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助。请告知我们您希望的检查项目和日程，我们将提供符合您条件的医院列表并协助您完成预约。点击“立即申请”留下您的咨询！',
+            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助。请告知我们您希望的检查项目 and 日程，我们将提供符合您条件的医院列表并协助您完成预约。点击“立即申请”留下您的咨询！',
             'chatbot_q2': '2. 你们与医院/医生有合同关系吗？',
-            'chatbot_a2': '不。CHECKIT 与特定医院没有合同关系。我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
-            'chatbot_q3': '3. 你们也提供医疗行为或医疗中介吗？',
-            'chatbot_a3': '不，CHECKIT 遵守医疗法，不提供任何医疗行为 or 中介。我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
+            'chatbot_a2': '不. CHECKIT 与特定医院没有合同关系. 我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
+            'chatbot_q3': '3. 你们也提供医疗行为 or 医疗中介吗？',
+            'chatbot_a3': '不, CHECKIT 遵守医疗法，不提供任何医疗行为 or 中介. 我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
             'chatbot_q4': '4. 检查当天我可以得到什么帮助？',
-            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感。我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
+            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感. 我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
             'chatbot_q5': '5. 结果报告如何交付？',
-            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语。我们遵守医疗法，不提供医疗建议。',
-            'chatbot_greeting_reply': '您好！见到您很高兴。有什么我可以帮您的吗？',
-            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复。如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复。',
+            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语. 我们遵守医疗法，不提供医疗建议. ',
+            'chatbot_greeting_reply': '您好！见到您很高兴. 有什么我可以帮您的吗？',
+            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复. 如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复. ',
+            'login_title': 'CHECKIT 登录',
+            'login_tab_user': '个人客户',
+            'login_tab_corp': '企业管理员',
+            'login_tab_master': '大師',
+            'login_key_placeholder': '输入安全密钥',
+            'login_google': '通过 Google 登录',
+            'login_email_placeholder': '电子邮箱',
+            'login_pass_placeholder': '密码',
+            'login_btn': '登录',
             'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
         },
         vn: {
@@ -809,7 +836,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corporate_title': 'Doanh nghiệp',
             'corporate_desc': 'Quản lý khám sức khỏe định kỳ cho nhân viên nước ngoài hiệu quả, giảm gánh nặng quản lý y tế.',
             'why_us_title': 'Tại sao chọn CHECKIT?',
-            'why_us_subtitle_new': 'Bất chấp dịch vụ y tế chất lượng cao, người nước ngoài vẫn gặp khó khăn trong "quy trình phi y tế".<br><br>CHECKIT lấp đầy khoảng trống này.',
+            'why_us_subtitle_new': 'Bất chấp dịch vụ y tế chất lượng cao, người nước ngoài vẫn gặp khó khăn trong "quy trình phi y tế".<br><br>CHECKIT lấp thêm khoảng trống này.',
             'why_us_feature1_title': 'Chuyên gia giao tiếp',
             'why_us_feature1_desc': 'Từ chọn bệnh viện đến dịch kết quả, chúng tôi giải quyết mọi vấn đề giao tiếp.',
             'why_us_feature2_title': '100% hướng tới khách hàng',
@@ -820,11 +847,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'why_us_feature4_desc': 'Hoạt động độc lập, không có phí môi giới. Chỉ áp dụng phí dịch vụ.',
             'process_title': 'Quy trình dịch vụ',
             'process_step1_title': 'Tư vấn & Hỗ trợ',
-            'process_step1_desc_new': 'Sau khi tư vấn, chúng tôi cung cấp danh sách bệnh viện và đặt lịch.',
+            'process_step1_desc_new': 'Sau khi tư vấn, chúng tôi cung cấp danh sách bệnh viện and đặt lịch.',
             'process_step2_title': 'Hỗ trợ thời gian thực',
             'process_step2_desc_new': 'Hỗ trợ giao tiếp thời gian thực trong bệnh viện vào ngày khám.',
             'process_step3_title_new': 'Giao kết quả dịch',
-            'process_step3_desc_new': 'Chúng tôi dịch và tóm tắt kết quả sang ngôn ngữ của bạn.',
+            'process_step3_desc_new': 'Chúng tôi dịch and tóm tắt kết quả sang ngôn ngữ của bạn.',
             'testimonials_title': 'Cảm nhận khách hàng',
             'testimonials_subtitle': 'Lắng nghe khách hàng của CHECKIT.',
             'testimonial1_text': '"Lần đầu khám tại Hàn, CHECKIT đã giúp tôi mọi thứ thật dễ dàng."',
@@ -896,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'individual_service2_title_new': 'Hỗ trợ thời gian thực',
             'individual_service2_desc_new': 'Hỗ trợ qua tin nhắn ngày khám.',
             'individual_service3_title_new': 'Result Translation',
-            'individual_service3_desc_new': 'Dịch và tóm tắt kết quả sang tiếng mẹ đẻ.',
+            'individual_service3_desc_new': 'Dịch and tóm tắt kết quả sang tiếng mẹ đẻ.',
             'packages_title': 'Gói CHECKIT',
             'packages_subtitle': 'Chọn kế hoạch phù hợp.',
             'package1_title': 'Gói No-Confusion',
@@ -1046,17 +1073,26 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_placeholder': 'Nhập tin nhắn...',
             'chatbot_welcome': 'Xin chào! Đây là chatbot hỗ trợ của CHECKIT. Tôi có thể giúp gì cho bạn?',
             'chatbot_q1': '1. Làm thế nào để đặt lịch?',
-            'chatbot_a1': 'Quản lý tận tâm của CHECKIT sẽ giúp bạn. Hãy cho chúng tôi biết các hạng mục khám và lịch trình mong muốn, chúng tôi sẽ cung cấp danh sách bệnh viện phù hợp và xử lý việc đặt lịch. Nhấn \'Đăng ký ngay\' để gửi yêu cầu!',
+            'chatbot_a1': 'Quản lý tận tâm của CHECKIT sẽ giúp bạn. Hãy cho chúng tôi biết các hạng mục khám and lịch trình mong muốn, chúng tôi sẽ cung cấp danh sách bệnh viện phù hợp and xử lý việc đặt lịch. Nhấn \'Đăng ký ngay\' để gửi yêu cầu!',
             'chatbot_q2': '2. Các bạn có hợp đồng với bệnh viện/bác sĩ không?',
             'chatbot_a2': 'Không. CHECKIT không có quan hệ hợp đồng với các bệnh viện cụ thể. Chúng tôi cung cấp thông tin khách quan để giúp bạn tìm thấy bệnh viện phù hợp nhất từ góc độ của mình.',
             'chatbot_q3': '3. Các bạn có thực hiện hành vi y tế hoặc giới thiệu bệnh nhân không?',
-            'chatbot_a3': 'Không, CHECKIT tuân thủ luật y tế và không thực hiện bất kỳ hành vi y tế hoặc giới thiệu nào. Chúng tôi tập trung vào "quy trình phi y tế" như đặt lịch, thông dịch và dịch kết quả.',
+            'chatbot_a3': 'Không, CHECKIT tuân thủ luật y tế and không thực hiện bất kỳ hành vi y tế or giới thiệu nào. Chúng tôi tập trung vào "quy trình phi y tế" như đặt lịch, thông dịch and dịch kết quả.',
             'chatbot_q4': '4. Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?',
             'chatbot_a4': 'Vào ngày khám, quản lý CheckBot của chúng tôi sẽ đồng hành cùng bạn để bạn không cảm thấy cô đơn do rào cản ngôn ngữ. Chúng tôi hỗ trợ tất cả quy trình giao tiếp trong bệnh viện theo thời gian thực.',
             'chatbot_q5': '5. Kết quả được giao như thế nào?',
-            'chatbot_a5': 'Hãy gửi cho chúng tôi kết quả tiếng Hàn bạn nhận được từ bệnh viện, chúng tôi sẽ dịch và tóm tắt nội dung cốt lõi sang ngôn ngữ của bạn. Chúng tôi không cung cấp ý kiến y khoa.',
+            'chatbot_a5': 'Hãy gửi cho chúng tôi kết quả tiếng Hàn bạn nhận được từ bệnh viện, chúng tôi sẽ dịch and tóm tắt nội dung cốt lõi sang ngôn ngữ của bạn. Chúng tôi không cung cấp ý kiến y khoa.',
             'chatbot_greeting_reply': 'Xin chào! Rất vui được gặp bạn. Tôi có thể giúp gì cho bạn?',
-            'chatbot_fallback_reply': 'Cảm ơn sự tư vấn quý báu của bạn! Nội dung bạn nhập sẽ được quản lý phụ trách kiểm tra và phản hồi sớm. Để được phản hồi chính xác hơn, vui lòng để lại lời nhắn qua mục \'Liên hệ\' ở cuối trang chủ.',
+            'chatbot_fallback_reply': 'Cảm ơn sự tư vấn quý báu của bạn! Nội dung bạn nhập sẽ được quản lý phụ trách kiểm tra and phản hồi sớm. Để được phản hồi chính xác hơn, vui lòng để lại lời nhắn qua mục \'Liên hệ\' ở cuối trang chủ.',
+            'login_title': 'CHECKIT ĐĂNG NHẬP',
+            'login_tab_user': 'Cá nhân',
+            'login_tab_corp': 'Quản lý doanh nghiệp',
+            'login_tab_master': 'Bậc thầy',
+            'login_key_placeholder': 'Nhập mã bảo mật',
+            'login_google': 'Đăng nhập bằng Google',
+            'login_email_placeholder': 'Email',
+            'login_pass_placeholder': 'Mật khẩu',
+            'login_btn': 'Đăng nhập',
             'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
         }
     };
@@ -1321,24 +1357,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const showLoginModal = () => {
             if(document.getElementById('login-modal-overlay')) return;
+            const data = translations[currentLang] || translations['ko'];
             const modalHtml = `<div id="login-modal-overlay" style="display:flex;">
                 <div class="login-modal-box">
                     <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-                    <h2 class="modal-logo">CHECKIT LOGIN</h2>
+                    <h2 class="modal-logo" data-lang-key="login_title">${data['login_title']}</h2>
                     <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
-                        <div class="p-tab active" id="tab-type-user">개인 고객</div>
-                        <div class="p-tab" id="tab-type-corp">기업 관리자</div>
-                        <div class="p-tab" id="tab-type-master">마스터</div>
+                        <div class="p-tab active" id="tab-type-user" data-lang-key="login_tab_user">${data['login_tab_user']}</div>
+                        <div class="p-tab" id="tab-type-corp" data-lang-key="login_tab_corp">${data['login_tab_corp']}</div>
+                        <div class="p-tab" id="tab-type-master" data-lang-key="login_tab_master">${data['login_tab_master']}</div>
                     </div>
                     <div id="key-field-container" style="display:none; margin-bottom:20px;">
-                        <input type="text" id="global-admin-key" placeholder="보안 KEY 입력" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
+                        <input type="text" id="global-admin-key" data-lang-key="login_key_placeholder" placeholder="${data['login_key_placeholder']}" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
                     </div>
                     <div style="display:flex; flex-direction:column; gap:12px;">
-                        <button id="btn-google-login" class="btn-auth btn-google">Google 로그인</button>
+                        <button id="btn-google-login" class="btn-auth btn-google" data-lang-key="login_google">${data['login_google']}</button>
                         <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
-                        <input type="email" id="auth-email" placeholder="Email" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="password" id="auth-pass" placeholder="Password" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <button id="btn-email-login" class="btn-auth btn-primary">로그인</button>
+                        <input type="email" id="auth-email" data-lang-key="login_email_placeholder" placeholder="${data['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <input type="password" id="auth-pass" data-lang-key="login_pass_placeholder" placeholder="${data['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <button id="btn-email-login" class="btn-auth btn-primary" data-lang-key="login_btn">${data['login_btn']}</button>
                     </div>
                 </div></div>`;
             document.body.insertAdjacentHTML('beforeend', modalHtml);

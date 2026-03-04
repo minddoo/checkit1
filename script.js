@@ -1400,29 +1400,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const handleSuccess = async (user) => {
                 if (!user) return;
                 
-                const modal = document.getElementById('login-modal-overlay');
-                if(modal) modal.remove(); // Remove login window IMMEDIATELY
-
+                // 1. Capture values first while elements exist
                 const key = keyInput ? keyInput.value.trim() : "";
+                const loginType = selectedType;
+                
+                // 2. Remove modal IMMEDIATELY
+                const modal = document.getElementById('login-modal-overlay');
+                if(modal) modal.remove(); 
+
+                // 3. Show welcome alert IMMEDIATELY
+                const langData = translations[currentLang] || translations['ko'];
+                const msg = langData['login_success_msg'] || "Welcome!";
+                alert(msg);
+
+                // 4. Process DB updates and redirection in the background
                 try {
-                    if (selectedType === 'master' && key === "CHECKIT_MASTER_2026") {
+                    if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
                         await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
-                    } else if (selectedType === 'corp' && key.startsWith("COMP_")) {
+                    } else if (loginType === 'corp' && key.startsWith("COMP_")) {
                         await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
                     } else {
                         await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
                     }
                 } catch (dbErr) {
-                    console.error("DB Error during login:", dbErr);
+                    console.error("Background DB Error:", dbErr);
                 }
                 
-                const langData = translations[currentLang] || translations['ko'];
-                const msg = langData['login_success_msg'] || "Login successful!";
-                
-                setTimeout(() => {
-                    alert(msg); // Multi-language Welcome Alert after modal is gone
-                    renderMyPage(user);
-                }, 100);
+                renderMyPage(user);
             };
 
             document.getElementById('close-login-modal').onclick = () => document.getElementById('login-modal-overlay').remove();

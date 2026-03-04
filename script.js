@@ -1584,9 +1584,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 1. Remove modal IMMEDIATELY
                 overlay.remove(); 
 
-                // 2. Show welcome alert IMMEDIATELY
-                const d = translations[currentLang] || translations['ko'];
-                alert(d['login_success_msg']);
+
 
                 // 3. Process DB updates in background
                 try {

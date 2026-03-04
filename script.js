@@ -1543,6 +1543,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 document.getElementById('btn-main-action').onclick = async () => {
+                    const btnMainAction = document.getElementById('btn-main-action');
+                    btnMainAction.disabled = true; // Disable button immediately
                     const email = document.getElementById('auth-email').value.trim();
                     const pass = document.getElementById('auth-pass')?.value;
                     const name = document.getElementById('signup-name')?.value;
@@ -1555,14 +1557,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             handleSuccess(res.user, key);
                         } else if (currentView === 'signup') {
                             if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
-                            console.log('Attempting to sign up with email:', email, 'and password:', pass); // Added log
+
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                            alert(d['signup_welcome_message']); // Use new welcome message
-                            overlay.remove(); // Close the current modal
-                            currentView = 'login'; // Ensure the view is set to login
-                            showLoginModal(); // Re-open modal to show login form
+                            alert(d['signup_welcome_message']);
+                            overlay.remove();
+                            currentView = 'login';
+                            showLoginModal();
                         } else if (currentView === 'find') {
                             await auth.sendPasswordResetEmail(email);
                             alert(d['find_pass_success']);
@@ -1570,8 +1572,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             renderModal();
                         }
                     } catch(e) {
-                        console.error('Firebase Signup Error:', e.message); // Added log
+
                         alert(e.message);
+                    } finally {
+                        btnMainAction.disabled = false; // Re-enable button
                     }
                 };
             };

@@ -69,22 +69,22 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_1_point_1': '직원들은 외국어를 못해서 전화를 피합니다.',
             'reality_item_1_point_2': '안내, 준비 가이드, 알림이 모두 한국어입니다.',
             'reality_item_1_point_3': '민감한 질문(생리, 수술, 증상)에 대해 제대로 된 설명을 받지 못합니다.',
-            'reality_item_1_point_4': '검진 중 모든 안내 방송은 한국어로만 나옵니다.',
+            'reality_item_1_point_4': '검진 중 모든 안내 방송은 한국어로만 나온다.',
             'reality_item_title_2': '2. 혼란스러운 과정',
-            'reality_item_2_point_1': '검진 패키지에 무엇이 포함되어 있는지조차 모릅니다.',
-            'reality_item_2_point_2': '준비 물품이 사용법에 대한 설명 없이 도착합니다.',
-            'reality_item_2_point_3': '대장내시경 약은 한국어로만 설명되어 → 검사에 실패합니다.',
-            'reality_item_2_point_4': '사전 문진표는 길고 복잡하며 전부 한국어입니다.',
+            'reality_item_2_point_1': '검진 패키지에 무엇이 포함되어 있는지조차 모른다.',
+            'reality_item_2_point_2': '준비 물품이 사용법에 대한 설명 없이 도착한다.',
+            'reality_item_2_point_3': '대장내시경 약은 한국어로만 설명되어 → 검사에 실패한다.',
+            'reality_item_2_point_4': '사전 문진표는 길고 복잡하며 전부 한국어이다.',
             'reality_item_title_3': '3. 불확실한 일정',
-            'reality_item_3_point_1': '예약을 잡는 데만 2-3일이 걸립니다.',
-            'reality_item_3_point_2': '직원마다 다른 답변을 하며 — 아무도 책임지지 않습니다.',
-            'reality_item_3_point_3': '한국 전화번호가 없으면 → 알림이나 준비 안내를 받지 못합니다.',
-            'reality_item_3_point_4': '해외 시차로 인해 → 통화가 실패하고 예약이 지연됩니다.',
+            'reality_item_3_point_1': '예약을 잡는 데만 2-3일이 걸린다.',
+            'reality_item_3_point_2': '직원마다 다른 답변을 하며 — 아무도 책임지지 않는다.',
+            'reality_item_3_point_3': '한국 전화번호가 없으면 → 알림이나 준비 안내를 받지 못한다.',
+            'reality_item_3_point_4': '해외 시차로 인해 → 통화가 실패하고 예약이 지연된다.',
             'reality_item_title_4': '4. 지연된 결과 및 책임 부재',
-            'reality_item_4_point_1': '당신이 없는 주소로 결과가 우편 발송됩니다.',
-            'reality_item_4_point_2': '한국을 떠난 후에도 결과가 몇 주 동안 지연됩니다.',
-            'reality_item_4_point_3': '해외 전화 인증 제한으로 영수증을 받을 수 없습니다.',
-            'reality_item_4_point_4': '검사 후 규칙(예: 용종 제거 후 비행)에 대한 설명이 없습니다.',
+            'reality_item_4_point_1': '당신이 없는 주소로 결과가 우편 발송된다.',
+            'reality_item_4_point_2': '한국을 떠난 후에도 결과가 몇 주 동안 지연된다.',
+            'reality_item_4_point_3': '해외 전화 인증 제한으로 영수증을 받을 수 없다.',
+            'reality_item_4_point_4': '검사 후 규칙(예: 용종 제거 후 비행)에 대한 설명이 없다.',
             'reality_overtime_title': '글로는 사소해 보이는 문제들. 현실은 이렇습니다.',
             'reality_overtime_p1': '한국에 오기 전에는 모든 것이 안심되었습니다.',
             'reality_overtime_p2': '다국어 지원이 가능하고, 외국인들이 자주 이용하며, 전체 과정이 순조롭고 잘 안내될 것이라고 들었습니다.',
@@ -139,19 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_includes': '(ZERO-MISTAKE PLAN 모두 포함 +)',
             'package3_feature1': '프리미엄 문진표 관리',
             'package3_feature2': '위험 포인트 설명 (비의료적, 절차 기반)',
-            'package3_feature3': '복잡한 서식 항목을 위한 영어 답변 템플릿',
+            'package3_feature3': '영어 답변 템플릿',
             'package3_feature4': '전체 서식 확인 (모든 페이지, 서명, 첨부파일)',
             'package3_feature5': '프리미엄 검진 전 팩 (상세 타임라인, 실수 대응 플로우)',
             'package3_feature6': '실시간 검진 당일 채팅 지원',
             'package3_feature7': '병원 내 동선 가이드 (그래픽)',
             'package3_feature8': '영문 영수증 요청 (대행)',
             'package3_feature9': 'CD / 추가 서류 요청',
-            'package3_feature10': '결과 나올 때까지 완전한 검진 후 후속 조치',
+            'package3_feature10': '완전한 검진 후 후속 조치',
             'package3_feature11': '결과 구성 (비의료적, 내용 구성만)',
             'package3_feature12': '병원 소통용 템플릿',
             'package3_feature13': '일정 변경 지원 (최대 3회 포함)',
             'package3_recommend_desc': '가장 안전하고 완벽하게 관리받고 싶은 분.',
-            'price_structure_title': '왜 외국인은 한국에서 동일한 건강검진에 더 많은 비용을 지불할까요?',
+            'price_structure_title': '왜 외국인은 한국에서 동일한 건강검진에 더 많은 비용을 지불할까?',
             'price_structure_q': '저희는 종종 이런 질문을 받습니다. “왜 당신의 옵션이 병원에서 제공하는 것보다 저렴한가요?”',
             'price_structure_a_title': '간단한 답변',
             'price_structure_a_text': '검사가 달라서가 아닙니다. 가격 구조 때문입니다.',
@@ -657,10 +657,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'reality_item_3_point_3': '收不到通知. ',
             'reality_item_3_point_4': '由于海外时差 → 通话失败且预约延迟. ',
             'reality_item_title_4': '4. 结果延迟且责任缺失',
-            'reality_item_4_point_1': '结果被邮寄到您不在의地址. ',
+            'reality_item_4_point_1': '结果被邮寄到您不在的地址. ',
             'reality_item_4_point_2': '离开韩国后结果仍延迟数周. ',
             'reality_item_4_point_3': '无法获取收据. ',
-            'reality_item_4_point_4': '没有关于检查后规则（如飞行）의说明. ',
+            'reality_item_4_point_4': '没有关于检查后规则（如飞行）的说明. ',
             'reality_overtime_title': '纸面上看似微小的问题。现实却是如此。',
             'reality_overtime_p1': '来韩国之前，一切都令人安心. ',
             'reality_overtime_p2': '我听说提供多语言支持，过程会很顺畅. ',
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'package3_feature13': '变更支持',
             'package3_recommend_desc': '希望获得最安全管理的人. ',
             'price_structure_title': '为什么外国人在韩国支付更多？',
-            'price_structure_q': '“为什么您的选项比医院의便宜？”',
+            'price_structure_q': '“为什么您的选项比医院的便宜？”',
             'price_structure_a_title': '简单回答',
             'price_structure_a_text': '不是检查不同，而是价格结构. ',
             'price_structure_reality_title': '医院真实情况',
@@ -746,7 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec2_title': '健康检查是强大福利',
             'corp_sec2_subtitle': '差异化的支持可提高忠诚度. ',
             'corp_sec2_item1_title': '向往的企业',
-            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一의福利. ',
+            'corp_sec2_item1_desc': '无语言障碍的医疗服务是排名第一的福利. ',
             'corp_sec2_item2_title': '生产力最大化',
             'corp_sec2_item2_desc': '健康的工人能带来最佳生产力. ',
             'corp_sec2_item3_title': 'ESG 经营',
@@ -830,17 +830,17 @@ document.addEventListener('DOMContentLoaded', () => {
             'chatbot_placeholder': '输入消息...',
             'chatbot_welcome': '您好！我是 CHECKIT 咨询机器人。有什么我可以帮您的吗？',
             'chatbot_q1': '1. 如何预约？',
-            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助。请告知我们您希望的检查项目和日程，我们将提供符合您条件的医院列表并协助您完成预约。点击“立即申请”留下您的咨询！',
+            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助. 请告知我们您希望的检查项目 and 日程，我们将提供符合您条件的医院列表并协助您完成预约. 点击“立即申请”留下您的咨询！',
             'chatbot_q2': '2. 你们与医院/医生有合同关系吗？',
-            'chatbot_a2': '不。CHECKIT 与特定医院没有合同关系。我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
-            'chatbot_q3': '3. 你们也提供医疗行为或医疗中介吗？',
-            'chatbot_a3': '不，CHECKIT 遵守医疗法，不提供任何医疗行为 or 中介。我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
+            'chatbot_a2': '不. CHECKIT 与特定医院没有合同关系. 我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
+            'chatbot_q3': '3. 你们也提供医疗行为 or 医疗中介吗？',
+            'chatbot_a3': '不, CHECKIT 遵守医疗法，不提供任何医疗行为 or 中介. 我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
             'chatbot_q4': '4. 检查当天我可以得到什么帮助？',
-            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感。我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
+            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感. 我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
             'chatbot_q5': '5. 结果报告如何交付？',
-            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语。我们遵守医疗法，不提供医疗建议。',
-            'chatbot_greeting_reply': '您好！见到您很高兴。有什么我可以帮您的吗？',
-            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复。如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复。',
+            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语. 我们遵守医疗法，不提供医疗建议. ',
+            'chatbot_greeting_reply': '您好！见到您很高兴. 有什么我可以帮您的吗？',
+            'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复. 如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复. ',
             'login_title': 'CHECKIT 登录',
             'login_tab_user': '个人客户',
             'login_tab_corp': '企业管理员',
@@ -1026,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec1_title': 'Nhân viên nước ngoài tất yếu',
             'corp_sec1_subtitle': 'Quản lý nhân tài là then chốt.',
             'corp_sec1_item1_title': 'Lao động tăng vọt',
-            'corp_sec1_item1_desc': 'Tỷ lệ lao động cao kỷ lục.',
+            'corp_sec1_item1_desc': 'Tỷ lệ lao động cao kỷ록.',
             'corp_sec1_item2_title': 'Nghĩa vụ pháp lý',
             'corp_sec1_item2_desc': 'Nghĩa vụ khám sức khỏe.',
             'corp_sec1_item3_title': 'Năng lực cạnh tranh',
@@ -1090,16 +1090,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_sec7_step3_title': '03. Hướng dẫn chuẩn bị',
             'corp_sec7_step3_1': 'Hướng dẫn chi tiết',
             'corp_sec7_step3_2': 'Thông báo thời gian thực',
-            'corp_sec7_step4_title': '04. Hỗ trợ ngày khám',
+            'corp_sec7_step4_title': '04. 당태 지원',
             'corp_sec7_step4_1': 'Giải quyết bất tiện',
             'corp_sec7_step4_2': 'Quản lý hoàn thành',
-            'corp_sec7_step5_title': '05. Quản lý kết quả',
-            'corp_sec7_step5_1': 'Hướng dẫn kết quả',
-            'corp_sec7_step5_2': 'Dịch tóm tắt',
-            'corp_sec7_step5_3': 'Nộp hồ sơ',
-            'corp_sec7_step6_title': '06. Báo cáo cuối cùng',
-            'corp_sec7_step6_1': 'Cập nhật danh sách',
-            'corp_sec7_step6_2': 'Báo cáo tiến độ',
+            'corp_sec7_step5_title': '05. 결과 관리',
+            'corp_sec7_step5_1': '周期指南',
+            'corp_sec7_step5_2': '摘要翻譯',
+            'corp_sec7_step5_3': '提交管理',
+            'corp_sec7_step6_title': '06. 最終報告',
+            'corp_sec7_step6_1': '更新备注',
+            'corp_sec7_step6_2': '进度报告',
             'corp_faq_title': 'Câu hỏi thường gặp',
             'corp_faq_subtitle': 'Thắc mắc doanh nghiệp.',
             'corp_faq_q1': 'Bệnh viện hiện có?',
@@ -1138,22 +1138,22 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': 'Email',
             'login_pass_placeholder': 'Mật khẩu',
             'login_btn': 'Đăng nhập',
-            'login_success_msg': 'Đăng nhập thành công! Chào mừng.',
-            'signup_title': 'Đăng ký',
-            'signup_btn': 'Đăng ký ngay',
-            'signup_success': 'Đăng ký thành công! Vui lòng đăng nhập.',
-            'find_pass_title': 'Đặt lại mật khẩu',
-            'find_pass_btn': 'Gửi email đặt lại',
-            'find_pass_success': 'Email đặt lại đã được gửi.',
-            'switch_to_signup': 'Chưa có tài khoản? Đăng ký',
-            'switch_to_login': 'Đã có tài khoản? Đăng nhập',
-            'switch_to_find': 'Quên mật khẩu?',
-            'signup_name_placeholder': 'Họ và tên',
-            'signup_privacy_title': 'Đồng ý thu thập và sử dụng thông tin cá nhân',
-            'signup_privacy_agree': 'Tôi đồng ý với việc thu thập và sử dụng thông tin cá nhân (Bắt buộc)',
-            'signup_privacy_error': 'Vui lòng đồng ý với các điều khoản.',
-            'signup_privacy_content': '1. Các mục: Tên, Email, Số điện thoại\n2. Mục đích: Đăng ký, Cung cấp dịch vụ, Tư vấn\n3. Thời hạn: Cho đến khi hủy tài khoản',
-            'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý'
+            'login_success_msg': '로그인에 성공했습니다! 환영합니다.',
+            'signup_title': '회원가입',
+            'signup_btn': '회원가입하기',
+            'signup_success': '회원가입이 완료되었습니다! 로그인해 주세요.',
+            'find_pass_title': '비밀번호 재설정',
+            'find_pass_btn': '재설정 메일 보내기',
+            'find_pass_success': '비밀번호 재설정 이메일을 보냈습니다.',
+            'switch_to_signup': '계정이 없으신가요? 회원가입',
+            'switch_to_login': '이미 계정이 있으신가요? 로그인',
+            'switch_to_find': '비밀번호를 잊으셨나요?',
+            'signup_name_placeholder': '이름',
+            'signup_privacy_title': '개인정보 수집 및 이용 동의',
+            'signup_privacy_agree': '개인정보 수집 및 이용에 동의합니다 (필수)',
+            'signup_privacy_error': '개인정보 수집 및 이용에 동의해주세요.',
+            'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호\n2. 수집 목적: 회원 가입 및 서비스 제공, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 법령에 따른 보존 필요 시 해당 기간까지)',
+            'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
         }
     };
 
@@ -1484,8 +1484,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${currentView === 'login' ? d['login_btn'] : (currentView === 'signup' ? d['signup_btn'] : d['find_pass_btn'])}
                         </button>
 
+                        <button id="btn-google-auth" class="btn-auth btn-google">${d['login_google']}</button>
+
                         ${currentView === 'login' ? `
-                        <button id="btn-google-login" class="btn-auth btn-google">${d['login_google']}</button>
                         <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
                         <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
                             <span id="go-signup" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_signup']}</span>
@@ -1518,13 +1519,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('tab-type-master').onclick = () => { selectedType = 'master'; renderModal(); };
                     document.getElementById('go-signup').onclick = () => { currentView = 'signup'; renderModal(); };
                     document.getElementById('go-find').onclick = () => { currentView = 'find'; renderModal(); };
-                    document.getElementById('btn-google-login').onclick = async () => {
-                        try { const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); handleSuccess(res.user); } 
-                        catch(e) { alert(e.message); }
-                    };
                 } else {
                     document.getElementById('go-login').onclick = () => { currentView = 'login'; renderModal(); };
                 }
+
+                document.getElementById('btn-google-auth').onclick = async () => {
+                    const privacyAgree = document.getElementById('privacy-agree');
+                    if (currentView === 'signup' && privacyAgree && !privacyAgree.checked) {
+                        alert(d['signup_privacy_error']);
+                        return;
+                    }
+                    try { 
+                        const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); 
+                        handleSuccess(res.user); 
+                    } 
+                    catch(e) { alert(e.message); }
+                };
 
                 document.getElementById('btn-main-action').onclick = async () => {
                     const email = document.getElementById('auth-email').value.trim();
@@ -1567,12 +1577,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 3. Process DB updates in background
                 try {
+                    const userRef = db.collection("users").doc(user.uid);
+                    const doc = await userRef.get();
+                    
+                    if (!doc.exists) {
+                        // New User (Sign-up via Google or missing profile)
+                        await userRef.set({ 
+                            fullName: user.displayName || "User", 
+                            email: user.email,
+                            role: 'user', 
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+                        }, { merge: true });
+                    }
+
                     if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
-                        await db.collection("users").doc(user.uid).set({ role: 'super_admin' }, { merge: true });
+                        await userRef.set({ role: 'super_admin' }, { merge: true });
                     } else if (loginType === 'corp' && key.startsWith("COMP_")) {
-                        await db.collection("users").doc(user.uid).set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
-                    } else {
-                        await db.collection("users").doc(user.uid).set({ role: 'user' }, { merge: true });
+                        await userRef.set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
                     }
                 } catch (dbErr) { console.error("Background DB Error:", dbErr); }
                 
@@ -1588,10 +1609,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
                 if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
                 const d = translations[currentLang] || translations['ko'];
-                btn.textContent = user ? (d['nav_mypage'] || 'My Page') : (d['nav_login'] || 'Login');
+                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || 'My Page') : (translations[currentLang]?.['nav_login'] || 'Login');
                 btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
                 if(user && !document.getElementById('logout-btn')) {
-                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=d['nav_logout'] || 'Logout';
+                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || 'Logout';
                     lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                 }
             });

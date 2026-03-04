@@ -4,9 +4,9 @@
 
 This project expands the CHECKIT website into a comprehensive, multilingual platform. Key enhancements include the addition of Chinese and Vietnamese language support across the entire site and chatbot, the creation of three new content sections on the main page (Process, Why Us, Reviews), and the development of dedicated pages for individual and corporate clients. A new contact form will also be added to streamline user inquiries.
 
-## 2. Core Features & Design (LOCKED)
+## 2. Core Features & Design (LOCKED - TOTAL PRESERVATION)
 
-The designs for the following pages are finalized and **LOCKED**. No structural or aesthetic changes are permitted without a "Force Override".
+The designs, functionalities, and text for the following sections are finalized and **STRICTLY LOCKED**. No modifications of any kind are permitted without a "Force Override". Any system update must ensure zero impact on these elements.
 
 ### **A. Main Page (`index.html`) - Design Identity: "Trust & Overview"**
 *   **Hero Section:** High-contrast white text on a dark overlay, emphasizing the primary CTA.

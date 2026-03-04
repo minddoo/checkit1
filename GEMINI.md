@@ -167,26 +167,30 @@ When requested for Firebase add the following the server configurations to .idx/
     }
 }
 
-# Protected Files & Design Constraints
+# Protected Files & Design Constraints (TOTAL LOCK)
 
-The following files and design elements are **LOCKED**. The AI must **NOT** modify the structure, design, layout, or content of these files unless explicitly overridden by a "Force Override" command from the user.
+The following files, design elements, and functionalities are **STRICTLY LOCKED**. The AI must **NOT** modify the structure, design, layout, text content, or core functional logic of these elements unless explicitly overridden by a "Force Override" command from the user. Any indirect impact during other modifications must be immediately reverted.
 
-*   **`individual.html`**: The entire individual customer page design, including the hero section, expectation section, reality section (diary style), solution section, and price structure section, is finalized.
-    *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
-    *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
-    *   **Preserve**: The specific card-less design for text sections and the image-only card design for the expectation section.
+*   **`index.html` (Main Page)**: Identity: "Trust & Overview".
+    *   **LOCKED**: All layout, color schemes, font styles, image placements, and section ordering.
+    *   **LOCKED**: All text content across Hero, Service For, Why CHECKIT, Process, Testimonials, and Contact sections.
+    *   **LOCKED**: Specific styling for white text hero and responsive card behaviors.
 
-*   **`index.html` (Main Page)**: The entire main page design, including the hero section, Why CHECKIT section, process section, testimonials section, and contact section, is finalized.
-    *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
-    *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
-    *   **Preserve**: The specific hero section styling (white text), card layouts, and responsive behaviors.
+*   **`individual.html` (Individual Page)**: Identity: "Empathy & Solution".
+    *   **LOCKED**: Hero section with character asset, Expectation vertical list, Reality diary-style pain points.
+    *   **LOCKED**: Price structure section (light-yellow radial gradient and clarity text).
+    *   **LOCKED**: Three-tier package card layout and specific checklists.
 
-*   **`corporate.html` (Corporate Page)**: The entire corporate customer page design, including the total solution hero, necessity section, welfare section, reality pain section, and operational roadmap, is finalized.
-    *   **Do not change**: Layout, section order, color hierarchy (alternate-bg usage), or icon sets.
-    *   **Do not update**: Structural elements like the B2B Process Slide Modal or the Roadmap items.
-    *   **Preserve**: The professional, trust-building aesthetic and the distinct B2B value proposition sections.
+*   **`corporate.html` (Corporate Page)**: Identity: "Efficiency & B2B Professionalism".
+    *   **LOCKED**: Corporate-blue theme, Necessity/Welfare sections, Reality Management Gap layout.
+    *   **LOCKED**: Solution Value comparison table and the 6-step Operational Roadmap.
+    *   **LOCKED**: B2B Process Slide Modal functionality and imagery.
 
-*   **Chatbot Design & Functionality**: The multilingual interactive chatbot (`Check봇`) UI and automated logic are finalized.
-    *   **Do not change**: Container height (85vh), header layout (right-aligned language buttons), or compact message styling.
-    *   **Do not update**: The core interaction logic including greeting detection, 5 preset questions/answers, and automated fallback responses.
-    *   **Preserve**: The automated multilingual switching behavior and the "Direct Support" value proposition.
+*   **Chatbot Design & Functionality (`Check봇`)**: Identity: "Multilingual Instant Support".
+    *   **LOCKED**: Container height (85vh), header layout (right-aligned lang buttons), and compact message UI.
+    *   **LOCKED**: Dynamic translation logic for the initial welcome greeting.
+    *   **LOCKED**: Intelligent response logic (greeting detection and fallback messaging).
+    *   **LOCKED**: The 5 standard preset questions and their verified multilingual answers.
+
+*   **Global Elements**:
+    *   **LOCKED**: Navigation structure, multi-language switching mechanisms, and CSS variables for core branding.

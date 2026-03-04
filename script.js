@@ -289,7 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_agree': '개인정보 수집 및 이용에 동의합니다 (필수)',
             'signup_privacy_error': '개인정보 수집 및 이용에 동의해주세요.',
             'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호\n2. 수집 목적: 회원 가입 및 서비스 제공, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 법령에 따른 보존 필요 시 해당 기간까지)',
-            'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
+            'stat_pending_leads': '미처리 문의',
+            'signup_dob_placeholder': '생년월일'
         },
         en: {
             'main_page_title': 'CHECKIT - Health Check-up for Foreigners',
@@ -577,7 +578,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_agree': 'I agree to the collection and use of personal info (Required)',
             'signup_privacy_error': 'Please agree to the privacy policy.',
             'signup_privacy_content': '1. Items: Name, Email, Phone\n2. Purpose: Sign-up, Service provision, Consultation\n3. Period: Until account deletion (unless required by law)',
-            'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries'
+            'stat_total_clients': 'Total Clients', 'stat_pending_leads': 'Pending Inquiries',
+            'signup_dob_placeholder': 'Date of Birth'
         },
         cn: {
             'main_page_title': 'CHECKIT - 外国人健康检查预约',
@@ -865,7 +867,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_agree': '我同意收集和使用个人信息 (必填)',
             'signup_privacy_error': '请同意个人信息收集及使用条约。',
             'signup_privacy_content': '1. 收集项目：姓名、邮箱、电话\n2. 收集目的：会员注册、提供服务、咨询回复\n3. 保有期间：注销会员为止',
-            'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询'
+            'stat_total_clients': '总客户', 'stat_pending_leads': '待处理咨询',
+            'signup_dob_placeholder': '出生日期'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
@@ -1153,7 +1156,8 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_privacy_agree': '개인정보 수집 및 이용에 동의합니다 (필수)',
             'signup_privacy_error': '개인정보 수집 및 이용에 동의해주세요.',
             'signup_privacy_content': '1. 수집 항목: 이름, 이메일, 휴대전화 번호\n2. 수집 목적: 회원 가입 및 서비스 제공, 상담 대응\n3. 보유 기간: 회원 탈퇴 시까지 (단, 법령에 따른 보존 필요 시 해당 기간까지)',
-            'stat_total_clients': '전체 고객', 'stat_pending_leads': '미처리 문의'
+            'stat_total_clients': 'Tổng khách hàng', 'stat_pending_leads': 'Thắc mắc chưa xử lý',
+            'signup_dob_placeholder': 'Ngày sinh'
         }
     };
 
@@ -1468,6 +1472,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="text" id="signup-name" placeholder="${d['signup_name_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <input type="date" id="signup-dob" placeholder="${d['signup_dob_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <div class="signup-privacy-box" style="background:#f9f9f9; padding:10px; border-radius:10px; border:1px solid #eee; font-size:0.75rem; text-align:left;">
                             <h4 style="margin-bottom:5px; font-size:0.8rem;">${d['signup_privacy_title']}</h4>
                             <div style="height:60px; overflow-y:auto; color:#666; margin-bottom:10px; white-space:pre-line;">${d['signup_privacy_content']}</div>
@@ -1550,7 +1555,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else if (currentView === 'signup') {
                             if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
-                            await db.collection("users").doc(res.user.uid).set({ fullName: name, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                            const dob = document.getElementById('signup-dob')?.value;
+                            await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                             alert(d['signup_success']);
                             currentView = 'login';
                             renderModal();

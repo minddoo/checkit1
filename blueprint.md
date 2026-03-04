@@ -29,7 +29,13 @@ The designs for the following pages are finalized and **LOCKED**. No structural 
 *   **Solution Value:** A "Hospital/Corporate vs CHECKIT" comparison table to clearly define the non-medical administrative role.
 *   **Operational Roadmap:** A vertical timeline (01 to 06) detailing the exact B2B workflow from list reception to final reporting.
 
-### **D. Global Design Standards**
+### **D. Chatbot (`Check봇`) - Design Identity: "Multilingual Instant Support"**
+*   **Expanded UI:** Optimized container height (85vh) with a compact header and message area to maximize conversation visibility.
+*   **Intelligent Logic:** Automated responses including multilingual greeting detection and a helpful fallback message directing users to the contact form.
+*   **Preset Knowledge:** Five standard B2B/B2C questions (Reservation, Contracts, Medical Scope, Day-of-Support, Results) with verified multilingual answers.
+*   **Interface:** Right-aligned language switcher buttons in the header for quick accessibility.
+
+### **E. Global Design Standards**
 *   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.
 *   **Mobile Experience:** Multi-card sections use horizontal sliders with `scroll-snap-type`.
 *   **Typography:** Expressive use of Pretendard and Noto Sans SC for multilingual clarity.

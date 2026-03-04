@@ -185,3 +185,8 @@ The following files and design elements are **LOCKED**. The AI must **NOT** modi
     *   **Do not change**: Layout, section order, color hierarchy (alternate-bg usage), or icon sets.
     *   **Do not update**: Structural elements like the B2B Process Slide Modal or the Roadmap items.
     *   **Preserve**: The professional, trust-building aesthetic and the distinct B2B value proposition sections.
+
+*   **Chatbot Design & Functionality**: The multilingual interactive chatbot (`Check봇`) UI and automated logic are finalized.
+    *   **Do not change**: Container height (85vh), header layout (right-aligned language buttons), or compact message styling.
+    *   **Do not update**: The core interaction logic including greeting detection, 5 preset questions/answers, and automated fallback responses.
+    *   **Preserve**: The automated multilingual switching behavior and the "Direct Support" value proposition.

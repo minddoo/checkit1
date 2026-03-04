@@ -160,39 +160,37 @@ body {
 }
 
 /* Hero Container Grid Isolation */
-#individual-hero .container {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 0;
-    width: 100%;
-}
-
 #corporate-hero .container {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 2fr auto 0.2fr; /* 왼쪽 여백을 대폭 넓혀 텍스트를 오른쪽으로 밀어냄 */
     align-items: center;
     gap: 0;
     width: 100%;
 }
 
-/* Hero Text Content - ALL PAGES STRICT CENTER */
-#individual-hero .hero-text-content,
+/* Individual Page Text Content - STRICT CENTER */
+#individual-hero .hero-text-content {
+    grid-column: 2;
+    text-align: center;
+    max-width: 700px;
+    z-index: 2;
+}
+
+/* Corporate Page Text Content - HEAVY RIGHT SHIFT */
 #corporate-hero .hero-text-content {
     grid-column: 2;
     text-align: center;
-    max-width: 800px;
-    margin-left: 0;
-    transform: none; /* 강제 이동 제거하여 정중앙 복원 */
+    max-width: 1000px;
+    padding-left: 200px; /* 강제로 오른쪽으로 추가 이동 */
     z-index: 2;
 }
 
 #corporate-hero .hero-title {
-    white-space: nowrap; /* 제목 1줄 강제 고정 */
+    white-space: nowrap; /* 제목 1줄 고정 */
 }
 
 #corporate-hero .hero-subtitle {
-    white-space: pre-line; /* <br> 태그에 따른 줄바꿈 정확히 반영 */
+    white-space: pre-line; /* 2줄 구조 유지 */
 }
 
 /* Main Page Hero Text (White) */

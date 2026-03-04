@@ -1193,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const authBtn = document.getElementById('platform-auth-btn');
         if (authBtn) {
             const user = firebase.auth().currentUser;
-            authBtn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || 'My Page') : (translations[currentLang]?.['nav_login'] || 'Login');
+            authBtn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || translations['ko']['nav_mypage']) : (translations[currentLang]?.['nav_login'] || translations['ko']['nav_login']);
         }
 
         // Update suggested questions if chatbot is initialized
@@ -1624,10 +1624,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
                 if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
                 const d = translations[currentLang] || translations['ko'];
-                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || 'My Page') : (translations[currentLang]?.['nav_login'] || 'Login');
+                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || translations['ko']['nav_mypage']) : (translations[currentLang]?.['nav_login'] || translations['ko']['nav_login']);
                 btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
                 if(user && !document.getElementById('logout-btn')) {
-                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || 'Logout';
+                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
                     lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
                 }
             });

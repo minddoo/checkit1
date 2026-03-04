@@ -1348,18 +1348,32 @@ document.addEventListener('DOMContentLoaded', () => {
         let platformSub = null;
 
         const renderMyPage = async (user) => {
-            const overlay = document.getElementById('mypage-overlay');
-            if(!overlay) return;
-            overlay.style.display = 'flex';
-            document.body.classList.add('platform-view-active');
-            
             try {
                 const uSnap = await db.collection("users").doc(user.uid).get();
-                const userData = uSnap.data();
+                const userData = uSnap.data() || {};
+
+                if (userData.role === 'user') {
+                    window.location.href = 'mypage_individual.html';
+                    return;
+                }
+
+                const overlay = document.getElementById('mypage-overlay');
+                if(!overlay) return;
+                overlay.style.display = 'flex';
+                document.body.classList.add('platform-view-active');
+            
                 if (userData?.role === 'super_admin') renderAdmin(user);
                 else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
                 else renderUser(user);
-            } catch (err) { renderUser(user); }
+            } catch (err) { 
+                // If reading the user data fails, default to the user view
+                // but first check if we are already on the mypage, to avoid loops
+                if (window.location.pathname.includes('mypage_individual.html')) {
+                    renderUser(user);
+                } else {
+                    window.location.href = 'mypage_individual.html';
+                }
+            }
         };
 
         const renderAdmin = (admin) => {
@@ -1604,6 +1618,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                         }, { merge: true });
                     }
+                    // Explicitly set role to 'user' if logged in via individual tab
+                    if (loginType === 'user') {
+                        await userRef.set({ role: 'user' }, { merge: true });
+                    }
+
 
                     if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
                         await userRef.set({ role: 'super_admin' }, { merge: true });

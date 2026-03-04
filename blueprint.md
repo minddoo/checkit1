@@ -28,6 +28,14 @@ This is the only area permitted for modification.
 *   **Authentication:** Firebase Auth (Google & Email).
 *   **User Roles:** User, Corporate Admin, Super Admin.
 *   **Profile Handling:** Onboarding and Metadata management.
+*   **Individual Customer My Page:**
+    *   **File:** `mypage_individual.html` created for individual user profiles.
+    *   **Styling:** Basic CSS added to `style.css` for the profile page layout.
+    *   **Redirection Logic (`script.js`):**
+        *   Upon successful login as an 'Individual' user (`loginType === 'user'`), users are now redirected to `mypage_individual.html`.
+        *   The `renderMyPage` function has been modified to redirect individual users (`userData.role === 'user'`) to `mypage_individual.html`.
+        *   Ensured that the user's role is explicitly set to 'user' in the database if `loginType` is 'user' during the `handleSuccess` process.
+
 ... (rest of the file remains unchanged)
 
 *   **Languages:** Korean (KO), English (EN), Chinese (CN), Vietnamese (VN).

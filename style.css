@@ -176,20 +176,14 @@ body {
     width: 100%;
 }
 
-/* Individual Page Text Content - STRICT CENTER */
-#individual-hero .hero-text-content {
-    grid-column: 2;
-    text-align: center;
-    max-width: 700px;
-    z-index: 2;
-}
-
-/* Corporate Page Text Content - FORCED RIGHT SHIFT */
+/* Hero Text Content - ALL PAGES STRICT CENTER */
+#individual-hero .hero-text-content,
 #corporate-hero .hero-text-content {
     grid-column: 2;
     text-align: center;
-    max-width: 1000px; /* 너비를 충분히 확보하여 텍스트 깨짐 방지 */
-    transform: translateX(300px); /* 오른쪽으로 강제 300px 이동 */
+    max-width: 800px;
+    margin-left: 0;
+    transform: none; /* 강제 이동 제거하여 정중앙 복원 */
     z-index: 2;
 }
 

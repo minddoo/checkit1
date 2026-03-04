@@ -1343,9 +1343,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof firebase !== 'undefined') {
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.firestore();
+        const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
 
         let platformSub = null;
+        let chatUnsubscribe = null; // To store the Firestore unsubscribe function for chat
+
+        // Utility function to display messages
+        const displayMessage = (messageData, currentUserId) => {
+            const messagesContainer = document.getElementById('user-chat-messages');
+            if (!messagesContainer) return;
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+            messageElement.classList.add(messageData.senderId === currentUserId ? 'sent' : 'received');
+
+            const timestamp = messageData.timestamp ? new Date(messageData.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+
+            if (messageData.fileUrl) {
+                const fileLink = document.createElement('a');
+                fileLink.href = messageData.fileUrl;
+                fileLink.target = '_blank';
+                fileLink.textContent = messageData.fileName || '파일 다운로드';
+                fileLink.classList.add('file-link');
+                messageElement.appendChild(fileLink);
+            } else {
+                messageElement.textContent = messageData.text;
+            }
+            
+            const timestampElement = document.createElement('span');
+            timestampElement.classList.add('timestamp');
+            timestampElement.textContent = timestamp;
+            messageElement.appendChild(timestampElement);
+
+            messagesContainer.appendChild(messageElement);
+        };
+
+        // Utility function to scroll chat to bottom
+        const scrollToBottom = () => {
+            const messagesContainer = document.getElementById('user-chat-messages');
+            if (messagesContainer) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        };
 
         const renderMyPage = async (user) => {
             try {
@@ -1572,9 +1611,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderModal();
         };
 
-        const loadMyPageIndividualData = async (user, db) => {
+        const loadMyPageIndividualData = async (user, db, storage) => {
             if (!user) {
-                // If no user is logged in, redirect to the main page or login
                 window.location.href = 'index.html'; 
                 return;
             }
@@ -1583,59 +1621,252 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailElement = document.getElementById('user-profile-email');
             const packageNameElement = document.getElementById('user-package-name');
             const packageItemsElement = document.getElementById('user-package-items');
+            const messagesContainer = document.getElementById('user-chat-messages');
+            const messageInput = document.getElementById('chat-message-input');
+            const sendButton = document.getElementById('chat-send-btn');
+            const uploadButton = document.getElementById('chat-upload-btn');
+            const fileInput = document.getElementById('chat-file-upload');
 
-            if (nameElement) nameElement.textContent = user.displayName || user.email;
-            if (emailElement) emailElement.textContent = user.email;
             
-            try {
-                const userRef = db.collection("users").doc(user.uid);
-                const doc = await userRef.get();
-                const userData = doc.data();
 
-                if (userData) {
-                    if (nameElement) nameElement.textContent = userData.fullName || user.displayName || user.email;
-                    
-                    const packageName = userData.packageName || "기본 패키지"; // Default package name
-                    const packageItems = userData.packageItems || ["기본 서비스 1", "기본 서비스 2"]; // Default package items
+                        if (nameElement) nameElement.textContent = user.displayName || user.email;
 
-                    if (packageNameElement) packageNameElement.textContent = packageName;
-                    if (packageItemsElement) {
-                        packageItemsElement.innerHTML = '';
-                        packageItems.forEach(item => {
-                            const li = document.createElement('li');
-                            li.textContent = item;
-                            packageItemsElement.appendChild(li);
+                        if (emailElement) emailElement.textContent = user.email;
+
+                        
+
+                        try {
+
+                            const userRef = db.collection("users").doc(user.uid);
+
+                            const doc = await userRef.get();
+
+                            const userData = doc.data();
+
+            
+
+                            if (userData) {
+
+                                if (nameElement) nameElement.textContent = userData.fullName || user.displayName || user.email;
+
+                                
+
+                                const packageName = userData.packageName || "기본 패키지"; 
+
+                                const packageItems = userData.packageItems || ["기본 서비스 1", "기본 서비스 2"]; 
+
+            
+
+                                if (packageNameElement) packageNameElement.textContent = packageName;
+
+                                if (packageItemsElement) {
+
+                                    packageItemsElement.innerHTML = '';
+
+                                    packageItems.forEach(item => {
+
+                                        const li = document.createElement('li');
+
+                                        li.textContent = item;
+
+                                        packageItemsElement.appendChild(li);
+
+                                    });
+
+                                }
+
+                            }
+
+            
+
+                            // Chat functionality
+
+                            if (messagesContainer) {
+
+                                const addChatMessage = (text, sender, isFile = false, fileName = '', fileUrl = '') => {
+
+                                    const messageGroup = messagesContainer.querySelector('.message-group:last-child');
+
+                                    const newMessage = document.createElement('div');
+
+                                    newMessage.classList.add('message-item', sender);
+
+                                    const now = new Date();
+
+                                    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            
+
+                                    let contentHtml = '';
+
+                                    if (isFile) {
+
+                                        contentHtml = `<a href="${fileUrl}" target="_blank" class="file-link"><i class="fas fa-file"></i> ${fileName}</a>`;
+
+                                    } else {
+
+                                        contentHtml = `<p>${text}</p>`;
+
+                                    }
+
+            
+
+                                    newMessage.innerHTML = `
+
+                                        <div class="message-content">${contentHtml}</div>
+
+                                        <div class="message-time">${timeString}</div>
+
+                                    `;
+
+                                    messagesContainer.appendChild(newMessage);
+
+                                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                                };
+
+            
+
+                                const sendMockMessage = (text) => {
+
+                                    addChatMessage(text, 'user');
+
+                                    messageInput.value = '';
+
+            
+
+                                    setTimeout(() => {
+
+                                        addChatMessage('안녕하세요! 무엇을 도와드릴까요?', 'agent');
+
+                                    }, 1000);
+
+                                };
+
+            
+
+                                sendButton.addEventListener('click', () => {
+
+                                    const messageText = messageInput.value.trim();
+
+                                    if (messageText) {
+
+                                        sendMockMessage(messageText);
+
+                                    }
+
+                                });
+
+            
+
+                                messageInput.addEventListener('keypress', (e) => {
+
+                                    if (e.key === 'Enter') {
+
+                                        const messageText = messageInput.value.trim();
+
+                                        if (messageText) {
+
+                                            sendMockMessage(messageText);
+
+                                        }
+
+                                    }
+
+                                });
+
+            
+
+                                // Mock File Upload (visually, not functionally)
+
+                                uploadButton.addEventListener('click', () => {
+
+                                    fileInput.click();
+
+                                });
+
+            
+
+                                fileInput.addEventListener('change', (e) => {
+
+                                    const file = e.target.files[0];
+
+                                    if (file) {
+
+                                        addChatMessage(`File: ${file.name}`, 'user', true, file.name, URL.createObjectURL(file));
+
+                                        fileInput.value = ''; // Clear the file input
+
+                                        setTimeout(() => {
+
+                                            addChatMessage(`파일 ${file.name}이(가) 접수되었습니다. 확인 후 답변드리겠습니다.`, 'agent');
+
+                                        }, 1500);
+
+                                    }
+
+                                });
+
+                            }
+
+                        } catch (error) {
+
+                            console.error("Error loading individual my page data:", error);
+
+                            if (packageNameElement) packageNameElement.textContent = "정보를 불러올 수 없습니다.";
+
+                            if (packageItemsElement) packageItemsElement.innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
+
+                        }
+
+                    };
+
+            
+
+                    const initAuthNav = () => {
+
+                        auth.onAuthStateChanged(user => {
+
+                            const nav = document.querySelector('#language-switcher');
+
+                            let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
+
+                            if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
+
+                            // Instead of setting text directly, call switchLanguage to ensure consistent updates
+
+                            switchLanguage(currentLang); 
+
+                            btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
+
+                            if(user && !document.getElementById('logout-btn')) {
+
+                                const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
+
+                                lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
+
+                            }
+
+            
+
+                            // Check if current page is mypage_individual.html and user is logged in
+
+                            if (window.location.pathname.includes('mypage_individual.html') && user) {
+
+                                loadMyPageIndividualData(user, db, storage);
+
+                            }
+
                         });
-                    }
-                }
-            } catch (error) {
-                console.error("Error loading individual my page data:", error);
-                // Fallback to basic info if Firestore fetch fails
-                if (packageNameElement) packageNameElement.textContent = "정보를 불러올 수 없습니다.";
-                if (packageItemsElement) packageItemsElement.innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
-            }
-        };
 
-        const initAuthNav = () => {
-            auth.onAuthStateChanged(user => {
-                const nav = document.querySelector('#language-switcher');
-                let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
-                if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
-                // Instead of setting text directly, call switchLanguage to ensure consistent updates
-                switchLanguage(currentLang); 
-                btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
-                if(user && !document.getElementById('logout-btn')) {
-                    const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
-                    lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
+                    };
+
+                    initAuthNav();
+
                 }
 
-                // Check if current page is mypage_individual.html and user is logged in
-                if (window.location.pathname.includes('mypage_individual.html') && user) {
-                    loadMyPageIndividualData(user, db);
-                }
+                switchLanguage('ko');
+
             });
-        };
-        initAuthNav();
-    }
-    switchLanguage('ko');
-});
+
+            

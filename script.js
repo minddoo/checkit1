@@ -1555,6 +1555,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             handleSuccess(res.user, key);
                         } else if (currentView === 'signup') {
                             if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
+                            console.log('Attempting to sign up with email:', email, 'and password:', pass); // Added log
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
@@ -1568,7 +1569,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             currentView = 'login';
                             renderModal();
                         }
-                    } catch(e) { alert(e.message); }
+                    } catch(e) {
+                        console.error('Firebase Signup Error:', e.message); // Added log
+                        alert(e.message);
+                    }
                 };
             };
 

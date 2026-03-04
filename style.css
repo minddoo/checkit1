@@ -224,9 +224,9 @@ body {
 
 #corporate-hero .hero-character {
     background-image: url('assets/기.png');
-    width: 450px; /* 배경 높이 500px에 맞춘 최적 크기 */
-    height: 450px;
-    margin-left: -50px; /* 3열 그리드 내에서의 자연스러운 배치 */
+    width: 900px; /* Doubled from 450px */
+    height: 900px; /* Doubled from 450px */
+    margin-left: -100px; /* Adjusted margin for larger size */
 }
 
 /* ----------------------------------
@@ -1355,7 +1355,7 @@ html[lang="vn"] #corporate-hero .hero-title {
         padding: 40px 0 !important;
     }
     #corporate-hero .hero-character {
-        height: 600px !important; /* Increased to 600px (1.5x) */
+        height: 1200px !important; /* Doubled to 1200px (from 600px) */
         max-width: 100% !important;
         width: 100% !important;
     }

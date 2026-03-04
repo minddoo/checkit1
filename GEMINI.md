@@ -180,3 +180,8 @@ The following files and design elements are **LOCKED**. The AI must **NOT** modi
     *   **Do not change**: Layout, color schemes, font styles, image placements, or section ordering.
     *   **Do not update**: Content or text within these sections unless it is a critical bug fix or typo correction.
     *   **Preserve**: The specific hero section styling (white text), card layouts, and responsive behaviors.
+
+*   **`corporate.html` (Corporate Page)**: The entire corporate customer page design, including the total solution hero, necessity section, welfare section, reality pain section, and operational roadmap, is finalized.
+    *   **Do not change**: Layout, section order, color hierarchy (alternate-bg usage), or icon sets.
+    *   **Do not update**: Structural elements like the B2B Process Slide Modal or the Roadmap items.
+    *   **Preserve**: The professional, trust-building aesthetic and the distinct B2B value proposition sections.

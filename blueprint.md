@@ -4,39 +4,38 @@
 
 This project expands the CHECKIT website into a comprehensive, multilingual platform. Key enhancements include the addition of Chinese and Vietnamese language support across the entire site and chatbot, the creation of three new content sections on the main page (Process, Why Us, Reviews), and the development of dedicated pages for individual and corporate clients. A new contact form will also be added to streamline user inquiries.
 
-## 2. Core Features & Design
+## 2. Core Features & Design (LOCKED)
 
-### **Visual & Structural Enhancements**
+The designs for the following pages are finalized and **LOCKED**. No structural or aesthetic changes are permitted without a "Force Override".
 
-*   **New Main Page Sections:** The `index.html` page will be enriched with three new, card-based sections:
-    1.  **Process:** Visually outlines the steps for using the service.
-    2.  **Why CHECKIT:** Highlights key benefits and reasons to choose the service.
-    3.  **Reviews:** Showcases testimonials from satisfied clients.
-*   **Dedicated Client Pages:** 
-    *   `individual.html` & `corporate.html` have been implemented with modern, responsive designs tailored to each client type.
-    *   `individual.html` focuses on personal health check-up support with 1:1 manager services.
-        *   **Expectation Section (March 2026):** A new vertical-stack section highlighting what foreigners expect from Korean medical services: Cost Efficiency, Convenience, Professionalism, and Time Saving. Each item features a large image and description.
-        *   **Reality Section (March 2026):** A contrasting section highlighting the common difficulties foreigners face in Korean hospitals: Language barriers, confusing processes, scheduling uncertainties, and post-checkup accountability issues.
-        *   **Price Structure Section (March 2026):** An explanatory text-only section with a light yellow gradient background and centered text. It clarifies why 외국인 (foreigners) often pay more at hospitals due to "Foreigner Packages" and how CHECKIT provides a more transparent, local-equivalent pricing structure.
-    *   `corporate.html` focuses on health management for groups of foreign employees, productivity enhancement, and workload reduction for health managers.
-*   **Design Standardization (March 2026):**
-    *   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.
-    *   **Hero Alignment:** Corporate and Individual hero sections are perfectly aligned.
-    *   **Text Clarity:** Hero titles and subtitles use high-contrast colors for maximum readability.
-*   **Mobile App-Like Experience:**
-    *   **Horizontal Sliders:** Multi-card sections (Packages, Features, Testimonials) use horizontal sliders on mobile with `scroll-snap-type`.
-    *   **Snap Behavior:** Cards land centered with a preview of adjacent cards.
+### **A. Main Page (`index.html`) - Design Identity: "Trust & Overview"**
+*   **Hero Section:** High-contrast white text on a dark overlay, emphasizing the primary CTA.
+*   **Service For:** Symmetrical card layout for Individual and Corporate entry points.
+*   **Why CHECKIT:** Grid-based features with a "Blinking Character" asset to add life to the page.
+*   **Process:** Clean, numbered step-by-step guide for general users.
+*   **Testimonials:** Professional card layout showcasing client success.
 
-*   **B2B Process Slide (March 2026):**
-    *   **Image-Based Slider:** PPT-style image slider displaying PNG exports of the official service process.
-    *   **Interactive UI:** Full-screen modal with navigation buttons and a page indicator.
+### **B. Individual Page (`individual.html`) - Design Identity: "Empathy & Solution"**
+*   **Hero Section:** Features a large `hero_character.png` for a friendly, approachable 1:1 feel.
+*   **Expectation Section:** Image-heavy vertical list using `#1` to `#4` tags to mirror common foreigner concerns.
+*   **Reality Section:** Diary-style "Pain Point" list with a dark/contrasting background to emphasize the difficulties foreigners face.
+*   **Price Structure Section:** Unique light-yellow radial gradient background. This is a text-centric section designed for deep clarity and trust regarding hospital pricing.
+*   **Packages:** Three-tier card layout (No-Confusion, Zero-Mistake, Total-Safe) with specific feature checklists.
 
-*   **Contact Us Section (March 2026):**
-    *   **Formspree Integration:** Inquiries are now sent directly to `checkit082@gmail.com` via Formspree (`https://formspree.io/f/xaqdljye`).
-    *   **Updated Form Structure:** Simplified to capture Email, Phone (Optional), and Message.
-    *   **Multilingual UI:** Title, subtitle, and button text update instantly based on language selection.
+### **C. Corporate Page (`corporate.html`) - Design Identity: "Efficiency & B2B Professionalism"**
+*   **Hero Section:** Corporate-blue and white theme focusing on productivity and workload reduction. Includes a specialized "Process Slide Modal" button.
+*   **Necessity & Welfare Sections:** Focus on legal compliance, ESG management, and employee retention using professional iconography.
+*   **Reality Pain Section:** Comparison layout highlighting the "Management Gap" between hospital output and corporate needs.
+*   **Solution Value:** A "Hospital/Corporate vs CHECKIT" comparison table to clearly define the non-medical administrative role.
+*   **Operational Roadmap:** A vertical timeline (01 to 06) detailing the exact B2B workflow from list reception to final reporting.
+
+### **D. Global Design Standards**
+*   **Unified Margins:** All pages use a standard `.container` with `max-width: 1200px` and consistent horizontal padding.
+*   **Mobile Experience:** Multi-card sections use horizontal sliders with `scroll-snap-type`.
+*   **Typography:** Expressive use of Pretendard and Noto Sans SC for multilingual clarity.
 
 ## 3. Multilingual Support
+... (rest of the file remains unchanged)
 
 *   **Languages:** Korean (KO), English (EN), Chinese (CN), Vietnamese (VN).
 *   **Real-time Switch:** Entire UI, including the Platform Dashboard and Chatbot, updates instantly when the language is changed.

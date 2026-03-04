@@ -1468,9 +1468,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="display:flex; flex-direction:column; gap:12px;">
                         ${currentView === 'signup' ? `
                         <input type="text" id="signup-name" placeholder="${d['signup_name_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+                        <input type="date" id="signup-dob" placeholder="${d['signup_dob_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="date" id="signup-dob" placeholder="${d['signup_dob_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
                         <div class="signup-privacy-box" style="background:#f9f9f9; padding:10px; border-radius:10px; border:1px solid #eee; font-size:0.75rem; text-align:left;">
                             <h4 style="margin-bottom:5px; font-size:0.8rem;">${d['signup_privacy_title']}</h4>
                             <div style="height:60px; overflow-y:auto; color:#666; margin-bottom:10px; white-space:pre-line;">${d['signup_privacy_content']}</div>

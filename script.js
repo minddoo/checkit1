@@ -1623,9 +1623,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const nav = document.querySelector('#language-switcher');
                 let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
                 if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
-                alert(`DEBUG: currentLang is ${currentLang}, translations[currentLang] is ${translations[currentLang]}, translations[currentLang]?.['nav_login'] is ${translations[currentLang]?.['nav_login']}`); // TEMP DEBUG ALERT
-                const d = translations[currentLang] || translations['ko'];
-                btn.textContent = user ? (translations[currentLang]?.['nav_mypage'] || translations['ko']['nav_mypage']) : (translations[currentLang]?.['nav_login'] || translations['ko']['nav_login']);
+                // Instead of setting text directly, call switchLanguage to ensure consistent updates
+                switchLanguage(currentLang); 
                 btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
                 if(user && !document.getElementById('logout-btn')) {
                     const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];

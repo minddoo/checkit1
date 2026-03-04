@@ -273,11 +273,11 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_google': 'Google 로그인',
             'login_email_placeholder': '이메일',
             'login_pass_placeholder': '비밀번호',
-            'login_btn': '로그인',
             'login_success_msg': '로그인에 성공했습니다! 환영합니다.',
             'signup_title': '회원가입',
             'signup_btn': '회원가입하기',
             'signup_success': '회원가입이 완료되었습니다! 로그인해 주세요.',
+            'signup_welcome_message': 'CHECKIT에 오신 것을 환영합니다!',
             'find_pass_title': '비밀번호 재설정',
             'find_pass_btn': '재설정 메일 보내기',
             'find_pass_success': '비밀번호 재설정 이메일을 보냈습니다.',
@@ -566,6 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_title': 'Sign Up',
             'signup_btn': 'Create Account',
             'signup_success': 'Sign up complete! Please login.',
+            'signup_welcome_message': 'Welcome to CHECKIT!',
             'find_pass_title': 'Reset Password',
             'find_pass_btn': 'Send Reset Email',
             'find_pass_success': 'Reset email has been sent.',
@@ -855,6 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_title': '注册',
             'signup_btn': '立即注册',
             'signup_success': '注册成功！请登录。',
+            'signup_welcome_message': '欢迎来到 CHECKIT！',
             'find_pass_title': '重置密码',
             'find_pass_btn': '发送重置邮件',
             'find_pass_success': '重置邮件已发送。',
@@ -1139,11 +1141,12 @@ document.addEventListener('DOMContentLoaded', () => {
             'login_email_placeholder': 'Email',
             'login_pass_placeholder': 'Mật khẩu',
             'login_btn': 'Đăng nhập',
-            'login_success_msg': '로그인에 성공했습니다! 환영합니다.',
-            'signup_title': '회원가입',
-            'signup_btn': '회원가입하기',
-            'signup_success': '회원가입이 완료되었습니다! 로그인해 주세요.',
-            'find_pass_title': '비밀번호 재설정',
+            'login_success_msg': 'Đăng nhập thành công! Chào mừng.',
+            'signup_title': 'Đăng ký',
+            'signup_btn': 'Đăng ký',
+            'signup_success': 'Đăng ký thành công! Vui lòng đăng nhập.',
+            'signup_welcome_message': 'Chào mừng đến với CHECKIT!',
+            'find_pass_title': 'Đặt lại mật khẩu',
             'find_pass_btn': '재설정 메일 보내기',
             'find_pass_success': '비밀번호 재설정 이메일을 보냈습니다.',
             'switch_to_signup': '계정이 없으신가요? 회원가입',
@@ -1555,9 +1558,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             const res = await auth.createUserWithEmailAndPassword(email, pass);
                             const dob = document.getElementById('signup-dob')?.value;
                             await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                            alert(d['signup_success']);
-                            currentView = 'login';
-                            renderModal();
+                            alert(d['signup_welcome_message']); // Use new welcome message
+                            overlay.remove(); // Close the current modal
+                            currentView = 'login'; // Ensure the view is set to login
+                            showLoginModal(); // Re-open modal to show login form
                         } else if (currentView === 'find') {
                             await auth.sendPasswordResetEmail(email);
                             alert(d['find_pass_success']);

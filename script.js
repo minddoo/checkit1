@@ -1054,6 +1054,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Chatbot Logic ---
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const openChatbotBtn = document.getElementById('open-chatbot');
+    const closeChatbotBtn = document.getElementById('close-chatbot');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+
+    if (openChatbotBtn && chatbotContainer && closeChatbotBtn) {
+        openChatbotBtn.addEventListener('click', () => {
+            chatbotContainer.classList.add('show');
+            document.body.classList.add('chatbot-open');
+            if (chatbotMessages && chatbotMessages.children.length === 0) {
+                addBotMessage(getWelcomeMessage(currentLang));
+            }
+        });
+
+        closeChatbotBtn.addEventListener('click', () => {
+            chatbotContainer.classList.remove('show');
+            document.body.classList.remove('chatbot-open');
+        });
+    }
+
+    function addBotMessage(text) {
+        if (!chatbotMessages) return;
+        const msg = document.createElement('div');
+        msg.className = 'message bot';
+        msg.innerHTML = text;
+        chatbotMessages.appendChild(msg);
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
+    function getWelcomeMessage(lang) {
+        const welcomes = {
+            ko: "안녕하세요! CHECKIT 상담 봇입니다. 무엇을 도와드릴까요?",
+            en: "Hello! This is the CHECKIT support bot. How can I help you today?",
+            cn: "您好！我是 CHECKIT 咨询机器人。有什么我可以帮您的吗？",
+            vn: "Xin chào! Đây là chatbot hỗ trợ của CHECKIT. Tôi có thể giúp gì cho bạn?"
+        };
+        return welcomes[lang] || welcomes['ko'];
+    }
+
     // --- Firebase Setup ---
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",

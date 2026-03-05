@@ -1386,254 +1386,399 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        const renderMyPage = async (user) => {
-            try {
-                const uSnap = await db.collection("users").doc(user.uid).get();
-                const userData = uSnap.data() || {};
-
-                if (userData.role === 'user') {
-                    window.location.href = 'mypage_individual.html';
-                    return;
-                }
-
-                const overlay = document.getElementById('mypage-overlay');
-                if(!overlay) return;
-                overlay.style.display = 'flex';
-                document.body.classList.add('platform-view-active');
-            
-                if (userData?.role === 'super_admin') renderAdmin(user);
-                else if (userData?.role === 'company_admin') renderCorporate(user, userData.companyId);
-                else renderUser(user);
-            } catch (err) { 
-                // If reading the user data fails for a 'user' role, directly redirect to mypage_individual.html
-                window.location.href = 'mypage_individual.html';
-            }
-        };
-
-        const renderAdmin = (admin) => {
-            const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `<div class="mypage-header"><h2>Admin Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div><div class="admin-main" id="admin-stats"></div></div>`;
-            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
-        };
-
-        const renderCorporate = (user, companyId) => {
-            const overlay = document.getElementById('mypage-overlay');
-            overlay.innerHTML = `<div class="mypage-header"><h2>Corporate: ${companyId}</h2><button id="close-mypage" class="lang-btn">Close</button></div>
-                <div class="container" style="padding:40px 0;"><div id="corp-stats" class="corp-stats-grid"></div><div class="info-panel"><table class="admin-table"><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody id="corp-list"></tbody></table></div></div>`;
-            document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
-        };
-
-
-
-        const showLoginModal = () => {
-            if(document.getElementById('login-modal-overlay')) return;
-            const data = translations[currentLang] || translations['ko'];
-            let currentView = 'login'; // 'login', 'signup', 'find'
-            let selectedType = 'user'; // 'user', 'corp', 'master'
-
-            const createModalContent = () => {
-                const d = translations[currentLang] || translations['ko'];
-                let viewTitle = d['login_title'];
-                if(currentView === 'signup') viewTitle = d['signup_title'];
-                if(currentView === 'find') viewTitle = d['find_pass_title'];
-
-                return `
-                <div class="login-modal-box">
-                    <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-                    <h2 class="modal-logo">${viewTitle}</h2>
-                    
-                    ${currentView === 'login' ? `
-                    <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
-                        <div class="p-tab ${selectedType === 'user' ? 'active' : ''}" id="tab-type-user" data-lang-key="login_tab_user">${d['login_tab_user']}</div>
-                        <div class="p-tab ${selectedType === 'corp' ? 'active' : ''}" id="tab-type-corp" data-lang-key="login_tab_corp">${d['login_tab_corp']}</div>
-                        <div class="p-tab ${selectedType === 'master' ? 'active' : ''}" id="tab-type-master" data-lang-key="login_tab_master">${d['login_tab_master']}</div>
-                    </div>` : ''}
-
-                    <div id="key-field-container" style="display:${(currentView === 'login' && selectedType !== 'user') ? 'block' : 'none'}; margin-bottom:20px;">
-                        <input type="text" id="global-admin-key" placeholder="${d['login_key_placeholder']}" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
-                    </div>
-
-                    <div style="display:flex; flex-direction:column; gap:12px;">
-                        ${currentView === 'signup' ? `
-                        <input type="text" id="signup-name" placeholder="${d['signup_name_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="date" id="signup-dob" placeholder="${d['signup_dob_placeholder']}" max="${new Date().toISOString().split('T')[0]}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        <div class="signup-privacy-box" style="background:#f9f9f9; padding:10px; border-radius:10px; border:1px solid #eee; font-size:0.75rem; text-align:left;">
-                            <h4 style="margin-bottom:5px; font-size:0.8rem;">${d['signup_privacy_title']}</h4>
-                            <div style="height:60px; overflow-y:auto; color:#666; margin-bottom:10px; white-space:pre-line;">${d['signup_privacy_content']}</div>
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                                <input type="checkbox" id="privacy-agree"> <span>${d['signup_privacy_agree']}</span>
-                            </label>
-                        </div>
-                        ` : `
-                        <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
-                        ${currentView !== 'find' ? `<input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">` : ''}
-                        `}
-                        
-                        <button id="btn-main-action" class="btn-auth btn-primary">
-                            ${currentView === 'login' ? d['login_btn'] : (currentView === 'signup' ? d['signup_btn'] : d['find_pass_btn'])}
-                        </button>
-
-                        <button id="btn-google-auth" class="btn-auth btn-google">${d['login_google']}</button>
-
-                        ${currentView === 'login' ? `
-                        <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
-                        <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
-                            <span id="go-signup" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_signup']}</span>
-                            <span id="go-find" style="color:#888; cursor:pointer;">${d['switch_to_find']}</span>
-                        </div>` : `
-                        <div style="text-align:center; font-size:0.85rem; margin-top:10px;">
-                            <span id="go-login" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_login']}</span>
-                        </div>`}
-                    </div>
-                </div>`;
-            };
-
-            const overlay = document.createElement('div');
-            overlay.id = 'login-modal-overlay';
-            overlay.style.display = 'flex';
-            document.body.appendChild(overlay);
-
-            const renderModal = () => {
-                overlay.innerHTML = createModalContent();
-                attachEvents();
-            };
-
-            const attachEvents = () => {
-                const d = translations[currentLang] || translations['ko'];
-                document.getElementById('close-login-modal').onclick = () => overlay.remove();
-                
-                if(currentView === 'login') {
-                    document.getElementById('tab-type-user').onclick = () => { selectedType = 'user'; renderModal(); };
-                    document.getElementById('tab-type-corp').onclick = () => { selectedType = 'corp'; renderModal(); };
-                    document.getElementById('tab-type-master').onclick = () => { selectedType = 'master'; renderModal(); };
-                    document.getElementById('go-signup').onclick = () => { currentView = 'signup'; renderModal(); };
-                    document.getElementById('go-find').onclick = () => { currentView = 'find'; renderModal(); };
-                } else {
-                    document.getElementById('go-login').onclick = () => { currentView = 'login'; renderModal(); };
-                }
-
-                document.getElementById('btn-google-auth').onclick = async () => {
-                    const privacyAgree = document.getElementById('privacy-agree');
-                    if (currentView === 'signup' && privacyAgree && !privacyAgree.checked) {
-                        alert(d['signup_privacy_error']);
-                        return;
-                    }
-                    try { 
-                        const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); 
-                        handleSuccess(res.user); 
-                    } 
-                    catch(e) { alert(e.message); }
-                };
-
-                document.getElementById('btn-main-action').onclick = async () => {
-                    const btnMainAction = document.getElementById('btn-main-action');
-                    btnMainAction.disabled = true; // Disable button immediately
-                    const email = document.getElementById('auth-email').value.trim();
-                    const pass = document.getElementById('auth-pass')?.value;
-                    const name = document.getElementById('signup-name')?.value;
-                    const key = document.getElementById('global-admin-key')?.value.trim();
-                    const privacyAgree = document.getElementById('privacy-agree');
+                const renderMyPage = async (user) => {
 
                     try {
-                        if (currentView === 'login') {
-                            const res = await auth.signInWithEmailAndPassword(email, pass);
-                            handleSuccess(res.user, key);
-                        } else if (currentView === 'signup') {
-                            if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
 
-                            const res = await auth.createUserWithEmailAndPassword(email, pass);
-                            const dob = document.getElementById('signup-dob')?.value;
-                            // Temporarily comment out Firestore set to debug silent failure
-                            // await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                            alert(d['signup_welcome_message']);
-                            overlay.remove(); // Close the current (signup) modal
-                            currentView = 'login';
-                            showLoginModal(); // Open a *new* modal, showing login form
-                        } else if (currentView === 'find') {
-                            await auth.sendPasswordResetEmail(email);
-                            alert(d['find_pass_success']);
-                            currentView = 'login';
-                            renderModal();
+                        const uSnap = await db.collection("users").doc(user.uid).get();
+
+                        const userData = uSnap.data() || {};
+
+        
+
+                        if (userData.role === 'user') {
+
+                            window.location.href = 'mypage_individual.html';
+
+                            return;
+
                         }
-                    } catch(e) {
 
-                        alert(e.message);
-                    } finally {
-                        btnMainAction.disabled = false; // Re-enable button
-                    }
-                };
-            };
+                        if (userData.role === 'company_admin') {
 
-            const handleSuccess = async (user, key = "") => {
-                if (!user) return;
-                const loginType = selectedType;
-                
-                // 1. Remove modal IMMEDIATELY
-                overlay.remove(); 
+                            window.location.href = 'mypage_corporate.html';
 
+                            return;
 
+                        }
 
-                // 3. Process DB updates in background
-                try {
-                    const userRef = db.collection("users").doc(user.uid);
-                    const doc = await userRef.get();
+        
+
+                        const overlay = document.getElementById('mypage-overlay');
+
+                        if(!overlay) return;
+
+                        overlay.style.display = 'flex';
+
+                        document.body.classList.add('platform-view-active');
+
                     
-                    if (!doc.exists) {
-                        // New User (Sign-up via Google or missing profile)
-                        await userRef.set({ 
-                            fullName: user.displayName || "User", 
-                            email: user.email,
-                            role: 'user', 
-                            packageName: '기본 패키지', // Default package name for new users
-                            packageItems: ['상담 지원', '예약 대행'], // Default package items
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp() 
-                        }, { merge: true });
+
+                        if (userData?.role === 'super_admin') renderAdmin(user);
+
+                        else renderUser(user); // Fallback for other roles or unassigned
+
+                    } catch (err) { 
+
+                        console.error("Error in renderMyPage:", err);
+
+                        // Fallback for any error, maybe redirect to home
+
+                        window.location.href = 'index.html';
+
                     }
-                    // Explicitly set role to 'user' if logged in via individual tab
-                    if (loginType === 'user') {
-                        await userRef.set({ role: 'user' }, { merge: true });
-                    }
 
+                };
 
-                    if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
-                        await userRef.set({ role: 'super_admin' }, { merge: true });
-                    } else if (loginType === 'corp' && key.startsWith("COMP_")) {
-                        await userRef.set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
-                    }
-                } catch (dbErr) { console.error("Background DB Error:", dbErr); }
-                
-                renderMyPage(user);
-            };
+        
 
-            renderModal();
-        };
+                const renderAdmin = (admin) => {
 
-        const loadMyPageIndividualData = async (user, db, storage) => {
-            if (!user) {
-                window.location.href = 'index.html'; 
-                return;
-            }
+                    const overlay = document.getElementById('mypage-overlay');
 
-            const nameElement = document.getElementById('user-profile-name');
-            const emailElement = document.getElementById('user-profile-email');
-            const packageNameElement = document.getElementById('user-package-name');
-            const packageItemsElement = document.getElementById('user-package-items');
-            const messagesContainer = document.getElementById('user-chat-messages');
-            const messageInput = document.getElementById('chat-message-input');
-            const sendButton = document.getElementById('chat-send-btn');
-            const uploadButton = document.getElementById('chat-upload-btn');
-            const fileInput = document.getElementById('chat-file-upload');
+                    overlay.innerHTML = `<div class="mypage-header"><h2>Admin Dashboard</h2><button id="close-mypage" class="lang-btn">Close</button></div>
 
-            
+                        <div class="admin-grid"><div class="admin-sidebar" id="admin-user-list"></div><div class="admin-main" id="admin-stats"></div></div>`;
 
-                        if (nameElement) nameElement.textContent = user.displayName || user.email;
+                    document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
 
-                        if (emailElement) emailElement.textContent = user.email;
+                };
+
+        
+
+                const renderCorporate = (user, companyId) => {
+
+                    // This function is now deprecated in favor of mypage_corporate.html
+
+                    // Kept for potential future use or reference
+
+                    const overlay = document.getElementById('mypage-overlay');
+
+                    overlay.innerHTML = `<div class="mypage-header"><h2>Corporate: ${companyId}</h2><button id="close-mypage" class="lang-btn">Close</button></div>
+
+                        <div class="container" style="padding:40px 0;"><div id="corp-stats" class="corp-stats-grid"></div><div class="info-panel"><table class="admin-table"><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody id="corp-list"></tbody></table></div></div>`;
+
+                    document.getElementById('close-mypage').onclick = () => { overlay.style.display='none'; document.body.classList.remove('platform-view-active'); if(platformSub) platformSub(); };
+
+                };
+
+        
+
+        
+
+        
+
+                const showLoginModal = () => {
+
+                    if(document.getElementById('login-modal-overlay')) return;
+
+                    const data = translations[currentLang] || translations['ko'];
+
+                    let currentView = 'login'; // 'login', 'signup', 'find'
+
+                    let selectedType = 'user'; // 'user', 'corp', 'master'
+
+        
+
+                    const createModalContent = () => {
+
+                        const d = translations[currentLang] || translations['ko'];
+
+                        let viewTitle = d['login_title'];
+
+                        if(currentView === 'signup') viewTitle = d['signup_title'];
+
+                        if(currentView === 'find') viewTitle = d['find_pass_title'];
+
+        
+
+                        return `
+
+                        <div class="login-modal-box">
+
+                            <button id="close-login-modal" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+
+                            <h2 class="modal-logo">${viewTitle}</h2>
+
+                            
+
+                            ${currentView === 'login' ? `
+
+                            <div class="platform-tabs" style="justify-content:center; margin-bottom:20px;">
+
+                                <div class="p-tab ${selectedType === 'user' ? 'active' : ''}" id="tab-type-user" data-lang-key="login_tab_user">${d['login_tab_user']}</div>
+
+                                <div class="p-tab ${selectedType === 'corp' ? 'active' : ''}" id="tab-type-corp" data-lang-key="login_tab_corp">${d['login_tab_corp']}</div>
+
+                                <div class="p-tab ${selectedType === 'master' ? 'active' : ''}" id="tab-type-master" data-lang-key="login_tab_master">${d['login_tab_master']}</div>
+
+                            </div>` : ''}
+
+        
+
+                            <div id="key-field-container" style="display:${(currentView === 'login' && selectedType !== 'user') ? 'block' : 'none'}; margin-bottom:20px;">
+
+                                <input type="text" id="global-admin-key" placeholder="${d['login_key_placeholder']}" style="padding:12px; border:2px solid var(--primary-color); border-radius:10px; width:100%; text-align:center;">
+
+                            </div>
+
+        
+
+                            <div style="display:flex; flex-direction:column; gap:12px;">
+
+                                ${currentView === 'signup' ? `
+
+                                <input type="text" id="signup-name" placeholder="${d['signup_name_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+
+                                <input type="date" id="signup-dob" placeholder="${d['signup_dob_placeholder']}" max="${new Date().toISOString().split('T')[0]}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+
+                                <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+
+                                <input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+
+                                <div class="signup-privacy-box" style="background:#f9f9f9; padding:10px; border-radius:10px; border:1px solid #eee; font-size:0.75rem; text-align:left;">
+
+                                    <h4 style="margin-bottom:5px; font-size:0.8rem;">${d['signup_privacy_title']}</h4>
+
+                                    <div style="height:60px; overflow-y:auto; color:#666; margin-bottom:10px; white-space:pre-line;">${d['signup_privacy_content']}</div>
+
+                                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+
+                                        <input type="checkbox" id="privacy-agree"> <span>${d['signup_privacy_agree']}</span>
+
+                                    </label>
+
+                                </div>
+
+                                ` : `
+
+                                <input type="email" id="auth-email" placeholder="${d['login_email_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">
+
+                                ${currentView !== 'find' ? `<input type="password" id="auth-pass" placeholder="${d['login_pass_placeholder']}" style="padding:12px; border:1px solid #ddd; border-radius:10px;">` : ''}
+
+                                `}
+
+                                
+
+                                <button id="btn-main-action" class="btn-auth btn-primary">
+
+                                    ${currentView === 'login' ? d['login_btn'] : (currentView === 'signup' ? d['signup_btn'] : d['find_pass_btn'])}
+
+                                </button>
+
+        
+
+                                <button id="btn-google-auth" class="btn-auth btn-google">${d['login_google']}</button>
+
+        
+
+                                ${currentView === 'login' ? `
+
+                                <hr style="border:none; border-top:1px solid #eee; margin:10px 0;">
+
+                                <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+
+                                    <span id="go-signup" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_signup']}</span>
+
+                                    <span id="go-find" style="color:#888; cursor:pointer;">${d['switch_to_find']}</span>
+
+                                </div>` : `
+
+                                <div style="text-align:center; font-size:0.85rem; margin-top:10px;">
+
+                                    <span id="go-login" style="color:var(--primary-color); cursor:pointer; font-weight:600;">${d['switch_to_login']}</span>
+
+                                </div>`}
+
+                            </div>
+
+                        </div>`;
+
+                    };
+
+        
+
+                    const overlay = document.createElement('div');
+
+                    overlay.id = 'login-modal-overlay';
+
+                    overlay.style.display = 'flex';
+
+                    document.body.appendChild(overlay);
+
+        
+
+                    const renderModal = () => {
+
+                        overlay.innerHTML = createModalContent();
+
+                        attachEvents();
+
+                    };
+
+        
+
+                    const attachEvents = () => {
+
+                        const d = translations[currentLang] || translations['ko'];
+
+                        document.getElementById('close-login-modal').onclick = () => overlay.remove();
 
                         
+
+                        if(currentView === 'login') {
+
+                            document.getElementById('tab-type-user').onclick = () => { selectedType = 'user'; renderModal(); };
+
+                            document.getElementById('tab-type-corp').onclick = () => { selectedType = 'corp'; renderModal(); };
+
+                            document.getElementById('tab-type-master').onclick = () => { selectedType = 'master'; renderModal(); };
+
+                            document.getElementById('go-signup').onclick = () => { currentView = 'signup'; renderModal(); };
+
+                            document.getElementById('go-find').onclick = () => { currentView = 'find'; renderModal(); };
+
+                        } else {
+
+                            document.getElementById('go-login').onclick = () => { currentView = 'login'; renderModal(); };
+
+                        }
+
+        
+
+                        document.getElementById('btn-google-auth').onclick = async () => {
+
+                            const privacyAgree = document.getElementById('privacy-agree');
+
+                            if (currentView === 'signup' && privacyAgree && !privacyAgree.checked) {
+
+                                alert(d['signup_privacy_error']);
+
+                                return;
+
+                            }
+
+                            try { 
+
+                                const res = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); 
+
+                                handleSuccess(res.user); 
+
+                            } 
+
+                            catch(e) { alert(e.message); }
+
+                        };
+
+        
+
+                        document.getElementById('btn-main-action').onclick = async () => {
+
+                            const btnMainAction = document.getElementById('btn-main-action');
+
+                            btnMainAction.disabled = true; // Disable button immediately
+
+                            const email = document.getElementById('auth-email').value.trim();
+
+                            const pass = document.getElementById('auth-pass')?.value;
+
+                            const name = document.getElementById('signup-name')?.value;
+
+                            const key = document.getElementById('global-admin-key')?.value.trim();
+
+                            const privacyAgree = document.getElementById('privacy-agree');
+
+        
+
+                            try {
+
+                                if (currentView === 'login') {
+
+                                    const res = await auth.signInWithEmailAndPassword(email, pass);
+
+                                    handleSuccess(res.user, key);
+
+                                } else if (currentView === 'signup') {
+
+                                    if(!privacyAgree.checked) { alert(d['signup_privacy_error']); return; }
+
+        
+
+                                    const res = await auth.createUserWithEmailAndPassword(email, pass);
+
+                                    const dob = document.getElementById('signup-dob')?.value;
+
+                                    // Temporarily comment out Firestore set to debug silent failure
+
+                                    // await db.collection("users").doc(res.user.uid).set({ fullName: name, dob: dob, role: 'user', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+
+                                    alert(d['signup_welcome_message']);
+
+                                    overlay.remove(); // Close the current (signup) modal
+
+                                    currentView = 'login';
+
+                                    showLoginModal(); // Open a *new* modal, showing login form
+
+                                } else if (currentView === 'find') {
+
+                                    await auth.sendPasswordResetEmail(email);
+
+                                    alert(d['find_pass_success']);
+
+                                    currentView = 'login';
+
+                                    renderModal();
+
+                                }
+
+                            } catch(e) {
+
+        
+
+                                alert(e.message);
+
+                            } finally {
+
+                                btnMainAction.disabled = false; // Re-enable button
+
+                            }
+
+                        };
+
+                    };
+
+        
+
+                    const handleSuccess = async (user, key = "") => {
+
+                        if (!user) return;
+
+                        const loginType = selectedType;
+
+                        
+
+                        // 1. Remove modal IMMEDIATELY
+
+                        overlay.remove(); 
+
+        
+
+        
+
+        
+
+                        // 3. Process DB updates in background
 
                         try {
 
@@ -1641,284 +1786,676 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             const doc = await userRef.get();
 
-                            const userData = doc.data();
+                            
 
-            
+                            if (!doc.exists) {
 
-                            if (userData) {
+                                // New User (Sign-up via Google or missing profile)
 
-                                if (nameElement) nameElement.textContent = userData.fullName || user.displayName || user.email;
+                                await userRef.set({ 
+
+                                    fullName: user.displayName || "User", 
+
+                                    email: user.email,
+
+                                    role: 'user', 
+
+                                    packageName: '기본 패키지', // Default package name for new users
+
+                                    packageItems: ['상담 지원', '예약 대행'], // Default package items
+
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+
+                                }, { merge: true });
+
+                            }
+
+                            // Explicitly set role to 'user' if logged in via individual tab
+
+                            if (loginType === 'user') {
+
+                                await userRef.set({ role: 'user' }, { merge: true });
+
+                            }
+
+        
+
+        
+
+                            if (loginType === 'master' && key === "CHECKIT_MASTER_2026") {
+
+                                await userRef.set({ role: 'super_admin' }, { merge: true });
+
+                            } else if (loginType === 'corp' && key.startsWith("COMP_")) {
+
+                                await userRef.set({ role: 'company_admin', companyId: key.replace("COMP_", "") }, { merge: true });
+
+                            }
+
+                        } catch (dbErr) { console.error("Background DB Error:", dbErr); }
+
+                        
+
+                        renderMyPage(user);
+
+                    };
+
+        
+
+                    renderModal();
+
+                };
+
+        
+
+                const loadMyPageIndividualData = async (user, db, storage) => {
+
+                    if (!user) {
+
+                        window.location.href = 'index.html'; 
+
+                        return;
+
+                    }
+
+        
+
+                    const nameElement = document.getElementById('user-profile-name');
+
+                    const emailElement = document.getElementById('user-profile-email');
+
+                    const packageNameElement = document.getElementById('user-package-name');
+
+                    const packageItemsElement = document.getElementById('user-package-items');
+
+                    const messagesContainer = document.getElementById('user-chat-messages');
+
+                    const messageInput = document.getElementById('chat-message-input');
+
+                    const sendButton = document.getElementById('chat-send-btn');
+
+                    const uploadButton = document.getElementById('chat-upload-btn');
+
+                    const fileInput = document.getElementById('chat-file-upload');
+
+        
+
+                    
+
+        
+
+                                if (nameElement) nameElement.textContent = user.displayName || user.email;
+
+        
+
+                                if (emailElement) emailElement.textContent = user.email;
+
+        
 
                                 
 
-                                const packageName = userData.packageName || "기본 패키지"; 
+        
 
-                                const packageItems = userData.packageItems || ["기본 서비스 1", "기본 서비스 2"]; 
+                                try {
 
-            
+        
 
-                                if (packageNameElement) packageNameElement.textContent = packageName;
+                                    const userRef = db.collection("users").doc(user.uid);
 
-                                if (packageItemsElement) {
+        
 
-                                    packageItemsElement.innerHTML = '';
+                                    const doc = await userRef.get();
 
-                                    packageItems.forEach(item => {
+        
 
-                                        const li = document.createElement('li');
+                                    const userData = doc.data();
 
-                                        li.textContent = item;
+        
 
-                                        packageItemsElement.appendChild(li);
+                    
 
-                                    });
+        
 
-                                }
+                                    if (userData) {
 
-                            }
+        
 
-            
+                                        if (nameElement) nameElement.textContent = userData.fullName || user.displayName || user.email;
 
-                            // Chat functionality
+        
 
-                            if (messagesContainer) {
+                                        
 
-                                const addChatMessage = (text, sender, isFile = false, fileName = '', fileUrl = '') => {
+        
 
-                                    const messageGroup = messagesContainer.querySelector('.message-group:last-child');
+                                        const packageName = userData.packageName || "기본 패키지"; 
 
-                                    const newMessage = document.createElement('div');
+        
 
-                                    newMessage.classList.add('message-item', sender);
+                                        const packageItems = userData.packageItems || ["기본 서비스 1", "기본 서비스 2"]; 
 
-                                    const now = new Date();
+        
 
-                                    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
 
-            
+        
 
-                                    let contentHtml = '';
+                                        if (packageNameElement) packageNameElement.textContent = packageName;
 
-                                    if (isFile) {
+        
 
-                                        contentHtml = `<a href="${fileUrl}" target="_blank" class="file-link"><i class="fas fa-file"></i> ${fileName}</a>`;
+                                        if (packageItemsElement) {
 
-                                    } else {
+        
 
-                                        contentHtml = `<p>${text}</p>`;
+                                            packageItemsElement.innerHTML = '';
 
-                                    }
+        
 
-            
+                                            packageItems.forEach(item => {
 
-                                    newMessage.innerHTML = `
+        
 
-                                        <div class="message-content">${contentHtml}</div>
+                                                const li = document.createElement('li');
 
-                                        <div class="message-time">${timeString}</div>
+        
 
-                                    `;
+                                                li.textContent = item;
 
-                                    messagesContainer.appendChild(newMessage);
+        
 
-                                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                                                packageItemsElement.appendChild(li);
 
-                                };
+        
 
-            
+                                            });
 
-                                const sendMockMessage = (text) => {
-
-                                    addChatMessage(text, 'user');
-
-                                    messageInput.value = '';
-
-            
-
-                                    setTimeout(() => {
-
-                                        addChatMessage('안녕하세요! 무엇을 도와드릴까요?', 'agent');
-
-                                    }, 1000);
-
-                                };
-
-            
-
-                                sendButton.addEventListener('click', () => {
-
-                                    const messageText = messageInput.value.trim();
-
-                                    if (messageText) {
-
-                                        sendMockMessage(messageText);
-
-                                    }
-
-                                });
-
-            
-
-                                messageInput.addEventListener('keypress', (e) => {
-
-                                    if (e.key === 'Enter') {
-
-                                        const messageText = messageInput.value.trim();
-
-                                        if (messageText) {
-
-                                            sendMockMessage(messageText);
+        
 
                                         }
 
+        
+
                                     }
 
-                                });
+        
 
-            
+                    
 
-                                // Mock File Upload (visually, not functionally)
+        
 
-                                uploadButton.addEventListener('click', () => {
+                                    // Chat functionality
 
-                                    fileInput.click();
+        
 
-                                });
+                                    if (messagesContainer) {
 
-            
+        
 
-                                fileInput.addEventListener('change', (e) => {
+                                        const addChatMessage = (text, sender, isFile = false, fileName = '', fileUrl = '') => {
 
-                                    const file = e.target.files[0];
+        
 
-                                    if (file) {
+                                            const messageGroup = messagesContainer.querySelector('.message-group:last-child');
 
-                                        addChatMessage(`File: ${file.name}`, 'user', true, file.name, URL.createObjectURL(file));
+        
 
-                                        fileInput.value = ''; // Clear the file input
+                                            const newMessage = document.createElement('div');
 
-                                                                                setTimeout(() => {
+        
 
-                                                                                    addChatMessage(`파일 ${file.name}이(가) 접수되었습니다. 확인 후 답변드리겠습니다.`, 'agent');
+                                            newMessage.classList.add('message-item', sender);
 
-                                                                                }, 1500);
+        
 
-                                                                            }
+                                            const now = new Date();
 
-                                                                        });
+        
 
-                                                                    }
+                                            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                                        
+        
 
-                                                                    const uploadResultsBtn = document.getElementById('upload-results-btn');
+                    
 
-                                                                    const resultsFileUpload = document.getElementById('results-file-upload');
+        
 
-                                        
+                                            let contentHtml = '';
 
-                                                                    if (uploadResultsBtn && resultsFileUpload) {
+        
 
-                                                                        uploadResultsBtn.addEventListener('click', () => {
+                                            if (isFile) {
 
-                                                                            resultsFileUpload.click();
+        
 
-                                                                        });
+                                                contentHtml = `<a href="${fileUrl}" target="_blank" class="file-link"><i class="fas fa-file"></i> ${fileName}</a>`;
 
-                                        
+        
 
-                                                                        resultsFileUpload.addEventListener('change', async (e) => {
+                                            } else {
 
-                                                                            const file = e.target.files[0];
+        
 
-                                                                            if (file) {
+                                                contentHtml = `<p>${text}</p>`;
 
-                                                                                const storageRef = storage.ref();
+        
 
-                                                                                const fileRef = storageRef.child(`user_uploads/${user.uid}/results/${file.name}`);
+                                            }
 
-                                        
+        
 
-                                                                                try {
+                    
 
-                                                                                    await fileRef.put(file);
+        
 
-                                                                                    alert(`${file.name} 파일이 성공적으로 업로드되었습니다!`);
+                                            newMessage.innerHTML = `
 
-                                                                                } catch (error) {
+        
 
-                                                                                    console.error("파일 업로드 중 오류 발생:", error);
+                                                <div class="message-content">${contentHtml}</div>
 
-                                                                                    alert(`파일 업로드 실패: ${error.message}`);
+        
 
-                                                                                }
+                                                <div class="message-time">${timeString}</div>
 
-                                                                                resultsFileUpload.value = ''; // Clear the file input
+        
 
-                                                                            }
+                                            `;
 
-                                                                        });
+        
 
-                                                                    }
+                                            messagesContainer.appendChild(newMessage);
 
-                                                                } catch (error) {
+        
 
-                            console.error("Error loading individual my page data:", error);
+                                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                            if (packageNameElement) packageNameElement.textContent = "정보를 불러올 수 없습니다.";
+        
 
-                            if (packageItemsElement) packageItemsElement.innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
+                                        };
 
-                        }
+        
 
-                    };
+                    
 
-            
+        
 
-                    const initAuthNav = () => {
+                                        const sendMockMessage = (text) => {
 
-                        auth.onAuthStateChanged(user => {
+        
 
-                            const nav = document.querySelector('#language-switcher');
+                                            addChatMessage(text, 'user');
 
-                            let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
+        
 
-                            if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
+                                            messageInput.value = '';
 
-                            // Instead of setting text directly, call switchLanguage to ensure consistent updates
+        
 
-                            switchLanguage(currentLang); 
+                    
 
-                            btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
+        
 
-                            if(user && !document.getElementById('logout-btn')) {
+                                            setTimeout(() => {
 
-                                const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
+        
 
-                                lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
+                                                addChatMessage('안녕하세요! 무엇을 도와드릴까요?', 'agent');
 
-                            }
+        
 
-            
+                                            }, 1000);
 
-                            // Check if current page is mypage_individual.html and user is logged in
+        
 
-                            if (window.location.pathname.includes('mypage_individual.html') && user) {
+                                        };
 
-                                loadMyPageIndividualData(user, db, storage);
+        
 
-                            }
+                    
+
+        
+
+                                        sendButton.addEventListener('click', () => {
+
+        
+
+                                            const messageText = messageInput.value.trim();
+
+        
+
+                                            if (messageText) {
+
+        
+
+                                                sendMockMessage(messageText);
+
+        
+
+                                            }
+
+        
+
+                                        });
+
+        
+
+                    
+
+        
+
+                                        messageInput.addEventListener('keypress', (e) => {
+
+        
+
+                                            if (e.key === 'Enter') {
+
+        
+
+                                                const messageText = messageInput.value.trim();
+
+        
+
+                                                if (messageText) {
+
+        
+
+                                                    sendMockMessage(messageText);
+
+        
+
+                                                }
+
+        
+
+                                            }
+
+        
+
+                                        });
+
+        
+
+                    
+
+        
+
+                                        // Mock File Upload (visually, not functionally)
+
+        
+
+                                        uploadButton.addEventListener('click', () => {
+
+        
+
+                                            fileInput.click();
+
+        
+
+                                        });
+
+        
+
+                    
+
+        
+
+                                        fileInput.addEventListener('change', (e) => {
+
+        
+
+                                            const file = e.target.files[0];
+
+        
+
+                                            if (file) {
+
+        
+
+                                                addChatMessage(`File: ${file.name}`, 'user', true, file.name, URL.createObjectURL(file));
+
+        
+
+                                                fileInput.value = ''; // Clear the file input
+
+        
+
+                                                setTimeout(() => {
+
+        
+
+                                                    addChatMessage(`파일 ${file.name}이(가) 접수되었습니다. 확인 후 답변드리겠습니다.`, 'agent');
+
+        
+
+                                                }, 1500);
+
+        
+
+                                            }
+
+        
+
+                                        });
+
+                                    }
+
+        
+
+                                    const uploadResultsBtn = document.getElementById('upload-results-btn');
+
+                                    const resultsFileUpload = document.getElementById('results-file-upload');
+
+        
+
+                                    if (uploadResultsBtn && resultsFileUpload) {
+
+                                        uploadResultsBtn.addEventListener('click', () => {
+
+                                            resultsFileUpload.click();
+
+                                        });
+
+        
+
+                                        resultsFileUpload.addEventListener('change', async (e) => {
+
+                                            const file = e.target.files[0];
+
+                                            if (file) {
+
+                                                const storageRef = storage.ref();
+
+                                                const fileRef = storageRef.child(`user_uploads/${user.uid}/results/${file.name}`);
+
+        
+
+                                                try {
+
+                                                    await fileRef.put(file);
+
+                                                    alert(`${file.name} 파일이 성공적으로 업로드되었습니다!`);
+
+                                                } catch (error) {
+
+                                                    console.error("파일 업로드 중 오류 발생:", error);
+
+                                                    alert(`파일 업로드 실패: ${error.message}`);
+
+                                                }
+
+                                                resultsFileUpload.value = ''; // Clear the file input
+
+                                            }
+
+                                        });
+
+                                    }
+
+                                } catch (error) {
+
+                                    console.error("Error loading individual my page data:", error);
+
+                                    if (packageNameElement) packageNameElement.textContent = "정보를 불러올 수 없습니다.";
+
+                                    if (packageItemsElement) packageItemsElement.innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
+
+                                }
+
+                            };
+
+                
+
+                const loadMyPageCorporateData = async (user, db) => {
+
+                    if (!user) {
+
+                        window.location.href = 'index.html'; 
+
+                        return;
+
+                    }
+
+        
+
+                    try {
+
+                        const userDoc = await db.collection("users").doc(user.uid).get();
+
+                        const userData = userDoc.data();
+
+                        const companyId = userData.companyId || 'Unknown Company';
+
+        
+
+                        document.getElementById('company-name').textContent = `${companyId} 관리자 페이지`;
+
+        
+
+                        // Mock data for employees
+
+                        const employees = [
+
+                            { name: 'John Doe', status: 'completed', date: '2024-07-20' },
+
+                            { name: 'Jane Smith', status: 'pending', date: '2024-08-05' },
+
+                            { name: 'Peter Jones', status: 'expired', date: '2024-06-30' },
+
+                            { name: 'Susan Williams', status: 'completed', date: '2024-07-22' },
+
+                        ];
+
+        
+
+                        const employeeListBody = document.getElementById('employee-list-body');
+
+                        employeeListBody.innerHTML = '';
+
+        
+
+                        employees.forEach(emp => {
+
+                            const row = document.createElement('tr');
+
+                            row.innerHTML = `
+
+                                <td>${emp.name}</td>
+
+                                <td><span class="status-pill ${emp.status}">${emp.status}</span></td>
+
+                                <td>${emp.date}</td>
+
+                                <td><button class="btn-icon"><i class="fas fa-eye"></i></button></td>
+
+                            `;
+
+                            employeeListBody.appendChild(row);
 
                         });
 
-                    };
+        
 
-                    initAuthNav();
+                        // Update stats
 
-                }
+                        document.getElementById('total-employees').textContent = employees.length;
 
-                switchLanguage('ko');
+                        document.getElementById('pending-checkups').textContent = employees.filter(e => e.status === 'pending').length;
 
-            });
+                        document.getElementById('completed-checkups').textContent = employees.filter(e => e.status === 'completed').length;
+
+                        document.getElementById('expired-checkups').textContent = employees.filter(e => e.status === 'expired').length;
+
+        
+
+                    } catch (error) {
+
+                        console.error("Error loading corporate my page data:", error);
+
+                        document.getElementById('company-name').textContent = "데이터를 불러올 수 없습니다.";
+
+                    }
+
+                };
+
+        
+
+                const initAuthNav = () => {
+
+                    auth.onAuthStateChanged(user => {
+
+                        const nav = document.querySelector('#language-switcher');
+
+                        let btn = document.getElementById('platform-auth-btn') || document.createElement('button');
+
+                        if(!btn.id) { btn.id='platform-auth-btn'; btn.className='lang-btn auth-main-btn'; nav.appendChild(btn); }
+
+                        
+
+                        switchLanguage(currentLang); 
+
+        
+
+                        btn.onclick = () => user ? renderMyPage(user) : showLoginModal();
+
+        
+
+                        if(user && !document.getElementById('logout-btn')) {
+
+                            const lo = document.createElement('button'); lo.id='logout-btn'; lo.className='lang-btn logout-btn'; lo.textContent=translations[currentLang]?.['nav_logout'] || translations['ko']['nav_logout'];
+
+                            lo.onclick = () => auth.signOut().then(() => location.reload()); nav.appendChild(lo);
+
+                        }
+
+        
+
+                        if (window.location.pathname.includes('mypage_individual.html') && user) {
+
+                            loadMyPageIndividualData(user, db, storage);
+
+                        }
+
+                        if (window.location.pathname.includes('mypage_corporate.html') && user) {
+
+                            loadMyPageCorporateData(user, db);
+
+                        }
+
+                    });
+
+                };
+
+        
+
+                initAuthNav();
+
+            }
+
+        
+
+            switchLanguage('ko');
+
+        });
 
             

@@ -1797,19 +1797,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                         fileInput.value = ''; // Clear the file input
 
-                                        setTimeout(() => {
+                                                                                setTimeout(() => {
 
-                                            addChatMessage(`파일 ${file.name}이(가) 접수되었습니다. 확인 후 답변드리겠습니다.`, 'agent');
+                                                                                    addChatMessage(`파일 ${file.name}이(가) 접수되었습니다. 확인 후 답변드리겠습니다.`, 'agent');
 
-                                        }, 1500);
+                                                                                }, 1500);
 
-                                    }
+                                                                            }
 
-                                });
+                                                                        });
 
-                            }
+                                                                    }
 
-                        } catch (error) {
+                                        
+
+                                                                    const uploadResultsBtn = document.getElementById('upload-results-btn');
+
+                                                                    const resultsFileUpload = document.getElementById('results-file-upload');
+
+                                        
+
+                                                                    if (uploadResultsBtn && resultsFileUpload) {
+
+                                                                        uploadResultsBtn.addEventListener('click', () => {
+
+                                                                            resultsFileUpload.click();
+
+                                                                        });
+
+                                        
+
+                                                                        resultsFileUpload.addEventListener('change', async (e) => {
+
+                                                                            const file = e.target.files[0];
+
+                                                                            if (file) {
+
+                                                                                const storageRef = storage.ref();
+
+                                                                                const fileRef = storageRef.child(`user_uploads/${user.uid}/results/${file.name}`);
+
+                                        
+
+                                                                                try {
+
+                                                                                    await fileRef.put(file);
+
+                                                                                    alert(`${file.name} 파일이 성공적으로 업로드되었습니다!`);
+
+                                                                                } catch (error) {
+
+                                                                                    console.error("파일 업로드 중 오류 발생:", error);
+
+                                                                                    alert(`파일 업로드 실패: ${error.message}`);
+
+                                                                                }
+
+                                                                                resultsFileUpload.value = ''; // Clear the file input
+
+                                                                            }
+
+                                                                        });
+
+                                                                    }
+
+                                                                } catch (error) {
 
                             console.error("Error loading individual my page data:", error);
 

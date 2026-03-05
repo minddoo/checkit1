@@ -6,6 +6,31 @@
     <title>1:1 채팅 - 마이페이지</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-upload {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .btn-upload:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="chat-container">
@@ -44,6 +69,10 @@
                         <h4 class="support-name">체킷 서포트</h4>
                         <p class="support-status">온라인</p>
                     </div>
+                </div>
+                <div class="header-actions">
+                    <button id="upload-results-btn" class="btn-upload">결과지 업로드</button>
+                    <input type="file" id="results-file-upload" style="display:none;">
                 </div>
             </header>
             <div class="chat-messages" id="chat-messages">

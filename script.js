@@ -1448,17 +1448,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 
 
-                                    } catch (err) { 
+                                                                        } catch (err) { 
 
-                                        console.error("Error in renderMyPage:", err);
+                
 
-                                        // If reading the user data fails for any reason, redirect to home page
+                                                                            console.error("Error in renderMyPage:", err);
 
-                                        window.location.href = 'index.html';
+                
 
-                                    }
+                                                                            alert(`Error loading My Page data: ${err.message}. Redirecting to home.`); // Informative alert
 
-                                };
+                
+
+                                                                            // If reading the user data fails for any reason, redirect to home page
+
+                
+
+                                                                            window.location.href = 'index.html';
+
+                
+
+                                                                        }
+
+                
+
+                                                                    };
 
         
 

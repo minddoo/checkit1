@@ -1386,59 +1386,79 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-                const renderMyPage = async (user) => {
+                                const renderMyPage = async (user) => {
 
-                    try {
+                                    try {
 
-                        const uSnap = await db.collection("users").doc(user.uid).get();
+                                        const uSnap = await db.collection("users").doc(user.uid).get();
 
-                        const userData = uSnap.data() || {};
+                                        const userData = uSnap.data() || {};
 
-        
+                
 
-                        if (userData.role === 'user') {
+                                        if (userData.role === 'user') {
 
-                            window.location.href = 'mypage_individual.html';
+                                            window.location.href = 'mypage_individual.html';
 
-                            return;
+                                            return;
 
-                        }
+                                        }
 
-                        if (userData.role === 'company_admin') {
+                                        if (userData.role === 'company_admin') {
 
-                            window.location.href = 'mypage_corporate.html';
+                                            window.location.href = 'mypage_corporate.html';
 
-                            return;
+                                            return;
 
-                        }
+                                        }
 
-        
+                                        if (userData.role === 'super_admin') {
 
-                        const overlay = document.getElementById('mypage-overlay');
+                                            // super_admin still uses the overlay for dashboard
 
-                        if(!overlay) return;
+                                            const overlay = document.getElementById('mypage-overlay');
 
-                        overlay.style.display = 'flex';
+                                            if(!overlay) {
 
-                        document.body.classList.add('platform-view-active');
+                                                // If no overlay, redirect to a default admin view or home
 
-                    
+                                                window.location.href = 'index.html'; // Or a dedicated admin page
 
-                        if (userData?.role === 'super_admin') renderAdmin(user);
+                                                return;
 
-                        else renderUser(user); // Fallback for other roles or unassigned
+                                            }
 
-                    } catch (err) { 
+                                            overlay.style.display = 'flex';
 
-                        console.error("Error in renderMyPage:", err);
+                                            document.body.classList.add('platform-view-active');
 
-                        // Fallback for any error, maybe redirect to home
+                                            renderAdmin(user);
 
-                        window.location.href = 'index.html';
+                                            return;
 
-                    }
+                                        }
 
-                };
+                
+
+                                        // Fallback for any other role or if role is not explicitly set
+
+                                        window.location.href = 'mypage_individual.html'; // Default redirect for authenticated users
+
+                                        return;
+
+                
+
+                                    } catch (err) { 
+
+                                        console.error("Error in renderMyPage:", err);
+
+                                        // If reading the user data fails for any reason, redirect to home page
+
+                                        window.location.href = 'index.html';
+
+                                    }
+
+                                };
 
         
 

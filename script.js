@@ -1342,7 +1342,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (typeof firebase !== 'undefined') {
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        console.log("Firebase global object is available.");
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log("Firebase app initialized.");
+        } else {
+            console.log("Firebase app already initialized.");
+        }
         const auth = firebase.auth(), db = firebase.firestore(), storage = firebase.storage();
 
         let platformSub = null;

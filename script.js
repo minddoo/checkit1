@@ -328,28 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (navMypage) navMypage.style.display = 'block';
             console.log("User logged in:", user.uid);
 
-            // Redirect to appropriate My Page based on user role
-            db.collection('users').doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    const userData = doc.data();
-                    if (userData.role === 'corporate_admin') {
-                        window.location.href = 'mypage_corporate.html';
-                    } else {
-                        // Default to individual mypage or user role
-                        window.location.href = 'mypage_individual.html';
-                    }
-                } else {
-                    console.log("No user data found in Firestore, redirecting to onboarding.");
-                    window.location.href = 'onboarding.html'; // Assuming an onboarding page
-                }
-            }).catch(error => {
-                console.error("Error getting user data during auth state change:", error);
-                // This is an error during login redirection, not mypage data load
-                alert("로그인 중 사용자 데이터를 불러오는 데 문제가 발생했습니다. 인터넷 연결을 확인해주세요. 메인 페이지로 이동합니다.");
-                auth.signOut();
-                window.location.href = 'index.html';
-            });
-
         } else {
             // User is signed out.
             if (navLogin) navLogin.style.display = 'block';
@@ -358,6 +336,34 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("User logged out.");
         }
     });
+
+    // --- My Page Navigation ---
+    const navMypage = document.getElementById('nav-mypage');
+    if (navMypage) {
+        navMypage.addEventListener('click', () => {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('users').doc(user.uid).get().then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        if (userData.role === 'corporate_admin') {
+                            window.location.href = 'mypage_corporate.html';
+                        } else {
+                            window.location.href = 'mypage_individual.html';
+                        }
+                    } else {
+                        console.log("No user data found in Firestore, redirecting to onboarding.");
+                        window.location.href = 'onboarding.html'; // Or show a message
+                    }
+                }).catch(error => {
+                    console.error("Error getting user data for My Page navigation:", error);
+                    alert("마이페이지로 이동하는 중 오류가 발생했습니다.");
+                });
+            }
+        });
+    }
+
+
 
     // --- 4. CONTACT FORM SUBMISSION ---
     const contactForm = document.getElementById('contact-form');

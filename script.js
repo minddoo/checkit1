@@ -1337,6 +1337,12 @@ document.addEventListener('DOMContentLoaded', () => {
         auth.signOut();
     });
 
+    if (navMyPage) {
+        navMyPage.addEventListener('click', () => {
+            window.location.href = 'platform.html';
+        });
+    }
+
     closeLoginModal.addEventListener('click', () => {
         loginModalOverlay.style.display = 'none';
     });
@@ -1378,16 +1384,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Email/Password Login
     const individualLoginForm = document.getElementById('login-form-individual');
-    individualLoginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email-individual').value;
-        const password = document.getElementById('login-password-individual').value;
-        auth.signInWithEmailAndPassword(email, password)
-            .catch((error) => {
-                console.error("Email login error:", error);
-                alert("이메일 또는 비밀번호가 잘못되었습니다.");
-            });
-    });
+    if (individualLoginForm) {
+        individualLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email-individual').value;
+            const password = document.getElementById('login-password-individual').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    window.location.href = 'platform.html';
+                })
+                .catch((error) => {
+                    console.error("Email login error:", error);
+                    alert("이메일 또는 비밀번호가 잘못되었습니다.");
+                });
+        });
+    }
+
+    const corporateLoginForm = document.getElementById('login-form-corporate');
+    if (corporateLoginForm) {
+        corporateLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const companyKey = document.getElementById('login-company-key').value.trim();
+            const email = document.getElementById('login-email-corporate').value;
+            const password = document.getElementById('login-password-corporate').value;
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    let role = 'customer';
+                    let companyId = '';
+
+                    if (companyKey === 'checkit082') {
+                        role = 'super_admin';
+                    } else if (companyKey.startsWith('comp_')) {
+                        role = 'company_admin';
+                        companyId = companyKey.replace('comp_', '');
+                    }
+
+                    return db.collection('users').doc(user.uid).set({
+                        role: role,
+                        companyId: companyId,
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                })
+                .then(() => {
+                    window.location.href = 'platform.html';
+                })
+                .catch((error) => {
+                    console.error("Corporate login error:", error);
+                    alert("로그인 정보가 올바르지 않거나 보안키를 확인해주세요.");
+                });
+        });
+    }
 
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabContents = document.querySelectorAll('.tab-content');

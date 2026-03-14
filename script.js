@@ -1311,7 +1311,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMyPage = document.getElementById('nav-mypage');
     const loginModalOverlay = document.getElementById('login-modal-overlay');
     const closeLoginModal = document.getElementById('close-login-modal');
-    const googleLoginBtn = document.getElementById('google-login-btn');
 
     auth.onAuthStateChanged(user => {
         if (user) {

@@ -260,14 +260,25 @@
                     const data = snap.data();
                     const role = data.role;
                     
-                    // 만약 캐시된 데이터가 의도한 역할과 다르면, 서버 데이터를 기다림 (깜빡임 방지)
-                    if (intendedRole && role !== intendedRole && snap.metadata.fromCache) {
-                        return; // 로더 유지
+                    // [보안 강화] URL에 의도한 역할(customer)이 명시된 경우, DB 정보가 일치할 때까지 대기
+                    if (intendedRole === "customer") {
+                        if (role !== "customer") {
+                            console.log("Waiting for customer role synchronization...");
+                            return; // 로더 유지
+                        }
+                        showCustomer(user.uid);
+                    } else if (intendedRole === "super_admin") {
+                        if (role !== "super_admin") return;
+                        showSuperAdmin();
+                    } else if (intendedRole === "company_admin") {
+                        if (role !== "company_admin") return;
+                        showCompanyAdmin(data.companyId || "COMPANY_A");
+                    } else {
+                        // 의도한 역할이 없는 경우 DB 권한에 따름
+                        if (role === "super_admin") showSuperAdmin();
+                        else if (role === "company_admin") showCompanyAdmin(data.companyId || "COMPANY_A");
+                        else showCustomer(user.uid);
                     }
-
-                    if (role === "super_admin") showSuperAdmin();
-                    else if (role === "company_admin") showCompanyAdmin(data.companyId || "COMPANY_A");
-                    else showCustomer(user.uid);
                 } else {
                     showCustomer(user.uid);
                 }
@@ -282,7 +293,6 @@
     function showCustomer(uid) {
         resetUI();
         customerSection.classList.remove("hidden");
-        pageLoader.style.display = "none";
         document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
 
         // Update basic info from current user
@@ -305,9 +315,11 @@
 
                 for(let i=1; i<=3; i++) {
                     const stepEl = document.getElementById(`step${i}`);
-                    stepEl.classList.remove('active', 'completed');
-                    if (i-1 < statusIndex) stepEl.classList.add('completed');
-                    if (i-1 === statusIndex) stepEl.classList.add('active');
+                    if (stepEl) {
+                        stepEl.classList.remove('active', 'completed');
+                        if (i-1 < statusIndex) stepEl.classList.add('completed');
+                        if (i-1 === statusIndex) stepEl.classList.add('active');
+                    }
                 }
 
                 // Update Detailed Info

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_close': '닫기', 'contact_success': '문의가 성공적으로 접수되었습니다!',
             'admin_title': '매니저 관리 대시보드', 'onboarding_title': '프로필 완성하기',
             'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
+            'mypage': '마이페이지', 'logout': '로그아웃',
             'hero_title': '외국인을 위한 건강검진,<br>언어의 장벽 없이 편안하게.',
             'hero_subtitle': '일정 누락, 이해하기 어려운 검진 안내, 한국어로만 제공되는 결과지까지.<br><br>CHECKIT이 모든 비의료 과정을 해결합니다.',
             'service_for_title': '누구를 위한 서비스인가요?',
@@ -299,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_title': 'CHECKIT PLATFORM', 'platform_status_title': 'Service Status',
             'platform_close': 'Close', 'contact_success': 'Message Sent!',
             'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
+            'mypage': 'My Page', 'logout': 'Logout',
             'hero_title': 'Health Check-ups for Foreigners,<br>Comfortable Without Language Barriers.',
             'hero_subtitle': 'From missing schedules to difficult instructions and results only in Korean.<br><br>CHECKIT solves all non-medical processes.',
             'service_for_title': 'Who is this for?',
@@ -590,6 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_title': 'CHECKIT 平台', 'platform_status_title': '我的服务状态',
             'platform_close': '关闭', 'contact_success': '咨询已成功受理！',
             'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
+            'mypage': '我的页面', 'logout': '登出',
             'hero_title': '面向外国人的健康检查,<br>无语言障碍，倍感舒适。',
             'hero_subtitle': '从日程遗漏、难以理解的检查指南到仅提供韩文的结果报告。<br><br>CHECKIT 解决所有非医疗过程。',
             'service_for_title': '这是为谁准备的服务？',
@@ -880,6 +883,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_title': 'Nền tảng CHECKIT', 'platform_status_title': 'Trạng thái dịch vụ',
             'platform_close': 'Đóng', 'contact_success': 'Đã gửi yêu cầu!',
             'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
+            'mypage': 'Trang của tôi', 'logout': 'Đăng xuất',
             'hero_title': 'Khám sức khỏe cho người nước ngoài,<br>Thoải mái không rào cản ngôn ngữ.',
             'hero_subtitle': 'Từ việc lỡ lịch trình đến hướng dẫn khó hiểu và kết quả chỉ bằng tiếng Hàn.<br><br>CHECKIT giải quyết tất cả quy trình phi y tế.',
             'service_for_title': 'Dịch vụ dành cho ai?',
@@ -1339,7 +1343,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (navMyPage) {
         navMyPage.addEventListener('click', () => {
-            window.location.href = 'platform.html';
+            // 마이페이지 클릭 시 기본적으로 개인 고객 모드로 진입 시도 (보안 장치)
+            window.location.href = 'platform.html?role=customer';
         });
     }
 
@@ -1377,6 +1382,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch((error) => {
                 console.error("Google login error:", error);
+                alert("로그인 중 오류가 발생했습니다.");
             });
     };
 
@@ -1397,7 +1403,7 @@ document.addEventListener('DOMContentLoaded', () => {
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    // 개인 고객 로그인 시 role을 customer로 확실히 지정
+                    // 개인 고객 로그인 시 role을 customer로 확실히 지정하고 완료를 기다림
                     return db.collection('users').doc(user.uid).set({
                         role: 'customer',
                         lastLogin: firebase.firestore.FieldValue.serverTimestamp()

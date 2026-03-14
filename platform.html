@@ -8,16 +8,16 @@
     <style>
         :root {
             --primary: #2ECC71;
-            --secondary: #3498DB;
-            --dark: #2C3E50;
-            --bg: #f4f7f6;
+            --secondary: #27ae60;
+            --dark: #1b4332;
+            --bg: #f0fdf4;
             --danger: #e74c3c;
         }
         body { font-family: 'Pretendard', Arial, sans-serif; padding: 40px; background: var(--bg); color: var(--dark); line-height: 1.6; }
-        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .container { max-width: 1400px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.1); }
         h2, h3 { color: var(--dark); margin-bottom: 20px; }
         .hidden { display: none; }
-        .card { padding: 20px; border: 1px solid #eee; margin-bottom: 20px; border-radius: 12px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card { padding: 20px; border: 1px solid #e0f2f1; margin-bottom: 20px; border-radius: 12px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
         button { padding: 10px 20px; background: var(--dark); color: #fff; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: 0.3s; font-weight: 600; }
         button:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -51,10 +51,72 @@
         .timeline-step.active .step-label { color: var(--dark); }
 
         .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .welcome-card { background: linear-gradient(135deg, var(--primary), #27ae60); color: #fff; border: none; }
+        .welcome-card { background: linear-gradient(135deg, var(--primary), #27ae60); color: #fff; border: none; position: relative; overflow: hidden; }
         .welcome-card h3 { color: #fff; margin-bottom: 5px; }
         .welcome-card p { opacity: 0.9; font-size: 0.95rem; }
+        .role-tag { position: absolute; top: 50%; right: 30px; transform: translateY(-50%); color: rgba(255,255,255,0.2); font-size: 4.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: -3px; white-space: nowrap; pointer-events: none; }
         
+        /* Two-Column Layout for Customer Page */
+        .customer-layout { display: flex; gap: 25px; align-items: flex-start; margin-top: 20px; }
+        .left-content { flex: 1.4; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+        .right-content { flex: 1; position: sticky; top: 20px; min-width: 320px; }
+
+        /* 1:1 Chat UI Styles */
+        .chat-card { background: #fff; border-radius: 16px; border: 1px solid #e0f2f1; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; height: 650px; overflow: hidden; }
+        .chat-header { padding: 18px 25px; background: var(--dark); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+        .chat-header .status-indicator { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+        .status-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); }
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; background: #f7fdf9; display: flex; flex-direction: column; gap: 18px; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 0.92rem; line-height: 1.5; position: relative; }
+        .message.bot { align-self: flex-start; background: #fff; border: 1px solid #d1e7dd; border-bottom-left-radius: 4px; color: #1b4332; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .message.user { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2); }
+        .chat-input-area { padding: 20px; border-top: 1px solid #e0f2f1; background: #fff; display: flex; gap: 12px; }
+        .chat-input-area input { flex: 1; margin-bottom: 0; padding: 12px 18px; background: #f0fdf4; border-color: #d1e7dd; }
+        .chat-input-area button { width: 48px; height: 48px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        .btn-attach { background: #f8f9fa; color: #888; border: 1px solid #eee; }
+        .btn-attach:hover { background: #eee; color: #555; }
+
+        /* Package Card Styling */
+        .package-item { font-size: 0.88rem; color: #555; display: flex; align-items: center; gap: 10px; line-height: 1.4; }
+        .package-item i { font-size: 0.8rem; }
+
+        /* --- 🏛️ Corporate Dashboard Enhanced Styles --- */
+        .admin-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e0f2f1; padding-bottom: 20px; }
+        .admin-header h2 { margin-bottom: 0; font-size: 1.8rem; }
+        .company-info { font-size: 0.9rem; color: #666; margin-top: 5px; }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: #fff; padding: 25px; border-radius: 16px; border: 1px solid #e0f2f1; display: flex; align-items: center; gap: 20px; transition: transform 0.2s; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.05); }
+        .kpi-icon { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .kpi-icon.blue { background: #e3f2fd; color: #2196f3; }
+        .kpi-icon.green { background: #e8f5e9; color: #4caf50; }
+        .kpi-icon.orange { background: #fff3e0; color: #ff9800; }
+        .kpi-icon.red { background: #ffebee; color: #f44336; }
+        .kpi-data { display: flex; flex-direction: column; }
+        .kpi-label { font-size: 0.85rem; color: #888; font-weight: 600; margin-bottom: 2px; }
+        .kpi-value { font-size: 1.6rem; font-weight: 800; color: var(--dark); }
+
+        .table-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 20px; }
+        .filter-group { display: flex; background: #f0fdf4; padding: 5px; border-radius: 10px; border: 1px solid #d1e7dd; }
+        .filter-btn { padding: 8px 18px; border: none; background: none; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #666; cursor: pointer; transition: 0.3s; }
+        .filter-btn.active { background: #fff; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        .search-box { position: relative; flex: 1; max-width: 300px; }
+        .search-box input { margin-bottom: 0; padding-left: 40px; background: #fff; }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaa; }
+
+        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+        .status-badge.complete { background: #e8f5e9; color: #2e7d32; }
+        .status-badge.pending { background: #fff3e0; color: #ef6c00; }
+        .status-badge.critical { background: #ffebee; color: #c62828; }
+
+        @media (max-width: 992px) {
+            .customer-layout { flex-direction: column; }
+            .right-content { position: static; width: 100%; min-width: unset; }
+            .chat-card { height: 550px; }
+        }
+
         @media (max-width: 768px) {
             body { padding: 15px; }
             .container { padding: 20px; }
@@ -87,67 +149,144 @@
     <div id="customerSection" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <h2><i class="fas fa-user-circle"></i> 마이페이지</h2>
-            <button class="btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> 로그아웃</button>
+            <button class="btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> 나가기</button>
         </div>
 
-        <div class="card welcome-card">
-            <h3 id="userName">환영합니다!</h3>
-            <p id="userEmail">회원님의 건강검진 진행 상황을 실시간으로 확인하세요.</p>
-        </div>
+        <div class="customer-layout">
+            <!-- Left Side: Info -->
+            <div class="left-content">
+                <div class="card welcome-card">
+                    <span class="role-tag">PERSONAL</span>
+                    <h3 id="userName">환영합니다!</h3>
+                    <p id="userEmail">회원님의 건강검진 진행 상황을 실시간으로 확인하세요.</p>
+                </div>
 
-        <!-- Progress Timeline -->
-        <div class="card">
-            <h3>진행 상태</h3>
-            <div class="timeline">
-                <div class="timeline-step" id="step1">
-                    <div class="step-icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="step-label">예약 대기</div>
+                <!-- Progress Timeline -->
+                <div class="card">
+                    <h3>진행 상태</h3>
+                    <div class="timeline">
+                        <div class="timeline-step" id="step1">
+                            <div class="step-icon"><i class="fas fa-credit-card"></i></div>
+                            <div class="step-label">결제 완료</div>
+                        </div>
+                        <div class="timeline-step" id="step2">
+                            <div class="step-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="step-label">예약</div>
+                        </div>
+                        <div class="timeline-step" id="step3">
+                            <div class="step-icon"><i class="fas fa-hospital-user"></i></div>
+                            <div class="step-label">검사 완료</div>
+                        </div>
+                        <div class="timeline-step" id="step4">
+                            <div class="step-icon"><i class="fas fa-file-medical-alt"></i></div>
+                            <div class="step-label">결과 및 서류 완료</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="timeline-step" id="step2">
-                    <div class="step-icon"><i class="fas fa-hospital-user"></i></div>
-                    <div class="step-label">검진 진행</div>
-                </div>
-                <div class="timeline-step" id="step3">
-                    <div class="step-icon"><i class="fas fa-file-medical-alt"></i></div>
-                    <div class="step-label">결과 확인</div>
+
+                <div id="customerData"></div>
+            </div>
+
+            <!-- Right Side: 1:1 Chat -->
+            <div class="right-content">
+                <div class="chat-card">
+                    <div class="chat-header">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <i class="fas fa-comments" style="color: var(--primary); font-size: 1.2rem;"></i>
+                            <span>1:1 전담 매니저</span>
+                        </div>
+                        <div class="status-indicator">
+                            <div class="status-dot"></div>
+                            <span>실시간 상담 가능</span>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            안녕하세요! CHECKIT 전담 매니저입니다. 👋<br><br>고객님의 건강검진 준비부터 결과 번역까지 모든 과정을 도와드립니다. 궁금하신 점을 아래에 입력해 주세요.
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="file" id="chatFileInput" style="display:none">
+                        <button class="btn-attach" id="attachBtn" title="파일 첨부"><i class="fas fa-paperclip"></i></button>
+                        <input type="text" id="chatInput" placeholder="매니저에게 메시지 보내기...">
+                        <button class="btn-primary" id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div id="customerData"></div>
     </div>
 
     <!-- 📊 기업 관리자 화면 -->
     <div id="companySection" class="hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2><i class="fas fa-building"></i> 기업 통합 대시보드</h2>
-            <button class="btn-danger" onclick="logout()">로그아웃</button>
-        </div>
-
-        <div class="card">
-            <h3>📊 실시간 현황판</h3>
-            <div style="display:flex; gap:30px;">
-                <div>총 인원: <span id="totalCount" class="stat-val">0</span> 명</div>
-                <div>만료 인원: <span id="expiredCount" class="stat-val stat-expired">0</span> 명</div>
+        <div class="admin-header">
+            <div>
+                <h2><i class="fas fa-city"></i> <span id="displayCompanyName">기업</span> 통합 보건관리 대시보드</h2>
+                <p class="company-info">현장 근로자 건강 모니터링 및 법적 검진 유효성 관리 시스템</p>
             </div>
-            <button class="btn-excel" onclick="exportExcel()"><i class="fas fa-file-excel"></i> 엑셀 다운로드</button>
-            <div style="clear:both;"></div>
+            <button class="btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> 나가기</button>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon blue"><i class="fas fa-users"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">전체 근로자</span>
+                    <span class="kpi-value" id="totalWorkers">0</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon green"><i class="fas fa-globe-asia"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">외국인 근로자</span>
+                    <span class="kpi-value" id="foreignWorkers">0</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon orange"><i class="fas fa-hourglass-half"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">검진 대기/진행</span>
+                    <span class="kpi-value" id="pendingCheckups">0</span>
+                </div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon red"><i class="fas fa-exclamation-circle"></i></div>
+                <div class="kpi-data">
+                    <span class="kpi-label">유효기간 만료</span>
+                    <span class="kpi-value" id="expiredCerts">0</span>
+                </div>
+            </div>
         </div>
 
         <div class="card">
-            <h3>📋 직원 리스트</h3>
+            <div class="table-controls">
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="filterTable('all')">전체 근로자</button>
+                    <button class="filter-btn" onclick="filterTable('korean')">내국인</button>
+                    <button class="filter-btn" onclick="filterTable('foreigner')">외국인 (다국어)</button>
+                </div>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="workerSearch" placeholder="이름 또는 현장 검색..." onkeyup="searchWorkers()">
+                </div>
+                <button class="btn-excel" onclick="exportExcel()"><i class="fas fa-file-excel"></i> 데이터 내보내기</button>
+            </div>
+
             <div style="overflow-x: auto;">
                 <table id="dataTable">
                     <thead>
                         <tr>
-                            <th>이름</th>
-                            <th>현장</th>
-                            <th>상태</th>
-                            <th>만료일</th>
-                            <th>결과지</th>
+                            <th>근로자명</th>
+                            <th>국적</th>
+                            <th>소속 현장</th>
+                            <th>검진 상태</th>
+                            <th>유효기간</th>
+                            <th>증빙 서류</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="tableBody">
+                        <tr><td colspan="6" style="text-align:center; padding: 40px;"><div class="loader"></div>데이터를 불러오는 중...</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -157,7 +296,7 @@
     <div id="superSection" class="hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <h2><i class="fas fa-user-shield"></i> 마스터 관리자 포털</h2>
-            <button class="btn-danger" onclick="logout()">로그아웃</button>
+            <button class="btn-danger" onclick="logout()">나가기</button>
         </div>
         <div id="superData"></div>
     </div>
@@ -166,7 +305,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc, collection, query, where, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, collection, query, where, onSnapshot, enableIndexedDbPersistence, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // 1. [강력 조치] 파이어베이스 오프라인 에러 팝업 강제 차단
     window.addEventListener('unhandledrejection', function(event) {
@@ -199,8 +338,14 @@
     const superSection = document.getElementById("superSection");
     const pageLoader = document.getElementById("pageLoader");
 
+    // [안전 장치] 1.5초 후 강제 해제 (최상의 사용자 경험)
+    const loaderTimeout = setTimeout(() => {
+        if (pageLoader) pageLoader.style.display = "none";
+    }, 1500);
+
     const urlParams = new URLSearchParams(window.location.search);
     const intendedRole = urlParams.get('role');
+    const intendedCid = urlParams.get('cid');
 
     let activeUnsubscribe = null;
 
@@ -210,82 +355,58 @@
         const key = document.getElementById("adminKey").value.trim();
 
         if (!email || !password) return alert("이메일과 비밀번호를 입력해주세요.");
-        pageLoader.style.display = "flex";
+        if (pageLoader) pageLoader.style.display = "flex";
 
         try {
-            // 인증 단계 (서버 연결 필수)
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // 2. [로직 개편] 데이터베이스 응답 대기 없이 키 확인 후 즉시 화면 전환
             if (key === "checkit082") {
                 showSuperAdmin();
-                setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true }).catch(() => {});
-                return;
-            } 
-            
-            if (key.startsWith("comp_")) {
+                setDoc(doc(db, "users", user.uid), { role: "super_admin", lastLogin: serverTimestamp() }, { merge: true }).catch(() => {});
+            } else if (key.startsWith("comp_")) {
                 const cid = key.replace("comp_", ""); 
                 showCompanyAdmin(cid);
-                setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true }).catch(() => {});
-                return;
+                setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid, lastLogin: serverTimestamp() }, { merge: true }).catch(() => {});
+            } else {
+                showCustomer(user.uid);
+                setDoc(doc(db, "users", user.uid), { role: "customer", lastLogin: serverTimestamp() }, { merge: true }).catch(() => {});
             }
-
-            if (key !== "") {
-                alert("보안 KEY가 올바르지 않습니다.");
-                await signOut(auth);
-                pageLoader.style.display = "none";
-                return;
-            }
-
-            // 일반 유저도 즉시 화면 전환
-            showCustomer(user.uid);
-            setDoc(doc(db, "users", user.uid), { role: "customer" }, { merge: true }).catch(() => {});
         } catch (e) {
             alert("로그인 실패: " + e.message);
-            pageLoader.style.display = "none";
+            if (pageLoader) pageLoader.style.display = "none";
         }
     };
 
     onAuthStateChanged(auth, (user) => {
         if (!user) {
+            if (window.isExiting) return;
             resetUI();
-            loginSection.classList.remove("hidden");
-            pageLoader.style.display = "none";
+            if (loginSection) loginSection.classList.remove("hidden");
+            if (pageLoader) pageLoader.style.display = "none";
             if(activeUnsubscribe) { activeUnsubscribe(); activeUnsubscribe = null; }
         } else {
-            // 자동 로그인 시 권한 확인을 위해 리스너 사용 (에러 방지)
+            // [FAIL-SAFE] 1초 후 무조건 로더 제거
+            setTimeout(() => { if(pageLoader) pageLoader.style.display = "none"; }, 1000);
+
+            // DB에서 역할 확인
             onSnapshot(doc(db, "users", user.uid), (snap) => {
-                if (snap.exists()) {
-                    const data = snap.data();
-                    const role = data.role;
-                    
-                    // [보안 강화] URL에 의도한 역할(customer)이 명시된 경우, DB 정보가 일치할 때까지 대기
-                    if (intendedRole === "customer") {
-                        if (role !== "customer") {
-                            console.log("Waiting for customer role synchronization...");
-                            return; // 로더 유지
-                        }
-                        showCustomer(user.uid);
-                    } else if (intendedRole === "super_admin") {
-                        if (role !== "super_admin") return;
-                        showSuperAdmin();
-                    } else if (intendedRole === "company_admin") {
-                        if (role !== "company_admin") return;
-                        showCompanyAdmin(data.companyId || "COMPANY_A");
-                    } else {
-                        // 의도한 역할이 없는 경우 DB 권한에 따름
-                        if (role === "super_admin") showSuperAdmin();
-                        else if (role === "company_admin") showCompanyAdmin(data.companyId || "COMPANY_A");
-                        else showCustomer(user.uid);
-                    }
+                const data = snap.exists() ? snap.data() : { role: 'customer' };
+                const dbRole = data.role || 'customer';
+                const role = intendedRole || dbRole; // URL 파라미터 우선
+
+                if (role === "super_admin" && dbRole === "super_admin") {
+                    showSuperAdmin();
+                } else if (role === "company_admin" && (dbRole === "company_admin" || dbRole === "super_admin")) {
+                    showCompanyAdmin(data.companyId || intendedCid || "COMPANY_A");
                 } else {
                     showCustomer(user.uid);
                 }
-                pageLoader.style.display = "none";
+                
+                if (pageLoader) pageLoader.style.display = "none";
             }, (err) => {
-                showCustomer(user.uid); // 에러 시 기본 화면이라도 노출
-                pageLoader.style.display = "none";
+                showCustomer(user.uid); 
+                if (pageLoader) pageLoader.style.display = "none";
             });
         }
     });
@@ -293,9 +414,9 @@
     function showCustomer(uid) {
         resetUI();
         customerSection.classList.remove("hidden");
+        if (pageLoader) pageLoader.style.display = "none";
         document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
 
-        // Update basic info from current user
         const user = auth.currentUser;
         if (user) {
             document.getElementById("userName").innerText = `안녕하세요, ${user.displayName || '고객님'}!`;
@@ -304,16 +425,24 @@
 
         if(activeUnsubscribe) activeUnsubscribe();
         activeUnsubscribe = onSnapshot(doc(db, "user_process", uid), (snap) => {
-            if (snap.exists()) {
-                const data = snap.data();
-                
+            let data = snap.exists() ? snap.data() : null;
+            
+            // [시범 운영용 데모 데이터] xhrlalswjd@naver.com 계정 전용
+            if (!data && user && user.email === 'xhrlalswjd@naver.com') {
+                data = {
+                    packageName: 'Total-Safe Plan',
+                    status: '결제 완료'
+                };
+            }
+
+            if (data) {
                 // Update Timeline
-                const steps = ['예약 대기', '검진 진행', '결과 확인'];
-                const currentStatus = data.status || '예약 대기';
+                const steps = ['결제 완료', '예약', '검사 완료', '결과 및 서류 완료'];
+                const currentStatus = data.status || '결제 완료';
                 let statusIndex = steps.indexOf(currentStatus);
                 if(statusIndex === -1) statusIndex = 0;
 
-                for(let i=1; i<=3; i++) {
+                for(let i=1; i<=4; i++) {
                     const stepEl = document.getElementById(`step${i}`);
                     if (stepEl) {
                         stepEl.classList.remove('active', 'completed');
@@ -322,74 +451,209 @@
                     }
                 }
 
-                // Update Detailed Info
+                // Package Data Mapping (Structured for UI)
+                const packageDetails = {
+                    'No-Confusion Plan': [
+                        { icon: 'fa-hospital', text: '중립적인 병원 목록 제공' },
+                        { icon: 'fa-language', text: '프로그램 및 가격 정보 번역' },
+                        { icon: 'fa-map-signs', text: '단계별 예약 가이드' },
+                        { icon: 'fa-file-invoice', text: '병원 서류 영어 번역' },
+                        { icon: 'fa-clipboard-check', text: '필수 문진표 가이드' }
+                    ],
+                    'Zero-Mistake Plan': [
+                        { icon: 'fa-plus-circle', text: 'No-Confusion Plan 모든 항목' },
+                        { icon: 'fa-exclamation-triangle', text: '외국인 주요 실수 방지 가이드' },
+                        { icon: 'fa-check-double', text: '서식 누락 확인 (1회)' },
+                        { icon: 'fa-notes-medical', text: '대장내시경 상세 준비 안내' },
+                        { icon: 'fa-calendar-alt', text: '일정 변경 지원 (1회)' }
+                    ],
+                    'Total-Safe Plan': [
+                        { icon: 'fa-crown', text: 'Zero-Mistake Plan 모든 항목' },
+                        { icon: 'fa-user-shield', text: '프리미엄 1:1 문진표 관리' },
+                        { icon: 'fa-comments-dollar', text: '실시간 검진 당일 원격 채팅' },
+                        { icon: 'fa-route', text: '병원 내부 동선 그래픽 가이드' },
+                        { icon: 'fa-file-medical', text: '결과지 단순 번역 요약본 전달' }
+                    ]
+                };
+
+                const userPackage = data.packageName || '이용 중인 상품이 없습니다.';
+                const features = packageDetails[userPackage] || [];
+
+                // Update Detailed Info (Professional Package View)
                 let html = `
                     <div class="card">
-                        <h3><i class="fas fa-info-circle"></i> 현재 안내 사항</h3>
-                        <p style="margin-bottom:15px; border-left: 4px solid var(--primary); padding-left: 15px;">${data.notice || '매니저의 안내를 기다리고 있습니다.'}</p>
-                        ${data.fileUrl ? `<button class="btn-primary" onclick="window.open('${data.fileUrl}', '_blank')"><i class="fas fa-file-download"></i> 결과지 보기</button>` : ''}
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                            <h3 style="margin:0;"><i class="fas fa-crown" style="color: #f1c40f;"></i> 이용 패키지</h3>
+                            <span style="font-size: 0.75rem; color: #999;">결제 완료</span>
+                        </div>
+                        
+                        <div style="background: linear-gradient(to right, #f8f9fa, #fff); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #eee;">
+                            <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-bottom: 5px;">CURRENT PLAN</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--dark);">${userPackage}</div>
+                        </div>
+                        
+                        <h4 style="margin-bottom: 15px; font-size: 0.95rem; color: #666; font-weight: 700;">포함된 서비스 혜택</h4>
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                            ${features.map(f => `
+                                <div class="package-item">
+                                    <div style="width:32px; height:32px; background: #f0fdf4; border-radius: 8px; display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas ${f.icon}" style="color: var(--primary); font-size: 0.9rem;"></i>
+                                    </div>
+                                    <span style="font-size: 0.88rem; color: #555;">${f.text}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        ${data.fileUrl ? `
+                            <div style="margin-top: 30px; padding-top: 25px; border-top: 1px dashed #eee;">
+                                <button class="btn-primary" style="width: 100%; height: 50px; font-size: 1rem;" onclick="window.open('${data.fileUrl}', '_blank')">
+                                    <i class="fas fa-file-pdf"></i> 결과 분석지 / 번역본 보기
+                                </button>
+                            </div>` : ''}
                     </div>`;
                 document.getElementById("customerData").innerHTML = html;
             } else {
                 document.getElementById("customerData").innerHTML = `
                     <div class="card">
-                        <h3><i class="fas fa-info-circle"></i> 현재 안내 사항</h3>
-                        <p>반갑습니다! 현재 배정된 매니저가 곧 진행 상황을 업데이트할 예정입니다.</p>
+                        <h3><i class="fas fa-box-open"></i> 이용 패키지</h3>
+                        <p>이용 중인 패키지 정보를 불러오는 중입니다. 잠시만 기다려 주세요.</p>
                     </div>`;
             }
-        }, () => {}); 
+        }, (err) => {
+            console.error("Customer snapshot error:", err);
+        }); 
     }
 
     function showCompanyAdmin(companyId) {
         resetUI();
         companySection.classList.remove("hidden");
-        pageLoader.style.display = "none";
-        document.getElementById("tableBody").innerHTML = '<tr><td colspan="5" style="text-align:center;"><div class="loader"></div></td></tr>';
+        if (pageLoader) pageLoader.style.display = "none";
+        document.getElementById("displayCompanyName").innerText = companyId.toUpperCase();
         
         const q = query(collection(db, "user_process"), where("companyId", "==", companyId));
         
         if(activeUnsubscribe) activeUnsubscribe();
         activeUnsubscribe = onSnapshot(q, (snapshot) => {
-            let total = 0, expired = 0, html = "";
-            snapshot.forEach(doc => {
-                const data = doc.data();
+            let total = 0, foreigners = 0, pending = 0, expired = 0;
+            let html = "";
+            
+            snapshot.forEach(snap => {
+                const data = snap.data();
                 total++;
+                if (data.nationality && data.nationality !== 'Korea') foreigners++;
+                if (data.status !== '결과 및 서류 완료') pending++;
+                
                 let expireStyle = "";
                 if (data.expireDate && new Date(data.expireDate) < new Date()) {
                     expired++;
-                    expireStyle = "style='color:red; font-weight:bold;'";
+                    expireStyle = "style='color:var(--danger); font-weight:bold;'";
                 }
+
+                const statusClass = data.status === '결과 및 서류 완료' ? 'complete' : (data.status === '결제 완료' ? 'pending' : 'pending');
+                const natIcon = data.nationality === 'Korea' ? '🇰🇷' : '🌏';
+
                 html += `
-                    <tr>
-                        <td>${data.name || "-"}</td>
-                        <td>${data.site || "-"}</td>
-                        <td>${data.status || "-"}</td>
+                    <tr class="worker-row" data-type="${data.nationality === 'Korea' ? 'korean' : 'foreigner'}">
+                        <td><strong>${data.name || "-"}</strong></td>
+                        <td>${natIcon} ${data.nationality || "KR"}</td>
+                        <td>${data.site || "현장 미지정"}</td>
+                        <td><span class="status-badge ${statusClass}">${data.status || "-"}</span></td>
                         <td ${expireStyle}>${data.expireDate || "-"}</td>
-                        <td><button onclick="window.open('${data.fileUrl || '#'}', '_blank')">보기</button></td>
+                        <td>
+                            <button class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="window.open('${data.fileUrl || '#'}', '_blank')">
+                                <i class="fas fa-file-pdf"></i> 보기
+                            </button>
+                        </td>
                     </tr>`;
             });
-            document.getElementById("totalCount").innerText = total;
-            document.getElementById("expiredCount").innerText = expired;
-            document.getElementById("tableBody").innerHTML = html || "<tr><td colspan='5' style='text-align:center;'>데이터가 없습니다.</td></tr>";
-        }, () => {});
+
+            document.getElementById("totalWorkers").innerText = total;
+            document.getElementById("foreignWorkers").innerText = foreigners;
+            document.getElementById("pendingCheckups").innerText = pending;
+            document.getElementById("expiredCerts").innerText = expired;
+            document.getElementById("tableBody").innerHTML = html || "<tr><td colspan='6' style='text-align:center;'>등록된 근로자 데이터가 없습니다.</td></tr>";
+            
+            if (pageLoader) pageLoader.style.display = "none";
+        }, (err) => {
+            console.error("Company snapshot error:", err);
+            if (pageLoader) pageLoader.style.display = "none";
+        });
     }
+
+    // --- 🔍 Table Interaction Logic ---
+    window.filterTable = function(type) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        document.querySelectorAll('.worker-row').forEach(row => {
+            if (type === 'all' || row.dataset.type === type) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    };
+
+    window.searchWorkers = function() {
+        const term = document.getElementById("workerSearch").value.toLowerCase();
+        document.querySelectorAll('.worker-row').forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(term) ? "" : "none";
+        });
+    };
 
     function showSuperAdmin() {
         resetUI();
         superSection.classList.remove("hidden");
-        pageLoader.style.display = "none";
+        if (pageLoader) pageLoader.style.display = "none";
         document.getElementById("superData").innerHTML = '<div class="loader"></div>';
 
         if(activeUnsubscribe) activeUnsubscribe();
         activeUnsubscribe = onSnapshot(collection(db, "user_process"), (snapshot) => {
-            let html = "";
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                html += `<div class="card"><strong>${data.name || "이름없음"}</strong> (${data.companyId || "개인"}) - ${data.status || "상태없음"}</div>`;
+            let html = "<h3><i class=\"fas fa-tools\"></i> 운영 중인 고객 리스트</h3>";
+            snapshot.forEach(snap => {
+                const data = snap.data();
+                const id = snap.id;
+                html += `
+                    <div class="card" style="display:flex; flex-direction:column; gap:15px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong>${data.name || "이름없음"}</strong>
+                            <span style="font-size:0.8rem; color:#999;">ID: ${id}</span>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                            <div>
+                                <label style="font-size:0.75rem; color:#888;">상태 변경</label>
+                                <select onchange="updateUserField('${id}', 'status', this.value)" style="width:100%; padding:5px; border-radius:5px; border:1px solid #ddd;">
+                                    <option value="결제 완료" ${data.status==='결제 완료'?'selected':''}>결제 완료</option>
+                                    <option value="예약" ${data.status==='예약'?'selected':''}>예약</option>
+                                    <option value="검사 완료" ${data.status==='검사 완료'?'selected':''}>검사 완료</option>
+                                    <option value="결과 및 서류 완료" ${data.status==='결과 및 서류 완료'?'selected':''}>결과 및 서류 완료</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; color:#888;">패키지 변경</label>
+                                <select onchange="updateUserField('${id}', 'packageName', this.value)" style="width:100%; padding:5px; border-radius:5px; border:1px solid #ddd;">
+                                    <option value="No-Confusion Plan" ${data.packageName==='No-Confusion Plan'?'selected':''}>No-Confusion</option>
+                                    <option value="Zero-Mistake Plan" ${data.packageName==='Zero-Mistake Plan'?'selected':''}>Zero-Mistake</option>
+                                    <option value="Total-Safe Plan" ${data.packageName==='Total-Safe Plan'?'selected':''}>Total-Safe</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>`;
             });
             document.getElementById("superData").innerHTML = html || "데이터가 없습니다.";
         }, () => {});
     }
+
+    // --- 🛠️ Admin Operation Logic ---
+    window.updateUserField = async function(uid, field, value) {
+        try {
+            await setDoc(doc(db, "user_process", uid), { [field]: value }, { merge: true });
+            console.log(`Updated ${field} to ${value} for ${uid}`);
+        } catch (e) {
+            alert("업데이트 실패: " + e.message);
+        }
+    };
 
     window.exportExcel = function() {
         const table = document.getElementById("dataTable");
@@ -407,8 +671,14 @@
     };
 
     window.logout = async function() {
+        window.isExiting = true;
+        if (pageLoader) {
+            pageLoader.style.display = "flex";
+            const p = pageLoader.querySelector("p");
+            if (p) p.innerText = "메인 페이지로 이동 중...";
+        }
         await signOut(auth);
-        resetUI();
+        window.location.href = 'index.html';
     }
 
     function resetUI() {
@@ -417,6 +687,68 @@
         companySection.classList.add("hidden");
         superSection.classList.add("hidden");
     }
+
+    // --- 💬 1:1 Chat Logic (Basic) ---
+    document.getElementById("sendMsgBtn").onclick = () => {
+        const input = document.getElementById("chatInput");
+        const chatMessages = document.getElementById("chatMessages");
+        if (!input.value.trim()) return;
+
+        // User Message
+        const userMsg = document.createElement("div");
+        userMsg.className = "message user";
+        userMsg.innerText = input.value;
+        chatMessages.appendChild(userMsg);
+
+        // Auto Scroll
+        input.value = "";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Simple Delay Reply (Mock)
+        setTimeout(() => {
+            const botMsg = document.createElement("div");
+            botMsg.className = "message bot";
+            botMsg.innerText = "메시지를 확인했습니다. 담당 매니저가 곧 답변을 드리겠습니다.";
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+    };
+
+    document.getElementById("chatInput").onkeypress = (e) => {
+        if (e.key === "Enter") document.getElementById("sendMsgBtn").click();
+    };
+
+    // --- 📎 File Upload Logic ---
+    const attachBtn = document.getElementById("attachBtn");
+    const fileInput = document.getElementById("chatFileInput");
+
+    attachBtn.onclick = () => fileInput.click();
+
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const chatMessages = document.getElementById("chatMessages");
+        
+        // Display File Upload Message
+        const fileMsg = document.createElement("div");
+        fileMsg.className = "message user";
+        fileMsg.innerHTML = `<i class="fas fa-file-alt"></i> 파일 업로드: <strong>${file.name}</strong>`;
+        chatMessages.appendChild(fileMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Reset input
+        fileInput.value = "";
+
+        // Simulated Manager Reply
+        setTimeout(() => {
+            const botMsg = document.createElement("div");
+            botMsg.className = "message bot";
+            botMsg.innerText = "파일이 정상적으로 전송되었습니다. 담당 매니저가 확인 후 답변 드리겠습니다.";
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1500);
+    };
 </script>
 </body>
 </html>

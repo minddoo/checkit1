@@ -1448,8 +1448,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(() => {
                     const companyKey = document.getElementById('login-company-key').value.trim();
-                    const roleParam = companyKey === 'checkit082' ? 'super_admin' : (companyKey.startsWith('comp_') ? 'company_admin' : 'customer');
-                    window.location.href = `platform.html?role=${roleParam}`;
+                    let roleParam = 'customer';
+                    let cidParam = '';
+                    
+                    if (companyKey === 'checkit082') {
+                        roleParam = 'super_admin';
+                    } else if (companyKey.startsWith('comp_')) {
+                        roleParam = 'company_admin';
+                        cidParam = companyKey.replace('comp_', '');
+                    }
+                    
+                    const url = cidParam ? `platform.html?role=${roleParam}&cid=${cidParam}` : `platform.html?role=${roleParam}`;
+                    window.location.href = url;
                 })
                 .catch((error) => {
                     console.error("Corporate login error:", error);

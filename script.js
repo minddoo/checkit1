@@ -1356,19 +1356,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const googleLoginBtnIndividual = document.getElementById('google-login-btn-individual');
     const googleLoginBtnCorporate = document.getElementById('google-login-btn-corporate');
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = (roleType = 'customer') => {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
         auth.signInWithPopup(provider)
             .then((result) => {
                 const user = result.user;
-                // Save user data to Firestore
-                db.collection('users').doc(user.uid).set({
+                // Save user data to Firestore with role
+                return db.collection('users').doc(user.uid).set({
                     displayName: user.displayName,
                     email: user.email,
                     photoURL: user.photoURL,
+                    role: roleType,
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
+            })
+            .then(() => {
+                window.location.href = 'platform.html';
             })
             .catch((error) => {
                 console.error("Google login error:", error);
@@ -1376,10 +1380,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (googleLoginBtnIndividual) {
-        googleLoginBtnIndividual.addEventListener('click', handleGoogleLogin);
+        googleLoginBtnIndividual.addEventListener('click', () => handleGoogleLogin('customer'));
     }
     if (googleLoginBtnCorporate) {
-        googleLoginBtnCorporate.addEventListener('click', handleGoogleLogin);
+        googleLoginBtnCorporate.addEventListener('click', () => handleGoogleLogin('company_admin'));
     }
 
     // Email/Password Login
@@ -1390,6 +1394,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('login-email-individual').value;
             const password = document.getElementById('login-password-individual').value;
             auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    // 개인 고객 로그인 시 role을 customer로 확실히 지정
+                    return db.collection('users').doc(user.uid).set({
+                        role: 'customer',
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                })
                 .then(() => {
                     window.location.href = 'platform.html';
                 })

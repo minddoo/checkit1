@@ -202,14 +202,14 @@
             const user = userCredential.user;
 
             // 2. [로직 개편] 데이터베이스 응답 대기 없이 키 확인 후 즉시 화면 전환
-            if (key === "CHECKIT_MASTER_2026") {
+            if (key === "checkit082") {
                 showSuperAdmin();
                 setDoc(doc(db, "users", user.uid), { role: "super_admin" }, { merge: true }).catch(() => {});
                 return;
             } 
             
-            if (key === "COMPANY_KEY_2026") {
-                const cid = "COMPANY_A"; 
+            if (key.startsWith("comp_")) {
+                const cid = key.replace("comp_", ""); 
                 showCompanyAdmin(cid);
                 setDoc(doc(db, "users", user.uid), { role: "company_admin", companyId: cid }, { merge: true }).catch(() => {});
                 return;
@@ -221,8 +221,9 @@
                 return;
             }
 
-            // 일반 유저도 즉시 화면 전환 (데이터는 리스너가 채움)
+            // 일반 유저도 즉시 화면 전환
             showCustomer(user.uid);
+            setDoc(doc(db, "users", user.uid), { role: "customer" }, { merge: true }).catch(() => {});
         } catch (e) {
             alert("로그인 실패: " + e.message);
         }

@@ -1372,7 +1372,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, { merge: true });
             })
             .then(() => {
-                window.location.href = 'platform.html';
+                const redirectUrl = roleType === 'company_admin' ? 'platform.html?role=company_admin' : 'platform.html?role=customer';
+                window.location.href = redirectUrl;
             })
             .catch((error) => {
                 console.error("Google login error:", error);
@@ -1403,7 +1404,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, { merge: true });
                 })
                 .then(() => {
-                    window.location.href = 'platform.html';
+                    window.location.href = 'platform.html?role=customer';
                 })
                 .catch((error) => {
                     console.error("Email login error:", error);
@@ -1440,7 +1441,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, { merge: true });
                 })
                 .then(() => {
-                    window.location.href = 'platform.html';
+                    const companyKey = document.getElementById('login-company-key').value.trim();
+                    const roleParam = companyKey === 'checkit082' ? 'super_admin' : (companyKey.startsWith('comp_') ? 'company_admin' : 'customer');
+                    window.location.href = `platform.html?role=${roleParam}`;
                 })
                 .catch((error) => {
                     console.error("Corporate login error:", error);

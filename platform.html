@@ -199,6 +199,9 @@
     const superSection = document.getElementById("superSection");
     const pageLoader = document.getElementById("pageLoader");
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const intendedRole = urlParams.get('role');
+
     let activeUnsubscribe = null;
 
     document.getElementById("loginBtn").onclick = async () => {
@@ -247,15 +250,23 @@
     onAuthStateChanged(auth, (user) => {
         if (!user) {
             resetUI();
+            loginSection.classList.remove("hidden");
             pageLoader.style.display = "none";
             if(activeUnsubscribe) { activeUnsubscribe(); activeUnsubscribe = null; }
         } else {
             // 자동 로그인 시 권한 확인을 위해 리스너 사용 (에러 방지)
             onSnapshot(doc(db, "users", user.uid), (snap) => {
                 if (snap.exists()) {
-                    const role = snap.data().role;
+                    const data = snap.data();
+                    const role = data.role;
+                    
+                    // 만약 캐시된 데이터가 의도한 역할과 다르면, 서버 데이터를 기다림 (깜빡임 방지)
+                    if (intendedRole && role !== intendedRole && snap.metadata.fromCache) {
+                        return; // 로더 유지
+                    }
+
                     if (role === "super_admin") showSuperAdmin();
-                    else if (role === "company_admin") showCompanyAdmin(snap.data().companyId || "COMPANY_A");
+                    else if (role === "company_admin") showCompanyAdmin(data.companyId || "COMPANY_A");
                     else showCustomer(user.uid);
                 } else {
                     showCustomer(user.uid);
@@ -270,7 +281,6 @@
 
     function showCustomer(uid) {
         resetUI();
-        loginSection.classList.add("hidden");
         customerSection.classList.remove("hidden");
         pageLoader.style.display = "none";
         document.getElementById("customerData").innerHTML = '<div class="loader"></div>';
@@ -320,7 +330,6 @@
 
     function showCompanyAdmin(companyId) {
         resetUI();
-        loginSection.classList.add("hidden");
         companySection.classList.remove("hidden");
         pageLoader.style.display = "none";
         document.getElementById("tableBody").innerHTML = '<tr><td colspan="5" style="text-align:center;"><div class="loader"></div></td></tr>';
@@ -355,7 +364,6 @@
 
     function showSuperAdmin() {
         resetUI();
-        loginSection.classList.add("hidden");
         superSection.classList.remove("hidden");
         pageLoader.style.display = "none";
         document.getElementById("superData").innerHTML = '<div class="loader"></div>';
@@ -392,35 +400,7 @@
     }
 
     function resetUI() {
-        loginSection.classList.remove("hidden");
-        customerSection.classList.add("hidden");
-        companySection.classList.add("hidden");
-        superSection.classList.add("hidden");
-    }
-</script>
-
-    window.exportExcel = function() {
-        const table = document.getElementById("dataTable");
-        let csv = "\uFEFF"; // Add BOM for Excel UTF-8 support
-        for (let row of table.rows) {
-            let cols = [];
-            for (let cell of row.cells) cols.push('"' + cell.innerText.replace(/"/g, '""') + '"');
-            csv += cols.join(",") + "\r\n";
-        }
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `checkit_report_${new Date().toISOString().slice(0,10)}.csv`;
-        link.click();
-    };
-
-    window.logout = async function() {
-        await signOut(auth);
-        resetUI();
-    }
-
-    function resetUI() {
-        loginSection.classList.remove("hidden");
+        loginSection.classList.add("hidden");
         customerSection.classList.add("hidden");
         companySection.classList.add("hidden");
         superSection.classList.add("hidden");

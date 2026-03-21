@@ -593,6 +593,9 @@
                 return tB - tA;
             });
             window.renderHospTable(allHospitals);
+          }, err => {
+              console.error("loadHospitals Error:", err);
+              showToast("병원 목록을 불러오는 중 오류(권한/인덱스 등)가 발생했습니다.", "error");
           });
     };
 
@@ -657,7 +660,7 @@
         };
 
         if(!info.name) {
-            showToast("변원 이름을 입력하세요.", "error");
+            showToast("병원 이름을 입력하세요.", "error");
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> 병원 명단에 추가';
             return;

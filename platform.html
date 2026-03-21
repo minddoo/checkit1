@@ -84,6 +84,29 @@
         .login-card { background: white; padding: 40px; border-radius: 15px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         .login-header { text-align: center; margin-bottom: 30px; }
         .login-header h2 { color: var(--dark); font-size: 1.8rem; margin: 0; }
+        .login-header h2 { color: var(--dark); font-size: 1.8rem; margin: 0; }
+
+        /* Chat Layout */
+        .chat-layout { display: flex; height: calc(100vh - 70px); background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .chat-sidebar { width: 320px; border-right: 1px solid #efefef; display: flex; flex-direction: column; background: #fff; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; background: #f8fafc; }
+        
+        .chat-item { padding: 18px 20px; border-bottom: 1px solid #f5f5f5; cursor: pointer; transition: 0.2s; position: relative; }
+        .chat-item:hover { background: #f9fafb; }
+        .chat-item.active { background: #e8f5e9; border-left: 4px solid var(--primary); }
+        .chat-item .name { font-weight: 700; font-size: 0.95rem; display: flex; justify-content: space-between; }
+        .chat-item .company { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        .chat-item .preview { font-size: 0.8rem; color: #94a3b8; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .chat-history { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 12px; }
+        .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative; }
+        .bubble-admin { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
+        .bubble-worker { align-self: flex-start; background: white; border: 1px solid #e2e8f0; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .bubble-system { align-self: center; background: #f1f5f9; color: #64748b; font-size: 0.75rem; padding: 6px 15px; border-radius: 20px; margin: 10px 0; }
+        
+        .chat-footer { padding: 20px; background: white; border-top: 1px solid #efefef; display: flex; gap: 12px; }
+        .chat-input { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 12px; font-family: inherit; font-size: 0.9rem; resize: none; outline: none; height: 50px; }
+        .chat-input:focus { border-color: var(--primary); }
     </style>
 </head>
 <body>
@@ -129,9 +152,10 @@
             <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><i class="fa-solid fa-building"></i> 고객사 관리</li>
-            <li><i class="fa-solid fa-chart-line"></i> 통계 및 로그</li>
-            <li><i class="fa-solid fa-gears"></i> 시스템 설정</li>
+            <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 고객사 관리</li>
+            <li id="menuChats" onclick="switchSection('Chats')"><i class="fa-solid fa-comments"></i> 1:1 채팅 관리</li>
+            <li id="menuStats" onclick="switchSection('Stats')"><i class="fa-solid fa-chart-line"></i> 통계 및 로그</li>
+            <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> 시스템 설정</li>
         </ul>
         <div style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
@@ -160,64 +184,134 @@
         <!-- Content -->
         <div class="content-area">
             
-            <!-- Generate Card -->
-            <div class="card">
-                <h3><i class="fa-solid fa-building-user" style="color: var(--primary);"></i> 신규 고객사 보안키 발급</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-                    새로운 고객사를 등록하고, 기업 관리자용 보안키를 생성하여 즉시 저장합니다.
-                </p>
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label>기업명</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-signature"></i>
-                            <input type="text" id="companyName" placeholder="예: 삼성전자">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>고유 회사코드</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-hashtag"></i>
-                            <input type="text" id="companyCode" placeholder="예: SS2026">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label>생성된 관리자 암호키</label>
-                        <div style="display: flex; gap: 10px;">
-                            <div class="input-wrapper" style="flex: 1;">
-                                <i class="fa-solid fa-key"></i>
-                                <input type="text" id="adminKey" placeholder="자동 생성" readonly>
+            <!-- SECTION 1: COMPANY MANAGEMENT -->
+            <div id="sectionComps">
+                <!-- Generate Card -->
+                <div class="card">
+                    <h3><i class="fa-solid fa-building-user" style="color: var(--primary);"></i> 신규 고객사 보안키 발급</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
+                        새로운 고객사를 등록하고, 기업 관리자용 보안키를 생성하여 즉시 저장합니다.
+                    </p>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>기업명</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-signature"></i>
+                                <input type="text" id="companyName" placeholder="예: 삼성전자">
                             </div>
-                            <button type="button" class="btn-dark" onclick="window.generateAdminKey()"><i class="fa-solid fa-rotate"></i> 생성</button>
                         </div>
-                    </div>
-                    <button id="saveBtn" class="btn-primary" style="height: 44px; margin-bottom: 2px;"><i class="fa-solid fa-check"></i> 저장 및 발급</button>
-                </div>
-            </div>
-            
-            <!-- List Card -->
-            <div class="card">
-                <div class="table-toolbar">
-                    <h3><i class="fa-solid fa-list-check" style="color: var(--dark);"></i> 영구 저장된 기업 목록</h3>
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                        <input type="text" id="searchInput" placeholder="기업명 또는 코드로 검색..." onkeyup="window.filterTable()">
+                        <div class="input-group">
+                            <label>고유 회사코드</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-hashtag"></i>
+                                <input type="text" id="companyCode" placeholder="예: SS2026">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>생성된 관리자 암호키</label>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-wrapper" style="flex: 1;">
+                                    <i class="fa-solid fa-key"></i>
+                                    <input type="text" id="adminKey" placeholder="자동 생성" readonly>
+                                </div>
+                                <button type="button" class="btn-dark" onclick="window.generateAdminKey()"><i class="fa-solid fa-rotate"></i> 생성</button>
+                            </div>
+                        </div>
+                        <button id="saveBtn" class="btn-primary" style="height: 44px; margin-bottom: 2px;"><i class="fa-solid fa-check"></i> 저장 및 발급</button>
                     </div>
                 </div>
                 
-                <table id="companyTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%">기업명</th>
-                            <th style="width: 20%">회사코드</th>
-                            <th style="width: 35%">관리자 암호키</th>
-                            <th style="width: 20%; text-align: center;">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody id="companyList">
-                        <tr><td colspan="4" style="text-align: center; color: #999;">로딩 중...</td></tr>
-                    </tbody>
-                </table>
+                <!-- List Card -->
+                <div class="card">
+                    <div class="table-toolbar">
+                        <h3><i class="fa-solid fa-list-check" style="color: var(--dark);"></i> 영구 저장된 기업 목록</h3>
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                            <input type="text" id="searchInput" placeholder="기업명 또는 코드로 검색..." onkeyup="window.filterTable()">
+                        </div>
+                    </div>
+                    
+                    <table id="companyTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%">기업명</th>
+                                <th style="width: 20%">회사코드</th>
+                                <th style="width: 35%">관리자 암호키</th>
+                                <th style="width: 20%; text-align: center;">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companyList">
+                            <tr><td colspan="4" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CHAT MANAGEMENT -->
+            <div id="sectionChats" class="hidden">
+                <div class="chat-layout">
+                    <!-- Chat List -->
+                    <div class="chat-sidebar">
+                        <div style="padding: 20px; background: #fcfcfc; border-bottom: 1px solid #efefef;">
+                            <h4 style="margin: 0; font-size: 1rem;"><i class="fa-solid fa-users-viewfinder"></i> 근로자 채팅 목록</h4>
+                        </div>
+                        <div id="chatWorkerList" style="flex: 1; overflow-y: auto;">
+                            <!-- List of workers injected here -->
+                            <div style="padding: 30px; text-align: center; color: #999;">대화 목록을 불러오고 있습니다...</div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Window -->
+                    <div class="chat-main" id="chatWindowPlaceholder">
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #cbd5e1; text-align: center; padding: 40px;">
+                            <i class="fa-solid fa-comments" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                            <h2>관리할 채팅을 선택해 주세요</h2>
+                            <p>좌측 목록에서 근로자를 선택하면 대화 내용이 표시됩니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-main hidden" id="chatWindowActive">
+                        <!-- Chat Header -->
+                        <div style="padding: 15px 25px; background: white; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span id="activeWorkerName" style="font-weight: 700; font-size: 1.1rem; color: var(--dark);">근로자명</span>
+                                <span id="activeWorkerComp" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">소속 기업</span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">
+                                <i class="fa-solid fa-circle"></i> 대화 중
+                            </div>
+                        </div>
+
+                        <!-- Messages -->
+                        <div id="activeChatMessages" class="chat-history">
+                            <!-- Bubble Messages -->
+                        </div>
+
+                        <!-- Footer Input -->
+                        <div class="chat-footer">
+                            <textarea id="masterChatInput" class="chat-input" placeholder="답변을 입력하세요..."></textarea>
+                            <button onclick="sendMasterMessage()" class="btn-primary" style="width: 54px; height: 50px;">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: STATS -->
+            <div id="sectionStats" class="hidden">
+                <div class="card">
+                    <h3>통계 및 로그</h3>
+                    <p style="color: #999;">준비 중인 기능입니다.</p>
+                </div>
+            </div>
+
+            <!-- SECTION 4: SETTINGS -->
+            <div id="sectionSettings" class="hidden">
+                <div class="card">
+                    <h3>시스템 설정</h3>
+                    <p style="color: #999;">준비 중인 기능입니다.</p>
+                </div>
             </div>
 
         </div>
@@ -267,6 +361,21 @@
     const db = firebase.firestore();
 
     let allCompanies = [];
+    let activeChatWorkerId = null;
+    let chatMsgUnsub = null;
+
+    // Section Switching
+    window.switchSection = (id) => {
+        const sections = ['Comps', 'Chats', 'Stats', 'Settings'];
+        sections.forEach(s => {
+            document.getElementById('section' + s).classList.add('hidden');
+            document.getElementById('menu' + s).classList.remove('active');
+        });
+        document.getElementById('section' + id).classList.remove('hidden');
+        document.getElementById('menu' + id).classList.add('active');
+
+        if (id === 'Chats') window.loadChatList();
+    };
 
     // Connection Check
     db.collection("company_info").limit(1).onSnapshot(() => {
@@ -378,6 +487,112 @@
             catch(e) { showToast("삭제 실패: " + e.message, "error"); }
         }
     };
+
+    // Chat Management Logic
+    window.loadChatList = () => {
+        // Query unique workers who have the 'messages' collection entries
+        // Since we don't have a 'chat_rooms' collection, we'll listen to ALL recent messages and group them.
+        // For performance, we'll fetch workers list and check if they have messages or just fetch messages and unique them.
+        db.collection('messages').orderBy('timestamp', 'desc').onSnapshot(snap => {
+            const workerListEl = document.getElementById('chatWorkerList');
+            if (snap.empty) {
+                workerListEl.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">표시할 대화가 없습니다.</div>';
+                return;
+            }
+
+            const uniqueWorkerIds = [...new Set(snap.docs.map(doc => doc.data().workerDocId))];
+            
+            // Render basic UI first
+            workerListEl.innerHTML = '<div style="padding: 15px; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid #efefef;">활성 대화 (' + uniqueWorkerIds.length + ')</div>';
+
+            uniqueWorkerIds.forEach(wid => {
+                const latestMsg = snap.docs.find(d => d.data().workerDocId === wid).data();
+                
+                // Get worker detail (this could be optimized with a local cache)
+                db.collection('workers').doc(wid).get().then(wDoc => {
+                    const wData = wDoc.exists ? wDoc.data() : { name: '알 수 없는 사용자', companyId: '-' };
+                    
+                    const div = document.createElement('div');
+                    div.className = `chat-item ${activeChatWorkerId === wid ? 'active' : ''}`;
+                    div.id = 'chatItem-' + wid;
+                    div.onclick = () => window.selectChat(wid, wData.name, wData.companyId);
+                    
+                    div.innerHTML = `
+                        <div class="name">
+                            <span>${wData.name}</span>
+                            <span style="font-size: 0.65rem; color: #94a3b8; font-weight: normal;">${latestMsg.timestamp ? '방금 전' : ''}</span>
+                        </div>
+                        <div class="company">${wData.companyId}</div>
+                        <div class="preview">${latestMsg.text}</div>
+                    `;
+                    workerListEl.appendChild(div);
+                });
+            });
+        });
+    };
+
+    window.selectChat = (workerId, name, compId) => {
+        activeChatWorkerId = workerId;
+        
+        // UI Toggle
+        document.getElementById('chatWindowPlaceholder').classList.add('hidden');
+        document.getElementById('chatWindowActive').classList.remove('hidden');
+        document.getElementById('activeWorkerName').textContent = name;
+        document.getElementById('activeWorkerComp').textContent = compId;
+
+        // Update active class in list
+        document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+        const activeItem = document.getElementById('chatItem-' + workerId);
+        if (activeItem) activeItem.classList.add('active');
+
+        // Load Messages
+        if (chatMsgUnsub) chatMsgUnsub();
+        chatMsgUnsub = db.collection('messages')
+            .where('workerDocId', '==', workerId)
+            .orderBy('timestamp', 'asc')
+            .onSnapshot(snap => {
+                const msgBody = document.getElementById('activeChatMessages');
+                let html = '';
+                snap.forEach(doc => {
+                    const m = doc.data();
+                    const isMaster = m.sender === 'admin';
+                    const isSystem = m.sender === 'system';
+                    
+                    let bubbleClass = isMaster ? 'bubble-admin' : 'bubble-worker';
+                    if (isSystem) bubbleClass = 'bubble-system';
+
+                    html += `<div class="chat-bubble ${bubbleClass}">${m.text}</div>`;
+                });
+                msgBody.innerHTML = html;
+                msgBody.scrollTop = msgBody.scrollHeight;
+            });
+    };
+
+    window.sendMasterMessage = async () => {
+        const input = document.getElementById('masterChatInput');
+        const text = input.value.trim();
+        if (!text || !activeChatWorkerId) return;
+
+        try {
+            await db.collection('messages').add({
+                workerDocId: activeChatWorkerId,
+                sender: 'admin',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            input.value = '';
+        } catch (e) {
+            showToast("전송 실패: " + e.message, "error");
+        }
+    };
+
+    document.getElementById('masterChatInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            window.sendMasterMessage();
+        }
+    });
     
     window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
 

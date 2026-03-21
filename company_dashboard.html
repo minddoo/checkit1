@@ -340,12 +340,12 @@
                     <thead>
                         <tr>
                             <th style="width: 15%">소속현장</th>
-                            <th style="width: 10%">성함</th>
-                            <th style="width: 10%">생년월일</th>
+                            <th style="width: 12%">성함</th>
+                            <th style="width: 12%">생년월일</th>
                             <th style="width: 10%">국적</th>
                             <th style="width: 15%">필수검진</th>
                             <th style="width: 15%">검진기간</th>
-                            <th style="width: 15%">개인 암호키</th>
+                            <th style="width: 11%">기업필요서류</th>
                             <th style="width: 10%; text-align: center;">관리</th>
                         </tr>
                     </thead>
@@ -530,7 +530,7 @@
                 <td><span class="badge-country">${d.nationality || '-'}</span></td>
                 <td>${d.checkup || '-'}</td>
                 <td>${d.period || '-'}</td>
-                <td><code style="background:#f1f5f9; padding:2px 5px; border-radius:4px; font-weight:bold;">${d.passwordKey || '-'}</code></td>
+                <td>${d.docs || '-'}</td>
                 <td style="text-align: center;">
                     <button class="btn-danger" onclick="window.delWorker('${d.id}', '${d.name}')"><i class="fa-solid fa-trash-can"></i> 삭제</button>
                     ${d.notes ? `<div style="margin-top:5px; font-size:0.8rem; color:#666;" title="${d.notes}"><i class="fa-solid fa-caption"></i> 특이사항 O</div>` : ''}

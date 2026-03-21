@@ -1803,7 +1803,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = document.getElementById('signup-worker-name').value.trim();
             const birthDate = document.getElementById('signup-worker-birth').value;
             const companyCode = document.getElementById('signup-worker-company-code').value.trim();
-            const personalKey = document.getElementById('signup-worker-personal-key').value.trim().toUpperCase();
             const email = document.getElementById('signup-worker-email').value.trim();
             const password = document.getElementById('signup-worker-password').value.trim();
 
@@ -1817,15 +1816,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const compCheck = await db.collection('company_info').doc(companyId).get();
                 if (!compCheck.exists) throw new Error('존재하지 않는 회사 코드입니다. (예: COMP_회사명)');
 
-                // 2. Verify worker in company roster
+                // 2. Verify worker in company roster (name + DOB match)
                 const workerSnap = await db.collection('workers')
                     .where('companyId', '==', companyId)
                     .where('name', '==', name)
                     .where('birthDate', '==', birthDate)
-                    .where('passwordKey', '==', personalKey)
                     .get();
 
-                if (workerSnap.empty) throw new Error('입력하신 정보와 일치하는 직원 등록 내역이 없습니다.\n관리자에게 문의하거나 암호키를 확인해주세요.');
+                if (workerSnap.empty) throw new Error('입력하신 이름과 생년월일이 직원 등록 내역과 일치하지 않습니다.\n관리자에게 이름/생년월일 등록 여부를 확인해주세요.');
 
                 const workerDoc = workerSnap.docs[0];
                 if (workerDoc.data().uid) throw new Error('이미 가입된 계정입니다. 로그인을 시도해주세요.');

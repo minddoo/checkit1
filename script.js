@@ -1452,8 +1452,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // [강력 로직] 마스터 계정 즉시 판별 (지원되는 모든 암호키 포함)
-            const isMaster = (companyKeyInput === 'comp_체킷' && (securityKey === 'checkit03080!!' || securityKey === 'checkit082082!'));
-            let companyKey = companyKeyInput.toLowerCase();
+            const isMaster = (companyKeyInput.toLowerCase() === 'comp_체킷' && (securityKey === 'checkit03080!!' || securityKey === 'checkit082082!'));
+            let companyKey = companyKeyInput; // 원본 케이스 유지
             let isValidAdmin = false;
             let targetRole = 'worker';
 
@@ -1493,23 +1493,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 1. 일반 기업 정보 확인 (마스터가 생성한 키인지 검증)
-            const cid = companyKey.replace('comp_', '');
+            const inputCid = companyKey.replace('comp_', '');
             try {
-                const compDoc = await db.collection('company_info').doc(cid).get();
+                // 정확한 케이스로 조회 확인
+                let compDoc = await db.collection('company_info').doc(inputCid).get();
+                // 없으면 소문자로 재시도
+                if (!compDoc.exists) {
+                    compDoc = await db.collection('company_info').doc(inputCid.toLowerCase()).get();
+                }
+
                 if (compDoc.exists) {
                     const cData = compDoc.data();
                     if (securityKey === cData.adminKey) {
                         isValidAdmin = true;
                         targetRole = 'company_admin';
-                        companyKey = cData.companyKey || companyKey; // 등록된 정확한 키 사용
+                        companyKey = cData.companyKey || 'comp_' + compDoc.id; // DB에 저장된 정확한 케이스 유지
                     }
                 }
             } catch (err) { console.warn("Company verify skip:", err); }
 
             // 2. 인증용 가상 계정 정보 생성
+            const safeCompanyKey = companyKey.toLowerCase(); // 계정 중복 생성을 막기 위해 이메일은 소문자로
             const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
-            const email = `${stringToHex(securityKey)}@${stringToHex(companyKey)}.checkit.com`;
-            const password = `${companyKey}_${securityKey}!2026`;
+            const email = `${stringToHex(securityKey)}@${stringToHex(safeCompanyKey)}.checkit.com`;
+            const password = `${safeCompanyKey}_${securityKey}!2026`;
 
             const handleLoginSuccess = (user) => {
                 const companyId = companyKey.replace('comp_', '');

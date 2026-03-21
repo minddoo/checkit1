@@ -93,8 +93,8 @@
         </div>
         <ul class="sidebar-menu">
             <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
-            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> 검진 현황 조회</li>
-            <li><i class="fa-solid fa-file-invoice"></i> 결과 리포트</li>
+            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> <span>검진 현황 조회</span></li>
+            <li id="menuReport" onclick="window.switchSection('report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트 조회</span></li>
         </ul>
         <div style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
@@ -396,6 +396,46 @@
                 </div>
             </div> <!-- End sectionStatus -->
             
+            <!-- SECTION 3: RESULT REPORT -->
+            <div id="sectionReport" class="hidden">
+                <!-- Summary Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #64748b;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">전체 인원</p>
+                        <h2 id="totalCount" style="margin: 10px 0 0; font-size: 2rem;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #10b981;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">검진 완료</p>
+                        <h2 id="completedCount" style="margin: 10px 0 0; font-size: 2rem; color: #10b981;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #f59e0b;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">진행 중</p>
+                        <h2 id="progressCount" style="margin: 10px 0 0; font-size: 2rem; color: #f59e0b;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #94a3b8;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">미진행</p>
+                        <h2 id="pendingCount" style="margin: 10px 0 0; font-size: 2rem; color: #94a3b8;">0</h2>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+                    <!-- Overall Chart -->
+                    <div class="card">
+                        <h3><i class="fa-solid fa-chart-pie" style="color: #6366f1;"></i> 전체 검진 완료율</h3>
+                        <div style="height: 300px; position: relative; display: flex; justify-content: center;">
+                            <canvas id="overallProgressChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Site Chart -->
+                    <div class="card">
+                        <h3><i class="fa-solid fa-chart-column" style="color: #8b5cf6;"></i> 현장별 검진 현황</h3>
+                        <div style="height: 300px;">
+                            <canvas id="siteProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End sectionReport -->
+            
         </div>
     </div>
 </div>
@@ -447,21 +487,117 @@
     window.switchSection = (section) => {
         const regSec = document.getElementById("sectionRegistration");
         const statusSec = document.getElementById("sectionStatus");
+        const reportSec = document.getElementById("sectionReport");
         const menuReg = document.getElementById("menuReg");
         const menuStatus = document.getElementById("menuStatus");
+        const menuReport = document.getElementById("menuReport");
+
+        // Hide all
+        [regSec, statusSec, reportSec].forEach(s => s.classList.add('hidden'));
+        [menuReg, menuStatus, menuReport].forEach(m => m.classList.remove('active'));
 
         if (section === 'registration') {
             regSec.classList.remove('hidden');
-            statusSec.classList.add('hidden');
             menuReg.classList.add('active');
-            menuStatus.classList.remove('active');
-        } else {
-            regSec.classList.add('hidden');
+        } else if (section === 'status') {
             statusSec.classList.remove('hidden');
-            menuReg.classList.remove('active');
             menuStatus.classList.add('active');
-            window.renderStatusDashboard(); // Refresh status view
+            window.renderStatusDashboard();
+        } else if (section === 'report') {
+            reportSec.classList.remove('hidden');
+            menuReport.classList.add('active');
+            window.renderReportDashboard();
         }
+    };
+
+    // Visualization Logic
+    let overallChart = null;
+    let siteChart = null;
+
+    window.renderReportDashboard = () => {
+        const total = allWorkers.length;
+        const completed = allWorkers.filter(w => w.status === '완료').length;
+        const inProgress = allWorkers.filter(w => w.status === '진행 중').length;
+        const pending = allWorkers.filter(w => !w.status || w.status === '진행 전').length;
+
+        // Update Summary Cards
+        document.getElementById('totalCount').innerText = total;
+        document.getElementById('completedCount').innerText = completed;
+        document.getElementById('progressCount').innerText = inProgress;
+        document.getElementById('pendingCount').innerText = pending;
+
+        // 1. Overall Progress Chart (Doughnut)
+        const canvasOverall = document.getElementById('overallProgressChart');
+        if (!canvasOverall) return;
+        const ctxOverall = canvasOverall.getContext('2d');
+        if (overallChart) overallChart.destroy();
+        overallChart = new Chart(ctxOverall, {
+            type: 'doughnut',
+            data: {
+                labels: ['완료', '진행 중', '미진행'],
+                datasets: [{
+                    data: [completed, inProgress, pending],
+                    backgroundColor: ['#10b981', '#f59e0b', '#cbd5e1'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // 2. Site Progress Chart (Bar)
+        const sites = [...new Set(allWorkers.map(w => w.site).filter(s => !!s))];
+        const siteData = sites.map(s => {
+            const workersAtSite = allWorkers.filter(w => w.site === s);
+            return {
+                site: s,
+                total: workersAtSite.length,
+                completed: workersAtSite.filter(w => w.status === '완료').length
+            };
+        });
+
+        const canvasSite = document.getElementById('siteProgressChart');
+        if (!canvasSite) return;
+        const ctxSite = canvasSite.getContext('2d');
+        if (siteChart) siteChart.destroy();
+        siteChart = new Chart(ctxSite, {
+            type: 'bar',
+            data: {
+                labels: siteData.map(d => d.site),
+                datasets: [
+                    {
+                        label: '전체 인원',
+                        data: siteData.map(d => d.total),
+                        backgroundColor: '#e2e8f0',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '완료 인원',
+                        data: siteData.map(d => d.completed),
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { beginAtZero: true, grid: { display: false } },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
     };
 
     // Workers Status Dashboard Logic
@@ -588,6 +724,13 @@
             });
 
             window.filterTable(); 
+            // 실시간 대시보드 및 리포트 갱신
+            if (!document.getElementById('sectionStatus').classList.contains('hidden')) {
+                window.renderStatusDashboard();
+            }
+            if (!document.getElementById('sectionReport').classList.contains('hidden')) {
+                window.renderReportDashboard();
+            } 
         }, err => {
             console.error("Worker load error:", err);
             if (err.message.includes('index')) {

@@ -1575,28 +1575,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Worker Login Handler ---
-    const loginFormWorker = document.getElementById('login-form-worker');
-    if (loginFormWorker) {
-        loginFormWorker.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-worker-email').value.trim();
-            const password = document.getElementById('login-worker-password').value.trim();
-            
-            const loader = document.getElementById('pageLoader') || { style: {} };
-            loader.style.display = 'flex';
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    handleLoginSuccess(userCredential.user);
-                })
-                .catch(err => {
-                    console.error("Worker login error:", err);
-                    alert("이메일 또는 비밀번호가 올바르지 않습니다.");
-                    loader.style.display = 'none';
-                });
-        });
-    }
 
     // --- Signup Modal Logic ---
     const signupLinkCorp = document.getElementById('signup-link-corp');

@@ -1747,91 +1747,104 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Worker Login Handler ---
-    const loginFormWorker = document.getElementById('login-form-worker');
-    if (loginFormWorker) {
-        loginFormWorker.addEventListener('submit', (e) => {
+    // --- Simplified Worker Login Handler ---
+    const loginFormWorkerSimplified = document.getElementById('login-form-worker-simplified');
+    if (loginFormWorkerSimplified) {
+        loginFormWorkerSimplified.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('login-worker-email').value.trim();
-            const password = document.getElementById('login-worker-password').value.trim();
+            const companyKey = document.getElementById('login-worker-company-key').value.trim();
+            const securityKey = document.getElementById('login-worker-security-key').value.trim();
+
+            if (!companyKey || !securityKey) {
+                return alert("회사 코드와 암호키를 모두 입력해주세요.");
+            }
+
             const loader = document.getElementById('pageLoader') || { style: {} };
             loader.style.display = 'flex';
+
+            const safeCompanyKey = companyKey.toLowerCase();
+            const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+            const email = `${stringToHex(securityKey)}@${stringToHex(safeCompanyKey)}.checkit.com`;
+            const password = `${safeCompanyKey}_${securityKey}!2026`;
+
             auth.signInWithEmailAndPassword(email, password)
                 .then(async (cred) => {
                     const userDoc = await db.collection('users').doc(cred.user.uid).get();
                     if (userDoc.exists && userDoc.data().role === 'worker') {
+                        const data = translations[currentLang] || translations['ko'];
+                        alert(data['login_success_msg'] || '로그인에 성공했습니다!');
                         window.location.href = 'worker_portal.html';
                     } else {
-                        alert('근로자 계정이 아닙니다.');
+                        alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');
                         auth.signOut();
                         loader.style.display = 'none';
                     }
                 })
                 .catch(err => {
-                    alert('이메일 또는 비밀번호가 올바르지 않습니다.');
+                    alert('정보가 올바르지 않거나 가입되지 않은 계정입니다. 회원가입을 먼저 진행해 주세요.');
                     loader.style.display = 'none';
                 });
         });
     }
 
-    // --- Worker Signup Handler ---
-    const signupFormWorker = document.getElementById('signup-form-worker');
-    if (signupFormWorker) {
-        signupFormWorker.addEventListener('submit', async (e) => {
+    // --- Simplified Worker Signup Handler ---
+    const signupFormWorkerSimplified = document.getElementById('signup-form-worker-simplified');
+    if (signupFormWorkerSimplified) {
+        signupFormWorkerSimplified.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('signup-worker-name').value.trim();
-            const birthDate = document.getElementById('signup-worker-birth').value;
-            const companyCode = document.getElementById('signup-worker-company-code').value.trim();
-            const email = document.getElementById('signup-worker-email').value.trim();
-            const password = document.getElementById('signup-worker-password').value.trim();
+            const companyName = document.getElementById('signup-worker-company-name').value.trim();
+            const companyKey = document.getElementById('signup-worker-company-key').value.trim().toLowerCase();
+            const securityKey = document.getElementById('signup-worker-security-key').value.trim();
 
-            if (password.length < 6) return alert('비밀번호는 6자리 이상이어야 합니다.');
+            if (!companyName || !companyKey || !securityKey) {
+                return alert("모든 항목을 입력해주세요.");
+            }
+
+            if (!companyKey.startsWith('comp_')) {
+                return alert("회사 코드는 'comp_회사명' 형식으로 시작해야 합니다.");
+            }
+
+            if (securityKey.length < 6) {
+                return alert("암호키는 6자리 이상으로 설정해야 합니다.");
+            }
 
             const loader = document.getElementById('pageLoader') || { style: {} };
             loader.style.display = 'flex';
+
+            const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+            const email = `${stringToHex(securityKey)}@${stringToHex(companyKey)}.checkit.com`;
+            const password = `${companyKey}_${securityKey}!2026`;
+
             try {
-                // 1. Verify company code
-                const companyId = companyCode.replace(/^comp_/i, '');
-                const compCheck = await db.collection('company_info').doc(companyId).get();
-                if (!compCheck.exists) throw new Error('존재하지 않는 회사 코드입니다. (예: COMP_회사명)');
-
-                // 2. Verify worker in company roster (name + DOB match)
-                const workerSnap = await db.collection('workers')
-                    .where('companyId', '==', companyId)
-                    .where('name', '==', name)
-                    .where('birthDate', '==', birthDate)
-                    .get();
-
-                if (workerSnap.empty) throw new Error('입력하신 이름과 생년월일이 직원 등록 내역과 일치하지 않습니다.\n관리자에게 이름/생년월일 등록 여부를 확인해주세요.');
-
-                const workerDoc = workerSnap.docs[0];
-                if (workerDoc.data().uid) throw new Error('이미 가입된 계정입니다. 로그인을 시도해주세요.');
-
-                // 3. Create Firebase Auth account
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // 4. Link user to worker doc
-                const batch = db.batch();
-                batch.set(db.collection('users').doc(user.uid), {
-                    role: 'worker', name, email, companyId,
-                    workerDocId: workerDoc.id,
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    role: 'worker',
+                    companyId: companyKey.replace('comp_', ''),
+                    companyName: companyName,
+                    securityKey: securityKey,
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
-                batch.update(db.collection('workers').doc(workerDoc.id), {
-                    uid: user.uid,
-                    linkedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                await batch.commit();
 
-                alert('근로자 회원가입이 완료되었습니다! 포털로 이동합니다.');
-                window.location.href = 'worker_portal.html';
-
-            } catch (err) {
-                console.error('Worker Signup Error:', err);
-                alert(err.message);
+                alert("회원가입이 완료되었습니다! 이제 로그인할 수 있습니다.");
+                auth.signOut();
+                if (signupModalOverlay) signupModalOverlay.style.display = 'none';
+                if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
+            } catch (error) {
+                console.error("Worker Signup Error:", error);
+                alert(error.message);
             } finally {
                 loader.style.display = 'none';
             }
+        });
+    }
+
+    // --- Worker Signup Link Handler ---
+    const signupLinkWorker = document.getElementById('signup-link-worker');
+    if (signupLinkWorker) {
+        signupLinkWorker.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loginModalOverlay) loginModalOverlay.style.display = 'none';
+            if (signupModalOverlay) signupModalOverlay.style.display = 'flex';
         });
     }
 });

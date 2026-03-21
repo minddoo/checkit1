@@ -686,38 +686,26 @@
     });
     
     // Member List Logic
-    window.showMemberList = async (companyCode, companyName) => {
+    window.showMemberList = async (companyCode) => {
         const modal = document.getElementById('memberModal');
         const title = document.getElementById('modalTitle');
         const listBody = document.getElementById('memberListBody');
         
+        // Find company name from allCompanies
+        const compInfo = allCompanies.find(c => c.companyKey === companyCode) || { name: companyCode };
+        const companyName = compInfo.name || companyCode;
+
         title.innerHTML = `<i class="fa-solid fa-building"></i> <strong>${companyName}</strong> 가입 근로자 명단`;
-        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 명단을 불러오고 있습니다...</td></tr>';
+        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> 로딩 중...</td></tr>';
         modal.style.display = 'flex';
 
         try {
-            // Re-sync with companyId unification (always search by the companyKey / companyId field)
-            const snap = await db.collection('users')
-                .where('role', '==', 'worker')
+            // Fetch from 'workers' roster to get birthDate, filtered by those joined (uid exists)
+            const snap = await db.collection('workers')
                 .where('companyId', '==', companyCode)
                 .get();
 
-            if (snap.empty) {
-                listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-user-slash"></i> 가입한 근로자가 없습니다.</td></tr>';
-                return;
-            }
-
             let html = '';
-            snap.forEach(doc => {
-                const u = doc.data();
-                const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
-                html += `
-                    <tr>
-                        <td style="font-weight:700;">${u.name || '-'}</td>
-                        <td style="text-align:center;">
-                            <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
-                        </td>
-                        <td style="text-align:center;">
                             <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.open('worker_portal.html?workerDocId=${u.workerDocId}&companyId=${u.companyId}', '_blank')">
                                 <i class="fa-solid fa-up-right-from-square"></i> 보기
                             </button>
@@ -794,6 +782,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:left;">성함</th>
+                        <th style="text-align:center;">생년월일</th>
                         <th style="text-align:center;">상태</th>
                         <th style="text-align:center;">포털</th>
                     </tr>

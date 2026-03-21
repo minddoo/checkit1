@@ -188,13 +188,31 @@
 
             <!-- SECTION 2: CHAT ROOM -->
             <div id="sectionChat" class="hidden">
-                <div class="card" style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                    <div class="card-icon icon-purple" style="width: 80px; height: 80px; font-size: 2.5rem; margin-bottom: 20px;">
-                        <i class="fa-solid fa-comments"></i>
+                <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: none;">
+                    <!-- Chat Header -->
+                    <div style="padding: 15px 25px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                        <div class="card-icon icon-purple" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                        </div>
                     </div>
-                    <h2 style="margin-bottom: 10px;">CHECKIT 1:1 대화방</h2>
-                    <p style="color: var(--text-muted); max-width: 400px;">전문 상담사와 1:1로 대화할 수 있는 공간입니다.<br>서비스 준비 중입니다.</p>
-                    <button class="status-btn" style="margin-top: 25px; background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 700;">상담 신청하기</button>
+
+                    <!-- Message Body -->
+                    <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Messages will be injected here -->
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px;">
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                        <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -246,6 +264,25 @@
         document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
     };
 
+    window.switchSection = (target) => {
+        const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
+        const menus = ['menuProgress', 'menuChat', 'menuResults'];
+
+        sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+        menus.forEach(m => document.getElementById(m).classList.remove('active'));
+
+        document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1)).classList.remove('hidden');
+        document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
+        
+        if (target === 'chat') {
+            // Scroll to bottom
+            const chatBody = document.getElementById('chatMessages');
+            setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+        }
+    };
+
+    let chatUnsub = null;
+
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
         if (!user) {
@@ -273,37 +310,19 @@
 
                 // 2. 실시간 근로자 명단 정보 감시 (관리자 업데이트 반영)
                 if (workerDocId) {
-                    db.collection('workers').doc(workerDocId).onSnapshot(async workerDoc => {
+                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
                         if (workerDoc.exists) {
                             renderCheckupStatus(workerDoc.data());
                         } else {
-                            // ID가 있으나 문서를 찾을 수 없는 경우 (명단 갱신 등) 재연동 시도
                             console.log("Worker ID mismatch, attempting to re-link...");
-                            await tryToRelinkWorker(user.uid, userData.name, companyId);
+                            tryToRelinkWorker(user.uid, userData.name, companyId);
                         }
                     });
-                } else {
-                    // ID가 아예 없는 경우 연동 시도
-                    await tryToRelinkWorker(user.uid, userData.name, companyId);
-                }
 
-                // 재연동 함수 (내부 헬퍼)
-                async function tryToRelinkWorker(uid, name, compId) {
-                    try {
-                        const snap = await db.collection('workers')
-                            .where('companyId', '==', compId)
-                            .where('name', '==', name)
-                            .limit(1).get();
-                        
-                        if (!snap.empty) {
-                            const newDocId = snap.docs[0].id;
-                            await db.collection('users').doc(uid).update({ workerDocId: newDocId });
-                            // snapshot listener will trigger again because users doc changed
-                        } else {
-                            document.getElementById('checkupStatus').innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
-                            document.getElementById('requiredDocs').textContent = '명단 등록 후 확인 가능합니다.';
-                        }
-                    } catch (e) { console.error("Relink error:", e); }
+                    // 4. 실시간 메시지/워크플로우 감시
+                    loadChatMessages(workerDocId);
+                } else {
+                    await tryToRelinkWorker(user.uid, userData.name, companyId);
                 }
 
                 // 3. 실시간 병원 정보 감시
@@ -323,13 +342,171 @@
         }
     });
 
+    // Chat / Workflow Logic
+    function loadChatMessages(workerDocId) {
+        if (chatUnsub) chatUnsub();
+        chatUnsub = db.collection('messages')
+            .where('workerDocId', '==', workerDocId)
+            .orderBy('timestamp', 'asc')
+            .onSnapshot(snap => {
+                const chatBody = document.getElementById('chatMessages');
+                
+                if (snap.empty) {
+                    // Send initial guide message if empty
+                    sendSystemGuide(workerDocId);
+                    return;
+                }
+
+                let html = '';
+                snap.forEach(doc => {
+                    const msg = doc.data();
+                    html += renderMessage(msg);
+                });
+                chatBody.innerHTML = html;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+    }
+
+    function renderMessage(msg) {
+        const isSystem = msg.sender === 'system';
+        const isAdmin = msg.sender === 'admin';
+        const isWorker = msg.sender === 'worker';
+        
+        let wrapperStyle = 'display: flex; flex-direction: column;';
+        if (isWorker) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
+        let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
+        if (isWorker) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
+        else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
+        else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+
+        if (msg.type === 'guide') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text}</p>
+                            <button onclick="window.open('https://checkit082082.pages.dev/checkup_guide.pdf', '_blank')" style="width: 100%; background: #f1f5f9; color: var(--dark); border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">안내문(PDF) 보기</button>
+                            <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">기한: 25.10.01 ~ 11.30</div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        if (msg.type === 'booking') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">제휴 병원 목록 보기</button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        return `
+            <div style="${wrapperStyle}">
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px;">Care Center</span>' : ''}
+                <div style="${bubbleStyle}">
+                    ${msg.text}
+                </div>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">오후 2:30</span>
+            </div>`;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            input.value = '';
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Chat send error:", e);
+            showToast("메시지 전송에 실패했습니다.", "error");
+        }
+    }
+
+    async function sendSystemGuide(workerDocId) {
+        // This simulates a system-initiated message flow
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'system',
+            text: '2025 건강검진 가이드가 도착했습니다.',
+            type: 'system',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'admin',
+            text: '안녕하세요! CHECKIT 케어 센터입니다. 귀하의 소속 기업 건강검진 안내를 확인해 주세요.',
+            type: 'guide',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'admin',
+            text: '안내문을 확인하신 후, 하단 병원 목록에서 원하는 병원을 선택하여 예약을 진행해 주시기 바랍니다.',
+            type: 'booking',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+
+    // 재연동 함수 (글로벌 스코프)
+    async function tryToRelinkWorker(uid, name, compId) {
+        try {
+            const snap = await db.collection('workers')
+                .where('companyId', '==', compId)
+                .where('name', '==', name)
+                .limit(1).get();
+            
+            if (!snap.empty) {
+                const newDocId = snap.docs[0].id;
+                await db.collection('users').doc(uid).update({ workerDocId: newDocId });
+            } else {
+                const statusEl = document.getElementById('checkupStatus');
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+                const docsEl = document.getElementById('requiredDocs');
+                if(docsEl) docsEl.textContent = '명단 등록 후 확인 가능합니다.';
+            }
+        } catch (e) { console.error("Relink error:", e); }
+    }
+
     function renderCheckupStatus(data) {
         const statusLabel = data.status || '진행 전';
         let badgeClass = 'status-pending';
         if (statusLabel === '진행 중') badgeClass = 'status-inprogress';
         if (statusLabel === '완료') badgeClass = 'status-done';
 
-        document.getElementById('checkupStatus').innerHTML = `
+        const statusContainer = document.getElementById('checkupStatus');
+        if (!statusContainer) return;
+
+        statusContainer.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 8px;">
@@ -365,6 +542,49 @@
             </div>
         `;
         document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
+
+        // Update Results Section
+        renderResults(data);
+    }
+
+    function renderResults(data) {
+        const resultsContainer = document.getElementById('sectionResults');
+        if (!resultsContainer) return;
+
+        const results = data.results || [];
+        const cardBody = resultsContainer.querySelector('.card');
+        
+        let resultsHtml = `
+            <div class="card-header">
+                <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
+                <h3>나의 결과지 관리</h3>
+            </div>
+        `;
+
+        if (results.length === 0) {
+            resultsHtml += `
+                <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
+                    <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                    <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+                </div>
+            `;
+        } else {
+            resultsHtml += '<div style="display: flex; flex-direction: column; gap: 10px;">';
+            results.forEach((res, idx) => {
+                resultsHtml += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
+                        <div>
+                            <div style="font-weight: 700; color: var(--text);">${res.name || '검진 결과지'}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">발급일: ${res.date || '-'} | 구분: ${res.type || '일반'}</div>
+                        </div>
+                        <button onclick="window.open('${res.url}', '_blank')" class="status-btn" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; font-size: 0.85rem;">다운로드</button>
+                    </div>
+                `;
+            });
+            resultsHtml += '</div>';
+        }
+        cardBody.innerHTML = resultsHtml;
     }
 
     async function updateStatus(newStatus) {

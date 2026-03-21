@@ -284,7 +284,14 @@
                         <div style="padding: 20px; background: #fcfcfc; border-bottom: 1px solid #efefef;">
                             <h4 style="margin: 0; font-size: 1rem;"><i class="fa-solid fa-users-viewfinder"></i> 근로자 채팅 목록</h4>
                         </div>
-                        <div id="chatWorkerList" style="flex: 1; overflow-y: auto;">
+                        <div style="padding: 10px 15px; border-bottom: 1px solid #eee; background: #f8fafc;">
+                            <div style="position: relative;">
+                                <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.8rem;"></i>
+                                <input type="text" id="chatSearchInput" placeholder="기업명 또는 이름 검색..." oninput="window.filterChatList()"
+                                       style="width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border-color 0.2s; background: white;">
+                            </div>
+                        </div>
+                        <div id="chatWorkerList" style="flex-grow: 1; overflow-y: auto;">
                             <!-- List of workers injected here -->
                             <div style="padding: 30px; text-align: center; color: #999;">대화 목록을 불러오고 있습니다...</div>
                         </div>
@@ -567,10 +574,10 @@
                 const compDisplayName = cid === 'ch082082' ? '체킷 (본사)' : (compInfo.name || cid);
 
                 html += `
-                    <div class="company-header" onclick="toggleWorkerGroup('${cid}')">
+                    <div class="company-header collapsed" onclick="toggleWorkerGroup('${cid}')">
                         <span><i class="fa-solid fa-chevron-down"></i> ${compDisplayName} (${workers.length})</span>
                     </div>
-                    <div id="group-${cid}" class="worker-group">
+                    <div id="group-${cid}" class="worker-group hidden">
                 `;
 
                 workers.forEach(w => {
@@ -589,6 +596,45 @@
             }
 
             workerListEl.innerHTML = html;
+            
+            // Re-apply filter if search input exists
+            if (document.getElementById('chatSearchInput')?.value) {
+                window.filterChatList();
+            }
+        });
+    };
+
+    window.filterChatList = () => {
+        const query = document.getElementById('chatSearchInput').value.trim().toLowerCase();
+        const headers = document.querySelectorAll('.company-header');
+        
+        headers.forEach(header => {
+            const group = header.nextElementSibling;
+            const companyName = header.textContent.toLowerCase();
+            let hasMatch = companyName.includes(query);
+            
+            const items = group.querySelectorAll('.chat-item');
+            items.forEach(item => {
+                const name = item.querySelector('.name span').textContent.toLowerCase();
+                if (name.includes(query) || companyName.includes(query)) {
+                    item.style.display = 'block';
+                    hasMatch = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            if (hasMatch) {
+                header.style.display = 'flex';
+                if (query) { // Auto-expand if searching
+                    group.classList.remove('hidden');
+                    header.classList.remove('collapsed');
+                }
+            } else {
+                header.style.display = 'none';
+                group.classList.add('hidden');
+                header.classList.add('collapsed');
+            }
         });
     };
 

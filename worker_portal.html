@@ -245,6 +245,8 @@
         document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1)).classList.remove('hidden');
         document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
     };
+
+    auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
         if (!user) {
             window.location.href = 'index.html';

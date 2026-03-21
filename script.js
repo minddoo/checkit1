@@ -1418,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (role === 'master' || role === 'super_admin') {
                     window.location.href = 'platform.html?role=master';
                 } else if (role === 'company_admin') {
-                    window.location.href = `https://586e9c7.checkit082082.pages.dev/관리자페이지.html?cid=${cid}`;
+                    window.location.href = `company_dashboard.html`;
                 } else {
                     window.location.href = 'platform.html?role=worker';
                 }
@@ -1542,7 +1542,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const data = translations[currentLang] || translations['ko'];
                     alert(data['login_success_msg'] || '로그인에 성공했습니다!');
                     if (role === 'company_admin') {
-                        window.location.href = `https://586e9c7.checkit082082.pages.dev/관리자페이지.html?cid=${companyId}`;
+                        window.location.href = `company_dashboard.html`;
                     } else {
                         window.location.href = `platform.html?role=${role}&cid=${companyId}`;
                     }

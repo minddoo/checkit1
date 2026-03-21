@@ -1495,11 +1495,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1. 일반 기업 정보 확인 (마스터가 생성한 키인지 검증)
             const inputCid = companyKey.replace('comp_', '');
             try {
-                // 정확한 케이스로 조회 확인
+                // 정확한 케이스로 조회 확인 (접두어 제거 버전)
                 let compDoc = await db.collection('company_info').doc(inputCid).get();
-                // 없으면 소문자로 재시도
+                
+                // 원본 입력값 자체가 문서 ID로 저장되었을지도 모르니 확인 (대소문자 유지)
+                if (!compDoc.exists) {
+                    compDoc = await db.collection('company_info').doc(companyKey).get();
+                }
+
+                // 없으면 소문자로 재시도 (접두어 제거 버전)
                 if (!compDoc.exists) {
                     compDoc = await db.collection('company_info').doc(inputCid.toLowerCase()).get();
+                }
+
+                // 없으면 소문자로 재시도 (원본 버전)
+                if (!compDoc.exists) {
+                    compDoc = await db.collection('company_info').doc(companyKey.toLowerCase()).get();
                 }
 
                 if (compDoc.exists) {

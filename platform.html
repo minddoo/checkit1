@@ -706,14 +706,26 @@
                 .get();
 
             let html = '';
-                            <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.open('worker_portal.html?workerDocId=${u.workerDocId}&companyId=${u.companyId}', '_blank')">
-                                <i class="fa-solid fa-up-right-from-square"></i> 보기
-                            </button>
-                        </td>
-                    </tr>
-                `;
+            snap.forEach(doc => {
+                const w = doc.data();
+                if (w.uid) { // Only show signed-up workers
+                    html += `
+                        <tr>
+                            <td style="font-weight:700;">${w.name || '-'}</td>
+                            <td style="text-align:center; color:#64748b; font-size:0.85rem;">${w.birthDate || '-'}</td>
+                            <td style="text-align:center;">
+                                <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
+                            </td>
+                            <td style="text-align:center;">
+                                <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.open('worker_portal.html?workerDocId=${doc.id}&companyId=${w.companyId}', '_blank')">
+                                    <i class="fa-solid fa-up-right-from-square"></i> 보기
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
             });
-            listBody.innerHTML = html;
+            listBody.innerHTML = html || '<tr><td colspan="4" style="text-align:center; padding:20px; color:#94a3b8;">가입된 근로자가 없습니다.</td></tr>';
         } catch (e) {
             console.error("Member list error:", e);
             listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#e74c3c;">명단을 불러오지 못했습니다: ' + e.message + '</td></tr>';

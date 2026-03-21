@@ -1844,7 +1844,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loader.style.display = 'flex';
 
             try {
-                const companyId = companyKey;
+                const companyId = companyKey.replace('comp_', '');
                 
                 // 3. Roster Check (Name + DOB + CompanyId)
                 const workerSnap = await db.collection('workers')

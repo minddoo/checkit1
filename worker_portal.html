@@ -78,6 +78,37 @@
 
         /* Loading state */
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout */
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
+        .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
+
+        .sidebar-menu { list-style: none; margin-top: 10px; }
+        .sidebar-menu li { 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            transition: 0.2s; 
+        }
+        .sidebar-menu li i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
+        .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
+
+        @media (max-width: 768px) {
+            .portal-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px 20px; }
+            .sidebar-menu { display: flex; gap: 10px; overflow-x: auto; margin-top: 0; padding-bottom: 5px; }
+            .sidebar-menu li { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.85rem; }
+            .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
+            .main-content { padding: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -97,45 +128,94 @@
         </div>
     </div>
 
-    <div class="main">
-        <!-- Welcome -->
-        <div class="welcome-banner">
-            <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
-            <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+    <div class="portal-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li id="menuProgress" class="active" onclick="switchSection('progress')">
+                    <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
+                </li>
+                <li id="menuChat" onclick="switchSection('chat')">
+                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
+                </li>
+                <li id="menuResults" onclick="switchSection('results')">
+                    <i class="fa-solid fa-file-medical"></i> 나의 결과지
+                </li>
+            </ul>
         </div>
 
-        <!-- My Checkup Status -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
-                <h3>나의 검진 현황</h3>
-            </div>
-            <div id="checkupStatus">
-                <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
-            </div>
-        </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- SECTION 1: MY PROGRESS -->
+            <div id="sectionProgress">
+                <!-- Welcome -->
+                <div class="welcome-banner">
+                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+                </div>
 
-        <!-- Affiliated Hospitals -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
-                <h3>제휴 병원 안내</h3>
-            </div>
-            <div id="hospitalList">
-                <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
-            </div>
-        </div>
+                <!-- My Checkup Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3>나의 검진 현황</h3>
+                    </div>
+                    <div id="checkupStatus">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
 
-        <!-- Required Docs -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
-                <h3>기업 필요 서류</h3>
+                <!-- Affiliated Hospitals -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
+                        <h3>제휴 병원 안내</h3>
+                    </div>
+                    <div id="hospitalList">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
+
+                <!-- Required Docs -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
+                        <h3>기업 필요 서류</h3>
+                    </div>
+                    <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
+                </div>
             </div>
-            <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
-        </div>
-    </div>
-</div>
+
+            <!-- SECTION 2: CHAT ROOM -->
+            <div id="sectionChat" class="hidden">
+                <div class="card" style="min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                    <div class="card-icon icon-purple" style="width: 80px; height: 80px; font-size: 2.5rem; margin-bottom: 20px;">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h2 style="margin-bottom: 10px;">CHECKIT 1:1 대화방</h2>
+                    <p style="color: var(--text-muted); max-width: 400px;">전문 상담사와 1:1로 대화할 수 있는 공간입니다.<br>서비스 준비 중입니다.</p>
+                    <button class="status-btn" style="margin-top: 25px; background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 700;">상담 신청하기</button>
+                </div>
+            </div>
+
+            <!-- SECTION 3: MY RESULTS -->
+            <div id="sectionResults" class="hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
+                        <h3>나의 결과지 관리</h3>
+                    </div>
+                    <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
+                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                        <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End main-content -->
+    </div> <!-- End portal-wrapper -->
+</div> <!-- End portalContent -->
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -154,7 +234,17 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    auth.onAuthStateChanged(async (user) => {
+    // Section Switching
+    window.switchSection = (target) => {
+        const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
+        const menus = ['menuProgress', 'menuChat', 'menuResults'];
+
+        sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+        menus.forEach(m => document.getElementById(m).classList.remove('active'));
+
+        document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1)).classList.remove('hidden');
+        document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1)).classList.add('active');
+    };
         const loader = document.getElementById('pageLoader');
         if (!user) {
             window.location.href = 'index.html';

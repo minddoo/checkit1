@@ -449,10 +449,10 @@
             });
             
             // 메모리 상에서 최신순 정렬 (index 오류 방지)
-            allWorkers.sort((a, b) => {
-                const timeA = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : new Date(a.createdAt).getTime()) : 0;
-                const timeB = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : new Date(b.createdAt).getTime()) : 0;
-                return timeB - timeA;
+            allWorkers.sort((a,b) => {
+                const tA = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
+                const tB = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
+                return tB - tA;
             });
 
             window.filterTable(); 
@@ -588,8 +588,8 @@
             });
             
             allHospitals.sort((a,b) => {
-                const tA = a.createdAt ? a.createdAt.toMillis() : 0;
-                const tB = b.createdAt ? b.createdAt.toMillis() : 0;
+                const tA = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
+                const tB = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
                 return tB - tA;
             });
             window.renderHospTable(allHospitals);

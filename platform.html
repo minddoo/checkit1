@@ -53,7 +53,7 @@
         
         /* Table */
         .table-toolbar { display: flex; justify-content: space-between; margin-bottom: 15px; }
-        .search-box { display: flex; align-items: center; background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 8px 15px; width: 300px; }
+        .search-box { display: flex; align-items: center; background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 8px 15px; width: 220px; }
         .search-box input { border: none; outline: none; background: transparent; margin-left: 10px; width: 100%; }
         
         table { width: 100%; border-collapse: collapse; text-align: left; }
@@ -288,7 +288,7 @@
                             <div style="position: relative;">
                                 <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.8rem;"></i>
                                 <input type="text" id="chatSearchInput" placeholder="기업명 또는 이름 검색..." oninput="window.filterChatList()"
-                                       style="width: 100%; padding: 8px 10px 8px 30px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border-color 0.2s; background: white;">
+                                       style="width: calc(100% - 10px); max-width: 240px; padding: 8px 10px 8px 30px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border-color 0.2s; background: white;">
                             </div>
                         </div>
                         <div id="chatWorkerList" style="flex-grow: 1; overflow-y: auto;">

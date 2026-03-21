@@ -92,8 +92,8 @@
             <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
-            <li><i class="fa-solid fa-calendar-check"></i> 검진 현황 조회</li>
+            <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
+            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> 검진 현황 조회</li>
             <li><i class="fa-solid fa-file-invoice"></i> 결과 리포트</li>
         </ul>
         <div style="margin-top: auto; padding: 20px;">
@@ -117,11 +117,13 @@
             </div>
         </header>
         
-        <!-- Content -->
+        <!-- Content Area -->
         <div class="content-area">
             
-            <!-- Generate Card -->
-            <div class="card">
+            <!-- SECTION 1: REGISTRATION -->
+            <div id="sectionRegistration">
+                <!-- Generate Card -->
+                <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                     <div>
                         <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 직원(임직원) 명단 등록</h3>
@@ -352,6 +354,41 @@
                     </tbody>
                 </table>
             </div>
+            </div> <!-- End sectionRegistration -->
+
+            <!-- SECTION 2: CHECKUP STATUS -->
+            <div id="sectionStatus" class="hidden">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <div>
+                            <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-chart-line" style="color: #8b5cf6;"></i> 실시간 검진 현황</h3>
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">전체 인원 및 현장별 검진 진행 상황을 모니터링합니다.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label style="font-weight: 600; font-size: 0.9rem; color: #64748b;">현장 선택:</label>
+                            <select id="statusSiteFilter" onchange="window.filterStatusTable()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.9rem; outline: none; background: white;">
+                                <option value="all">전체 현장 보기</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <table id="statusTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">소속 현장</th>
+                                <th style="width: 15%">성함</th>
+                                <th style="width: 20%">필수 검진</th>
+                                <th style="width: 20%">검진 기간</th>
+                                <th style="width: 15%">진행 상태</th>
+                                <th style="width: 15%; text-align: center;">상세 정보</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statusList">
+                            <!-- 로딩 중 또는 데이터 없음 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- End sectionStatus -->
             
         </div>
     </div>
@@ -399,6 +436,82 @@
     let currentCompanyId = null;
     let allWorkers = [];
     let allHospitals = [];
+
+    // Section Switching logic
+    window.switchSection = (section) => {
+        const regSec = document.getElementById("sectionRegistration");
+        const statusSec = document.getElementById("sectionStatus");
+        const menuReg = document.getElementById("menuReg");
+        const menuStatus = document.getElementById("menuStatus");
+
+        if (section === 'registration') {
+            regSec.classList.remove('hidden');
+            statusSec.classList.add('hidden');
+            menuReg.classList.add('active');
+            menuStatus.classList.remove('active');
+        } else {
+            regSec.classList.add('hidden');
+            statusSec.classList.remove('hidden');
+            menuReg.classList.remove('active');
+            menuStatus.classList.add('active');
+            window.renderStatusDashboard(); // Refresh status view
+        }
+    };
+
+    // Workers Status Dashboard Logic
+    window.renderStatusDashboard = () => {
+        // Populate Site Filter
+        const sites = [...new Set(allWorkers.map(w => w.site).filter(s => !!s))];
+        const filter = document.getElementById("statusSiteFilter");
+        const currentVal = filter.value;
+        
+        let options = '<option value="all">전체 현장 보기</option>';
+        sites.forEach(s => {
+            options += `<option value="${s}">${s}</option>`;
+        });
+        filter.innerHTML = options;
+        filter.value = sites.includes(currentVal) ? currentVal : "all";
+
+        window.filterStatusTable();
+    };
+
+    window.filterStatusTable = () => {
+        const selectedSite = document.getElementById("statusSiteFilter").value;
+        const filtered = selectedSite === "all" 
+            ? allWorkers 
+            : allWorkers.filter(w => w.site === selectedSite);
+        
+        const list = document.getElementById("statusList");
+        if(filtered.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 40px 0;">조회된 인원이 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(w => {
+            // progress status (for now default to '진행 전')
+            const statusLabel = w.status || "진행 전";
+            let statusColor = "#94a3b8"; // grey
+            if (statusLabel === "완료") statusColor = "#10b981"; // green
+            if (statusLabel === "진행 중") statusColor = "#f59e0b"; // orange
+
+            html += `<tr>
+                <td style="color: #64748b;">${w.site || '-'}</td>
+                <td><strong>${w.name}</strong></td>
+                <td style="font-size: 0.9rem;">${w.checkup || '-'}</td>
+                <td style="font-size: 0.85rem; color: #64748b;">${w.period || '-'}</td>
+                <td>
+                    <span style="display:inline-block; padding: 4px 10px; border-radius: 6px; background: ${statusColor}15; color: ${statusColor}; font-size: 0.85rem; font-weight: 700; border: 1px solid ${statusColor}30;">
+                        ${statusLabel}
+                    </span>
+                </td>
+                <td style="text-align: center;">
+                    <button class="btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="showToast('상세 결과 준비 중입니다.', 'info')">조회</button>
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
 
     // Table Rendering for Workers
     window.renderTable = (dataArray) => {

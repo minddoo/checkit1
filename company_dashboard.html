@@ -216,13 +216,22 @@
             </div>
             
             <!-- Hospital Info Card -->
-            <div class="card">
+            <div class="card" style="margin-bottom: 30px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                     <div>
                         <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-hospital" style="color: #0ea5e9;"></i> 제휴 병원 및 검진 안내</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
-                            우리 기업과 연계된 검진 병원의 정보를 근로자들에게 안내하기 위해 상세히 작성해 주세요.
+                            우리 기업과 연계된 검진 병원의 정보를 근로자들에게 안내하기 위해 상세히 작성해 주세요. 여러 병원도 일괄 등록 가능합니다.
                         </p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline" onclick="window.downloadHospExcelTemplate()" style="border-color: #0ea5e9; color: #0ea5e9;">
+                            <i class="fa-solid fa-download"></i> 병원 양식 다운로드
+                        </button>
+                        <button class="btn-primary" style="background: #0ea5e9;" onclick="document.getElementById('hospExcelUpload').click()">
+                            <i class="fa-solid fa-file-excel"></i> 병원 엑셀 일괄등록
+                        </button>
+                        <input type="file" id="hospExcelUpload" accept=".xlsx, .xls" style="display: none;" onchange="window.handleHospExcelUpload(event)">
                     </div>
                 </div>
                 <form id="hospitalInfoForm" onsubmit="window.saveHospitalInfo(event)">
@@ -257,9 +266,9 @@
                         </div>
                         <div class="input-group">
                             <label>예약 사이트 유무</label>
-                            <div class="input-wrapper">
+                            <div class="input-wrapper" style="height: 43.5px;">
                                 <i class="fa-solid fa-link"></i>
-                                <div style="display: flex; align-items: center; gap: 15px; flex: 1; padding: 12px 10px;">
+                                <div style="display: flex; align-items: center; gap: 15px; flex: 1; padding: 0 10px; height: 100%;">
                                     <label style="display:flex; align-items:center; gap:5px; font-weight:normal; cursor:pointer; margin:0; font-size:0.95rem;">
                                         <input type="radio" name="hospHasLink" value="Y" onchange="window.toggleHospLink()" style="flex:initial; padding:0; margin:0; height:auto;"> 유 (Link O)
                                     </label>
@@ -286,10 +295,33 @@
                     </div>
                     <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
                         <button type="submit" id="saveHospBtn" class="btn-primary" style="height: 44px; padding: 0 30px; background: #0ea5e9;">
-                            <i class="fa-solid fa-floppy-disk"></i> 병원 정보 저장
+                            <i class="fa-solid fa-plus"></i> 병원 명단에 추가
                         </button>
                     </div>
                 </form>
+            </div>
+
+            <!-- Hospital List Card -->
+            <div class="card">
+                <div class="table-toolbar">
+                    <h3><i class="fa-solid fa-square-h" style="color: #0ea5e9;"></i> 등록된 제휴 병원 목록</h3>
+                </div>
+                
+                <table id="hospitalTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">병원 이름</th>
+                            <th style="width: 20%">검진 가능 기간</th>
+                            <th style="width: 15%">예약 가능 기간</th>
+                            <th style="width: 15%">추가 항목 비용</th>
+                            <th style="width: 20%">예약 사이트</th>
+                            <th style="width: 10%; text-align: center;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hospitalList">
+                        <tr><td colspan="6" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                    </tbody>
+                </table>
             </div>
             
             <!-- List Card -->
@@ -366,8 +398,9 @@
     let currentUserData = null;
     let currentCompanyId = null;
     let allWorkers = [];
+    let allHospitals = [];
 
-    // Table Rendering
+    // Table Rendering for Workers
     window.renderTable = (dataArray) => {
         const list = document.getElementById("workerList");
         if(dataArray.length === 0) {
@@ -455,28 +488,11 @@
 
                 currentCompanyId = currentUserData.companyId;
                 
-                // 회사 이름 및 병원 정보 가져오기
+                // 회사 이름만 가져오기 (병원은 별도 컬렉션으로 분리됨)
                 const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
                 if (compDoc.exists) {
                     const data = compDoc.data();
                     document.getElementById("displayCompanyName").innerText = data.name || currentCompanyId;
-                    
-                    // 기존 병원 정보가 있다면 폼 채우기
-                    if(data.hospitalInfo) {
-                        document.getElementById("hospName").value = data.hospitalInfo.name || "";
-                        document.getElementById("hospSchedule").value = data.hospitalInfo.schedule || "";
-                        document.getElementById("hospPeriod").value = data.hospitalInfo.period || "";
-                        document.getElementById("hospExtraCost").value = data.hospitalInfo.extraCost || "";
-                        
-                        if(data.hospitalInfo.hasLink === 'Y') {
-                            document.querySelector('input[name="hospHasLink"][value="Y"]').checked = true;
-                            document.getElementById("hospLink").value = data.hospitalInfo.link || "";
-                            document.getElementById("hospCode").value = data.hospitalInfo.code || "";
-                        } else {
-                            document.querySelector('input[name="hospHasLink"][value="N"]').checked = true;
-                        }
-                        window.toggleHospLink();
-                    }
                 } else {
                     document.getElementById("displayCompanyName").innerText = currentCompanyId;
                 }
@@ -561,7 +577,64 @@
         }
     };
     
-    // Save Hospital Info
+    // Load Hospitals
+    window.loadHospitals = (companyId) => {
+        db.collection("hospitals")
+          .where("companyId", "==", companyId)
+          .onSnapshot(snap => {
+            allHospitals = [];
+            snap.forEach(doc => {
+                allHospitals.push({ id: doc.id, ...doc.data() });
+            });
+            
+            allHospitals.sort((a,b) => {
+                const tA = a.createdAt ? a.createdAt.toMillis() : 0;
+                const tB = b.createdAt ? b.createdAt.toMillis() : 0;
+                return tB - tA;
+            });
+            window.renderHospTable(allHospitals);
+          });
+    };
+
+    window.renderHospTable = (dataArray) => {
+        const list = document.getElementById("hospitalList");
+        if(dataArray.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 30px 0;">등록된 제휴 병원이 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        dataArray.forEach(h => {
+            const linkHtml = h.hasLink === 'Y' && h.link 
+                ? `<a href="${h.link}" target="_blank" style="color: #0ea5e9; font-weight: 600; text-decoration: underline;">바로가기</a><br><span style="font-size: 0.85rem; color: #64748b;">Code: ${h.code||'-'}</span>` 
+                : `<span style="color: #94a3b8;">없음</span>`;
+            
+            html += `<tr>
+                <td style="font-weight: 600; color: #0ea5e9;">${h.name}</td>
+                <td>${h.schedule}</td>
+                <td>${h.period}</td>
+                <td>${h.extraCost || '-'}</td>
+                <td>${linkHtml}</td>
+                <td style="text-align: center;">
+                    <button class="btn-danger" onclick="window.delHospital('${h.id}', '${h.name}')" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 5px 12px;">삭제</button>
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
+
+    window.delHospital = async (id, name) => {
+        if(confirm(`[${name}] 병원을 목록에서 완전히 삭제하시겠습니까?`)) {
+            try { 
+                await db.collection("hospitals").doc(id).delete(); 
+                showToast("병원이 삭제되었습니다.", "success"); 
+            } catch(e) { 
+                showToast("삭제 실패: " + e.message, "error"); 
+            }
+        }
+    };
+
+    // Save Hospital Info manually
     window.saveHospitalInfo = async (e) => {
         e.preventDefault();
         
@@ -583,18 +656,30 @@
             code: hasLink === 'Y' ? document.getElementById("hospCode").value.trim() : ''
         };
 
+        if(!info.name) {
+            showToast("변원 이름을 입력하세요.", "error");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> 병원 명단에 추가';
+            return;
+        }
+
         try {
-            await db.collection('company_info').doc(currentCompanyId).set({
-                hospitalInfo: info
-            }, { merge: true });
+            await db.collection('hospitals').add({
+                companyId: currentCompanyId,
+                ...info,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
             
-            showToast("제휴 병원 정보가 성공적으로 업데이트되었습니다!", "success");
+            showToast("제휴 병원 정보가 성공적으로 추가되었습니다!", "success");
+            e.target.reset(); // clear form inputs
+            document.querySelector('input[name="hospHasLink"][value="N"]').checked = true;
+            window.toggleHospLink();
         } catch(err) {
             console.error("Save Hospital Error:", err);
-            showToast("제휴 병원 정보 저장에 실패했습니다.", "error");
+            showToast("제휴 병원 추가에 실패했습니다.", "error");
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> 병원 정보 저장';
+            submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> 병원 명단에 추가';
         }
     };
     
@@ -723,6 +808,99 @@
                 loader.style.display = "none";
                 document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
                 e.target.value = ""; // Reset file input
+            }
+        };
+        
+        reader.onerror = () => {
+             loader.style.display = "none";
+             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
+        };
+
+        reader.readAsBinaryString(file);
+    };
+    
+    // Hospital Excel Upload/Download logic
+    window.downloadHospExcelTemplate = () => {
+        const wsData = [
+            ["병원 이름", "검진 가능 기간", "예약 가능 기간", "추가 항목 비용", "예약 사이트 링크(URL)", "예약 회사코드"],
+            ["CHECKIT 지정병원", "25.10.01 ~ 11.30", "25.10.01 ~ 11.30", "위내시경 추가 시 50,000원", "https://hospital-booking.com", "CHK_2025"]
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        ws['!cols'] = [ {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 200}, {wpx: 100} ];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "병원일괄등록양식");
+        XLSX.writeFile(wb, "CHECKIT_병원목록_일괄등록_양식.xlsx");
+    };
+
+    window.handleHospExcelUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!currentCompanyId) {
+            showToast("기업 정보가 확인되지 않습니다.", "error");
+            return;
+        }
+
+        const loader = document.getElementById("pageLoader");
+        document.getElementById("loaderMessage").innerText = "병원 엑셀 데이터를 처리 중입니다...";
+        loader.style.display = "flex";
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const firstSheet = workbook.SheetNames[0];
+                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
+
+                if(excelRows.length === 0) throw new Error("엑셀 파일에 데이터가 없습니다.");
+
+                let batch = db.batch();
+                let count = 0, totalAdded = 0;
+
+                for (let i = 0; i < excelRows.length; i++) {
+                    const row = excelRows[i];
+                    if (i === 0 && row["병원 이름"] === "CHECKIT 지정병원") continue;
+
+                    const name = String(row["병원 이름"] || "").trim();
+                    const schedule = String(row["검진 가능 기간"] || "").trim();
+                    const period = String(row["예약 가능 기간"] || "").trim();
+                    const extra = String(row["추가 항목 비용"] || "").trim();
+                    const link = String(row["예약 사이트 링크(URL)"] || "").trim();
+                    const code = String(row["예약 회사코드"] || "").trim();
+
+                    if (!name) continue; 
+
+                    const docRef = db.collection("hospitals").doc();
+                    batch.set(docRef, {
+                        companyId: currentCompanyId,
+                        name: name,
+                        schedule: schedule,
+                        period: period,
+                        extraCost: extra,
+                        hasLink: link ? 'Y' : 'N',
+                        link: link,
+                        code: code,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    count++; totalAdded++;
+                    if (count === 490) { await batch.commit(); batch = db.batch(); count = 0; }
+                }
+                if (count > 0) await batch.commit();
+                
+                if (totalAdded > 0) {
+                    showToast(`총 ${totalAdded}개의 병원이 일괄 등록되었습니다!`, "success");
+                } else {
+                    showToast("성공적으로 추가된 병원이 없습니다 (병원 이름 누락 확인).", "error");
+                }
+
+            } catch (err) {
+                console.error("Hosp Upload Error:", err);
+                showToast("엑셀 병원 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
+            } finally {
+                loader.style.display = "none";
+                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
+                e.target.value = ""; 
             }
         };
         

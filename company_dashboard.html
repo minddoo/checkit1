@@ -215,35 +215,6 @@
                 </form>
             </div>
             
-            <!-- List Card -->
-            <div class="card">
-                <div class="table-toolbar">
-                    <h3><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                        <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
-                    </div>
-                </div>
-                
-                <table id="workerTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 15%">소속현장</th>
-                            <th style="width: 10%">성함</th>
-                            <th style="width: 10%">생년월일</th>
-                            <th style="width: 10%">국적</th>
-                            <th style="width: 15%">필수검진</th>
-                            <th style="width: 15%">검진기간</th>
-                            <th style="width: 15%">기업필요서류</th>
-                            <th style="width: 10%; text-align: center;">관리</th>
-                        </tr>
-                    </thead>
-                    <tbody id="workerList">
-                        <tr><td colspan="8" style="text-align: center; color: #999;">로딩 중...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
             <!-- Hospital Info Card -->
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
@@ -305,6 +276,35 @@
                         </button>
                     </div>
                 </form>
+            </div>
+            
+            <!-- List Card -->
+            <div class="card">
+                <div class="table-toolbar">
+                    <h3><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                        <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
+                    </div>
+                </div>
+                
+                <table id="workerTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%">소속현장</th>
+                            <th style="width: 10%">성함</th>
+                            <th style="width: 10%">생년월일</th>
+                            <th style="width: 10%">국적</th>
+                            <th style="width: 15%">필수검진</th>
+                            <th style="width: 15%">검진기간</th>
+                            <th style="width: 15%">기업필요서류</th>
+                            <th style="width: 10%; text-align: center;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workerList">
+                        <tr><td colspan="8" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                    </tbody>
+                </table>
             </div>
             
         </div>

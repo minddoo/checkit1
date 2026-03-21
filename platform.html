@@ -126,6 +126,15 @@
         .company-header i { transition: 0.2s; }
         .company-header.collapsed i { transform: rotate(-90deg); }
         .worker-group.hidden { display: none; }
+
+        /* Modal Styles */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001; display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        .modal-content { background: white; width: 90%; max-width: 800px; max-height: 85vh; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal-header { padding: 20px 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+        .modal-body { padding: 25px; overflow-y: auto; flex: 1; }
+        .modal-body table { width: 100%; border-collapse: collapse; }
+        .modal-body th { background: #f8fafc; color: #64748b; font-size: 0.8rem; padding: 12px; }
+        .modal-body td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -253,9 +262,10 @@
                     <table id="companyTable">
                         <thead>
                             <tr>
-                                <th style="width: 25%">기업명</th>
-                                <th style="width: 20%">회사코드</th>
-                                <th style="width: 35%">관리자 암호키</th>
+                                <th style="width: 20%">기업명</th>
+                                <th style="width: 15%">회사코드</th>
+                                <th style="width: 30%">관리자 암호키</th>
+                                <th style="width: 15%; text-align: center;">가입 현황</th>
                                 <th style="width: 20%; text-align: center;">관리</th>
                             </tr>
                         </thead>
@@ -457,7 +467,7 @@
     window.renderTable = (dataArray) => {
         const list = document.getElementById("companyList");
         if(dataArray.length === 0) {
-            list.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 30px; color: #999;">데이터가 없습니다.</td></tr>`;
+            list.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">데이터가 없습니다.</td></tr>`;
             return;
         }
         
@@ -471,6 +481,11 @@
                         ${d.adminKey}
                         <button class="copy-btn" onclick="window.copyToClipboard('${d.adminKey}')"><i class="fa-regular fa-copy"></i></button>
                     </div>
+                </td>
+                <td style="text-align: center;">
+                    <button class="btn-outline" style="padding: 6px 12px; font-size: 0.8rem; margin: 0 auto;" onclick="window.showMemberList('${d.companyKey}', '${d.name}')">
+                        <i class="fa-solid fa-users"></i> 근로자 목록
+                    </button>
                 </td>
                 <td style="text-align: center;">
                     <button class="btn-danger" onclick="window.delComp('${d.id}', '${d.name}')"><i class="fa-solid fa-trash-can"></i> 삭제</button>
@@ -670,6 +685,54 @@
         }
     });
     
+    // Member List Logic
+    window.showMemberList = async (companyCode, companyName) => {
+        const modal = document.getElementById('memberModal');
+        const title = document.getElementById('modalTitle');
+        const listBody = document.getElementById('memberListBody');
+        
+        title.innerHTML = `<i class="fa-solid fa-building"></i> <strong>${companyName}</strong> 가입 근로자 명단`;
+        listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#999;"><i class="fa-solid fa-spinner fa-spin"></i> 명단을 불러오고 있습니다...</td></tr>';
+        modal.style.display = 'flex';
+
+        try {
+            // Re-sync with companyId unification (always search by the companyKey / companyId field)
+            const snap = await db.collection('users')
+                .where('role', '==', 'worker')
+                .where('companyId', '==', companyCode)
+                .get();
+
+            if (snap.empty) {
+                listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-user-slash"></i> 가입한 근로자가 없습니다.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            snap.forEach(doc => {
+                const u = doc.data();
+                const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : '-';
+                html += `
+                    <tr>
+                        <td style="font-weight:700;">${u.name || '-'}</td>
+                        <td>${u.email || '-'}</td>
+                        <td style="color:#64748b;">${date}</td>
+                        <td style="text-align:center;">
+                            <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
+                        </td>
+                    </tr>
+                `;
+            });
+            listBody.innerHTML = html;
+        } catch (e) {
+            console.error("Member list error:", e);
+            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#e74c3c;">명단을 불러오지 못했습니다: ' + e.message + '</td></tr>';
+        }
+    };
+
+    window.closeModal = () => {
+        document.getElementById('memberModal').style.display = 'none';
+    };
+
     window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
 
     auth.onAuthStateChanged(user => {
@@ -713,5 +776,35 @@
         if (e.key === "Enter") { e.preventDefault(); document.getElementById("loginBtn").click(); }
     });
 </script>
+
+<!-- Member Modal -->
+<div id="memberModal" class="modal-overlay" onclick="if(event.target === this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle" style="margin:0; font-size:1.1rem;">가입 근로자 명단</h3>
+            <button class="btn-outline" style="padding: 5px 10px; border-radius: 50%; width: 32px; height: 32px; border: none; background: #eee;" onclick="closeModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align:left;">성함</th>
+                        <th style="text-align:left;">계정(이메일)</th>
+                        <th style="text-align:left;">가입일자</th>
+                        <th style="text-align:center;">상태</th>
+                    </tr>
+                </thead>
+                <tbody id="memberListBody">
+                    <!-- Injected via JS -->
+                </tbody>
+            </table>
+        </div>
+        <div style="padding: 15px 25px; border-top: 1px solid #eee; text-align: right; background: #fafafa;">
+            <button class="btn-dark" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closeModal()">닫기</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -717,6 +717,11 @@
                         <td style="text-align:center;">
                             <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
                         </td>
+                        <td style="text-align:center;">
+                            <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.open('worker_portal.html?workerDocId=${u.workerDocId}&companyId=${u.companyId}', '_blank')">
+                                <i class="fa-solid fa-up-right-from-square"></i> 보기
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
@@ -790,6 +795,7 @@
                     <tr>
                         <th style="text-align:left;">성함</th>
                         <th style="text-align:center;">상태</th>
+                        <th style="text-align:center;">포털</th>
                     </tr>
                 </thead>
                 <tbody id="memberListBody">

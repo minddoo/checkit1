@@ -121,10 +121,11 @@
 <div id="portalContent" class="hidden">
     <!-- Top Bar -->
     <div class="top-bar">
-        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT 근로자 포털</div>
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT 근로자 포털 <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER VIEW</span></div>
         <div class="user-info">
             <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
-            <button class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃</button>
+            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃</button>
+            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i> 닫기</button>
         </div>
     </div>
 
@@ -290,42 +291,54 @@
             return;
         }
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramWorkerDocId = urlParams.get('workerDocId');
+        const paramCompanyId = urlParams.get('companyId');
+
         try {
-            // 1. 실시간 사용자 정보 감시
+            // Check if Master Admin or regular worker
             db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
-                if (!userDoc.exists || userDoc.data().role !== 'worker') {
+                const userData = userDoc.data() || {};
+                const isMaster = user.email === "master@checkit.com";
+                
+                let workerDocId = userData.workerDocId;
+                let companyId = userData.companyId;
+
+                // Mode: Master Viewing a specific worker
+                if (isMaster && paramWorkerDocId && paramCompanyId) {
+                    workerDocId = paramWorkerDocId;
+                    companyId = paramCompanyId;
+                    
+                    document.getElementById('masterBadge').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.add('hidden');
+                    document.getElementById('closeBtn').classList.remove('hidden');
+                } else if (!userDoc.exists || userData.role !== 'worker') {
                     console.warn('Worker record not found or invalid role');
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
                     return;
                 }
 
-                const userData = userDoc.data();
-                const workerDocId = userData.workerDocId;
-                const companyId = userData.companyId;
-
                 // 기본 정보 표시
-                document.getElementById('displayName').textContent = userData.name || '근로자';
-                document.getElementById('welcomeName').textContent = userData.name || '근로자';
+                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
 
-                // 2. 실시간 근로자 명단 정보 감시 (관리자 업데이트 반영)
                 if (workerDocId) {
                     db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
                         if (workerDoc.exists) {
-                            renderCheckupStatus(workerDoc.data());
+                            const wData = workerDoc.data();
+                            if (isMaster) {
+                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                document.getElementById('welcomeName').textContent = wData.name;
+                            }
+                            renderCheckupStatus(wData);
                         } else {
-                            console.log("Worker ID mismatch, attempting to re-link...");
-                            tryToRelinkWorker(user.uid, userData.name, companyId);
+                            if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
                         }
                     });
-
-                    // 4. 실시간 메시지/워크플로우 감시
                     loadChatMessages(workerDocId);
-                } else {
-                    await tryToRelinkWorker(user.uid, userData.name, companyId);
                 }
 
-                // 3. 실시간 병원 정보 감시
                 if (companyId) {
                     db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
                         renderHospitals(hospSnap.docs);
@@ -335,7 +348,6 @@
                 loader.style.display = 'none';
                 document.getElementById('portalContent').classList.remove('hidden');
             });
-
         } catch (err) {
             console.error('Portal sync error:', err);
             loader.style.display = 'none';

@@ -280,17 +280,24 @@
             <!-- Worker Signup content -->
             <div id="signup-worker-content" class="tab-content active" style="display:block;">
                 <form id="signup-form-worker-simplified">
-                    <div class="form-group">
-                        <label>회사 이름 (Company Name)</label>
-                        <input type="text" id="signup-worker-company-name" required placeholder="본인의 회사명 입력">
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label>성함 (Name)</label>
+                            <input type="text" id="signup-worker-name" placeholder="예: 홍길동" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label>생년월일 (DOB)</label>
+                            <input type="date" id="signup-worker-birth" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>회사 입력키 (Company Code)</label>
                         <input type="text" id="signup-worker-company-key" required placeholder="예: comp_회사명">
                     </div>
                     <div class="form-group">
-                        <label>사용할 암호키 (Security Key)</label>
-                        <input type="password" id="signup-worker-security-key" required placeholder="비밀번호처럼 사용할 키를 입력하세요">
+                        <label>생성할 암호키 (Security Key)</label>
+                        <input type="password" id="signup-worker-security-key" required placeholder="worker+영문,숫자,특수문자 포함 6자리 이상">
+                        <small style="color: #64748b; font-size: 0.8rem; display: block; margin-top: 4px;">형식: worker로 시작 (예: worker123!@)</small>
                     </div>
                     <button type="submit" class="cta-button-primary">회원가입 완료</button>
                 </form>

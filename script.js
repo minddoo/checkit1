@@ -1792,46 +1792,88 @@ document.addEventListener('DOMContentLoaded', () => {
     if (signupFormWorkerSimplified) {
         signupFormWorkerSimplified.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const companyName = document.getElementById('signup-worker-company-name').value.trim();
+            const name = document.getElementById('signup-worker-name').value.trim();
+            const birthDate = document.getElementById('signup-worker-birth').value;
             const companyKey = document.getElementById('signup-worker-company-key').value.trim().toLowerCase();
             const securityKey = document.getElementById('signup-worker-security-key').value.trim();
 
-            if (!companyName || !companyKey || !securityKey) {
+            if (!name || !birthDate || !companyKey || !securityKey) {
                 return alert("모든 항목을 입력해주세요.");
+            }
+
+            // 1. Format Check: must start with 'worker'
+            if (!securityKey.startsWith('worker')) {
+                return alert("암호키는 반드시 'worker'로 시작해야 합니다. (예: worker123!@)");
+            }
+
+            // 2. Format Check: Eng + Num + Special, 6+ chars
+            const hasEnglish = /[a-zA-Z]/.test(securityKey);
+            const hasNumber = /[0-9]/.test(securityKey);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(securityKey);
+            if (securityKey.length < 6 || !hasEnglish || !hasNumber || !hasSpecial) {
+                return alert("암호키는 'worker'를 포함하여 영문, 숫자, 특수문자를 모두 포함한 6자리 이상이어야 합니다.");
             }
 
             if (!companyKey.startsWith('comp_')) {
                 return alert("회사 코드는 'comp_회사명' 형식으로 시작해야 합니다.");
             }
 
-            if (securityKey.length < 6) {
-                return alert("암호키는 6자리 이상으로 설정해야 합니다.");
-            }
-
             const loader = document.getElementById('pageLoader') || { style: {} };
             loader.style.display = 'flex';
 
-            const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
-            const email = `${stringToHex(securityKey)}@${stringToHex(companyKey)}.checkit.com`;
-            const password = `${companyKey}_${securityKey}!2026`;
-
             try {
+                const companyId = companyKey.replace('comp_', '');
+                
+                // 3. Roster Check (Name + DOB + CompanyId)
+                const workerSnap = await db.collection('workers')
+                    .where('companyId', '==', companyId)
+                    .where('name', '==', name)
+                    .where('birthDate', '==', birthDate)
+                    .get();
+
+                if (workerSnap.empty) {
+                    throw new Error('입력하신 성함과 생년월일이 기업의 직원 명단과 일치하지 않습니다. 관리자에게 확인해 주세요.');
+                }
+
+                const workerDoc = workerSnap.docs[0];
+                if (workerDoc.data().uid) {
+                    throw new Error('이미 가입된 정보입니다. 로그인을 시도해 주세요.');
+                }
+
+                // 4. Create Account
+                const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+                const email = `${stringToHex(securityKey)}@${stringToHex(companyKey)}.checkit.com`;
+                const password = `${companyKey}_${securityKey}!2026`;
+
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                await db.collection('users').doc(userCredential.user.uid).set({
+                const user = userCredential.user;
+
+                // 5. Link User and Save Metadata
+                const batch = db.batch();
+                batch.set(db.collection('users').doc(user.uid), {
                     role: 'worker',
-                    companyId: companyKey.replace('comp_', ''),
-                    companyName: companyName,
+                    companyId: companyId,
+                    name: name,
                     securityKey: securityKey,
+                    workerDocId: workerDoc.id,
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
 
-                alert("회원가입이 완료되었습니다! 이제 로그인할 수 있습니다.");
+                batch.update(db.collection('workers').doc(workerDoc.id), {
+                    uid: user.uid,
+                    linkedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await batch.commit();
+
+                alert("근로자 회원가입이 완료되었습니다! 이제 로그인할 수 있습니다.");
                 auth.signOut();
                 if (signupModalOverlay) signupModalOverlay.style.display = 'none';
                 if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
+                
             } catch (error) {
                 console.error("Worker Signup Error:", error);
-                alert(error.message);
+                alert(error.message || "회원가입 중 오류가 발생했습니다.");
             } finally {
                 loader.style.display = 'none';
             }

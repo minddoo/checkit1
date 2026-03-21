@@ -111,11 +111,11 @@ body {
  * 2.5. Hero Section
  * ------------------- */
 #hero {
-    background-image: url('assets/대표.png');
+    background-image: url('assets/hero-main-new.png');
     background-size: cover;
     background-position: center;
     text-align: center;
-    padding: 180px 0; /* Increased padding to increase height */
+    padding: 180px 0;
     position: relative;
     overflow: hidden;
 }
@@ -127,7 +127,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay for readability */
+    background-color: rgba(255, 255, 255, 0.3); /* Lighter overlay for clarity */
     z-index: 0;
 }
 
@@ -201,7 +201,8 @@ body {
 /* Main Page Hero Text (White) */
 #hero .hero-title,
 #hero .hero-subtitle {
-    color: var(--white);
+    color: #1e293b;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
 }
 
 /* Individual & Corporate Page Hero Text (Black - Fixed) */

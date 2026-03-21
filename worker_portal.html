@@ -348,17 +348,16 @@
         chatUnsub = db.collection('messages')
             .where('workerDocId', '==', workerDocId)
             .orderBy('timestamp', 'asc')
-            .onSnapshot(snap => {
+            .onSnapshot({ includeMetadataChanges: true }, snap => {
                 const chatBody = document.getElementById('chatMessages');
                 
                 if (snap.empty) {
-                    // Send initial guide message if empty
                     sendSystemGuide(workerDocId);
                     return;
                 }
 
                 let html = '';
-                snap.forEach(doc => {
+                snap.docs.forEach(doc => {
                     const msg = doc.data();
                     html += renderMessage(msg);
                 });
@@ -372,7 +371,9 @@
         const isAdmin = msg.sender === 'admin';
         const isWorker = msg.sender === 'worker';
         
-        let wrapperStyle = 'display: flex; flex-direction: column;';
+        const timestamp = msg.timestamp ? new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '전송 중...';
+
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
         if (isWorker) wrapperStyle += ' align-items: flex-end;';
         else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
         else wrapperStyle += ' align-items: flex-start;';
@@ -385,7 +386,7 @@
         if (msg.type === 'guide') {
             return `
                 <div style="${wrapperStyle}">
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
                             <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
                         </div>
@@ -395,13 +396,14 @@
                             <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">기한: 25.10.01 ~ 11.30</div>
                         </div>
                     </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
                 </div>`;
         }
 
         if (msg.type === 'booking') {
             return `
                 <div style="${wrapperStyle}">
-                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
                             <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
                         </div>
@@ -410,16 +412,17 @@
                             <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">제휴 병원 목록 보기</button>
                         </div>
                     </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
                 </div>`;
         }
 
         return `
             <div style="${wrapperStyle}">
-                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px;">Care Center</span>' : ''}
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
                 <div style="${bubbleStyle}">
                     ${msg.text}
                 </div>
-                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">오후 2:30</span>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;
     }
 

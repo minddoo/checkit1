@@ -1533,41 +1533,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const companyId = companyKey.replace('comp_', '');
                 let role = targetRole;
 
-                let workerDocId = null;
-                // [데이터 연동] 근로자로 로그인한 경우, 해당 회사와 암호키에 매칭되는 직원 정보 검색
-                if (role === 'worker') {
-                    try {
-                        const workerSnap = await db.collection('workers')
-                            .where('companyId', '==', companyId)
-                            .where('passwordKey', '==', securityKey)
-                            .limit(1)
-                            .get();
-                        
-                        if (!workerSnap.empty) {
-                            workerDocId = workerSnap.docs[0].id;
-                            console.log("Worker document linked:", workerDocId);
-                        }
-                    } catch (err) {
-                        console.warn("Worker link search failed:", err);
-                    }
+                // [데이터 연동 & 권한 체크]
+                // 1. 기업용 탭에서는 관리자만 로그인 성공 허용
+                if (role !== 'company_admin') {
+                    alert("이 탭은 기업 관리자 전용입니다. 근로자이신 경우 '근로자용' 탭에서 로그인해 주세요.");
+                    auth.signOut();
+                    loader.style.display = 'none';
+                    return;
                 }
 
                 db.collection('users').doc(user.uid).set({
                     role: role,
                     companyId: companyId,
                     securityKey: securityKey,
-                    workerDocId: workerDocId, // 자동 연동된 문서 ID 저장
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true }).then(() => {
                     const data = translations[currentLang] || translations['ko'];
-                    alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                    if (role === 'company_admin') {
-                        window.location.href = `company_dashboard.html`;
-                    } else if (role === 'worker') {
-                        window.location.href = `worker_portal.html`;
-                    } else {
-                        window.location.href = `platform.html?role=${role}&cid=${companyId}`;
-                    }
+                    alert(data['login_success_msg'] || '관리자 로그인에 성공했습니다!');
+                    window.location.href = `company_dashboard.html`;
                 });
             };
 

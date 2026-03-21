@@ -129,17 +129,24 @@
                 <form id="addWorkerForm" onsubmit="window.saveWorker(event)">
                     <div class="form-grid">
                         <div class="input-group">
-                            <label>이름 (Name)</label>
+                            <label>소속현장 (Site)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-building-user"></i>
+                                <input type="text" id="workerSite" placeholder="예: 제1공장" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>성함 (Name)</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-user"></i>
                                 <input type="text" id="workerName" placeholder="예: 윈터" required>
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>연락처 (Phone)</label>
+                            <label>생년월일 (DOB)</label>
                             <div class="input-wrapper">
-                                <i class="fa-solid fa-mobile-screen-button"></i>
-                                <input type="tel" id="workerPhone" placeholder="예: 010-1234-5678" required>
+                                <i class="fa-solid fa-calendar-day"></i>
+                                <input type="date" id="workerBirth" required>
                             </div>
                         </div>
                         <div class="input-group">
@@ -161,10 +168,31 @@
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>생년월일 (DOB)</label>
+                            <label>필수검진 (Required Checkup)</label>
                             <div class="input-wrapper">
-                                <i class="fa-solid fa-calendar-day"></i>
-                                <input type="date" id="workerBirth" required>
+                                <i class="fa-solid fa-stethoscope"></i>
+                                <input type="text" id="workerCheckup" placeholder="예: 일반검진, 특수검진" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>검진기간 (Checkup Period)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-week"></i>
+                                <input type="text" id="workerPeriod" placeholder="예: 25.01.01 ~ 25.12.31" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>기업필요서류 (Required Docs)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <input type="text" id="workerDocs" placeholder="예: 보건증, 결과지" required>
+                            </div>
+                        </div>
+                        <div class="input-group" style="grid-column: 1 / -1;">
+                            <label>특이사항 (Notes)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <input type="text" id="workerNotes" placeholder="예: 한국어 소통 원활 (선택사항)">
                             </div>
                         </div>
                     </div>
@@ -180,22 +208,25 @@
                     <h3><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                        <input type="text" id="searchInput" placeholder="이름 또는 연락처로 검색..." onkeyup="window.filterTable()">
+                        <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
                     </div>
                 </div>
                 
                 <table id="workerTable">
                     <thead>
                         <tr>
-                            <th style="width: 25%">이름</th>
-                            <th style="width: 20%">연락처</th>
-                            <th style="width: 20%">국적</th>
-                            <th style="width: 20%">생년월일</th>
-                            <th style="width: 15%; text-align: center;">관리</th>
+                            <th style="width: 15%">소속현장</th>
+                            <th style="width: 10%">성함</th>
+                            <th style="width: 10%">생년월일</th>
+                            <th style="width: 10%">국적</th>
+                            <th style="width: 15%">필수검진</th>
+                            <th style="width: 15%">검진기간</th>
+                            <th style="width: 15%">기업필요서류</th>
+                            <th style="width: 10%; text-align: center;">관리</th>
                         </tr>
                     </thead>
                     <tbody id="workerList">
-                        <tr><td colspan="5" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                        <tr><td colspan="8" style="text-align: center; color: #999;">로딩 중...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -248,19 +279,23 @@
     window.renderTable = (dataArray) => {
         const list = document.getElementById("workerList");
         if(dataArray.length === 0) {
-            list.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">등록된 직원이 없습니다.</td></tr>`;
+            list.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 30px; color: #999;">등록된 직원이 없습니다.</td></tr>`;
             return;
         }
         
         let html = "";
         dataArray.forEach(d => {
             html += `<tr>
+                <td>${d.site || '-'}</td>
                 <td><strong>${d.name}</strong></td>
-                <td>${d.phone}</td>
-                <td><span class="badge-country">${d.nationality}</span></td>
-                <td>${d.birthDate}</td>
+                <td>${d.birthDate || '-'}</td>
+                <td><span class="badge-country">${d.nationality || '-'}</span></td>
+                <td>${d.checkup || '-'}</td>
+                <td>${d.period || '-'}</td>
+                <td>${d.docs || '-'}</td>
                 <td style="text-align: center;">
                     <button class="btn-danger" onclick="window.delWorker('${d.id}', '${d.name}')"><i class="fa-solid fa-trash-can"></i> 삭제</button>
+                    ${d.notes ? `<div style="margin-top:5px; font-size:0.8rem; color:#666;" title="${d.notes}"><i class="fa-solid fa-caption"></i> 특이사항 O</div>` : ''}
                 </td>
             </tr>`;
         });
@@ -271,7 +306,7 @@
         const query = document.getElementById("searchInput").value.trim().toLowerCase();
         if(!query) { window.renderTable(allWorkers); return; }
         const filtered = allWorkers.filter(w => 
-            w.name.toLowerCase().includes(query) || w.phone.includes(query)
+            w.name.toLowerCase().includes(query) || (w.site && w.site.toLowerCase().includes(query))
         );
         window.renderTable(filtered);
     };
@@ -360,13 +395,17 @@
             return;
         }
 
+        const site = document.getElementById("workerSite").value.trim();
         const name = document.getElementById("workerName").value.trim();
-        const phone = document.getElementById("workerPhone").value.trim();
-        const nationality = document.getElementById("workerNationality").value;
         const birthDate = document.getElementById("workerBirth").value;
+        const nationality = document.getElementById("workerNationality").value;
+        const checkup = document.getElementById("workerCheckup").value.trim();
+        const period = document.getElementById("workerPeriod").value.trim();
+        const docs = document.getElementById("workerDocs").value.trim();
+        const notes = document.getElementById("workerNotes").value.trim();
         
-        if(!name || !phone || !nationality || !birthDate) {
-            showToast("모든 필수 정보를 입력해주세요.", "error"); 
+        if(!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
+            showToast("특이사항을 제외한 모든 필수 정보를 입력해주세요.", "error"); 
             return;
         }
 
@@ -377,10 +416,14 @@
         try {
             await db.collection("workers").add({
                 companyId: currentCompanyId,
+                site: site,
                 name: name, 
-                phone: phone, 
-                nationality: nationality, 
                 birthDate: birthDate,
+                nationality: nationality, 
+                checkup: checkup,
+                period: period,
+                docs: docs,
+                notes: notes,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             

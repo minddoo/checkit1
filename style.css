@@ -111,7 +111,7 @@ body {
  * 2.5. Hero Section
  * ------------------- */
 #hero {
-    background-image: url('assets/hero-wide.png');
+    background-image: url('assets/me.png');
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -121,13 +121,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #fff;
 }
 
 #hero::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.05); /* Minimal overlay for background depth */
+    background-color: rgba(255, 255, 255, 0.15); /* Very light light-overlay for depth */
     z-index: 0;
 }
 

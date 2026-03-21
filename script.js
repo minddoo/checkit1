@@ -1756,7 +1756,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const securityKey = document.getElementById('login-worker-security-key').value.trim();
 
             if (!companyKey || !securityKey) {
-                return alert("회사 코드와 암호키를 모두 입력해주세요.");
+                return alert("회사 입력키와 암호키를 모두 입력해주세요.");
             }
 
             const loader = document.getElementById('pageLoader') || { style: {} };
@@ -1814,15 +1814,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return alert("암호키는 'worker'를 포함하여 영문, 숫자, 특수문자를 모두 포함한 6자리 이상이어야 합니다.");
             }
 
-            if (!companyKey.startsWith('comp_')) {
-                return alert("회사 코드는 'comp_회사명' 형식으로 시작해야 합니다.");
-            }
-
             const loader = document.getElementById('pageLoader') || { style: {} };
             loader.style.display = 'flex';
 
             try {
-                const companyId = companyKey.replace('comp_', '');
+                const companyId = companyKey;
                 
                 // 3. Roster Check (Name + DOB + CompanyId)
                 const workerSnap = await db.collection('workers')

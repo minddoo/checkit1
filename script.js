@@ -1529,14 +1529,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = `${stringToHex(securityKey)}@${stringToHex(safeCompanyKey)}.checkit.com`;
             const password = `${safeCompanyKey}_${securityKey}!2026`;
 
-            const handleLoginSuccess = (user) => {
+            const handleLoginSuccess = async (user) => {
                 const companyId = companyKey.replace('comp_', '');
                 let role = targetRole;
+
+                let workerDocId = null;
+                // [데이터 연동] 근로자로 로그인한 경우, 해당 회사와 암호키에 매칭되는 직원 정보 검색
+                if (role === 'worker') {
+                    try {
+                        const workerSnap = await db.collection('workers')
+                            .where('companyId', '==', companyId)
+                            .where('passwordKey', '==', securityKey)
+                            .limit(1)
+                            .get();
+                        
+                        if (!workerSnap.empty) {
+                            workerDocId = workerSnap.docs[0].id;
+                            console.log("Worker document linked:", workerDocId);
+                        }
+                    } catch (err) {
+                        console.warn("Worker link search failed:", err);
+                    }
+                }
 
                 db.collection('users').doc(user.uid).set({
                     role: role,
                     companyId: companyId,
                     securityKey: securityKey,
+                    workerDocId: workerDocId, // 자동 연동된 문서 ID 저장
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true }).then(() => {
                     const data = translations[currentLang] || translations['ko'];
@@ -1771,6 +1791,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(async (cred) => {
                     const userDoc = await db.collection('users').doc(cred.user.uid).get();
                     if (userDoc.exists && userDoc.data().role === 'worker') {
+                        const userData = userDoc.data();
+                        const companyId = companyKey.replace('comp_', '');
+                        
+                        // [데이터 연동] workerDocId가 없거나 새로 로그인한 경우 연동 시도
+                        if (!userData.workerDocId) {
+                            try {
+                                const workerSnap = await db.collection('workers')
+                                    .where('companyId', '==', companyId)
+                                    .where('passwordKey', '==', securityKey)
+                                    .limit(1)
+                                    .get();
+                                
+                                if (!workerSnap.empty) {
+                                    await db.collection('users').doc(cred.user.uid).update({
+                                        workerDocId: workerSnap.docs[0].id
+                                    });
+                                    console.log("Worker document linked on direct login:", workerSnap.docs[0].id);
+                                }
+                            } catch (err) {
+                                console.warn("Worker link search failed on direct login:", err);
+                            }
+                        }
+
                         const data = translations[currentLang] || translations['ko'];
                         alert(data['login_success_msg'] || '로그인에 성공했습니다!');
                         window.location.href = 'worker_portal.html';

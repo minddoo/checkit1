@@ -201,16 +201,27 @@
     });
 
     function renderCheckupStatus(data) {
+        const docId = auth.currentUser ? JSON.parse(localStorage.getItem('userData') || '{}').workerDocId : null;
         const statusLabel = data.status || '진행 전';
         let badgeClass = 'status-pending';
         if (statusLabel === '진행 중') badgeClass = 'status-inprogress';
         if (statusLabel === '완료') badgeClass = 'status-done';
 
         document.getElementById('checkupStatus').innerHTML = `
-            <div style="margin-bottom: 16px;">
-                <span class="status-badge ${badgeClass}">
-                    <i class="fa-solid fa-circle-dot"></i> ${statusLabel}
-                </span>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 8px;">
+                        <span class="status-badge ${badgeClass}">
+                            <i class="fa-solid fa-circle-dot"></i> ${statusLabel}
+                        </span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">현재 검진 진행 상황을 아래 버튼으로 업데이트하세요.</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="updateStatus('진행 전')" class="status-btn" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">진행 전</button>
+                    <button onclick="updateStatus('진행 중')" class="status-btn" style="background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">진행 중</button>
+                    <button onclick="updateStatus('완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">완료</button>
+                </div>
             </div>
             <div class="info-grid">
                 <div class="info-item">
@@ -232,6 +243,41 @@
             </div>
         `;
         document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
+    }
+
+    async function updateStatus(newStatus) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                alert('연결된 직원 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            const loader = document.getElementById('pageLoader');
+            loader.style.display = 'flex';
+            
+            await db.collection('workers').doc(workerDocId).update({
+                status: newStatus,
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Local refresh will be handled by the state change listener if we were using one,
+            // but here we just reload the data manually for simplicity.
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+            
+            alert(`검진 상태가 '${newStatus}'(으)로 업데이트되었습니다.`);
+        } catch (err) {
+            console.error('Status update error:', err);
+            alert('상태 업데이트에 실패했습니다.');
+        } finally {
+            document.getElementById('pageLoader').style.display = 'none';
+        }
     }
 
     function renderHospitals(docs) {

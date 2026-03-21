@@ -122,10 +122,23 @@
             
             <!-- Generate Card -->
             <div class="card">
-                <h3><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 직원(임직원) 명단 등록</h3>
-                <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-                    우리 회사의 외국인 근로자 및 직원 정보를 등록하여 검진 명단으로 관리하세요.
-                </p>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 직원(임직원) 명단 등록</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
+                            우리 회사의 외국인 근로자 및 직원 정보를 등록하여 검진 명단으로 관리하세요.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline" onclick="window.downloadExcelTemplate()">
+                            <i class="fa-solid fa-download"></i> 엑셀 양식 다운로드
+                        </button>
+                        <button class="btn-primary" style="background: #10b981;" onclick="document.getElementById('excelUpload').click()">
+                            <i class="fa-solid fa-file-excel"></i> 엑셀 일괄 등록
+                        </button>
+                        <input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;" onchange="window.handleExcelUpload(event)">
+                    </div>
+                </div>
                 <form id="addWorkerForm" onsubmit="window.saveWorker(event)">
                     <div class="form-grid">
                         <div class="input-group">
@@ -239,6 +252,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<!-- SheetJS for Excel Upload/Download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
     // Toast Notification System
@@ -449,6 +464,126 @@
                 showToast("삭제 실패: " + e.message, "error"); 
             }
         }
+    };
+    
+    // Excel Download Template
+    window.downloadExcelTemplate = () => {
+        const wsData = [
+            ["소속현장", "성함", "생년월일", "국적", "필수검진", "검진기간", "기업필요서류", "특이사항"],
+            ["제1공장", "홍길동", "1990-01-01", "대한민국", "일반검진, 특수검진", "25.01.01 ~ 25.12.31", "보건증", "한국어 능통"]
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        
+        // 열 너비 보정
+        ws['!cols'] = [ {wpx: 100}, {wpx: 100}, {wpx: 120}, {wpx: 100}, {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 200} ];
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "직원등록양식");
+        
+        XLSX.writeFile(wb, "CHECKIT_직원명단_일괄등록_양식.xlsx");
+    };
+
+    // Excel Upload Handler
+    window.handleExcelUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!currentCompanyId) {
+            showToast("기업 정보가 확인되지 않습니다.", "error");
+            return;
+        }
+
+        const loader = document.getElementById("pageLoader");
+        document.getElementById("loaderMessage").innerText = "엑셀 데이터를 처리 중입니다...";
+        loader.style.display = "flex";
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const data = evt.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const firstSheet = workbook.SheetNames[0];
+                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
+
+                if(excelRows.length === 0) {
+                    throw new Error("엑셀 파일에 데이터가 없습니다.");
+                }
+
+                // Batch Write (Firebase Firestore supports up to 500 writes per batch)
+                let batch = db.batch();
+                let count = 0;
+                let totalAdded = 0;
+
+                for (let i = 0; i < excelRows.length; i++) {
+                    const row = excelRows[i];
+                    
+                    // 첫 번째 줄이 예시 데이터인 경우 건너뛰기
+                    if (i === 0 && row["성함"] === "홍길동" && row["소속현장"] === "제1공장") continue;
+
+                    const site = String(row["소속현장"] || "").trim();
+                    const name = String(row["성함"] || "").trim();
+                    const birthDate = String(row["생년월일"] || "").trim();
+                    const nationality = String(row["국적"] || "").trim();
+                    const checkup = String(row["필수검진"] || "").trim();
+                    const period = String(row["검진기간"] || "").trim();
+                    const docs = String(row["기업필요서류"] || "").trim();
+                    const notes = String(row["특이사항"] || "").trim();
+
+                    // 필수값 누락 시 해당 행 건너뜀 (특이사항 제외)
+                    if (!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
+                        continue; 
+                    }
+
+                    const docRef = db.collection("workers").doc(); // Create new ref
+                    batch.set(docRef, {
+                        companyId: currentCompanyId,
+                        site: site,
+                        name: name,
+                        birthDate: birthDate,
+                        nationality: nationality,
+                        checkup: checkup,
+                        period: period,
+                        docs: docs,
+                        notes: notes,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    count++;
+                    totalAdded++;
+
+                    if (count === 490) {
+                        await batch.commit();
+                        batch = db.batch();
+                        count = 0;
+                    }
+                }
+
+                if (count > 0) {
+                    await batch.commit();
+                }
+                
+                if (totalAdded > 0) {
+                    showToast(`총 ${totalAdded}명의 직원이 일괄 등록되었습니다!`, "success");
+                } else {
+                    showToast("성공적으로 추가된 직원이 없습니다 (필수값 누락 확인).", "error");
+                }
+
+            } catch (err) {
+                console.error("Excel Upload Error:", err);
+                showToast("엑셀 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
+            } finally {
+                loader.style.display = "none";
+                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
+                e.target.value = ""; // Reset file input
+            }
+        };
+        
+        reader.onerror = () => {
+             loader.style.display = "none";
+             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
+        };
+
+        reader.readAsBinaryString(file);
     };
     
     window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };

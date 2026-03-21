@@ -336,9 +336,41 @@
 
             <!-- SECTION 3: STATS -->
             <div id="sectionStats" class="hidden">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px;">
+                    <!-- Company Stats Card -->
+                    <div class="card" style="text-align: center; padding: 30px;">
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-building"></i> 계약 기업 수</h4>
+                        <div style="height: 180px; position: relative; margin-bottom: 20px;">
+                            <canvas id="companyChart"></canvas>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 800; color: #3b82f6;" id="countComps">0</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">등록된 전체 기업</div>
+                    </div>
+
+                    <!-- Worker Roster Stats Card -->
+                    <div class="card" style="text-align: center; padding: 30px;">
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-users"></i> 총 명단 등록 근로자</h4>
+                        <div style="height: 180px; position: relative; margin-bottom: 20px;">
+                            <canvas id="workerChart"></canvas>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 800; color: #10b981;" id="countWorkers">0</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">관리 중인 전체 명단</div>
+                    </div>
+
+                    <!-- Signup Progress Stats Card -->
+                    <div class="card" style="text-align: center; padding: 30px;">
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-user-check"></i> 회원가입 완료 근로자</h4>
+                        <div style="height: 180px; position: relative; margin-bottom: 20px;">
+                            <canvas id="signupChart"></canvas>
+                        </div>
+                        <div style="font-size: 2rem; font-weight: 800; color: #f59e0b;" id="countSignedUp">0</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">포털 이용 중인 근로자</div>
+                    </div>
+                </div>
+
                 <div class="card">
-                    <h3>통계 및 로그</h3>
-                    <p style="color: #999;">준비 중인 기능입니다.</p>
+                    <h4>최근 시스템 로그</h4>
+                    <p style="color: #999; font-size: 0.9rem;">실시간 시스템 활동 로그가 여기에 표시됩니다 (준비 중).</p>
                 </div>
             </div>
 
@@ -358,6 +390,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     // Toast Notification System
@@ -411,6 +444,7 @@
         document.getElementById('menu' + id).classList.add('active');
 
         if (id === 'Chats') window.loadChatList();
+        if (id === 'Stats') window.initStats();
     };
 
     // Connection Check
@@ -731,6 +765,64 @@
         }
     });
     
+    // Statistics Logic
+    let charts = { company: null, worker: null, signup: null };
+
+    window.initStats = async () => {
+        try {
+            // Fetch Company Count
+            const compSnap = await db.collection("company_info").get();
+            const compCount = compSnap.size;
+            document.getElementById("countComps").innerText = compCount.toLocaleString();
+
+            // Fetch Worker & Signup Counts
+            const workerSnap = await db.collection("workers").get();
+            const totalWorkers = workerSnap.size;
+            const signedUpWorkers = workerSnap.docs.filter(d => d.data().uid).length;
+            
+            document.getElementById("countWorkers").innerText = totalWorkers.toLocaleString();
+            document.getElementById("countSignedUp").innerText = signedUpWorkers.toLocaleString();
+
+            // Render/Update Charts
+            // 1. Company (Target: 50 for now)
+            renderChart("company", [compCount, Math.max(0, 50 - compCount)], ["계약 기업", "잔여"], ["#3b82f6", "#f1f5f9"]);
+            // 2. Roster (Target: 1000 for now)
+            renderChart("worker", [totalWorkers, Math.max(0, 5000 - totalWorkers)], ["등록 인원", "잔여"], ["#10b981", "#f1f5f9"]);
+            // 3. Signup Ratio
+            renderChart("signup", [signedUpWorkers, Math.max(0, totalWorkers - signedUpWorkers)], ["가입 완료", "미가입"], ["#f59e0b", "#f1f5f9"]);
+
+        } catch (e) {
+            console.error("Stats Error:", e);
+        }
+    };
+
+    function renderChart(key, data, labels, colors) {
+        const ctx = document.getElementById(key + 'Chart').getContext('2d');
+        if (charts[key]) charts[key].destroy();
+        
+        charts[key] = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '80%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+    }
+
     // Member List Logic
         window.showMemberList = async (companyCode) => {
             const modal = document.getElementById('memberModal');

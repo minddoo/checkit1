@@ -111,11 +111,13 @@ body {
  * 2.5. Hero Section
  * ------------------- */
 #hero {
-    background-image: url('assets/hero-main-new.png');
-    background-size: cover;
-    background-position: center;
+    background-image: url('assets/me.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom; /* Position at bottom to let text breathe above */
+    background-color: #fff;
     text-align: center;
-    padding: 180px 0;
+    padding: 100px 0 350px; /* Large bottom padding to show the contain image below text */
     position: relative;
     overflow: hidden;
 }

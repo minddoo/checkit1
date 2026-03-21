@@ -1846,11 +1846,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const companyId = companyKey.replace('comp_', '');
                 
-                // 3. Roster Check (Name + DOB + CompanyId)
+                // 3. Roster Check (Name + CompanyId) - 생년월일 체크 제외 요청 반영
                 const workerSnap = await db.collection('workers')
                     .where('companyId', '==', companyId)
                     .where('name', '==', name)
-                    .where('birthDate', '==', birthDate)
                     .get();
 
                 if (workerSnap.empty) {

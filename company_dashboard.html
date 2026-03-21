@@ -750,17 +750,21 @@
                 for (let i = 0; i < excelRows.length; i++) {
                     const row = excelRows[i];
                     
-                    // 첫 번째 줄이 예시 데이터인 경우 건너뛰기
-                    if (i === 0 && row["성함"] === "홍길동" && row["소속현장"] === "제1공장") continue;
+                    const getVal = (key) => {
+                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
+                        return actualKey ? String(row[actualKey] || "").trim() : "";
+                    };
 
-                    const site = String(row["소속현장"] || "").trim();
-                    const name = String(row["성함"] || "").trim();
-                    const birthDate = String(row["생년월일"] || "").trim();
-                    const nationality = String(row["국적"] || "").trim();
-                    const checkup = String(row["필수검진"] || "").trim();
-                    const period = String(row["검진기간"] || "").trim();
-                    const docs = String(row["기업필요서류"] || "").trim();
-                    const notes = String(row["특이사항"] || "").trim();
+                    const name = getVal("성함");
+                    const site = getVal("소속현장");
+                    if (i === 0 && name === "홍길동" && site === "제1공장") continue;
+
+                    const birthDate = getVal("생년월일");
+                    const nationality = getVal("국적");
+                    const checkup = getVal("필수검진");
+                    const period = getVal("검진기간");
+                    const docs = getVal("기업필요서류");
+                    const notes = getVal("특이사항");
 
                     // 필수값 누락 시 해당 행 건너뜀 (특이사항 제외)
                     if (!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
@@ -859,14 +863,20 @@
 
                 for (let i = 0; i < excelRows.length; i++) {
                     const row = excelRows[i];
-                    if (i === 0 && row["병원 이름"] === "CHECKIT 지정병원") continue;
+                    
+                    const getVal = (key) => {
+                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
+                        return actualKey ? String(row[actualKey] || "").trim() : "";
+                    };
 
-                    const name = String(row["병원 이름"] || "").trim();
-                    const schedule = String(row["검진 가능 기간"] || "").trim();
-                    const period = String(row["예약 가능 기간"] || "").trim();
-                    const extra = String(row["추가 항목 비용"] || "").trim();
-                    const link = String(row["예약 사이트 링크(URL)"] || "").trim();
-                    const code = String(row["예약 회사코드"] || "").trim();
+                    const name = getVal("병원 이름");
+                    if (i === 0 && name === "CHECKIT 지정병원") continue;
+
+                    const schedule = getVal("검진 가능 기간");
+                    const period = getVal("예약 가능 기간");
+                    const extra = getVal("추가 항목 비용");
+                    const link = getVal("예약 사이트 링크(URL)");
+                    const code = getVal("예약 회사코드");
 
                     if (!name) continue; 
 

@@ -244,6 +244,69 @@
                 </table>
             </div>
 
+            <!-- Hospital Info Card -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-hospital" style="color: #0ea5e9;"></i> 제휴 병원 및 검진 안내</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
+                            우리 기업과 연계된 검진 병원의 정보를 근로자들에게 안내하기 위해 상세히 작성해 주세요.
+                        </p>
+                    </div>
+                </div>
+                <form id="hospitalInfoForm" onsubmit="window.saveHospitalInfo(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>병원 이름</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-house-medical"></i>
+                                <input type="text" id="hospName" placeholder="예: CHECKIT 지정병원" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>검진 가능 일정</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                <input type="text" id="hospSchedule" placeholder="예: 평일 09:00 ~ 16:00" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>예약 가능 기간</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <input type="text" id="hospPeriod" placeholder="예: 25.10.01 ~ 25.11.30" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>추가 항목 비용</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-won-sign"></i>
+                                <input type="text" id="hospExtraCost" placeholder="예: 위내시경 추가 시 50,000원">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>예약 사이트 유무 (선택)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-link"></i>
+                                <input type="url" id="hospLink" placeholder="예: https://hospital-booking.com">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>예약 회사코드 (선택)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-key"></i>
+                                <input type="text" id="hospCode" placeholder="예: CHK_2025">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                        <button type="submit" id="saveHospBtn" class="btn-primary" style="height: 44px; padding: 0 30px; background: #0ea5e9;">
+                            <i class="fa-solid fa-floppy-disk"></i> 병원 정보 저장
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -378,10 +441,21 @@
 
                 currentCompanyId = currentUserData.companyId;
                 
-                // 회사 이름 가져오기
+                // 회사 이름 및 병원 정보 가져오기
                 const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
                 if (compDoc.exists) {
-                    document.getElementById("displayCompanyName").innerText = compDoc.data().name || currentCompanyId;
+                    const data = compDoc.data();
+                    document.getElementById("displayCompanyName").innerText = data.name || currentCompanyId;
+                    
+                    // 기존 병원 정보가 있다면 폼 채우기
+                    if(data.hospitalInfo) {
+                        document.getElementById("hospName").value = data.hospitalInfo.name || "";
+                        document.getElementById("hospSchedule").value = data.hospitalInfo.schedule || "";
+                        document.getElementById("hospPeriod").value = data.hospitalInfo.period || "";
+                        document.getElementById("hospExtraCost").value = data.hospitalInfo.extraCost || "";
+                        document.getElementById("hospLink").value = data.hospitalInfo.link || "";
+                        document.getElementById("hospCode").value = data.hospitalInfo.code || "";
+                    }
                 } else {
                     document.getElementById("displayCompanyName").innerText = currentCompanyId;
                 }
@@ -463,6 +537,40 @@
             } catch(e) { 
                 showToast("삭제 실패: " + e.message, "error"); 
             }
+        }
+    };
+    
+    // Save Hospital Info
+    window.saveHospitalInfo = async (e) => {
+        e.preventDefault();
+        
+        if (!currentCompanyId) return;
+
+        const submitBtn = document.getElementById("saveHospBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+
+        const info = {
+            name: document.getElementById("hospName").value.trim(),
+            schedule: document.getElementById("hospSchedule").value.trim(),
+            period: document.getElementById("hospPeriod").value.trim(),
+            extraCost: document.getElementById("hospExtraCost").value.trim(),
+            link: document.getElementById("hospLink").value.trim(),
+            code: document.getElementById("hospCode").value.trim()
+        };
+
+        try {
+            await db.collection('company_info').doc(currentCompanyId).set({
+                hospitalInfo: info
+            }, { merge: true });
+            
+            showToast("제휴 병원 정보가 성공적으로 업데이트되었습니다!", "success");
+        } catch(err) {
+            console.error("Save Hospital Error:", err);
+            showToast("제휴 병원 정보 저장에 실패했습니다.", "error");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> 병원 정보 저장';
         }
     };
     

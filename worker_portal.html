@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT - 근로자 포털</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --dark: #1e1b4b;
+            --bg: #f0f4ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .hidden { display: none !important; }
+
+        /* Loader */
+        #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+        .loader { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Header */
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .top-bar .logo i { color: var(--primary-light); }
+        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; }
+        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .top-bar .logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Main Content */
+        .main { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+
+        /* Welcome Banner */
+        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .welcome-banner h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        .welcome-banner p { opacity: 0.8; font-size: 0.95rem; }
+
+        /* Cards */
+        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-header h3 { font-size: 1.1rem; color: var(--text); }
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .icon-purple { background: #ede9fe; color: var(--primary); }
+        .icon-green { background: #d1fae5; color: var(--success); }
+        .icon-blue { background: #dbeafe; color: #3b82f6; }
+
+        /* Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .status-pending { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+        .status-inprogress { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
+        .status-done { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
+        .info-item .label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+        .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+        /* Hospital List */
+        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .hospital-item:last-child { border-bottom: none; }
+        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
+        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+        .hospital-link:hover { background: #4f46e5; }
+        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+
+        /* Loading state */
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p style="color: #64748b; font-size: 0.95rem;">포털을 불러오는 중...</p>
+</div>
+
+<div id="portalContent" class="hidden">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT 근로자 포털</div>
+        <div class="user-info">
+            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
+            <button class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃</button>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Welcome -->
+        <div class="welcome-banner">
+            <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+            <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+        </div>
+
+        <!-- My Checkup Status -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
+                <h3>나의 검진 현황</h3>
+            </div>
+            <div id="checkupStatus">
+                <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+            </div>
+        </div>
+
+        <!-- Affiliated Hospitals -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
+                <h3>제휴 병원 안내</h3>
+            </div>
+            <div id="hospitalList">
+                <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+            </div>
+        </div>
+
+        <!-- Required Docs -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
+                <h3>기업 필요 서류</h3>
+            </div>
+            <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.firebasestorage.app",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(async (user) => {
+        const loader = document.getElementById('pageLoader');
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists || userDoc.data().role !== 'worker') {
+                alert('근로자 계정이 아닙니다.');
+                await auth.signOut();
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            // Display name
+            document.getElementById('displayName').textContent = userData.name || '근로자';
+            document.getElementById('welcomeName').textContent = userData.name || '근로자';
+
+            // Load worker specific data
+            if (workerDocId) {
+                const workerDoc = await db.collection('workers').doc(workerDocId).get();
+                if (workerDoc.exists) {
+                    renderCheckupStatus(workerDoc.data());
+                }
+            }
+
+            // Load hospitals
+            if (companyId) {
+                const hospSnap = await db.collection('hospitals').where('companyId', '==', companyId).get();
+                renderHospitals(hospSnap.docs);
+            }
+
+        } catch (err) {
+            console.error('Portal load error:', err);
+        } finally {
+            loader.style.display = 'none';
+            document.getElementById('portalContent').classList.remove('hidden');
+        }
+    });
+
+    function renderCheckupStatus(data) {
+        const statusLabel = data.status || '진행 전';
+        let badgeClass = 'status-pending';
+        if (statusLabel === '진행 중') badgeClass = 'status-inprogress';
+        if (statusLabel === '완료') badgeClass = 'status-done';
+
+        document.getElementById('checkupStatus').innerHTML = `
+            <div style="margin-bottom: 16px;">
+                <span class="status-badge ${badgeClass}">
+                    <i class="fa-solid fa-circle-dot"></i> ${statusLabel}
+                </span>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">소속 현장</div>
+                    <div class="value">${data.site || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">국적</div>
+                    <div class="value">${data.nationality || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">필수 검진 항목</div>
+                    <div class="value">${data.checkup || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">검진 가능 기간</div>
+                    <div class="value">${data.period || '-'}</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
+    }
+
+    function renderHospitals(docs) {
+        const container = document.getElementById('hospitalList');
+        if (docs.length === 0) {
+            container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
+            return;
+        }
+        let html = '';
+        docs.forEach(doc => {
+            const h = doc.data();
+            const linkHtml = h.hasLink === 'Y' && h.link
+                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기</a>`
+                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> 예약 사이트 없음</span>`;
+            html += `
+                <div class="hospital-item">
+                    <div>
+                        <div class="hospital-name">${h.name}</div>
+                        <div class="hospital-meta">검진 기간: ${h.schedule || '-'} &nbsp;|&nbsp; 예약 기간: ${h.period || '-'}</div>
+                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">추가 비용: ${h.extraCost}</div>` : ''}
+                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">회사 코드: <strong>${h.code}</strong></div>` : ''}
+                    </div>
+                    <div>${linkHtml}</div>
+                </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function doLogout() {
+        auth.signOut().then(() => { window.location.href = 'index.html'; });
+    }
+</script>
+</body>
+</html>

@@ -600,13 +600,26 @@
 
         // Load Messages
         if (chatMsgUnsub) chatMsgUnsub();
+        // Remove orderBy to bypass composite index requirement
         chatMsgUnsub = db.collection('messages')
             .where('workerDocId', '==', workerId)
-            .orderBy('timestamp', 'asc')
             .onSnapshot({ includeMetadataChanges: true }, snap => {
                 const msgBody = document.getElementById('activeChatMessages');
+                
+                if (snap.empty) {
+                    msgBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">대화 기록이 없습니다.</div>';
+                    return;
+                }
+
+                // Manual sort in JS
+                const sortedDocs = [...snap.docs].sort((a, b) => {
+                    const tA = a.data().timestamp?.toMillis() || Date.now();
+                    const tB = b.data().timestamp?.toMillis() || Date.now();
+                    return tA - tB;
+                });
+
                 let html = '';
-                snap.forEach(doc => {
+                sortedDocs.forEach(doc => {
                     const m = doc.data();
                     const isMaster = m.sender === 'admin';
                     const isSystem = m.sender === 'system';
@@ -625,6 +638,9 @@
                 });
                 msgBody.innerHTML = html;
                 msgBody.scrollTop = msgBody.scrollHeight;
+            }, err => {
+                console.error("Chat sync error:", err);
+                document.getElementById('activeChatMessages').innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
             });
     };
 

@@ -778,7 +778,10 @@
             // Fetch Worker & Signup Counts
             const workerSnap = await db.collection("workers").get();
             const totalWorkers = workerSnap.size;
-            const signedUpWorkers = workerSnap.docs.filter(d => d.data().uid).length;
+            
+            // Count from users collection for more accuracy on signups
+            const userSnap = await db.collection("users").where("role", "==", "worker").get();
+            const signedUpWorkers = userSnap.size;
             
             document.getElementById("countWorkers").innerText = totalWorkers.toLocaleString();
             document.getElementById("countSignedUp").innerText = signedUpWorkers.toLocaleString();

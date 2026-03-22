@@ -223,7 +223,12 @@
             from { transform: translateY(0); opacity: 1; }
             to { transform: translateY(20px); opacity: 0; }
         }
+
+        /* Language Button Active State */
+        .lang-btn { background: transparent; color: #64748b; }
+        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     </style>
+
 
 </head>
 <body>
@@ -314,6 +319,13 @@
                         <div>
                             <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
                             <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                        </div>
+                        <!-- Language Switcher -->
+                        <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                            <button onclick="setChatLanguage('ko')" class="lang-btn active" data-lang="ko" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">KR</button>
+                            <button onclick="setChatLanguage('en')" class="lang-btn" data-lang="en" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">EN</button>
+                            <button onclick="setChatLanguage('cn')" class="lang-btn" data-lang="cn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">CN</button>
+                            <button onclick="setChatLanguage('vn')" class="lang-btn" data-lang="vn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">VN</button>
                         </div>
                     </div>
 
@@ -505,6 +517,10 @@
                                 document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
                                 document.getElementById('welcomeName').textContent = wData.name;
                             }
+                            const prefLang = wData.prefLang || 'ko';
+                            document.querySelectorAll('.lang-btn').forEach(btn => {
+                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                            });
                             renderCheckupStatus(wData);
                         } else {
                             if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
@@ -920,7 +936,7 @@
             const workerDocId = userDoc.data().workerDocId;
             if (!workerDocId) return;
 
-            // Show a "sending" state if needed, but let's just send
+            // Send original message
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
@@ -928,6 +944,24 @@
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+
+            // Get preferred language and translate
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const prefLang = workerDoc.data().prefLang || 'ko';
+
+            if (prefLang !== 'ko') {
+                showToast(`번역 중 (${prefLang})...`, "info");
+                const translated = await translateText(text, prefLang);
+                if (translated) {
+                    await db.collection('messages').add({
+                        workerDocId: workerDocId,
+                        sender: 'admin',
+                        text: `[Translation to ${prefLang}]\n\n${translated}`,
+                        type: 'text',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
@@ -944,6 +978,47 @@
             alert('오류가 발생했습니다. 다시 시도해 주세요.');
         }
     }
+
+    async function translateText(text, targetLang) {
+        try {
+            // Using Google's public gtx endpoint for demonstration
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data && data[0]) {
+                return data[0].map(x => x[0]).join('');
+            }
+            return null;
+        } catch (e) {
+            console.error("Translation error:", e);
+            return null;
+        }
+    }
+
+    window.setChatLanguage = async (lang) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Update UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            // Save to Firestore
+            await db.collection('workers').doc(workerDocId).update({
+                prefLang: lang
+            });
+            
+            showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
+        } catch (e) {
+            console.error("Set language error:", e);
+        }
+    };
 
     // Registration Form Functions
     window.openBookingForm = () => {

@@ -437,6 +437,11 @@
             }
         } catch (e) { console.error("Time format error", e); }
 
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
+        if (isWorker) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
         let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
         if (isWorker) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
         else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';

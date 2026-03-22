@@ -125,6 +125,67 @@
             .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
             .main-content { padding: 20px; }
         }
+        /* Existing styles... */
+        /* Booking Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .booking-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .booking-modal h3 { margin-bottom: 20px; color: var(--dark); font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; color: #64748b; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>
@@ -246,12 +307,57 @@
                         <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
                         <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
                     </div>
-                </div>
-            </div>
-
         </div> <!-- End main-content -->
     </div> <!-- End portal-wrapper -->
 </div> <!-- End portalContent -->
+
+<!-- Booking Form Modal HTML -->
+<div id="bookingModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeBookingForm()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>예약 신청서 작성</h3>
+        <form id="bookingForm" onsubmit="submitBookingForm(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>성함</label>
+                    <input type="text" id="bf_name" required>
+                </div>
+                <div class="form-group">
+                    <label>생년월일</label>
+                    <input type="date" id="bf_dob" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>연락처</label>
+                <input type="tel" id="bf_phone" placeholder="010-0000-0000" required>
+            </div>
+            <div class="form-group">
+                <label>한국 거주 주소</label>
+                <input type="text" id="bf_address" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 병원</label>
+                <input type="text" id="bf_hospital" placeholder="제휴 병원 중 선택 또는 기입" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 날짜 (7일 기간으로 입력)</label>
+                <input type="text" id="bf_dateRange" placeholder="예: 2024.05.01 ~ 2024.05.07" required>
+            </div>
+            <div class="form-group">
+                <label>추가 검사 항목 유무</label>
+                <select id="bf_extraItems">
+                    <option value="none">없음</option>
+                    <option value="yes">있음 (상담 필요)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>개인 희망 서류 (선택 사항)</label>
+                <textarea id="bf_documents" placeholder="예: 실손보험 청구용 서류 등" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">신청서 제출하기</button>
+        </form>
+    </div>
+</div>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -473,7 +579,8 @@
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
-                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">제휴 병원 목록 보기</button>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">예약 신청서 작성하기</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -732,7 +839,74 @@
         } catch (e) { console.error("Submit date error:", e); }
     }
 
-    // 재연동 함수 (글로벌 스코프)
+    // Registration Form Functions
+    window.openBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'flex';
+        // Auto-fill name if available
+        const nameDisplay = document.getElementById('displayName').textContent;
+        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '관리자' && nameDisplay !== '근로자') {
+            document.getElementById('bf_name').value = nameDisplay.split(' ')[0];
+        }
+    };
+
+    window.closeBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+    };
+
+    async function submitBookingForm(event) {
+        event.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const formData = {
+            name: document.getElementById('bf_name').value,
+            dob: document.getElementById('bf_dob').value,
+            phone: document.getElementById('bf_phone').value,
+            address: document.getElementById('bf_address').value,
+            hospital: document.getElementById('bf_hospital').value,
+            dateRange: document.getElementById('bf_dateRange').value,
+            extraItems: document.getElementById('bf_extraItems').value,
+            documents: document.getElementById('bf_documents').value,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: '신청완료'
+        };
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const companyId = userDoc.data().companyId;
+
+            formData.workerDocId = workerDocId;
+            formData.companyId = companyId;
+
+            // Save to bookings collection
+            await db.collection('bookings').add(formData);
+
+            // Add chat notification
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `검진 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '신청서가 성공적으로 접수되었습니다! 마스터 페이지 담당자가 내용을 확인한 후 예약 확정 안내를 드릴 예정입니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeBookingForm();
+            alert('신청서가 성공적으로 제출되었습니다.');
+        } catch (e) {
+            console.error("Booking submission error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
     async function tryToRelinkWorker(uid, name, compId) {
         try {
             const snap = await db.collection('workers')

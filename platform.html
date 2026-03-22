@@ -181,6 +181,7 @@
         </div>
         <ul class="sidebar-menu">
             <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 고객사 관리</li>
+            <li id="menuBookings" onclick="switchSection('Bookings')"><i class="fa-solid fa-file-invoice-dollar"></i> 예약 신청 현황</li>
             <li id="menuChats" onclick="switchSection('Chats')"><i class="fa-solid fa-comments"></i> 1:1 채팅 관리</li>
             <li id="menuStats" onclick="switchSection('Stats')"><i class="fa-solid fa-chart-line"></i> 통계 및 로그</li>
             <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> 시스템 설정</li>
@@ -435,16 +436,19 @@
 
     // Section Switching
     window.switchSection = (id) => {
-        const sections = ['Comps', 'Chats', 'Stats', 'Settings'];
+        const sections = ['Comps', 'Chats', 'Stats', 'Settings', 'Bookings'];
         sections.forEach(s => {
-            document.getElementById('section' + s).classList.add('hidden');
-            document.getElementById('menu' + s).classList.remove('active');
+            const el = document.getElementById('section' + s);
+            if (el) el.classList.add('hidden');
+            const menu = document.getElementById('menu' + s);
+            if (menu) menu.classList.remove('active');
         });
         document.getElementById('section' + id).classList.remove('hidden');
         document.getElementById('menu' + id).classList.add('active');
 
         if (id === 'Chats') window.loadChatList();
         if (id === 'Stats') window.initStats();
+        if (id === 'Bookings') window.loadBookings();
     };
 
     // Connection Check
@@ -554,6 +558,61 @@
             });
             window.filterTable(); 
         });
+    };
+
+    // Booking Applications Logic
+    let allBookings = [];
+    window.loadBookings = () => {
+        db.collection("bookings").orderBy("timestamp", "desc").onSnapshot(snap => {
+            allBookings = [];
+            snap.forEach(doc => {
+                const data = doc.data(); data.id = doc.id;
+                allBookings.push(data);
+            });
+            window.renderBookings(allBookings);
+        });
+    };
+
+    window.renderBookings = (data) => {
+        const list = document.getElementById("bookingListTable");
+        if(data.length === 0) {
+            list.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 30px; color: #999;">신청 내역이 없습니다.</td></tr>`;
+            return;
+        }
+
+        let html = "";
+        data.forEach(b => {
+            html += `<tr>
+                <td><strong>${b.name}</strong><br><span style="font-size:0.7rem; color:#94a3b8;">${b.dob || ''}</span></td>
+                <td>${b.hospital}</td>
+                <td style="font-size:0.85rem; color:var(--dark); font-weight:600;">${b.dateRange}</td>
+                <td style="text-align: center;">
+                    <span style="background:${b.extraItems === 'yes' ? '#fff7ed' : '#f1f5f9'}; color:${b.extraItems === 'yes' ? '#ea580c' : '#94a3b8'}; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:700;">
+                        ${b.extraItems === 'yes' ? '있음' : '없음'}
+                    </span>
+                </td>
+                <td style="font-size:0.8rem; color:#64748b;">
+                    ${b.phone}<br>${b.address}
+                </td>
+                <td style="text-align: center;">
+                    <span style="background:#e8f5e9; color:#10b981; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">${b.status || '대기'}</span>
+                </td>
+                <td style="text-align: center;">
+                    <button class="btn-outline" style="padding: 6px 10px; font-size: 0.8rem; margin: 0 auto;" onclick="window.copyToClipboard('${b.phone}')">
+                        <i class="fa-solid fa-phone"></i> 연락처 복사
+                    </button>
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
+
+    window.filterBookings = () => {
+        const query = document.getElementById("bookingSearchInput").value.trim().toLowerCase();
+        const filtered = allBookings.filter(b => 
+            b.name.toLowerCase().includes(query) || b.hospital.toLowerCase().includes(query)
+        );
+        window.renderBookings(filtered);
     };
 
     window.delComp = async (id, name) => { 

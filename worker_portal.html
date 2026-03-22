@@ -432,8 +432,8 @@
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text}</p>
-                            <button onclick="window.open('https://checkit082082.pages.dev/checkup_guide.pdf', '_blank')" style="width: 100%; background: #f1f5f9; color: var(--dark); border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">안내문(PDF) 보기</button>
-                            <div style="margin-top: 10px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">기한: 25.10.01 ~ 11.30</div>
+                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -498,7 +498,7 @@
         await db.collection('messages').add({
             workerDocId: workerDocId,
             sender: 'system',
-            text: '2025 건강검진 가이드가 도착했습니다.',
+            text: 'CHECKIT 케어 서비스가 시작되었습니다.',
             type: 'system',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -510,14 +510,34 @@
             type: 'guide',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
+    }
 
-        await db.collection('messages').add({
-            workerDocId: workerDocId,
-            sender: 'admin',
-            text: '안내문을 확인하신 후, 하단 병원 목록에서 원하는 병원을 선택하여 예약을 진행해 주시기 바랍니다.',
-            type: 'booking',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+    async function showMyRegisteredInfo() {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const data = workerDoc.data();
+
+            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}\n\n위 내용이 본인의 정보와 맞는지 확인해 주세요.`;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: infoText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // Auto scroll is handled by the snapshot listener
+        } catch (e) {
+            console.error("Show info error:", e);
+        }
     }
 
     // 재연동 함수 (글로벌 스코프)

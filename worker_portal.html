@@ -593,7 +593,7 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
                         <div style="padding: 15px;">
-                            <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text || ''}</p>
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
                             <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
                         </div>
                     </div>
@@ -915,7 +915,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '신청서가 성공적으로 접수되었습니다. checkit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요. 예약 확정 안내를 받은 분은 아래 예약 확정 문자 올리기 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
+                text: '신청서가 성공적으로 접수되었습니다.\n\ncheckit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요.\n\n예약 확정 안내를 받은 분은 아래 \'예약 확정 문자 올리기\' 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
                 type: 'action_check',
                 btnText: '예약 확정 문자 올리기',
                 action: 'startConfirmationFlow()',

@@ -839,6 +839,29 @@
         } catch (e) { console.error("Submit date error:", e); }
     }
 
+    window.startConfirmationFlow = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '아래 채팅창에 받으신 예약 확정 문자나 알림톡 내용을 복사해서 붙여넣어 주세요.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.focus();
+                chatInput.scrollIntoView({ behavior: 'smooth' });
+            }
+        } catch (e) { console.error("Start confirmation flow error:", e); }
+    };
+
     // Registration Form Functions
     window.openBookingForm = () => {
         document.getElementById('bookingModalOverlay').style.display = 'flex';
@@ -895,8 +918,11 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '신청서가 성공적으로 접수되었습니다! checkit 담당자가 내용을 확인한 후 예약 진행 예정입니다. 예약 후 다음 안내까지 기다려주세요.',
-                type: 'text',
+                text: '신청서가 성공적으로 접수되었습니다. checkit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요. 예약 확정 안내를 받은 분은 아래 예약 확정 문자 올리기 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
+                type: 'action_check',
+                btnText: '예약 확정 문자 올리기',
+                action: 'startConfirmationFlow()',
+                btnColor: '#f59e0b',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 

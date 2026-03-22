@@ -556,7 +556,6 @@
     // Chat / Workflow Logic
     function loadChatMessages(workerDocId) {
         if (chatUnsub) chatUnsub();
-        // Remove orderBy to bypass composite index requirement
         chatUnsub = db.collection('messages')
             .where('workerDocId', '==', (workerDocId || 'none'))
             .onSnapshot({ includeMetadataChanges: true }, snap => {
@@ -564,8 +563,16 @@
                 if (!chatBody) return;
 
                 try {
-                    const messages = snap.docs.map(d => d.data());
-                    const hasCareGuide = messages.some(m => m.type === 'guide' || m.type === 'action_check');
+                    const docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    
+                    // Manual Sort
+                    docs.sort((a, b) => {
+                        const tA = (a.timestamp && a.timestamp.toMillis) ? a.timestamp.toMillis() : 0;
+                        const tB = (b.timestamp && b.timestamp.toMillis) ? b.timestamp.toMillis() : 0;
+                        return tA - tB;
+                    });
+
+                    const hasCareGuide = docs.some(m => m.type === 'guide' || m.type === 'action_check');
 
                     if (!hasCareGuide && workerDocId) {
                         if (!window._guideSentFor?.includes(workerDocId)) {
@@ -573,19 +580,18 @@
                             window._guideSentFor.push(workerDocId);
                             sendSystemGuide(workerDocId);
                         }
-                        if (snapshot.empty) {
-                            const chatBody = document.getElementById('chatMessages');
-                            if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 케어 가이드를 전송 중입니다...</div>';
-                            return;
-                        }
                     }
-                    });
+
+                    if (snap.empty) {
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
+                        return;
+                    }
 
                     let html = '';
-                    sortedDocs.forEach(doc => {
-                        html += renderMessage(doc.data());
+                    docs.forEach(msg => {
+                        html += renderMessage(msg);
                     });
-                    chatBody.innerHTML = html || '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
+                    chatBody.innerHTML = html;
                     chatBody.scrollTop = chatBody.scrollHeight;
                 } catch (e) {
                     console.error("Render error:", e);

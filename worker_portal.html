@@ -573,19 +573,12 @@
                             window._guideSentFor.push(workerDocId);
                             sendSystemGuide(workerDocId);
                         }
-                        if (snap.empty) {
-                            chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 케어 가이드를 전송 중입니다...</div>';
+                        if (snapshot.empty) {
+                            const chatBody = document.getElementById('chatMessages');
+                            if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 케어 가이드를 전송 중입니다...</div>';
                             return;
                         }
                     }
-
-                    // Manual sort in JS
-                    const sortedDocs = [...snap.docs].sort((a, b) => {
-                        const dataA = a.data();
-                        const dataB = b.data();
-                        const tA = (dataA.timestamp && typeof dataA.timestamp.toMillis === 'function') ? dataA.timestamp.toMillis() : Date.now();
-                        const tB = (dataB.timestamp && typeof dataB.timestamp.toMillis === 'function') ? dataB.timestamp.toMillis() : Date.now();
-                        return tA - tB;
                     });
 
                     let html = '';
@@ -635,7 +628,7 @@
         const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
         
         if (!isWorker && prefLang !== 'ko' && msg.text && msg.type === 'text') {
-            const cacheKey = `${msg.timestamp?.seconds || 'temp'}_${prefLang}`;
+            const cacheKey = `${msg.id || msg.timestamp?.seconds || 'temp'}_${prefLang}`;
             if (window.translationCache && window.translationCache[cacheKey]) {
                 translationHtml = `<div class="translation-box"><i class="fa-solid fa-language"></i> ${window.translationCache[cacheKey]}</div>`;
             } else {
@@ -1062,8 +1055,8 @@
                 prefLang: lang
             });
             
-            // Re-render chat to apply translations
-            loadChatMessages();
+            // Re-render chat locally
+            renderChatHistory();
             
             showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
         } catch (e) {

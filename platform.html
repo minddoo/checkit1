@@ -12,7 +12,71 @@
         .hidden { display: none !important; }
         
         /* Layout */
-        .sidebar { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; padding: 20px 0; }
+        .sidebar { width: 280px; background: var(--dark); color: white; display: flex; flex-direction: column; position: relative; }
+        .sidebar-header { padding: 30px 25px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Alarm Bell */
+        .alarm-trigger {
+            position: relative;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            transition: 0.2s;
+        }
+        .alarm-trigger:hover { background: rgba(255,255,255,0.2); }
+        .alarm-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 10px;
+            border: 2px solid var(--dark);
+        }
+        .alarm-panel {
+            position: absolute;
+            left: 280px;
+            top: 60px;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 1000;
+            border: 1px solid #e2e8f0;
+            display: none;
+            flex-direction: column;
+            max-height: 500px;
+            overflow: hidden;
+        }
+        .alarm-panel.show { display: flex; }
+        .alarm-header { padding: 15px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+        .alarm-list { overflow-y: auto; flex: 1; }
+        .alarm-item { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 12px; transition: 0.2s; cursor: pointer; }
+        .alarm-item:hover { background: #f0f7ff; }
+        .alarm-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        .alarm-info { flex: 1; min-width: 0; }
+        .alarm-name { font-weight: 700; font-size: 0.85rem; margin-bottom: 2px; }
+        .alarm-msg { font-size: 0.75rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        @keyframes ring {
+            0% { transform: rotate(0); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-15deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(5deg); }
+            60% { transform: rotate(-5deg); }
+            100% { transform: rotate(0); }
+        }
+        .ping { animation: ring 1.5s infinite ease-in-out; }
         .sidebar-brand { font-size: 1.5rem; font-weight: 700; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
         .sidebar-menu { list-style: none; padding: 0; margin: 0; }
         .sidebar-menu li { padding: 15px 25px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #d1d5db; transition: 0.3s; }
@@ -226,8 +290,32 @@
     
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="sidebar-brand">
-            <i class="fa-solid fa-shield-halved" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
+        <div class="sidebar-header">
+            <div>
+                <h1 style="font-size: 1.25rem; margin: 0; display: flex; align-items: center; gap: 10px;">
+                    <span style="background: var(--primary); color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.9rem;">C</span>
+                    CHECKIT <span style="font-size: 0.7rem; font-weight: 400; opacity: 0.7;">Master</span>
+                </h1>
+            </div>
+            <div class="alarm-trigger" id="alarmTrigger" onclick="toggleAlarmPanel()">
+                <i class="fa-solid fa-bell"></i>
+                <span id="alarmBadge" class="alarm-badge hidden">0</span>
+            </div>
+        </div>
+
+        <!-- Alarm Panel -->
+        <div id="alarmPanel" class="alarm-panel">
+            <div class="alarm-header">
+                <span style="font-weight: 700; font-size: 0.9rem; color: var(--dark);">오늘의 알림톡 대상자</span>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: #94a3b8;" onclick="toggleAlarmPanel()"></i>
+            </div>
+            <div id="alarmList" class="alarm-list">
+                <!-- Alarm Items -->
+                <div style="padding: 30px; text-align: center; color: #94a3b8; font-size: 0.8rem;">
+                    <i class="fa-solid fa-calendar-check" style="font-size: 1.5rem; margin-bottom: 10px; opacity: 0.3;"></i>
+                    <br>오늘 전송할 알림톡이 없습니다.
+                </div>
+            </div>
         </div>
         <ul class="sidebar-menu">
             <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 고객사 관리</li>

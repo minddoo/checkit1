@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     revealElements.forEach(el => revealObserver.observe(el));
+    
+    // Initialize Hero Slider
+    initHeroSlider();
 
     // --- 1. FULL MULTILINGUAL DATA RESTORATION ---
     const translations = {
@@ -1938,3 +1941,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function initHeroSlider() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length === 0) return;
+
+    let currentSlide = 0;
+    const slideInterval = 5000; // 5 seconds
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(nextSlide, slideInterval);
+}

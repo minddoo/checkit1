@@ -675,8 +675,8 @@
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
-                            <input type="date" id="resvDateInput" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
-                            <button onclick="submitReservationDate()" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
+                            <input type="date" class="resv-date-input" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
+                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -846,8 +846,17 @@
         } catch (e) { console.error("Request confirmation error:", e); }
     }
 
-    async function submitReservationDate() {
-        const dateVal = document.getElementById('resvDateInput').value;
+    async function submitReservationDate(btn) {
+        let dateVal = '';
+        if (btn) {
+            const input = btn.parentElement.querySelector('.resv-date-input');
+            if (input) dateVal = input.value;
+        } else {
+            // Fallback for older code if any
+            const input = document.getElementById('resvDateInput');
+            if (input) dateVal = input.value;
+        }
+        
         if (!dateVal) { alert('날짜를 선택해 주세요.'); return; }
 
         const user = auth.currentUser;

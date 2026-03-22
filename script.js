@@ -1,5 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- 0. MODERN UI ENHANCEMENTS (Animations & Header) ---
+    const header = document.getElementById('main-header');
+    const revealElements = document.querySelectorAll('.reveal');
+
+    // Header scroll background effect
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Intersection Observer for Reveal Animations
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
     // --- 1. FULL MULTILINGUAL DATA RESTORATION ---
     const translations = {
         ko: {

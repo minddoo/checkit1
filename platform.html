@@ -129,6 +129,9 @@
 
         /* Modal Styles */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10001; display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+        
+        /* Master Chat Styles (Rich Messages) */
+        :root { --primary-light: #e8f5e9; --warning: #f59e0b; --border: #e2e8f0; }
         .booking-company-header {
             background: #fff;
             padding: 20px 25px;
@@ -831,7 +834,101 @@
         group.classList.toggle('hidden');
         header.classList.toggle('collapsed');
     };
+    
+    // Unified Chat Rendering for Master
+    function renderMasterMessage(msg) {
+        if (!msg) return '';
+        const isMaster = msg.sender === 'admin';
+        const isWorker = msg.sender === 'worker';
+        const isSystem = msg.sender === 'system';
+        
+        let timestamp = '전송 중...';
+        try {
+            if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
+                timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else if (msg.timestamp instanceof Date) {
+                timestamp = msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+        } catch (e) { console.error("Time format error", e); }
 
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
+        if (isMaster) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
+        let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
+        if (isMaster) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
+        else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
+        else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+
+        if (msg.type === 'guide') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내 (미리보기)
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">내 검진 정보 확인하기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'booking') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계 (미리보기)
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">예약 신청서 작성하기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'action_check') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid var(--primary);">
+                        <div style="padding: 15px;">
+                            <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text || ''}</p>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">${msg.btnText || '상세 보기(미리보기)'}</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'date_input_request') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <div style="width: 100%; padding: 10px; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8;">근로자 날짜 입력 대기 중...</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        return `
+            <div style="${wrapperStyle}">
+                ${isMaster ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-right: 5px; font-weight: 600; text-align: right; width: 100%;">체킷 케어센터</span>' : ''}
+                <div style="${bubbleStyle}">
+                    ${(msg.text || '').replace(/\n/g, '<br>')}
+                </div>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isMaster ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+            </div>`;
+    }
     window.selectChat = (workerId, name, compId) => {
         activeChatWorkerId = workerId;
         
@@ -868,21 +965,7 @@
 
                 let html = '';
                 sortedDocs.forEach(doc => {
-                    const m = doc.data();
-                    const isMaster = m.sender === 'admin';
-                    const isSystem = m.sender === 'system';
-                    
-                    let bubbleClass = isMaster ? 'bubble-admin' : 'bubble-worker';
-                    if (isSystem) bubbleClass = 'bubble-system';
-
-                    const timeStr = m.timestamp ? new Date(m.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...';
-
-                    html += `
-                        <div class="bubble-wrapper" style="${isMaster ? 'align-items: flex-end;' : 'align-items: flex-start;'}">
-                            <div class="chat-bubble ${bubbleClass}">${m.text}</div>
-                            <span class="bubble-time">${timeStr}</span>
-                        </div>
-                    `;
+                    html += renderMasterMessage(doc.data());
                 });
                 msgBody.innerHTML = html;
                 msgBody.scrollTop = msgBody.scrollHeight;

@@ -104,9 +104,37 @@
         .bubble-admin { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
         .bubble-worker { align-self: flex-start; background: white; border: 1px solid #e2e8f0; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .bubble-system { align-self: center; background: #f1f5f9; color: #64748b; font-size: 0.75rem; padding: 6px 15px; border-radius: 20px; margin: 10px 0; }
-        .bubble-time { font-size: 0.65rem; color: #94a3b8; margin-top: 4px; }
+        .chat-history { flex: 1; padding: 25px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; }
         
-        .chat-footer { padding: 20px; background: white; border-top: 1px solid #efefef; display: flex; gap: 12px; }
+        /* Alimtalk Tool */
+        .alimtalk-tool {
+            padding: 10px 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        .alim-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .alim-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #f0f7ff;
+        }
+        .alim-btn i { margin-right: 4px; }
+
+        .chat-footer { padding: 15px 25px; background: white; border-top: 1px solid #eee; display: flex; gap: 15px; align-items: flex-end; }
         .chat-input { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 12px; font-family: inherit; font-size: 0.9rem; resize: none; outline: none; height: 50px; }
         .chat-input:focus { border-color: var(--primary); }
 
@@ -367,6 +395,17 @@
                         <!-- Messages -->
                         <div id="activeChatMessages" class="chat-history">
                             <!-- Bubble Messages -->
+                        </div>
+
+                        <!-- Alimtalk Tool -->
+                        <div class="alimtalk-tool">
+                            <span style="font-size: 0.75rem; color: #94a3b8; align-self: center; margin-right: 5px;">알림톡 툴:</span>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('7d')"><i class="fa-solid fa-bell"></i> 7일전</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('5d')"><i class="fa-solid fa-bell"></i> 5일전</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('3d')"><i class="fa-solid fa-bell"></i> 3일전</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('2d')"><i class="fa-solid fa-bell"></i> 2일전</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('1d')"><i class="fa-solid fa-bell"></i> 1일전</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('dday')"><i class="fa-solid fa-hospital-user"></i> 당일</button>
                         </div>
 
                         <!-- Footer Input -->
@@ -1000,6 +1039,23 @@
             window.sendMasterMessage();
         }
     });
+
+    const alimtalkTemplates = {
+        '7d': '[체킷] 건강검진 7일 전입니다. 예약된 병원과 시간을 확인해 주세요.',
+        '5d': '[체킷] 건강검진 5일 전입니다. 대변 채취 등 사전 준비 사항을 확인해 주세요.',
+        '3d': '[체킷] 건강검진 3일 전입니다. 금식 등 주의사항을 다시 한번 확인해 주세요.',
+        '2d': '[체킷] 건강검진 2일 전입니다. 내일 저녁 9시부터 금식입니다.',
+        '1d': '[체킷] 내일은 건강검진일입니다. 저녁 9시 이후부터 꼭 금식하시고, 신분증을 지참하여 방문 바랍니다.',
+        'dday': '[체킷] 오늘은 건강검진일입니다! 잊지 말고 병원을 방문해 주세요. (신분증 지참 필수)'
+    };
+
+    window.applyAlimtalkTemplate = (type) => {
+        const input = document.getElementById('masterChatInput');
+        if (!input) return;
+        input.value = alimtalkTemplates[type] || '';
+        input.focus();
+        showToast('알림톡 템플릿이 입력되었습니다. 내용을 자유롭게 수정하세요.', 'info');
+    };
     
     // Statistics Logic
     let charts = { company: null, worker: null, signup: null };

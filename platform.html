@@ -1022,13 +1022,20 @@
             document.getElementById("countWorkers").innerText = totalWorkers.toLocaleString();
             document.getElementById("countSignedUp").innerText = signedUpWorkers.toLocaleString();
 
-            // Render/Update Charts
-            // 1. Company (Target: 50 for now)
-            renderChart("company", [compCount, Math.max(0, 50 - compCount)], ["계약 기업", "잔여"], ["#3b82f6", "#f1f5f9"]);
-            // 2. Roster (Target: 1000 for now)
-            renderChart("worker", [totalWorkers, Math.max(0, 5000 - totalWorkers)], ["등록 인원", "잔여"], ["#10b981", "#f1f5f9"]);
-            // 3. Signup Ratio
-            renderChart("signup", [signedUpWorkers, Math.max(0, totalWorkers - signedUpWorkers)], ["가입 완료", "미가입"], ["#f59e0b", "#f1f5f9"]);
+            // Render/Update Charts with realistic scales
+            // 1. Company (Realistic Target: 100 or 2x current)
+            const compTarget = Math.max(100, Math.ceil(compCount / 50) * 50);
+            renderChart("company", [compCount, Math.max(0, compTarget - compCount)], ["계약 기업", "잔여"], ["#3b82f6", "#f1f5f9"]);
+            
+            // 2. Roster (Realistic Target: 5000 or next 1000 step)
+            const workerTarget = Math.max(1000, Math.ceil(totalWorkers / 500) * 500);
+            renderChart("worker", [totalWorkers, Math.max(0, workerTarget - totalWorkers)], ["등록 인원", "잔여"], ["#10b981", "#f1f5f9"]);
+            
+            // 3. Signup Ratio (Comparison within the roster)
+            // If totalWorkers is 0, we avoid division by zero or weird charts
+            const nonSignedUp = Math.max(0, totalWorkers - signedUpWorkers);
+            const signupData = totalWorkers > 0 ? [signedUpWorkers, nonSignedUp] : [0, 1];
+            renderChart("signup", signupData, ["가입 완료", "미가입"], ["#f59e0b", "#f1f5f9"]);
 
         } catch (e) {
             console.error("Stats Error:", e);

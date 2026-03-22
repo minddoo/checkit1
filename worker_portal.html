@@ -693,15 +693,12 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // Add the next step button
+            // Add the next step booking buttons
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '위 정보가 맞다면 검진받을 병원을 선택해 주세요. 병원 선택을 완료하셨나요?',
-                type: 'action_check',
-                btnText: '병원선택 완료',
-                action: 'completeHospitalSelection()',
-                btnColor: '#818cf8',
+                text: '정보를 확인하셨나요? 이제 아래 버튼을 통해 제휴 병원을 확인하고 예약 신청서를 작성해 주세요.',
+                type: 'booking',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
             

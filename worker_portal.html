@@ -456,11 +456,39 @@
                 </div>`;
         }
 
+        if (msg.type === 'action_check') {
+            const btnColor = msg.btnColor || 'var(--primary)';
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
+                        <div style="padding: 15px;">
+                            <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text}</p>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'date_input_request') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text}</p>
+                            <input type="date" id="resvDateInput" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
+                            <button onclick="submitReservationDate()" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
         return `
             <div style="${wrapperStyle}">
                 ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
                 <div style="${bubbleStyle}">
-                    ${msg.text}
+                    ${msg.text.replace(/\n/g, '<br>')}
                 </div>
                 <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;
@@ -524,7 +552,7 @@
             const workerDoc = await db.collection('workers').doc(workerDocId).get();
             const data = workerDoc.data();
 
-            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}\n\n위 내용이 본인의 정보와 맞는지 확인해 주세요.`;
+            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}`;
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
@@ -533,11 +561,151 @@
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
+
+            // Add the next step button
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '위 정보가 맞다면 검진받을 병원을 선택해 주세요. 병원 선택을 완료하셨나요?',
+                type: 'action_check',
+                btnText: '병원선택 완료',
+                action: 'completeHospitalSelection()',
+                btnColor: '#818cf8',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
             
-            // Auto scroll is handled by the snapshot listener
-        } catch (e) {
-            console.error("Show info error:", e);
-        }
+        } catch (e) { console.error("Show info error:", e); }
+    }
+
+    async function completeHospitalSelection() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원을 선택했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '좋습니다! 그럼 해당 병원에 예약을 진행해 주세요. 예약이 완료되면 아래 버튼을 눌러주세요.',
+                type: 'action_check',
+                btnText: '예약완료',
+                action: 'completeBooking()',
+                btnColor: '#10b981',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Hospital select error:", e); }
+    }
+
+    async function completeBooking() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원 예약을 완료했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '예약을 완료하셨군요! 병원에서 받으신 **예약 확정문자(캡쳐본 또는 내용)**를 아래 버튼을 통해 제출해 주세요.',
+                type: 'action_check',
+                btnText: '확정 내용 전송하기',
+                action: 'requestConfirmation()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Booking complete error:", e); }
+    }
+
+    async function requestConfirmation() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Request confirmation error:", e); }
+    }
+
+    async function submitReservationDate() {
+        const dateVal = document.getElementById('resvDateInput').value;
+        if (!dateVal) { alert('날짜를 선택해 주세요.'); return; }
+
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `${dateVal}로 예약을 완료했습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Save to worker doc
+            await db.collection('workers').doc(workerDocId).update({
+                reservedDate: dateVal,
+                status: '예약완료'
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 아래와 같이 실시간 주의사항 알림톡(D-7, 5, 3, 2, 1)이 자동으로 발송 예약되었습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Simulate the reminder schedule display
+            const reminders = [
+                { d: 7, text: "음주 및 과식 금지 가이드" },
+                { d: 5, text: "복용 중인 약물 확인 및 중단 안내" },
+                { d: 3, text: "검진 전 최종 확인 및 문진표 작성 안내" },
+                { d: 2, text: "금식 시작 및 준비물 체크리스트" },
+                { d: 1, text: "내일 검진 시간 및 병원 위치 재안내" }
+            ];
+
+            let scheduleText = "📅 **발송 예약된 알림톡 일정**\n";
+            reminders.forEach(r => {
+                const rDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000)).toLocaleDateString();
+                scheduleText += `\n- **D-${r.d} (${rDate})**: ${r.text}`;
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'system',
+                text: scheduleText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        } catch (e) { console.error("Submit date error:", e); }
     }
 
     // 재연동 함수 (글로벌 스코프)

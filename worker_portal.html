@@ -378,12 +378,20 @@
         chatUnsub = db.collection('messages')
             .where('workerDocId', '==', workerDocId)
             .onSnapshot({ includeMetadataChanges: true }, snap => {
-                const chatBody = document.getElementById('chatMessages');
-                
-                if (snap.empty) {
-                    chatBody.innerHTML = ''; 
-                    sendSystemGuide(workerDocId);
-                    return;
+                const messages = snap.docs.map(d => d.data());
+                const hasCareGuide = messages.some(m => m.type === 'guide' || m.type === 'action_check');
+
+                if (!hasCareGuide) {
+                    // Send guide if missing, but only once in this session
+                    if (!window._guideSentFor?.includes(workerDocId)) {
+                        window._guideSentFor = window._guideSentFor || [];
+                        window._guideSentFor.push(workerDocId);
+                        sendSystemGuide(workerDocId);
+                    }
+                    if (snap.empty) {
+                        chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">케어 가이드를 전송 중입니다...</div>';
+                        return;
+                    }
                 }
 
                 // Manual sort in JS

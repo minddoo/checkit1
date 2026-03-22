@@ -378,6 +378,7 @@
         chatUnsub = db.collection('messages')
             .where('workerDocId', '==', workerDocId)
             .onSnapshot({ includeMetadataChanges: true }, snap => {
+                const chatBody = document.getElementById('chatMessages');
                 const messages = snap.docs.map(d => d.data());
                 const hasCareGuide = messages.some(m => m.type === 'guide' || m.type === 'action_check');
 

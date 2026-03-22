@@ -240,10 +240,16 @@ body {
 
 .hero-content { 
     position: relative; 
-    z-index: 1; 
+    z-index: 10; 
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 60px 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 .hero-title { 

@@ -181,7 +181,7 @@
         </div>
         <ul class="sidebar-menu">
             <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 고객사 관리</li>
-            <li id="menuBookings" onclick="switchSection('Bookings')"><i class="fa-solid fa-file-invoice-dollar"></i> 예약 신청 현황</li>
+            <li id="menuBookings" onclick="switchSection('Bookings')"><i class="fa-solid fa-file-invoice-dollar"></i> 폼 작성 관리</li>
             <li id="menuChats" onclick="switchSection('Chats')"><i class="fa-solid fa-comments"></i> 1:1 채팅 관리</li>
             <li id="menuStats" onclick="switchSection('Stats')"><i class="fa-solid fa-chart-line"></i> 통계 및 로그</li>
             <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> 시스템 설정</li>
@@ -272,6 +272,35 @@
                         </thead>
                         <tbody id="companyList">
                             <tr><td colspan="4" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 4: BOOKING APPLICATIONS -->
+            <div id="sectionBookings" class="hidden">
+                <div class="card">
+                    <div class="table-toolbar">
+                        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary);"></i> 폼 작성 및 예약 신청 관리</h3>
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                            <input type="text" id="bookingSearchInput" placeholder="이름 또는 병원 검색..." onkeyup="window.filterBookings()">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>소속 기업</th>
+                                <th>신청 근로자</th>
+                                <th>검진 병원</th>
+                                <th>희망 날짜/기간</th>
+                                <th style="text-align: center;">추가항목</th>
+                                <th>연락처/주소</th>
+                                <th style="text-align: center;">상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingListTable">
+                            <tr><td colspan="7" style="text-align: center; padding: 30px; color: #999;">데이터를 불러오는 중...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -582,7 +611,12 @@
 
         let html = "";
         data.forEach(b => {
+            // Find company name
+            const compInfo = allCompanies.find(c => c.companyKey === b.companyId) || { name: b.companyId };
+            const compName = b.companyId === 'ch082082' ? '체킷 (본사)' : (compInfo.name || b.companyId);
+
             html += `<tr>
+                <td style="font-size:0.85rem; color:#64748b;">${compName}</td>
                 <td><strong>${b.name}</strong><br><span style="font-size:0.7rem; color:#94a3b8;">${b.dob || ''}</span></td>
                 <td>${b.hospital}</td>
                 <td style="font-size:0.85rem; color:var(--dark); font-weight:600;">${b.dateRange}</td>
@@ -596,11 +630,6 @@
                 </td>
                 <td style="text-align: center;">
                     <span style="background:#e8f5e9; color:#10b981; padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">${b.status || '대기'}</span>
-                </td>
-                <td style="text-align: center;">
-                    <button class="btn-outline" style="padding: 6px 10px; font-size: 0.8rem; margin: 0 auto;" onclick="window.copyToClipboard('${b.phone}')">
-                        <i class="fa-solid fa-phone"></i> 연락처 복사
-                    </button>
                 </td>
             </tr>`;
         });

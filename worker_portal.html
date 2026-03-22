@@ -186,7 +186,45 @@
             cursor: pointer;
             color: #94a3b8;
         }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+            min-width: 280px;
+        }
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        
+        @keyframes toastIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
     </style>
+
 </head>
 <body>
 
@@ -358,6 +396,20 @@
         </form>
     </div>
 </div>
+
+<!-- Alimtalk Paste Modal HTML -->
+<div id="alimtalkModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeAlimtalkModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>예약 확정 정보 올리기</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">병원에서 받으신 한국어 알림톡이나 문자 내용을 아래에 복사해서 붙여넣어 주세요.</p>
+        <div class="form-group">
+            <textarea id="alimtalkContent" placeholder="여기에 내용을 붙여넣으세요..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
+        </div>
+        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">내용 전송하기</button>
+    </div>
+</div>
+
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -836,28 +888,62 @@
         } catch (e) { console.error("Submit date error:", e); }
     }
 
-    window.startConfirmationFlow = async () => {
+    window.startConfirmationFlow = () => {
+        openAlimtalkModal();
+    };
+
+    window.openAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'flex';
+        const textarea = document.getElementById('alimtalkContent');
+        if (textarea) {
+            textarea.value = '';
+            textarea.focus();
+        }
+    };
+
+    window.closeAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'none';
+    };
+
+    async function submitAlimtalk() {
+        const text = document.getElementById('alimtalkContent').value.trim();
+        if (!text) {
+            alert('내용을 입력해 주세요.');
+            return;
+        }
+
         const user = auth.currentUser;
         if (!user) return;
+
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
-            
+            if (!workerDocId) return;
+
+            // Show a "sending" state if needed, but let's just send
             await db.collection('messages').add({
                 workerDocId: workerDocId,
-                sender: 'admin',
-                text: '아래 채팅창에 받으신 예약 확정 문자나 알림톡 내용을 복사해서 붙여넣어 주세요.',
+                sender: 'worker',
+                text: text,
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            
-            const chatInput = document.getElementById('chatInput');
-            if (chatInput) {
-                chatInput.focus();
-                chatInput.scrollIntoView({ behavior: 'smooth' });
-            }
-        } catch (e) { console.error("Start confirmation flow error:", e); }
-    };
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeAlimtalkModal();
+            showToast("정보가 성공적으로 전송되었습니다.", "success");
+        } catch (e) {
+            console.error("Submit alimtalk error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
 
     // Registration Form Functions
     window.openBookingForm = () => {
@@ -1140,6 +1226,24 @@
     function doLogout() {
         auth.signOut().then(() => { window.location.href = 'index.html'; });
     }
+
+    function showToast(message, type = 'success') {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3100);
+    }
 </script>
+
 </body>
 </html>

@@ -56,10 +56,26 @@
         .icon-blue { background: #dbeafe; color: #3b82f6; }
 
         /* Status Badge */
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; transition: 0.3s; }
         .status-pending { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
-        .status-inprogress { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
-        .status-done { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+        .status-reservation { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .status-checkup { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+        .status-result { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .status-recheck-target { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .status-recheck-done { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+
+        /* Progress Stepper */
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; padding: 0 10px; }
+        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; transition: 0.3s; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; transition: 0.3s; white-space: nowrap; }
+        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
+        .step.active .step-label { color: var(--primary); font-weight: 700; }
+        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
+        .step.completed .step-label { color: #10b981; }
+        .step.warning .step-icon { background: var(--warning); border-color: var(--warning); color: white; }
+        .step.warning .step-label { color: var(--warning); }
 
         /* Info Grid */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -526,27 +542,64 @@
 
     function renderCheckupStatus(data) {
         const statusLabel = data.status || '진행 전';
+        const statuses = ['진행 전', '예약완료', '검사완료', '결과완료', '재검대상자', '재검완료'];
+        const currentIdx = statuses.indexOf(statusLabel);
+
         let badgeClass = 'status-pending';
-        if (statusLabel === '진행 중') badgeClass = 'status-inprogress';
-        if (statusLabel === '완료') badgeClass = 'status-done';
+        let icon = 'fa-circle-dot';
+        
+        switch(statusLabel) {
+            case '예약완료': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
+            case '검사완료': badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
+            case '결과완료': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
+            case '재검대상자': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
+            case '재검완료': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
+        }
 
         const statusContainer = document.getElementById('checkupStatus');
         if (!statusContainer) return;
 
-        statusContainer.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
-                <div>
-                    <div style="margin-bottom: 8px;">
-                        <span class="status-badge ${badgeClass}">
-                            <i class="fa-solid fa-circle-dot"></i> ${statusLabel}
-                        </span>
-                    </div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">현재 검진 진행 상황을 아래 버튼으로 업데이트하세요.</p>
+        // Progress Stepper HTML
+        let stepperHtml = '<div class="stepper">';
+        statuses.forEach((s, idx) => {
+            if (s === '진행 전') return; // Skip "진행 전" in the visual stepper for space
+            let stepClass = '';
+            
+            if (idx < currentIdx) stepClass = 'completed';
+            else if (idx === currentIdx) stepClass = 'active';
+            
+            // Special handling for re-examination
+            if (statusLabel === '재검대상자' && s === '재검대상자') stepClass = 'warning active';
+            if (statusLabel === '재검완료' && s === '재검대상자') stepClass = 'completed';
+
+            stepperHtml += `
+                <div class="step ${stepClass}">
+                    <div class="step-icon">${idx < currentIdx ? '<i class="fa-solid fa-check"></i>' : idx}</div>
+                    <div class="step-label">${s}</div>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <button onclick="updateStatus('진행 전')" class="status-btn" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">진행 전</button>
-                    <button onclick="updateStatus('진행 중')" class="status-btn" style="background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">진행 중</button>
-                    <button onclick="updateStatus('완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">완료</button>
+            `;
+        });
+        stepperHtml += '</div>';
+
+        statusContainer.innerHTML = `
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <span class="status-badge ${badgeClass}">
+                        <i class="fa-solid ${icon}"></i> ${statusLabel}
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+                        마지막 업데이트: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '기록 없음'}
+                    </span>
+                </div>
+                
+                ${stepperHtml}
+
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border);">
+                    <button onclick="updateStatus('예약완료')" class="status-btn" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">예약완료</button>
+                    <button onclick="updateStatus('검사완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">검사완료</button>
+                    <button onclick="updateStatus('결과완료')" class="status-btn" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">결과완료</button>
+                    <button onclick="updateStatus('재검대상자')" class="status-btn" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검대상자</button>
+                    <button onclick="updateStatus('재검완료')" class="status-btn" style="background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검완료</button>
                 </div>
             </div>
             <div class="info-grid">

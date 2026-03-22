@@ -895,7 +895,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '신청서가 성공적으로 접수되었습니다! 마스터 페이지 담당자가 내용을 확인한 후 예약 확정 안내를 드릴 예정입니다.',
+                text: '신청서가 성공적으로 접수되었습니다! checkit 담당자가 내용을 확인한 후 예약 진행 예정입니다. 예약 후 다음 안내까지 기다려주세요.',
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });

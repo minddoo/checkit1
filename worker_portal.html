@@ -227,6 +227,15 @@
         /* Language Button Active State */
         .lang-btn { background: transparent; color: #64748b; }
         .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        .translation-box {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-style: italic;
+        }
     </style>
 
 
@@ -621,6 +630,20 @@
         else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
         else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
 
+        // Automated Translation Logic for worker view
+        let translationHtml = '';
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        if (!isWorker && prefLang !== 'ko' && msg.text && msg.type === 'text') {
+            const cacheKey = `${msg.timestamp?.seconds || 'temp'}_${prefLang}`;
+            if (window.translationCache && window.translationCache[cacheKey]) {
+                translationHtml = `<div class="translation-box"><i class="fa-solid fa-language"></i> ${window.translationCache[cacheKey]}</div>`;
+            } else {
+                translationHtml = `<div class="translation-box" id="trans_${cacheKey}"><i class="fa-solid fa-spinner fa-spin"></i> Translating...</div>`;
+                triggerTranslation(msg.text, prefLang, cacheKey);
+            }
+        }
+
         if (msg.type === 'guide') {
             return `
                 <div style="${wrapperStyle}">
@@ -988,6 +1011,22 @@
         }
     }
 
+    window.translationCache = {};
+    window.ongoingTranslations = {};
+
+    async function triggerTranslation(text, lang, cacheKey) {
+        if (window.ongoingTranslations[cacheKey]) return;
+        window.ongoingTranslations[cacheKey] = true;
+        
+        const translated = await translateText(text, lang);
+        if (translated) {
+            window.translationCache[cacheKey] = translated;
+            const el = document.getElementById(`trans_${cacheKey}`);
+            if (el) el.innerHTML = `<i class="fa-solid fa-language"></i> ${translated}`;
+        }
+        delete window.ongoingTranslations[cacheKey];
+    }
+
     async function translateText(text, targetLang) {
         try {
             // Using Google's public gtx endpoint for demonstration
@@ -1022,6 +1061,9 @@
             await db.collection('workers').doc(workerDocId).update({
                 prefLang: lang
             });
+            
+            // Re-render chat to apply translations
+            loadChatMessages();
             
             showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
         } catch (e) {

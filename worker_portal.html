@@ -379,18 +379,19 @@
             .where('workerDocId', '==', workerDocId)
             .onSnapshot({ includeMetadataChanges: true }, snap => {
                 const chatBody = document.getElementById('chatMessages');
+                if (!chatBody) return; // Guard against early snapshot before DOM ready
+
                 const messages = snap.docs.map(d => d.data());
                 const hasCareGuide = messages.some(m => m.type === 'guide' || m.type === 'action_check');
 
                 if (!hasCareGuide) {
-                    // Send guide if missing, but only once in this session
                     if (!window._guideSentFor?.includes(workerDocId)) {
                         window._guideSentFor = window._guideSentFor || [];
                         window._guideSentFor.push(workerDocId);
                         sendSystemGuide(workerDocId);
                     }
                     if (snap.empty) {
-                        chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">케어 가이드를 전송 중입니다...</div>';
+                        chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 케어 가이드를 전송 중입니다...</div>';
                         return;
                     }
                 }
@@ -440,7 +441,7 @@
                             <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
                         </div>
                         <div style="padding: 18px;">
-                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text}</p>
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
                             <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
                             <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
                         </div>
@@ -457,7 +458,7 @@
                             <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
                         </div>
                         <div style="padding: 18px;">
-                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text}</p>
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
                             <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">제휴 병원 목록 보기</button>
                         </div>
                     </div>
@@ -471,7 +472,7 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
                         <div style="padding: 15px;">
-                            <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text}</p>
+                            <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text || ''}</p>
                             <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
                         </div>
                     </div>
@@ -484,7 +485,7 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
                         <div style="padding: 18px;">
-                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text}</p>
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
                             <input type="date" id="resvDateInput" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
                             <button onclick="submitReservationDate()" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
                         </div>
@@ -497,7 +498,7 @@
             <div style="${wrapperStyle}">
                 ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
                 <div style="${bubbleStyle}">
-                    ${msg.text.replace(/\n/g, '<br>')}
+                    ${(msg.text || '').replace(/\n/g, '<br>')}
                 </div>
                 <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;

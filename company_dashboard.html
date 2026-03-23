@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT 기업 관리자 대시보드</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        :root { --primary: #4F46E5; --dark: #1e293b; --bg: #f8fafc; --danger: #ef4444; --text-muted: #64748b; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; background: var(--bg); color: #334155; display: flex; height: 100vh; overflow: hidden; }
+        .hidden { display: none !important; }
+        
+        /* Layout */
+        .sidebar { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; padding: 20px 0; }
+        .sidebar-brand { font-size: 1.5rem; font-weight: 700; padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu li { padding: 15px 25px; cursor: pointer; display: flex; align-items: center; gap: 15px; color: #cbd5e1; transition: 0.3s; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background: rgba(255,255,255,0.1); color: white; border-left: 4px solid var(--primary); }
+        
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        
+        .header { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .company-badge { font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; background: #e0e7ff; color: #4338ca; font-weight: bold; border: 1px solid #c7d2fe; display: flex; align-items: center; gap: 8px; }
+        
+        .content-area { padding: 30px; overflow-y: auto; flex: 1; }
+        
+        /* Cards */
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); margin-bottom: 30px; }
+        h3 { margin-top: 0; font-size: 1.25rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #0f172a; }
+        
+        /* Form */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: end; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .input-wrapper { display: flex; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; transition: 0.3s; }
+        .input-wrapper:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); background: #fff; }
+        .input-wrapper i { padding: 0 15px; color: #94a3b8; }
+        .input-wrapper input, .input-wrapper select { flex: 1; padding: 12px 10px; border: none; outline: none; background: transparent; font-family: inherit; font-size: 0.95rem; }
+        .input-wrapper input::placeholder { font-size: 0.82rem; color: #a1a1aa; }
+        /* Buttons */
+        button { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: inherit; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #4338ca; }
+        .btn-danger { background: var(--danger); color: white; padding: 8px 15px; font-size: 0.85rem; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #334155; }
+        .btn-outline:hover { background: #f1f5f9; }
+        
+        /* Table */
+        .table-toolbar { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
+        .search-box { display: flex; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 15px; width: 300px; transition: 0.3s; }
+        .search-box:focus-within { border-color: var(--primary); background: #fff; }
+        .search-box input { border: none; outline: none; background: transparent; margin-left: 10px; width: 100%; font-family: inherit; }
+        
+        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; }
+        th, td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
+        th { color: var(--text-muted); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; background: #f8fafc; }
+        th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+        th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+        tr:hover td { background: #f8fafc; }
+        .badge-country { background: #e0f2fe; color: #0284c7; padding: 5px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+        
+        /* Loader */
+        #pageLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Toast */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
+        .toast { min-width: 250px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; padding: 15px 20px; transform: translateX(120%); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .toast.show { transform: translateX(0); }
+        .toast-icon { font-size: 1.2rem; }
+        .toast.success .toast-icon { color: var(--primary); }
+        .toast.error .toast-icon { color: var(--danger); }
+    </style>
+</head>
+<body>
+
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p id="loaderMessage">데이터를 불러오는 중입니다...</p>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- Dashboard Section -->
+<div id="superSection" style="width: 100%; display: none;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
+        </div>
+        <ul class="sidebar-menu">
+            <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
+            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> <span>검진 현황 조회</span></li>
+            <li id="menuReport" onclick="window.switchSection('report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트 조회</span></li>
+        </ul>
+        <div style="margin-top: auto; padding: 20px;">
+            <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
+            </button>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <h2 style="margin: 0; font-size: 1.2rem;">기업 관리자 대시보드</h2>
+            </div>
+            <div>
+                <span class="company-badge" id="companyBadgeInfo">
+                    <i class="fa-solid fa-building"></i> <span id="displayCompanyName">로딩중...</span>
+                </span>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <div class="content-area">
+            
+            <!-- SECTION 1: REGISTRATION -->
+            <div id="sectionRegistration" class="reveal">
+                <!-- Generate Card -->
+                <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 직원(임직원) 명단 등록</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
+                            우리 회사의 외국인 근로자 및 직원 정보를 등록하여 검진 명단으로 관리하세요.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline" onclick="window.downloadExcelTemplate()">
+                            <i class="fa-solid fa-download"></i> 엑셀 양식 다운로드
+                        </button>
+                        <button class="btn-primary" style="background: #10b981;" onclick="document.getElementById('excelUpload').click()">
+                            <i class="fa-solid fa-file-excel"></i> 엑셀 일괄 등록
+                        </button>
+                        <input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;" onchange="window.handleExcelUpload(event)">
+                    </div>
+                </div>
+                <form id="addWorkerForm" onsubmit="window.saveWorker(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>소속현장 (Site)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-building-user"></i>
+                                <input type="text" id="workerSite" placeholder="예: 제1공장" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>성함 (Name)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-user"></i>
+                                <input type="text" id="workerName" placeholder="예: 윈터" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>생년월일 (DOB)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-day"></i>
+                                <input type="date" id="workerBirth" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>국적 (Nationality)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-globe"></i>
+                                <select id="workerNationality" required>
+                                    <option value="" disabled selected>국적 선택</option>
+                                    <option value="대한민국">대한민국 (KR)</option>
+                                    <option value="베트남">베트남 (VN)</option>
+                                    <option value="필리핀">필리핀 (PH)</option>
+                                    <option value="중국">중국 (CN)</option>
+                                    <option value="태국">태국 (TH)</option>
+                                    <option value="우즈베키스탄">우즈베키스탄 (UZ)</option>
+                                    <option value="캄보디아">캄보디아 (KH)</option>
+                                    <option value="미얀마">미얀마 (MM)</option>
+                                    <option value="기타">기타 (Other)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>필수검진 (Required Checkup)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-stethoscope"></i>
+                                <input type="text" id="workerCheckup" placeholder="예: 일반검진, 특수검진" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>검진기간 (Checkup Period)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-calendar-week"></i>
+                                <input type="text" id="workerPeriod" placeholder="예: 25.01.01 ~ 25.12.31" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>기업필요서류 (Required Docs)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <input type="text" id="workerDocs" placeholder="예: 보건증, 결과지" required>
+                            </div>
+                        </div>
+                        <div class="input-group" style="grid-column: 1 / -1;">
+                            <label>특이사항 (Notes)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <input type="text" id="workerNotes" placeholder="예: 한국어 소통 원활 (선택사항)">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                        <button type="submit" id="saveBtn" class="btn-primary" style="height: 44px; padding: 0 30px;"><i class="fa-solid fa-check"></i> 명단에 추가</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Hospital Info Card -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-hospital" style="color: #0ea5e9;"></i> 제휴 병원 및 검진 안내</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
+                            우리 기업과 연계된 검진 병원의 정보를 근로자들에게 안내하기 위해 상세히 작성해 주세요. 여러 병원도 일괄 등록 가능합니다.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline" onclick="window.downloadHospExcelTemplate()" style="border-color: #0ea5e9; color: #0ea5e9;">
+                            <i class="fa-solid fa-download"></i> 병원 양식 다운로드
+                        </button>
+                        <button class="btn-primary" style="background: #0ea5e9;" onclick="document.getElementById('hospExcelUpload').click()">
+                            <i class="fa-solid fa-file-excel"></i> 병원 엑셀 일괄등록
+                        </button>
+                        <input type="file" id="hospExcelUpload" accept=".xlsx, .xls" style="display: none;" onchange="window.handleHospExcelUpload(event)">
+                    </div>
+                </div>
+                <form id="hospitalInfoForm" onsubmit="window.saveHospitalInfo(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>병원 이름</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-house-medical"></i>
+                                <input type="text" id="hospName" placeholder="예: CHECKIT 지정병원">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>검진 가능 기간</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                <input type="text" id="hospSchedule" placeholder="근로자가 검진 받을 수 있는 기간 (예: 25.10.01 ~ 11.30)">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>예약 가능 기간</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <input type="text" id="hospPeriod" placeholder="예: 25.10.01 ~ 25.11.30">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>추가 항목 비용</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-won-sign"></i>
+                                <input type="text" id="hospExtraCost" placeholder="예: 위내시경 추가 시 50,000원">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>예약 사이트 유무</label>
+                            <div class="input-wrapper" style="height: 43.5px;">
+                                <i class="fa-solid fa-link"></i>
+                                <div style="display: flex; align-items: center; gap: 15px; flex: 1; padding: 0 10px; height: 100%;">
+                                    <label style="display:flex; align-items:center; gap:5px; font-weight:normal; cursor:pointer; margin:0; font-size:0.82rem;">
+                                        <input type="radio" name="hospHasLink" value="Y" onchange="window.toggleHospLink()" style="flex:initial; padding:0; margin:0; height:auto;"> 유 (Link O)
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:5px; font-weight:normal; cursor:pointer; margin:0; font-size:0.82rem;">
+                                        <input type="radio" name="hospHasLink" value="N" onchange="window.toggleHospLink()" checked style="flex:initial; padding:0; margin:0; height:auto;"> 무 (Link X)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group" id="hospLinkGroup" style="display: none;">
+                            <label>예약 사이트 주소</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-link"></i>
+                                <input type="url" id="hospLink" placeholder="예: https://hospital-booking.com">
+                            </div>
+                        </div>
+                        <div class="input-group" id="hospCodeGroup" style="display: none;">
+                            <label>예약 회사코드</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-key"></i>
+                                <input type="text" id="hospCode" placeholder="예: CHK_2025">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                        <button type="submit" id="saveHospBtn" class="btn-primary" style="height: 44px; padding: 0 30px; background: #0ea5e9;">
+                            <i class="fa-solid fa-plus"></i> 병원 명단에 추가
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Hospital List Card -->
+            <div class="card">
+                <div class="table-toolbar">
+                    <h3><i class="fa-solid fa-square-h" style="color: #0ea5e9;"></i> 등록된 제휴 병원 목록</h3>
+                </div>
+                
+                <table id="hospitalTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">병원 이름</th>
+                            <th style="width: 20%">검진 가능 기간</th>
+                            <th style="width: 15%">예약 가능 기간</th>
+                            <th style="width: 15%">추가 항목 비용</th>
+                            <th style="width: 20%">예약 사이트</th>
+                            <th style="width: 10%; text-align: center;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hospitalList">
+                        <tr><td colspan="6" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- List Card -->
+            <div class="card">
+                <div class="table-toolbar">
+                    <h3><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                        <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
+                    </div>
+                </div>
+                
+                <table id="workerTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%">소속현장</th>
+                            <th style="width: 12%">성함</th>
+                            <th style="width: 12%">생년월일</th>
+                            <th style="width: 10%">국적</th>
+                            <th style="width: 15%">필수검진</th>
+                            <th style="width: 15%">검진기간</th>
+                            <th style="width: 11%">기업필요서류</th>
+                            <th style="width: 10%; text-align: center;">관리</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workerList">
+                        <tr><td colspan="8" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            </div> <!-- End sectionRegistration -->
+
+            <!-- SECTION 2: CHECKUP STATUS -->
+            <div id="sectionStatus" class="hidden reveal">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px; flex-wrap: wrap;">
+                        <div>
+                            <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-chart-line" style="color: #8b5cf6;"></i> 실시간 검진 현황</h3>
+                            <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">전체 인원 및 현장별 검진 진행 상황을 모니터링합니다.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                            <div class="search-box" style="margin: 0; width: 250px;">
+                                <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                                <input type="text" id="statusSearchInput" placeholder="이름 또는 현장 검색..." onkeyup="window.filterStatusTable()">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="font-weight: 600; font-size: 0.9rem; color: #64748b;">현장 필터:</label>
+                                <select id="statusSiteFilter" onchange="window.filterStatusTable()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.9rem; outline: none; background: white;">
+                                    <option value="all">전체 현장 보기</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="statusTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">소속 현장</th>
+                                <th style="width: 15%">성함</th>
+                                <th style="width: 20%">필수 검진</th>
+                                <th style="width: 20%">검진 기간</th>
+                                <th style="width: 15%">진행 상태</th>
+                                <th style="width: 15%; text-align: center;">상세 정보</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statusList">
+                            <!-- 로딩 중 또는 데이터 없음 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- End sectionStatus -->
+            
+            <div id="sectionReport" class="hidden reveal">
+                <!-- Filter Toolbar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px; flex-wrap: wrap;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-chart-pie" style="color: #6366f1;"></i> 결과 리포트 및 통계 분석</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">우리 기업 및 현장별 상세 검진 결과를 데이터로 확인하세요.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                        <div class="search-box" style="margin: 0; width: 250px;">
+                            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                            <input type="text" id="reportSearchInput" placeholder="직원 성함 검색..." onkeyup="window.renderReportDashboard()">
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label style="font-weight: 600; font-size: 0.9rem; color: #64748b;">현장 선택:</label>
+                            <select id="reportSiteFilter" onchange="window.renderReportDashboard()" style="padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-family: inherit; font-size: 0.9rem; outline: none; background: white;">
+                                <option value="all">전체 현장 (기업 전체)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Statistics Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #64748b;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">총 인원</p>
+                        <h2 id="totalCount" style="margin: 8px 0 0; font-size: 1.8rem;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #4f46e5;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">예약 진행</p>
+                        <h2 id="reservationCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #4f46e5;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #10b981;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">검사 완료</p>
+                        <h2 id="completedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #10b981;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #8b5cf6;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">결과 완료</p>
+                        <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #8b5cf6;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f59e0b;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">재검 대상자</p>
+                        <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f59e0b;">0</h2>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #ef4444; background: #fff1f2;">
+                        <p style="color: #be123c; font-size: 0.85rem; margin: 0; font-weight: 700;">재검 이행률</p>
+                        <h2 id="recheckRate" style="margin: 8px 0 0; font-size: 1.8rem; color: #e11d48;">0%</h2>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+                    <!-- Overall Chart -->
+                    <div class="card">
+                        <h3><i class="fa-solid fa-chart-pie" style="color: #6366f1;"></i> 전체 검진 완료율</h3>
+                        <div style="height: 300px; position: relative; display: flex; justify-content: center;">
+                            <canvas id="overallProgressChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Site Chart -->
+                    <div class="card">
+                        <h3><i class="fa-solid fa-chart-column" style="color: #8b5cf6;"></i> 현장별 검진 현황</h3>
+                        <div style="height: 300px;">
+                            <canvas id="siteProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End sectionReport -->
+            
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<!-- Chart.js for Visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- SheetJS for Excel Upload/Download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    // Toast Notification System
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-circle-exclamation"></i>';
+        toast.innerHTML = `<div class="toast-icon">${icon}</div><div style="font-weight: 500;">${message}</div>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    window.showToast = showToast;
+
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.firebasestorage.app",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUserData = null;
+    let currentCompanyId = null;
+    let allWorkers = [];
+    let allHospitals = [];
+
+    // Section Switching logic
+    window.switchSection = (section) => {
+        const regSec = document.getElementById("sectionRegistration");
+        const statusSec = document.getElementById("sectionStatus");
+        const reportSec = document.getElementById("sectionReport");
+        const menuReg = document.getElementById("menuReg");
+        const menuStatus = document.getElementById("menuStatus");
+        const menuReport = document.getElementById("menuReport");
+
+        // Hide all
+        [regSec, statusSec, reportSec].forEach(s => s.classList.add('hidden'));
+        [menuReg, menuStatus, menuReport].forEach(m => m.classList.remove('active'));
+
+        if (section === 'registration') {
+            regSec.classList.remove('hidden');
+            menuReg.classList.add('active');
+        } else if (section === 'status') {
+            statusSec.classList.remove('hidden');
+            menuStatus.classList.add('active');
+            window.renderStatusDashboard();
+        } else if (section === 'report') {
+            reportSec.classList.remove('hidden');
+            menuReport.classList.add('active');
+            window.renderReportDashboard();
+        }
+    };
+
+    // Visualization Logic
+    let overallChart = null;
+    let siteChart = null;
+
+    window.renderReportDashboard = () => {
+        const selectedSite = document.getElementById("reportSiteFilter").value;
+        const searchQuery = document.getElementById("reportSearchInput").value.trim().toLowerCase();
+
+        // Populate Site Filter if first time
+        const allSites = [...new Set(allWorkers.map(w => w.site).filter(s => !!s))];
+        const siteFilter = document.getElementById("reportSiteFilter");
+        if (siteFilter.options.length <= 1) { // Only 'all' exists
+            allSites.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                siteFilter.appendChild(opt);
+            });
+        }
+
+        // Apply Filters
+        let filtered = allWorkers;
+        if (selectedSite !== "all") {
+            filtered = filtered.filter(w => w.site === selectedSite);
+        }
+        if (searchQuery) {
+            filtered = filtered.filter(w => w.name.toLowerCase().includes(searchQuery));
+        }
+
+        const total = filtered.length;
+        const reservationCount = filtered.filter(w => w.status === '예약완료').length;
+        const checkupCount = filtered.filter(w => w.status === '검사완료').length;
+        const resultCount = filtered.filter(w => w.status === '결과완료').length;
+        const recheckTargetCount = filtered.filter(w => w.status === '재검대상자').length;
+        const recheckDoneCount = filtered.filter(w => w.status === '재검완료').length;
+        const pendingCount = filtered.filter(w => !w.status || w.status === '진행 전').length;
+
+        // Recheck Fulfillment Rate
+        const recheckRate = recheckTargetCount > 0 
+            ? Math.round((recheckDoneCount / recheckTargetCount) * 100) 
+            : 0;
+
+        // Update Summary Cards
+        document.getElementById('totalCount').innerText = total.toLocaleString();
+        document.getElementById('reservationCount').innerText = reservationCount.toLocaleString();
+        document.getElementById('completedCount').innerText = checkupCount.toLocaleString();
+        document.getElementById('resultCount').innerText = resultCount.toLocaleString();
+        document.getElementById('recheckTargetCount').innerText = recheckTargetCount.toLocaleString();
+        document.getElementById('recheckRate').innerText = recheckRate + '%';
+
+        // 1. Overall Progress Chart (Doughnut)
+        const canvasOverall = document.getElementById('overallProgressChart');
+        if (!canvasOverall) return;
+        const ctxOverall = canvasOverall.getContext('2d');
+        if (overallChart) overallChart.destroy();
+
+        // Include chart.js if not already present (Safety check)
+        if (typeof Chart === 'undefined') {
+            console.warn("Chart.js not loaded yet");
+            return;
+        }
+
+        overallChart = new Chart(ctxOverall, {
+            type: 'doughnut',
+            data: {
+                labels: ['예약완료', '검사완료', '결과완료', '재검대상', '재검완료', '미진행'],
+                datasets: [{
+                    data: [reservationCount, checkupCount, resultCount, recheckTargetCount, recheckDoneCount, pendingCount],
+                    backgroundColor: ['#4f46e5', '#10b981', '#8b5cf6', '#f59e0b', '#0891b2', '#cbd5e1'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                },
+                cutout: '75%'
+            }
+        });
+
+        // 2. Site Progress Chart (Bar) - Still showing all sites for context, or just the filtered one?
+        // Let's show all sites but highlight the filtered one if selected.
+        const siteStats = allSites.map(s => {
+            const workersAtSite = allWorkers.filter(w => w.site === s);
+            return {
+                site: s,
+                total: workersAtSite.length,
+                completed: workersAtSite.filter(w => ['검사완료', '결과완료', '재검완료'].includes(w.status)).length
+            };
+        });
+
+        const canvasSite = document.getElementById('siteProgressChart');
+        if (!canvasSite) return;
+        const ctxSite = canvasSite.getContext('2d');
+        if (siteChart) siteChart.destroy();
+        siteChart = new Chart(ctxSite, {
+            type: 'bar',
+            data: {
+                labels: siteStats.map(d => d.site),
+                datasets: [
+                    {
+                        label: '전체 인원',
+                        data: siteStats.map(d => d.total),
+                        backgroundColor: '#e2e8f0',
+                        borderRadius: 4
+                    },
+                    {
+                        label: '완료 인원',
+                        data: siteStats.map(d => d.completed),
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { beginAtZero: true, grid: { display: false } },
+                    y: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                }
+            }
+        });
+    };
+
+    // Workers Status Dashboard Logic
+    window.renderStatusDashboard = () => {
+        // Populate Site Filter
+        const sites = [...new Set(allWorkers.map(w => w.site).filter(s => !!s))];
+        const filter = document.getElementById("statusSiteFilter");
+        const currentVal = filter.value;
+        
+        let options = '<option value="all">전체 현장 보기</option>';
+        sites.forEach(s => {
+            options += `<option value="${s}">${s}</option>`;
+        });
+        filter.innerHTML = options;
+        filter.value = sites.includes(currentVal) ? currentVal : "all";
+
+        window.filterStatusTable();
+    };
+
+    window.filterStatusTable = () => {
+        const selectedSite = document.getElementById("statusSiteFilter").value;
+        const searchQuery = document.getElementById("statusSearchInput").value.trim().toLowerCase();
+
+        let filtered = allWorkers;
+
+        // 1. 현장 선택 필터 적용
+        if (selectedSite !== "all") {
+            filtered = filtered.filter(w => w.site === selectedSite);
+        }
+
+        // 2. 이름 및 현장 검색어 필터 적용
+        if (searchQuery) {
+            filtered = filtered.filter(w => 
+                w.name.toLowerCase().includes(searchQuery) || 
+                (w.site && w.site.toLowerCase().includes(searchQuery))
+            );
+        }
+        
+        const list = document.getElementById("statusList");
+        if(filtered.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 40px 0;">조회된 인원이 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(w => {
+            // progress status (for now default to '진행 전')
+            const statusLabel = w.status || "진행 전";
+            let statusColor = "#94a3b8"; // grey
+            
+            switch(statusLabel) {
+                case "예약완료": statusColor = "#4f46e5"; break;
+                case "검사완료": statusColor = "#10b981"; break;
+                case "결과완료": statusColor = "#8b5cf6"; break;
+                case "재검대상자": statusColor = "#f59e0b"; break;
+                case "재검완료": statusColor = "#0891b2"; break;
+            }
+
+            html += `<tr>
+                <td style="color: #64748b;">${w.site || '-'}</td>
+                <td><strong>${w.name}</strong></td>
+                <td style="font-size: 0.9rem;">${w.checkup || '-'}</td>
+                <td style="font-size: 0.85rem; color: #64748b;">${w.period || '-'}</td>
+                <td>
+                    <span style="display:inline-block; padding: 4px 10px; border-radius: 6px; background: ${statusColor}15; color: ${statusColor}; font-size: 0.85rem; font-weight: 700; border: 1px solid ${statusColor}30;">
+                        ${statusLabel}
+                    </span>
+                </td>
+                <td style="text-align: center;">
+                    <button class="btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="showToast('상세 결과 준비 중입니다.', 'info')">조회</button>
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
+
+    // Table Rendering for Workers
+    window.renderTable = (dataArray) => {
+        const list = document.getElementById("workerList");
+        if(dataArray.length === 0) {
+            list.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 30px; color: #999;">등록된 직원이 없습니다.</td></tr>`;
+            return;
+        }
+        
+        let html = "";
+        dataArray.forEach(d => {
+            html += `<tr>
+                <td>${d.site || '-'}</td>
+                <td><strong>${d.name}</strong></td>
+                <td>${d.birthDate || '-'}</td>
+                <td><span class="badge-country">${d.nationality || '-'}</span></td>
+                <td>${d.checkup || '-'}</td>
+                <td>${d.period || '-'}</td>
+                <td>${d.docs || '-'}</td>
+                <td style="text-align: center;">
+                    <button class="btn-danger" onclick="window.delWorker('${d.id}', '${d.name}')"><i class="fa-solid fa-trash-can"></i> 삭제</button>
+                    ${d.notes ? `<div style="margin-top:5px; font-size:0.8rem; color:#666;" title="${d.notes}"><i class="fa-solid fa-caption"></i> 특이사항 O</div>` : ''}
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
+
+    window.filterTable = () => {
+        const query = document.getElementById("searchInput").value.trim().toLowerCase();
+        if(!query) { window.renderTable(allWorkers); return; }
+        const filtered = allWorkers.filter(w => 
+            w.name.toLowerCase().includes(query) || (w.site && w.site.toLowerCase().includes(query))
+        );
+        window.renderTable(filtered);
+    };
+
+    // Load Workers
+    window.loadWorkers = (companyId) => {
+        db.collection("workers")
+          .where("companyId", "==", companyId)
+          .onSnapshot(snap => {
+            allWorkers = [];
+            snap.forEach(doc => {
+                const data = doc.data(); 
+                data.id = doc.id;
+                allWorkers.push(data);
+            });
+            
+            // 메모리 상에서 최신순 정렬 (index 오류 방지)
+            allWorkers.sort((a,b) => {
+                const tA = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
+                const tB = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
+                return tB - tA;
+            });
+
+            window.filterTable(); 
+            // 실시간 대시보드 및 리포트 갱신
+            if (!document.getElementById('sectionStatus').classList.contains('hidden')) {
+                window.renderStatusDashboard();
+            }
+            if (!document.getElementById('sectionReport').classList.contains('hidden')) {
+                window.renderReportDashboard();
+            } 
+        }, err => {
+            console.error("Worker load error:", err);
+            if (err.message.includes('index')) {
+                showToast("DB 복합 인덱스 오류가 발생했습니다. (수정 완료됨)", "error");
+            } else {
+                showToast("데이터를 불러오는 중 오류가 발생했습니다.", "error");
+            }
+        });
+    };
+
+    // Firebase Auth State
+    auth.onAuthStateChanged(async (user) => {
+        const loader = document.getElementById("pageLoader");
+        if(!user) { 
+            window.location.href = 'index.html'; 
+            return;
+        }
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+                currentUserData = userDoc.data();
+                
+                // 마스터거나 일반 직원이면 권한 없음
+                if (currentUserData.role !== 'company_admin') {
+                    alert("기업 관리자만 접근할 수 있는 페이지입니다.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                currentCompanyId = currentUserData.companyId;
+                
+                // 회사 이름만 가져오기 (병원은 별도 컬렉션으로 분리됨)
+                const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
+                if (compDoc.exists) {
+                    const data = compDoc.data();
+                    document.getElementById("displayCompanyName").innerText = data.name || currentCompanyId;
+                } else {
+                    document.getElementById("displayCompanyName").innerText = currentCompanyId;
+                }
+
+                // 권한 확인 및 로딩 완료 후 화면 표시
+                document.getElementById("superSection").style.display = "flex";
+                loader.style.display = "none";
+                
+                window.loadWorkers(currentCompanyId);
+                window.loadHospitals(currentCompanyId);
+
+            } else {
+                auth.signOut();
+            }
+        } catch (error) {
+            console.error("Auth routing error:", error);
+            loader.style.display = "none";
+            alert("사용자 정보를 불러오는데 실패했습니다.");
+        }
+    });
+
+    // Helper: Generate Random Key
+    const generateKey = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    window.saveWorker = async (e) => {
+        e.preventDefault();
+        
+        if (!currentCompanyId) {
+            showToast("기업 정보가 확인되지 않아 등록할 수 없습니다.", "error");
+            return;
+        }
+
+        const site = document.getElementById("workerSite").value.trim();
+        const name = document.getElementById("workerName").value.trim();
+        const birthDate = document.getElementById("workerBirth").value;
+        const nationality = document.getElementById("workerNationality").value;
+        const checkup = document.getElementById("workerCheckup").value.trim();
+        const period = document.getElementById("workerPeriod").value.trim();
+        const docs = document.getElementById("workerDocs").value.trim();
+        const notes = document.getElementById("workerNotes").value.trim();
+        
+        if(!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
+            showToast("특이사항을 제외한 모든 필수 정보를 입력해주세요.", "error"); 
+            return;
+        }
+
+        const submitBtn = document.getElementById("saveBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+
+        try {
+            await db.collection("workers").add({
+                companyId: currentCompanyId,
+                site: site,
+                name: name, 
+                birthDate: birthDate,
+                nationality: nationality, 
+                checkup: checkup,
+                period: period,
+                docs: docs,
+                notes: notes,
+                passwordKey: generateKey(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            showToast("직원 명단에 성공적으로 추가되었습니다!", "success");
+            
+            // 폼 초기화
+            document.getElementById("addWorkerForm").reset();
+        } catch(err) { 
+            console.error("Worker save Error:", err);
+            showToast("저장 실패: " + err.message, "error"); 
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> 명단에 추가';
+        }
+    };
+
+    window.delWorker = async (id, name) => { 
+        if(confirm(`[${name}] 직원을 명단에서 완전히 삭제하시겠습니까?`)) {
+            try { 
+                await db.collection("workers").doc(id).delete(); 
+                showToast("명단에서 삭제되었습니다.", "success"); 
+            } catch(e) { 
+                showToast("삭제 실패: " + e.message, "error"); 
+            }
+        }
+    };
+    
+    // Load Hospitals
+    window.loadHospitals = (companyId) => {
+        db.collection("hospitals")
+          .where("companyId", "==", companyId)
+          .onSnapshot(snap => {
+            allHospitals = [];
+            snap.forEach(doc => {
+                allHospitals.push({ id: doc.id, ...doc.data() });
+            });
+            
+            allHospitals.sort((a,b) => {
+                const tA = (a.createdAt && typeof a.createdAt.toMillis === 'function') ? a.createdAt.toMillis() : 0;
+                const tB = (b.createdAt && typeof b.createdAt.toMillis === 'function') ? b.createdAt.toMillis() : 0;
+                return tB - tA;
+            });
+            window.renderHospTable(allHospitals);
+          }, err => {
+              console.error("loadHospitals Error:", err);
+              showToast("병원 목록을 불러오는 중 오류(권한/인덱스 등)가 발생했습니다.", "error");
+          });
+    };
+
+    window.renderHospTable = (dataArray) => {
+        const list = document.getElementById("hospitalList");
+        if(dataArray.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 30px 0;">등록된 제휴 병원이 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        dataArray.forEach(h => {
+            const linkHtml = h.hasLink === 'Y' && h.link 
+                ? `<a href="${h.link}" target="_blank" style="color: #0ea5e9; font-weight: 600; text-decoration: underline;">바로가기</a><br><span style="font-size: 0.85rem; color: #64748b;">Code: ${h.code||'-'}</span>` 
+                : `<span style="color: #94a3b8;">없음</span>`;
+            
+            html += `<tr>
+                <td style="font-weight: 600; color: #0ea5e9;">${h.name}</td>
+                <td>${h.schedule}</td>
+                <td>${h.period}</td>
+                <td>${h.extraCost || '-'}</td>
+                <td>${linkHtml}</td>
+                <td style="text-align: center;">
+                    <button class="btn-danger" onclick="window.delHospital('${h.id}', '${h.name}')" style="background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 5px 12px;">삭제</button>
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
+
+    window.delHospital = async (id, name) => {
+        if(confirm(`[${name}] 병원을 목록에서 완전히 삭제하시겠습니까?`)) {
+            try { 
+                await db.collection("hospitals").doc(id).delete(); 
+                showToast("병원이 삭제되었습니다.", "success"); 
+            } catch(e) { 
+                showToast("삭제 실패: " + e.message, "error"); 
+            }
+        }
+    };
+
+    // Save Hospital Info manually
+    window.saveHospitalInfo = async (e) => {
+        e.preventDefault();
+        
+        if (!currentCompanyId) return;
+
+        const submitBtn = document.getElementById("saveHospBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+        
+        const hasLink = document.querySelector('input[name="hospHasLink"]:checked').value;
+
+        const info = {
+            name: document.getElementById("hospName").value.trim(),
+            schedule: document.getElementById("hospSchedule").value.trim(),
+            period: document.getElementById("hospPeriod").value.trim(),
+            extraCost: document.getElementById("hospExtraCost").value.trim(),
+            hasLink: hasLink,
+            link: hasLink === 'Y' ? document.getElementById("hospLink").value.trim() : '',
+            code: hasLink === 'Y' ? document.getElementById("hospCode").value.trim() : ''
+        };
+
+        if(!info.name) {
+            showToast("병원 이름을 입력하세요.", "error");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> 병원 명단에 추가';
+            return;
+        }
+
+        try {
+            await db.collection('hospitals').add({
+                companyId: currentCompanyId,
+                ...info,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            showToast("제휴 병원 정보가 성공적으로 추가되었습니다!", "success");
+            e.target.reset(); // clear form inputs
+            document.querySelector('input[name="hospHasLink"][value="N"]').checked = true;
+            window.toggleHospLink();
+        } catch(err) {
+            console.error("Save Hospital Error:", err);
+            showToast("제휴 병원 추가에 실패했습니다.", "error");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> 병원 명단에 추가';
+        }
+    };
+    
+    // Toggle Link inputs
+    window.toggleHospLink = () => {
+        const hasLink = document.querySelector('input[name="hospHasLink"]:checked').value;
+        const linkGroup = document.getElementById('hospLinkGroup');
+        const codeGroup = document.getElementById('hospCodeGroup');
+        if(hasLink === 'Y') {
+            linkGroup.style.display = 'block';
+            codeGroup.style.display = 'block';
+        } else {
+            linkGroup.style.display = 'none';
+            codeGroup.style.display = 'none';
+            document.getElementById('hospLink').value = '';
+            document.getElementById('hospCode').value = '';
+        }
+    };
+    
+    // Excel Download Template
+    window.downloadExcelTemplate = () => {
+        const wsData = [
+            ["소속현장", "성함", "생년월일", "국적", "필수검진", "검진기간", "기업필요서류", "특이사항"],
+            ["제1공장", "홍길동", "1990-01-01", "대한민국", "일반검진, 특수검진", "25.01.01 ~ 25.12.31", "보건증", "한국어 능통"]
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        
+        // 열 너비 보정
+        ws['!cols'] = [ {wpx: 100}, {wpx: 100}, {wpx: 120}, {wpx: 100}, {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 200} ];
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "직원등록양식");
+        
+        XLSX.writeFile(wb, "CHECKIT_직원명단_일괄등록_양식.xlsx");
+    };
+
+    // Excel Upload Handler
+    window.handleExcelUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!currentCompanyId) {
+            showToast("기업 정보가 확인되지 않습니다.", "error");
+            return;
+        }
+
+        const loader = document.getElementById("pageLoader");
+        document.getElementById("loaderMessage").innerText = "엑셀 데이터를 처리 중입니다...";
+        loader.style.display = "flex";
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const data = evt.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const firstSheet = workbook.SheetNames[0];
+                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
+
+                if(excelRows.length === 0) {
+                    throw new Error("엑셀 파일에 데이터가 없습니다.");
+                }
+
+                // Batch Write (Firebase Firestore supports up to 500 writes per batch)
+                let batch = db.batch();
+                let count = 0;
+                let totalAdded = 0;
+
+                for (let i = 0; i < excelRows.length; i++) {
+                    const row = excelRows[i];
+                    
+                    const getVal = (key) => {
+                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
+                        return actualKey ? String(row[actualKey] || "").trim() : "";
+                    };
+
+                    const name = getVal("성함");
+                    const site = getVal("소속현장");
+                    if (i === 0 && name === "홍길동" && site === "제1공장") continue;
+
+                    const birthDate = getVal("생년월일");
+                    const nationality = getVal("국적");
+                    const checkup = getVal("필수검진");
+                    const period = getVal("검진기간");
+                    const docs = getVal("기업필요서류");
+                    const notes = getVal("특이사항");
+
+                    // 필수값 누락 시 해당 행 건너뜀 (특이사항 제외)
+                    if (!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
+                        continue; 
+                    }
+
+                    const docRef = db.collection("workers").doc(); // Create new ref
+                    batch.set(docRef, {
+                        companyId: currentCompanyId,
+                        site: site,
+                        name: name,
+                        birthDate: birthDate,
+                        nationality: nationality,
+                        checkup: checkup,
+                        period: period,
+                        docs: docs,
+                        notes: notes,
+                        passwordKey: generateKey(),
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    count++;
+                    totalAdded++;
+
+                    if (count === 490) {
+                        await batch.commit();
+                        batch = db.batch();
+                        count = 0;
+                    }
+                }
+
+                if (count > 0) {
+                    await batch.commit();
+                }
+                
+                if (totalAdded > 0) {
+                    showToast(`총 ${totalAdded}명의 직원이 일괄 등록되었습니다!`, "success");
+                } else {
+                    showToast("성공적으로 추가된 직원이 없습니다 (필수값 누락 확인).", "error");
+                }
+
+            } catch (err) {
+                console.error("Excel Upload Error:", err);
+                showToast("엑셀 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
+            } finally {
+                loader.style.display = "none";
+                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
+                e.target.value = ""; // Reset file input
+            }
+        };
+        
+        reader.onerror = () => {
+             loader.style.display = "none";
+             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
+        };
+
+        reader.readAsBinaryString(file);
+    };
+    
+    // Hospital Excel Upload/Download logic
+    window.downloadHospExcelTemplate = () => {
+        const wsData = [
+            ["병원 이름", "검진 가능 기간", "예약 가능 기간", "추가 항목 비용", "예약 사이트 링크(URL)", "예약 회사코드"],
+            ["CHECKIT 지정병원", "25.10.01 ~ 11.30", "25.10.01 ~ 11.30", "위내시경 추가 시 50,000원", "https://hospital-booking.com", "CHK_2025"]
+        ];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+        ws['!cols'] = [ {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 200}, {wpx: 100} ];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "병원일괄등록양식");
+        XLSX.writeFile(wb, "CHECKIT_병원목록_일괄등록_양식.xlsx");
+    };
+
+    window.handleHospExcelUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!currentCompanyId) {
+            showToast("기업 정보가 확인되지 않습니다.", "error");
+            return;
+        }
+
+        const loader = document.getElementById("pageLoader");
+        document.getElementById("loaderMessage").innerText = "병원 엑셀 데이터를 처리 중입니다...";
+        loader.style.display = "flex";
+
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                const firstSheet = workbook.SheetNames[0];
+                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
+
+                if(excelRows.length === 0) throw new Error("엑셀 파일에 데이터가 없습니다.");
+
+                let batch = db.batch();
+                let count = 0, totalAdded = 0;
+
+                for (let i = 0; i < excelRows.length; i++) {
+                    const row = excelRows[i];
+                    
+                    const getVal = (key) => {
+                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
+                        return actualKey ? String(row[actualKey] || "").trim() : "";
+                    };
+
+                    const name = getVal("병원 이름");
+                    if (i === 0 && name === "CHECKIT 지정병원") continue;
+
+                    const schedule = getVal("검진 가능 기간");
+                    const period = getVal("예약 가능 기간");
+                    const extra = getVal("추가 항목 비용");
+                    const link = getVal("예약 사이트 링크(URL)");
+                    const code = getVal("예약 회사코드");
+
+                    if (!name) continue; 
+
+                    const docRef = db.collection("hospitals").doc();
+                    batch.set(docRef, {
+                        companyId: currentCompanyId,
+                        name: name,
+                        schedule: schedule,
+                        period: period,
+                        extraCost: extra,
+                        hasLink: link ? 'Y' : 'N',
+                        link: link,
+                        code: code,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    count++; totalAdded++;
+                    if (count === 490) { await batch.commit(); batch = db.batch(); count = 0; }
+                }
+                if (count > 0) await batch.commit();
+                
+                if (totalAdded > 0) {
+                    showToast(`총 ${totalAdded}개의 병원이 일괄 등록되었습니다!`, "success");
+                } else {
+                    showToast("성공적으로 추가된 병원이 없습니다 (병원 이름 누락 확인).", "error");
+                }
+
+            } catch (err) {
+                console.error("Hosp Upload Error:", err);
+                showToast("엑셀 병원 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
+            } finally {
+                loader.style.display = "none";
+                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
+                e.target.value = ""; 
+            }
+        };
+        
+        reader.onerror = () => {
+             loader.style.display = "none";
+             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
+        };
+
+        reader.readAsBinaryString(file);
+    };
+    
+    window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
+</script>
+</body>
+</html>

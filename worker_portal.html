@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT - 근로자 포털</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --dark: #1e1b4b;
+            --bg: #f0f4ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .hidden { display: none !important; }
+
+        /* Loader */
+        #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+        .loader { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Header */
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .top-bar .logo i { color: var(--primary-light); }
+        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; }
+        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .top-bar .logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Main Content */
+        .main { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+
+        /* Welcome Banner */
+        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .welcome-banner h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        .welcome-banner p { opacity: 0.8; font-size: 0.95rem; }
+
+        /* Cards */
+        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-header h3 { font-size: 1.1rem; color: var(--text); }
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .icon-purple { background: #ede9fe; color: var(--primary); }
+        .icon-green { background: #d1fae5; color: var(--success); }
+        .icon-blue { background: #dbeafe; color: #3b82f6; }
+
+        /* Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; transition: 0.3s; }
+        .status-pending { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+        .status-reservation { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .status-checkup { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+        .status-result { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .status-recheck-target { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .status-recheck-done { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+
+        /* Progress Stepper */
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; padding: 0 10px; }
+        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; transition: 0.3s; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; transition: 0.3s; white-space: nowrap; }
+        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
+        .step.active .step-label { color: var(--primary); font-weight: 700; }
+        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
+        .step.completed .step-label { color: #10b981; }
+        .step.warning .step-icon { background: var(--warning); border-color: var(--warning); color: white; }
+        .step.warning .step-label { color: var(--warning); }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
+        .info-item .label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+        .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+        /* Hospital List */
+        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .hospital-item:last-child { border-bottom: none; }
+        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
+        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+        .hospital-link:hover { background: #4f46e5; }
+        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+
+        /* Loading state */
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout */
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
+        .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
+
+        .sidebar-menu { list-style: none; margin-top: 10px; }
+        .sidebar-menu li { 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            transition: 0.2s; 
+        }
+        .sidebar-menu li i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
+        .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
+
+        @media (max-width: 768px) {
+            .portal-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px 20px; }
+            .sidebar-menu { display: flex; gap: 10px; overflow-x: auto; margin-top: 0; padding-bottom: 5px; }
+            .sidebar-menu li { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.85rem; }
+            .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
+            .main-content { padding: 20px; }
+        }
+        /* Existing styles... */
+        /* Booking Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .booking-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .booking-modal h3 { margin-bottom: 20px; color: var(--dark); font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; color: #64748b; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+            min-width: 280px;
+        }
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        
+        @keyframes toastIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+
+        /* Language Button Active State */
+        .lang-btn { background: transparent; color: #64748b; }
+        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
+        .translation-box {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-style: italic;
+        }
+    </style>
+
+
+</head>
+<body>
+
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p style="color: #64748b; font-size: 0.95rem;">포털을 불러오는 중...</p>
+</div>
+
+<div id="portalContent" class="hidden">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT 근로자 포털 <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER VIEW</span></div>
+        <div class="user-info">
+            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
+            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃</button>
+            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i> 닫기</button>
+        </div>
+    </div>
+
+    <div class="portal-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li id="menuProgress" class="active" onclick="switchSection('progress')">
+                    <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
+                </li>
+                <li id="menuChat" onclick="switchSection('chat')">
+                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
+                </li>
+                <li id="menuResults" onclick="switchSection('results')">
+                    <i class="fa-solid fa-file-medical"></i> 나의 결과지
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- SECTION 1: MY PROGRESS -->
+            <div id="sectionProgress" class="reveal">
+                <!-- Welcome -->
+                <div class="welcome-banner">
+                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+                </div>
+
+                <!-- My Checkup Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3>나의 검진 현황</h3>
+                    </div>
+                    <div id="checkupStatus">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
+
+                <!-- Affiliated Hospitals -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
+                        <h3>제휴 병원 안내</h3>
+                    </div>
+                    <div id="hospitalList">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
+
+                <!-- Required Docs -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
+                        <h3>기업 필요 서류</h3>
+                    </div>
+                    <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CHAT ROOM -->
+            <div id="sectionChat" class="hidden reveal">
+                <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: none;">
+                <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: none;">
+                    <!-- Chat Header -->
+                    <div style="padding: 15px 25px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                        <div class="card-icon icon-purple" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                        </div>
+                        <!-- Language Switcher -->
+                        <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                            <button onclick="setChatLanguage('ko')" class="lang-btn active" data-lang="ko" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">KR</button>
+                            <button onclick="setChatLanguage('en')" class="lang-btn" data-lang="en" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">EN</button>
+                            <button onclick="setChatLanguage('cn')" class="lang-btn" data-lang="cn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">CN</button>
+                            <button onclick="setChatLanguage('vn')" class="lang-btn" data-lang="vn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">VN</button>
+                        </div>
+                    </div>
+
+                    <!-- Message Body -->
+                    <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Messages will be injected here -->
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px;">
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                        <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: MY RESULTS -->
+            <div id="sectionResults" class="hidden reveal">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
+                        <h3>나의 결과지 관리</h3>
+                    </div>
+                    <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
+                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                        <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+                    </div>
+        </div> <!-- End main-content -->
+    </div> <!-- End portal-wrapper -->
+</div> <!-- End portalContent -->
+
+<!-- Booking Form Modal HTML -->
+<div id="bookingModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeBookingForm()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>예약 신청서 작성</h3>
+        <form id="bookingForm" onsubmit="submitBookingForm(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>성함</label>
+                    <input type="text" id="bf_name" required>
+                </div>
+                <div class="form-group">
+                    <label>생년월일</label>
+                    <input type="date" id="bf_dob" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>연락처</label>
+                <input type="tel" id="bf_phone" placeholder="010-0000-0000" required>
+            </div>
+            <div class="form-group">
+                <label>한국 거주 주소</label>
+                <input type="text" id="bf_address" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 병원</label>
+                <input type="text" id="bf_hospital" placeholder="제휴 병원 중 선택 또는 기입" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 날짜 (7일 기간으로 입력)</label>
+                <input type="text" id="bf_dateRange" placeholder="예: 2024.05.01 ~ 2024.05.07" required>
+            </div>
+            <div class="form-group">
+                <label>추가 검사 항목 유무</label>
+                <select id="bf_extraItems">
+                    <option value="none">없음</option>
+                    <option value="yes">있음 (상담 필요)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>개인 희망 서류 (선택 사항)</label>
+                <textarea id="bf_documents" placeholder="예: 실손보험 청구용 서류 등" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">신청서 제출하기</button>
+        </form>
+    </div>
+</div>
+
+<!-- Alimtalk Paste Modal HTML -->
+<div id="alimtalkModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeAlimtalkModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>예약 확정 정보 올리기</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">병원에서 받으신 한국어 알림톡이나 문자 내용을 아래에 복사해서 붙여넣어 주세요.</p>
+        <div class="form-group">
+            <textarea id="alimtalkContent" placeholder="여기에 내용을 붙여넣으세요..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
+        </div>
+        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">내용 전송하기</button>
+    </div>
+</div>
+
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.firebasestorage.app",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Section Switching
+    window.switchSection = (target) => {
+        const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
+        const menus = ['menuProgress', 'menuChat', 'menuResults'];
+
+        sections.forEach(s => {
+            const el = document.getElementById(s);
+            if (el) el.classList.add('hidden');
+        });
+        menus.forEach(m => {
+            const el = document.getElementById(m);
+            if (el) el.classList.remove('active');
+        });
+
+        const targetSection = document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1));
+        const targetMenu = document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1));
+        
+        if (targetSection) targetSection.classList.remove('hidden');
+        if (targetMenu) targetMenu.classList.add('active');
+        
+        if (target === 'chat') {
+            const chatBody = document.getElementById('chatMessages');
+            if (chatBody) {
+                setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+            }
+        }
+    };
+
+    let chatUnsub = null;
+
+    auth.onAuthStateChanged(async (user) => {
+        const loader = document.getElementById('pageLoader');
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramWorkerDocId = urlParams.get('workerDocId');
+        const paramCompanyId = urlParams.get('companyId');
+
+        try {
+            // Check if Master Admin or regular worker
+            db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
+                const userData = userDoc.data() || {};
+                const isMaster = user.email === "master@checkit.com";
+                
+                let workerDocId = userData.workerDocId;
+                let companyId = userData.companyId;
+
+                // Mode: Master Viewing a specific worker
+                if (isMaster && paramWorkerDocId && paramCompanyId) {
+                    workerDocId = paramWorkerDocId;
+                    companyId = paramCompanyId;
+                    
+                    document.getElementById('masterBadge').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.add('hidden');
+                    document.getElementById('closeBtn').classList.remove('hidden');
+                } else if (!userDoc.exists || userData.role !== 'worker') {
+                    console.warn('Worker record not found or invalid role');
+                    loader.style.display = 'none';
+                    document.getElementById('portalContent').classList.remove('hidden');
+                    return;
+                }
+
+                // 기본 정보 표시
+                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                if (workerDocId) {
+                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                        if (workerDoc.exists) {
+                            const wData = workerDoc.data();
+                            if (isMaster) {
+                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                document.getElementById('welcomeName').textContent = wData.name;
+                            }
+                            const prefLang = wData.prefLang || 'ko';
+                            document.querySelectorAll('.lang-btn').forEach(btn => {
+                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                            });
+                            renderCheckupStatus(wData);
+                        } else {
+                            if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
+                        }
+                    });
+                    loadChatMessages(workerDocId);
+                }
+
+                if (companyId) {
+                    db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                        renderHospitals(hospSnap.docs);
+                    });
+                }
+
+                loader.style.display = 'none';
+                document.getElementById('portalContent').classList.remove('hidden');
+            });
+        } catch (err) {
+            console.error('Portal sync error:', err);
+            loader.style.display = 'none';
+        }
+    });
+
+    // Chat / Workflow Logic
+    function loadChatMessages(workerDocId) {
+        if (chatUnsub) chatUnsub();
+        chatUnsub = db.collection('messages')
+            .where('workerDocId', '==', (workerDocId || 'none'))
+            .onSnapshot({ includeMetadataChanges: true }, snap => {
+                const chatBody = document.getElementById('chatMessages');
+                if (!chatBody) return;
+
+                try {
+                    const docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    
+                    // Manual Sort
+                    docs.sort((a, b) => {
+                        const tA = (a.timestamp && a.timestamp.toMillis) ? a.timestamp.toMillis() : 0;
+                        const tB = (b.timestamp && b.timestamp.toMillis) ? b.timestamp.toMillis() : 0;
+                        return tA - tB;
+                    });
+
+                    const hasCareGuide = docs.some(m => m.type === 'guide' || m.type === 'action_check');
+
+                    if (!hasCareGuide && workerDocId) {
+                        if (!window._guideSentFor?.includes(workerDocId)) {
+                            window._guideSentFor = window._guideSentFor || [];
+                            window._guideSentFor.push(workerDocId);
+                            sendSystemGuide(workerDocId);
+                        }
+                    }
+
+                    if (snap.empty) {
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
+                        return;
+                    }
+
+                    let html = '';
+                    docs.forEach(msg => {
+                        html += renderMessage(msg);
+                    });
+                    chatBody.innerHTML = html;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } catch (e) {
+                    console.error("Render error:", e);
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 표시 중 오류가 발생했습니다.</div>';
+                }
+            }, err => {
+                console.error("Chat sync error:", err);
+                const chatBody = document.getElementById('chatMessages');
+                if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
+            });
+    }
+
+    function renderMessage(msg) {
+        if (!msg) return '';
+        const isSystem = msg.sender === 'system';
+        const isAdmin = msg.sender === 'admin';
+        const isWorker = msg.sender === 'worker';
+        
+        let timestamp = '전송 중...';
+        try {
+            if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
+                timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else if (msg.timestamp instanceof Date) {
+                timestamp = msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+        } catch (e) { console.error("Time format error", e); }
+
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
+        if (isWorker) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
+        let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
+        if (isWorker) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
+        else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
+        else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+
+        // Automated Translation Logic for worker view
+        let translationHtml = '';
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        if (!isWorker && prefLang !== 'ko' && msg.text && msg.type === 'text') {
+            const cacheKey = `${msg.id || msg.timestamp?.seconds || 'temp'}_${prefLang}`;
+            if (window.translationCache && window.translationCache[cacheKey]) {
+                translationHtml = `<div class="translation-box"><i class="fa-solid fa-language"></i> ${window.translationCache[cacheKey]}</div>`;
+            } else {
+                translationHtml = `<div class="translation-box" id="trans_${cacheKey}"><i class="fa-solid fa-spinner fa-spin"></i> Translating...</div>`;
+                triggerTranslation(msg.text, prefLang, cacheKey);
+            }
+        }
+
+        if (msg.type === 'guide') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'booking') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">예약 신청서 작성하기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'action_check') {
+            const btnColor = msg.btnColor || 'var(--primary)';
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
+                        <div style="padding: 15px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'date_input_request') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <input type="date" class="resv-date-input" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
+                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        return `
+            <div style="${wrapperStyle}">
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                <div style="${bubbleStyle}">
+                    ${(msg.text || '').replace(/\n/g, '<br>')}
+                </div>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+            </div>`;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            input.value = '';
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Chat send error:", e);
+            showToast("메시지 전송에 실패했습니다.", "error");
+        }
+    }
+
+    async function sendSystemGuide(workerDocId) {
+        // This simulates a system-initiated message flow
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'system',
+            text: 'CHECKIT 케어 서비스가 시작되었습니다.',
+            type: 'system',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'admin',
+            text: '안녕하세요! CHECKIT 케어 센터입니다. 귀하의 소속 기업 건강검진 안내를 확인해 주세요.',
+            type: 'guide',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+
+    async function showMyRegisteredInfo() {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const data = workerDoc.data();
+
+            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}`;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: infoText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Add the next step booking buttons
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '정보를 확인하셨나요? 이제 아래 버튼을 통해 제휴 병원을 확인하고 예약 신청서를 작성해 주세요.',
+                type: 'booking',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+        } catch (e) { console.error("Show info error:", e); }
+    }
+
+    async function completeHospitalSelection() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원을 선택했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '좋습니다! 그럼 해당 병원에 예약을 진행해 주세요. 예약이 완료되면 아래 버튼을 눌러주세요.',
+                type: 'action_check',
+                btnText: '예약완료',
+                action: 'completeBooking()',
+                btnColor: '#10b981',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Hospital select error:", e); }
+    }
+
+    async function completeBooking() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원 예약을 완료했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '예약을 완료하셨군요! 병원에서 받으신 **예약 확정문자(캡쳐본 또는 내용)**를 아래 버튼을 통해 제출해 주세요.',
+                type: 'action_check',
+                btnText: '확정 내용 전송하기',
+                action: 'requestConfirmation()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Booking complete error:", e); }
+    }
+
+    async function requestConfirmation() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Request confirmation error:", e); }
+    }
+
+    async function submitReservationDate(btn) {
+        let dateVal = '';
+        if (btn) {
+            const input = btn.parentElement.querySelector('.resv-date-input');
+            if (input) dateVal = input.value;
+        } else {
+            // Fallback for older code if any
+            const input = document.getElementById('resvDateInput');
+            if (input) dateVal = input.value;
+        }
+        
+        if (!dateVal) { alert('날짜를 선택해 주세요.'); return; }
+
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `${dateVal}로 예약을 완료했습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Save to worker doc
+            await db.collection('workers').doc(workerDocId).update({
+                reservedDate: dateVal,
+                status: '예약완료'
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 아래와 같이 실시간 주의사항 알림톡(D-7, 5, 3, 2, 1)이 자동으로 발송 예약되었습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Simulate the reminder schedule display
+            const reminders = [
+                { d: 7, text: "음주 및 과식 금지 가이드" },
+                { d: 5, text: "복용 중인 약물 확인 및 중단 안내" },
+                { d: 3, text: "검진 전 최종 확인 및 문진표 작성 안내" },
+                { d: 2, text: "금식 시작 및 준비물 체크리스트" },
+                { d: 1, text: "내일 검진 시간 및 병원 위치 재안내" }
+            ];
+
+            let scheduleText = "📅 **발송 예약된 알림톡 일정**\n";
+            reminders.forEach(r => {
+                const rDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000)).toLocaleDateString();
+                scheduleText += `\n- **D-${r.d} (${rDate})**: ${r.text}`;
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'system',
+                text: scheduleText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        } catch (e) { console.error("Submit date error:", e); }
+    }
+
+    window.startConfirmationFlow = () => {
+        openAlimtalkModal();
+    };
+
+    window.openAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'flex';
+        const textarea = document.getElementById('alimtalkContent');
+        if (textarea) {
+            textarea.value = '';
+            textarea.focus();
+        }
+    };
+
+    window.closeAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'none';
+    };
+
+    async function submitAlimtalk() {
+        const text = document.getElementById('alimtalkContent').value.trim();
+        if (!text) {
+            alert('내용을 입력해 주세요.');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Send original message
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Get preferred language and translate
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const prefLang = workerDoc.data().prefLang || 'ko';
+
+            if (prefLang !== 'ko') {
+                showToast(`번역 중 (${prefLang})...`, "info");
+                const translated = await translateText(text, prefLang);
+                if (translated) {
+                    await db.collection('messages').add({
+                        workerDocId: workerDocId,
+                        sender: 'admin',
+                        text: `[Translation to ${prefLang}]\n\n${translated}`,
+                        type: 'text',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeAlimtalkModal();
+            showToast("정보가 성공적으로 전송되었습니다.", "success");
+        } catch (e) {
+            console.error("Submit alimtalk error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+
+    window.translationCache = {};
+    window.ongoingTranslations = {};
+
+    async function triggerTranslation(text, lang, cacheKey) {
+        if (window.ongoingTranslations[cacheKey]) return;
+        window.ongoingTranslations[cacheKey] = true;
+        
+        const translated = await translateText(text, lang);
+        if (translated) {
+            window.translationCache[cacheKey] = translated;
+            const el = document.getElementById(`trans_${cacheKey}`);
+            if (el) el.innerHTML = `<i class="fa-solid fa-language"></i> ${translated}`;
+        }
+        delete window.ongoingTranslations[cacheKey];
+    }
+
+    async function translateText(text, targetLang) {
+        try {
+            // Using Google's public gtx endpoint for demonstration
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data && data[0]) {
+                return data[0].map(x => x[0]).join('');
+            }
+            return null;
+        } catch (e) {
+            console.error("Translation error:", e);
+            return null;
+        }
+    }
+
+    window.setChatLanguage = async (lang) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Update UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            // Save to Firestore
+            await db.collection('workers').doc(workerDocId).update({
+                prefLang: lang
+            });
+            
+            // Re-render chat locally
+            renderChatHistory();
+            
+            showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
+        } catch (e) {
+            console.error("Set language error:", e);
+        }
+    };
+
+    // Registration Form Functions
+    window.openBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'flex';
+        // Auto-fill name if available
+        const nameDisplay = document.getElementById('displayName').textContent;
+        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '관리자' && nameDisplay !== '근로자') {
+            document.getElementById('bf_name').value = nameDisplay.split(' ')[0];
+        }
+    };
+
+    window.closeBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+    };
+
+    async function submitBookingForm(event) {
+        event.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const formData = {
+            name: document.getElementById('bf_name').value,
+            dob: document.getElementById('bf_dob').value,
+            phone: document.getElementById('bf_phone').value,
+            address: document.getElementById('bf_address').value,
+            hospital: document.getElementById('bf_hospital').value,
+            dateRange: document.getElementById('bf_dateRange').value,
+            extraItems: document.getElementById('bf_extraItems').value,
+            documents: document.getElementById('bf_documents').value,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: '신청완료'
+        };
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const companyId = userDoc.data().companyId;
+
+            formData.workerDocId = workerDocId;
+            formData.companyId = companyId;
+
+            // Save to bookings collection
+            await db.collection('bookings').add(formData);
+
+            // Add chat notification
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `검진 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '신청서가 성공적으로 접수되었습니다.\n\ncheckit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요.\n\n예약 확정 안내를 받은 분은 아래 \'예약 확정 문자 올리기\' 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
+                type: 'action_check',
+                btnText: '예약 확정 문자 올리기',
+                action: 'startConfirmationFlow()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeBookingForm();
+            alert('신청서가 성공적으로 제출되었습니다.');
+        } catch (e) {
+            console.error("Booking submission error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+    async function tryToRelinkWorker(uid, name, compId) {
+        try {
+            const snap = await db.collection('workers')
+                .where('companyId', '==', compId)
+                .where('name', '==', name)
+                .limit(1).get();
+            
+            if (!snap.empty) {
+                const newDocId = snap.docs[0].id;
+                await db.collection('users').doc(uid).update({ workerDocId: newDocId });
+            } else {
+                const statusEl = document.getElementById('checkupStatus');
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+                const docsEl = document.getElementById('requiredDocs');
+                if(docsEl) docsEl.textContent = '명단 등록 후 확인 가능합니다.';
+            }
+        } catch (e) { console.error("Relink error:", e); }
+    }
+
+    function renderCheckupStatus(data) {
+        const statusLabel = data.status || '진행 전';
+        const statuses = ['진행 전', '예약완료', '검사완료', '결과완료', '재검대상자', '재검완료'];
+        const currentIdx = statuses.indexOf(statusLabel);
+
+        let badgeClass = 'status-pending';
+        let icon = 'fa-circle-dot';
+        
+        switch(statusLabel) {
+            case '예약완료': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
+            case '검사완료': badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
+            case '결과완료': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
+            case '재검대상자': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
+            case '재검완료': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
+        }
+
+        const statusContainer = document.getElementById('checkupStatus');
+        if (!statusContainer) return;
+
+        // Progress Stepper HTML
+        let stepperHtml = '<div class="stepper">';
+        statuses.forEach((s, idx) => {
+            if (s === '진행 전') return; // Skip "진행 전" in the visual stepper for space
+            let stepClass = '';
+            
+            if (idx < currentIdx) stepClass = 'completed';
+            else if (idx === currentIdx) stepClass = 'active';
+            
+            // Special handling for re-examination
+            if (statusLabel === '재검대상자' && s === '재검대상자') stepClass = 'warning active';
+            if (statusLabel === '재검완료' && s === '재검대상자') stepClass = 'completed';
+
+            stepperHtml += `
+                <div class="step ${stepClass}">
+                    <div class="step-icon">${idx < currentIdx ? '<i class="fa-solid fa-check"></i>' : idx}</div>
+                    <div class="step-label">${s}</div>
+                </div>
+            `;
+        });
+        stepperHtml += '</div>';
+
+        statusContainer.innerHTML = `
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <span class="status-badge ${badgeClass}">
+                        <i class="fa-solid ${icon}"></i> ${statusLabel}
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+                        마지막 업데이트: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '기록 없음'}
+                    </span>
+                </div>
+                
+                ${stepperHtml}
+
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border);">
+                    <button onclick="updateStatus('예약완료')" class="status-btn" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">예약완료</button>
+                    <button onclick="updateStatus('검사완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">검사완료</button>
+                    <button onclick="updateStatus('결과완료')" class="status-btn" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">결과완료</button>
+                    <button onclick="updateStatus('재검대상자')" class="status-btn" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검대상자</button>
+                    <button onclick="updateStatus('재검완료')" class="status-btn" style="background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검완료</button>
+                </div>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">소속 현장</div>
+                    <div class="value">${data.site || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">국적</div>
+                    <div class="value">${data.nationality || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">필수 검진 항목</div>
+                    <div class="value">${data.checkup || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">검진 가능 기간</div>
+                    <div class="value">${data.period || '-'}</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
+
+        // Update Results Section
+        renderResults(data);
+    }
+
+    function renderResults(data) {
+        const resultsContainer = document.getElementById('sectionResults');
+        if (!resultsContainer) return;
+
+        const results = data.results || [];
+        const cardBody = resultsContainer.querySelector('.card');
+        
+        let resultsHtml = `
+            <div class="card-header">
+                <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
+                <h3>나의 결과지 관리</h3>
+            </div>
+        `;
+
+        if (results.length === 0) {
+            resultsHtml += `
+                <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
+                    <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                    <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
+                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+                </div>
+            `;
+        } else {
+            resultsHtml += '<div style="display: flex; flex-direction: column; gap: 10px;">';
+            results.forEach((res, idx) => {
+                resultsHtml += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
+                        <div>
+                            <div style="font-weight: 700; color: var(--text);">${res.name || '검진 결과지'}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">발급일: ${res.date || '-'} | 구분: ${res.type || '일반'}</div>
+                        </div>
+                        <button onclick="window.open('${res.url}', '_blank')" class="status-btn" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; font-size: 0.85rem;">다운로드</button>
+                    </div>
+                `;
+            });
+            resultsHtml += '</div>';
+        }
+        cardBody.innerHTML = resultsHtml;
+    }
+
+    async function updateStatus(newStatus) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                alert('연결된 직원 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            const loader = document.getElementById('pageLoader');
+            loader.style.display = 'flex';
+            
+            await db.collection('workers').doc(workerDocId).update({
+                status: newStatus,
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Local refresh will be handled by the state change listener if we were using one,
+            // but here we just reload the data manually for simplicity.
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+            
+            alert(`검진 상태가 '${newStatus}'(으)로 업데이트되었습니다.`);
+        } catch (err) {
+            console.error('Status update error:', err);
+            alert('상태 업데이트에 실패했습니다.');
+        } finally {
+            document.getElementById('pageLoader').style.display = 'none';
+        }
+    }
+
+    function renderHospitals(docs) {
+        const container = document.getElementById('hospitalList');
+        if (docs.length === 0) {
+            container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
+            return;
+        }
+        let html = '';
+        docs.forEach(doc => {
+            const h = doc.data();
+            const linkHtml = h.hasLink === 'Y' && h.link
+                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기</a>`
+                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> 예약 사이트 없음</span>`;
+            html += `
+                <div class="hospital-item">
+                    <div>
+                        <div class="hospital-name">${h.name}</div>
+                        <div class="hospital-meta">검진 기간: ${h.schedule || '-'} &nbsp;|&nbsp; 예약 기간: ${h.period || '-'}</div>
+                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">추가 비용: ${h.extraCost}</div>` : ''}
+                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">회사 코드: <strong>${h.code}</strong></div>` : ''}
+                    </div>
+                    <div>${linkHtml}</div>
+                </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function doLogout() {
+        auth.signOut().then(() => { window.location.href = 'index.html'; });
+    }
+
+    function showToast(message, type = 'success') {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3100);
+    }
+</script>
+
+</body>
+</html>

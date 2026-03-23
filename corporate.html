@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-key="corporate_page_title">기업 고객 - CHECKIT</title>
+    <link rel="stylesheet" href="style.css?v=5.5">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="assets/js/layout-loader.js" defer></script>
+</head>
+<body>
+    <header id="main-header"></header>
+
+    <section id="corporate-hero" class="reveal">
+        <div class="container">
+            <div class="hero-text-content">
+                <h1 class="hero-title" data-lang-key="corporate_page_title">기업 고객용 토탈 솔루션</h1>
+                <p class="hero-subtitle" data-lang-key="corporate_page_subtitle">외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 생산성을 높이고 보건 관리 부담을 덜어드립니다.</p>
+                <button id="openProcessSlide" class="cta-button-primary" data-lang-key="view_workflow">실무과정 보기</button>
+            </div>
+            <div class="hero-character"></div>
+            </div>
+            </section>
+
+            <!-- 실무 과정 슬라이드 모달 (이미지 슬라이드 방식) -->
+            <div id="processModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; justify-content: center; align-items: center;">
+                <div class="modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);"></div>
+                
+                <div class="pptContainer" style="position: relative; background: #fff; width: 95%; max-width: 900px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 1; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <button id="closeProcess" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; font-weight: bold; z-index: 10;">X</button>
+                    
+                    <div style="width: 100%; display: flex; justify-content: center; align-items: center; min-height: 200px; margin-bottom: 20px;">
+                        <img id="processImage" src="" style="max-width: 100%; max-height: 75vh; object-fit: contain; border: 1px solid #eee; border-radius: 8px;" />
+                    </div>
+                    
+                    <div class="nav" style="display: flex; align-items: center; gap: 20px; margin-top: 10px;">
+                        <button id="prevBtn" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-chevron-left"></i></button>
+                        <span id="indicator" style="font-weight: 700; color: #555; font-size: 1rem; min-width: 60px;"></span>
+                        <button id="nextBtn" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+
+    <!-- 섹션 1: 외국인 근로자는 선택이 아닌 필수인 현실 -->
+    <section id="corporate-necessity" class="section reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec1_title">외국인 근로자, 이제 선택이 아닌 필수입니다</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec1_subtitle">변화하는 산업 현장, 기업의 지속 가능한 성장을 위해 외국인 인력 확보와 관리는 가장 중요한 과제가 되었습니다.</p>
+            <div class="features-grid-new">
+                <div class="feature-item-new">
+                    <i class="fas fa-chart-line"></i>
+                    <h3 data-lang-key="corp_sec1_item1_title">급증하는 외국인 인력</h3>
+                    <p data-lang-key="corp_sec1_item1_desc">국내 제조, 생산, 건설, 모든 현장 기업의 외국인 비중은 매년 최고치를 경신하고 있습니다.</p>
+                </div>
+                <div class="feature-item-new">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3 data-lang-key="corp_sec1_item2_title">법적 보호 의무 강화</h3>
+                    <p data-lang-key="corp_sec1_item2_desc">외국인 근로자 또한 내국인과 동일한 산업안전보건법 및 검진 의무의 대상입니다.</p>
+                </div>
+                <div class="feature-item-new">
+                    <i class="fas fa-users-gear"></i>
+                    <h3 data-lang-key="corp_sec1_item3_title">기업 경쟁력의 핵심</h3>
+                    <p data-lang-key="corp_sec1_item3_desc">우수한 외국인 인력을 유지(Retention)하는 것이 곧 기업의 생산성과 직결됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 2: 건강검진 지원 복지 제도 (긍정적인 느낌) -->
+    <section id="corporate-welfare" class="section alternate-bg reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec2_title">건강검진, 가장 강력한 복지 혜택이 됩니다</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec2_subtitle">차별화된 건강검진 지원은 근로자의 애사심을 높이고 기업의 이미지를 제고합니다.</p>
+            <div class="welfare-visual-grid">
+                <div class="welfare-card">
+                    <div class="welfare-icon-box"><i class="fas fa-heart-pulse"></i></div>
+                    <h4 data-lang-key="corp_sec2_item1_title">일하고 싶은 기업</h4>
+                    <p data-lang-key="corp_sec2_item1_desc">언어 장벽 없는 건강 관리는 외국인 근로자가 가장 선호하는 복지 1순위입니다.</p>
+                </div>
+                <div class="welfare-card">
+                    <div class="welfare-icon-box"><i class="fas fa-smile-beam"></i></div>
+                    <h4 data-lang-key="corp_sec2_item2_title">생산성 극대화</h4>
+                    <p data-lang-key="corp_sec2_item2_desc">건강한 근로자가 안정적으로 근무할 때 기업의 생산 효율은 최대로 발휘됩니다.</p>
+                </div>
+                <div class="welfare-card">
+                    <div class="welfare-icon-box"><i class="fas fa-award"></i></div>
+                    <h4 data-lang-key="corp_sec2_item3_title">ESG 경영의 실천</h4>
+                    <p data-lang-key="corp_sec2_item3_desc">다양성을 존중하고 인권을 보호하는 선도적인 기업으로서의 가치를 증명하세요.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 3: 하지만 겪는 진짜 현실 (고충과 공백) -->
+    <section id="corporate-reality-pain" class="section reality-wrapper reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec3_title">하지만, 현장에서 마주하는 현실은 다릅니다</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec3_subtitle">병원을 예약하고 검진을 받는 '당일'보다 더 힘든 것은 그 전후의 '관리 공백'입니다.</p>
+            <div class="reality-grid">
+                <div class="reality-card">
+                    <h3 class="reality-item-title" data-lang-key="corp_sec3_item1_title">검진 전: 막막함과 두려움</h3>
+                    <ul class="reality-list">
+                        <li data-lang-key="corp_sec3_item1_p1">한국어로 된 문진표와 주의사항, 번역기로도 한계가 있습니다.</li>
+                        <li data-lang-key="corp_sec3_item1_p2">금식 안내를 오해하여 검사가 취소되거나 사고가 발생하기도 합니다.</li>
+                        <li data-lang-key="corp_sec3_item1_p3">병원을 찾아가는 길부터 소통에 대한 심한 불안감을 느낍니다.</li>
+                    </ul>
+                </div>
+                <div class="reality-card">
+                    <h3 class="reality-item-title" data-lang-key="corp_sec3_item2_title">검진 후: 방치된 결과</h3>
+                    <ul class="reality-list">
+                        <li data-lang-key="corp_sec3_item2_p1">어렵게 받은 결과지, 정작 본인은 내용을 한 글자도 읽지 못합니다.</li>
+                        <li data-lang-key="corp_sec3_item2_p2">재검사가 필요한 위험 신호를 놓쳐 병을 키우는 경우가 빈번합니다.</li>
+                        <li data-lang-key="corp_sec3_item2_p3">기업은 결과지만 보관할 뿐, 근로자와의 소통 공백은 여전합니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 4: 비의료과정 담당 (CHECKIT의 역할) -->
+    <section id="corporate-solution-value" class="section alternate-bg reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec4_title">CHECKIT만이 채울 수 있는 관리의 공백</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec4_subtitle">병원은 의료 행위만 하고, 기업은 결과만 받습니다. 그 사이의 '모든 과정'은 CHECKIT이 책임집니다.</p>
+            <div class="solution-comparison">
+                <div class="comparison-column">
+                    <h3 data-lang-key="corp_sec4_side1_title">병원과 기업의 영역</h3>
+                    <ul class="comparison-list legacy">
+                        <li data-lang-key="corp_sec4_side1_p1">전문적인 의료 검사 시행</li>
+                        <li data-lang-key="corp_sec4_side1_p2">검진 결과 데이터 생성</li>
+                        <li data-lang-key="corp_sec4_side1_p3">법적 의무 기록 보관</li>
+                    </ul>
+                </div>
+                <div class="comparison-divider"><i class="fas fa-plus"></i></div>
+                <div class="comparison-column highlight">
+                    <h3 data-lang-key="corp_sec4_side2_title">CHECKIT의 영역 (비의료 과정)</h3>
+                    <ul class="comparison-list checkit">
+                        <li data-lang-key="corp_sec4_side2_p1">1:1 모국어 전담 매니저 매칭</li>
+                        <li data-lang-key="corp_sec4_side2_p2">문진표 및 사전 주의사항 완벽 번역 가이드</li>
+                        <li data-lang-key="corp_sec4_side2_p3">검진 당일 실시간 텍스트 소통 지원</li>
+                        <li data-lang-key="corp_sec4_side2_p4">결과지 단순 번역 및 요약 파일 전달</li>
+                        <li data-lang-key="corp_sec4_side2_p5">사후 관리(재검 안내) 소통 대행</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 5: CHECKIT만 가능한 이유 -->
+    <section id="corporate-only-reason" class="section reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec5_title">오직 CHECKIT만이 가능한 이유</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec5_subtitle">흉내 낼 수 없는 전문성과 기술력으로 외국인 근로자 관리의 표준을 만듭니다.</p>
+            <div class="only-reason-grid">
+                <div class="reason-item">
+                    <h4 data-lang-key="corp_sec5_item1_title">다국어 전문 인력풀</h4>
+                    <p data-lang-key="corp_sec5_item1_desc">단순 번역이 아닌 한국 의료 시스템을 완벽히 이해하는 다국어 매니저가 직접 관리합니다.</p>
+                </div>
+                <div class="reason-item">
+                    <h4 data-lang-key="corp_sec5_item2_title">실시간 실무 대응 역량</h4>
+                    <p data-lang-key="corp_sec5_item2_desc">검진 현장에서 발생하는 돌발 상황에 즉각적으로 대응할 수 있는 시스템을 갖추고 있습니다.</p>
+                </div>
+                <div class="reason-item">
+                    <h4 data-lang-key="corp_sec5_item3_title">고객 중심의 독립성</h4>
+                    <p data-lang-key="corp_sec5_item3_desc">특정 병원에 종속되지 않아 오직 근로자의 편의와 기업의 효율만을 위해 최적의 선택지를 제안합니다.</p>
+                </div>
+                <div class="reason-item">
+                    <h4 data-lang-key="corp_sec5_item4_title">모국어 결과지 제공</h4>
+                    <p data-lang-key="corp_sec5_item4_desc">검진 결과를 근로자의 모국어로 단순 번역하여 전달함으로써, 본인의 건강 상태를 정확히 파악하고 사후 관리에 적극 참여할 수 있도록 돕습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 6: 도입의 간편함과 안전성 -->
+    <section id="corporate-no-burden" class="section alternate-bg reveal">
+        <div class="container">
+            <div class="safety-badge"><i class="fas fa-check-shield"></i></div>
+            <h2 class="section-title" data-lang-key="corp_sec6_title">기존 프로세스를 바꿀 필요가 없습니다</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec6_subtitle">의료법을 완벽히 준수하며, 기업의 운영 효율만을 극대화합니다.</p>
+            <div class="safety-grid">
+                <div class="safety-card">
+                    <i class="fas fa-balance-scale"></i>
+                    <h4 data-lang-key="corp_sec6_item1_title">의료법 위반 없음</h4>
+                    <p data-lang-key="corp_sec6_item1_desc">환자 유인·알선 행위를 하지 않으며, 비의료적 소통 및 행정 서비스만을 대행하여 법적 리스크가 전혀 없습니다.</p>
+                </div>
+                <div class="safety-card">
+                    <i class="fas fa-handshake-slash"></i>
+                    <h4 data-lang-key="corp_sec6_item2_title">병원 계약 구조 없음</h4>
+                    <p data-lang-key="corp_sec6_item2_desc">병원과 수수료를 주고받는 구조가 아닙니다. 기업이 기존에 이용하던 연계 병원을 그대로 사용하셔도 무방합니다.</p>
+                </div>
+                <div class="safety-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4 data-lang-key="corp_sec6_item3_title">즉각 도입 가능</h4>
+                    <p data-lang-key="corp_sec6_item3_desc">복잡한 시스템 연동 없이 서비스 신청만으로 내일부터 바로 외국인 근로자들의 검진 환경이 개선됩니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 7: 프로세스 과정 -->
+    <section id="corporate-process-detail" class="section reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_sec7_title">정교하고 체계적인 운영 프로세스</h2>
+            <p class="section-subtitle" data-lang-key="corp_sec7_subtitle">명단 수령부터 최종 보고까지, CHECKIT이 모든 과정을 책임지고 관리합니다.</p>
+            
+            <div class="process-roadmap">
+                <div class="roadmap-item">
+                    <div class="roadmap-number">01</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step1_title">명단 수령 및 분석</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step1_1">기업으로부터 검진 대상자 명단 수령</li>
+                            <li data-lang-key="corp_sec7_step1_2">명단 확인 후 예약 및 검진 기간 우선순위 정리</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-number">02</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step2_title">개인별 예약 및 확정</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step2_1">근로자 대상 1:1 컨택 및 희망 일정·병원 선택</li>
+                            <li data-lang-key="corp_sec7_step2_2">신속한 예약 진행 및 확정 문자 발송</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-number">03</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step3_title">집중 사전 가이드</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step3_1">검진 전 준비사항 및 주의사항 상세 안내</li>
+                            <li data-lang-key="corp_sec7_step3_2">7일·3일·2일·1일 전 및 당일 실시간 1:1 알림 제공</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-number">04</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step4_title">검진 당일 현장 지원</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step4_1">검사 당일 실시간 소통 지원 및 불편 해소</li>
+                            <li data-lang-key="corp_sec7_step4_2">진행 상황 모니터링 및 미검 항목 없는 완료 관리</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-number">05</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step5_title">결과 관리 및 사후 케어</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step5_1">검진 완료 후 결과 소요 기간 및 수령 방법 안내</li>
+                            <li data-lang-key="corp_sec7_step5_2">결과지 단순 번역 제공 및 재검 필요 여부 확인</li>
+                            <li data-lang-key="corp_sec5_item2_desc" style="display:none;">(Hidden for mapping)</li>
+                            <li data-lang-key="corp_sec7_step5_3">회사 필수 제출 서류 안내 및 최종 제출까지 관리</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <div class="roadmap-number">06</div>
+                    <div class="roadmap-content">
+                        <h4 data-lang-key="corp_sec7_step6_title">최종 보고 및 데이터 업데이트</h4>
+                        <ul class="roadmap-list">
+                            <li data-lang-key="corp_sec7_step6_1">명단 파일에 개인별 진행 상황 및 특이사항 업데이트</li>
+                            <li data-lang-key="corp_sec7_step6_2">기업 요청 시 실시간 진행 현황 및 완료 명단 보고</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 섹션 8: 기업 고객 FAQ -->
+    <section id="corporate-faq" class="section alternate-bg">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="corp_faq_title">자주 묻는 질문 (FAQ)</h2>
+            <p class="section-subtitle" data-lang-key="corp_faq_subtitle">기업 고객분들이 가장 궁금해하시는 질문들을 모았습니다.</p>
+            
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q-badge">Q</span>
+                        <h4 data-lang-key="corp_faq_q1">기존 제휴 병원을 그대로 이용할 수 있나요?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-lang-key="corp_faq_a1">네, 가능합니다. CHECKIT은 특정 병원에 종속되지 않은 독립적인 서비스입니다. 기업이 기존에 이용하시던 병원을 바꾸실 필요 없이, 예약과 소통 관리 공백만 저희가 채워드립니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q-badge">Q</span>
+                        <h4 data-lang-key="corp_faq_q2">의료법 위반 소지는 없나요?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-lang-key="corp_faq_a2">CHECKIT은 환자 유인/알선 등 의료법 위반 행위를 엄격히 금지합니다. 저희는 의료 행위가 아닌 예약 대행, 통역, 결과지 단순 번역 등 '비의료적 행정 지원'에만 집중하므로 법적으로 매우 안전합니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q-badge">Q</span>
+                        <h4 data-lang-key="corp_faq_q3">근로자 개인정보는 어떻게 관리되나요?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-lang-key="corp_faq_a3">모든 과정에서 개인정보 보호법을 준수합니다. 검진 명단은 보안이 강화된 방식으로 수령하며, 검진 완료 후 필요 기간이 지나면 규정에 따라 안전하게 처리됩니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q-badge">Q</span>
+                        <h4 data-lang-key="corp_faq_q4">도입 시 시스템 연동 같은 복잡한 과정이 필요한가요?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-lang-key="corp_faq_a4">전혀 필요 없습니다. 별도의 소프트웨어 설치나 시스템 연동 없이, 검진 대상자 명단 전달과 간단한 일정 협의만으로 즉시 도입이 가능합니다.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q-badge">Q</span>
+                        <h4 data-lang-key="corp_faq_q5">결과지 번역은 어느 수준까지 제공되나요?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-lang-key="corp_faq_a5">전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 '내용 전달' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-form" class="section reveal">
+        <div class="container">
+            <h2 class="section-title" data-lang-key="contact_title_new">궁금한 점이 있으신가요?</h2>
+            <p class="section-subtitle" data-lang-key="contact_subtitle_new">CHECKIT의 기업 전담 팀이 최적의 솔루션을 제안해 드립니다.</p>
+            <div class="contact-form-body">
+                <form id="corporate-inquiry" action="https://formspree.io/f/xaqdljye" method="POST">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="company-name" data-lang-key="contact_form_company_label">기업명</label>
+                            <input type="text" id="company-name" name="company_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-lang-key="contact_form_email_label">이메일 주소</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" data-lang-key="contact_form_message_label">문의 내용</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <input type="hidden" name="_subject" value="New Corporate Inquiry from CHECKIT">
+                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button">문의하기</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer"></footer>
+
+    <!-- My Page Overlay -->
+    <div id="mypage-overlay"></div>
+
+    <!-- Chatbot UI -->
+    <button id="open-chatbot"><i class="fas fa-comment-dots"></i></button>
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <span class="chatbot-title" data-lang-key="chatbot_header">Check봇</span>
+            <div id="chatbot-lang-buttons">
+                <button class="chatbot-lang-btn active" data-lang="ko">KO</button>
+                <button class="chatbot-lang-btn" data-lang="en">EN</button>
+                <button class="chatbot-lang-btn" data-lang="cn">CN</button>
+                <button class="chatbot-lang-btn" data-lang="vn">VN</button>
+            </div>
+            <button id="close-chatbot">&times;</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-bottom-container">
+            <div id="chatbot-suggested-questions"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" data-lang-key="chatbot_placeholder">
+                <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal-overlay">
+        <div class="login-modal-box">
+            <span id="close-login-modal" class="close-button">&times;</span>
+            <div class="login-header">
+                <h2 data-lang-key="login_title">로그인</h2>
+            </div>
+
+            <!-- Corporate Admin Form -->
+            <div id="corporate" class="tab-content active">
+                <form id="login-form-corporate">
+                    <div class="form-group">
+                        <label for="login-company-key" data-lang-key="login_company_key_label"></label>
+                        <input type="text" id="login-company-key" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-security-key" data-lang-key="login_security_key_label">암호키<br><span class="label-subtext">관리자는 부여받은 암호키를 입력해 주세요.</span></label>
+                        <input type="password" id="login-security-key" required>
+                    </div>
+                <button type="submit" class="cta-button-primary" data-lang-key="login_btn">로그인</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+
+    <script src="script.js?v=4.1"></script>
+</body>
+</html>

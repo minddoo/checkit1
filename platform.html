@@ -1126,7 +1126,149 @@
         });
     }
 
+    // --- 검진 일정 관리 (Schedule Management) 로직 추가 ---
+    let allBookings = [];
+    let currentMilestone = 'all';
+
+    window.loadBookings = () => {
+        const loader = document.getElementById('pageLoader');
+        if (loader) {
+            document.getElementById('loaderMessage').innerText = '일정 데이터를 불러오는 중...';
+            loader.style.display = 'flex';
+        }
+
+        // workers 컬렉션에서 reservedDate가 있는 모든 문서를 가져옵니다.
+        db.collection('workers').onSnapshot(snap => {
+            allBookings = [];
+            snap.forEach(doc => {
+                const data = doc.data();
+                if (data.reservedDate) {
+                    const row = {
+                        id: doc.id,
+                        name: data.name,
+                        companyId: data.companyId,
+                        site: data.site || '-',
+                        reservedDate: data.reservedDate,
+                        status: data.status,
+                        dDay: calculateDDay(data.reservedDate)
+                    };
+                    allBookings.push(row);
+                }
+            });
+
+            // 예약 날짜순으로 정렬
+            allBookings.sort((a, b) => new Date(a.reservedDate) - new Date(b.reservedDate));
+            
+            window.filterBookings(currentMilestone);
+            if (loader) loader.style.display = 'none';
+        }, err => {
+            console.error("Load bookings error:", err);
+            if (loader) loader.style.display = 'none';
+            showToast("일정 데이터를 불러오는데 실패했습니다.", "error");
+        });
+    };
+
+    function calculateDDay(dateStr) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const target = new Date(dateStr);
+        target.setHours(0, 0, 0, 0);
+        
+        const diffTime = target - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
+    window.renderBookings = (data) => {
+        const tbody = document.getElementById('bookingTableBody');
+        if (!tbody) return;
+
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">표시할 일정이 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        data.forEach(b => {
+            let dDayLabel = '';
+            let dDayClass = '';
+            
+            if (b.dDay < 0) {
+                dDayLabel = '기간 도과';
+                dDayClass = 'background: #f1f5f9; color: #64748b;';
+            } else if (b.dDay === 0) {
+                dDayLabel = 'D-Day';
+                dDayClass = 'background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2;';
+            } else {
+                dDayLabel = `D-${b.dDay}`;
+                if (b.dDay <= 3) dDayClass = 'background: #fff7ed; color: #f97316; border: 1px solid #ffedd5;';
+                else dDayClass = 'background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7;';
+            }
+
+            // Find company name
+            const compInfo = allCompanies.find(c => c.companyKey === b.companyId) || { name: b.companyId };
+            const compDisplayName = b.companyId === 'ch082082' ? '체킷 (본사)' : (compInfo.name || b.companyId);
+
+            html += `
+                <tr>
+                    <td style="padding: 15px 20px; font-weight: 700;">${b.name}</td>
+                    <td style="padding: 15px;">
+                        <div style="font-size: 0.85rem; font-weight: 600;">${compDisplayName}</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">${b.site}</div>
+                    </td>
+                    <td style="padding: 15px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-regular fa-calendar-check" style="color: var(--primary);"></i>
+                            <span style="font-weight: 600;">${b.reservedDate}</span>
+                        </div>
+                    </td>
+                    <td style="padding: 15px; text-align: center;">
+                        <span style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; ${dDayClass}">
+                            ${dDayLabel}
+                        </span>
+                    </td>
+                    <td style="padding: 15px 20px; text-align: center;">
+                        <button class="btn-outline" style="padding: 6px 12px; font-size: 0.8rem; margin: 0 auto;" onclick="window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats');">
+                            <i class="fa-solid fa-comments"></i> 채팅 관리
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    };
+
+    window.filterBookings = (milestone) => {
+        currentMilestone = milestone;
+        
+        // 버튼 활성화 상태 업데이트
+        const buttons = document.querySelectorAll('#bookingMilestoneFilters .alim-btn');
+        buttons.forEach(btn => {
+            const btnText = btn.innerText;
+            if (milestone === 'all' && btnText === '전체') btn.classList.add('active');
+            else if (btnText.includes(milestone) && milestone !== 'all') btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+
+        // 검색어 가져오기
+        const query = document.getElementById('bookingSearchInput')?.value.trim().toLowerCase() || '';
+
+        const filtered = allBookings.filter(b => {
+            const matchesQuery = b.name.toLowerCase().includes(query);
+            let matchesMilestone = true;
+            
+            if (milestone !== 'all') {
+                matchesMilestone = (b.dDay === parseInt(milestone));
+            }
+            
+            return matchesQuery && matchesMilestone;
+        });
+
+        window.renderBookings(filtered);
+    };
+
     // Member List Logic
+
         window.showMemberList = async (companyCode) => {
             const modal = document.getElementById('memberModal');
             const title = document.getElementById('modalTitle');

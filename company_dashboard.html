@@ -830,16 +830,34 @@
             if (userDoc.exists) {
                 currentUserData = userDoc.data();
                 
-                // 마스터거나 일반 직원이면 권한 없음
-                if (currentUserData.role !== 'company_admin') {
-                    alert("기업 관리자만 접근할 수 있는 페이지입니다.");
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlCompanyId = urlParams.get('companyId');
+
+                // 마스터거나 기업 관리자면 허용
+                const isMaster = currentUserData.role === 'admin' || user.email === 'master@checkit.com';
+                const isCompanyAdmin = currentUserData.role === 'company_admin';
+
+                if (!isMaster && !isCompanyAdmin) {
+                    alert("권한이 없는 계정입니다.");
                     window.location.href = 'index.html';
                     return;
                 }
 
-                currentCompanyId = currentUserData.companyId;
+                // 마스터가 URL로 들어온 경우 해당 기업 ID 사용
+                if (isMaster && urlCompanyId) {
+                    currentCompanyId = urlCompanyId;
+                    showToast("마스터 관리자 모드로 접속 중입니다.", "info");
+                } else {
+                    currentCompanyId = currentUserData.companyId;
+                }
+
+                if (!currentCompanyId) {
+                    alert("기업 정보가 연결되지 않았습니다.");
+                    window.location.href = 'index.html';
+                    return;
+                }
                 
-                // 회사 이름만 가져오기 (병원은 별도 컬렉션으로 분리됨)
+                // 회사 이름 가져오기
                 const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
                 if (compDoc.exists) {
                     const data = compDoc.data();

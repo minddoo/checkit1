@@ -1325,48 +1325,58 @@
     // =============================================
     window.loadNotices = () => {
         if (!currentCompanyId) return;
-        db.collection('notices')
-            .where('target', 'in', ['all', currentCompanyId])
-            .orderBy('createdAt', 'desc')
-            .limit(20)
-            .onSnapshot(snap => {
-                let unread = 0;
-                const badge = document.getElementById('noticeBadge');
-                const list = document.getElementById('noticeList');
-                if (!list) return;
+        const list = document.getElementById('noticeList');
+        const badge = document.getElementById('noticeBadge');
+        if (!list) return;
 
-                if (snap.empty) {
-                    list.innerHTML = `<div style="padding:40px; text-align:center; color:#94a3b8; font-size:0.85rem;"><i class="fa-solid fa-bell-slash" style="font-size:2rem; margin-bottom:10px; opacity:0.3;"></i><br>공지사항이 없습니다.</div>`;
-                    badge.classList.add('hidden');
-                    return;
-                }
+        // Firestore 'in' + 'orderBy' 복합 인덱스 오류 방지 → 별도 쿼리 2개 실행 후 클라이언트 병합
+        const q1 = db.collection('notices').where('target', '==', 'all').get();
+        const q2 = db.collection('notices').where('target', '==', currentCompanyId).get();
 
-                let html = '';
-                snap.forEach(doc => {
-                    const n = doc.data();
-                    const isRead = n.readBy && n.readBy.includes(currentCompanyId);
-                    if (!isRead) unread++;
-                    const dateStr = n.createdAt ? new Date(n.createdAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }) : '';
-                    html += `
-                        <div class="notice-item ${isRead ? '' : 'unread'}" onclick="window.markNoticeRead('${doc.id}')">
-                            <div style="font-size:0.9rem; font-weight:${isRead ? '400' : '700'}; color:${isRead ? '#64748b' : '#1e293b'}; line-height:1.5;">
-                                ${isRead ? '' : '<span style="background:#4f46e5; color:white; font-size:0.65rem; padding:2px 6px; border-radius:10px; margin-right:6px; vertical-align:middle;">NEW</span>'}
-                                ${n.content}
-                            </div>
-                            <div class="notice-item-date"><i class="fa-regular fa-clock"></i> ${dateStr} · ${n.target === 'all' ? '전체 공지' : '대상 공지'}</div>
+        Promise.all([q1, q2]).then(([snap1, snap2]) => {
+            const docs = [];
+            snap1.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+            snap2.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+
+            // 날짜 내림차순 정렬
+            docs.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+
+            if (docs.length === 0) {
+                list.innerHTML = `<div style="padding:40px; text-align:center; color:#94a3b8; font-size:0.85rem;"><i class="fa-solid fa-bell-slash" style="font-size:2rem; margin-bottom:10px; opacity:0.3; display:block;"></i>공지사항이 없습니다.</div>`;
+                badge.classList.add('hidden');
+                return;
+            }
+
+            let unread = 0;
+            let html = '';
+            docs.forEach(n => {
+                const isRead = n.readBy && n.readBy.includes(currentCompanyId);
+                if (!isRead) unread++;
+                const dateStr = n.createdAt ? new Date(n.createdAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }) : '';
+                html += `
+                    <div class="notice-item ${isRead ? '' : 'unread'}" onclick="window.markNoticeRead('${n.id}')">
+                        <div style="font-size:0.9rem; font-weight:${isRead ? '400' : '700'}; color:${isRead ? '#64748b' : '#1e293b'}; line-height:1.5;">
+                            ${isRead ? '' : '<span style="background:#4f46e5; color:white; font-size:0.65rem; padding:2px 6px; border-radius:10px; margin-right:6px; vertical-align:middle;">NEW</span>'}
+                            ${n.content}
                         </div>
-                    `;
-                });
-                list.innerHTML = html;
-
-                if (unread > 0) {
-                    badge.innerText = unread;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
+                        <div class="notice-item-date"><i class="fa-regular fa-clock"></i> ${dateStr} · ${n.target === 'all' ? '전체 공지' : '대상 공지'}</div>
+                    </div>
+                `;
             });
+            list.innerHTML = html;
+
+            if (unread > 0) {
+                badge.innerText = unread;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }).catch(e => {
+            console.error('Notice load error:', e);
+            list.innerHTML = `<div style="padding:30px; text-align:center; color:#ef4444; font-size:0.85rem;"><i class="fa-solid fa-triangle-exclamation"></i> 공지를 불러오는데 실패했습니다.</div>`;
+        });
     };
+
 
     window.markNoticeRead = async (docId) => {
         if (!currentCompanyId) return;

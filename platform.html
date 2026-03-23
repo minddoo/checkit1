@@ -1160,6 +1160,7 @@
             allBookings.sort((a, b) => new Date(a.reservedDate) - new Date(b.reservedDate));
             
             window.filterBookings(currentMilestone);
+            window.updateAlarmStatus();
             if (loader) loader.style.display = 'none';
         }, err => {
             console.error("Load bookings error:", err);
@@ -1265,7 +1266,91 @@
         });
 
         window.renderBookings(filtered);
+        
+        // 알림 패널에 명단 표시 및 열기
+        window.populateAlarmList(milestone);
+        window.toggleAlarmPanel(true);
     };
+
+    // --- 알림 패널 (Alarm Panel) 제어 로직 ---
+    window.toggleAlarmPanel = (forceState) => {
+        const panel = document.getElementById('alarmPanel');
+        if (typeof forceState === 'boolean') {
+            if (forceState) panel.classList.add('show');
+            else panel.classList.remove('show');
+        } else {
+            panel.classList.toggle('show');
+        }
+    };
+
+    window.updateAlarmStatus = () => {
+        const todayBookings = allBookings.filter(b => b.dDay === 0);
+        const badge = document.getElementById('alarmBadge');
+        
+        if (todayBookings.length > 0) {
+            badge.innerText = todayBookings.length;
+            badge.classList.remove('hidden');
+            document.querySelector('.alarm-trigger i').classList.add('ping');
+        } else {
+            badge.classList.add('hidden');
+            document.querySelector('.alarm-trigger i').classList.remove('ping');
+        }
+
+        // 기본적으로 당일 명단을 패널에 채워둠 (열었을 때 바로 보이게)
+        if (currentMilestone === 'all') {
+            window.populateAlarmList('0'); 
+        }
+    };
+
+    window.populateAlarmList = (milestone) => {
+        const listEl = document.getElementById('alarmList');
+        const headerTitle = document.querySelector('#alarmPanel .alarm-header span');
+        
+        let filtered = [];
+        let titlePrefix = '전체';
+        
+        if (milestone === 'all') {
+            filtered = allBookings;
+            titlePrefix = '전체 예약자';
+        } else {
+            filtered = allBookings.filter(b => b.dDay === parseInt(milestone));
+            titlePrefix = milestone === '0' ? '오늘(당일) 대상자' : `${milestone}일 전 대상자`;
+        }
+
+        headerTitle.innerText = `${titlePrefix} (${filtered.length})`;
+
+        if (filtered.length === 0) {
+            listEl.innerHTML = `
+                <div style="padding: 40px 20px; text-align: center; color: #94a3b8; font-size: 0.85rem;">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size: 2rem; margin-bottom: 15px; opacity: 0.2;"></i>
+                    <br>해당하는 인원이 없습니다.
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(b => {
+            const compInfo = allCompanies.find(c => c.companyKey === b.companyId) || { name: b.companyId };
+            const compDisplayName = b.companyId === 'ch082082' ? '체킷' : (compInfo.name || b.companyId);
+            
+            html += `
+                <div class="alarm-item" onclick="window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats'); toggleAlarmPanel(false);">
+                    <div class="alarm-icon" style="background: ${b.dDay === 0 ? '#fee2e2' : '#f0f9ff'}; color: ${b.dDay === 0 ? '#ef4444' : '#3b82f6'};">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="alarm-info">
+                        <div class="alarm-name">${b.name} <span style="font-weight: 400; font-size: 0.7rem; color: #94a3b8;">(${compDisplayName})</span></div>
+                        <div class="alarm-msg">${b.reservedDate} · D${b.dDay >= 0 ? '-' : '+'}${Math.abs(b.dDay)}</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: #cbd5e1;"></i>
+                </div>
+            `;
+        });
+        listEl.innerHTML = html;
+    };
+    // ---------------------------------------------
+
 
     // Member List Logic
 

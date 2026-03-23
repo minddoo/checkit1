@@ -240,6 +240,7 @@
         .booking-company-header:hover { border-color: var(--primary); background: #f8fafc; }
         .booking-company-header h4 { margin: 0; font-size: 1rem; color: var(--dark); display: flex; align-items: center; gap: 12px; }
         .booking-company-header .count-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .booking-company-header i.fa-chevron-down { transition: transform 0.3s ease; color: #94a3b8; }
         
         .booking-group-content { margin-bottom: 30px; animation: slideDown 0.3s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -442,21 +443,12 @@
                         </div>
                     </div>
 
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f1f5f9; text-align: left;">
-                                    <th style="padding: 15px 20px; font-size: 0.85rem; color: #64748b;">근로자 성함</th>
-                                    <th style="padding: 15px; font-size: 0.85rem; color: #64748b;">기업 / 현장</th>
-                                    <th style="padding: 15px; font-size: 0.85rem; color: #64748b;">예약 일자</th>
-                                    <th style="padding: 15px; font-size: 0.85rem; color: #64748b; text-align: center;">기한 상태</th>
-                                    <th style="padding: 15px 20px; font-size: 0.85rem; color: #64748b; text-align: center;">관리</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bookingTableBody">
-                                <!-- Data Rows -->
-                            </tbody>
-                        </table>
+                    <div id="bookingGroupContainer" style="padding: 10px 20px;">
+                        <!-- Company Groups injected here -->
+                        <div style="padding: 40px; text-align: center; color: #94a3b8;">
+                            <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
+                            <br>데이터를 불러오고 있습니다...
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1181,62 +1173,111 @@
     }
 
     window.renderBookings = (data) => {
-        const tbody = document.getElementById('bookingTableBody');
-        if (!tbody) return;
+        const container = document.getElementById('bookingGroupContainer');
+        if (!container) return;
 
         if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">표시할 일정이 없습니다.</td></tr>';
+            container.innerHTML = '<div style="padding: 50px; text-align: center; color: #94a3b8;">해당하는 일정이 없습니다.</div>';
             return;
         }
 
-        let html = '';
-        data.forEach(b => {
-            let dDayLabel = '';
-            let dDayClass = '';
-            
-            if (b.dDay < 0) {
-                dDayLabel = '기간 도과';
-                dDayClass = 'background: #f1f5f9; color: #64748b;';
-            } else if (b.dDay === 0) {
-                dDayLabel = 'D-Day';
-                dDayClass = 'background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2;';
-            } else {
-                dDayLabel = `D-${b.dDay}`;
-                if (b.dDay <= 3) dDayClass = 'background: #fff7ed; color: #f97316; border: 1px solid #ffedd5;';
-                else dDayClass = 'background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7;';
-            }
+        // 기업별 그룹화
+        const grouped = data.reduce((acc, curr) => {
+            if (!acc[curr.companyId]) acc[curr.companyId] = [];
+            acc[curr.companyId].push(curr);
+            return acc;
+        }, {});
 
-            // Find company name
-            const compInfo = allCompanies.find(c => c.companyKey === b.companyId) || { name: b.companyId };
-            const compDisplayName = b.companyId === 'ch082082' ? '체킷 (본사)' : (compInfo.name || b.companyId);
+        let html = '';
+        Object.keys(grouped).forEach(cid => {
+            const workers = grouped[cid];
+            const compInfo = allCompanies.find(c => c.companyKey === cid) || { name: cid };
+            const compDisplayName = cid === 'ch082082' ? '체킷 (본사)' : (compInfo.name || cid);
 
             html += `
-                <tr>
-                    <td style="padding: 15px 20px; font-weight: 700;">${b.name}</td>
-                    <td style="padding: 15px;">
-                        <div style="font-size: 0.85rem; font-weight: 600;">${compDisplayName}</div>
-                        <div style="font-size: 0.75rem; color: #94a3b8;">${b.site}</div>
-                    </td>
-                    <td style="padding: 15px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-regular fa-calendar-check" style="color: var(--primary);"></i>
-                            <span style="font-weight: 600;">${b.reservedDate}</span>
-                        </div>
-                    </td>
-                    <td style="padding: 15px; text-align: center;">
-                        <span style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; ${dDayClass}">
-                            ${dDayLabel}
-                        </span>
-                    </td>
-                    <td style="padding: 15px 20px; text-align: center;">
-                        <button class="btn-outline" style="padding: 6px 12px; font-size: 0.8rem; margin: 0 auto;" onclick="window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats');">
-                            <i class="fa-solid fa-comments"></i> 채팅 관리
-                        </button>
-                    </td>
-                </tr>
+                <div class="booking-company-header" onclick="window.toggleBookingGroup('${cid}')">
+                    <h4>
+                        <i class="fa-solid fa-building"></i> ${compDisplayName}
+                        <span class="count-badge">${workers.length}</span>
+                    </h4>
+                    <i class="fa-solid fa-chevron-down" id="arrow-${cid}"></i>
+                </div>
+                <div id="booking-group-${cid}" class="booking-group-content hidden">
+                    <table style="width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden;">
+                        <tbody id="booking-list-${cid}">
+            `;
+
+            workers.forEach(b => {
+                let dDayLabel = '';
+                let dDayClass = '';
+                
+                if (b.dDay < 0) {
+                    dDayLabel = '기간 도과';
+                    dDayClass = 'background: #f1f5f9; color: #64748b;';
+                } else if (b.dDay === 0) {
+                    dDayLabel = 'D-Day';
+                    dDayClass = 'background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2;';
+                } else {
+                    dDayLabel = `D-${b.dDay}`;
+                    if (b.dDay <= 3) dDayClass = 'background: #fff7ed; color: #f97316; border: 1px solid #ffedd5;';
+                    else dDayClass = 'background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7;';
+                }
+
+                html += `
+                    <tr>
+                        <td style="padding: 15px 20px; font-weight: 700; width: 25%; border-bottom: 1px solid #f1f5f9;">${b.name}</td>
+                        <td style="padding: 15px; width: 25%; border-bottom: 1px solid #f1f5f9;">
+                            <div style="font-size: 0.75rem; color: #94a3b8;">${b.site}</div>
+                        </td>
+                        <td style="padding: 15px; width: 25%; border-bottom: 1px solid #f1f5f9;">
+                            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                <i class="fa-regular fa-calendar-check" style="color: var(--primary);"></i>
+                                <span>${b.reservedDate}</span>
+                            </div>
+                        </td>
+                        <td style="padding: 15px; width: 15%; text-align: center; border-bottom: 1px solid #f1f5f9;">
+                            <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; ${dDayClass}">
+                                ${dDayLabel}
+                            </span>
+                        </td>
+                        <td style="padding: 15px 20px; width: 10%; text-align: right; border-bottom: 1px solid #f1f5f9;">
+                            <button class="btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="event.stopPropagation(); window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats');">
+                                <i class="fa-solid fa-comments"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
             `;
         });
-        tbody.innerHTML = html;
+        container.innerHTML = html;
+        
+        // 검색 중이거나 일수가 지정된 경우 자동으로 모두 펼치기 (옵션)
+        if (currentMilestone !== 'all' || document.getElementById('bookingSearchInput')?.value) {
+            Object.keys(grouped).forEach(cid => window.toggleBookingGroup(cid, true));
+        }
+    };
+
+    window.toggleBookingGroup = (cid, forceOpen) => {
+        const group = document.getElementById('booking-group-' + cid);
+        const arrow = document.getElementById('arrow-' + cid);
+        if (!group) return;
+
+        if (forceOpen === true) {
+            group.classList.remove('hidden');
+            if (arrow) arrow.style.transform = 'rotate(180deg)';
+        } else if (forceOpen === false) {
+            group.classList.add('hidden');
+            if (arrow) arrow.style.transform = 'rotate(0deg)';
+        } else {
+            const isHidden = group.classList.toggle('hidden');
+            if (arrow) arrow.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
     };
 
     window.filterBookings = (milestone) => {
@@ -1266,11 +1307,8 @@
         });
 
         window.renderBookings(filtered);
-        
-        // 알림 패널에 명단 표시 및 열기
-        window.populateAlarmList(milestone);
-        window.toggleAlarmPanel(true);
     };
+
 
     // --- 알림 패널 (Alarm Panel) 제어 로직 ---
     window.toggleAlarmPanel = (forceState) => {

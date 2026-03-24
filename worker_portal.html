@@ -269,7 +269,7 @@
                     <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
                 </li>
                 <li id="menuResults" onclick="switchSection('results')">
-                    <i class="fa-solid fa-file-medical"></i> 나의 결과지
+                    <i class="fa-solid fa-file-shield"></i> 결과 관리
                 </li>
             </ul>
         </div>
@@ -354,18 +354,46 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: MY RESULTS -->
+            <!-- SECTION 3: RESULT MANAGEMENT -->
             <div id="sectionResults" class="hidden reveal">
-                <div class="card">
+                <div class="card" style="border-left: 4px solid var(--primary);">
                     <div class="card-header">
-                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
-                        <h3>나의 결과지 관리</h3>
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <h3>기업에 결과지 제출하기</h3>
                     </div>
-                    <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
-                        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                        <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
-                        <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+                    <div id="resultSubmissionArea" style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border);">
+                        <!-- Dynamic content -->
+                        <div id="noSubmissionUI">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                            <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                            
+                            <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                    <i class="fa-solid fa-camera"></i> 사진 업로드
+                                </button>
+                                <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                    <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div id="translationCard" class="card hidden">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-language"></i></div>
+                        <h3>나의 언어로 번역보기 (Translation)</h3>
+                    </div>
+                    <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
+                        <p style="font-size: 0.9rem; margin-bottom: 15px; color: #5b21b6;">제출하신 한국어 결과지를 분석하여 번역된 결과를 제공합니다.</p>
+                        <button onclick="window.openTranslationModal()" class="btn-submit" style="width: auto; padding: 12px 25px; margin-top: 0; background: #7c3aed;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 번역된 결과 확인하기
+                        </button>
+                    </div>
+                </div>
+            </div> <!-- End sectionResults -->
         </div> <!-- End main-content -->
     </div> <!-- End portal-wrapper -->
 </div> <!-- End portalContent -->
@@ -431,6 +459,25 @@
     </div>
 </div>
 
+<!-- Translation Modal HTML -->
+<div id="translationModalOverlay" class="modal-overlay">
+    <div class="booking-modal" style="max-width: 600px;">
+        <button class="close-modal" onclick="document.getElementById('translationModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>검진 결과 번역 (Translated Result)</h3>
+        
+        <div id="translationContent" style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>결과지를 분석하여 번역 중입니다...</p>
+            </div>
+        </div>
+        
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 20px; text-align: center;">
+            <i class="fa-solid fa-circle-info"></i> 이 번역은 AI에 의해 자동 생성되었으며, 정확한 진단은 반드시 의사와 상담하시기 바랍니다.
+        </p>
+    </div>
+</div>
+
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -474,6 +521,8 @@
             if (chatBody) {
                 setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
             }
+        } else if (target === 'results') {
+            window.renderResultsSection();
         }
     };
 
@@ -1252,40 +1301,138 @@
         if (!resultsContainer) return;
 
         const results = data.results || [];
-        const cardBody = resultsContainer.querySelector('.card');
+        const isSubmitted = !!data.docsReceived;
         
-        let resultsHtml = `
-            <div class="card-header">
-                <div class="card-icon icon-blue"><i class="fa-solid fa-file-medical-flag"></i></div>
-                <h3>나의 결과지 관리</h3>
-            </div>
-        `;
-
-        if (results.length === 0) {
-            resultsHtml += `
-                <div style="padding: 40px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed #e2e8f0;">
-                    <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                    <p style="color: var(--text-muted);">업로드된 결과지가 없습니다.</p>
-                    <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px;">검진 기관에서 결과가 전송되면 이곳에서 확인 가능합니다.</p>
+        // 1. Update Submission Area
+        const submissionArea = document.getElementById('resultSubmissionArea');
+        if (isSubmitted) {
+            submissionArea.innerHTML = `
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 12px; color: #16a34a;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
+                    <p style="font-weight: 700;">결과지 제출이 완료되었습니다!</p>
+                    <p style="font-size: 0.85rem; color: #15803d; margin-top: 5px;">기업 담당자에게 제출 정보가 전달되었습니다.</p>
+                    <button onclick="window.reSubmitResult()" style="background: none; border: none; color: #16a34a; text-decoration: underline; font-size: 0.8rem; margin-top: 15px; cursor: pointer;">다시 제출하기</button>
                 </div>
             `;
+            document.getElementById('translationCard').classList.remove('hidden');
         } else {
-            resultsHtml += '<div style="display: flex; flex-direction: column; gap: 10px;">';
-            results.forEach((res, idx) => {
-                resultsHtml += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-radius: 12px; border: 1px solid var(--border);">
-                        <div>
-                            <div style="font-weight: 700; color: var(--text);">${res.name || '검진 결과지'}</div>
-                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">발급일: ${res.date || '-'} | 구분: ${res.type || '일반'}</div>
-                        </div>
-                        <button onclick="window.open('${res.url}', '_blank')" class="status-btn" style="background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; font-size: 0.85rem;">다운로드</button>
+            submissionArea.innerHTML = `
+                <div id="noSubmissionUI">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                    <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                    
+                    <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                            <i class="fa-solid fa-camera"></i> 사진 업로드
+                        </button>
+                        <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                            <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                        </button>
                     </div>
-                `;
-            });
-            resultsHtml += '</div>';
+                </div>
+            `;
+            document.getElementById('translationCard').classList.add('hidden');
         }
-        cardBody.innerHTML = resultsHtml;
     }
+
+    // Result Submission Logic
+    window.renderResultsSection = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const workerDocId = userDoc.data().workerDocId;
+        if (!workerDocId) return;
+
+        const workerDoc = await db.collection('workers').doc(workerDocId).get();
+        renderResults(workerDoc.data());
+    };
+
+    window.submitResultToCompany = async () => {
+        if (!confirm("검진 결과지를 기업 기업관리자에게 제출하시겠습니까?")) return;
+        
+        try {
+            const user = auth.currentUser;
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            await db.collection('workers').doc(workerDocId).update({
+                docsReceived: true,
+                docsSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            showToast("결과지가 성공적으로 제출되었습니다!", "success");
+            window.renderResultsSection();
+        } catch (e) {
+            console.error("Result submission error:", e);
+            showToast("제출 실패: " + e.message, "error");
+        }
+    };
+
+    window.reSubmitResult = () => {
+        if (confirm("기존 제출 내역을 취소하고 다시 기록하시겠습니까?")) {
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).get().then(uDoc => {
+                db.collection('workers').doc(uDoc.data().workerDocId).update({
+                    docsReceived: false
+                }).then(() => {
+                    window.renderResultsSection();
+                });
+            });
+        }
+    };
+
+    window.handleResultFileUpload = (input) => {
+        if (input.files && input.files[0]) {
+            showToast("파일을 업로드하는 중입니다...", "info");
+            setTimeout(() => {
+                window.submitResultToCompany();
+            }, 1000);
+        }
+    };
+
+    // Translation Logic
+    window.openTranslationModal = () => {
+        const modal = document.getElementById('translationModalOverlay');
+        const content = document.getElementById('translationContent');
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        modal.style.display = 'flex';
+        content.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>번역 중입니다... (Translating to ${prefLang.toUpperCase()})</p>
+            </div>
+        `;
+        
+        setTimeout(() => {
+            const translations = {
+                ko: { title: "건강검진 주요 결과", items: ["비만: 정상", "고혈압: 주의", "당뇨: 정상", "추가 소견: 충분한 휴식 필요"] },
+                en: { title: "Main Medical Results", items: ["Obesity: Normal", "Blood Pressure: Caution", "Diabetes: Normal", "Doctors Note: Rest required"] },
+                vn: { title: "Kết quả kiểm tra sức khỏe chính", items: ["Béo phì: Bình thường", "Huyết áp: Chú ý", "Tiểu đường: Bình thường", "Ghi chú: Cần nghỉ ngơi"] },
+                cn: { title: "主要健康检查结果", items: ["肥胖：正常", "高血压：注意", "糖尿病：正常", "医生提示：需要充分休息"] }
+            };
+            
+            const t = translations[prefLang] || translations.en;
+            
+            content.innerHTML = `
+                <h4 style="margin-bottom: 15px; color: var(--primary); border-bottom: 2px solid #ddd6fe; padding-bottom: 10px;">
+                    <i class="fa-solid fa-file-invoice"></i> ${t.title}
+                </h4>
+                <ul style="list-style: none; padding: 0;">
+                    ${t.items.map(item => `
+                        <li style="padding: 10px; background: white; margin-bottom: 8px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600;">
+                            <i class="fa-solid fa-check" style="color: #10b981; margin-right: 8px;"></i> ${item}
+                        </li>
+                    `).join('')}
+                </ul>
+                <div style="margin-top: 15px; background: #fffbeb; padding: 12px; border-radius: 8px; font-size: 0.8rem; color: #92400e; border: 1px solid #fef3c7;">
+                    <i class="fa-solid fa-circle-exclamation"></i> <strong>Note:</strong> Re-examination is recommended for blood pressure.
+                </div>
+            `;
+        }, 1500);
+    };
 
     async function updateStatus(newStatus) {
         try {

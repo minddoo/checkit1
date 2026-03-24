@@ -328,9 +328,8 @@
                     <div class="consent-box" style="background: #f0f7ff; border-radius: 10px; padding: 14px 16px; border: 1px solid #d0e3ff; margin-bottom: 14px;">
                         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.92rem; line-height: 1.5; color: #334155;">
                             <input type="checkbox" id="signup-worker-consent-medical" required style="margin-top: 3px; width: 18px; height: 18px; accent-color: var(--primary); flex-shrink: 0;">
-                            <span>
-                                <strong>[필수] 민감정보(의료 데이터) 처리 및 결과지 수신 동의</strong>
-                                <a href="javascript:void(0)" onclick="this.parentElement.querySelector('.consent-detail').style.display = this.parentElement.querySelector('.consent-detail').style.display === 'none' ? 'block' : 'none'" style="font-size: 0.78rem; color: var(--primary); margin-left: 6px; text-decoration: underline;">내용 보기 ▾</a>
+                            <span style="display: block;">
+                                <span style="white-space: nowrap; font-size: 0.85rem;"><strong>[필수] 민감정보(의료 데이터) 처리 및 결과지 수신 동의</strong><a href="javascript:void(0)" onclick="this.closest('span').parentElement.querySelector('.consent-detail').style.display = this.closest('span').parentElement.querySelector('.consent-detail').style.display === 'none' ? 'block' : 'none'" style="font-size: 0.75rem; color: var(--primary); margin-left: 4px; text-decoration: underline;">내용 보기 ▾</a></span>
                                 <div class="consent-detail" style="display: none; margin-top: 8px; font-size: 0.8rem; color: #475569; background: #fff; border-radius: 8px; padding: 12px; line-height: 1.7; border: 1px solid #e2e8f0; text-align: left;">
                                     <strong>제공 내용:</strong> 병원으로부터 발행된 원본 결과지와 함께, 이해를 돕기 위한 단순 번역 결과지 및 질병분류코드(KCD/ICD) 정보를 수신하고 이를 소속 기업 관리자와 공유하는 것에 동의합니다.<br><br>
                                     <strong>의료 면책 고지:</strong> 제공되는 번역문과 질병코드는 단순 참고용이며 법적/의학적 효력이 없습니다. 정확한 진단과 치료는 반드시 검진 기관(병원)에 직접 내원하여 의료진과 상담해야 합니다.

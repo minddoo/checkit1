@@ -1292,67 +1292,15 @@
         document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
 
         // Update Results Section
-        renderResults(data);
+        window.renderResultsSection(data);
     }
 
-    function renderResults(data) {
-        const resultsContainer = document.getElementById('sectionResults');
-        if (!resultsContainer) return;
-
-        const results = data.results || [];
-        const isSubmitted = !!data.docsReceived;
-        
-        // 1. Update Submission Area
-        const submissionArea = document.getElementById('resultSubmissionArea');
-        if (isSubmitted) {
-            submissionArea.innerHTML = `
-                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 12px; color: #16a34a;">
-                    <i class="fa-solid fa-circle-check" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
-                    <p style="font-weight: 700;">결과지 제출이 완료되었습니다!</p>
-                    <p style="font-size: 0.85rem; color: #15803d; margin-top: 5px;">기업 담당자에게 제출 정보가 전달되었습니다.</p>
-                    <button onclick="window.reSubmitResult()" style="background: none; border: none; color: #16a34a; text-decoration: underline; font-size: 0.8rem; margin-top: 15px; cursor: pointer;">다시 제출하기</button>
-                </div>
-            `;
-            document.getElementById('translationCard').classList.remove('hidden');
-        } else {
-            submissionArea.innerHTML = `
-                <div id="noSubmissionUI">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                    <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
-                    
-                    <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
-                            <i class="fa-solid fa-camera"></i> 사진 업로드
-                        </button>
-                        <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
-                            <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('translationCard').classList.add('hidden');
-        }
-    }
-
-    // Result Submission Logic - moved to end of file (active implementations with file upload support)
-    // Old functions removed: renderResultsSection, submitResultToCompany, reSubmitResult, handleResultFileUpload
+    // Original renderResults function removed to avoid redundancy with renderResultsSection
 
     window.reSubmitResult = () => {
-        if (confirm("기존 제출 내역을 취소하고 다시 기록하시겠습니까?")) {
-            const user = auth.currentUser;
-            db.collection('users').doc(user.uid).get().then(uDoc => {
-                db.collection('workers').doc(uDoc.data().workerDocId).update({
-                    docsReceived: false,
-                    resultFileUrl: firebase.firestore.FieldValue.delete(),
-                    resultFileName: firebase.firestore.FieldValue.delete(),
-                    resultFileType: firebase.firestore.FieldValue.delete()
-                }).then(() => {
-                    window.renderResultsSection();
-                });
-            });
-        }
+        // Direct trigger of file input for smoother UX as requested
+        const fileInput = document.getElementById('resultFileInput');
+        if (fileInput) fileInput.click();
     };
 
     // Translation Logic
@@ -1563,23 +1511,23 @@
         }
     };
 
-    window.renderResultsSection = async function() {
+    window.renderResultsSection = async function(workerDocData) {
         const area = document.getElementById('resultSubmissionArea');
         if (!area) return;
 
-        const user = auth.currentUser;
-        if (!user) return;
-
-        try {
+        let w = workerDocData;
+        if (!w) {
+            const user = auth.currentUser;
+            if (!user) return;
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const ud = userDoc.data() || {};
-            const workerDocId = ud.workerDocId;
+            const workerDocId = (userDoc.data() || {}).workerDocId;
             if (!workerDocId) return;
-
             const workerDoc = await db.collection('workers').doc(workerDocId).get();
             if (!workerDoc.exists) return;
-            const w = workerDoc.data();
+            w = workerDoc.data();
+        }
 
+        try {
             if (w.resultFileUrl) {
                 const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
                 const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
@@ -1612,6 +1560,28 @@
                         </button>
                     </div>
                 `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
+            } else {
+                area.innerHTML = `
+                    <div id="noSubmissionUI">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                        <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                        
+                        <input type="file" id="resultFileInput3" style="display: none;" onchange="handleResultFileUpload(this)">
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button onclick="document.getElementById('resultFileInput3').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                <i class="fa-solid fa-camera"></i> 사진 업로드
+                            </button>
+                            <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                            </button>
+                        </div>
+                    </div>
+                `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
             }
         } catch (e) {
             console.error('Render results error:', e);

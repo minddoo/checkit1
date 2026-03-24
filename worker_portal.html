@@ -1336,58 +1336,22 @@
         }
     }
 
-    // Result Submission Logic
-    window.renderResultsSection = async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const workerDocId = userDoc.data().workerDocId;
-        if (!workerDocId) return;
-
-        const workerDoc = await db.collection('workers').doc(workerDocId).get();
-        renderResults(workerDoc.data());
-    };
-
-    window.submitResultToCompany = async () => {
-        if (!confirm("검진 결과지를 기업 기업관리자에게 제출하시겠습니까?")) return;
-        
-        try {
-            const user = auth.currentUser;
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            const workerDocId = userDoc.data().workerDocId;
-            
-            await db.collection('workers').doc(workerDocId).update({
-                docsReceived: true,
-                docsSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            showToast("결과지가 성공적으로 제출되었습니다!", "success");
-            window.renderResultsSection();
-        } catch (e) {
-            console.error("Result submission error:", e);
-            showToast("제출 실패: " + e.message, "error");
-        }
-    };
+    // Result Submission Logic - moved to end of file (active implementations with file upload support)
+    // Old functions removed: renderResultsSection, submitResultToCompany, reSubmitResult, handleResultFileUpload
 
     window.reSubmitResult = () => {
         if (confirm("기존 제출 내역을 취소하고 다시 기록하시겠습니까?")) {
             const user = auth.currentUser;
             db.collection('users').doc(user.uid).get().then(uDoc => {
                 db.collection('workers').doc(uDoc.data().workerDocId).update({
-                    docsReceived: false
+                    docsReceived: false,
+                    resultFileUrl: firebase.firestore.FieldValue.delete(),
+                    resultFileName: firebase.firestore.FieldValue.delete(),
+                    resultFileType: firebase.firestore.FieldValue.delete()
                 }).then(() => {
                     window.renderResultsSection();
                 });
             });
-        }
-    };
-
-    window.handleResultFileUpload = (input) => {
-        if (input.files && input.files[0]) {
-            showToast("파일을 업로드하는 중입니다...", "info");
-            setTimeout(() => {
-                window.submitResultToCompany();
-            }, 1000);
         }
     };
 

@@ -2119,9 +2119,6 @@
                 <a id="rvDownloadBtn" href="" download="" class="btn-primary" style="padding:10px 25px; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:8px;">
                     <i class="fa-solid fa-download"></i> 다운로드
                 </a>
-                <a id="rvNewTabBtn" href="" target="_blank" class="btn-outline" style="padding:10px 25px; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:8px;">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> 새 탭에서 열기
-                </a>
             </div>
         </div>
     </div>
@@ -2166,10 +2163,9 @@
             `;
         }
 
-        // Download & new tab links
+        // Download link
         document.getElementById('rvDownloadBtn').href = worker.resultFileUrl;
         document.getElementById('rvDownloadBtn').download = worker.resultFileName || 'result';
-        document.getElementById('rvNewTabBtn').href = worker.resultFileUrl;
 
         document.getElementById('resultViewerModal').style.display = 'flex';
     };

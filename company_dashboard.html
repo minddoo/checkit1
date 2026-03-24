@@ -442,25 +442,25 @@
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">총 인원</p>
                         <h2 id="totalCount" style="margin: 8px 0 0; font-size: 1.8rem;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #4f46e5;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #0ea5e9;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">예약 진행</p>
-                        <h2 id="reservationCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #4f46e5;">0</h2>
+                        <h2 id="reservationCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #0ea5e9;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #10b981;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #22c55e;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">검사 완료</p>
-                        <h2 id="completedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #10b981;">0</h2>
+                        <h2 id="completedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #22c55e;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #8b5cf6;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f43f5e;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">결과 완료</p>
-                        <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #8b5cf6;">0</h2>
+                        <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f43f5e;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f59e0b;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #facc15;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">재검 대상자</p>
-                        <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f59e0b;">0</h2>
+                        <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #facc15;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #ef4444; background: #fff1f2; position: relative;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #ff4444; background: #fff1f2; position: relative;">
                         <p style="color: #be123c; font-size: 0.85rem; margin: 0; font-weight: 700;">재검 이행률</p>
-                        <h2 id="recheckRate" style="margin: 8px 0 0; font-size: 1.8rem; color: #e11d48;">0%</h2>
+                        <h2 id="recheckRate" style="margin: 8px 0 0; font-size: 1.8rem; color: #ff4444;">0%</h2>
                         <div id="recheckSummaryDetail" style="font-size: 0.75rem; color: #be123c; margin-top: 5px; opacity: 0.8;">대상 0 / 완료 0</div>
                     </div>
                 </div>
@@ -628,7 +628,7 @@
                 labels: ['예약완료', '검사완료', '결과완료', '재검대상', '재검완료', '미진행'],
                 datasets: [{
                     data: [reservationCount, checkupCount, resultCount, recheckTargetCount, recheckDoneCount, pendingCount],
-                    backgroundColor: ['#3b82f6', '#10b981', '#a855f7', '#f97316', '#06b6d4', '#e2e8f0'],
+                    backgroundColor: ['#0ea5e9', '#22c55e', '#f43f5e', '#facc15', '#2dd4bf', '#f1f5f9'],
                     borderWidth: 3,
                     borderColor: '#ffffff'
                 }]
@@ -680,7 +680,7 @@
                     {
                         label: '완료 인원',
                         data: siteStats.map(d => d.completed),
-                        backgroundColor: '#10b981',
+                        backgroundColor: '#22c55e',
                         borderRadius: 4
                     },
                     {
@@ -724,9 +724,9 @@
                                 <span style="font-size:0.8rem; font-weight:800; color:#10b981;">${compPct}%</span>
                             </div>
                             <div style="height:10px; border-radius:5px; background:#f1f5f9; overflow:hidden; display:flex;">
-                                <div style="width:${compPct}%; background:#10b981; transition:0.6s;"></div>
-                                <div style="width:${resPct}%; background:#3b82f6; transition:0.6s;"></div>
-                                <div style="width:${recPct}%; background:#f97316; transition:0.6s;"></div>
+                                <div style="width:${compPct}%; background:#22c55e; transition:0.6s;"></div>
+                                <div style="width:${resPct}%; background:#0ea5e9; transition:0.6s;"></div>
+                                <div style="width:${recPct}%; background:#facc15; transition:0.6s;"></div>
                             </div>
                         </div>
                     `;

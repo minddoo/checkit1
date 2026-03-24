@@ -1514,6 +1514,146 @@
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 3100);
     }
+
+    // ========== RESULT FILE UPLOAD & SUBMISSION ==========
+    window.handleResultFileUpload = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // Validate file size (max 5MB for base64 storage)
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('파일 크기가 5MB를 초과합니다. 더 작은 파일을 선택해주세요.', 'error');
+            input.value = '';
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const loader = document.getElementById('pageLoader');
+        loader.style.display = 'flex';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+
+            // Convert to base64
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const base64Data = e.target.result;
+                    await db.collection('workers').doc(workerDocId).update({
+                        resultFileUrl: base64Data,
+                        resultFileName: file.name,
+                        resultFileType: file.type,
+                        resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: '결과완료'
+                    });
+                    showToast('결과지가 성공적으로 제출되었습니다!', 'success');
+                    renderResultsSection();
+                } catch (err) {
+                    console.error('File save error:', err);
+                    showToast('파일 저장 실패: ' + err.message, 'error');
+                } finally {
+                    loader.style.display = 'none';
+                }
+            };
+            reader.onerror = () => {
+                showToast('파일을 읽을 수 없습니다.', 'error');
+                loader.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        } catch (err) {
+            console.error('Upload error:', err);
+            showToast('업로드 실패: ' + err.message, 'error');
+            loader.style.display = 'none';
+        }
+        input.value = '';
+    };
+
+    window.submitResultToCompany = async function() {
+        const user = auth.currentUser;
+        if (!user) return;
+        if (!confirm('파일 없이 검진 완료를 기업에 알리시겠습니까?')) return;
+
+        const loader = document.getElementById('pageLoader');
+        loader.style.display = 'flex';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+
+            await db.collection('workers').doc(workerDocId).update({
+                status: '결과완료',
+                resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast('검진 완료가 기업에 전달되었습니다!', 'success');
+            renderResultsSection();
+        } catch (err) {
+            console.error('Submit error:', err);
+            showToast('제출 실패: ' + err.message, 'error');
+        } finally {
+            loader.style.display = 'none';
+        }
+    };
+
+    window.renderResultsSection = async function() {
+        const area = document.getElementById('resultSubmissionArea');
+        if (!area) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const ud = userDoc.data() || {};
+            const workerDocId = ud.workerDocId;
+            if (!workerDocId) return;
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            if (!workerDoc.exists) return;
+            const w = workerDoc.data();
+
+            if (w.resultFileUrl) {
+                const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
+                const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
+                
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">결과지 제출 완료</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">파일명: ${w.resultFileName || '첨부파일'}</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">제출일: ${submittedAt}</p>
+                        ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${w.resultFileUrl}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
+                        <a href="${w.resultFileUrl}" download="${w.resultFileName || 'result'}" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--dark);">
+                            <i class="fa-solid fa-download"></i> 내 결과지 다운로드
+                        </a>
+                    </div>
+                `;
+
+                // Show translation card
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.remove('hidden');
+            } else if (w.status === '결과완료') {
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">검진 완료 보고됨</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">파일이 첨부되지 않았습니다. 결과지를 추가로 업로드할 수 있습니다.</p>
+                        <input type="file" id="resultFileInput2" style="display:none;" onchange="handleResultFileUpload(this)">
+                        <button onclick="document.getElementById('resultFileInput2').click()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
+                            <i class="fa-solid fa-camera"></i> 결과지 업로드
+                        </button>
+                    </div>
+                `;
+            }
+        } catch (e) {
+            console.error('Render results error:', e);
+        }
+    };
+
 </script>
 
 </body>

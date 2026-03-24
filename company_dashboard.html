@@ -1753,9 +1753,9 @@
                     </td>
                     <td style="text-align:center;">
                         ${w.resultFileUrl ? `
-                            <a href="${w.resultFileUrl}" target="_blank" class="btn-outline" style="padding:4px 10px; font-size:0.75rem; text-decoration:none; display:inline-flex; align-items:center; gap:5px; background:#f8fafc; border-color:#e2e8f0; color:#475569;">
-                                <i class="fa-solid fa-file-pdf"></i> 결과지 원본
-                            </a>
+                            <button onclick="window.viewResultFile('${w.id}')" class="btn-outline" style="padding:4px 12px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; background:#eef2ff; border-color:#c7d2fe; color:#4f46e5; cursor:pointer;">
+                                <i class="fa-solid fa-eye"></i> 결과지 보기
+                            </button>
                         ` : '<span style="color:#cbd5e1; font-size:0.8rem;">- 미첨부 -</span>'}
                     </td>
                 </tr>
@@ -2089,3 +2089,88 @@
 
 </body>
 </html>
+
+<!-- Result File Viewer Modal -->
+<div id="resultViewerModal" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'" style="display:none;">
+    <div class="modal-content" style="max-width:700px;">
+        <div class="modal-header">
+            <h3 style="margin:0; font-size:1.05rem;"><i class="fa-solid fa-file-medical" style="color:#4f46e5;"></i> 근로자 결과지 보기</h3>
+            <button onclick="document.getElementById('resultViewerModal').style.display='none'" style="background:none; border:none; font-size:1.2rem; color:#94a3b8; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body" style="text-align:center;">
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px; text-align:left;">
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">근로자명</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvWorkerName">-</div>
+                </div>
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">파일명</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvFileName">-</div>
+                </div>
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">제출일</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvSubmitDate">-</div>
+                </div>
+            </div>
+            <div id="rvPreviewArea" style="border:2px dashed #e2e8f0; border-radius:12px; padding:20px; margin-bottom:20px; background:#fafbfc; min-height:150px; display:flex; align-items:center; justify-content:center;">
+                <span style="color:#94a3b8;">미리보기 영역</span>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <a id="rvDownloadBtn" href="" download="" class="btn-primary" style="padding:10px 25px; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:8px;">
+                    <i class="fa-solid fa-download"></i> 다운로드
+                </a>
+                <a id="rvNewTabBtn" href="" target="_blank" class="btn-outline" style="padding:10px 25px; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:8px;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> 새 탭에서 열기
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.viewResultFile = (workerId) => {
+        const worker = allWorkers.find(w => w.id === workerId);
+        if (!worker || !worker.resultFileUrl) {
+            return alert('결과지를 찾을 수 없습니다.');
+        }
+
+        document.getElementById('rvWorkerName').textContent = worker.name || '-';
+        document.getElementById('rvFileName').textContent = worker.resultFileName || '첨부파일';
+        const submitDate = worker.resultSubmittedAt 
+            ? new Date(worker.resultSubmittedAt.seconds * 1000).toLocaleDateString('ko-KR') 
+            : '-';
+        document.getElementById('rvSubmitDate').textContent = submitDate;
+
+        // Preview area
+        const previewArea = document.getElementById('rvPreviewArea');
+        const isImage = worker.resultFileType && worker.resultFileType.startsWith('image/');
+        const isPdf = worker.resultFileType && worker.resultFileType === 'application/pdf';
+
+        if (isImage) {
+            previewArea.innerHTML = `<img src="${worker.resultFileUrl}" style="max-width:100%; max-height:400px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
+        } else if (isPdf) {
+            previewArea.innerHTML = `
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-file-pdf" style="font-size:4rem; color:#ef4444; margin-bottom:12px;"></i>
+                    <p style="font-weight:600; color:#334155;">${worker.resultFileName || 'PDF 파일'}</p>
+                    <p style="font-size:0.8rem; color:#94a3b8;">PDF 파일은 다운로드하여 확인해 주세요</p>
+                </div>
+            `;
+        } else {
+            previewArea.innerHTML = `
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-file" style="font-size:4rem; color:#64748b; margin-bottom:12px;"></i>
+                    <p style="font-weight:600; color:#334155;">${worker.resultFileName || '첨부파일'}</p>
+                    <p style="font-size:0.8rem; color:#94a3b8;">파일을 다운로드하여 확인해 주세요</p>
+                </div>
+            `;
+        }
+
+        // Download & new tab links
+        document.getElementById('rvDownloadBtn').href = worker.resultFileUrl;
+        document.getElementById('rvDownloadBtn').download = worker.resultFileName || 'result';
+        document.getElementById('rvNewTabBtn').href = worker.resultFileUrl;
+
+        document.getElementById('resultViewerModal').style.display = 'flex';
+    };
+</script>

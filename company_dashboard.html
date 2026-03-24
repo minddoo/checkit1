@@ -1584,8 +1584,11 @@
                         <button onclick="window.toggleFollowUpStatus('${w.id}', 'docsReceived', ${docsDone})" 
                                 style="padding:6px 12px; font-size:0.75rem; border-radius:6px; background:${docsDone ? '#f0fdf4':'#fef2f2'}; color:${docsDone ? '#16a34a':'#e11d48'}; border:1px solid ${docsDone ? '#bbf7d0':'#fecaca'}; width:100%; justify-content:center;">
                             <i class="fa-solid ${docsDone ? 'fa-file-circle-check':'fa-file-circle-xmark'}"></i> 
-                            ${docsDone ? '서류 수령 완료' : '결과지 미수령 (클릭)'}
+                            ${docsDone ? '수령 완료' : '미수령 (클릭)'}
                         </button>
+                    </td>
+                    <td style="font-size:0.75rem; color:#64748b; padding-left:10px;">
+                        ${w.resultSummary || '-'}
                     </td>
                     <td style="text-align:center;">
                         <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="showToast('메모 기능 준비 중', 'info')">메모</button>

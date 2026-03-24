@@ -714,6 +714,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- jsPDF for PDF generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2canvas for Korean PDF rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- SheetJS for Excel Upload/Download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -1934,108 +1936,138 @@
         }
     };
 
-    // --- PDF Download ---
-    window.downloadContractPDF = () => {
+    // --- PDF Download (Korean via html2canvas) ---
+    window.downloadContractPDF = async () => {
         const data = window._contractData;
         if (!data) return alert('계약서 데이터를 불러올 수 없습니다.');
 
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
-        const pw = doc.internal.pageSize.getWidth();
-        let y = 20;
-        const lm = 20; // left margin
-        const cw = pw - 40; // content width
+        const loader = document.getElementById('pageLoader');
+        if (loader) { loader.style.display = 'flex'; document.getElementById('loaderMessage').textContent = 'PDF 생성 중...'; }
 
-        // Helper: add text with word wrap
-        const addText = (text, size, opts = {}) => {
-            doc.setFontSize(size);
-            if (opts.bold) doc.setFont(undefined, 'bold');
-            else doc.setFont(undefined, 'normal');
-            if (opts.color) doc.setTextColor(...opts.color);
-            else doc.setTextColor(51, 65, 85);
-            const lines = doc.splitTextToSize(text, opts.width || cw);
-            if (y + lines.length * (size * 0.5) > 270) { doc.addPage(); y = 20; }
-            doc.text(lines, opts.x || lm, y);
-            y += lines.length * (size * 0.45) + (opts.gap || 2);
-        };
-
-        // Title
-        doc.setFillColor(79, 70, 229);
-        doc.rect(0, 0, pw, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(18);
-        doc.setFont(undefined, 'bold');
-        doc.text('CHECKIT', pw / 2, 18, { align: 'center' });
-        doc.setFontSize(11);
-        doc.setFont(undefined, 'normal');
-        doc.text('Check-it Enterprise Service Agreement', pw / 2, 28, { align: 'center' });
-        doc.setFontSize(8);
-        doc.text('Mobile Electronic Contract', pw / 2, 35, { align: 'center' });
-        y = 50;
-
-        // Contract intro
-        addText('[Article 1] Administrative Support Role of the Platform', 11, { bold: true, gap: 4 });
-        addText('Non-medical nature: Check-it is not a medical institution and complies with Article 27, Paragraph 3 of the Medical Service Act. It does not have any revenue sharing (commission) structure with hospitals and never engages in medical brokerage or patient solicitation.', 9, { gap: 3 });
-        addText('Scope of Service: Check-it only performs non-medical administrative processes that bridge communication gaps between foreign workers, hospitals, and companies. (Reservation proxy, multilingual translation support, document issuance guidance, re-examination schedule management, etc.)', 9, { gap: 6 });
-
-        addText('[Article 2] Medical Data Provision and Disclaimer', 11, { bold: true, gap: 4 });
-        addText('Result composition: Check-it provides reference translations and disease classification codes (KCD/ICD) along with the original results received from the hospital.', 9, { gap: 3 });
-        addText('Medical judgment: The translations and codes provided are for reference only and have no legal/medical effect. Accurate diagnosis and treatment must be obtained by visiting the hospital directly.', 9, { gap: 3 });
-        addText('Separation of liability: Check-it bears no legal responsibility for accidents in hospitals, medical errors in examination results, or treatment-related disputes.', 9, { gap: 6 });
-
-        addText('[Article 3] Personal Information Entrustment and Security Commitment', 11, { bold: true, gap: 4 });
-        addText('Entrustment relationship: The administrator entrusts worker information to Check-it for management, and Check-it performs technical protection measures in accordance with the Personal Information Protection Act as a trustee.', 9, { gap: 3 });
-        addText('Administrator obligation: The administrator must not leak or misuse worker nationality, alien registration number (first digits), examination results, etc. accessed through the system for purposes other than business (occupational safety and health management, etc.). All legal responsibility for violations lies with the administrator.', 9, { gap: 6 });
-
-        addText('[Article 4] Data Retention and Destruction', 11, { bold: true, gap: 4 });
-        addText('Retention period: All reservation information, conversation content, and examination data generated during service use are safely stored for 5 years after service withdrawal (or contract termination) for post-verification and legal response.', 9, { gap: 3 });
-        addText('Destruction procedure: Data whose retention period has expired is immediately permanently destroyed in an irrecoverable manner.', 9, { gap: 8 });
-
-        // Divider
-        doc.setDrawColor(200, 200, 200);
-        doc.line(lm, y, pw - lm, y);
-        y += 8;
-
-        // Consent checklist
-        addText('Consent Checklist', 12, { bold: true, gap: 5 });
-        const consentItems = [
-            '[Required] Service Agreement Confirmation and Consent',
-            '[Required] Personal Information Collection and Use Consent',
-            '[Required] Personal Information Entrustment and Security Commitment',
-            '[Required] Platform Role and Liability Limitation Acknowledgement'
-        ];
-        consentItems.forEach(item => {
-            addText('V  ' + item, 9, { gap: 3 });
-        });
-        y += 5;
-
-        // Signer info
-        doc.setDrawColor(200, 200, 200);
-        doc.line(lm, y, pw - lm, y);
-        y += 8;
-        addText('Signer: ' + (data.signerName || '-'), 11, { bold: true, gap: 3 });
-        addText('Contract Date: ' + (data.signDate || '-'), 10, { gap: 3 });
         const signedAtStr = data.signedAt ? new Date(data.signedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
-        addText('Server Timestamp: ' + signedAtStr, 9, { color: [100, 116, 139], gap: 8 });
+        const sigImg = data.signatureImage ? `<img src="${data.signatureImage}" style="max-width:220px; max-height:80px;">` : '<span style="color:#94a3b8;">서명 없음</span>';
 
-        // Signature image
-        if (data.signatureImage) {
-            addText('Electronic Signature:', 10, { bold: true, gap: 4 });
-            try {
-                if (y + 35 > 270) { doc.addPage(); y = 20; }
-                doc.addImage(data.signatureImage, 'PNG', lm, y, 60, 25);
-                y += 30;
-            } catch (e) { console.warn('Signature image error:', e); }
+        // Build Korean HTML
+        const container = document.createElement('div');
+        container.style.cssText = 'position:fixed; left:-9999px; top:0; width:800px; padding:50px; background:white; font-family:Pretendard,sans-serif; color:#334155; line-height:1.8; font-size:14px;';
+        container.innerHTML = `
+            <div style="text-align:center; margin-bottom:30px; padding-bottom:20px; border-bottom:3px solid #4F46E5;">
+                <div style="display:inline-block; background:#eef2ff; padding:6px 18px; border-radius:16px; font-size:12px; font-weight:600; color:#4F46E5; margin-bottom:12px;">모바일 전자 계약서</div>
+                <h1 style="font-size:22px; margin:10px 0 6px; color:#0f172a;">체킷(Check-it) 기업 서비스 이용 계약서</h1>
+                <p style="font-size:13px; color:#64748b; margin:0;">본 계약은 기업 관리자(이하 "관리자")가 외국인 근로자 건강검진 행정 지원 플랫폼 '체킷'(이하 "체킷")을 이용함에 있어, 상호 간의 역할과 책임 범위를 명확히 규정하기 위해 체결합니다.</p>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">⚖️ 제1조 (플랫폼의 행정 지원 역할)</h3>
+                <div style="background:#f8fafc; border-radius:8px; padding:14px; border-left:3px solid #4F46E5;">
+                    <p style="margin:0 0 8px;"><b>비의료적 성격:</b> '체킷'은 의료기관이 아니며, 의료법 제27조 제3항을 준수합니다. 병원과 어떠한 수익 분배(수수료) 구조도 갖지 않으며, 진료 알선이나 환자 유인 행위를 절대 행하지 않습니다.</p>
+                    <p style="margin:0;"><b>서비스 범위:</b> '체킷'은 외국인 근로자와 병원, 기업 사이의 의사소통 공백을 채우는 비의료 행정 과정만을 수행합니다. (예약 대행, 다국어 번역 지원, 필수 서류 발급 안내, 재검사 일정 관리 등)</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🏥 제2조 (의료 데이터 제공 및 면책)</h3>
+                <div style="background:#f0f9ff; border-radius:8px; padding:14px; border-left:3px solid #0ea5e9;">
+                    <p style="margin:0 0 8px;"><b>결과지 구성:</b> '체킷'은 병원에서 수령한 원본 결과지와 함께 참고용 단순 번역본, 질병분류코드(KCD/ICD)를 제공합니다.</p>
+                    <p style="margin:0 0 8px;"><b>의료적 판단:</b> 제공되는 번역 및 코드는 단순 참고용이며 법적/의학적 효력을 갖지 않습니다.</p>
+                    <p style="margin:0;"><b>책임 분리:</b> 병원 내 사고, 검진 결과의 의학적 오류, 진료 관련 분쟁에 대해 '체킷'은 어떠한 법적 책임도 지지 않습니다.</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🔒 제3조 (개인정보 위탁 및 보안 확약)</h3>
+                <div style="background:#f5f3ff; border-radius:8px; padding:14px; border-left:3px solid #8b5cf6;">
+                    <p style="margin:0 0 8px;"><b>위수탁 관계:</b> '관리자'는 근로자의 정보를 '체킷'에 위탁하여 관리하며, '체킷'은 수탁자로서 개인정보 보호법에 따른 기술적 보호 조치를 수행합니다.</p>
+                    <p style="margin:0;"><b>관리자 의무:</b> '관리자'는 근로자의 국적, 외국인등록번호(앞자리), 검진 결과 등을 업무 목적 외로 유출하거나 오남용해서는 안 됩니다. 이를 위반하여 발생하는 모든 법적 책임은 '관리자'에게 있습니다.</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:28px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🗄️ 제4조 (데이터 보존 및 파기)</h3>
+                <div style="background:#f0fdf4; border-radius:8px; padding:14px; border-left:3px solid #10b981;">
+                    <p style="margin:0 0 8px;"><b>보관 기간:</b> 서비스 이용 과정에서 발생한 모든 예약 정보, 대화 내용, 검진 데이터는 서비스 탈퇴(또는 계약 종료) 후 5년간 안전하게 보관됩니다.</p>
+                    <p style="margin:0;"><b>파기 절차:</b> 보관 기간이 경과한 데이터는 복구가 불가능한 방법으로 즉시 영구 파기됩니다.</p>
+                </div>
+            </div>
+
+            <div style="border-top:2px solid #e2e8f0; padding-top:22px; margin-bottom:22px;">
+                <h3 style="font-size:15px; margin:0 0 14px; color:#0f172a;">✅ 동의 체크리스트</h3>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 서비스 이용 계약서 확인 및 동의</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 기업 담당자 개인정보 수집 및 이용 동의</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 개인정보 위탁 및 보안 관리 확약</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 플랫폼 역할 및 책임 제한 확약</div>
+                </div>
+            </div>
+
+            <div style="border-top:2px solid #e2e8f0; padding-top:22px;">
+                <h3 style="font-size:15px; margin:0 0 14px; color:#0f172a;">✍️ 서명 및 날인</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px;">
+                    <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                        <div style="font-size:11px; color:#94a3b8; margin-bottom:3px;">관리자 성함</div>
+                        <div style="font-weight:700; font-size:15px;">${data.signerName || '-'}</div>
+                    </div>
+                    <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                        <div style="font-size:11px; color:#94a3b8; margin-bottom:3px;">계약 체결일</div>
+                        <div style="font-weight:700; font-size:15px;">${data.signDate || '-'}</div>
+                    </div>
+                </div>
+                <div style="margin-bottom:8px; font-size:12px; color:#94a3b8;">서버 기록 시간: ${signedAtStr}</div>
+                <div style="margin-top:12px;">
+                    <div style="font-size:12px; color:#64748b; margin-bottom:6px;">전자 서명</div>
+                    <div style="border:2px dashed #e2e8f0; border-radius:8px; padding:12px; display:inline-block; background:white;">
+                        ${sigImg}
+                    </div>
+                </div>
+                <div style="margin-top:25px; text-align:center; font-size:10px; color:#cbd5e1;">
+                    본 문서는 CHECKIT 플랫폼을 통해 전자 서명된 계약서입니다.
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+
+        try {
+            const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+            document.body.removeChild(container);
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+            const pdfW = pdf.internal.pageSize.getWidth();
+            const pdfH = pdf.internal.pageSize.getHeight();
+            const margin = 10;
+            const usableW = pdfW - margin * 2;
+            const imgW = canvas.width;
+            const imgH = canvas.height;
+            const ratio = usableW / imgW;
+            const scaledH = imgH * ratio;
+            const usableH = pdfH - margin * 2;
+
+            let srcY = 0;
+            let page = 0;
+            while (srcY < imgH) {
+                if (page > 0) pdf.addPage();
+                const sliceH = Math.min(usableH / ratio, imgH - srcY);
+                const sliceCanvas = document.createElement('canvas');
+                sliceCanvas.width = imgW;
+                sliceCanvas.height = sliceH;
+                const sliceCtx = sliceCanvas.getContext('2d');
+                sliceCtx.drawImage(canvas, 0, srcY, imgW, sliceH, 0, 0, imgW, sliceH);
+                const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.95);
+                pdf.addImage(sliceData, 'JPEG', margin, margin, usableW, sliceH * ratio);
+                srcY += sliceH;
+                page++;
+            }
+
+            pdf.save(`CHECKIT_계약서_${data.signerName || ''}_${data.signDate || ''}.pdf`);
+            showToast('PDF 다운로드 완료!', 'success');
+        } catch (e) {
+            console.error('PDF generation error:', e);
+            showToast('PDF 생성 중 오류: ' + e.message, 'error');
+            if (container.parentNode) document.body.removeChild(container);
+        } finally {
+            if (loader) loader.style.display = 'none';
         }
-
-        // Footer
-        y += 5;
-        doc.setFontSize(7);
-        doc.setTextColor(150, 150, 150);
-        doc.text('This document was electronically signed via the CHECKIT platform.', pw / 2, y, { align: 'center' });
-
-        doc.save(`CHECKIT_Contract_${data.signerName || 'unknown'}_${data.signDate || 'undated'}.pdf`);
-        showToast('PDF 다운로드 완료!', 'success');
     };
 
 </script>

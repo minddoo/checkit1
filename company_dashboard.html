@@ -1587,11 +1587,12 @@
                             ${docsDone ? '수령 완료' : '미수령 (클릭)'}
                         </button>
                     </td>
-                    <td style="font-size:0.75rem; color:#64748b; padding-left:10px;">
-                        ${w.resultSummary || '-'}
-                    </td>
                     <td style="text-align:center;">
-                        <button class="btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="showToast('메모 기능 준비 중', 'info')">메모</button>
+                        ${w.resultFileUrl ? `
+                            <a href="${w.resultFileUrl}" target="_blank" class="btn-outline" style="padding:4px 10px; font-size:0.75rem; text-decoration:none; display:inline-flex; align-items:center; gap:5px; background:#f8fafc; border-color:#e2e8f0; color:#475569;">
+                                <i class="fa-solid fa-file-pdf"></i> 결과지 원본
+                            </a>
+                        ` : '<span style="color:#cbd5e1; font-size:0.8rem;">- 미첨부 -</span>'}
                     </td>
                 </tr>
             `;

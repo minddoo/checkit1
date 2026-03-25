@@ -1385,11 +1385,23 @@
                 return;
             }
 
+            // PDF 파일인 경우 OCR 불가 안내
+            if (wData.resultFileType === 'application/pdf') {
+                content.innerHTML = `
+                    <div style="padding:40px; text-align:center; color:#64748b;">
+                        <i class="fa-solid fa-file-pdf" style="font-size:3rem; color:var(--danger); margin-bottom:15px;"></i>
+                        <p style="font-weight:700; color:var(--text); margin-bottom:10px;">PDF 파일은 자동 판독이 어렵습니다.</p>
+                        <p style="font-size:0.85rem;">결과지를 사진(JPG, PNG)으로 찍어서 다시 올려주시면 번역 기능을 이용하실 수 있습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
             // OCR Start
             const worker = await Tesseract.createWorker('kor', 1, {
                 logger: m => {
-                    if (m.status === 'recognizing text') {
-                        const pct = Math.round(m.progress * 100);
+                    if (m && m.status === 'recognizing text') {
+                        const pct = Math.round((m.progress || 0) * 100);
                         const progressEl = document.getElementById('ocrProgressInner');
                         const statusEl = document.getElementById('ocrStatusText');
                         if (progressEl) progressEl.style.width = pct + '%';
@@ -1407,7 +1419,8 @@
             }
 
             // Translation Start
-            document.getElementById('ocrStatusText').innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
+            const statusEl = document.getElementById('ocrStatusText');
+            if (statusEl) statusEl.innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
             const translated = await translateText(text, prefLang);
 
             // Display Results
@@ -1431,7 +1444,7 @@
                             ${translated}
                         </div>
                     </div>
-                    <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`')}\`)" style="width: 100%; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" style="width: 100%; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <i class="fa-solid fa-copy"></i> 번역 내용 복사하기
                     </button>
                 </div>
@@ -1439,7 +1452,8 @@
 
         } catch (e) {
             console.error('Translation process error:', e);
-            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">오류 발생: ${e.message}</div>`;
+            const errMsg = e && e.message ? e.message : String(e);
+            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">분석 중 오류 발생: ${errMsg}</div>`;
         }
     };
 

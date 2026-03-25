@@ -490,6 +490,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -502,6 +503,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
     // Section Switching
     window.switchSection = (target) => {
@@ -1398,10 +1400,18 @@
             if (wData.resultFileType === 'application/pdf') {
                 document.getElementById('ocrStatusText').innerText = 'PDF 스마트 변환 중...';
                 try {
-                    const loadingTask = pdfjsLib.getDocument(wData.resultFileUrl);
+                    // Convert base64 PDF to Uint8Array for pdf.js stability
+                    const base64Content = wData.resultFileUrl.split(',')[1];
+                    const binaryContent = atob(base64Content);
+                    const bytes = new Uint8Array(binaryContent.length);
+                    for (let i = 0; i < binaryContent.length; i++) {
+                        bytes[i] = binaryContent.charCodeAt(i);
+                    }
+
+                    const loadingTask = pdfjsLib.getDocument({ data: bytes });
                     const pdf = await loadingTask.promise;
-                    const page = await pdf.getPage(1); // 첫 페이지 분석
-                    const viewport = page.getViewport({ scale: 2.5 }); // 고해상도 렌더링 (판독률 향상)
+                    const page = await pdf.getPage(1);
+                    const viewport = page.getViewport({ scale: 2.0 });
                     
                     const canvas = document.createElement('canvas');
                     const context = canvas.getContext('2d');
@@ -1412,12 +1422,25 @@
                     processingImage = canvas.toDataURL('image/png');
                 } catch (pdfErr) {
                     console.error('PDF Conversion Error:', pdfErr);
-                    throw new Error('PDF 변환에 실패했습니다. 사진 형식으로 다시 시도해 주세요.');
+                    throw new Error('PDF 변환에 실패했습니다. 사진 형식으로 가급적 업로드해 주세요.');
+                }
+            } else if (processingImage.startsWith('http')) {
+                // Fetch Storage URL as Blob to avoid Tesseract CORS issues
+                try {
+                    const response = await fetch(processingImage);
+                    processingImage = await response.blob();
+                } catch (fetchErr) {
+                    console.error('Image fetch error:', fetchErr);
+                    // Fallback to URL if fetch fails
                 }
             }
 
             // OCR Start
-            const worker = await Tesseract.createWorker('kor', 1, {
+            const ocrStatusEl = document.getElementById('ocrStatusText');
+            if (ocrStatusEl) ocrStatusEl.innerText = '인공지능 분석 엔진 초기화 중...';
+            
+            // Use high-level simplify API for better stability in Tesseract v5
+            const { data: { text } } = await Tesseract.recognize(processingImage, 'kor', {
                 logger: m => {
                     if (m && m.status === 'recognizing text') {
                         const pct = Math.round((m.progress || 0) * 100);
@@ -1428,9 +1451,6 @@
                     }
                 }
             });
-
-            const { data: { text } } = await worker.recognize(processingImage);
-            await worker.terminate();
 
             if (!text || text.trim().length === 0) {
                 content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">데이터를 분석할 수 없습니다. 문서 가림이나 흔들림이 없는 사진을 다시 업로드해 주세요.</div>';
@@ -1571,9 +1591,9 @@
         const file = input.files[0];
         if (!file) return;
 
-        // Validate file size (max 5MB for base64 storage)
-        if (file.size > 5 * 1024 * 1024) {
-            showToast('파일 크기가 5MB를 초과합니다. 더 작은 파일을 선택해주세요.', 'error');
+        // Max 30MB for Firebase Storage
+        if (file.size > 30 * 1024 * 1024) {
+            showToast('파일 크기가 30MB를 초과합니다. 더 작은 파일을 선택해주세요.', 'error');
             input.value = '';
             return;
         }
@@ -1589,35 +1609,34 @@
             const workerDocId = userDoc.data().workerDocId;
             if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
-            // Convert to base64
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const base64Data = e.target.result;
+            // Upload directly to Firebase Storage
+            const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // Optional: Update progress UI
+                }, 
+                (error) => { throw error; }, 
+                async () => {
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    
                     await db.collection('workers').doc(workerDocId).update({
-                        resultFileUrl: base64Data,
+                        resultFileUrl: downloadURL,
                         resultFileName: file.name,
                         resultFileType: file.type,
                         resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                         status: '수령완료',
                         docsReceived: true
                     });
+
                     showToast('결과지가 성공적으로 제출되었습니다!', 'success');
                     renderResultsSection();
-                } catch (err) {
-                    console.error('File save error:', err);
-                    showToast('파일 저장 실패: ' + err.message, 'error');
-                } finally {
                     loader.style.display = 'none';
                 }
-            };
-            reader.onerror = () => {
-                showToast('파일을 읽을 수 없습니다.', 'error');
-                loader.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
+            );
         } catch (err) {
-            console.error('Upload error:', err);
+            console.error('Upload Error:', err);
             showToast('업로드 실패: ' + err.message, 'error');
             loader.style.display = 'none';
         }

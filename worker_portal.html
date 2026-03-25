@@ -1364,49 +1364,61 @@
 
     // Helper to normalize images for OCR (Handles CORS, resizing, and format conversion)
     async function normalizeImageForOCR(imageSrc) {
+        console.log("Starting normalizeImageForOCR...");
         return new Promise((resolve, reject) => {
             const img = new Image();
-            img.crossOrigin = 'Anonymous'; // Crucial for Firebase Storage URLs
+            // Only set crossOrigin for external URLs to avoid issues with Data URLs
+            if (imageSrc && imageSrc.startsWith('http')) {
+                img.crossOrigin = 'Anonymous';
+            }
             
+            const timeout = setTimeout(() => {
+                img.src = ""; // Stop loading
+                reject(new Error('이미지 분석 시간 초과 (15초)'));
+            }, 15000);
+
             img.onload = () => {
+                clearTimeout(timeout);
+                console.log("Image loaded for normalization:", img.width, "x", img.height);
                 try {
                     const canvas = document.createElement('canvas');
-                    const MAX_DIM = 1600; // Optimal for OCR without excessive memory
                     let width = img.width;
                     let height = img.height;
-                    
-                    if (width > height) {
-                        if (width > MAX_DIM) {
-                            height = Math.round(height * (MAX_DIM / width));
+
+                    // Resize if too large for Firestore (Max ~600KB base64 safe)
+                    const MAX_DIM = 1200;
+                    if (width > MAX_DIM || height > MAX_DIM) {
+                        if (width > height) {
+                            height *= MAX_DIM / width;
                             width = MAX_DIM;
-                        }
-                    } else {
-                        if (height > MAX_DIM) {
-                            width = Math.round(width * (MAX_DIM / height));
+                        } else {
+                            width *= MAX_DIM / height;
                             height = MAX_DIM;
                         }
                     }
-                    
+
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Convert to high-quality JPEG Data URL
-                    resolve(canvas.toDataURL('image/jpeg', 0.9));
+
+                    // Convert to high-quality JPEG Data URL (smaller than PNG)
+                    const result = canvas.toDataURL('image/jpeg', 0.8);
+                    console.log("Normalization complete. Result size:", Math.round(result.length / 1024), "KB");
+                    resolve(result);
                 } catch (e) {
-                    reject(new Error('이미지 처리 중 오류가 발생했습니다. (Canvas Error)'));
+                    console.error("Canvas normalization error:", e);
+                    reject(e);
                 }
             };
-            
-            img.onerror = () => {
-                reject(new Error('이미지 로드에 실패했습니다. (보안 정책 또는 데이터 오류)'));
+
+            img.onerror = (err) => {
+                clearTimeout(timeout);
+                console.error("Image load error for normalization:", err);
+                reject(new Error('이미지를 읽을 수 없습니다. (데이터 오류)'));
             };
-            
+
             img.src = imageSrc;
-            
-            // Timeout after 15 seconds
-            setTimeout(() => reject(new Error('이미지 로드 시간이 초과되었습니다.')), 15000);
         });
     }
 
@@ -1647,6 +1659,8 @@
         const file = input.files[0];
         if (!file) return;
 
+        console.log("File selected:", file.name, file.size, file.type);
+
         // Max 30MB for Firebase Storage
         if (file.size > 30 * 1024 * 1024) {
             showToast('파일 크기가 30MB를 초과합니다. 더 작은 파일을 선택해주세요.', 'error');
@@ -1658,69 +1672,90 @@
         if (loader) {
             loader.style.display = 'flex';
             const lt = loader.querySelector('p');
-            if (lt) lt.innerText = '준비 중...';
+            if (lt) lt.innerText = '로그인 확인 중...';
         }
 
         try {
             const user = auth.currentUser;
-            if (!user) throw new Error('로그인이 필요합니다.');
+            if (!user) throw new Error('로그인이 필요합니다. 페이지를 새로고침 해보세요.');
             
+            console.log("Authentitcated user:", user.uid);
+            
+            if (loader) loader.querySelector('p').innerText = '진행 상황 확인 중...';
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
-            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+            if (!workerDocId) throw new Error('근로자 문서 ID가 계정과 연결되지 않았습니다.');
+            
+            console.log("Worker Doc ID:", workerDocId);
 
             // 1. Read file locally as Data URL
+            if (loader) loader.querySelector('p').innerText = '파일 읽는 중...';
+            console.log("Step 1: Reading file as Data URL");
             const fullBase64 = await new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = (err) => reject(new Error('파일 읽기 실패'));
+                reader.onerror = (err) => {
+                    console.error("FileReader Error:", err);
+                    reject(new Error('파일을 읽을 수 없습니다.'));
+                };
                 reader.readAsDataURL(file);
             });
+            console.log("Step 1 complete. Base64 length:", fullBase64.length);
 
             // 2. Prepare Optimized OCR Base64
             let ocrBase64 = fullBase64;
             if (file.type.startsWith('image/')) {
                 if (loader) {
                     const lt = loader.querySelector('p');
-                    if (lt) lt.innerText = '이미지 최적화 중...';
+                    if (lt) lt.innerText = '이미지 최적화 중... (Firestore용)';
                 }
+                console.log("Step 2: Normalizing image for OCR");
                 try {
                     ocrBase64 = await normalizeImageForOCR(fullBase64);
+                    console.log("Step 2 complete. Optimized length:", ocrBase64.length);
                 } catch (e) {
-                    console.warn("OCR normalization skipped", e);
+                    console.warn("OCR normalization skipped due to error:", e);
                 }
+            } else {
+                console.log("Step 2 skipped (not an image)");
             }
 
             // 3. Upload Original to Firebase Storage
             if (loader) {
                 const lt = loader.querySelector('p');
-                if (lt) lt.innerText = '서버 업로드 시작...';
+                if (lt) lt.innerText = '스토리지 업로드 시작...';
             }
+            console.log("Step 3: Uploading to Firebase Storage");
             
-            const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
+            const storagePath = `results/${workerDocId}_${Date.now()}_${file.name}`;
+            const storageRef = storage.ref(storagePath);
             const uploadTask = storageRef.put(file);
 
             // Listen for progress
             uploadTask.on('state_changed', 
                 (snapshot) => {
                     const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    console.log("Upload progress:", progress, "%");
                     if (loader) {
                         const lt = loader.querySelector('p');
                         if (lt) lt.innerText = `업로드 중... (${progress}%)`;
                     }
                 }, 
-                (err) => { /* Intercepted by catch later */ }
+                (err) => { console.error("Internal Upload Error:", err); }
             );
 
-            // Wait for upload completion (UploadTask is Promise-like)
+            // Wait for upload completion
             await uploadTask;
+            console.log("Step 3 complete. File uploaded to storage.");
             
             // 4. Update Database
             if (loader) {
                 const lt = loader.querySelector('p');
-                if (lt) lt.innerText = '정보 저장 중...';
+                if (lt) lt.innerText = '결과 데이터를 저장 중...';
             }
+            console.log("Step 4: Getting URL and updating Firestore");
             const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+            console.log("Download URL obtained:", downloadURL);
 
             await db.collection('workers').doc(workerDocId).update({
                 resultFileUrl: downloadURL,
@@ -1731,14 +1766,16 @@
                 status: '수령완료',
                 docsReceived: true
             });
+            console.log("Step 4 complete. Firestore updated.");
 
             showToast('결과지가 성공적으로 제출되었습니다!', 'success');
             await renderResultsSection();
 
         } catch (err) {
-            console.error('Upload Process Error:', err);
-            showToast('업로드 실패: ' + err.message, 'error');
+            console.error('FINAL UPLOAD ERROR CATCH:', err);
+            showToast('업로드 최종 실패: ' + err.message, 'error');
         } finally {
+            console.log("handleResultFileUpload finally block reached.");
             if (loader) {
                 loader.style.display = 'none';
                 const lt = loader.querySelector('p');

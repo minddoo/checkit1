@@ -1679,53 +1679,38 @@
             const user = auth.currentUser;
             if (!user) throw new Error('로그인이 필요합니다. 페이지를 새로고침 해보세요.');
             
-            console.log("Authentitcated user:", user.uid);
-            
             if (loader) loader.querySelector('p').innerText = '진행 상황 확인 중...';
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const workerDocId = userDoc.data().workerDocId;
+            const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
             if (!workerDocId) throw new Error('근로자 문서 ID가 계정과 연결되지 않았습니다.');
-            
-            console.log("Worker Doc ID:", workerDocId);
 
-            // 1. Read file locally as Data URL
-            if (loader) loader.querySelector('p').innerText = '파일 읽는 중...';
-            console.log("Step 1: Reading file as Data URL");
-            const fullBase64 = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.onerror = (err) => {
-                    console.error("FileReader Error:", err);
-                    reject(new Error('파일을 읽을 수 없습니다.'));
-                };
-                reader.readAsDataURL(file);
-            });
-            console.log("Step 1 complete. Base64 length:", fullBase64.length);
-
-            // 2. Prepare Optimized OCR Base64
-            let ocrBase64 = fullBase64;
+            // 1. Prepare Optimized OCR Base64 (Only for images)
+            let ocrBase64 = null;
             if (file.type.startsWith('image/')) {
                 if (loader) {
                     const lt = loader.querySelector('p');
-                    if (lt) lt.innerText = '이미지 최적화 중... (Firestore용)';
+                    if (lt) lt.innerText = '이미지 최적화 중...';
                 }
-                console.log("Step 2: Normalizing image for OCR");
+                const blobUrl = URL.createObjectURL(file);
                 try {
-                    ocrBase64 = await normalizeImageForOCR(fullBase64);
-                    console.log("Step 2 complete. Optimized length:", ocrBase64.length);
+                    ocrBase64 = await normalizeImageForOCR(blobUrl);
+                    // Double check size to be safe for Firestore (800KB limit)
+                    if (ocrBase64 && ocrBase64.length > 800 * 1024) {
+                        console.warn("Optimized image still too large for Firestore, skipping base64 storage");
+                        ocrBase64 = null;
+                    }
                 } catch (e) {
-                    console.warn("OCR normalization skipped due to error:", e);
+                    console.warn("OCR normalization failed/skipped:", e);
+                } finally {
+                    URL.revokeObjectURL(blobUrl);
                 }
-            } else {
-                console.log("Step 2 skipped (not an image)");
             }
 
-            // 3. Upload Original to Firebase Storage
+            // 2. Upload Original to Firebase Storage
             if (loader) {
                 const lt = loader.querySelector('p');
                 if (lt) lt.innerText = '스토리지 업로드 시작...';
             }
-            console.log("Step 3: Uploading to Firebase Storage");
             
             const storagePath = `results/${workerDocId}_${Date.now()}_${file.name}`;
             const storageRef = storage.ref(storagePath);
@@ -1772,15 +1757,16 @@
             await renderResultsSection();
 
         } catch (err) {
-            console.error('FINAL UPLOAD ERROR CATCH:', err);
-            showToast('업로드 최종 실패: ' + err.message, 'error');
+            console.error('Final Upload Error Catch:', err);
+            showToast('업로드 중 오류 발생: ' + err.message, 'error');
         } finally {
-            console.log("handleResultFileUpload finally block reached.");
-            if (loader) {
-                loader.style.display = 'none';
-                const lt = loader.querySelector('p');
-                if (lt) lt.innerText = '포털을 불러오는 중...';
-            }
+            try {
+                if (loader) {
+                    loader.style.display = 'none';
+                    const lt = loader.querySelector('p');
+                    if (lt) lt.innerText = '포털을 불러오는 중...';
+                }
+            } catch (e) { console.error("Loader cleanup error", e); }
             input.value = '';
         }
     };

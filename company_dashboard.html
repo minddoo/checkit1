@@ -92,9 +92,10 @@
             <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
         </div>
         <ul class="sidebar-menu">
-            <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
-            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> <span>검진 현황 조회</span></li>
-            <li id="menuReport" onclick="window.switchSection('report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트 조회</span></li>
+            <li id="menuReg" class="active" onclick="window.switchSection('Reg')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
+                <li id="menuStatus" onclick="window.switchSection('Status')"><i class="fa-solid fa-list-check"></i> <span>검진 현황</span></li>
+                <li id="menuFollowUp" onclick="window.switchSection('FollowUp')"><i class="fa-solid fa-file-circle-check"></i> <span>사후관리 현황</span></li>
+                <li id="menuReport" onclick="window.switchSection('Report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트</span></li>
         </ul>
         <div style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
@@ -120,6 +121,42 @@
         <!-- Content Area -->
         <div class="content-area">
             
+            <!-- SECTION: FOLLOW-UP MANAGEMENT -->
+            <div id="sectionFollowUp" class="hidden reveal">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-file-circle-check" style="color: var(--primary);"></i> 사후관리 현황 (결과/보건증 수령)</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">근로자들의 결과지 및 보건증 수령 상태를 관리합니다.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-toolbar">
+                        <div style="display: flex; gap: 15px;">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="followSearchInput" placeholder="이름 또는 현장 검색..." onkeyup="window.renderFollowUpTable()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 20%">소속 현장</th>
+                                <th style="width: 20%">성함</th>
+                                <th style="width: 20%">검진종류</th>
+                                <th style="width: 20%">수령 상태</th>
+                                <th style="width: 20%; text-align: center;">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="followUpList">
+                            <tr><td colspan="5" style="text-align: center; color: #999; padding: 30px 0;">데이터를 불러오고 있습니다...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- SECTION 1: REGISTRATION -->
             <div id="sectionRegistration" class="reveal">
                 <!-- Generate Card -->
@@ -435,6 +472,10 @@
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">결과 완료</p>
                         <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #8b5cf6;">0</h2>
                     </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #06b6d4;">
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">수령 완료</p>
+                        <h2 id="receivedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #06b6d4;">0</h2>
+                    </div>
                     <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f59e0b;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">재검 대상자</p>
                         <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f59e0b;">0</h2>
@@ -513,30 +554,21 @@
     let allHospitals = [];
 
     // Section Switching logic
-    window.switchSection = (section) => {
-        const regSec = document.getElementById("sectionRegistration");
-        const statusSec = document.getElementById("sectionStatus");
-        const reportSec = document.getElementById("sectionReport");
-        const menuReg = document.getElementById("menuReg");
-        const menuStatus = document.getElementById("menuStatus");
-        const menuReport = document.getElementById("menuReport");
+    window.switchSection = (id) => {
+        const sections = ['Registration', 'Status', 'FollowUp', 'Report'];
+        sections.forEach(s => {
+            const el = document.getElementById('section' + s);
+            if (el) el.classList.add('hidden');
+            const menu = document.getElementById('menu' + s);
+            if (menu) menu.classList.remove('active');
+        });
 
-        // Hide all
-        [regSec, statusSec, reportSec].forEach(s => s.classList.add('hidden'));
-        [menuReg, menuStatus, menuReport].forEach(m => m.classList.remove('active'));
+        document.getElementById('section' + id).classList.remove('hidden');
+        document.getElementById('menu' + id).classList.add('active');
 
-        if (section === 'registration') {
-            regSec.classList.remove('hidden');
-            menuReg.classList.add('active');
-        } else if (section === 'status') {
-            statusSec.classList.remove('hidden');
-            menuStatus.classList.add('active');
-            window.renderStatusDashboard();
-        } else if (section === 'report') {
-            reportSec.classList.remove('hidden');
-            menuReport.classList.add('active');
-            window.renderReportDashboard();
-        }
+        if (id === 'Status') window.renderStatusDashboard();
+        if (id === 'FollowUp') window.renderFollowUpTable();
+        if (id === 'Report') window.renderReportDashboard();
     };
 
     // Visualization Logic
@@ -571,7 +603,8 @@
         const total = filtered.length;
         const reservationCount = filtered.filter(w => w.status === '예약완료').length;
         const checkupCount = filtered.filter(w => w.status === '검사완료').length;
-        const resultCount = filtered.filter(w => w.status === '결과완료').length;
+        const resultDoneCount = filtered.filter(w => w.status === '결과완료').length;
+        const receivedCount = filtered.filter(w => w.status === '수령완료').length;
         const recheckTargetCount = filtered.filter(w => w.status === '재검대상자').length;
         const recheckDoneCount = filtered.filter(w => w.status === '재검완료').length;
         const pendingCount = filtered.filter(w => !w.status || w.status === '진행 전').length;
@@ -585,7 +618,8 @@
         document.getElementById('totalCount').innerText = total.toLocaleString();
         document.getElementById('reservationCount').innerText = reservationCount.toLocaleString();
         document.getElementById('completedCount').innerText = checkupCount.toLocaleString();
-        document.getElementById('resultCount').innerText = resultCount.toLocaleString();
+        document.getElementById('resultCount').innerText = resultDoneCount.toLocaleString();
+        document.getElementById('receivedCount').innerText = receivedCount.toLocaleString();
         document.getElementById('recheckTargetCount').innerText = recheckTargetCount.toLocaleString();
         document.getElementById('recheckRate').innerText = recheckRate + '%';
 
@@ -1283,6 +1317,49 @@
     };
     
     window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
+
+    // --- FOLLOW-UP TABLE RENDERING ---
+    window.renderFollowUpTable = (dataArray = null) => {
+        const list = document.getElementById("followUpList");
+        if (!list) return;
+
+        const source = dataArray || allWorkers;
+        const query = document.getElementById("followSearchInput").value.trim().toLowerCase();
+
+        // 사후관리 대상: 결과완료 또는 수령완료 상태인 직원
+        const filtered = source.filter(w => {
+            const matchesStatus = (w.status === '결과완료' || w.status === '수령완료');
+            const matchesQuery = w.name.toLowerCase().includes(query) || (w.site||'').toLowerCase().includes(query);
+            return matchesStatus && matchesQuery;
+        });
+
+        if(filtered.length === 0) {
+            list.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #999; padding: 30px 0;">사후관리 대상자가 없습니다.</td></tr>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(w => {
+            const isReceived = w.status === '수령완료';
+            const badgeBg = isReceived ? '#06b6d4' : '#8b5cf6';
+            const statusLabel = isReceived ? '수령 완료' : '미수령';
+
+            html += `<tr>
+                <td>${w.site || '-'}</td>
+                <td style="font-weight: 600;">${w.name}</td>
+                <td>${w.checkup || '-'}</td>
+                <td>
+                    <span style="display:inline-block; padding: 4px 10px; border-radius: 6px; background: ${badgeBg}15; color: ${badgeBg}; font-size: 0.85rem; font-weight: 700; border: 1px solid ${badgeBg}30;">
+                        ${statusLabel}
+                    </span>
+                </td>
+                <td style="text-align: center;">
+                    ${w.resultFileUrl ? `<a href="${w.resultFileUrl}" target="_blank" class="btn-primary" style="padding: 5px 12px; font-size: 0.85rem; text-decoration: none; display: inline-block;">파일확인</a>` : `<button class="btn-outline" disabled style="padding: 5px 12px; font-size: 0.85rem; opacity: 0.5;">파일없음</button>`}
+                </td>
+            </tr>`;
+        });
+        list.innerHTML = html;
+    };
 </script>
 </body>
 </html>

@@ -436,6 +436,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
@@ -448,6 +449,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const storage = firebase.storage(); // Storage 초기화 추가
 
     // Section Switching
     window.switchSection = (target) => {
@@ -1368,6 +1370,87 @@
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 3100);
     }
+
+    // --- 7. FILE UPLOAD (RESULT SHEET) ---
+    window.handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // 파일 크기 제한 (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            showToast("파일 크기는 10MB를 초과할 수 없습니다.", "error");
+            e.target.value = '';
+            return;
+        }
+
+        if (confirm(`'${file.name}' 파일을 업로드하시겠습니까?\n업로드 즉시 '수령 완료' 상태로 변경됩니다.`)) {
+            window.uploadFile(file);
+        } else {
+            e.target.value = '';
+        }
+    };
+
+    window.uploadFile = (file) => {
+        if (!activeWorkerDocId) return;
+
+        const storageRef = storage.ref(`results/${activeWorkerDocId}/${Date.now()}_${file.name}`);
+        const uploadTask = storageRef.put(file);
+
+        const progressArea = document.getElementById('uploadProgressArea');
+        const progressBar = document.getElementById('uploadProgressBar');
+        const statusText = document.getElementById('uploadStatusText');
+        const placeholder = document.getElementById('uploadPlaceholder');
+
+        placeholder.classList.add('hidden');
+        progressArea.classList.remove('hidden');
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                progressBar.style.width = progress + '%';
+                statusText.innerText = `업로드 중... (${Math.round(progress)}%)`;
+            }, 
+            (error) => {
+                console.error("Upload error:", error);
+                showToast("업로드 중 오류가 발생했습니다.", "error");
+                placeholder.classList.remove('hidden');
+                progressArea.classList.add('hidden');
+            }, 
+            async () => {
+                const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                
+                try {
+                    // 1. Firestore 상태 업데이트 (수령완료)
+                    await db.collection("workers").doc(activeWorkerDocId).update({
+                        status: '수령완료',
+                        resultFileUrl: downloadURL,
+                        resultUploadedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // 2. UI 업데이트
+                    showToast("결과지 업로드 및 수령 완료 처리가 완료되었습니다.", "success");
+                    statusText.innerText = "업로드 완료!";
+                    
+                    // My Results 목록 새로고침 (있다면)
+                    if (window.viewResults) window.viewResults();
+                    
+                    // 대시보드 새로고침
+                    window.loadWorkerData(activeWorkerDocId);
+
+                } catch (err) {
+                    console.error("Firestore update error after upload:", err);
+                    showToast("상태 업데이트에 실패했습니다.", "error");
+                } finally {
+                    setTimeout(() => {
+                        placeholder.classList.remove('hidden');
+                        progressArea.classList.add('hidden');
+                        progressBar.style.width = '0%';
+                    }, 2000);
+                }
+            }
+        );
+    };
+
 </script>
 
 </body>

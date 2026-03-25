@@ -250,7 +250,8 @@
 
 <div id="pageLoader">
     <div class="loader"></div>
-    <p style="color: #64748b; font-size: 0.95rem;">포털을 불러오는 중...</p>
+    <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">포털을 불러오는 중...</p>
+    <button id="loaderCloseBtn" style="display: none; margin-top: 20px; background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; color: var(--text-muted);" onclick="this.parentElement.style.display='none'">닫기 (창이 멈춘 경우)</button>
 </div>
 
 <div id="portalContent" class="hidden">
@@ -1660,88 +1661,81 @@
         if (!file) return;
 
         console.log("File selected:", file.name, file.size, file.type);
-
-        // Max 30MB for Firebase Storage
         if (file.size > 30 * 1024 * 1024) {
-            showToast('파일 크기가 30MB를 초과합니다. 더 작은 파일을 선택해주세요.', 'error');
+            showToast('파일 크기가 30MB를 초과합니다.', 'error');
             input.value = '';
             return;
         }
 
         const loader = document.getElementById('pageLoader');
+        const lt = loader ? loader.querySelector('p') : null;
+        const lcb = document.getElementById('loaderCloseBtn');
+        
+        // Watchdog & Escape Hatch
+        let watchdog = null;
+        let escapeHatch = null;
+        
         if (loader) {
             loader.style.display = 'flex';
-            const lt = loader.querySelector('p');
-            if (lt) lt.innerText = '로그인 확인 중...';
+            if (lt) lt.innerText = '준비 중...';
+            if (lcb) lcb.style.display = 'none';
+            
+            // Show close button after 6 seconds if still loading
+            escapeHatch = setTimeout(() => {
+                if (lcb) lcb.style.display = 'block';
+            }, 6000);
+
+            // Force close after 45 seconds (Definite safety)
+            watchdog = setTimeout(() => {
+                if (loader.style.display === 'flex') {
+                    console.warn("Watchdog forced loader close");
+                    loader.style.display = 'none';
+                    showToast('업로드 시간이 너무 오래 걸려 중단되었습니다. 다시 시도해 주세요.', 'error');
+                }
+            }, 45000);
         }
 
         try {
             const user = auth.currentUser;
-            if (!user) throw new Error('로그인이 필요합니다. 페이지를 새로고침 해보세요.');
+            if (!user) throw new Error('로그인이 필요합니다.');
             
-            if (loader) loader.querySelector('p').innerText = '진행 상황 확인 중...';
+            if (lt) lt.innerText = '계정 확인 중...';
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
-            if (!workerDocId) throw new Error('근로자 문서 ID가 계정과 연결되지 않았습니다.');
+            if (!workerDocId) throw new Error('근로자 문서 ID를 찾을 수 없습니다.');
 
-            // 1. Prepare Optimized OCR Base64 (Only for images)
+            // 1. Optimize image (Memory efficient with Blob URL)
             let ocrBase64 = null;
             if (file.type.startsWith('image/')) {
-                if (loader) {
-                    const lt = loader.querySelector('p');
-                    if (lt) lt.innerText = '이미지 최적화 중...';
-                }
+                if (lt) lt.innerText = '이미지 최적화 중...';
                 const blobUrl = URL.createObjectURL(file);
                 try {
                     ocrBase64 = await normalizeImageForOCR(blobUrl);
-                    // Double check size to be safe for Firestore (800KB limit)
-                    if (ocrBase64 && ocrBase64.length > 800 * 1024) {
-                        console.warn("Optimized image still too large for Firestore, skipping base64 storage");
-                        ocrBase64 = null;
-                    }
-                } catch (e) {
-                    console.warn("OCR normalization failed/skipped:", e);
-                } finally {
-                    URL.revokeObjectURL(blobUrl);
-                }
+                    if (ocrBase64 && ocrBase64.length > 800 * 1024) ocrBase64 = null;
+                } catch (e) { console.warn("OCR norm skip", e); }
+                finally { URL.revokeObjectURL(blobUrl); }
             }
 
-            // 2. Upload Original to Firebase Storage
-            if (loader) {
-                const lt = loader.querySelector('p');
-                if (lt) lt.innerText = '스토리지 업로드 시작...';
-            }
-            
+            // 2. Upload to Storage
+            if (lt) lt.innerText = '파일 업로드 시작...';
             const storagePath = `results/${workerDocId}_${Date.now()}_${file.name}`;
             const storageRef = storage.ref(storagePath);
-            const uploadTask = storageRef.put(file);
+            const uploadTask = storageRef.put(file, { contentType: file.type });
 
-            // Listen for progress
             uploadTask.on('state_changed', 
-                (snapshot) => {
-                    const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                    console.log("Upload progress:", progress, "%");
-                    if (loader) {
-                        const lt = loader.querySelector('p');
-                        if (lt) lt.innerText = `업로드 중... (${progress}%)`;
-                    }
-                }, 
-                (err) => { console.error("Internal Upload Error:", err); }
+                (snap) => {
+                    const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                    if (lt) lt.innerText = `업로드 중... (${pct}%)`;
+                },
+                (err) => { console.error("Upload stream error", err); }
             );
 
-            // Wait for upload completion
-            await uploadTask;
-            console.log("Step 3 complete. File uploaded to storage.");
-            
-            // 4. Update Database
-            if (loader) {
-                const lt = loader.querySelector('p');
-                if (lt) lt.innerText = '결과 데이터를 저장 중...';
-            }
-            console.log("Step 4: Getting URL and updating Firestore");
-            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-            console.log("Download URL obtained:", downloadURL);
+            const snapshot = await uploadTask;
+            if (lt) lt.innerText = '업로드 완료, 주소 확인 중...';
+            const downloadURL = await snapshot.ref.getDownloadURL();
 
+            // 3. Update Firestore
+            if (lt) lt.innerText = '데이터베이스 저장 중...';
             await db.collection('workers').doc(workerDocId).update({
                 resultFileUrl: downloadURL,
                 resultOcrBase64: ocrBase64,
@@ -1751,22 +1745,20 @@
                 status: '수령완료',
                 docsReceived: true
             });
-            console.log("Step 4 complete. Firestore updated.");
 
-            showToast('결과지가 성공적으로 제출되었습니다!', 'success');
-            await renderResultsSection();
-
+            showToast('성공적으로 제출되었습니다!', 'success');
+            // No manual renderResultsSection call needed - onSnapshot will trigger it
+            
         } catch (err) {
-            console.error('Final Upload Error Catch:', err);
-            showToast('업로드 중 오류 발생: ' + err.message, 'error');
+            console.error('Final Upload Error:', err);
+            showToast('오류: ' + err.message, 'error');
         } finally {
-            try {
-                if (loader) {
-                    loader.style.display = 'none';
-                    const lt = loader.querySelector('p');
-                    if (lt) lt.innerText = '포털을 불러오는 중...';
-                }
-            } catch (e) { console.error("Loader cleanup error", e); }
+            if (watchdog) clearTimeout(watchdog);
+            if (escapeHatch) clearTimeout(escapeHatch);
+            if (loader) {
+                loader.style.display = 'none';
+                if (lt) lt.innerText = '포털을 불러오는 중...';
+            }
             input.value = '';
         }
     };

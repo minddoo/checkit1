@@ -1374,11 +1374,13 @@
             const user = auth.currentUser;
             if (!user) throw new Error('로그인이 필요합니다.');
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const workerDocId = userDoc.data().workerDocId;
-            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const userData = userDoc.data();
+            if (!userData || !userData.workerDocId) throw new Error('근로자 정보가 연결되지 않았습니다.');
+            
+            const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
             const wData = workerDoc.data();
 
-            if (!wData.resultFileUrl) {
+            if (!wData || !wData.resultFileUrl) {
                 content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
                 return;
             }

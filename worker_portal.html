@@ -6,6 +6,7 @@
     <title>CHECKIT - 근로자 포털 (v1.0.2)</title> <!-- fix nesting bug -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -1091,18 +1092,29 @@
     }
 
     async function translateText(text, targetLang) {
+        if (!text || targetLang === 'ko') return text;
         try {
-            // Using Google's public gtx endpoint for demonstration
-            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data && data[0]) {
-                return data[0].map(x => x[0]).join('');
+            // Split text into chunks if it's too long (limit ~2000 chars for GET)
+            const MAX_CHUNK = 1000;
+            const chunks = [];
+            for (let i = 0; i < text.length; i += MAX_CHUNK) {
+                chunks.push(text.substring(i, i + MAX_CHUNK));
             }
-            return null;
+
+            const translatedChunks = await Promise.all(chunks.map(async (chunk) => {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data && data[0]) {
+                    return data[0].map(x => x[0]).join('');
+                }
+                return chunk;
+            }));
+
+            return translatedChunks.join('\n');
         } catch (e) {
             console.error("Translation error:", e);
-            return null;
+            return text;
         }
     }
 
@@ -1342,7 +1354,7 @@
     };
 
     // Translation Logic
-    window.openTranslationModal = () => {
+    window.openTranslationModal = async () => {
         const modal = document.getElementById('translationModalOverlay');
         const content = document.getElementById('translationContent');
         const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
@@ -1351,36 +1363,90 @@
         content.innerHTML = `
             <div style="text-align: center; padding: 30px; color: #94a3b8;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <p>번역 중입니다... (Translating to ${prefLang.toUpperCase()})</p>
+                <p id="ocrStatusText">결과지 이미지를 분석하는 중입니다...</p>
+                <div id="ocrProgressBar" style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 15px; overflow: hidden;">
+                    <div id="ocrProgressInner" style="width: 0%; height: 100%; background: var(--primary); transition: 0.3s;"></div>
+                </div>
             </div>
         `;
-        
-        setTimeout(() => {
-            const translations = {
-                ko: { title: "건강검진 주요 결과", items: ["비만: 정상", "고혈압: 주의", "당뇨: 정상", "추가 소견: 충분한 휴식 필요"] },
-                en: { title: "Main Medical Results", items: ["Obesity: Normal", "Blood Pressure: Caution", "Diabetes: Normal", "Doctors Note: Rest required"] },
-                vn: { title: "Kết quả kiểm tra sức khỏe chính", items: ["Béo phì: Bình thường", "Huyết áp: Chú ý", "Tiểu đường: Bình thường", "Ghi chú: Cần nghỉ ngơi"] },
-                cn: { title: "主要健康检查结果", items: ["肥胖：正常", "高血压：注意", "糖尿病：正常", "医生提示：需要充分休息"] }
-            };
-            
-            const t = translations[prefLang] || translations.en;
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const wData = workerDoc.data();
+
+            if (!wData.resultFileUrl) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
+                return;
+            }
+
+            // OCR Start
+            const worker = await Tesseract.createWorker('kor', 1, {
+                logger: m => {
+                    if (m.status === 'recognizing text') {
+                        const pct = Math.round(m.progress * 100);
+                        const progressEl = document.getElementById('ocrProgressInner');
+                        const statusEl = document.getElementById('ocrStatusText');
+                        if (progressEl) progressEl.style.width = pct + '%';
+                        if (statusEl) statusEl.innerText = `텍스트 판독 중... (${pct}%)`;
+                    }
+                }
+            });
+
+            const { data: { text } } = await worker.recognize(wData.resultFileUrl);
+            await worker.terminate();
+
+            if (!text || text.trim().length === 0) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">이미지에서 텍스트를 읽을 수 없습니다. 선명한 사진을 다시 업로드해 주세요.</div>';
+                return;
+            }
+
+            // Translation Start
+            document.getElementById('ocrStatusText').innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
+            const translated = await translateText(text, prefLang);
+
+            // Display Results
+            const langName = { ko: '한국어', en: 'English', cn: 'Chinese', vn: 'Vietnamese' }[prefLang] || prefLang;
             
             content.innerHTML = `
-                <h4 style="margin-bottom: 15px; color: var(--primary); border-bottom: 2px solid #ddd6fe; padding-bottom: 10px;">
-                    <i class="fa-solid fa-file-invoice"></i> ${t.title}
-                </h4>
-                <ul style="list-style: none; padding: 0;">
-                    ${t.items.map(item => `
-                        <li style="padding: 10px; background: white; margin-bottom: 8px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.9rem; font-weight: 600;">
-                            <i class="fa-solid fa-check" style="color: #10b981; margin-right: 8px;"></i> ${item}
-                        </li>
-                    `).join('')}
-                </ul>
-                <div style="margin-top: 15px; background: #fffbeb; padding: 12px; border-radius: 8px; font-size: 0.8rem; color: #92400e; border: 1px solid #fef3c7;">
-                    <i class="fa-solid fa-circle-exclamation"></i> <strong>Note:</strong> Re-examination is recommended for blood pressure.
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-file-lines"></i> 원본 텍스트 (Original Text)
+                        </h4>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; max-height: 200px; overflow-y: auto; line-height: 1.6; white-space: pre-line;">
+                            ${text}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-language"></i> 번역된 결과 (Translated - ${langName})
+                        </h4>
+                        <div style="background: #f5f3ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd6fe; font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #4338ca;">
+                            ${translated}
+                        </div>
+                    </div>
+                    <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`')}\`)" style="width: 100%; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-solid fa-copy"></i> 번역 내용 복사하기
+                    </button>
                 </div>
             `;
-        }, 1500);
+
+        } catch (e) {
+            console.error('Translation process error:', e);
+            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">오류 발생: ${e.message}</div>`;
+        }
+    };
+
+    window.copyTranslationToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('복사되었습니다!', 'success');
+        }).catch(err => {
+            showToast('복사 실패', 'error');
+        });
     };
 
     async function updateStatus(newStatus) {

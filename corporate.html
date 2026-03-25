@@ -8,27 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="assets/js/layout-loader.js" defer></script>
 </head>
 <body>
-    <header id="main-header">
-        <div class="container">
-            <a href="index.html" class="logo">
-                <img src="assets/로고2.png" alt="CHECKIT Logo" class="header-logo">
-                CHECKIT
-            </a>
-            <nav>
-                <div id="language-switcher">
-                    <button class="lang-btn active" data-lang="ko">KR</button>
-                    <button class="lang-btn" data-lang="en">EN</button>
-                    <button class="lang-btn" data-lang="cn">CN</button>
-                    <button class="lang-btn" data-lang="vn">VN</button>
-                </div>
-                <button id="nav-login" class="cta-button-secondary" data-lang-key="nav_login">로그인</button>
-                <button id="nav-mypage" class="cta-button-secondary" style="display: none;" data-lang-key="mypage">마이페이지</button>
-                <button id="nav-logout" class="cta-button-secondary" style="display: none;" data-lang-key="logout">로그아웃</button>
-            </nav>
-        </div>
-    </header>
+    <header id="main-header"></header>
 
     <section id="corporate-hero" class="reveal">
         <div class="container">
@@ -379,11 +362,7 @@
         </div>
     </section>
 
-    <footer id="main-footer" class="section">
-        <div class="container">
-            <p>&copy; 2026 CHECKIT. All rights reserved.</p>
-        </div>
-    </footer>
+    <footer class="site-footer"></footer>
 
     <!-- My Page Overlay -->
     <div id="mypage-overlay"></div>

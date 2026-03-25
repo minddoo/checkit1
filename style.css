@@ -112,37 +112,40 @@ body {
  * 2. Header
  * ------------------- */
 #main-header { 
-    background: var(--glass-bg); 
-    backdrop-filter: blur(12px); 
-    -webkit-backdrop-filter: blur(12px);
-    padding: 15px 0; 
-    border-bottom: 1px solid rgba(0,0,0,0.04); 
+    background: rgba(255, 255, 255, 0.75); 
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    padding: 16px 0; 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
     position: sticky; 
     top: 0; 
     z-index: 1000; 
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 #main-header.scrolled {
-    padding: 10px 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    padding: 12px 0;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
 }
 #main-header .container { display: flex; justify-content: space-between; align-items: center; }
-#main-header nav { display: flex; align-items: center; gap: 15px; z-index: 1001; }
+#main-header nav { display: flex; align-items: center; gap: 20px; z-index: 1001; }
+
 .logo {
     display: flex;
     align-items: center;
-    font-size: 2.0rem; 
+    font-size: 1.8rem; 
     font-weight: 800;
-    color: var(--primary-color);
+    color: var(--primary-dark);
     text-decoration: none;
-    position: relative; 
-    overflow: hidden; 
+    letter-spacing: -0.5px;
+    transition: transform 0.3s ease;
 }
+.logo:hover { transform: scale(1.02); }
 
 .header-logo {
-    height: 4.0rem;
-    margin-right: -10px;
-    vertical-align: middle;
+    height: 3.5rem;
+    margin-right: -8px;
+    filter: drop-shadow(0 4px 6px rgba(46, 204, 113, 0.1));
 }
 
 /* Logo Shine Animation */
@@ -162,12 +165,49 @@ body {
     animation: shine-effect 1s ease-in-out 1.5s infinite; 
 }
 
-#language-switcher { text-align: right; } 
-#language-switcher .lang-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 8px 15px; margin-left: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
-#language-switcher .lang-btn.active { background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color); }
+#language-switcher { 
+    display: flex;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 4px;
+    border-radius: 12px;
+} 
+#language-switcher .lang-btn { 
+    background: transparent; 
+    border: none; 
+    border-radius: 8px; 
+    padding: 6px 14px; 
+    cursor: pointer; 
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
+}
+#language-switcher .lang-btn.active { 
+    background-color: var(--white); 
+    color: var(--primary-dark); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+#language-switcher .lang-btn:hover:not(.active) {
+    background: rgba(0,0,0,0.03);
+}
 
-#login-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 8px 15px; margin-left: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s; color: var(--text-color); }
-#login-btn:hover { background-color: var(--primary-color); color: var(--white); border-color: var(--primary-color); }
+.cta-button-secondary { 
+    background-color: #f1fdf5; 
+    color: var(--primary-dark); 
+    padding: 10px 24px; 
+    border-radius: 10px; 
+    text-decoration: none; 
+    font-weight: 700; 
+    border: 1px solid rgba(46, 204, 113, 0.2); 
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); 
+}
+.cta-button-secondary:hover { 
+    background-color: var(--primary-color); 
+    color: var(--white);
+    border-color: var(--primary-color);
+    transform: translateY(-2px); 
+}
 /* ------------------- 
  * 2.5. Hero Section
  * ------------------- */

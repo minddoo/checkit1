@@ -73,6 +73,21 @@
         .toast-icon { font-size: 1.2rem; }
         .toast.success .toast-icon { color: var(--primary); }
         .toast.error .toast-icon { color: var(--danger); }
+
+        /* Notice Bell */
+        .notice-trigger { position: relative; cursor: pointer; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: #f1f5f9; transition: 0.2s; }
+        .notice-trigger:hover { background: #e0e7ff; color: var(--primary); }
+        .notice-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 5px; border-radius: 10px; border: 2px solid white; }
+        .notice-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 10001; display: none; align-items: flex-start; justify-content: flex-end; padding: 70px 30px 0 0; box-sizing: border-box; backdrop-filter: blur(2px); }
+        .notice-modal-overlay.show { display: flex; }
+        .notice-modal { background: white; width: 380px; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); display: flex; flex-direction: column; max-height: 500px; overflow: hidden; animation: slideIn 0.25s ease; }
+        @keyframes slideIn { from { opacity:0; transform: translateY(-12px); } to { opacity:1; transform: translateY(0); } }
+        .notice-modal-header { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+        .notice-list { overflow-y: auto; flex: 1; }
+        .notice-item { padding: 15px 20px; border-bottom: 1px solid #f8fafc; transition: 0.15s; }
+        .notice-item.unread { background: #eef2ff; border-left: 3px solid var(--primary); }
+        .notice-item:hover { background: #f8fafc; }
+        .notice-item-date { font-size: 0.72rem; color: #94a3b8; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -92,10 +107,11 @@
             <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
         </div>
         <ul class="sidebar-menu">
-            <li id="menuReg" class="active" onclick="window.switchSection('Reg')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
-                <li id="menuStatus" onclick="window.switchSection('Status')"><i class="fa-solid fa-list-check"></i> <span>검진 현황</span></li>
-                <li id="menuFollowUp" onclick="window.switchSection('FollowUp')"><i class="fa-solid fa-file-circle-check"></i> <span>사후관리 현황</span></li>
-                <li id="menuReport" onclick="window.switchSection('Report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트</span></li>
+            <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
+            <li id="menuStatus" onclick="window.switchSection('status')"><i class="fa-solid fa-calendar-check"></i> <span>검진 현황 조회</span></li>
+            <li id="menuReport" onclick="window.switchSection('report')"><i class="fa-solid fa-chart-pie"></i> <span>결과 리포트 조회</span></li>
+            <li id="menuFollowUp" onclick="window.switchSection('followup')"><i class="fa-solid fa-clipboard-check"></i> <span>사후관리 현황</span></li>
+            <li id="menuContract" onclick="window.switchSection('contract')"><i class="fa-solid fa-file-signature"></i> <span>계약 및 동의</span></li>
         </ul>
         <div style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
@@ -111,7 +127,11 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 <h2 style="margin: 0; font-size: 1.2rem;">기업 관리자 대시보드</h2>
             </div>
-            <div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="notice-trigger" id="noticeTrigger" onclick="window.toggleNoticeModal()" title="공지사항">
+                    <i class="fa-solid fa-bell" style="font-size:1rem; color:#475569;"></i>
+                    <span id="noticeBadge" class="notice-badge hidden">0</span>
+                </div>
                 <span class="company-badge" id="companyBadgeInfo">
                     <i class="fa-solid fa-building"></i> <span id="displayCompanyName">로딩중...</span>
                 </span>
@@ -121,42 +141,6 @@
         <!-- Content Area -->
         <div class="content-area">
             
-            <!-- SECTION: FOLLOW-UP MANAGEMENT -->
-            <div id="sectionFollowUp" class="hidden reveal">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <div>
-                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-file-circle-check" style="color: var(--primary);"></i> 사후관리 현황 (결과/보건증 수령)</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">근로자들의 결과지 및 보건증 수령 상태를 관리합니다.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="table-toolbar">
-                        <div style="display: flex; gap: 15px;">
-                            <div class="search-box">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" id="followSearchInput" placeholder="이름 또는 현장 검색..." onkeyup="window.renderFollowUpTable()">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 20%">소속 현장</th>
-                                <th style="width: 20%">성함</th>
-                                <th style="width: 20%">검진종류</th>
-                                <th style="width: 20%">수령 상태</th>
-                                <th style="width: 20%; text-align: center;">관리</th>
-                            </tr>
-                        </thead>
-                        <tbody id="followUpList">
-                            <tr><td colspan="5" style="text-align: center; color: #999; padding: 30px 0;">데이터를 불러오고 있습니다...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <!-- SECTION 1: REGISTRATION -->
             <div id="sectionRegistration" class="reveal">
                 <!-- Generate Card -->
@@ -460,29 +444,26 @@
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">총 인원</p>
                         <h2 id="totalCount" style="margin: 8px 0 0; font-size: 1.8rem;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #4f46e5;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #0ea5e9;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">예약 진행</p>
-                        <h2 id="reservationCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #4f46e5;">0</h2>
+                        <h2 id="reservationCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #0ea5e9;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #10b981;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #22c55e;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">검사 완료</p>
-                        <h2 id="completedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #10b981;">0</h2>
+                        <h2 id="completedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #22c55e;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #8b5cf6;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f43f5e;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">결과 완료</p>
-                        <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #8b5cf6;">0</h2>
+                        <h2 id="resultCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f43f5e;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #06b6d4;">
-                        <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">수령 완료</p>
-                        <h2 id="receivedCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #06b6d4;">0</h2>
-                    </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #f59e0b;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #facc15;">
                         <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">재검 대상자</p>
-                        <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #f59e0b;">0</h2>
+                        <h2 id="recheckTargetCount" style="margin: 8px 0 0; font-size: 1.8rem; color: #facc15;">0</h2>
                     </div>
-                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #ef4444; background: #fff1f2;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-top: 4px solid #ff4444; background: #fff1f2; position: relative;">
                         <p style="color: #be123c; font-size: 0.85rem; margin: 0; font-weight: 700;">재검 이행률</p>
-                        <h2 id="recheckRate" style="margin: 8px 0 0; font-size: 1.8rem; color: #e11d48;">0%</h2>
+                        <h2 id="recheckRate" style="margin: 8px 0 0; font-size: 1.8rem; color: #ff4444;">0%</h2>
+                        <div id="recheckSummaryDetail" style="font-size: 0.75rem; color: #be123c; margin-top: 5px; opacity: 0.8;">대상 0 / 완료 0</div>
                     </div>
                 </div>
 
@@ -497,12 +478,229 @@
                     <!-- Site Chart -->
                     <div class="card">
                         <h3><i class="fa-solid fa-chart-column" style="color: #8b5cf6;"></i> 현장별 검진 현황</h3>
-                        <div style="height: 300px;">
+                        <div style="height: 250px; margin-bottom: 20px;">
                             <canvas id="siteProgressChart"></canvas>
                         </div>
+                        <div id="siteProgressBars" style="border-top: 1px solid #f1f5f9; padding-top: 20px;"></div>
                     </div>
                 </div>
             </div> <!-- End sectionReport -->
+
+            <!-- SECTION 4: FOLLOW-UP MANAGEMENT -->
+            <div id="sectionFollowUp" class="hidden reveal">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; gap: 20px; flex-wrap: wrap;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-clipboard-check" style="color: #10b981;"></i> 검진 사후관리 및 서류 수령 현황</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">검진 완료 인원의 결과지 수령 상태와 재검 대상자 안내 현황을 관리합니다.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="btn-outline" onclick="window.renderFollowUpSection()" style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-arrows-rotate"></i> 새로고침
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #f43f5e; display: flex; align-items: center; gap: 20px;">
+                        <div style="background: #fff1f2; color: #f43f5e; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fa-solid fa-file-circle-exclamation"></i>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">결과지 미수령</p>
+                            <h2 id="followupMissingDocs" style="margin: 5px 0 0; font-size: 1.5rem; color: #e11d48;">0</h2>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #facc15; display: flex; align-items: center; gap: 20px;">
+                        <div style="background: #fefce8; color: #facc15; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">재검 안내 필요</p>
+                            <h2 id="followupPendingInfo" style="margin: 5px 0 0; font-size: 1.5rem; color: #d97706;">0</h2>
+                        </div>
+                    </div>
+                    <div class="card" style="margin-bottom: 0; padding: 20px; border-left: 4px solid #22c55e; display: flex; align-items: center; gap: 20px;">
+                        <div style="background: #f0fdf4; color: #22c55e; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0; font-weight: 600;">전체 이행률</p>
+                            <h2 id="followupTotalRate" style="margin: 5px 0 0; font-size: 1.5rem; color: #16a34a;">0%</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <table id="followUpTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%">현장</th>
+                                <th style="width: 15%">성함</th>
+                                <th style="width: 15%">진행 상태</th>
+                                <th style="width: 25%">재검 안내 (보건관리자)</th>
+                                <th style="width: 20%">결과/보건증 수령</th>
+                                <th style="width: 10%; text-align: center;">비고</th>
+                            </tr>
+                        </thead>
+                        <tbody id="followUpList">
+                            <!-- JS populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- End sectionFollowUp -->
+
+            <!-- SECTION 5: CONTRACT & AGREEMENT -->
+            <div id="sectionContract" class="hidden reveal">
+                <div class="card" style="max-width: 800px; margin: 0 auto;">
+                    <!-- Contract Header -->
+                    <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--primary);">
+                        <div style="display: inline-flex; align-items: center; gap: 10px; background: #eef2ff; padding: 8px 20px; border-radius: 20px; margin-bottom: 15px;">
+                            <i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i>
+                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">모바일 전자 계약서</span>
+                        </div>
+                        <h2 style="font-size: 1.4rem; margin: 10px 0 5px; color: #0f172a;">체킷(Check-it) 기업 서비스 이용 계약서</h2>
+                        <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0;">본 계약은 기업 관리자(이하 "관리자")가 외국인 근로자 건강검진 행정 지원 플랫폼 '체킷'(이하 "체킷")을 이용함에 있어, 상호 간의 역할과 책임 범위를 명확히 규정하기 위해 체결합니다.</p>
+                    </div>
+
+                    <!-- Contract Body -->
+                    <div id="contractBody" style="font-size: 0.88rem; line-height: 1.85; color: #334155;">
+                        <!-- 제1조 -->
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="font-size: 1rem; color: #0f172a; margin: 0 0 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-gavel" style="color: var(--primary); font-size: 0.9rem;"></i> 제1조 (플랫폼의 행정 지원 역할)</h4>
+                            <div style="background: #f8fafc; border-radius: 10px; padding: 16px; border-left: 3px solid var(--primary);">
+                                <p style="margin: 0 0 10px;"><strong>비의료적 성격:</strong> '체킷'은 의료기관이 아니며, 의료법 제27조 제3항을 준수합니다. 병원과 어떠한 수익 분배(수수료) 구조도 갖지 않으며, 진료 알선이나 환자 유인 행위를 절대 행하지 않습니다.</p>
+                                <p style="margin: 0;"><strong>서비스 범위:</strong> '체킷'은 외국인 근로자와 병원, 기업 사이의 의사소통 공백을 채우는 비의료 행정 과정만을 수행합니다. (예약 대행, 다국어 번역 지원, 필수 서류 발급 안내, 재검사 일정 관리 등)</p>
+                            </div>
+                        </div>
+                        <!-- 제2조 -->
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="font-size: 1rem; color: #0f172a; margin: 0 0 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-file-medical" style="color: #0ea5e9; font-size: 0.9rem;"></i> 제2조 (의료 데이터 제공 및 면책)</h4>
+                            <div style="background: #f0f9ff; border-radius: 10px; padding: 16px; border-left: 3px solid #0ea5e9;">
+                                <p style="margin: 0 0 10px;"><strong>결과지 구성:</strong> '체킷'은 병원에서 수령한 원본 결과지와 함께 참고용 단순 번역본, 질병분류코드(KCD/ICD)를 제공합니다.</p>
+                                <p style="margin: 0 0 10px;"><strong>의료적 판단:</strong> 제공되는 번역 및 코드는 단순 참고용이며 법적/의학적 효력을 갖지 않습니다. 정확한 진단과 치료는 반드시 해당 병원에 직접 내원하여 의료진과 상담해야 합니다.</p>
+                                <p style="margin: 0;"><strong>책임 분리:</strong> 병원 내 사고, 검진 결과의 의학적 오류, 진료 관련 분쟁에 대해 '체킷'은 어떠한 법적 책임도 지지 않습니다.</p>
+                            </div>
+                        </div>
+                        <!-- 제3조 -->
+                        <div style="margin-bottom: 24px;">
+                            <h4 style="font-size: 1rem; color: #0f172a; margin: 0 0 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-lock" style="color: #8b5cf6; font-size: 0.9rem;"></i> 제3조 (개인정보 위탁 및 보안 확약)</h4>
+                            <div style="background: #f5f3ff; border-radius: 10px; padding: 16px; border-left: 3px solid #8b5cf6;">
+                                <p style="margin: 0 0 10px;"><strong>위수탁 관계:</strong> '관리자'는 근로자의 정보를 '체킷'에 위탁하여 관리하며, '체킷'은 수탁자로서 개인정보 보호법에 따른 기술적 보호 조치를 수행합니다.</p>
+                                <p style="margin: 0;"><strong>관리자 의무:</strong> '관리자'는 시스템을 통해 조회한 근로자의 국적, 외국인등록번호(앞자리), 검진 결과 등을 업무 목적(산업안전보건 관리 등) 외로 유출하거나 오남용해서는 안 됩니다. 이를 위반하여 발생하는 모든 법적 책임은 '관리자'에게 있습니다.</p>
+                            </div>
+                        </div>
+                        <!-- 제4조 -->
+                        <div style="margin-bottom: 30px;">
+                            <h4 style="font-size: 1rem; color: #0f172a; margin: 0 0 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-database" style="color: #10b981; font-size: 0.9rem;"></i> 제4조 (데이터 보존 및 파기)</h4>
+                            <div style="background: #f0fdf4; border-radius: 10px; padding: 16px; border-left: 3px solid #10b981;">
+                                <p style="margin: 0 0 10px;"><strong>보관 기간:</strong> 서비스 이용 과정에서 발생한 모든 예약 정보, 대화 내용, 검진 데이터는 사후 증빙 및 법적 대응을 위해 서비스 탈퇴(또는 계약 종료) 후 5년간 안전하게 보관됩니다.</p>
+                                <p style="margin: 0;"><strong>파기 절차:</strong> 보관 기간이 경과한 데이터는 복구가 불가능한 방법으로 즉시 영구 파기됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Consent Checklist -->
+                    <div style="border-top: 2px solid #e2e8f0; padding-top: 25px; margin-bottom: 25px;">
+                        <h3 style="font-size: 1.05rem; margin-bottom: 18px;"><i class="fa-solid fa-list-check" style="color: var(--primary);"></i> 모바일 계약 동의 체크리스트</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Check 1 -->
+                            <label class="contract-check-item" style="display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: 0.2s;">
+                                <input type="checkbox" class="contract-consent-cb" id="contractConsent1" style="margin-top: 2px; width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0;">
+                                <div>
+                                    <strong style="color: #0f172a;">[필수] 서비스 이용 계약서 확인 및 동의</strong>
+                                    <p style="margin: 6px 0 0; font-size: 0.82rem; color: #64748b; line-height: 1.6;">위 계약서의 모든 조항(비의료 행정 지원 원칙 및 면책 사항)을 숙지하였으며 이에 동의합니다.</p>
+                                </div>
+                            </label>
+                            <!-- Check 2 -->
+                            <label class="contract-check-item" style="display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: 0.2s;">
+                                <input type="checkbox" class="contract-consent-cb" id="contractConsent2" style="margin-top: 2px; width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0;">
+                                <div>
+                                    <strong style="color: #0f172a;">[필수] 기업 담당자 개인정보 수집 및 이용 동의</strong>
+                                    <p style="margin: 6px 0 0; font-size: 0.82rem; color: #64748b; line-height: 1.6;">수집 항목: 성함, 부서, 직책, 연락처, 소속 현장 정보<br>수집 목적: 기업 계정 관리, 근로자 검진 현황 리포트 제공<br>보관 기간: 서비스 이용 종료 또는 담당자 변경 시로부터 5년간 보관 후 파기</p>
+                                </div>
+                            </label>
+                            <!-- Check 3 -->
+                            <label class="contract-check-item" style="display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: 0.2s;">
+                                <input type="checkbox" class="contract-consent-cb" id="contractConsent3" style="margin-top: 2px; width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0;">
+                                <div>
+                                    <strong style="color: #0f172a;">[필수] 개인정보 위탁 및 보안 관리 확약</strong>
+                                    <p style="margin: 6px 0 0; font-size: 0.82rem; color: #64748b; line-height: 1.6;">근로자의 민감정보(국적, 번호 앞자리, 결과 등)를 업무 외 용도로 사용하거나 유출 시 모든 법적 책임은 기업 관리자에게 있음을 확인합니다.</p>
+                                </div>
+                            </label>
+                            <!-- Check 4 -->
+                            <label class="contract-check-item" style="display: flex; align-items: flex-start; gap: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: 0.2s;">
+                                <input type="checkbox" class="contract-consent-cb" id="contractConsent4" style="margin-top: 2px; width: 20px; height: 20px; accent-color: var(--primary); flex-shrink: 0;">
+                                <div>
+                                    <strong style="color: #0f172a;">[필수] 플랫폼 역할 및 책임 제한 확약</strong>
+                                    <p style="margin: 6px 0 0; font-size: 0.82rem; color: #64748b; line-height: 1.6;">'체킷'이 병원 수수료를 취하지 않는 행정 지원 플랫폼임을 인지하며, 의료적 결과에 대한 책임은 병원과 본인(관리자)에게 있음을 확인합니다.</p>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- Select All -->
+                        <label style="display: flex; align-items: center; gap: 10px; margin-top: 14px; cursor: pointer; padding: 10px 0;">
+                            <input type="checkbox" id="contractConsentAll" style="width: 20px; height: 20px; accent-color: var(--primary);">
+                            <span style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">위 약관에 모두 동의합니다</span>
+                        </label>
+                    </div>
+
+                    <!-- Signature Section -->
+                    <div style="border-top: 2px solid #e2e8f0; padding-top: 25px;">
+                        <h3 style="font-size: 1.05rem; margin-bottom: 18px;"><i class="fa-solid fa-pen-nib" style="color: var(--primary);"></i> 서명 및 날인</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div class="input-group">
+                                <label>관리자 성함</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                    <input type="text" id="contractSignerName" placeholder="예: 홍길동">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>계약 체결일</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-calendar-day"></i>
+                                    <input type="date" id="contractSignDate">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Signature Canvas -->
+                        <div style="margin-bottom: 20px;">
+                            <label style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">전자 서명 (아래에 서명해 주세요)</label>
+                            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #fafbfc; position: relative; overflow: hidden;">
+                                <canvas id="signatureCanvas" width="700" height="200" style="width: 100%; cursor: crosshair; touch-action: none;"></canvas>
+                                <button type="button" onclick="window.clearSignature()" style="position: absolute; top: 10px; right: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; color: #64748b; cursor: pointer;">
+                                    <i class="fa-solid fa-eraser"></i> 다시 쓰기
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Already Signed Notice -->
+                        <div id="contractAlreadySigned" style="display: none; text-align: center; padding: 30px; background: #f0fdf4; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 20px;">
+                            <i class="fa-solid fa-circle-check" style="font-size: 2.5rem; color: #22c55e; margin-bottom: 12px;"></i>
+                            <h3 style="color: #16a34a; margin: 0 0 8px;">계약 체결 완료</h3>
+                            <p style="color: #64748b; font-size: 0.9rem; margin: 0;">체결일: <span id="contractSignedDate" style="font-weight: 600;"></span></p>
+                            <p style="color: #64748b; font-size: 0.85rem; margin: 8px 0 0;">서명자: <span id="contractSignedBy" style="font-weight: 600;"></span></p>
+                            <!-- Saved Signature Preview -->
+                            <div id="savedSignatureArea" style="display:none; margin-top:18px;">
+                                <p style="font-size:0.8rem; color:#94a3b8; margin:0 0 8px;">전자 서명</p>
+                                <div style="border:2px dashed #bbf7d0; border-radius:10px; padding:12px; display:inline-block; background:white;">
+                                    <img id="savedSignatureImg" src="" alt="서명" style="max-width:280px; max-height:100px;">
+                                </div>
+                            </div>
+                            <!-- PDF Download Button -->
+                            <div style="margin-top: 18px;">
+                                <button class="btn-primary" style="padding: 12px 30px; font-size: 0.95rem; border-radius: 10px; background: #4F46E5;" onclick="window.downloadContractPDF()">
+                                    <i class="fa-solid fa-file-pdf"></i> 계약서 PDF 다운로드
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Submit -->
+                        <div id="contractSubmitArea" style="display: flex; justify-content: center;">
+                            <button id="contractSubmitBtn" class="btn-primary" style="padding: 14px 50px; font-size: 1rem; border-radius: 10px;" onclick="window.submitContract()">
+                                <i class="fa-solid fa-file-signature"></i> 계약 체결하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End sectionContract -->
             
         </div>
     </div>
@@ -514,6 +712,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <!-- Chart.js for Visualization -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- jsPDF for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- html2canvas for Korean PDF rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- SheetJS for Excel Upload/Download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -554,21 +756,42 @@
     let allHospitals = [];
 
     // Section Switching logic
-    window.switchSection = (id) => {
-        const sections = ['Registration', 'Status', 'FollowUp', 'Report'];
-        sections.forEach(s => {
-            const el = document.getElementById('section' + s);
-            if (el) el.classList.add('hidden');
-            const menu = document.getElementById('menu' + s);
-            if (menu) menu.classList.remove('active');
-        });
+    window.switchSection = (section) => {
+        const regSec = document.getElementById("sectionRegistration");
+        const statusSec = document.getElementById("sectionStatus");
+        const reportSec = document.getElementById("sectionReport");
+        const followupSec = document.getElementById("sectionFollowUp");
+        const contractSec = document.getElementById("sectionContract");
+        const menuReg = document.getElementById("menuReg");
+        const menuStatus = document.getElementById("menuStatus");
+        const menuReport = document.getElementById("menuReport");
+        const menuFollowUp = document.getElementById("menuFollowUp");
+        const menuContract = document.getElementById("menuContract");
 
-        document.getElementById('section' + id).classList.remove('hidden');
-        document.getElementById('menu' + id).classList.add('active');
+        // Hide all
+        [regSec, statusSec, reportSec, followupSec, contractSec].forEach(s => s.classList.add('hidden'));
+        [menuReg, menuStatus, menuReport, menuFollowUp, menuContract].forEach(m => m.classList.remove('active'));
 
-        if (id === 'Status') window.renderStatusDashboard();
-        if (id === 'FollowUp') window.renderFollowUpTable();
-        if (id === 'Report') window.renderReportDashboard();
+        if (section === 'registration') {
+            regSec.classList.remove('hidden');
+            menuReg.classList.add('active');
+        } else if (section === 'status') {
+            statusSec.classList.remove('hidden');
+            menuStatus.classList.add('active');
+            window.renderStatusDashboard();
+        } else if (section === 'report') {
+            reportSec.classList.remove('hidden');
+            menuReport.classList.add('active');
+            window.renderReportDashboard();
+        } else if (section === 'followup') {
+            followupSec.classList.remove('hidden');
+            menuFollowUp.classList.add('active');
+            window.renderFollowUpSection();
+        } else if (section === 'contract') {
+            contractSec.classList.remove('hidden');
+            menuContract.classList.add('active');
+            window.initContractSection();
+        }
     };
 
     // Visualization Logic
@@ -603,8 +826,7 @@
         const total = filtered.length;
         const reservationCount = filtered.filter(w => w.status === '예약완료').length;
         const checkupCount = filtered.filter(w => w.status === '검사완료').length;
-        const resultDoneCount = filtered.filter(w => w.status === '결과완료').length;
-        const receivedCount = filtered.filter(w => w.status === '수령완료').length;
+        const resultCount = filtered.filter(w => w.status === '결과완료').length;
         const recheckTargetCount = filtered.filter(w => w.status === '재검대상자').length;
         const recheckDoneCount = filtered.filter(w => w.status === '재검완료').length;
         const pendingCount = filtered.filter(w => !w.status || w.status === '진행 전').length;
@@ -618,8 +840,7 @@
         document.getElementById('totalCount').innerText = total.toLocaleString();
         document.getElementById('reservationCount').innerText = reservationCount.toLocaleString();
         document.getElementById('completedCount').innerText = checkupCount.toLocaleString();
-        document.getElementById('resultCount').innerText = resultDoneCount.toLocaleString();
-        document.getElementById('receivedCount').innerText = receivedCount.toLocaleString();
+        document.getElementById('resultCount').innerText = resultCount.toLocaleString();
         document.getElementById('recheckTargetCount').innerText = recheckTargetCount.toLocaleString();
         document.getElementById('recheckRate').innerText = recheckRate + '%';
 
@@ -641,31 +862,46 @@
                 labels: ['예약완료', '검사완료', '결과완료', '재검대상', '재검완료', '미진행'],
                 datasets: [{
                     data: [reservationCount, checkupCount, resultCount, recheckTargetCount, recheckDoneCount, pendingCount],
-                    backgroundColor: ['#4f46e5', '#10b981', '#8b5cf6', '#f59e0b', '#0891b2', '#cbd5e1'],
-                    borderWidth: 0
+                    backgroundColor: ['#0ea5e9', '#22c55e', '#f43f5e', '#facc15', '#2dd4bf', '#f1f5f9'],
+                    borderWidth: 3,
+                    borderColor: '#ffffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 }, padding: 15 } }
                 },
-                cutout: '75%'
+                cutout: '72%'
             }
         });
 
-        // 2. Site Progress Chart (Bar) - Still showing all sites for context, or just the filtered one?
-        // Let's show all sites but highlight the filtered one if selected.
+        // Update Recheck Detail Text
+        const recheckDetail = document.getElementById('recheckSummaryDetail');
+        if (recheckDetail) {
+            recheckDetail.innerText = `대상 ${recheckTargetCount.toLocaleString()} / 완료 ${recheckDoneCount.toLocaleString()}`;
+        }
+
+        // 2. Site Progress Chart & Visual Bars
         const siteStats = allSites.map(s => {
             const workersAtSite = allWorkers.filter(w => w.site === s);
+            const total = workersAtSite.length;
+            const completed = workersAtSite.filter(w => ['검사완료', '결과완료', '재검완료'].includes(w.status)).length;
+            const reserved = workersAtSite.filter(w => w.status === '예약완료').length;
+            const recheck = workersAtSite.filter(w => w.status === '재검대상자').length;
+            
             return {
                 site: s,
-                total: workersAtSite.length,
-                completed: workersAtSite.filter(w => ['검사완료', '결과완료', '재검완료'].includes(w.status)).length
+                total: total,
+                completed: completed,
+                reserved: reserved,
+                recheck: recheck,
+                pending: total - completed - reserved - recheck
             };
         });
 
+        // 2-1. Bar Chart (Keep as reference)
         const canvasSite = document.getElementById('siteProgressChart');
         if (!canvasSite) return;
         const ctxSite = canvasSite.getContext('2d');
@@ -676,15 +912,15 @@
                 labels: siteStats.map(d => d.site),
                 datasets: [
                     {
-                        label: '전체 인원',
-                        data: siteStats.map(d => d.total),
-                        backgroundColor: '#e2e8f0',
+                        label: '완료 인원',
+                        data: siteStats.map(d => d.completed),
+                        backgroundColor: '#22c55e',
                         borderRadius: 4
                     },
                     {
-                        label: '완료 인원',
-                        data: siteStats.map(d => d.completed),
-                        backgroundColor: '#8b5cf6',
+                        label: '전체 인원',
+                        data: siteStats.map(d => d.total),
+                        backgroundColor: '#e2e8f0',
                         borderRadius: 4
                     }
                 ]
@@ -702,6 +938,45 @@
                 }
             }
         });
+
+        // 2-2. Rich HTML Progress Bars (Detailed View)
+        const siteBarsContainer = document.getElementById('siteProgressBars');
+        if (siteBarsContainer) {
+            let html = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div style="font-weight:700; font-size:0.85rem; color:#64748b;">현장별 상세 진행도</div>
+                    <div style="display:flex; gap:10px; font-size:0.7rem;">
+                        <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span>완료</span>
+                        <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#0ea5e9;"></span>예약</span>
+                        <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#facc15;"></span>재검</span>
+                    </div>
+                </div>
+            `;
+            if (siteStats.length === 0) {
+                html += '<div style="text-align:center; color:#94a3b8; font-size:0.8rem; padding:20px;">현장 데이터가 없습니다.</div>';
+            } else {
+                siteStats.forEach(s => {
+                    const compPct = s.total > 0 ? Math.round(s.completed / s.total * 100) : 0;
+                    const resPct = s.total > 0 ? Math.round(s.reserved / s.total * 100) : 0;
+                    const recPct = s.total > 0 ? Math.round(s.recheck / s.total * 100) : 0;
+                    
+                    html += `
+                        <div style="margin-bottom: 12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-weight:700; font-size:0.85rem;">${s.site} <small style="color:#94a3b8; font-weight:normal;">(${s.total}명)</small></span>
+                                <span style="font-size:0.8rem; font-weight:800; color:#22c55e;">${compPct}%</span>
+                            </div>
+                            <div style="height:10px; border-radius:5px; background:#f1f5f9; overflow:hidden; display:flex;">
+                                <div style="width:${compPct}%; background:#22c55e; transition:0.6s;"></div>
+                                <div style="width:${resPct}%; background:#0ea5e9; transition:0.6s;"></div>
+                                <div style="width:${recPct}%; background:#facc15; transition:0.6s;"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            siteBarsContainer.innerHTML = html;
+        }
     };
 
     // Workers Status Dashboard Logic
@@ -841,7 +1116,9 @@
             if (!document.getElementById('sectionReport').classList.contains('hidden')) {
                 window.renderReportDashboard();
             } 
-        }, err => {
+            if (!document.getElementById('sectionFollowUp').classList.contains('hidden')) {
+                window.renderFollowUpSection();
+            }        }, err => {
             console.error("Worker load error:", err);
             if (err.message.includes('index')) {
                 showToast("DB 복합 인덱스 오류가 발생했습니다. (수정 완료됨)", "error");
@@ -864,16 +1141,34 @@
             if (userDoc.exists) {
                 currentUserData = userDoc.data();
                 
-                // 마스터거나 일반 직원이면 권한 없음
-                if (currentUserData.role !== 'company_admin') {
-                    alert("기업 관리자만 접근할 수 있는 페이지입니다.");
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlCompanyId = urlParams.get('companyId');
+
+                // 마스터거나 기업 관리자면 허용
+                const isMaster = currentUserData.role === 'admin' || user.email === 'master@checkit.com';
+                const isCompanyAdmin = currentUserData.role === 'company_admin';
+
+                if (!isMaster && !isCompanyAdmin) {
+                    alert("권한이 없는 계정입니다.");
                     window.location.href = 'index.html';
                     return;
                 }
 
-                currentCompanyId = currentUserData.companyId;
+                // 마스터가 URL로 들어온 경우 해당 기업 ID 사용
+                if (isMaster && urlCompanyId) {
+                    currentCompanyId = urlCompanyId;
+                    showToast("마스터 관리자 모드로 접속 중입니다.", "info");
+                } else {
+                    currentCompanyId = currentUserData.companyId;
+                }
+
+                if (!currentCompanyId) {
+                    alert("기업 정보가 연결되지 않았습니다.");
+                    window.location.href = 'index.html';
+                    return;
+                }
                 
-                // 회사 이름만 가져오기 (병원은 별도 컬렉션으로 분리됨)
+                // 회사 이름 가져오기
                 const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
                 if (compDoc.exists) {
                     const data = compDoc.data();
@@ -888,6 +1183,7 @@
                 
                 window.loadWorkers(currentCompanyId);
                 window.loadHospitals(currentCompanyId);
+                window.loadNotices();
 
             } else {
                 auth.signOut();
@@ -1316,50 +1612,561 @@
         reader.readAsBinaryString(file);
     };
     
-    window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
+    // =============================================
+    // 공지사항 (NOTICE) 로직
+    // =============================================
+    window.loadNotices = () => {
+        if (!currentCompanyId) return;
+        const list = document.getElementById('noticeList');
+        const badge = document.getElementById('noticeBadge');
+        if (!list) return;
 
-    // --- FOLLOW-UP TABLE RENDERING ---
-    window.renderFollowUpTable = (dataArray = null) => {
+        // Firestore 'in' + 'orderBy' 복합 인덱스 오류 방지 → 별도 쿼리 2개 실행 후 클라이언트 병합
+        const q1 = db.collection('notices').where('target', '==', 'all').get();
+        const q2 = db.collection('notices').where('target', '==', currentCompanyId).get();
+
+        Promise.all([q1, q2]).then(([snap1, snap2]) => {
+            const docs = [];
+            snap1.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+            snap2.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+
+            // 날짜 내림차순 정렬
+            docs.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+
+            if (docs.length === 0) {
+                list.innerHTML = `<div style="padding:40px; text-align:center; color:#94a3b8; font-size:0.85rem;"><i class="fa-solid fa-bell-slash" style="font-size:2rem; margin-bottom:10px; opacity:0.3; display:block;"></i>공지사항이 없습니다.</div>`;
+                badge.classList.add('hidden');
+                return;
+            }
+
+            let unread = 0;
+            let html = '';
+            docs.forEach(n => {
+                const isRead = n.readBy && n.readBy.includes(currentCompanyId);
+                if (!isRead) unread++;
+                const dateStr = n.createdAt ? new Date(n.createdAt).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short' }) : '';
+                html += `
+                    <div class="notice-item ${isRead ? '' : 'unread'}" onclick="window.markNoticeRead('${n.id}')">
+                        <div style="font-size:0.9rem; font-weight:${isRead ? '400' : '700'}; color:${isRead ? '#64748b' : '#1e293b'}; line-height:1.5;">
+                            ${isRead ? '' : '<span style="background:#4f46e5; color:white; font-size:0.65rem; padding:2px 6px; border-radius:10px; margin-right:6px; vertical-align:middle;">NEW</span>'}
+                            ${n.content}
+                        </div>
+                        <div class="notice-item-date"><i class="fa-regular fa-clock"></i> ${dateStr} · ${n.target === 'all' ? '전체 공지' : '대상 공지'}</div>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+
+            if (unread > 0) {
+                badge.innerText = unread;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }).catch(e => {
+            console.error('Notice load error:', e);
+            list.innerHTML = `<div style="padding:30px; text-align:center; color:#ef4444; font-size:0.85rem;"><i class="fa-solid fa-triangle-exclamation"></i> 공지를 불러오는데 실패했습니다.</div>`;
+        });
+    };
+
+
+    window.markNoticeRead = async (docId) => {
+        if (!currentCompanyId) return;
+        try {
+            await db.collection('notices').doc(docId).update({
+                readBy: firebase.firestore.FieldValue.arrayUnion(currentCompanyId)
+            });
+        } catch(e) { console.warn('Mark read error:', e); }
+    };
+
+    window.toggleNoticeModal = () => {
+        const overlay = document.getElementById('noticeModalOverlay');
+        overlay.classList.toggle('show');
+    };
+
+    // =============================================
+    // 보건 사후관리 (FOLLOW-UP) 로직
+    // =============================================
+    window.renderFollowUpSection = () => {
         const list = document.getElementById("followUpList");
         if (!list) return;
 
-        const source = dataArray || allWorkers;
-        const query = document.getElementById("followSearchInput").value.trim().toLowerCase();
+        // 사후관리 대상: 검진을 받았거나(검사완료 이상), 재검대상자인 인원
+        const targets = allWorkers.filter(w => 
+            ['검사완료', '결과완료', '재검대상자', '재검완료'].includes(w.status)
+        );
 
-        // 사후관리 대상: 결과완료 또는 수령완료 상태인 직원
-        const filtered = source.filter(w => {
-            const matchesStatus = (w.status === '결과완료' || w.status === '수령완료');
-            const matchesQuery = w.name.toLowerCase().includes(query) || (w.site||'').toLowerCase().includes(query);
-            return matchesStatus && matchesQuery;
-        });
-
-        if(filtered.length === 0) {
-            list.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #999; padding: 30px 0;">사후관리 대상자가 없습니다.</td></tr>';
+        if (targets.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 50px 0;">사후관리 대상자가 아직 없습니다. (검진 완료 이후 표시됨)</td></tr>';
+            document.getElementById('followupMissingDocs').innerText = '0';
+            document.getElementById('followupPendingInfo').innerText = '0';
+            document.getElementById('followupTotalRate').innerText = '0%';
             return;
         }
 
-        let html = '';
-        filtered.forEach(w => {
-            const isReceived = w.status === '수령완료';
-            const badgeBg = isReceived ? '#06b6d4' : '#8b5cf6';
-            const statusLabel = isReceived ? '수령 완료' : '미수령';
+        let missingDocs = 0;
+        let pendingInfo = 0;
+        let totalActions = 0;
+        let completedActions = 0;
 
-            html += `<tr>
-                <td>${w.site || '-'}</td>
-                <td style="font-weight: 600;">${w.name}</td>
-                <td>${w.checkup || '-'}</td>
-                <td>
-                    <span style="display:inline-block; padding: 4px 10px; border-radius: 6px; background: ${badgeBg}15; color: ${badgeBg}; font-size: 0.85rem; font-weight: 700; border: 1px solid ${badgeBg}30;">
-                        ${statusLabel}
-                    </span>
-                </td>
-                <td style="text-align: center;">
-                    ${w.resultFileUrl ? `<a href="${w.resultFileUrl}" target="_blank" class="btn-primary" style="padding: 5px 12px; font-size: 0.85rem; text-decoration: none; display: inline-block;">파일확인</a>` : `<button class="btn-outline" disabled style="padding: 5px 12px; font-size: 0.85rem; opacity: 0.5;">파일없음</button>`}
-                </td>
-            </tr>`;
+        let html = '';
+        targets.forEach(w => {
+            const isRecheck = w.status === '재검대상자';
+            const docsDone = !!w.docsReceived;
+            const infoDone = !!w.recheckInformed;
+
+            if (!docsDone) missingDocs++;
+            if (isRecheck) {
+                totalActions++;
+                if (!infoDone) pendingInfo++;
+                else completedActions++;
+            }
+            totalActions++; // 결과지 수령은 공통 액션
+            if (docsDone) completedActions++;
+
+            const statusColor = w.status === '재검대상자' ? '#facc15' : '#22c55e';
+            
+            html += `
+                <tr>
+                    <td style="color:#64748b; font-size:0.85rem;">${w.site || '-'}</td>
+                    <td><strong>${w.name}</strong></td>
+                    <td>
+                        <span style="font-size:0.75rem; padding:2px 8px; border-radius:4px; background:${statusColor}15; color:${statusColor}; border:1px solid ${statusColor}30; font-weight:700;">
+                            ${w.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${isRecheck ? `
+                            <button onclick="window.toggleFollowUpStatus('${w.id}', 'recheckInformed', ${infoDone})" 
+                                    style="padding:6px 12px; font-size:0.75rem; border-radius:6px; background:${infoDone ? '#f0fdf4':'#fffbeb'}; color:${infoDone ? '#16a34a':'#d97706'}; border:1px solid ${infoDone ? '#bbf7d0':'#fef08a'}; width:100%; justify-content:center;">
+                                <i class="fa-solid ${infoDone ? 'fa-circle-check':'fa-triangle-exclamation'}"></i> 
+                                ${infoDone ? '재검 안내 완료' : '재검 안내 필요 (클릭)'}
+                            </button>
+                        ` : '<span style="color:#cbd5e1; font-size:0.8rem;">- 해당 없음 -</span>'}
+                    </td>
+                    <td>
+                        <button onclick="window.toggleFollowUpStatus('${w.id}', 'docsReceived', ${docsDone})" 
+                                style="padding:6px 12px; font-size:0.75rem; border-radius:6px; background:${docsDone ? '#f0fdf4':'#fef2f2'}; color:${docsDone ? '#16a34a':'#e11d48'}; border:1px solid ${docsDone ? '#bbf7d0':'#fecaca'}; width:100%; justify-content:center;">
+                            <i class="fa-solid ${docsDone ? 'fa-file-circle-check':'fa-file-circle-xmark'}"></i> 
+                            ${docsDone ? '수령 완료' : '미수령 (클릭)'}
+                        </button>
+                    </td>
+                    <td style="text-align:center;">
+                        ${w.resultFileUrl ? `
+                            <button onclick="window.viewResultFile('${w.id}')" class="btn-outline" style="padding:4px 12px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; background:#eef2ff; border-color:#c7d2fe; color:#4f46e5; cursor:pointer;">
+                                <i class="fa-solid fa-eye"></i> 결과지 보기
+                            </button>
+                        ` : '<span style="color:#cbd5e1; font-size:0.8rem;">- 미첨부 -</span>'}
+                    </td>
+                </tr>
+            `;
         });
+
         list.innerHTML = html;
+        document.getElementById('followupMissingDocs').innerText = missingDocs.toLocaleString();
+        document.getElementById('followupPendingInfo').innerText = pendingInfo.toLocaleString();
+        const totalRate = totalActions > 0 ? Math.round((completedActions / totalActions) * 100) : 0;
+        document.getElementById('followupTotalRate').innerText = totalRate + '%';
     };
+
+    window.toggleFollowUpStatus = async (id, field, currentVal) => {
+        try {
+            await db.collection('workers').doc(id).update({
+                [field]: !currentVal,
+                lastFollowUpAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast("상태가 업데이트되었습니다.", "success");
+            // onSnapshot이 자동으로 화면을 갱신합니다.
+        } catch (e) {
+            console.error("Follow-up toggle error:", e);
+            showToast("업데이트 실패: " + e.message, "error");
+        }
+    };
+
+    window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
+
+    // ========== CONTRACT & AGREEMENT SECTION ==========
+
+    // --- Signature Pad ---
+    let sigCanvas, sigCtx, sigDrawing = false;
+
+    function initSignaturePad() {
+        sigCanvas = document.getElementById('signatureCanvas');
+        if (!sigCanvas) return;
+        sigCtx = sigCanvas.getContext('2d');
+        sigCtx.lineWidth = 2.5;
+        sigCtx.lineCap = 'round';
+        sigCtx.strokeStyle = '#1e293b';
+
+        const getPos = (e) => {
+            const rect = sigCanvas.getBoundingClientRect();
+            const scaleX = sigCanvas.width / rect.width;
+            const scaleY = sigCanvas.height / rect.height;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+        };
+
+        const start = (e) => { e.preventDefault(); sigDrawing = true; const p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); };
+        const draw = (e) => { if (!sigDrawing) return; e.preventDefault(); const p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); };
+        const stop = () => { sigDrawing = false; };
+
+        sigCanvas.addEventListener('mousedown', start);
+        sigCanvas.addEventListener('mousemove', draw);
+        sigCanvas.addEventListener('mouseup', stop);
+        sigCanvas.addEventListener('mouseleave', stop);
+        sigCanvas.addEventListener('touchstart', start, { passive: false });
+        sigCanvas.addEventListener('touchmove', draw, { passive: false });
+        sigCanvas.addEventListener('touchend', stop);
+    }
+
+    window.clearSignature = () => {
+        if (sigCanvas && sigCtx) {
+            sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+        }
+    };
+
+    function isSignatureEmpty() {
+        if (!sigCanvas) return true;
+        const blank = document.createElement('canvas');
+        blank.width = sigCanvas.width;
+        blank.height = sigCanvas.height;
+        return sigCanvas.toDataURL() === blank.toDataURL();
+    }
+
+    // --- Consent All-Check ---
+    function initContractConsent() {
+        const allCb = document.getElementById('contractConsentAll');
+        const cbs = document.querySelectorAll('.contract-consent-cb');
+        if (!allCb) return;
+        allCb.addEventListener('change', () => {
+            cbs.forEach(cb => cb.checked = allCb.checked);
+        });
+        cbs.forEach(cb => {
+            cb.addEventListener('change', () => {
+                allCb.checked = Array.from(cbs).every(c => c.checked);
+            });
+        });
+    }
+
+    // --- Init Contract Section ---
+    window.initContractSection = async () => {
+        initSignaturePad();
+        initContractConsent();
+
+        // Set today's date as default
+        const dateInput = document.getElementById('contractSignDate');
+        if (dateInput && !dateInput.value) {
+            dateInput.value = new Date().toISOString().split('T')[0];
+        }
+
+        // Check if contract already exists
+        if (!currentCompanyId) return;
+        try {
+            const contractDoc = await db.collection('contracts').doc(currentCompanyId).get();
+            if (contractDoc.exists) {
+                const data = contractDoc.data();
+                document.getElementById('contractAlreadySigned').style.display = 'block';
+                document.getElementById('contractSignedDate').textContent = data.signDate || '';
+                document.getElementById('contractSignedBy').textContent = data.signerName || '';
+                document.getElementById('contractSubmitBtn').disabled = true;
+                document.getElementById('contractSubmitBtn').style.opacity = '0.5';
+                document.getElementById('contractSubmitBtn').textContent = '계약 체결 완료됨';
+                // Show saved signature
+                if (data.signatureImage) {
+                    document.getElementById('savedSignatureImg').src = data.signatureImage;
+                    document.getElementById('savedSignatureArea').style.display = 'block';
+                }
+                // Store contract data for PDF
+                window._contractData = data;
+            }
+        } catch (e) { console.warn('Contract check error:', e); }
+    };
+
+    // --- Submit Contract ---
+    window.submitContract = async () => {
+        // Validate consents
+        const cbs = document.querySelectorAll('.contract-consent-cb');
+        const allChecked = Array.from(cbs).every(c => c.checked);
+        if (!allChecked) return alert('필수 동의 항목에 모두 체크해 주세요.');
+
+        const signerName = document.getElementById('contractSignerName').value.trim();
+        const signDate = document.getElementById('contractSignDate').value;
+        if (!signerName) return alert('관리자 성함을 입력해 주세요.');
+        if (!signDate) return alert('계약 체결일을 선택해 주세요.');
+        if (isSignatureEmpty()) return alert('전자 서명을 해 주세요.');
+
+        if (!confirm(`${signerName}님 명의로 계약을 체결하시겠습니까?\n체결 후에는 수정이 불가합니다.`)) return;
+
+        const loader = document.getElementById('pageLoader');
+        if (loader) loader.style.display = 'flex';
+
+        try {
+            const signatureDataUrl = sigCanvas.toDataURL('image/png');
+
+            await db.collection('contracts').doc(currentCompanyId).set({
+                companyId: currentCompanyId,
+                signerName: signerName,
+                signDate: signDate,
+                signatureImage: signatureDataUrl,
+                consent: {
+                    serviceAgreement: true,
+                    privacyCollection: true,
+                    securityCommitment: true,
+                    liabilityAcknowledgement: true
+                },
+                signedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                signedByUid: auth.currentUser ? auth.currentUser.uid : null
+            });
+
+            showToast('계약이 성공적으로 체결되었습니다!', 'success');
+            
+            // Show completion UI
+            document.getElementById('contractAlreadySigned').style.display = 'block';
+            document.getElementById('contractSignedDate').textContent = signDate;
+            document.getElementById('contractSignedBy').textContent = signerName;
+            document.getElementById('contractSubmitBtn').disabled = true;
+            document.getElementById('contractSubmitBtn').style.opacity = '0.5';
+            document.getElementById('contractSubmitBtn').textContent = '계약 체결 완료됨';
+        } catch (e) {
+            console.error('Contract submit error:', e);
+            showToast('계약 체결 중 오류가 발생했습니다: ' + e.message, 'error');
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    };
+
+    // --- PDF Download (Korean via html2canvas) ---
+    window.downloadContractPDF = async () => {
+        const data = window._contractData;
+        if (!data) return alert('계약서 데이터를 불러올 수 없습니다.');
+
+        const loader = document.getElementById('pageLoader');
+        if (loader) { loader.style.display = 'flex'; document.getElementById('loaderMessage').textContent = 'PDF 생성 중...'; }
+
+        const signedAtStr = data.signedAt ? new Date(data.signedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
+        const sigImg = data.signatureImage ? `<img src="${data.signatureImage}" style="max-width:220px; max-height:80px;">` : '<span style="color:#94a3b8;">서명 없음</span>';
+
+        // Build Korean HTML
+        const container = document.createElement('div');
+        container.style.cssText = 'position:fixed; left:-9999px; top:0; width:800px; padding:50px; background:white; font-family:Pretendard,sans-serif; color:#334155; line-height:1.8; font-size:14px;';
+        container.innerHTML = `
+            <div style="text-align:center; margin-bottom:30px; padding-bottom:20px; border-bottom:3px solid #4F46E5;">
+                <div style="display:inline-block; background:#eef2ff; padding:6px 18px; border-radius:16px; font-size:12px; font-weight:600; color:#4F46E5; margin-bottom:12px;">모바일 전자 계약서</div>
+                <h1 style="font-size:22px; margin:10px 0 6px; color:#0f172a;">체킷(Check-it) 기업 서비스 이용 계약서</h1>
+                <p style="font-size:13px; color:#64748b; margin:0;">본 계약은 기업 관리자(이하 "관리자")가 외국인 근로자 건강검진 행정 지원 플랫폼 '체킷'(이하 "체킷")을 이용함에 있어, 상호 간의 역할과 책임 범위를 명확히 규정하기 위해 체결합니다.</p>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">⚖️ 제1조 (플랫폼의 행정 지원 역할)</h3>
+                <div style="background:#f8fafc; border-radius:8px; padding:14px; border-left:3px solid #4F46E5;">
+                    <p style="margin:0 0 8px;"><b>비의료적 성격:</b> '체킷'은 의료기관이 아니며, 의료법 제27조 제3항을 준수합니다. 병원과 어떠한 수익 분배(수수료) 구조도 갖지 않으며, 진료 알선이나 환자 유인 행위를 절대 행하지 않습니다.</p>
+                    <p style="margin:0;"><b>서비스 범위:</b> '체킷'은 외국인 근로자와 병원, 기업 사이의 의사소통 공백을 채우는 비의료 행정 과정만을 수행합니다. (예약 대행, 다국어 번역 지원, 필수 서류 발급 안내, 재검사 일정 관리 등)</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🏥 제2조 (의료 데이터 제공 및 면책)</h3>
+                <div style="background:#f0f9ff; border-radius:8px; padding:14px; border-left:3px solid #0ea5e9;">
+                    <p style="margin:0 0 8px;"><b>결과지 구성:</b> '체킷'은 병원에서 수령한 원본 결과지와 함께 참고용 단순 번역본, 질병분류코드(KCD/ICD)를 제공합니다.</p>
+                    <p style="margin:0 0 8px;"><b>의료적 판단:</b> 제공되는 번역 및 코드는 단순 참고용이며 법적/의학적 효력을 갖지 않습니다.</p>
+                    <p style="margin:0;"><b>책임 분리:</b> 병원 내 사고, 검진 결과의 의학적 오류, 진료 관련 분쟁에 대해 '체킷'은 어떠한 법적 책임도 지지 않습니다.</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:22px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🔒 제3조 (개인정보 위탁 및 보안 확약)</h3>
+                <div style="background:#f5f3ff; border-radius:8px; padding:14px; border-left:3px solid #8b5cf6;">
+                    <p style="margin:0 0 8px;"><b>위수탁 관계:</b> '관리자'는 근로자의 정보를 '체킷'에 위탁하여 관리하며, '체킷'은 수탁자로서 개인정보 보호법에 따른 기술적 보호 조치를 수행합니다.</p>
+                    <p style="margin:0;"><b>관리자 의무:</b> '관리자'는 근로자의 국적, 외국인등록번호(앞자리), 검진 결과 등을 업무 목적 외로 유출하거나 오남용해서는 안 됩니다. 이를 위반하여 발생하는 모든 법적 책임은 '관리자'에게 있습니다.</p>
+                </div>
+            </div>
+
+            <div style="margin-bottom:28px;">
+                <h3 style="font-size:15px; color:#0f172a; margin:0 0 8px;">🗄️ 제4조 (데이터 보존 및 파기)</h3>
+                <div style="background:#f0fdf4; border-radius:8px; padding:14px; border-left:3px solid #10b981;">
+                    <p style="margin:0 0 8px;"><b>보관 기간:</b> 서비스 이용 과정에서 발생한 모든 예약 정보, 대화 내용, 검진 데이터는 서비스 탈퇴(또는 계약 종료) 후 5년간 안전하게 보관됩니다.</p>
+                    <p style="margin:0;"><b>파기 절차:</b> 보관 기간이 경과한 데이터는 복구가 불가능한 방법으로 즉시 영구 파기됩니다.</p>
+                </div>
+            </div>
+
+            <div style="border-top:2px solid #e2e8f0; padding-top:22px; margin-bottom:22px;">
+                <h3 style="font-size:15px; margin:0 0 14px; color:#0f172a;">✅ 동의 체크리스트</h3>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 서비스 이용 계약서 확인 및 동의</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 기업 담당자 개인정보 수집 및 이용 동의</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 개인정보 위탁 및 보안 관리 확약</div>
+                    <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:10px 12px; font-size:13px;">✔ [필수] 플랫폼 역할 및 책임 제한 확약</div>
+                </div>
+            </div>
+
+            <div style="border-top:2px solid #e2e8f0; padding-top:22px;">
+                <h3 style="font-size:15px; margin:0 0 14px; color:#0f172a;">✍️ 서명 및 날인</h3>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px;">
+                    <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                        <div style="font-size:11px; color:#94a3b8; margin-bottom:3px;">관리자 성함</div>
+                        <div style="font-weight:700; font-size:15px;">${data.signerName || '-'}</div>
+                    </div>
+                    <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                        <div style="font-size:11px; color:#94a3b8; margin-bottom:3px;">계약 체결일</div>
+                        <div style="font-weight:700; font-size:15px;">${data.signDate || '-'}</div>
+                    </div>
+                </div>
+                <div style="margin-bottom:8px; font-size:12px; color:#94a3b8;">서버 기록 시간: ${signedAtStr}</div>
+                <div style="margin-top:12px;">
+                    <div style="font-size:12px; color:#64748b; margin-bottom:6px;">전자 서명</div>
+                    <div style="border:2px dashed #e2e8f0; border-radius:8px; padding:12px; display:inline-block; background:white;">
+                        ${sigImg}
+                    </div>
+                </div>
+                <div style="margin-top:25px; text-align:center; font-size:10px; color:#cbd5e1;">
+                    본 문서는 CHECKIT 플랫폼을 통해 전자 서명된 계약서입니다.
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+
+        try {
+            const canvas = await html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+            document.body.removeChild(container);
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+            const pdfW = pdf.internal.pageSize.getWidth();
+            const pdfH = pdf.internal.pageSize.getHeight();
+            const margin = 10;
+            const usableW = pdfW - margin * 2;
+            const imgW = canvas.width;
+            const imgH = canvas.height;
+            const ratio = usableW / imgW;
+            const scaledH = imgH * ratio;
+            const usableH = pdfH - margin * 2;
+
+            let srcY = 0;
+            let page = 0;
+            while (srcY < imgH) {
+                if (page > 0) pdf.addPage();
+                const sliceH = Math.min(usableH / ratio, imgH - srcY);
+                const sliceCanvas = document.createElement('canvas');
+                sliceCanvas.width = imgW;
+                sliceCanvas.height = sliceH;
+                const sliceCtx = sliceCanvas.getContext('2d');
+                sliceCtx.drawImage(canvas, 0, srcY, imgW, sliceH, 0, 0, imgW, sliceH);
+                const sliceData = sliceCanvas.toDataURL('image/jpeg', 0.95);
+                pdf.addImage(sliceData, 'JPEG', margin, margin, usableW, sliceH * ratio);
+                srcY += sliceH;
+                page++;
+            }
+
+            pdf.save(`CHECKIT_계약서_${data.signerName || ''}_${data.signDate || ''}.pdf`);
+            showToast('PDF 다운로드 완료!', 'success');
+        } catch (e) {
+            console.error('PDF generation error:', e);
+            showToast('PDF 생성 중 오류: ' + e.message, 'error');
+            if (container.parentNode) document.body.removeChild(container);
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    };
+
 </script>
+
+<!-- Notice Modal -->
+<div id="noticeModalOverlay" class="notice-modal-overlay" onclick="if(event.target===this) window.toggleNoticeModal()">
+    <div class="notice-modal">
+        <div class="notice-modal-header">
+            <span style="font-weight:700; font-size:0.95rem; color:#1e293b;"><i class="fa-solid fa-bullhorn" style="color:#6366f1; margin-right:8px;"></i>마스터 공지사항</span>
+            <button onclick="window.toggleNoticeModal()" style="background:none; border:none; padding:4px 8px; color:#94a3b8; font-size:1rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="noticeList" class="notice-list">
+            <div style="padding:40px; text-align:center; color:#94a3b8; font-size:0.85rem;">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+
+<!-- Result File Viewer Modal -->
+<div id="resultViewerModal" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'" style="display:none;">
+    <div class="modal-content" style="max-width:700px;">
+        <div class="modal-header">
+            <h3 style="margin:0; font-size:1.05rem;"><i class="fa-solid fa-file-medical" style="color:#4f46e5;"></i> 근로자 결과지 보기</h3>
+            <button onclick="document.getElementById('resultViewerModal').style.display='none'" style="background:none; border:none; font-size:1.2rem; color:#94a3b8; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body" style="text-align:center;">
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px; text-align:left;">
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">근로자명</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvWorkerName">-</div>
+                </div>
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">파일명</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvFileName">-</div>
+                </div>
+                <div style="background:#f8fafc; border-radius:8px; padding:12px;">
+                    <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:3px;">제출일</div>
+                    <div style="font-weight:700; font-size:0.9rem;" id="rvSubmitDate">-</div>
+                </div>
+            </div>
+            <div id="rvPreviewArea" style="border:2px dashed #e2e8f0; border-radius:12px; padding:20px; margin-bottom:20px; background:#fafbfc; min-height:150px; display:flex; align-items:center; justify-content:center;">
+                <span style="color:#94a3b8;">미리보기 영역</span>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <a id="rvDownloadBtn" href="" download="" class="btn-primary" style="padding:10px 25px; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border-radius:8px;">
+                    <i class="fa-solid fa-download"></i> 다운로드
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.viewResultFile = (workerId) => {
+        const worker = allWorkers.find(w => w.id === workerId);
+        if (!worker || !worker.resultFileUrl) {
+            return alert('결과지를 찾을 수 없습니다.');
+        }
+
+        document.getElementById('rvWorkerName').textContent = worker.name || '-';
+        document.getElementById('rvFileName').textContent = worker.resultFileName || '첨부파일';
+        const submitDate = worker.resultSubmittedAt 
+            ? new Date(worker.resultSubmittedAt.seconds * 1000).toLocaleDateString('ko-KR') 
+            : '-';
+        document.getElementById('rvSubmitDate').textContent = submitDate;
+
+        // Preview area
+        const previewArea = document.getElementById('rvPreviewArea');
+        const isImage = worker.resultFileType && worker.resultFileType.startsWith('image/');
+        const isPdf = worker.resultFileType && worker.resultFileType === 'application/pdf';
+
+        if (isImage) {
+            previewArea.innerHTML = `<img src="${worker.resultFileUrl}" style="max-width:100%; max-height:400px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">`;
+        } else if (isPdf) {
+            previewArea.innerHTML = `
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-file-pdf" style="font-size:4rem; color:#ef4444; margin-bottom:12px;"></i>
+                    <p style="font-weight:600; color:#334155;">${worker.resultFileName || 'PDF 파일'}</p>
+                    <p style="font-size:0.8rem; color:#94a3b8;">PDF 파일은 다운로드하여 확인해 주세요</p>
+                </div>
+            `;
+        } else {
+            previewArea.innerHTML = `
+                <div style="text-align:center;">
+                    <i class="fa-solid fa-file" style="font-size:4rem; color:#64748b; margin-bottom:12px;"></i>
+                    <p style="font-weight:600; color:#334155;">${worker.resultFileName || '첨부파일'}</p>
+                    <p style="font-size:0.8rem; color:#94a3b8;">파일을 다운로드하여 확인해 주세요</p>
+                </div>
+            `;
+        }
+
+        // Download link
+        document.getElementById('rvDownloadBtn').href = worker.resultFileUrl;
+        document.getElementById('rvDownloadBtn').download = worker.resultFileName || 'result';
+
+        document.getElementById('resultViewerModal').style.display = 'flex';
+    };
+</script>

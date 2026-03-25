@@ -1842,9 +1842,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Simplified Worker Signup Handler ---
     const signupFormWorkerSimplified = document.getElementById('signup-form-worker-simplified');
+
+    // --- 전체 동의 체크박스 로직 ---
+    const consentAll = document.getElementById('signup-worker-consent-all');
+    const consentPrivacy = document.getElementById('signup-worker-consent-privacy');
+    const consentAdmin = document.getElementById('signup-worker-consent-admin');
+    const consentMedical = document.getElementById('signup-worker-consent-medical');
+    const consentBoxes = [consentPrivacy, consentAdmin, consentMedical];
+
+    if (consentAll) {
+        consentAll.addEventListener('change', () => {
+            consentBoxes.forEach(cb => { if (cb) cb.checked = consentAll.checked; });
+        });
+        consentBoxes.forEach(cb => {
+            if (cb) cb.addEventListener('change', () => {
+                consentAll.checked = consentBoxes.every(c => c && c.checked);
+            });
+        });
+    }
+
     if (signupFormWorkerSimplified) {
         signupFormWorkerSimplified.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // --- 동의 체크 검증 ---
+            if (!consentPrivacy?.checked || !consentAdmin?.checked || !consentMedical?.checked) {
+                return alert('필수 동의 항목에 모두 체크해 주세요.');
+            }
             const name = document.getElementById('signup-worker-name').value.trim();
             const birthDate = document.getElementById('signup-worker-birth').value;
             const companyKey = document.getElementById('signup-worker-company-key').value.trim().toLowerCase();
@@ -1897,6 +1921,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const user = userCredential.user;
 
                 // 5. Link User and Save Metadata
+                const consentTimestamp = new Date().toISOString();
                 const batch = db.batch();
                 batch.set(db.collection('users').doc(user.uid), {
                     role: 'worker',
@@ -1904,6 +1929,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     name: name,
                     securityKey: securityKey,
                     workerDocId: workerDoc.id,
+                    consent: {
+                        privacy: { agreed: true, agreedAt: consentTimestamp },
+                        adminService: { agreed: true, agreedAt: consentTimestamp },
+                        medicalData: { agreed: true, agreedAt: consentTimestamp }
+                    },
                     lastLogin: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
 

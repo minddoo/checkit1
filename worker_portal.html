@@ -1716,21 +1716,43 @@
                 finally { URL.revokeObjectURL(blobUrl); }
             }
 
-            // 2. Upload to Storage
+            // 2. Upload to Storage (Path must match storage.rules)
             if (lt) lt.innerText = '파일 업로드 시작...';
-            const storagePath = `results/${workerDocId}_${Date.now()}_${file.name}`;
+            const storagePath = `user_files/${user.uid}/results/${Date.now()}_${file.name}`;
             const storageRef = storage.ref(storagePath);
             const uploadTask = storageRef.put(file, { contentType: file.type });
+
+            let lastBytes = 0;
+            let stuckCounter = 0;
+            const stuckTimer = setInterval(() => {
+                if (loader.style.display === 'none') { clearInterval(stuckTimer); return; }
+                if (lt && lt.innerText.includes('%')) {
+                    const currentBytes = uploadTask.snapshot.bytesTransferred;
+                    if (currentBytes === lastBytes && currentBytes < file.size) {
+                        stuckCounter++;
+                        if (stuckCounter > 8) { // 8 seconds without progress
+                            lt.innerText = `업로드 지연 중... (${Math.round((currentBytes/file.size)*100)}%) - 네트워크를 확인해 주세요.`;
+                        }
+                    } else {
+                        stuckCounter = 0;
+                    }
+                    lastBytes = currentBytes;
+                }
+            }, 1000);
 
             uploadTask.on('state_changed', 
                 (snap) => {
                     const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
                     if (lt) lt.innerText = `업로드 중... (${pct}%)`;
                 },
-                (err) => { console.error("Upload stream error", err); }
+                (err) => { 
+                    console.error("Upload stream error", err); 
+                    showToast('스토리지 권한 또는 연결 오류: ' + err.message, 'error');
+                }
             );
 
             const snapshot = await uploadTask;
+            clearInterval(stuckTimer);
             if (lt) lt.innerText = '업로드 완료, 주소 확인 중...';
             const downloadURL = await snapshot.ref.getDownloadURL();
 

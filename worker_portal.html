@@ -1445,8 +1445,10 @@
             let rawImageSource = wData.resultFileUrl;
             let processingImage = null;
 
-            // PDF 파일인 경우 OCR 가능하도록 이미지로 변환
-            if (wData.resultFileType === 'application/pdf') {
+            // Prefer the optimized base64 for OCR to bypass CORS entirely
+            if (wData.resultOcrBase64) {
+                processingImage = wData.resultOcrBase64;
+            } else if (wData.resultFileType === 'application/pdf') {
                 const statusEl = document.getElementById('ocrStatusText');
                 if (statusEl) statusEl.innerText = 'PDF 스마트 판독 준비 중...';
                 
@@ -1476,10 +1478,15 @@
                     throw new Error('PDF 파일 변환에 실패했습니다. 사진 형식으로 가급적 제출해 주세요.');
                 }
             } else {
-                // For regular images, use normalization to handle CORS and format
+                // For older images without resultOcrBase64, try normalization (might still hit CORS)
                 const statusEl = document.getElementById('ocrStatusText');
                 if (statusEl) statusEl.innerText = '이미지 데이터 최적화 중...';
-                processingImage = await normalizeImageForOCR(rawImageSource);
+                try {
+                    processingImage = await normalizeImageForOCR(rawImageSource);
+                } catch (normErr) {
+                    console.error('Normalization error:', normErr);
+                    throw new Error('보안 정책(CORS)으로 인해 이전 업로드된 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
+                }
             }
 
             if (!processingImage) throw new Error('처리할 이미지를 생성할 수 없습니다.');
@@ -1658,32 +1665,50 @@
             const workerDocId = userDoc.data().workerDocId;
             if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
-            // Upload directly to Firebase Storage
-            const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
-            const uploadTask = storageRef.put(file);
-
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Optional: Update progress UI
-                }, 
-                (error) => { throw error; }, 
-                async () => {
-                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                    
-                    await db.collection('workers').doc(workerDocId).update({
-                        resultFileUrl: downloadURL,
-                        resultFileName: file.name,
-                        resultFileType: file.type,
-                        resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        status: '수령완료',
-                        docsReceived: true
-                    });
-
-                    showToast('결과지가 성공적으로 제출되었습니다!', 'success');
-                    renderResultsSection();
-                    loader.style.display = 'none';
+            // Use FileReader to create a small base64 for OCR (Bypasses Storage CORS)
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const fullBase64 = e.target.result;
+                let ocrBase64 = fullBase64;
+                
+                // If it's an image, create a compressed version for Firestore
+                if (file.type.startsWith('image/')) {
+                    try {
+                        ocrBase64 = await normalizeImageForOCR(fullBase64);
+                    } catch (e) {
+                         console.warn("OCR normalization failed during upload, using fallback");
+                    }
                 }
-            );
+
+                // Upload original directly to Firebase Storage
+                const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
+                const uploadTask = storageRef.put(file);
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // Optional: Update progress UI
+                    }, 
+                    (error) => { throw error; }, 
+                    async () => {
+                        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                        
+                        await db.collection('workers').doc(workerDocId).update({
+                            resultFileUrl: downloadURL,
+                            resultOcrBase64: ocrBase64, // Small base64 in Firestore for reliable OCR
+                            resultFileName: file.name,
+                            resultFileType: file.type,
+                            resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: '수령완료',
+                            docsReceived: true
+                        });
+
+                        showToast('결과지가 성공적으로 제출되었습니다!', 'success');
+                        renderResultsSection();
+                        loader.style.display = 'none';
+                    }
+                );
+            };
+            reader.readAsDataURL(file);
         } catch (err) {
             console.error('Upload Error:', err);
             showToast('업로드 실패: ' + err.message, 'error');

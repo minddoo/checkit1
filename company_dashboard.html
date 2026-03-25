@@ -826,7 +826,7 @@
         const total = filtered.length;
         const reservationCount = filtered.filter(w => w.status === '예약완료').length;
         const checkupCount = filtered.filter(w => w.status === '검사완료').length;
-        const resultCount = filtered.filter(w => w.status === '결과완료').length;
+        const resultCount = filtered.filter(w => w.status === '수령완료' || w.status === '결과완료').length;
         const recheckTargetCount = filtered.filter(w => w.status === '재검대상자').length;
         const recheckDoneCount = filtered.filter(w => w.status === '재검완료').length;
         const pendingCount = filtered.filter(w => !w.status || w.status === '진행 전').length;
@@ -859,7 +859,7 @@
         overallChart = new Chart(ctxOverall, {
             type: 'doughnut',
             data: {
-                labels: ['예약완료', '검사완료', '결과완료', '재검대상', '재검완료', '미진행'],
+                labels: ['예약완료', '검사완료', '수령완료', '재검대상', '재검완료', '미진행'],
                 datasets: [{
                     data: [reservationCount, checkupCount, resultCount, recheckTargetCount, recheckDoneCount, pendingCount],
                     backgroundColor: ['#0ea5e9', '#22c55e', '#f43f5e', '#facc15', '#2dd4bf', '#f1f5f9'],
@@ -887,7 +887,7 @@
         const siteStats = allSites.map(s => {
             const workersAtSite = allWorkers.filter(w => w.site === s);
             const total = workersAtSite.length;
-            const completed = workersAtSite.filter(w => ['검사완료', '결과완료', '재검완료'].includes(w.status)).length;
+            const completed = workersAtSite.filter(w => ['검사완료', '결과완료', '수령완료', '재검완료'].includes(w.status)).length;
             const reserved = workersAtSite.filter(w => w.status === '예약완료').length;
             const recheck = workersAtSite.filter(w => w.status === '재검대상자').length;
             
@@ -1030,7 +1030,8 @@
             switch(statusLabel) {
                 case "예약완료": statusColor = "#4f46e5"; break;
                 case "검사완료": statusColor = "#10b981"; break;
-                case "결과완료": statusColor = "#8b5cf6"; break;
+                case "결과완료": 
+                case "수령완료": statusColor = "#8b5cf6"; break;
                 case "재검대상자": statusColor = "#f59e0b"; break;
                 case "재검완료": statusColor = "#0891b2"; break;
             }
@@ -1693,7 +1694,7 @@
 
         // 사후관리 대상: 검진을 받았거나(검사완료 이상), 재검대상자인 인원
         const targets = allWorkers.filter(w => 
-            ['검사완료', '결과완료', '재검대상자', '재검완료'].includes(w.status)
+            ['검사완료', '결과완료', '수령완료', '재검대상자', '재검완료'].includes(w.status)
         );
 
         if (targets.length === 0) {
@@ -1771,10 +1772,23 @@
 
     window.toggleFollowUpStatus = async (id, field, currentVal) => {
         try {
+            const isTurningOn = !currentVal;
             await db.collection('workers').doc(id).update({
-                [field]: !currentVal,
+                [field]: isTurningOn,
                 lastFollowUpAt: firebase.firestore.FieldValue.serverTimestamp()
             });
+
+            // 추가: 재검 안내를 활성화할 때 근로자에게 알림 메시지 발송
+            if (field === 'recheckInformed' && isTurningOn) {
+                await db.collection('messages').add({
+                    workerDocId: id,
+                    sender: 'admin',
+                    text: '건강검진 결과 재검사가 필요합니다. 나의 진행상황 대시보드에서 안내 사항을 확인하시거나, 궁금한 점은 이곳에 남겨주세요.',
+                    type: 'recheck_notice',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+
             showToast("상태가 업데이트되었습니다.", "success");
             // onSnapshot이 자동으로 화면을 갱신합니다.
         } catch (e) {

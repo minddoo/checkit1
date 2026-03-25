@@ -1654,93 +1654,98 @@
             return;
         }
 
-        const user = auth.currentUser;
-        if (!user) return;
-
         const loader = document.getElementById('pageLoader');
         if (loader) {
             loader.style.display = 'flex';
-            const loaderText = loader.querySelector('p');
-            if (loaderText) loaderText.innerText = '결과지 업로드 중...';
+            const lt = loader.querySelector('p');
+            if (lt) lt.innerText = '준비 중...';
         }
 
         try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
             if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
-            // Use FileReader to create a small base64 for OCR (Bypasses Storage CORS)
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const fullBase64 = e.target.result;
-                    let ocrBase64 = fullBase64;
-                    
-                    // If it's an image, create a compressed version for Firestore
-                    if (file.type.startsWith('image/')) {
-                        try {
-                            ocrBase64 = await normalizeImageForOCR(fullBase64);
-                        } catch (e) {
-                             console.warn("OCR normalization failed during upload, using fallback");
-                        }
-                    }
+            // 1. Read file locally as Data URL
+            const fullBase64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (err) => reject(new Error('파일 읽기 실패'));
+                reader.readAsDataURL(file);
+            });
 
-                    // Upload original directly to Firebase Storage
-                    const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
-                    const uploadTask = storageRef.put(file);
-
-                    uploadTask.on('state_changed', 
-                        (snapshot) => {
-                            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                            const loaderText = loader ? loader.querySelector('p') : null;
-                            if (loaderText) loaderText.innerText = `업로드 중... (${progress}%)`;
-                        }, 
-                        (error) => { 
-                            console.error("Storage Error:", error);
-                            showToast('스토리지 업로드 실패', 'error');
-                            if (loader) loader.style.display = 'none';
-                        }, 
-                        async () => {
-                            try {
-                                const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                                
-                                await db.collection('workers').doc(workerDocId).update({
-                                    resultFileUrl: downloadURL,
-                                    resultOcrBase64: ocrBase64, // Small base64 in Firestore for reliable OCR
-                                    resultFileName: file.name,
-                                    resultFileType: file.type,
-                                    resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                                    status: '수령완료',
-                                    docsReceived: true
-                                });
-
-                                showToast('결과지가 성공적으로 제출되었습니다!', 'success');
-                                await renderResultsSection();
-                            } catch (updateErr) {
-                                console.error("Database update error:", updateErr);
-                                showToast('데이터 업데이트 실패', 'error');
-                            } finally {
-                                if (loader) {
-                                    loader.style.display = 'none';
-                                    const loaderText = loader.querySelector('p');
-                                    if (loaderText) loaderText.innerText = '포털을 불러오는 중...';
-                                }
-                            }
-                        }
-                    );
-                } catch (readerErr) {
-                    console.error("Reader Process Error:", readerErr);
-                    showToast('파일 처리 중 오류 발생', 'error');
-                    if (loader) loader.style.display = 'none';
+            // 2. Prepare Optimized OCR Base64
+            let ocrBase64 = fullBase64;
+            if (file.type.startsWith('image/')) {
+                if (loader) {
+                    const lt = loader.querySelector('p');
+                    if (lt) lt.innerText = '이미지 최적화 중...';
                 }
-            };
-            reader.readAsDataURL(file);
+                try {
+                    ocrBase64 = await normalizeImageForOCR(fullBase64);
+                } catch (e) {
+                    console.warn("OCR normalization skipped", e);
+                }
+            }
+
+            // 3. Upload Original to Firebase Storage
+            if (loader) {
+                const lt = loader.querySelector('p');
+                if (lt) lt.innerText = '서버 업로드 시작...';
+            }
+            
+            const storageRef = storage.ref(`results/${workerDocId}_${Date.now()}_${file.name}`);
+            const uploadTask = storageRef.put(file);
+
+            // Listen for progress
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    if (loader) {
+                        const lt = loader.querySelector('p');
+                        if (lt) lt.innerText = `업로드 중... (${progress}%)`;
+                    }
+                }, 
+                (err) => { /* Intercepted by catch later */ }
+            );
+
+            // Wait for upload completion (UploadTask is Promise-like)
+            await uploadTask;
+            
+            // 4. Update Database
+            if (loader) {
+                const lt = loader.querySelector('p');
+                if (lt) lt.innerText = '정보 저장 중...';
+            }
+            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+
+            await db.collection('workers').doc(workerDocId).update({
+                resultFileUrl: downloadURL,
+                resultOcrBase64: ocrBase64,
+                resultFileName: file.name,
+                resultFileType: file.type,
+                resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: '수령완료',
+                docsReceived: true
+            });
+
+            showToast('결과지가 성공적으로 제출되었습니다!', 'success');
+            await renderResultsSection();
+
         } catch (err) {
             console.error('Upload Process Error:', err);
             showToast('업로드 실패: ' + err.message, 'error');
-            if (loader) loader.style.display = 'none';
+        } finally {
+            if (loader) {
+                loader.style.display = 'none';
+                const lt = loader.querySelector('p');
+                if (lt) lt.innerText = '포털을 불러오는 중...';
+            }
+            input.value = '';
         }
-        input.value = '';
     };
 
     window.submitResultToCompany = async function() {

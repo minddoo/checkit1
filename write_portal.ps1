@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+$html = @"
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -241,3 +242,5 @@
     </script>
 </body>
 </html>
+"@
+[System.IO.File]::WriteAllText("c:\Users\pc\.gemini\antigravity\scratch\checkit1-main\worker_portal.html", $html, [System.Text.Encoding]::UTF8)

@@ -1826,7 +1826,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const data = translations[currentLang] || translations['ko'];
                         alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                        window.location.href = 'worker_portal.html';
+                        const workerId = (userDoc.data() && userDoc.data().workerDocId) ? userDoc.data().workerDocId : '';
+                        window.location.href = `worker_portal.html?workerDocId=${workerId}`;
                     } else {
                         alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');
                         auth.signOut();

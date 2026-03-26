@@ -1734,6 +1734,33 @@
 
             let lastBytes = 0;
             let stallCounter = 0;
+            
+            // Expose emergency submit for the button
+            window.forceEmergencySubmit = async () => {
+                if (fallbackBase64) {
+                    clearInterval(stallCheckInterval);
+                    if (lt) lt.innerText = '비상 모드로 전환 중... (DB 직접 저장)';
+                    uploadTask.cancel(); // Stop the hanging task
+                    
+                    try {
+                        await db.collection('workers').doc(workerDocId).update({
+                            resultFileBase64: fallbackBase64,
+                            resultFileName: file.name,
+                            resultFileType: file.type,
+                            resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: '결과완료',
+                            docsReceived: true,
+                            uploadNote: 'Emergency manual fallback (CORS stall)'
+                        });
+                        showToast('비상 제출되었습니다. (CORS 문제 해결 권장)', 'success');
+                        if (loader) loader.style.display = 'none';
+                    } catch (e) {
+                        console.error("Emergency manual failed", e);
+                        showToast('비상 제출 중 오류: ' + e.message, 'error');
+                    }
+                }
+            };
+
             const stallCheckInterval = setInterval(() => {
                 if (loader.style.display === 'none') { clearInterval(stallCheckInterval); return; }
                 
@@ -1742,9 +1769,15 @@
 
                 if (snap.bytesTransferred === lastBytes) {
                     stallCounter++;
-                    if (stallCounter >= 6) { // 6 seconds no progress
+                    if (stallCounter >= 5) { // 5 seconds no progress
                         if (lt) {
-                            lt.innerHTML = `<span style="color:#f87171; font-weight:bold;">업로드 정체 감지 (CORS/네트워크 체크 필요)</span><br>잠시만 기다려 주시거나 취소 후 다시 시도해 주세요.`;
+                            lt.innerHTML = `
+                                <div style="color:#f87171; font-weight:bold; margin-bottom:8px;">업로드 정합/네트워크 지연 발생</div>
+                                서버 연결(CORS) 문제일 가능성이 큽니다.<br>
+                                ${fallbackBase64 ? 
+                                    `<button onclick="window.forceEmergencySubmit()" style="margin-top:12px; background:#f59e0b; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:bold; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.1);"><i class="fa-solid fa-bolt"></i> 바로 데이터베이스로 제출 (비상)</button>` 
+                                    : '잠시 더 기다려 보시거나 대역폭을 확인해 주세요.'}
+                            `;
                         }
                     }
                 } else {

@@ -364,7 +364,6 @@
             <div id="sectionResults" class="hidden reveal">
                 <!-- Persistent hidden file input for all result uploads -->
                 <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
-
                 <div class="card" style="border-left: 4px solid var(--primary);">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
@@ -1763,8 +1762,9 @@
                 resultOcrBase64: ocrBase64,
                 resultFileName: file.name,
                 resultFileType: file.type,
+                resultFileStoragePath: storageRef.fullPath,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: '수령완료',
+                status: '결과완료',
                 docsReceived: true
             });
 
@@ -1856,7 +1856,7 @@
                         <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
                         <h3 style="color:#059669; margin-bottom:6px;">검진 완료 보고됨</h3>
                         <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">파일이 첨부되지 않았습니다. 결과지를 추가로 업로드할 수 있습니다.</p>
-                        <button type="button" onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
+                        <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
                             <i class="fa-solid fa-camera"></i> 결과지 업로드
                         </button>
                     </div>
@@ -1871,7 +1871,7 @@
                         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
                         
                         <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button type="button" onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                            <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
                                 <i class="fa-solid fa-camera"></i> 사진 업로드
                             </button>
                             <button type="button" onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">

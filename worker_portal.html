@@ -1674,202 +1674,101 @@
         const file = input.files[0];
         if (!file) return;
 
-        console.log("File selected:", file.name, file.size, file.type);
+        console.log("File selected (Base64 Mode):", file.name, file.size);
         const isPdf = file.type === 'application/pdf';
-        
-        // Initial limit check
-        if (file.size > 30 * 1024 * 1024) {
-            showToast('파일 크기가 30MB를 초과합니다.', 'error');
-            input.value = '';
-            return;
-        }
 
         const loader = document.getElementById('pageLoader');
         const lt = loader ? loader.querySelector('p') : null;
-        const lcb = document.getElementById('loaderCloseBtn');
         
         if (loader) {
             loader.style.display = 'flex';
-            if (lt) lt.innerText = '준비 중...';
-            if (lcb) lcb.style.display = 'none';
+            if (lt) lt.innerText = '파일 처리 중...';
         }
 
         try {
             const user = auth.currentUser;
             if (!user) throw new Error('로그인이 필요합니다.');
             
-            if (lt) lt.innerText = '계정 확인 중...';
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
-            if (!workerDocId) throw new Error('근로자 문서 ID를 찾을 수 없습니다.');
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
-            // 1. Base64 Fallback & OCR Optimization (for small files or images)
-            let ocrBase64 = null;
-            let fallbackBase64 = null;
+            // 1. Convert to Base64 with Compression fallback
+            let finalBase64 = null;
             
-            if (file.size < 800 * 1024) {
-                if (lt) lt.innerText = '빠른 제출 준비 중...';
-                const reader = new FileReader();
-                fallbackBase64 = await new Promise((resolve) => {
+            if (!isPdf && file.type.startsWith('image/')) {
+                if (lt) lt.innerText = '이미지 최적화 중...';
+                // Image Compression logic using Canvas
+                finalBase64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            // Max dimension 1600px for 1MB safety
+                            const MAX_SIDE = 1600;
+                            if (width > MAX_SIDE || height > MAX_SIDE) {
+                                if (width > height) {
+                                    height = Math.round((height * MAX_SIDE) / width);
+                                    width = MAX_SIDE;
+                                } else {
+                                    width = Math.round((width * MAX_SIDE) / height);
+                                    height = MAX_SIDE;
+                                }
+                            }
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            
+                            // High compression for photos
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                            console.log("Compressed size:", Math.round(dataUrl.length / 1024), "KB");
+                            resolve(dataUrl);
+                        };
+                        img.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.'));
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                // PDF or other - generic base64
+                if (lt) lt.innerText = '파일 읽는 중...';
+                finalBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
                     reader.onload = e => resolve(e.target.result);
                     reader.readAsDataURL(file);
                 });
             }
 
-            if (!isPdf && file.type.startsWith('image/')) {
-                if (lt) lt.innerText = '이미지 최적화 중...';
-                const blobUrl = URL.createObjectURL(file);
-                try {
-                    ocrBase64 = await normalizeImageForOCR(blobUrl);
-                    if (ocrBase64 && ocrBase64.length > 800 * 1024) ocrBase64 = null;
-                } catch (e) { console.warn("OCR norm skip", e); }
-                finally { URL.revokeObjectURL(blobUrl); }
+            // Safety check for Firestore (~1MB)
+            if (finalBase64.length > 1.4 * 1024 * 1024) { // Roughly 1MB limit for document
+                 throw new Error('파일이 너무 커서 저장할 수 없습니다. 더 작은 파일이나 해상도가 낮은 사진을 사용해 주세요.');
             }
 
-            // 2. Upload to Storage with Intensive Monitoring
-            if (lt) lt.innerText = '파일 업로드 시작... (0%)';
-            const storagePath = `user_files/${user.uid}/results/${Date.now()}_${file.name}`;
-            const storageRef = storage.ref(storagePath);
-            const uploadTask = storageRef.put(file, { contentType: file.type });
-
-            let lastBytes = 0;
-            let stallCounter = 0;
-            
-            // Expose emergency submit for the button
-            window.forceEmergencySubmit = async () => {
-                if (fallbackBase64) {
-                    clearInterval(stallCheckInterval);
-                    if (lt) lt.innerText = '비상 모드로 전환 중... (DB 직접 저장)';
-                    uploadTask.cancel(); // Stop the hanging task
-                    
-                    try {
-                        await db.collection('workers').doc(workerDocId).update({
-                            resultFileBase64: fallbackBase64,
-                            resultFileName: file.name,
-                            resultFileType: file.type,
-                            resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            status: '결과완료',
-                            docsReceived: true,
-                            uploadNote: 'Emergency manual fallback (CORS stall)'
-                        });
-                        showToast('비상 제출되었습니다. (CORS 문제 해결 권장)', 'success');
-                        if (loader) loader.style.display = 'none';
-                    } catch (e) {
-                        console.error("Emergency manual failed", e);
-                        showToast('비상 제출 중 오류: ' + e.message, 'error');
-                    }
-                }
-            };
-
-            const stallCheckInterval = setInterval(() => {
-                if (loader.style.display === 'none') { clearInterval(stallCheckInterval); return; }
-                
-                const snap = uploadTask.snapshot;
-                if (!snap) return;
-
-                if (snap.bytesTransferred === lastBytes) {
-                    stallCounter++;
-                    if (stallCounter >= 5) { // 5 seconds no progress
-                        if (lt) {
-                            lt.innerHTML = `
-                                <div style="color:#f87171; font-weight:bold; margin-bottom:8px;">업로드 정합/네트워크 지연 발생</div>
-                                서버 연결(CORS) 문제일 가능성이 큽니다.<br>
-                                ${fallbackBase64 ? 
-                                    `<button onclick="window.forceEmergencySubmit()" style="margin-top:12px; background:#f59e0b; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:bold; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.1);"><i class="fa-solid fa-bolt"></i> 바로 데이터베이스로 제출 (비상)</button>` 
-                                    : '잠시 더 기다려 보시거나 대역폭을 확인해 주세요.'}
-                            `;
-                        }
-                    }
-                } else {
-                    stallCounter = 0;
-                }
-                lastBytes = snap.bytesTransferred;
-            }, 1000);
-
-            uploadTask.on('state_changed', 
-                (snap) => {
-                    const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
-                    if (lt) lt.innerText = `업로드 중... (${pct}%)`;
-                },
-                (err) => {
-                    console.error("Upload Task Error Object:", err);
-                    let msg = '업로드 실패: ' + err.code;
-                    if (err.code === 'storage/unauthorized') msg = '스토리지 권한이 없습니다. (규칙 확인 필요)';
-                    if (err.code === 'storage/retry-limit-exceeded') msg = '서버 연결 시간이 초과되었습니다. (CORS 확인 필요)';
-                    showToast(msg, 'error');
-                    if (lcb) lcb.style.display = 'block';
-                }
-            );
-
-            const snapshot = await uploadTask;
-            clearInterval(stallCheckInterval);
-            if (lt) lt.innerText = '업로드 완료, 주소 확인 중...';
-            const downloadURL = await snapshot.ref.getDownloadURL();
-
-            // 3. Update Firestore (with Base64 fallback if applicable)
-            if (lt) lt.innerText = '데이터베이스 저장 중...';
-            const updateData = {
-                resultFileUrl: downloadURL,
+            // 2. Direct Firestore Update (No Storage)
+            if (lt) lt.innerText = '데이터베이스에 저장 중...';
+            await db.collection('workers').doc(workerDocId).update({
+                resultFileBase64: finalBase64,
                 resultFileName: file.name,
                 resultFileType: file.type,
-                resultFileStoragePath: storageRef.fullPath,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: '결과완료',
-                docsReceived: true
-            };
-
-            if (ocrBase64) updateData.resultOcrBase64 = ocrBase64;
-            if (fallbackBase64) updateData.resultFileBase64 = fallbackBase64;
-
-            await db.collection('workers').doc(workerDocId).update(updateData);
+                docsReceived: true,
+                resultFileUrl: null // Clear storage reference if exists
+            });
 
             showToast('성공적으로 제출되었습니다!', 'success');
             
         } catch (err) {
-            console.error('Final Upload Error Context:', err);
-            
-            // "최대로 가능한 방법": If Storage fails but we have fallbackBase64, try to save JUST THAT.
-            const user = auth.currentUser;
-            if (user && err.code && (err.code.includes('storage/') || err.message.includes('storage'))) {
-                try {
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    const workerDocId = userDoc.data()?.workerDocId;
-                    
-                    // IF we have base64 data and file is small, save it as a "emergency" backup
-                    const reader = new FileReader();
-                    const emergencyBase64 = (file.size < 800 * 1024) ? await new Promise(r => {
-                        reader.onload = e => r(e.target.result);
-                        reader.readAsDataURL(file);
-                    }) : null;
-
-                    if (emergencyBase64 && workerDocId) {
-                        if (lt) lt.innerText = '스토리지 오류 발생, 대체 방식으로 저장 시도 중...';
-                        await db.collection('workers').doc(workerDocId).update({
-                            resultFileBase64: emergencyBase64,
-                            resultFileName: file.name,
-                            resultFileType: file.type,
-                            resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            status: '결과완료',
-                            docsReceived: true,
-                            uploadNote: 'Storage failure, fallback to Firestore'
-                        });
-                        showToast('스토리지 연결 문제로 인해 대체 방식으로 제출되었습니다.', 'success');
-                        return;
-                    }
-                } catch (innerErr) { console.error("Emergency fallback failed", innerErr); }
-            }
-
-            showToast('오류 발생: ' + err.message, 'error');
-            if (lcb) lcb.style.display = 'block';
+            console.error('Upload Error:', err);
+            showToast('오류: ' + err.message, 'error');
         } finally {
-            if (loader) {
-                // DON'T close loader immediately if there was an error, let user see the error message
-                setTimeout(() => {
-                    if (loader.style.display === 'flex' && !lcb.style.display === 'block') {
-                        loader.style.display = 'none';
-                    }
-                }, 3000);
-            }
+            if (loader) loader.style.display = 'none';
             input.value = '';
         }
     };

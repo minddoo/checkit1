@@ -2141,8 +2141,8 @@
 <script>
     window.viewResultFile = (workerId) => {
         const worker = allWorkers.find(w => w.id === workerId);
-        // "Maximum Robust": check both URL and Base64
-        const fileContent = worker.resultFileUrl || worker.resultFileBase64;
+        // Base64 Mode: prioritize Base64 for instant access, URL as fallback
+        const fileContent = worker.resultFileBase64 || worker.resultFileUrl;
         
         if (!worker || !fileContent) {
             return alert('제출된 결과지 파일이 없거나 아직 처리 중입니다.');

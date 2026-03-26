@@ -363,7 +363,7 @@
             <!-- SECTION 3: RESULT MANAGEMENT -->
             <div id="sectionResults" class="hidden reveal">
                 <!-- Persistent hidden file input for all result uploads -->
-                <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
+                <input type="file" id="resultFileInput" style="display: none;" accept="image/*,application/pdf" onchange="handleResultFileUpload(this)">
                 <div class="card" style="border-left: 4px solid var(--primary);">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
@@ -496,7 +496,7 @@
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
         authDomain: "checkit-43341.firebaseapp.com",
         projectId: "checkit-43341",
-        storageBucket: "checkit-43341.firebasestorage.app",
+        storageBucket: "checkit-43341.appspot.com",
         messagingSenderId: "818434232492",
         appId: "1:818434232492:web:713836b01fc11196150f09"
     };
@@ -1448,13 +1448,14 @@
             
             const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
             const wData = workerDoc.data();
+            const fileContent = wData.resultFileUrl || wData.resultFileBase64;
 
-            if (!wData || !wData.resultFileUrl) {
+            if (!wData || !fileContent) {
                 content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
                 return;
             }
 
-            let rawImageSource = wData.resultFileUrl;
+            let rawImageSource = fileContent;
             let processingImage = null;
 
             // Prefer the optimized base64 for OCR to bypass CORS entirely
@@ -1465,12 +1466,21 @@
                 if (statusEl) statusEl.innerText = 'PDF 스마트 판독 준비 중...';
                 
                 try {
-                    // Convert base64 PDF to Uint8Array for pdf.js stability
-                    const base64Content = wData.resultFileUrl.split(',')[1];
-                    const binaryContent = atob(base64Content);
-                    const bytes = new Uint8Array(binaryContent.length);
-                    for (let i = 0; i < binaryContent.length; i++) {
-                        bytes[i] = binaryContent.charCodeAt(i);
+                    let bytes = null;
+                    if (rawImageSource.startsWith('data:')) {
+                        // Data URL
+                        const base64Content = rawImageSource.split(',')[1];
+                        const binaryContent = atob(base64Content);
+                        bytes = new Uint8Array(binaryContent.length);
+                        for (let i = 0; i < binaryContent.length; i++) {
+                            bytes[i] = binaryContent.charCodeAt(i);
+                        }
+                    } else {
+                        // Storage URL - pdf.js fetch and convert to array buffer
+                        if (statusEl) statusEl.innerText = 'PDF 데이터 수신 중...';
+                        const response = await fetch(rawImageSource);
+                        const buffer = await response.arrayBuffer();
+                        bytes = new Uint8Array(buffer);
                     }
 
                     const loadingTask = pdfjsLib.getDocument({ data: bytes });
@@ -1487,17 +1497,22 @@
                     processingImage = canvas.toDataURL('image/png');
                 } catch (pdfErr) {
                     console.error('PDF Conversion Error:', pdfErr);
-                    throw new Error('PDF 파일 변환에 실패했습니다. 사진 형식으로 가급적 제출해 주세요.');
+                    throw new Error('PDF 파일 변환에 실패했습니다. (CORS 또는 파일 오류)');
                 }
             } else {
-                // For older images without resultOcrBase64, try normalization (might still hit CORS)
+                // For images without resultOcrBase64, try normalization
                 const statusEl = document.getElementById('ocrStatusText');
                 if (statusEl) statusEl.innerText = '이미지 데이터 최적화 중...';
                 try {
                     processingImage = await normalizeImageForOCR(rawImageSource);
                 } catch (normErr) {
                     console.error('Normalization error:', normErr);
-                    throw new Error('보안 정책(CORS)으로 인해 이전 업로드된 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
+                    // Fallback: If it's already a data URL, try it directly
+                    if (rawImageSource.startsWith('data:')) {
+                        processingImage = rawImageSource;
+                    } else {
+                        throw new Error('보안 정책(CORS)으로 인해 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
+                    }
                 }
             }
 
@@ -1660,6 +1675,9 @@
         if (!file) return;
 
         console.log("File selected:", file.name, file.size, file.type);
+        const isPdf = file.type === 'application/pdf';
+        
+        // Initial limit check
         if (file.size > 30 * 1024 * 1024) {
             showToast('파일 크기가 30MB를 초과합니다.', 'error');
             input.value = '';
@@ -1670,28 +1688,10 @@
         const lt = loader ? loader.querySelector('p') : null;
         const lcb = document.getElementById('loaderCloseBtn');
         
-        // Watchdog & Escape Hatch
-        let watchdog = null;
-        let escapeHatch = null;
-        
         if (loader) {
             loader.style.display = 'flex';
             if (lt) lt.innerText = '준비 중...';
             if (lcb) lcb.style.display = 'none';
-            
-            // Show close button after 6 seconds if still loading
-            escapeHatch = setTimeout(() => {
-                if (lcb) lcb.style.display = 'block';
-            }, 6000);
-
-            // Force close after 45 seconds (Definite safety)
-            watchdog = setTimeout(() => {
-                if (loader.style.display === 'flex') {
-                    console.warn("Watchdog forced loader close");
-                    loader.style.display = 'none';
-                    showToast('업로드 시간이 너무 오래 걸려 중단되었습니다. 다시 시도해 주세요.', 'error');
-                }
-            }, 45000);
         }
 
         try {
@@ -1703,9 +1703,20 @@
             const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
             if (!workerDocId) throw new Error('근로자 문서 ID를 찾을 수 없습니다.');
 
-            // 1. Optimize image (Memory efficient with Blob URL)
+            // 1. Base64 Fallback & OCR Optimization (for small files or images)
             let ocrBase64 = null;
-            if (file.type.startsWith('image/')) {
+            let fallbackBase64 = null;
+            
+            if (file.size < 800 * 1024) {
+                if (lt) lt.innerText = '빠른 제출 준비 중...';
+                const reader = new FileReader();
+                fallbackBase64 = await new Promise((resolve) => {
+                    reader.onload = e => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (!isPdf && file.type.startsWith('image/')) {
                 if (lt) lt.innerText = '이미지 최적화 중...';
                 const blobUrl = URL.createObjectURL(file);
                 try {
@@ -1715,28 +1726,31 @@
                 finally { URL.revokeObjectURL(blobUrl); }
             }
 
-            // 2. Upload to Storage (Path must match storage.rules)
-            if (lt) lt.innerText = '파일 업로드 시작...';
+            // 2. Upload to Storage with Intensive Monitoring
+            if (lt) lt.innerText = '파일 업로드 시작... (0%)';
             const storagePath = `user_files/${user.uid}/results/${Date.now()}_${file.name}`;
             const storageRef = storage.ref(storagePath);
             const uploadTask = storageRef.put(file, { contentType: file.type });
 
             let lastBytes = 0;
-            let stuckCounter = 0;
-            const stuckTimer = setInterval(() => {
-                if (loader.style.display === 'none') { clearInterval(stuckTimer); return; }
-                if (lt && lt.innerText.includes('%')) {
-                    const currentBytes = uploadTask.snapshot.bytesTransferred;
-                    if (currentBytes === lastBytes && currentBytes < file.size) {
-                        stuckCounter++;
-                        if (stuckCounter > 8) { // 8 seconds without progress
-                            lt.innerText = `업로드 지연 중... (${Math.round((currentBytes/file.size)*100)}%) - 네트워크를 확인해 주세요.`;
+            let stallCounter = 0;
+            const stallCheckInterval = setInterval(() => {
+                if (loader.style.display === 'none') { clearInterval(stallCheckInterval); return; }
+                
+                const snap = uploadTask.snapshot;
+                if (!snap) return;
+
+                if (snap.bytesTransferred === lastBytes) {
+                    stallCounter++;
+                    if (stallCounter >= 6) { // 6 seconds no progress
+                        if (lt) {
+                            lt.innerHTML = `<span style="color:#f87171; font-weight:bold;">업로드 정체 감지 (CORS/네트워크 체크 필요)</span><br>잠시만 기다려 주시거나 취소 후 다시 시도해 주세요.`;
                         }
-                    } else {
-                        stuckCounter = 0;
                     }
-                    lastBytes = currentBytes;
+                } else {
+                    stallCounter = 0;
                 }
+                lastBytes = snap.bytesTransferred;
             }, 1000);
 
             uploadTask.on('state_changed', 
@@ -1744,42 +1758,84 @@
                     const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
                     if (lt) lt.innerText = `업로드 중... (${pct}%)`;
                 },
-                (err) => { 
-                    console.error("Upload stream error", err); 
-                    showToast('스토리지 권한 또는 연결 오류: ' + err.message, 'error');
+                (err) => {
+                    console.error("Upload Task Error Object:", err);
+                    let msg = '업로드 실패: ' + err.code;
+                    if (err.code === 'storage/unauthorized') msg = '스토리지 권한이 없습니다. (규칙 확인 필요)';
+                    if (err.code === 'storage/retry-limit-exceeded') msg = '서버 연결 시간이 초과되었습니다. (CORS 확인 필요)';
+                    showToast(msg, 'error');
+                    if (lcb) lcb.style.display = 'block';
                 }
             );
 
             const snapshot = await uploadTask;
-            clearInterval(stuckTimer);
+            clearInterval(stallCheckInterval);
             if (lt) lt.innerText = '업로드 완료, 주소 확인 중...';
             const downloadURL = await snapshot.ref.getDownloadURL();
 
-            // 3. Update Firestore
+            // 3. Update Firestore (with Base64 fallback if applicable)
             if (lt) lt.innerText = '데이터베이스 저장 중...';
-            await db.collection('workers').doc(workerDocId).update({
+            const updateData = {
                 resultFileUrl: downloadURL,
-                resultOcrBase64: ocrBase64,
                 resultFileName: file.name,
                 resultFileType: file.type,
                 resultFileStoragePath: storageRef.fullPath,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: '결과완료',
                 docsReceived: true
-            });
+            };
+
+            if (ocrBase64) updateData.resultOcrBase64 = ocrBase64;
+            if (fallbackBase64) updateData.resultFileBase64 = fallbackBase64;
+
+            await db.collection('workers').doc(workerDocId).update(updateData);
 
             showToast('성공적으로 제출되었습니다!', 'success');
-            // No manual renderResultsSection call needed - onSnapshot will trigger it
             
         } catch (err) {
-            console.error('Final Upload Error:', err);
-            showToast('오류: ' + err.message, 'error');
+            console.error('Final Upload Error Context:', err);
+            
+            // "최대로 가능한 방법": If Storage fails but we have fallbackBase64, try to save JUST THAT.
+            const user = auth.currentUser;
+            if (user && err.code && (err.code.includes('storage/') || err.message.includes('storage'))) {
+                try {
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    const workerDocId = userDoc.data()?.workerDocId;
+                    
+                    // IF we have base64 data and file is small, save it as a "emergency" backup
+                    const reader = new FileReader();
+                    const emergencyBase64 = (file.size < 800 * 1024) ? await new Promise(r => {
+                        reader.onload = e => r(e.target.result);
+                        reader.readAsDataURL(file);
+                    }) : null;
+
+                    if (emergencyBase64 && workerDocId) {
+                        if (lt) lt.innerText = '스토리지 오류 발생, 대체 방식으로 저장 시도 중...';
+                        await db.collection('workers').doc(workerDocId).update({
+                            resultFileBase64: emergencyBase64,
+                            resultFileName: file.name,
+                            resultFileType: file.type,
+                            resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            status: '결과완료',
+                            docsReceived: true,
+                            uploadNote: 'Storage failure, fallback to Firestore'
+                        });
+                        showToast('스토리지 연결 문제로 인해 대체 방식으로 제출되었습니다.', 'success');
+                        return;
+                    }
+                } catch (innerErr) { console.error("Emergency fallback failed", innerErr); }
+            }
+
+            showToast('오류 발생: ' + err.message, 'error');
+            if (lcb) lcb.style.display = 'block';
         } finally {
-            if (watchdog) clearTimeout(watchdog);
-            if (escapeHatch) clearTimeout(escapeHatch);
             if (loader) {
-                loader.style.display = 'none';
-                if (lt) lt.innerText = '포털을 불러오는 중...';
+                // DON'T close loader immediately if there was an error, let user see the error message
+                setTimeout(() => {
+                    if (loader.style.display === 'flex' && !lcb.style.display === 'block') {
+                        loader.style.display = 'none';
+                    }
+                }, 3000);
             }
             input.value = '';
         }
@@ -1830,7 +1886,9 @@
         }
 
         try {
-            if (w.resultFileUrl) {
+            const hasFile = w.resultFileUrl || w.resultFileBase64;
+            if (hasFile) {
+                const fileSource = w.resultFileUrl || w.resultFileBase64;
                 const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
                 const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
                 
@@ -1840,7 +1898,7 @@
                         <h3 style="color:#059669; margin-bottom:6px;">결과지 제출 완료</h3>
                         <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">파일명: ${w.resultFileName || '첨부파일'}</p>
                         <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">제출일: ${submittedAt}</p>
-                        ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${w.resultFileUrl}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
+                        ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${fileSource}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
                         <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; display:inline-flex; align-items:center; gap:8px; background:var(--dark);">
                             <i class="fa-solid fa-arrow-up-from-bracket"></i> 결과지 다시 올리기
                         </button>

@@ -311,8 +311,8 @@
             <div id="sectionProgress" class="reveal">
                 <!-- Welcome -->
                 <div class="welcome-banner">
-                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
-                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+                    <h2><span id="welcomePre">안녕하세요, </span><span id="welcomeName">-</span> 님 👋</h2>
+                    <p id="bannerSub">나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
                 </div>
 
                 <!-- My Checkup Status -->
@@ -559,7 +559,50 @@
         }
     };
 
-    let chatUnsub = null;
+    window.changePortalLanguage = async function(lang) {
+        console.log("Changing language to:", lang);
+        
+        // Update UI buttons state
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+
+        // Save to Firestore (Workers collection)
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const workerDocId = userDoc.data()?.workerDocId;
+                if (workerDocId) {
+                    await db.collection('workers').doc(workerDocId).update({ prefLang: lang });
+                }
+            } catch (e) { console.error("Lang save error", e); }
+        }
+
+        translateStaticUI(lang);
+    };
+
+    function translateStaticUI(lang) {
+        const trans = {
+            ko: { myProgress: '나의 진행상황', chat: '1:1 대화방', results: '결과 관리', welcome: '안녕하세요, ', bannerSub: '나의 건강검진 현황과 제휴 병원 정보를 확인하세요.' },
+            en: { myProgress: 'My Status', chat: 'Support Chat', results: 'Results', welcome: 'Welcome, ', bannerSub: 'Check your status and partner hospital info.' },
+            cn: { myProgress: '进度查询', chat: '在线咨询', results: '结果查询', welcome: '您好, ', bannerSub: '请确认您的健康检查状态和合作医院信息。' },
+            vn: { myProgress: 'Tiến độ', chat: 'Hỗ trợ 1:1', results: 'Kết quả', welcome: 'Xin chào, ', bannerSub: 'Kiểm tra tình trạng kiểm tra và thông tin bệnh viện.' }
+        };
+        const t = trans[lang] || trans.ko;
+        
+        const menuProgress = document.getElementById('menuProgress');
+        const menuChat = document.getElementById('menuChat');
+        const menuResults = document.getElementById('menuResults');
+        const welcomePre = document.getElementById('welcomePre');
+        const bannerSub = document.getElementById('bannerSub');
+
+        if (menuProgress) menuProgress.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.myProgress}`;
+        if (menuChat) menuChat.innerHTML = `<i class="fa-solid fa-comments"></i> ${t.chat}`;
+        if (menuResults) menuResults.innerHTML = `<i class="fa-solid fa-file-shield"></i> ${t.results}`;
+        if (welcomePre) welcomePre.textContent = t.welcome;
+        if (bannerSub) bannerSub.textContent = t.bannerSub;
+    }
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
@@ -573,7 +616,6 @@
         const paramCompanyId = urlParams.get('companyId');
 
         try {
-            // Check if Master Admin or regular worker
             db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
                 const userData = userDoc.data() || {};
                 const isMaster = user.email === "master@checkit.com";
@@ -581,22 +623,18 @@
                 let workerDocId = userData.workerDocId;
                 let companyId = userData.companyId;
 
-                // Mode: Master Viewing a specific worker
                 if (isMaster && paramWorkerDocId && paramCompanyId) {
                     workerDocId = paramWorkerDocId;
                     companyId = paramCompanyId;
-                    
                     document.getElementById('masterBadge').classList.remove('hidden');
                     document.getElementById('logoutBtn').classList.add('hidden');
                     document.getElementById('closeBtn').classList.remove('hidden');
                 } else if (!userDoc.exists || userData.role !== 'worker') {
-                    console.warn('Worker record not found or invalid role');
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
                     return;
                 }
 
-                // 기본 정보 표시
                 document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
                 document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
 
@@ -612,6 +650,7 @@
                             document.querySelectorAll('.lang-btn').forEach(btn => {
                                 btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
                             });
+                            translateStaticUI(prefLang);
                             renderCheckupStatus(wData);
                         } else {
                             if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);

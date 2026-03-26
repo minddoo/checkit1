@@ -319,10 +319,10 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
-                        <h3>나의 검진 현황</h3>
+                        <h3 id="h_myStatus">나의 검진 현황</h3>
                     </div>
                     <div id="checkupStatus">
-                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                        <div class="loading-text" id="load_status"><i class="fa-solid fa-spinner fa-spin"></i> <span class="t-loading">불러오는 중...</span></div>
                     </div>
                 </div>
 
@@ -330,10 +330,10 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
-                        <h3>제휴 병원 안내</h3>
+                        <h3 id="h_hospitals">제휴 병원 안내</h3>
                     </div>
                     <div id="hospitalList">
-                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                        <div class="loading-text" id="load_hospitals"><i class="fa-solid fa-spinner fa-spin"></i> <span class="t-loading">불러오는 중...</span></div>
                     </div>
                 </div>
 
@@ -341,7 +341,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
-                        <h3>기업 필요 서류</h3>
+                        <h3 id="h_required">기업 필요 서류</h3>
                     </div>
                     <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
                 </div>
@@ -356,8 +356,8 @@
                             <i class="fa-solid fa-comments"></i>
                         </div>
                         <div>
-                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
-                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                            <h4 id="h_chatTitle" style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p id="p_chatStatus" style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
                         </div>
                         <!-- Language Switcher -->
                         <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
@@ -371,7 +371,7 @@
                     <!-- Message Body -->
                     <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
                         <!-- Messages will be injected here -->
-                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
+                        <div class="loading-text" id="load_chat"><i class="fa-solid fa-spinner fa-spin"></i> <span id="t_loadChat">대화 내용을 불러오는 중...</span></div>
                     </div>
 
                     <!-- Input Area -->
@@ -391,21 +391,21 @@
                 <div class="card" style="border-left: 4px solid var(--primary);">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
-                        <h3>기업에 결과지 제출하기</h3>
+                        <h3 id="h_submitResult">기업에 결과지 제출하기</h3>
                     </div>
                     <div id="resultSubmissionArea" style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border);">
                         <!-- Dynamic content -->
                         <div id="noSubmissionUI">
                             <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                            <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
-                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                            <p id="p_noResult" style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                            <p id="p_resultInst" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
                             
                             <div style="display: flex; gap: 10px; justify-content: center;">
                                 <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
-                                    <i class="fa-solid fa-camera"></i> 사진 업로드
+                                    <i class="fa-solid fa-camera"></i> <span id="b_uploadPhoto">사진 업로드</span>
                                 </button>
                                 <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
-                                    <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                                    <i class="fa-solid fa-paper-plane"></i> <span id="b_submitNow">바로 제출하기</span>
                                 </button>
                             </div>
                         </div>
@@ -584,24 +584,73 @@
 
     function translateStaticUI(lang) {
         const trans = {
-            ko: { myProgress: '나의 진행상황', chat: '1:1 대화방', results: '결과 관리', welcome: '안녕하세요, ', bannerSub: '나의 건강검진 현황과 제휴 병원 정보를 확인하세요.' },
-            en: { myProgress: 'My Status', chat: 'Support Chat', results: 'Results', welcome: 'Welcome, ', bannerSub: 'Check your status and partner hospital info.' },
-            cn: { myProgress: '进度查询', chat: '在线咨询', results: '结果查询', welcome: '您好, ', bannerSub: '请确认您的健康检查状态和合作医院信息。' },
-            vn: { myProgress: 'Tiến độ', chat: 'Hỗ trợ 1:1', results: 'Kết quả', welcome: 'Xin chào, ', bannerSub: 'Kiểm tra tình trạng kiểm tra và thông tin bệnh viện.' }
+            ko: { 
+                myProgress: '나의 진행상황', chat: '1:1 대화방', results: '결과 관리', welcome: '안녕하세요, ', 
+                bannerSub: '나의 건강검진 현황과 제휴 병원 정보를 확인하세요.',
+                h_myStatus: '나의 검진 현황', h_hospitals: '제휴 병원 안내', h_required: '기업 필요 서류',
+                h_chatTitle: 'CHECKIT 1:1 케어 센터', p_chatStatus: '온라인 상담 대기 중', chatInput: '궁금한 점을 남겨주세요...',
+                h_submitResult: '기업에 결과지 제출하기', p_noResult: '아직 제출된 결과지가 없습니다.',
+                p_resultInst: '검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.',
+                b_uploadPhoto: '사진 업로드', b_submitNow: '바로 제출하기',
+                t_loading: '불러오는 중...', t_loadChat: '대화 내용을 불러오는 중...'
+            },
+            en: { 
+                myProgress: 'My Status', chat: '1:1 Chat', results: 'Results', welcome: 'Welcome, ', 
+                bannerSub: 'Check your status and partner hospital info.',
+                h_myStatus: 'My Checkup Status', h_hospitals: 'Partner Hospitals', h_required: 'Required Documents',
+                h_chatTitle: 'CHECKIT 1:1 Care Center', p_chatStatus: 'Counselors Online', chatInput: 'Type your message here...',
+                h_submitResult: 'Submit Results', p_noResult: 'No results submitted yet.',
+                p_resultInst: 'Upload a photo of your health checkup result or medical certificate,<br>or click confirm to notify your completion.',
+                b_uploadPhoto: 'Upload Photo', b_submitNow: 'Submit Now',
+                t_loading: 'Loading...', t_loadChat: 'Loading chat history...'
+            },
+            cn: { 
+                myProgress: '我的进度', chat: '1:1 聊天', results: '结果管理', welcome: '您好, ', 
+                bannerSub: '查看您的健康检查状态和合作医院信息。',
+                h_myStatus: '我的检查状态', h_hospitals: '合作医院指南', h_required: '企业所需文件',
+                h_chatTitle: 'CHECKIT 1:1 服务中心', p_chatStatus: '在线咨询中', chatInput: '请输入您的问题...',
+                h_submitResult: '提交检查结果', p_noResult: '尚未提交结果。',
+                p_resultInst: '拍摄并上传您的健康检查结果或健康证,<br>或点击确认按钮通知企业检查已完成。',
+                b_uploadPhoto: '上传照片', b_submitNow: '立即提交',
+                t_loading: '加载中...', t_loadChat: '正在加载对话...'
+            },
+            vn: { 
+                myProgress: 'Tiến độ', chat: 'Trò chuyện 1:1', results: 'Kết quả', welcome: 'Xin chào, ', 
+                bannerSub: 'Kiểm tra tình trạng kiểm tra và thông tin bệnh viện.',
+                h_myStatus: 'Tình trạng kiểm tra', h_hospitals: 'Bệnh viện liên kết', h_required: 'Giấy tờ yêu cầu',
+                h_chatTitle: ' CHECKIT Trung tâm chăm sóc 1:1', p_chatStatus: 'Đang chờ tư vấn trực tuyến', chatInput: 'Vui lòng để lại câu hỏi của bạn...',
+                h_submitResult: 'Nộp kết quả cho doanh nghiệp', p_noResult: 'Chưa có kết quả nào được nộp.',
+                p_resultInst: 'Chụp ảnh và tải lên phiếu kết quả kiểm tra hoặc giấy khám sức khỏe,<br>hoặc nhấn nút xác nhận để thông báo hoàn thành.',
+                b_uploadPhoto: 'Tải ảnh lên', b_submitNow: 'Nộp ngay',
+                t_loading: 'Đang tải...', t_loadChat: 'Đang tải nội dung trò chuyện...'
+            }
         };
         const t = trans[lang] || trans.ko;
         
-        const menuProgress = document.getElementById('menuProgress');
-        const menuChat = document.getElementById('menuChat');
-        const menuResults = document.getElementById('menuResults');
-        const welcomePre = document.getElementById('welcomePre');
-        const bannerSub = document.getElementById('bannerSub');
+        // Sidebar & Banner
+        const ids = ['menuProgress', 'menuChat', 'menuResults', 'welcomePre', 'bannerSub', 
+                     'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle', 
+                     'h_submitResult', 'p_noResult', 'p_resultInst', 
+                     'b_uploadPhoto', 'b_submitNow', 't_loadChat'];
+        
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                if (id === 'menuProgress') el.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.myProgress}`;
+                else if (id === 'menuChat') el.innerHTML = `<i class="fa-solid fa-comments"></i> ${t.chat}`;
+                else if (id === 'menuResults') el.innerHTML = `<i class="fa-solid fa-file-shield"></i> ${t.results}`;
+                else if (id === 'p_chatStatus') el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> ${t.p_chatStatus}`;
+                else if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
+                else el.textContent = t[id] || t.welcome;
+            }
+        });
 
-        if (menuProgress) menuProgress.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.myProgress}`;
-        if (menuChat) menuChat.innerHTML = `<i class="fa-solid fa-comments"></i> ${t.chat}`;
-        if (menuResults) menuResults.innerHTML = `<i class="fa-solid fa-file-shield"></i> ${t.results}`;
-        if (welcomePre) welcomePre.textContent = t.welcome;
-        if (bannerSub) bannerSub.textContent = t.bannerSub;
+        // Placeholder for chat input
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) chatInput.placeholder = t.chatInput;
+
+        // Generic Loading
+        document.querySelectorAll('.t-loading').forEach(el => el.textContent = t.t_loading);
     }
 
     auth.onAuthStateChanged(async (user) => {

@@ -616,60 +616,83 @@
         const paramCompanyId = urlParams.get('companyId');
 
         try {
-            db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
-                const userData = userDoc.data() || {};
-                const isMaster = user.email === "master@checkit.com";
-                
-                let workerDocId = userData.workerDocId;
-                let companyId = userData.companyId;
+            // Use simple get for initial check, then optionally snapshot
+            const userRef = db.collection('users').doc(user.uid);
+            userRef.onSnapshot(async (userDoc) => {
+                try {
+                    if (!userDoc.exists) {
+                        loader.style.display = 'none';
+                        return;
+                    }
 
-                if (isMaster && paramWorkerDocId && paramCompanyId) {
-                    workerDocId = paramWorkerDocId;
-                    companyId = paramCompanyId;
-                    document.getElementById('masterBadge').classList.remove('hidden');
-                    document.getElementById('logoutBtn').classList.add('hidden');
-                    document.getElementById('closeBtn').classList.remove('hidden');
-                } else if (!userDoc.exists || userData.role !== 'worker') {
+                    const userData = userDoc.data();
+                    const isMaster = userData.role === 'master';
+                    
+                    let workerDocId = userData.workerDocId;
+                    let companyId = userData.companyId;
+
+                    // Mode: Master Viewing a specific worker
+                    if (isMaster && paramWorkerDocId && paramCompanyId) {
+                        workerDocId = paramWorkerDocId;
+                        companyId = paramCompanyId;
+                        document.getElementById('masterBadge').classList.remove('hidden');
+                        document.getElementById('logoutBtn').classList.add('hidden');
+                        document.getElementById('closeBtn').classList.remove('hidden');
+                    } else if (userData.role !== 'worker' && !isMaster) {
+                        loader.style.display = 'none';
+                        document.getElementById('portalContent').classList.remove('hidden');
+                        return;
+                    }
+
+                    document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                    document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                    if (workerDocId) {
+                        db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                            try {
+                                if (workerDoc.exists) {
+                                    const wData = workerDoc.data();
+                                    if (isMaster) {
+                                        document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                        document.getElementById('welcomeName').textContent = wData.name;
+                                    }
+                                    const prefLang = wData.prefLang || 'ko';
+                                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                                        btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                                    });
+                                    translateStaticUI(prefLang);
+                                    renderCheckupStatus(wData);
+                                } else {
+                                    if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
+                                }
+                            } catch (e) {
+                                console.error("Worker snapshot error", e);
+                            }
+                            // Ensure loader hides even if inner snapshot is slow/fails
+                            loader.style.display = 'none';
+                            document.getElementById('portalContent').classList.remove('hidden');
+                        });
+                        loadChatMessages(workerDocId);
+                    } else {
+                        // No worker doc to link
+                        loader.style.display = 'none';
+                        document.getElementById('portalContent').classList.remove('hidden');
+                    }
+
+                    if (companyId) {
+                        db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                            renderHospitals(hospSnap.docs);
+                        });
+                    }
+
+                } catch (snapErr) {
+                    console.error('Snapshot inner error:', snapErr);
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
-                    return;
                 }
-
-                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
-                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
-
-                if (workerDocId) {
-                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
-                        if (workerDoc.exists) {
-                            const wData = workerDoc.data();
-                            if (isMaster) {
-                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
-                                document.getElementById('welcomeName').textContent = wData.name;
-                            }
-                            const prefLang = wData.prefLang || 'ko';
-                            document.querySelectorAll('.lang-btn').forEach(btn => {
-                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
-                            });
-                            translateStaticUI(prefLang);
-                            renderCheckupStatus(wData);
-                        } else {
-                            if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
-                        }
-                    });
-                    loadChatMessages(workerDocId);
-                }
-
-                if (companyId) {
-                    db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
-                        renderHospitals(hospSnap.docs);
-                    });
-                }
-
-                loader.style.display = 'none';
-                document.getElementById('portalContent').classList.remove('hidden');
             });
         } catch (err) {
-            console.error('Portal sync error:', err);
+            console.error('Auth handler error:', err);
             loader.style.display = 'none';
         }
     });

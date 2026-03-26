@@ -230,9 +230,25 @@
             to { transform: translateY(20px); opacity: 0; }
         }
 
-        /* Language Button Active State */
-        .lang-btn { background: transparent; color: #64748b; }
-        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        /* Language Switcher */
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 15px; }
+        .lang-btn { 
+            background: transparent; 
+            border: none; 
+            color: rgba(255,255,255,0.6); 
+            padding: 5px 12px; 
+            border-radius: 7px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .lang-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .lang-btn i { font-size: 0.8rem; }
 
         .translation-box {
             margin-top: 8px;
@@ -257,11 +273,19 @@
 <div id="portalContent" class="hidden">
     <!-- Top Bar -->
     <div class="top-bar">
-        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT 근로자 포털 <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER VIEW</span></div>
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
+        
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
+            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
+            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
+            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
+        </div>
+
         <div class="user-info">
             <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
-            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃</button>
-            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i> 닫기</button>
+            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
         </div>
     </div>
 

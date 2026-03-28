@@ -1887,10 +1887,13 @@ function googleTranslateElementInit() {
         clone.style.width = '180mm'; // Fixed width for A4
         
         // Ensure all text is visible in PDF
-        const scrollDivs = clone.querySelectorAll('div[style*="overflow-y: auto"]');
+        const scrollDivs = clone.querySelectorAll('div');
         scrollDivs.forEach(div => {
-            div.style.maxHeight = 'none';
-            div.style.overflow = 'visible';
+            if (div.style.maxHeight || div.style.overflowY) {
+                div.style.maxHeight = 'none';
+                div.style.overflow = 'visible';
+                div.style.overflowY = 'visible';
+            }
         });
 
         // Add header to PDF

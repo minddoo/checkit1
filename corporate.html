@@ -13,42 +13,75 @@
 <body>
     <header id="main-header"></header>
 
-    <section id="corporate-hero" class="reveal" style="position: relative;">
-        <!-- Background Slideshow -->
-        <div class="hero-slideshow">
-            <div class="hero-slide active" style="background-image: url('assets/images/hero-1.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('assets/images/hero-2.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('assets/images/hero-3.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('assets/images/hero-4.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('assets/images/hero-5.jpg');"></div>
-        </div>
-        <div class="hero-slideshow-overlay"></div>
+        <!-- CORPORATE HERO (ROUNDED CARD SLIDESHOW) -->
+        <section id="corporate-hero" class="reveal" style="background-color: var(--bg-light); padding: 80px 20px;">
+            <div class="container" style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
+                <div class="hero-card" style="background: var(--white); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); padding: 40px; text-align: center;">
+                    
+                    <!-- Slideshow inside the card (cover ratio) -->
+                    <div class="hero-slideshow" style="position: relative; height: 500px; border-radius: 16px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); margin-bottom: 20px; width: 100%;">
+                        <div class="hero-slide active" style="background-image: url('assets/hero-1.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-2.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-3.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-4.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-5.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-6.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-7.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-8.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="hero-slide" style="background-image: url('assets/hero-9.jpg'); background-size: cover; background-position: center;"></div>
+                    </div>
 
-        <div class="container" style="position: relative; z-index: 2;">
-            <div class="hero-text-content">
-                <h1 class="hero-title" data-lang-key="corporate_page_title">모든 외국인 근로자들을 위한<br>맞춤형 건강검진 솔루션</h1>
-                <p class="hero-subtitle" data-lang-key="corporate_page_subtitle">언어의 장벽을 허물고,<br>가장 안전하고 확실한 검진을 제공합니다.</p>
-                <button id="openProcessSlide" class="cta-button-primary" data-lang-key="view_workflow">소개서 확인하기</button>
+                    <!-- Synchronized captions for each slide -->
+                    <div class="hero-caption-container" style="margin-top: 15px; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+                        <div class="hero-caption active" data-index="0" style="font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(1) 첫 번째 사진 설명이 여기에 들어갑니다.</div>
+                        <div class="hero-caption" data-index="1" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(2) 두 번째 사진 설명이 들어갈 자리입니다.</div>
+                        <div class="hero-caption" data-index="2" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(3) 세 번째 사진에 대한 설명입니다.</div>
+                        <div class="hero-caption" data-index="3" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(4) 네 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="4" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(5) 다섯 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="5" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(6) 여섯 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="6" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(7) 일곱 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="7" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(8) 여덟 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="8" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(9) 아홉 번째 사진 설명입니다.</div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <button id="openProcessSlide" class="cta-button-primary" data-lang-key="view_workflow" style="padding: 12px 30px;">소개서 확인하기</button>
+                    </div>
+
+                </div>
             </div>
-            <!-- <div class="hero-character"></div> -->
-        </div>
-        
-        <script>
-            // 3초 간격 슬라이드쇼 스크립트
-            document.addEventListener('DOMContentLoaded', function() {
-                const slides = document.querySelectorAll('.hero-slide');
-                let currentSlide = 0;
-                
-                if (slides.length > 0) {
-                    setInterval(() => {
-                        slides[currentSlide].classList.remove('active');
-                        currentSlide = (currentSlide + 1) % slides.length;
-                        slides[currentSlide].classList.add('active');
-                    }, 3000);
-                }
-            });
-        </script>
-    </section>
+
+            <script>
+                // 3초 간격 슬라이드쇼 및 캡션 동기화 스크립트
+                document.addEventListener('DOMContentLoaded', function() {
+                    const heroSection = document.getElementById('corporate-hero');
+                    const slides = heroSection.querySelectorAll('.hero-slide');
+                    const captions = heroSection.querySelectorAll('.hero-caption');
+                    let currentSlide = 0;
+                    
+                    if (slides.length > 0) {
+                        setInterval(() => {
+                            // 이전 상태 제거
+                            slides[currentSlide].classList.remove('active');
+                            if (captions[currentSlide]) {
+                                captions[currentSlide].classList.remove('active');
+                                captions[currentSlide].style.display = 'none';
+                            }
+
+                            // 다음 인덱스로 전환
+                            currentSlide = (currentSlide + 1) % slides.length;
+
+                            // 새로운 상태 적용
+                            slides[currentSlide].classList.add('active');
+                            if (captions[currentSlide]) {
+                                captions[currentSlide].classList.add('active');
+                                captions[currentSlide].style.display = 'block';
+                            }
+                        }, 3000);
+                    }
+                });
+            </script>
+        </section>
 
             <!-- 실무 과정 슬라이드 모달 (이미지 슬라이드 방식) -->
             <div id="processModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; justify-content: center; align-items: center;">

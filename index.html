@@ -35,26 +35,47 @@
                         <div class="hero-slide" style="background-image: url('assets/hero-9.jpg'); background-size: cover; background-position: center;"></div>
                     </div>
 
-                    <!-- Placeholder for future short descriptions -->
-                    <div class="card-description-placeholder" style="color: var(--text-light); font-size: 1.15rem; padding: 10px 0; font-weight: 500;">
-                        <!-- 사용자님이 추후 설명을 추가하실 공간입니다 -->
-                        <span style="opacity: 0.5;">(사진에 대한 짧은 설명을 여기에 추가하세요)</span>
+                    <!-- Synchronized captions for each slide -->
+                    <div class="hero-caption-container" style="margin-top: 15px; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+                        <div class="hero-caption active" data-index="0" style="font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(1) 첫 번째 사진 설명이 여기에 들어갑니다.</div>
+                        <div class="hero-caption" data-index="1" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(2) 두 번째 사진 설명이 들어갈 자리입니다.</div>
+                        <div class="hero-caption" data-index="2" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(3) 세 번째 사진에 대한 설명입니다.</div>
+                        <div class="hero-caption" data-index="3" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(4) 네 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="4" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(5) 다섯 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="5" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(6) 여섯 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="6" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(7) 일곱 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="7" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(8) 여덟 번째 사진 설명입니다.</div>
+                        <div class="hero-caption" data-index="8" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">(9) 아홉 번째 사진 설명입니다.</div>
                     </div>
 
                 </div>
             </div>
 
             <script>
-                // 3초 간격 슬라이드쇼 스크립트
+                // 3초 간격 슬라이드쇼 및 캡션 동기화 스크립트
                 document.addEventListener('DOMContentLoaded', function() {
                     const slides = document.querySelectorAll('#hero .hero-slide');
+                    const captions = document.querySelectorAll('#hero .hero-caption');
                     let currentSlide = 0;
                     
                     if (slides.length > 0) {
                         setInterval(() => {
+                            // 이전 상태 제거
                             slides[currentSlide].classList.remove('active');
+                            if (captions[currentSlide]) {
+                                captions[currentSlide].classList.remove('active');
+                                captions[currentSlide].style.display = 'none';
+                            }
+
+                            // 다음 인덱스로 전환
                             currentSlide = (currentSlide + 1) % slides.length;
+
+                            // 새로운 상태 적용
                             slides[currentSlide].classList.add('active');
+                            if (captions[currentSlide]) {
+                                captions[currentSlide].classList.add('active');
+                                captions[currentSlide].style.display = 'block';
+                            }
                         }, 3000);
                     }
                 });

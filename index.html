@@ -64,7 +64,7 @@
             </div>
 
             <script>
-                // 히어로 슬라이드 제어 스크립트 (캡션 중첩 방지 및 도트 상호작용)
+                // 히어로 슬라이드 제어 스크립트 (무한 루프 전환 품질 고도화)
                 document.addEventListener('DOMContentLoaded', function() {
                     const heroSection = document.getElementById('hero');
                     const slides = heroSection.querySelectorAll('.hero-slide');
@@ -75,12 +75,18 @@
                     let isPaused = false;
                     
                     if (slides.length > 0) {
-                        // 슬라이드 이동 핵심 함수
+                        // 슬라이드 이동 핵심 함수 (z-index 제어 포함)
                         function goToSlide(n) {
                             const prevSlideIndex = currentSlide;
                             
-                            // 1. 모든 상태 초기화 (중첩 방지 핵심)
-                            slides.forEach(s => s.classList.remove('exit-left'));
+                            // 1. 모든 이전 상태 초기화 (중첩 방지)
+                            slides.forEach((s, idx) => {
+                                if (idx !== prevSlideIndex) {
+                                    s.classList.remove('exit-left');
+                                    s.style.zIndex = '1'; // 기본 z-index
+                                }
+                            });
+                            
                             captions.forEach(c => {
                                 c.classList.remove('active');
                                 c.style.display = 'none';
@@ -88,7 +94,11 @@
                             });
                             dots.forEach(d => d.classList.remove('active'));
 
-                            // 2. 이전 슬라이드 퇴장 효과 (자동 재생 시에만)
+                            // 2. 레이어 순서 정교화 (새로운 슬라이드를 무조건 위로)
+                            slides[prevSlideIndex].style.zIndex = '10'; // 퇴장하는 슬라이드
+                            slides[n].style.zIndex = '20'; // 입장하는 슬라이드
+
+                            // 3. 퇴장 효과 적용
                             if (!isPaused) {
                                 slides[prevSlideIndex].classList.remove('active');
                                 slides[prevSlideIndex].classList.add('exit-left');
@@ -96,26 +106,27 @@
                                 slides[prevSlideIndex].classList.remove('active');
                             }
 
-                            // 3. 인덱스 업데이트
+                            // 4. 인덱스 업데이트
                             currentSlide = n;
 
-                            // 4. 신규 슬라이드 등장
+                            // 5. 신규 슬라이드 및 도트 활성화
                             slides[currentSlide].classList.remove('exit-left');
                             slides[currentSlide].classList.add('active');
                             dots[currentSlide].classList.add('active');
 
                             if (captions[currentSlide]) {
                                 captions[currentSlide].style.display = 'block';
-                                // 약간의 지연 후 opacity 조절로 부드러운 페이드인
                                 setTimeout(() => {
                                     captions[currentSlide].classList.add('active');
                                     captions[currentSlide].style.opacity = '1';
-                                }, 20);
+                                }, 30);
                             }
                             
-                            // 5. 클래스 정리
+                            // 6. 클래스 및 z-index 정리
                             setTimeout(() => {
-                                if (slides[prevSlideIndex]) slides[prevSlideIndex].classList.remove('exit-left');
+                                if (slides[prevSlideIndex]) {
+                                    slides[prevSlideIndex].classList.remove('exit-left');
+                                }
                             }, 800);
                         }
 
@@ -132,10 +143,9 @@
                         // 도트 클릭 이벤트 바인딩
                         dots.forEach((dot, index) => {
                             dot.addEventListener('click', () => {
-                                // 자동 재생 중지
+                                // 자동 재생 중지 (clearInterval 및 플래그 설정)
                                 clearInterval(autoPlay);
                                 isPaused = true;
-                                // 해당 슬라이드로 즉시 이동
                                 goToSlide(index);
                             });
                         });

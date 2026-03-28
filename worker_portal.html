@@ -305,19 +305,24 @@
 
     function translateStaticUI(lang) {
         const t = transTable[lang] || transTable.ko;
-        const ids = ['menuProgress', 'menuChat', 'menuResults', 'welcomePre', 'bannerSub', 
-                     'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle', 
-                     'h_submitResult', 'p_noResult', 'p_resultInst', 
-                     'b_uploadPhoto', 'b_submitNow', 't_loadChat', 'masterBadge'];
-        ids.forEach(id => {
+        const menuMap = {
+            menuProgress: { icon: 'fa-person-walking-arrow-right', key: 'menuProgress' },
+            menuChat:     { icon: 'fa-comments',                   key: 'menuChat' },
+            menuResults:  { icon: 'fa-file-shield',                key: 'menuResults' }
+        };
+        Object.entries(menuMap).forEach(([id, cfg]) => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = `<i class="fa-solid ${cfg.icon}"></i> ${t[cfg.key] || ''}`;
+        });
+        const textIds = ['welcomePre', 'bannerSub',
+                         'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle',
+                         'h_submitResult', 'p_noResult',
+                         'b_uploadPhoto', 'b_submitNow', 't_loadChat', 'masterBadge'];
+        textIds.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
-                if (id === 'menuProgress') el.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i>`;
-                else if (id === 'menuChat') el.innerHTML = `<i class="fa-solid fa-comments"></i>`;
-                else if (id === 'menuResults') el.innerHTML = `<i class="fa-solid fa-file-shield"></i>`;
-                else if (id === 'p_chatStatus') el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i>`;
-                else if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
-                else el.textContent = t[id];
+                if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
+                else el.textContent = t[id] || '';
             }
         });
         const chatInput = document.getElementById('chatInput');
@@ -461,16 +466,18 @@
     }
 
     function renderCheckupStatus(data) {
-        const statuses = ['\uc9c4\ud589 \uc911', '\uc608\uc57d\uc644\ub8cc', '\uacb0\uc9c4\uc644\ub8cc', '\uacb0\uacbc\uc644\ub8cc', '\uc7ac\uacb0\ub300\uc0c1\uc790', '\uc7ac\uacb0\uc644\ub8cc'];
-        const statusLabel = data.status || '\uc9c4\ud589 \uc911';
+        const container = document.getElementById('checkupStatus');
+        const statuses = ['진행 중', '예약완료', '결진완료', '결과완료', '재결대상자', '재결완료'];
+        const statusLabel = data.status || '진행 중';
         const currentIdx = statuses.indexOf(statusLabel);
         let badgeClass = 'status-pending';
-        if (statusLabel === '\uc608\uc57d\uc644\ub8cc') badgeClass = 'status-reservation';
-        else if (statusLabel === '\uacb0\uc9c4\uc644\ub8cc') badgeClass = 'status-checkup';
-        else if (statusLabel === '\uacb0\uacbc\uc644\ub8cc') badgeClass = 'status-result';
+        if (statusLabel === '예약완료') badgeClass = 'status-reservation';
+        else if (statusLabel === '결진완료') badgeClass = 'status-checkup';
+        else if (statusLabel === '결과완료') badgeClass = 'status-result';
 
+        let stepperHtml = '<div class="stepper">';
         statuses.forEach((s, idx) => {
-            if (s === '\uc9c4\ud589 \uc911') return;
+            if (s === '진행 중') return;
             let stepClass = idx < currentIdx ? 'completed' : (idx === currentIdx ? 'active' : '');
             stepperHtml += `<div class="step ${stepClass}"><div class="step-icon"></div><div class="step-label">${s}</div></div>`;
         });
@@ -485,11 +492,12 @@
                     ${stepperHtml}
                 </div>
                 <div class="info-grid" style="margin-top:20px;">
-                    <div class="info-item"><div class="label">Site</div><div class="value">${data.hospitalName || '-'}</div></div>
-                    <div class="info-item"><div class="label">Checkup</div><div class="value">${data.checkupDate || '-'}</div></div>
+                    <div class="info-item"><div class="label">검진 병원</div><div class="value">${data.hospitalName || '-'}</div></div>
+                    <div class="info-item"><div class="label">검진 일자</div><div class="value">${data.checkupDate || '-'}</div></div>
                 </div>`;
         }
-        document.getElementById('requiredDocs').textContent = data.docs || 'No documents recorded.';
+        const reqDocs = document.getElementById('requiredDocs');
+        if (reqDocs) reqDocs.textContent = data.docs || '등록된 서류 없음';
         window.renderResultsSection(data);
     }
 

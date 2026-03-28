@@ -625,6 +625,9 @@ function googleTranslateElementInit() {
         }
     });
 </script>
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -1081,13 +1084,60 @@ function googleTranslateElementInit() {
         } catch (e) { console.error("Request confirmation error:", e); }
     }
 
+    window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate) {
+        // [필수 입력] 회원가입 후 발급받은 실제 API 키 정보를 여기에 입력하세요
+        const API_KEY = 'ENTER_YOUR_SOLAPI_API_KEY'; 
+        const API_SECRET = 'ENTER_YOUR_SOLAPI_API_SECRET';
+        const PF_ID = 'ENTER_YOUR_KAKAOTALK_CHANNEL_ID'; // 카카오톡 채널 아이디 (예: @checkit)
+        const TEMPLATE_ID = 'ENTER_YOUR_TEMPLATE_ID'; // 승인받은 알림톡 템플릿 아이디
+
+        if (API_KEY === 'ENTER_YOUR_SOLAPI_API_KEY') {
+            console.log("알림톡 API 키가 입력되지 않아 실제 발송은 생략됩니다.");
+            console.log(`[시뮬레이션] ${phoneNumber} 번호로 ${reservedDate} 알림톡 발송!`);
+            return;
+        }
+
+        const date = new Date().toISOString();
+        const salt = Math.random().toString(36).substring(2, 15);
+        const data = date + salt;
+        let signature;
+        try {
+             signature = CryptoJS.HmacSHA256(data, API_SECRET).toString(CryptoJS.enc.Hex);
+        } catch(e) { console.error("CryptoJS로드 실패", e); return; }
+
+        const authString = `HMAC-SHA256 apiKey=${API_KEY}, date=${date}, salt=${salt}, signature=${signature}`;
+        const payload = {
+            message: {
+                to: phoneNumber.replace(/[^0-9]/g, ''),
+                from: "01000000000", // 사전에 등록된 발신번호 입력 필수
+                kakaoOptions: {
+                    pfId: PF_ID,
+                    templateId: TEMPLATE_ID,
+                    variables: { "#{날짜}": reservedDate }
+                }
+            }
+        };
+
+        try {
+            const response = await fetch("https://api.solapi.com/messages/v4/send", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": authString },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            console.log("알림톡 전송 결과:", result);
+            if(result.statusCode === '2000') {
+               showToast("알림톡이 성공적으로 발송되었습니다.", "success");
+            }
+        } catch (error) { console.error("알림톡 전송 중 오류 발생:", error); }
+    };
+
     async function submitReservationDate(btn) {
         let dateVal = '';
         if (btn) {
             const input = btn.parentElement.querySelector('.resv-date-input');
             if (input) dateVal = input.value;
         } else {
-            // Fallback for older code if any
             const input = document.getElementById('resvDateInput');
             if (input) dateVal = input.value;
         }
@@ -1109,10 +1159,16 @@ function googleTranslateElementInit() {
             });
 
             // Save to worker doc
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            let workerPhone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber || '01000000000') : '01000000000';
+            
             await db.collection('workers').doc(workerDocId).update({
                 reservedDate: dateVal,
                 status: '예약완료'
             });
+
+            // Trigger Actual Alimtalk
+            await window.sendKakaoAlimtalk(workerPhone, dateVal);
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,

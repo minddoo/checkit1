@@ -1125,12 +1125,12 @@ function googleTranslateElementInit() {
     window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate, scheduledDate = null) {
         // [필수 입력] 회원가입 후 발급받은 실제 API 키 정보를 여기에 입력하세요
         const API_KEY = '58.140.153.24'; 
-        const API_SECRET = 'ENTER_YOUR_SOLAPI_API_SECRET';
+        const API_SECRET = 'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD';
         const PF_ID = 'ENTER_YOUR_KAKAOTALK_CHANNEL_ID'; // 카카오톡 채널 아이디 (예: @checkit)
         const TEMPLATE_ID = 'ENTER_YOUR_TEMPLATE_ID'; // 승인받은 알림톡 템플릿 아이디
 
-        if (API_KEY === '58.140.153.24' || API_KEY.includes('ENTER_YOUR')) {
-            console.log("알림톡 API 키가 기본값이거나 누락되어 실제 발송은 생략됩니다.");
+        if (PF_ID.includes('ENTER_YOUR') || TEMPLATE_ID.includes('ENTER_YOUR')) {
+            console.log("알림톡 발신자 정보(PF_ID)나 템플릿(TEMPLATE_ID)이 누락되어 실제 발송은 생략됩니다.");
             console.log(`[시뮬레이션] ${phoneNumber} 번호로 ${reservedDate} 알림톡 ${scheduledDate ? '('+scheduledDate+' 예약)' : '(즉시)'} 발송!`);
             return;
         }

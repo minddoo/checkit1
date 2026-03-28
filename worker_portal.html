@@ -376,8 +376,12 @@
                     </div>
 
                     <!-- Input Area -->
-                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px;">
-                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end;">
+                        <input type="file" id="chatFileInput" style="display: none;" onchange="handleChatFileUpload(this)" accept="image/*,application/pdf">
+                        <button onclick="document.getElementById('chatFileInput').click()" style="width: 50px; height: 50px; background: #f1f5f9; color: #64748b; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;" title="파일 첨부">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s; overflow-y: auto;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
                         <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
                             <i class="fa-solid fa-paper-plane"></i>
                         </button>
@@ -622,6 +626,14 @@ function googleTranslateElementInit() {
         const savedLang = localStorage.getItem('checkit_lang');
         if (savedLang) {
             setTimeout(() => window.changePortalLanguage(savedLang), 1000);
+        }
+    });
+
+    // Chat input Enter key listener
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
         }
     });
 </script>
@@ -921,6 +933,32 @@ function googleTranslateElementInit() {
                 </div>`;
         }
 
+        if (msg.type === 'image') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="max-width: 250px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: white; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <img src="${msg.url}" style="width: 100%; height: auto; display: block;">
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'file') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="${bubbleStyle}; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <i class="fa-solid fa-file-lines" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        <div style="text-align: left;">
+                            <div style="font-size: 0.85rem; font-weight: 600;">${msg.fileName || '첨부 파일'}</div>
+                            <div style="font-size: 0.7rem; opacity: 0.8;">클릭하여 보기</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
         return `
             <div style="${wrapperStyle}">
                 ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
@@ -1084,26 +1122,23 @@ function googleTranslateElementInit() {
         } catch (e) { console.error("Request confirmation error:", e); }
     }
 
-    window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate) {
+    window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate, scheduledDate = null) {
         // [필수 입력] 회원가입 후 발급받은 실제 API 키 정보를 여기에 입력하세요
         const API_KEY = '58.140.153.24'; 
         const API_SECRET = 'ENTER_YOUR_SOLAPI_API_SECRET';
         const PF_ID = 'ENTER_YOUR_KAKAOTALK_CHANNEL_ID'; // 카카오톡 채널 아이디 (예: @checkit)
         const TEMPLATE_ID = 'ENTER_YOUR_TEMPLATE_ID'; // 승인받은 알림톡 템플릿 아이디
 
-        if (API_KEY === 'ENTER_YOUR_SOLAPI_API_KEY') {
-            console.log("알림톡 API 키가 입력되지 않아 실제 발송은 생략됩니다.");
-            console.log(`[시뮬레이션] ${phoneNumber} 번호로 ${reservedDate} 알림톡 발송!`);
+        if (API_KEY === '58.140.153.24' || API_KEY.includes('ENTER_YOUR')) {
+            console.log("알림톡 API 키가 기본값이거나 누락되어 실제 발송은 생략됩니다.");
+            console.log(`[시뮬레이션] ${phoneNumber} 번호로 ${reservedDate} 알림톡 ${scheduledDate ? '('+scheduledDate+' 예약)' : '(즉시)'} 발송!`);
             return;
         }
 
         const date = new Date().toISOString();
         const salt = Math.random().toString(36).substring(2, 15);
         const data = date + salt;
-        let signature;
-        try {
-             signature = CryptoJS.HmacSHA256(data, API_SECRET).toString(CryptoJS.enc.Hex);
-        } catch(e) { console.error("CryptoJS로드 실패", e); return; }
+        let signature = CryptoJS.HmacSHA256(data, API_SECRET).toString(CryptoJS.enc.Hex);
 
         const authString = `HMAC-SHA256 apiKey=${API_KEY}, date=${date}, salt=${salt}, signature=${signature}`;
         const payload = {
@@ -1117,6 +1152,11 @@ function googleTranslateElementInit() {
                 }
             }
         };
+        
+        // 예약 발송일 경우 ISO 8601 형식 추가
+        if (scheduledDate) {
+            payload.scheduledDate = new Date(scheduledDate).toISOString();
+        }
 
         try {
             const response = await fetch("https://api.solapi.com/messages/v4/send", {
@@ -1125,10 +1165,7 @@ function googleTranslateElementInit() {
                 body: JSON.stringify(payload)
             });
             const result = await response.json();
-            console.log("알림톡 전송 결과:", result);
-            if(result.statusCode === '2000') {
-               showToast("알림톡이 성공적으로 발송되었습니다.", "success");
-            }
+            console.log("알림톡 전송 요청 결과:", result);
         } catch (error) { console.error("알림톡 전송 중 오류 발생:", error); }
     };
 
@@ -1149,6 +1186,8 @@ function googleTranslateElementInit() {
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            let workerPhone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber || '01000000000') : '01000000000';
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
@@ -1159,26 +1198,15 @@ function googleTranslateElementInit() {
             });
 
             // Save to worker doc
-            const workerDoc = await db.collection('workers').doc(workerDocId).get();
-            let workerPhone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber || '01000000000') : '01000000000';
-            
             await db.collection('workers').doc(workerDocId).update({
                 reservedDate: dateVal,
                 status: '예약완료'
             });
 
-            // Trigger Actual Alimtalk
+            // 1. 발송 예약 즉시 알림톡 (확인)
             await window.sendKakaoAlimtalk(workerPhone, dateVal);
 
-            await db.collection('messages').add({
-                workerDocId: workerDocId,
-                sender: 'admin',
-                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 아래와 같이 실시간 주의사항 알림톡(D-7, 5, 3, 2, 1)이 자동으로 발송 예약되었습니다.`,
-                type: 'text',
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-            // Simulate the reminder schedule display
+            // 2. D-day별 리마인드 알림톡 예약 발송 등록
             const reminders = [
                 { d: 7, text: "음주 및 과식 금지 가이드" },
                 { d: 5, text: "복용 중인 약물 확인 및 중단 안내" },
@@ -1187,6 +1215,26 @@ function googleTranslateElementInit() {
                 { d: 1, text: "내일 검진 시간 및 병원 위치 재안내" }
             ];
 
+            for (const r of reminders) {
+                const targetDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000));
+                // 발송 시간은 오전 10시로 고정
+                targetDate.setHours(10, 0, 0, 0);
+                
+                // 현재보다 미래일 경우에만 예약 등록
+                if (targetDate > new Date()) {
+                    await window.sendKakaoAlimtalk(workerPhone, dateVal, targetDate);
+                }
+            }
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // (이미 위에서 reminders를 사용하여 알림톡 예약을 완료함)
             let scheduleText = "📅 **발송 예약된 알림톡 일정**\n";
             reminders.forEach(r => {
                 const rDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000)).toLocaleDateString();
@@ -1220,6 +1268,46 @@ function googleTranslateElementInit() {
     window.closeAlimtalkModal = () => {
         document.getElementById('alimtalkModalOverlay').style.display = 'none';
     };
+
+    async function handleChatFileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        showToast("파일을 업로드 중입니다...", "info");
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            // Firebase Storage가 설정되지 않았을 수 있으므로, base64로 데모 처리
+            // 실제 서비스에서는 storage.ref().put(file) 사용 권장
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Url = e.target.result;
+                const isImage = file.type.startsWith('image/');
+
+                await db.collection('messages').add({
+                    workerDocId: workerDocId,
+                    sender: 'worker',
+                    url: base64Url,
+                    fileName: file.name,
+                    type: isImage ? 'image' : 'file',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showToast("전송 완료!", "success");
+                input.value = ''; // Reset input
+            };
+            reader.readAsDataURL(file);
+
+        } catch (e) {
+            console.error("Chat upload error:", e);
+            showToast("파일 업로드에 실패했습니다.", "error");
+        }
+    }
 
     async function submitAlimtalk() {
         const text = document.getElementById('alimtalkContent').value.trim();

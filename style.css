@@ -373,11 +373,11 @@ body {
     color: #000;
 }
 
-/* Corporate Page Hero Text (White over Slideshow overlay) */
+/* Corporate Page Hero Text (Dark) */
 #corporate-hero .hero-title,
 #corporate-hero .hero-subtitle {
-    color: #fff;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #1e293b;
+    text-shadow: none;
 }
 
 .hero-title {

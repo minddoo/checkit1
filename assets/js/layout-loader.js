@@ -29,13 +29,12 @@ const LayoutLoader = {
             <div class="footer-grid">
                 <div class="footer-info">
                     <h4 class="footer-title">쇼핑몰 기본정보</h4>
-                    <p>상호명: <strong>CHEOUMIJO</strong></p>
-                    <p>대표자명: Kim Sun Hong</p>
-                    <p>사업장 주소: 12040 경기도 남양주시 오남읍 진건오남로 661</p>
+                    <p>상호명: <strong>주식회사 체킷</strong></p>
+                    <p>대표자명: 김선홍</p>
+                    <p>사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)</p>
                     <p>대표 전화: 01051093459</p>
-                    <p>사업자 등록번호: 5270901813</p>
-                    <p>통신판매업 신고번호: 2021-진접오남-0341</p>
-                    <p>개인정보보호책임자: Kim Sun Hong</p>
+                    <p>사업자 등록번호: 8718803241</p>
+                    <p>개인정보보호책임자: 남민정</p>
                 </div>
                 <div class="footer-cs">
                     <h4 class="footer-title">고객센터 정보</h4>
@@ -45,7 +44,7 @@ const LayoutLoader = {
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 CHEOUMIJO. All Rights Reserved.</p>
+                <p>&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.</p>
             </div>
         </div>
     `,

@@ -350,6 +350,102 @@ body {
     box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
 }
 
+/* Premium Full-Width Section Card */
+.premium-full-card {
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(240, 253, 244, 0.85));
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border-radius: 40px;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.05),
+        0 30px 100px rgba(46, 204, 113, 0.12),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+    padding: 80px 60px;
+    max-width: 1100px;
+    margin: 40px auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 10;
+}
+
+/* Background Graphic Elements */
+.premium-full-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: url('assets/industry_bg.png'); /* Placeholder if needed, but we'll use a better approach */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+    z-index: 1;
+}
+
+.premium-full-card .card-content {
+    position: relative;
+    z-index: 5;
+}
+
+.premium-full-card h2.section-title-inside {
+    font-size: 2.5rem; /* 텍스트 키움 */
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 30px;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+}
+
+.premium-full-card i.main-icon {
+    font-size: 4rem;
+    color: #2ecc71;
+    margin-bottom: 30px;
+    display: block;
+    filter: drop-shadow(0 0 15px rgba(46, 204, 113, 0.4));
+}
+
+.premium-full-card h3.main-heading {
+    font-size: 2.8rem; /* 텍스트 대폭 키움 */
+    font-weight: 900;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+.premium-full-card p.description {
+    font-size: 1.4rem; /* 텍스트 키움 */
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 45px;
+    font-weight: 500;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.premium-full-card .cta-button-premium {
+    display: inline-block;
+    padding: 20px 50px;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    border-radius: 60px;
+    box-shadow: 0 10px 30px rgba(46, 204, 113, 0.4);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.premium-full-card .cta-button-premium:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 40px rgba(46, 204, 113, 0.6);
+}
+
 /* Hero Container Grid Isolation */
 #individual-hero .container,
 #corporate-hero .container {

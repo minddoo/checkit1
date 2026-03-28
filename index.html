@@ -64,54 +64,81 @@
             </div>
 
             <script>
-                // 3초 간격 슬라이드쇼 및 캡션/인디케이터 동기화 스크립트
+                // 히어로 슬라이드 제어 스크립트 (캡션 중첩 방지 및 도트 상호작용)
                 document.addEventListener('DOMContentLoaded', function() {
                     const heroSection = document.getElementById('hero');
                     const slides = heroSection.querySelectorAll('.hero-slide');
                     const captions = heroSection.querySelectorAll('.hero-caption');
                     const dots = heroSection.querySelectorAll('.hero-dot');
                     let currentSlide = 0;
+                    let autoPlay;
+                    let isPaused = false;
                     
                     if (slides.length > 0) {
-                        setInterval(() => {
+                        // 슬라이드 이동 핵심 함수
+                        function goToSlide(n) {
                             const prevSlideIndex = currentSlide;
                             
-                            // 1. 현재 슬라이드 및 캡션 퇴장
-                            slides[prevSlideIndex].classList.remove('active');
-                            slides[prevSlideIndex].classList.add('exit-left');
-                            dots[prevSlideIndex].classList.remove('active');
-                            
-                            if (captions[prevSlideIndex]) {
-                                captions[prevSlideIndex].style.opacity = '0';
-                                // 중첩 방지: 즉시 보이지 않게 처리 (transition 시간이 끝난 후가 아닌 더 빠르게)
-                                setTimeout(() => {
-                                    captions[prevSlideIndex].classList.remove('active');
-                                    captions[prevSlideIndex].style.display = 'none';
-                                }, 300);
+                            // 1. 모든 상태 초기화 (중첩 방지 핵심)
+                            slides.forEach(s => s.classList.remove('exit-left'));
+                            captions.forEach(c => {
+                                c.classList.remove('active');
+                                c.style.display = 'none';
+                                c.style.opacity = '0';
+                            });
+                            dots.forEach(d => d.classList.remove('active'));
+
+                            // 2. 이전 슬라이드 퇴장 효과 (자동 재생 시에만)
+                            if (!isPaused) {
+                                slides[prevSlideIndex].classList.remove('active');
+                                slides[prevSlideIndex].classList.add('exit-left');
+                            } else {
+                                slides[prevSlideIndex].classList.remove('active');
                             }
 
-                            // 2. 인덱스 업데이트
-                            currentSlide = (currentSlide + 1) % slides.length;
+                            // 3. 인덱스 업데이트
+                            currentSlide = n;
 
-                            // 3. 다음 슬라이드 및 캡션 등장
+                            // 4. 신규 슬라이드 등장
                             slides[currentSlide].classList.remove('exit-left');
                             slides[currentSlide].classList.add('active');
                             dots[currentSlide].classList.add('active');
 
                             if (captions[currentSlide]) {
                                 captions[currentSlide].style.display = 'block';
+                                // 약간의 지연 후 opacity 조절로 부드러운 페이드인
                                 setTimeout(() => {
                                     captions[currentSlide].classList.add('active');
                                     captions[currentSlide].style.opacity = '1';
-                                }, 50);
+                                }, 20);
                             }
                             
-                            // 4. 퇴장 완료된 슬라이드 클래스 정리
+                            // 5. 클래스 정리
                             setTimeout(() => {
-                                slides[prevSlideIndex].classList.remove('exit-left');
+                                if (slides[prevSlideIndex]) slides[prevSlideIndex].classList.remove('exit-left');
                             }, 800);
+                        }
 
-                        }, 3000); // 3초 간격
+                        // 자동 재생 시작 (3초 간격)
+                        function startAutoPlay() {
+                            autoPlay = setInterval(() => {
+                                let next = (currentSlide + 1) % slides.length;
+                                goToSlide(next);
+                            }, 3000);
+                        }
+
+                        startAutoPlay();
+
+                        // 도트 클릭 이벤트 바인딩
+                        dots.forEach((dot, index) => {
+                            dot.addEventListener('click', () => {
+                                // 자동 재생 중지
+                                clearInterval(autoPlay);
+                                isPaused = true;
+                                // 해당 슬라이드로 즉시 이동
+                                goToSlide(index);
+                            });
+                        });
                     }
                 });
             </script>

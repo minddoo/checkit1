@@ -350,67 +350,6 @@ body {
     box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
 }
 
-/* Industrial Premium Card Styling */
-.industrial-premium-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 253, 244, 0.8));
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-radius: 30px;
-    border: 1px solid rgba(46, 204, 113, 0.15);
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.05),
-        0 20px 60px rgba(46, 204, 113, 0.08),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    padding: 60px 40px;
-    max-width: 950px;
-    margin: 80px auto;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Subtle Noise Texture Overlay */
-.industrial-premium-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 200%;
-    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.industrial-premium-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.08),
-        0 30px 80px rgba(46, 204, 113, 0.12);
-}
-
-.industrial-premium-card h2 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(to bottom right, #1e293b, #334155);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 25px;
-    letter-spacing: -0.02em;
-}
-
-.industrial-premium-card p {
-    font-size: 1.25rem;
-    color: #475569;
-    line-height: 1.8;
-    max-width: 750px;
-    margin: 0 auto;
-    font-weight: 500;
-}
-
 /* Hero Container Grid Isolation */
 #individual-hero .container,
 #corporate-hero .container {

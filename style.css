@@ -402,7 +402,7 @@ body {
     color: #2ecc71;
     margin-bottom: 20px;
     display: block;
-    filter: drop-shadow(0 0 10px rgba(46, 204, 113, 0.3));
+    /* 네온 효과 제거 */
 }
 
 .premium-full-card h3.main-heading {
@@ -435,7 +435,7 @@ body {
     font-size: 1.15rem;
     font-weight: 700;
     border-radius: 50px;
-    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.3);
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2); /* 네온 효과 제거 및 그림자 축소 */
     transition: all 0.3s ease;
     text-decoration: none;
 }

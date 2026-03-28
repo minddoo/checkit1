@@ -1883,14 +1883,10 @@ function googleTranslateElementInit() {
         // Create a clone for PDF rendering to avoid UI glitches
         const clone = element.cloneNode(true);
         clone.id = 'pdf-render-clone';
-        clone.style.position = 'absolute';
-        clone.style.left = '-9999px';
-        clone.style.top = '0';
         clone.style.padding = '30px';
         clone.style.background = 'white';
         clone.style.width = '180mm';
         clone.style.height = 'auto';
-        document.body.appendChild(clone);
         
         // Ensure all text is visible in PDF and remove buttons
         const flexContainers = clone.querySelectorAll('div[style*="display: flex; gap: 10px;"]');
@@ -1935,7 +1931,6 @@ function googleTranslateElementInit() {
 
         showToast("PDF 생성을 시작합니다...", "info");
         html2pdf().set(opt).from(clone).save().then(() => {
-            document.body.removeChild(clone);
             showToast("PDF 다운로드가 완료되었습니다.", "success");
         }).catch(err => {
             console.error("PDF generation error:", err);

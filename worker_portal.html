@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -419,8 +419,18 @@
                         <h3>나의 언어로 번역보기 (Translation)</h3>
                     </div>
                     <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
-                        <p style="font-size: 0.9rem; margin-bottom: 5px; color: #5b21b6;">제출하신 한국어 결과지를 분석하여 번역된 결과를 제공합니다.</p>
-                        <p style="font-size: 0.8rem; margin-bottom: 15px; color: #7c3aed; font-weight: 500;"><i class="fa-solid fa-circle-info"></i> 질병코드도 KCD, ICD로 비교해서 나의 결과지 정확하게 확인하세요.</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px; color: #5b21b6; font-weight: 600;">제출하신 한국어 결과지를 분석하여 나의 언어로 번역된 결과를 제공합니다.</p>
+                        
+                        <div style="background: white; border-radius: 8px; padding: 12px; margin-bottom: 15px; border: 1px dashed #c4b5fd;">
+                            <p style="font-size: 0.8rem; color: #6d28d9; line-height: 1.5;">
+                                <i class="fa-solid fa-circle-info" style="color: #8b5cf6;"></i> <strong>안내사항:</strong> AI 단순 번역 특성상 의학 용어의 의미나 뉘앙스가 약간 다를 수 있습니다.<br>
+                                이를 방지하고 정확한 확인을 돕기 위해 <strong>① 원본 결과지, ② 번역 결과지, ③ KCD/ICD 국제 질병코드</strong>를 함께 제공해 드립니다.
+                            </p>
+                            <p style="font-size: 0.75rem; color: #ef4444; margin-top: 8px; font-weight: 600;">
+                                ※ CHECKIT은 번역 서비스를 제공할 뿐, 어떠한 의학적 진단이나 판단도 내리지 않음을 알려드립니다.
+                            </p>
+                        </div>
+                        
                         <button onclick="window.openTranslationModal()" class="btn-submit" style="width: auto; padding: 12px 25px; margin-top: 0; background: #7c3aed;">
                             <i class="fa-solid fa-wand-magic-sparkles"></i> 번역된 결과 확인하기
                         </button>
@@ -498,16 +508,19 @@
         <button class="close-modal" onclick="document.getElementById('translationModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
         <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>검진 결과 번역 (Translated Result)</h3>
         
+        <div style="background: #fff7ed; border-left: 4px solid #f97316; padding: 12px 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
+            <p style="font-size: 0.85rem; color: #c2410c; font-weight: 700; margin-bottom: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 읽어보시고 꼭 참고해 주세요!</p>
+            <p style="font-size: 0.75rem; color: #9a3412; line-height: 1.5;">
+                본 번역 결과는 원본의 이해를 돕기 위한 <strong>AI 자동 번역물</strong>로, 의학 용어 특성상 뉘앙스 차이가 발생할 수 있어 <strong>원본 및 국제 질병코드(KCD/ICD)와 교차로 확인</strong>하시길 권장합니다. CHECKIT은 건강검진 절차를 돕는 플랫폼이며 <strong>절대 의학적 진단이나 판단을 대신하지 않으므로</strong>, 정확한 진단을 위해서는 반드시 담당 의사와 상담하셔야 합니다.
+            </p>
+        </div>
+
         <div id="translationContent" style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
             <div style="text-align: center; padding: 30px; color: #94a3b8;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
                 <p>결과지를 분석하여 번역 중입니다...</p>
             </div>
         </div>
-        
-        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 20px; text-align: center;">
-            <i class="fa-solid fa-circle-info"></i> 이 번역은 AI에 의해 자동 생성되었으며, 정확한 진단은 반드시 의사와 상담하시기 바랍니다.
-        </p>
     </div>
 </div>
 

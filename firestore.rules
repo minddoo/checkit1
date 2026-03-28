@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // [치트키] 마스터 계정 이메일은 모든 권한 통과
+    match /{document=**} {
+      allow read, write: if request.auth != null && request.auth.token.email == "master@checkit.com";
+    }
+
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /company_info/{companyId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null; 
+    }
+
+    match /user_process/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      match /{allPaths=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

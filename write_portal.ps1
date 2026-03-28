@@ -1,0 +1,543 @@
+$scriptContent = @"
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.appspot.com",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    let chatUnsub = null;
+
+    const transTable = {
+        ko: {
+            menuProgress: '\ub098\uc758 \uc9c4\ud589\uc0c1\ud669',
+            menuChat: '1:1 \ub300\ud654\ubc29',
+            menuResults: '\uacb0\uacbc \uad00\ub9ac',
+            welcomePre: '\uc548\ub155\ud558\uc138\uc694, ',
+            bannerSub: '\ub098\uc758 \uac74\uac15\uacb0\uc9c4 \ud604\ud669\uacfc \uc81c\ud734 \ubcd1\uc6d0 \uc815\ubcf4\ub97c \ud655\uc778\ud558\uc138\uc694.',
+            h_myStatus: '\ub098\uc758 \uacb0\uc9c4 \ud604\ud669',
+            h_hospitals: '\uc81c\ud734 \ubcd1\uc6d0 \uc548\ub0b4',
+            h_required: '\uae30\uc5c5 \ud544\uc694 \uc11c\ub958',
+            h_chatTitle: 'CHECKIT 1:1 \ucf00\uc5b4 \uc13c\ud130',
+            p_chatStatus: '\uc0c1\ub2f4\uc6d0\uc774 \uc628\ub77c\uc778\uc785\ub2c8\ub2e4',
+            chatInput: '\uad81\uae08\ud55c \uc810\uc744 \ub0a8\uaca8\uc8fc\uc138\uc694...',
+            h_submitResult: '\uae30\uc5c5\uc5d0 \uacb0\uacbc\uc9c0 \uc11c\ucd9c\ud558\uae30',
+            p_noResult: '\uc544\uc9c1 \uc11c\ucd9c\ub41c \uacb0\uacbc\uc9c0\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.',
+            p_resultInst: '\uacb0\uc9c4 \uacb0\uacbc\uc9c0(\ub610\ub294 \ubcf4\uac74\uc99d)\ub97c \ucc0d\uc5b4 \uc5c5\ub85c\ub4dc\ud558\uac70\ub098,<br>\ud655\uc778 \ubc84\ud2bc\uc744 \ub20c\ub7ec \uae30\uc5c5\uc5d0 \uacb0\uc9c4 \uc644\ub8cc\ub97c \uc54c\ub9b4 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
+            b_uploadPhoto: '\uc0ac\uc9c4 \uc5c5\ub85c\ub4dc',
+            b_submitNow: '\ubc14\ub85c \uc11c\ucd9c\ud558\uae30',
+            t_loading: '\ubd88\ub7ec\uc624\ub294 \uc911...',
+            t_loadChat: '\ub300\ud654 \ub0b4\uc6a9\uc744 \ubd88\ub7ec\uc624\ub294 \uc911...',
+            logout: '\ub85c\uadf8\uc544\uc6c3',
+            masterBadge: '\ub9c8\uc2a4\ud130 \uc804\uc6a9'
+        },
+        en: {
+            menuProgress: 'My Progress',
+            menuChat: '1:1 Chat',
+            menuResults: 'Results',
+            welcomePre: 'Welcome, ',
+            bannerSub: 'Check your health checkup status and partner hospitals.',
+            h_myStatus: 'My Checkup Status',
+            h_hospitals: 'Partner Hospitals',
+            h_required: 'Required Documents',
+            h_chatTitle: 'CHECKIT 1:1 Care Center',
+            p_chatStatus: 'Counselors Online',
+            chatInput: 'Type your message here...',
+            h_submitResult: 'Submit Results',
+            p_noResult: 'No results submitted yet.',
+            p_resultInst: 'Upload a photo of your results or medical certificate,<br>or click to notify completion.',
+            b_uploadPhoto: 'Upload Photo',
+            b_submitNow: 'Submit Now',
+            t_loading: 'Loading...',
+            t_loadChat: 'Loading chat history...',
+            logout: 'Logout',
+            masterBadge: 'MASTER'
+        },
+        cn: {
+            menuProgress: '\u6211\u7684\u8fdb\u5ea6',
+            menuChat: '1:1 \u804a\u5929',
+            menuResults: '\u7ed3\u679c\u7ba1\u7406',
+            welcomePre: '\u60a8\u597d, ',
+            bannerSub: '\u67e5\u770b\u60a8\u7684\u5065\u5eb7\u4f53\u68c0\u72b6\u6001\u548c\u5408\u4f5c\u533b\u9662\u3002',
+            h_myStatus: '\u6211\u7684\u4f53\u68c0\u72b6\u6001',
+            h_hospitals: '\u5408\u4f5c\u533b\u9662\u6307\u5357',
+            h_required: '\u4f01\u4e1a\u6240\u9700\u6587\u4ef6',
+            h_chatTitle: 'CHECKIT 1:1 \u62a4\u7406\u4e2d\u5fc3',
+            p_chatStatus: '\u5ba2\u670d\u5728\u7ebf',
+            chatInput: '\u8bf7\u7559\u4e0b\u60a8\u7684\u95ee\u9898...',
+            h_submitResult: '\u5411\u4f01\u4e1a\u63d0\u4ea4\u7ed3\u679c',
+            p_noResult: '\u5c1a\u672a\u63d0\u4ea4\u7ed3\u679c\u3002',
+            p_resultInst: '\u62cd\u7167\u4e0a\u4f20\u4f53\u68c0\u7ed3\u679c\u6216\u533b\u7597\u8bc1\u660e\uff0c<br>\u6216\u70b9\u51fb\u786e\u8ba4\u4ee5\u901a\u77e5\u4f01\u4e1a\u5b8c\u6210\u3002',
+            b_uploadPhoto: '\u4e0a\u4f20\u7167\u7247',
+            b_submitNow: '\u7acb\u5373\u63d0\u4ea4',
+            t_loading: '\u52a0\u8f7d\u4e2d...',
+            t_loadChat: '\u6b63\u5728\u52a0\u8f7d\u804a\u5929\u8bb0\u5f55...',
+            logout: '\u9000\u51fa\u767b\u5f55',
+            masterBadge: '\u7ba1\u7406\u5458'
+        },
+        vn: {
+            menuProgress: 'Ti\u1ebfn \u0111\u1ed9 c\u1ee7a t\u00f4i',
+            menuChat: 'Tr\u00f2 chuy\u1ec7n 1:1',
+            menuResults: 'Qu\u1ea3n l\u00fd k\u1ebft qu\u1ea3',
+            welcomePre: 'Xin ch\u00e0o, ',
+            bannerSub: 'Ki\u1ec3m tra t\u00ecnh tr\u1ea1ng s\u1ee9c kh\u1ecfe v\u00e0 b\u1ec7nh vi\u1ec7n li\u00ean k\u1ebft.',
+            h_myStatus: 'T\u00ecnh tr\u1ea1ng ki\u1ec3m tra',
+            h_hospitals: 'B\u1ec7nh vi\u1ec7n li\u00ean k\u1ebft',
+            h_required: 'Gi\u1ea5y t\u1edd y\u00eau c\u1ea7u',
+            h_chatTitle: 'Trung t\u00e2m ch\u0103m s\u00f3c 1:1 CHECKIT',
+            p_chatStatus: 'T\u01b0 v\u1ea5n vi\u00ean tr\u1ef1c tuy\u1ebfn',
+            chatInput: 'Vui l\u00f2ng \u0111\u1ec3 l\u1ea1i c\u00e2u h\u1ecfi c\u1ee7a b\u1ea1n...',
+            h_submitResult: 'N\u1ed9p k\u1ebft qu\u1ea3 cho c\u00f4ng ty',
+            p_noResult: 'Ch\u01b0a c\u00f3 k\u1ebft qu\u1ea3 n\u00e0o \u0111\u01b0\u1ee3c n\u1ed9p.',
+            p_resultInst: 'Ch\u1ee5p \u1ea3nh v\u00e0 t\u1ea3i l\u00ean k\u1ebft qu\u1ea3 ki\u1ec3m tra,<br>ho\u1eb7c nh\u1ea5n x\u00e1c nh\u1eadn \u0111\u1ec3 th\u00f4ng b\u00e1o ho\u00e0n th\u00e0nh.',
+            b_uploadPhoto: 'T\u1ea3i \u1ea3nh l\u00ean',
+            b_submitNow: 'N\u1ed9p ngay',
+            t_loading: '\u0110ang t\u1ea3i...',
+            t_loadChat: '\u0110ang t\u1ea3i n\u1ed9p dung tr\u00f2 chuy\u1ec7n...',
+            logout: '\u0110\u0103ng xu\u1ea5t',
+            masterBadge: 'QU\u1ea2N TR\u1eca'
+        }
+    };
+
+    window.switchSection = (target) => {
+        const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
+        const menus = ['menuProgress', 'menuChat', 'menuResults'];
+        sections.forEach(s => {
+            const el = document.getElementById(s);
+            if (el) el.classList.add('hidden');
+        });
+        menus.forEach(m => {
+            const el = document.getElementById(m);
+            if (el) el.classList.remove('active');
+        });
+        const targetSection = document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1));
+        const targetMenu = document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1));
+        if (targetSection) targetSection.classList.remove('hidden');
+        if (targetMenu) targetMenu.classList.add('active');
+        if (target === 'chat') {
+            const chatBody = document.getElementById('chatMessages');
+            if (chatBody) setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+        } else if (target === 'results') {
+            window.renderResultsSection();
+        }
+    };
+
+    window.changePortalLanguage = async function(lang) {
+        console.log("Changing language to:", lang);
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const workerDocId = userDoc.data()?.workerDocId;
+                if (workerDocId) {
+                    await db.collection('workers').doc(workerDocId).update({ prefLang: lang });
+                }
+            } catch (e) { console.error("Lang save error", e); }
+        }
+        translateStaticUI(lang);
+    };
+
+    function translateStaticUI(lang) {
+        const t = transTable[lang] || transTable.ko;
+        const ids = ['menuProgress', 'menuChat', 'menuResults', 'welcomePre', 'bannerSub', 
+                     'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle', 
+                     'h_submitResult', 'p_noResult', 'p_resultInst', 
+                     'b_uploadPhoto', 'b_submitNow', 't_loadChat', 'masterBadge'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                if (id === 'menuProgress') el.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.menuProgress}`;
+                else if (id === 'menuChat') el.innerHTML = `<i class="fa-solid fa-comments"></i> ${t.menuChat}`;
+                else if (id === 'menuResults') el.innerHTML = `<i class="fa-solid fa-file-shield"></i> ${t.menuResults}`;
+                else if (id === 'p_chatStatus') el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> ${t.p_chatStatus}`;
+                else if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
+                else el.textContent = t[id];
+            }
+        });
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput) chatInput.placeholder = t.chatInput;
+        document.querySelectorAll('.t-loading').forEach(el => el.textContent = t.t_loading);
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+        const loader = document.getElementById('pageLoader');
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        let workerDocId = urlParams.get('workerDocId');
+        let companyId = urlParams.get('companyId');
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists) {
+                loader.style.display = 'none';
+                return;
+            }
+            const userData = userDoc.data();
+            const isMaster = userData.role === 'master';
+            if (!workerDocId) workerDocId = userData.workerDocId;
+            if (!companyId) companyId = userData.companyId;
+
+            if (isMaster && urlParams.get('workerDocId')) {
+                document.getElementById('masterBadge').classList.remove('hidden');
+                document.getElementById('logoutBtn').classList.add('hidden');
+                document.getElementById('closeBtn').classList.remove('hidden');
+            }
+
+            document.getElementById('displayName').textContent = userData.name || (isMaster ? 'Master' : 'Worker');
+            document.getElementById('welcomeName').textContent = userData.name || (isMaster ? 'Master' : 'Worker');
+
+            if (workerDocId) {
+                db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                    if (workerDoc.exists) {
+                        const wData = workerDoc.data();
+                        if (isMaster) document.getElementById('welcomeName').textContent = wData.name;
+                        const prefLang = wData.prefLang || 'ko';
+                        translateStaticUI(prefLang);
+                        renderCheckupStatus(wData);
+                        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang));
+                    }
+                    loader.style.display = 'none';
+                    document.getElementById('portalContent').classList.remove('hidden');
+                }, () => {
+                    loader.style.display = 'none';
+                    document.getElementById('portalContent').classList.remove('hidden');
+                });
+                loadChatMessages(workerDocId);
+            } else {
+                loader.style.display = 'none';
+                document.getElementById('portalContent').classList.remove('hidden');
+            }
+            if (companyId) {
+                db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                    renderHospitals(hospSnap.docs);
+                });
+            }
+        } catch (err) {
+            console.error('Auth error:', err);
+            loader.style.display = 'none';
+            document.getElementById('portalContent').classList.remove('hidden');
+        }
+    });
+
+    function loadChatMessages(workerDocId) {
+        if (chatUnsub) chatUnsub();
+        chatUnsub = db.collection('messages').where('workerDocId', '==', workerDocId)
+            .onSnapshot(snap => {
+                const chatBody = document.getElementById('chatMessages');
+                if (!chatBody) return;
+                const docs = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (a.timestamp?.seconds||0) - (b.timestamp?.seconds||0));
+                chatBody.innerHTML = docs.map(msg => renderMessage(msg)).join('');
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+    }
+
+    function renderMessage(msg) {
+        const isWorker = msg.sender === 'worker';
+        const isSystem = msg.sender === 'system';
+        const isAdmin = msg.sender === 'admin';
+        let timestamp = '';
+        if (msg.timestamp) timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
+        if (isWorker) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
+        let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
+        if (isWorker) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
+        else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
+        else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+
+        if (msg.type === 'guide') {
+            return `<div style="${wrapperStyle}"><div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);"><div style="background: var(--dark); color: white; padding: 15px; font-weight: 700;">Guide</div><div style="padding: 18px;"><p style="font-size: 0.85rem; line-height: 1.6;">${msg.text}</p></div></div><span style="font-size: 0.65rem; color: #94a3b8;">${timestamp}</span></div>`;
+        }
+        return `<div style="${wrapperStyle}">${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">Admin</span>' : ''}<div style="${bubbleStyle}">${(msg.text || '').replace(/\n/g, '<br>')}</div><span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px;">${timestamp}</span></div>`;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        const user = auth.currentUser;
+        if (!user) return;
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const workerDocId = userDoc.data().workerDocId;
+        if (!workerDocId) return;
+        input.value = '';
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'worker',
+            text: text,
+            type: 'text',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+
+    function renderCheckupStatus(data) {
+        const statuses = ['\uc9c4\ud589 \uc911', '\uc608\uc57d\uc644\ub8cc', '\uacb0\uc9c4\uc644\ub8cc', '\uacb0\uacbc\uc644\ub8cc', '\uc7ac\uacb0\ub300\uc0c1\uc790', '\uc7ac\uacb0\uc644\ub8cc'];
+        const statusLabel = data.status || '\uc9c4\ud589 \uc911';
+        const currentIdx = statuses.indexOf(statusLabel);
+        let badgeClass = 'status-pending';
+        if (statusLabel === '\uc608\uc57d\uc644\ub8cc') badgeClass = 'status-reservation';
+        else if (statusLabel === '\uacb0\uc9c4\uc644\ub8cc') badgeClass = 'status-checkup';
+        else if (statusLabel === '\uacb0\uacbc\uc644\ub8cc') badgeClass = 'status-result';
+
+        let stepperHtml = '<div class="stepper">';
+        statuses.forEach((s, idx) => {
+            if (s === '\uc9c4\ud589 \uc911') return;
+            let stepClass = idx < currentIdx ? 'completed' : (idx === currentIdx ? 'active' : '');
+            stepperHtml += `<div class="step ${stepClass}"><div class="step-icon">${idx < currentIdx ? '<i class="fa-solid fa-check"></i>' : idx}</div><div class="step-label">${s}</div></div>`;
+        });
+        stepperHtml += '</div>';
+
+        const container = document.getElementById('checkupStatus');
+        if (container) {
+            container.innerHTML = `
+                <div style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span class="status-badge ${badgeClass}">${statusLabel}</span>
+                    </div>
+                    ${stepperHtml}
+                </div>
+                <div class="info-grid" style="margin-top:20px;">
+                    <div class="info-item"><div class="label">Site</div><div class="value">${data.site || '-'}</div></div>
+                    <div class="info-item"><div class="label">Checkup</div><div class="value">${data.checkup || '-'}</div></div>
+                </div>`;
+        }
+        document.getElementById('requiredDocs').textContent = data.docs || 'No documents recorded.';
+        window.renderResultsSection(data);
+    }
+
+    window.renderResultsSection = async function(w) {
+        const area = document.getElementById('resultSubmissionArea');
+        if (!area) return;
+        if (!w) {
+            const user = auth.currentUser;
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDoc = await db.collection('workers').doc(userDoc.data().workerDocId).get();
+            w = workerDoc.data();
+        }
+        const hasFile = w.resultFileUrl || w.resultFileBase64;
+        if (hasFile) {
+            area.innerHTML = `<div style="text-align:center;"><i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i><h3 style="color:#059669; margin-bottom:10px;">Submitted</h3><button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width:auto; padding:10px 25px; background:var(--dark);">Re-upload</button></div>`;
+            document.getElementById('translationCard')?.classList.remove('hidden');
+        } else {
+            area.innerHTML = `<div id="noSubmissionUI"><i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i><p>No results yet.</p><button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; background: var(--dark);">Upload Photo</button></div>`;
+        }
+    };
+
+    window.handleResultFileUpload = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const loader = document.getElementById('pageLoader');
+        loader.style.display = 'flex';
+        try {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64 = e.target.result;
+                const user = auth.currentUser;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                await db.collection('workers').doc(userDoc.data().workerDocId).update({
+                    resultFileBase64: base64,
+                    resultFileName: file.name,
+                    resultFileType: file.type,
+                    resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    status: '\uacb0\uacbc\uc644\ub8cc'
+                });
+                loader.style.display = 'none';
+                location.reload();
+            };
+            reader.readAsDataURL(file);
+        } catch (err) { alert(err.message); loader.style.display = 'none'; }
+    };
+
+    function renderHospitals(docs) {
+        const container = document.getElementById('hospitalList');
+        let html = '';
+        docs.forEach(doc => {
+            const h = doc.data();
+            html += `<div class="hospital-item"><div><div class="hospital-name">${h.name}</div><div class="hospital-meta">${h.schedule || ''}</div></div><div><a class="hospital-link" href="${h.link || '#'}" target="_blank">Book</a></div></div>`;
+        });
+        container.innerHTML = html || 'No hospitals.';
+    }
+
+    function doLogout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }
+"@
+
+$htmlContent = @"
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT - Worker Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --dark: #1e1b4b;
+            --bg: #f0f4ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .hidden { display: none !important; }
+
+        #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+        .loader { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .top-bar .logo i { color: var(--primary-light); }
+        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; }
+        .top-bar .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; }
+
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 15px; }
+        .lang-btn { background: transparent; border: none; color: rgba(255,255,255,0.6); padding: 5px 12px; border-radius: 7px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .lang-btn.active { background: white; color: var(--primary); }
+
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
+        .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
+
+        .sidebar-menu { list-style: none; margin-top: 10px; }
+        .sidebar-menu li { padding: 14px 18px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+        .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
+        .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
+
+        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .icon-purple { background: #ede9fe; color: var(--primary); }
+        .icon-green { background: #d1fae5; color: var(--success); }
+        .icon-blue { background: #dbeafe; color: #3b82f6; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .status-pending { background: #f1f5f9; color: #64748b; }
+        .status-reservation { background: #e0e7ff; color: #4338ca; }
+        .status-checkup { background: #d1fae5; color: #059669; }
+        .status-result { background: #f5f3ff; color: #6d28d9; }
+
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; }
+        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; }
+        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; }
+        .step.active .step-label { color: var(--primary); }
+        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
+        .info-item .label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
+        .info-item .value { font-weight: 600; }
+
+        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .hospital-name { font-weight: 700; color: var(--primary); }
+        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
+        .hospital-link { background: var(--primary); color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+
+        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        
+        @media (max-width: 768px) {
+            .portal-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px; }
+            .sidebar-menu { display: flex; overflow-x: auto; gap: 10px; }
+            .sidebar-menu li { white-space: nowrap; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="pageLoader"><div class="loader"></div><p class="t-loading">Loading...</p></div>
+    <div id="portalContent" class="hidden">
+        <div class="top-bar">
+            <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">KO</button>
+                <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">EN</button>
+                <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">CN</button>
+                <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">VN</button>
+            </div>
+            <div class="user-info">
+                <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span></span>
+                <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="portal-wrapper">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li id="menuProgress" class="active" onclick="switchSection('progress')"><i class="fa-solid fa-person-walking-arrow-right"></i> My Progress</li>
+                    <li id="menuChat" onclick="switchSection('chat')"><i class="fa-solid fa-comments"></i> 1:1 Chat</li>
+                    <li id="menuResults" onclick="switchSection('results')"><i class="fa-solid fa-file-shield"></i> Results</li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <div id="sectionProgress">
+                    <div class="welcome-banner">
+                        <h2 id="welcomeText"><span id="welcomePre">Welcome, </span><span id="welcomeName">-</span></h2>
+                        <p id="bannerSub">Check your status and info here.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div><h3 id="h_myStatus">My Status</h3></div>
+                        <div id="checkupStatus"><p class="t-loading">Loading...</p></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div><h3 id="h_hospitals">Partner Hospitals</h3></div>
+                        <div id="hospitalList"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div><h3 id="h_required">Required Documents</h3></div>
+                        <p id="requiredDocs">-</p>
+                    </div>
+                </div>
+                <div id="sectionChat" class="hidden">
+                    <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0;">
+                        <div style="padding: 15px; border-bottom: 1px solid var(--border); font-weight: bold;" id="h_chatTitle">1:1 Care Center</div>
+                        <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;"></div>
+                        <div style="padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px;">
+                            <textarea id="chatInput" style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none;" placeholder="Message..."></textarea>
+                            <button onclick="sendChatMessage()" style="padding: 0 20px; background: var(--primary); color: white; border: none; border-radius: 8px;"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div id="sectionResults" class="hidden">
+                    <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
+                    <div class="card">
+                        <div class="card-header"><div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div><h3 id="h_submitResult">Submit Results</h3></div>
+                        <div id="resultSubmissionArea" style="padding: 20px; text-align: center; border: 2px dashed var(--border); border-radius: 12px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>$scriptContent</script>
+</body>
+</html>
+"@
+
+$htmlContent | Set-Content -Path "c:\Users\pc\.gemini\antigravity\scratch\checkit1-main\worker_portal.html" -Encoding UTF8

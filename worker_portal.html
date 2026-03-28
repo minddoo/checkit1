@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - Worker Portal</title>
+    <title>CHECKIT - 근로자 포털 (v1.0.2)</title> <!-- fix nesting bug -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // Set PDF.js worker source
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    </script>
     <style>
         :root {
             --primary: #6366f1;
@@ -24,141 +31,494 @@
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .hidden { display: none !important; }
 
+        /* Loader */
         #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
         .loader { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* Header */
         .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         .top-bar .logo i { color: var(--primary-light); }
         .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; }
-        .top-bar .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
-        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; }
+        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .top-bar .logout-btn:hover { background: rgba(255,255,255,0.1); }
 
-        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 15px; }
-        .lang-btn { background: transparent; border: none; color: rgba(255,255,255,0.6); padding: 5px 12px; border-radius: 7px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
-        .lang-btn.active { background: white; color: var(--primary); }
+        /* Main Content */
+        .main { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
 
+        /* Welcome Banner */
+        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .welcome-banner h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        .welcome-banner p { opacity: 0.8; font-size: 0.95rem; }
+
+        /* Cards */
+        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-header h3 { font-size: 1.1rem; color: var(--text); }
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .icon-purple { background: #ede9fe; color: var(--primary); }
+        .icon-green { background: #d1fae5; color: var(--success); }
+        .icon-blue { background: #dbeafe; color: #3b82f6; }
+
+        /* Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; transition: 0.3s; }
+        .status-pending { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+        .status-reservation { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .status-checkup { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+        .status-result { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .status-recheck-target { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .status-recheck-done { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+
+        /* Progress Stepper */
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; padding: 0 10px; }
+        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; transition: 0.3s; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; transition: 0.3s; white-space: nowrap; }
+        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
+        .step.active .step-label { color: var(--primary); font-weight: 700; }
+        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
+        .step.completed .step-label { color: #10b981; }
+        .step.warning .step-icon { background: var(--warning); border-color: var(--warning); color: white; }
+        .step.warning .step-label { color: var(--warning); }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
+        .info-item .label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+        .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+        /* Hospital List */
+        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+        .hospital-item:last-child { border-bottom: none; }
+        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
+        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+        .hospital-link:hover { background: #4f46e5; }
+        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+
+        /* Loading state */
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout */
         .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
         .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
         .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
 
         .sidebar-menu { list-style: none; margin-top: 10px; }
-        .sidebar-menu li { padding: 14px 18px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+        .sidebar-menu li { 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            transition: 0.2s; 
+        }
+        .sidebar-menu li i { font-size: 1.1rem; width: 24px; text-align: center; }
         .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
         .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
 
-        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
-        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
-        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-        .icon-purple { background: #ede9fe; color: var(--primary); }
-        .icon-green { background: #d1fae5; color: var(--success); }
-        .icon-blue { background: #dbeafe; color: #3b82f6; }
-
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
-        .status-pending { background: #f1f5f9; color: #64748b; }
-        .status-reservation { background: #e0e7ff; color: #4338ca; }
-        .status-checkup { background: #d1fae5; color: #059669; }
-        .status-result { background: #f5f3ff; color: #6d28d9; }
-
-        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; }
-        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
-        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
-        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
-        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; }
-        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; }
-        .step.active .step-label { color: var(--primary); }
-        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
-
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
-        .info-item .label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
-        .info-item .value { font-weight: 600; }
-
-        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .hospital-name { font-weight: 700; color: var(--primary); }
-        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
-        .hospital-link { background: var(--primary); color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
-
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        
         @media (max-width: 768px) {
             .portal-wrapper { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px; }
-            .sidebar-menu { display: flex; overflow-x: auto; gap: 10px; }
-            .sidebar-menu li { white-space: nowrap; padding: 10px; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px 20px; }
+            .sidebar-menu { display: flex; gap: 10px; overflow-x: auto; margin-top: 0; padding-bottom: 5px; }
+            .sidebar-menu li { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.85rem; }
+            .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
+            .main-content { padding: 20px; }
+        }
+        /* Existing styles... */
+        /* Booking Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .booking-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .booking-modal h3 { margin-bottom: 20px; color: var(--dark); font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; color: #64748b; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+            min-width: 280px;
+        }
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        
+        @keyframes toastIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+
+        /* Language Switcher */
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 15px; }
+        .lang-btn { 
+            background: transparent; 
+            border: none; 
+            color: rgba(255,255,255,0.6); 
+            padding: 5px 12px; 
+            border-radius: 7px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .lang-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .lang-btn i { font-size: 0.8rem; }
+
+        .translation-box {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-style: italic;
         }
     </style>
+
+
 </head>
 <body>
-    <div id="pageLoader"><div class="loader"></div><p class="t-loading">Loading...</p></div>
-    <div id="portalContent" class="hidden">
-        <div class="top-bar">
-            <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
-            <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">KO</button>
-                <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">EN</button>
-                <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">CN</button>
-                <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">VN</button>
-            </div>
-            <div class="user-info">
-                <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span></span>
-                <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
-                <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">포털을 불러오는 중...</p>
+    <button id="loaderCloseBtn" style="display: none; margin-top: 20px; background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; color: var(--text-muted);" onclick="this.parentElement.style.display='none'">닫기 (창이 멈춘 경우)</button>
+</div>
+
+<div id="portalContent" class="hidden">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
+        
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
+            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
+            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
+            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
         </div>
-        <div class="portal-wrapper">
-            <div class="sidebar">
-                <ul class="sidebar-menu">
-                    <li id="menuProgress" class="active" onclick="switchSection('progress')"><i class="fa-solid fa-person-walking-arrow-right"></i> My Progress</li>
-                    <li id="menuChat" onclick="switchSection('chat')"><i class="fa-solid fa-comments"></i> 1:1 Chat</li>
-                    <li id="menuResults" onclick="switchSection('results')"><i class="fa-solid fa-file-shield"></i> Results</li>
-                </ul>
-            </div>
-            <div class="main-content">
-                <div id="sectionProgress">
-                    <div class="welcome-banner">
-                        <h2 id="welcomeText"><span id="welcomePre">Welcome, </span><span id="welcomeName">-</span></h2>
-                        <p id="bannerSub">Check your status and info here.</p>
+
+        <div class="user-info">
+            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
+            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <div class="portal-wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li id="menuProgress" class="active" onclick="switchSection('progress')">
+                    <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
+                </li>
+                <li id="menuChat" onclick="switchSection('chat')">
+                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
+                </li>
+                <li id="menuResults" onclick="switchSection('results')">
+                    <i class="fa-solid fa-file-shield"></i> 결과 관리
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- SECTION 1: MY PROGRESS -->
+            <div id="sectionProgress" class="reveal">
+                <!-- Welcome -->
+                <div class="welcome-banner">
+                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+                </div>
+
+                <!-- My Checkup Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3>나의 검진 현황</h3>
                     </div>
-                    <div class="card">
-                        <div class="card-header"><div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div><h3 id="h_myStatus">My Status</h3></div>
-                        <div id="checkupStatus"><p class="t-loading">Loading...</p></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header"><div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div><h3 id="h_hospitals">Partner Hospitals</h3></div>
-                        <div id="hospitalList"></div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header"><div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div><h3 id="h_required">Required Documents</h3></div>
-                        <p id="requiredDocs">-</p>
+                    <div id="checkupStatus">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
                     </div>
                 </div>
-                <div id="sectionChat" class="hidden">
-                    <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0;">
-                        <div style="padding: 15px; border-bottom: 1px solid var(--border); font-weight: bold;" id="h_chatTitle">1:1 Care Center</div>
-                        <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; display: flex; flex-direction: column; gap: 10px;"></div>
-                        <div style="padding: 15px; border-top: 1px solid var(--border); display: flex; gap: 10px;">
-                            <textarea id="chatInput" style="flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 10px; resize: none;" placeholder="Message..."></textarea>
-                            <button onclick="sendChatMessage()" style="padding: 0 20px; background: var(--primary); color: white; border: none; border-radius: 8px;"><i class="fa-solid fa-paper-plane"></i></button>
+
+                <!-- Affiliated Hospitals -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
+                        <h3>제휴 병원 안내</h3>
+                    </div>
+                    <div id="hospitalList">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
+
+                <!-- Required Docs -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
+                        <h3>기업 필요 서류</h3>
+                    </div>
+                    <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CHAT ROOM -->
+            <div id="sectionChat" class="hidden reveal">
+                <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: none;">
+                    <!-- Chat Header -->
+                    <div style="padding: 15px 25px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                        <div class="card-icon icon-purple" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                        </div>
+                        <!-- Language Switcher -->
+                        <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                            <button onclick="setChatLanguage('ko')" class="lang-btn active" data-lang="ko" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">KR</button>
+                            <button onclick="setChatLanguage('en')" class="lang-btn" data-lang="en" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">EN</button>
+                            <button onclick="setChatLanguage('cn')" class="lang-btn" data-lang="cn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">CN</button>
+                            <button onclick="setChatLanguage('vn')" class="lang-btn" data-lang="vn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">VN</button>
+                        </div>
+                    </div>
+
+                    <!-- Message Body -->
+                    <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Messages will be injected here -->
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px;">
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                        <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: RESULT MANAGEMENT -->
+            <div id="sectionResults" class="hidden reveal">
+                <!-- Persistent hidden file input for all result uploads -->
+                <input type="file" id="resultFileInput" style="display: none;" accept="image/*,application/pdf" onchange="handleResultFileUpload(this)">
+                <div class="card" style="border-left: 4px solid var(--primary);">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <h3>기업에 결과지 제출하기</h3>
+                    </div>
+                    <div id="resultSubmissionArea" style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border);">
+                        <!-- Dynamic content -->
+                        <div id="noSubmissionUI">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                            <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                            
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                    <i class="fa-solid fa-camera"></i> 사진 업로드
+                                </button>
+                                <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                    <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div id="sectionResults" class="hidden">
-                    <input type="file" id="resultFileInput" style="display: none;" onchange="handleResultFileUpload(this)">
-                    <div class="card">
-                        <div class="card-header"><div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div><h3 id="h_submitResult">Submit Results</h3></div>
-                        <div id="resultSubmissionArea" style="padding: 20px; text-align: center; border: 2px dashed var(--border); border-radius: 12px;"></div>
+
+                <div id="translationCard" class="card hidden">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-language"></i></div>
+                        <h3>나의 언어로 번역보기 (Translation)</h3>
+                    </div>
+                    <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
+                        <p style="font-size: 0.9rem; margin-bottom: 5px; color: #5b21b6;">제출하신 한국어 결과지를 분석하여 번역된 결과를 제공합니다.</p>
+                        <p style="font-size: 0.8rem; margin-bottom: 15px; color: #7c3aed; font-weight: 500;"><i class="fa-solid fa-circle-info"></i> 질병코드도 KCD, ICD로 비교해서 나의 결과지 정확하게 확인하세요.</p>
+                        <button onclick="window.openTranslationModal()" class="btn-submit" style="width: auto; padding: 12px 25px; margin-top: 0; background: #7c3aed;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 번역된 결과 확인하기
+                        </button>
                     </div>
                 </div>
+            </div> <!-- End sectionResults -->
+        </div> <!-- End main-content -->
+    </div> <!-- End portal-wrapper -->
+</div> <!-- End portalContent -->
+
+<!-- Booking Form Modal HTML -->
+<div id="bookingModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeBookingForm()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>예약 신청서 작성</h3>
+        <form id="bookingForm" onsubmit="submitBookingForm(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>성함</label>
+                    <input type="text" id="bf_name" required>
+                </div>
+                <div class="form-group">
+                    <label>생년월일</label>
+                    <input type="date" id="bf_dob" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>연락처</label>
+                <input type="tel" id="bf_phone" placeholder="010-0000-0000" required>
+            </div>
+            <div class="form-group">
+                <label>한국 거주 주소</label>
+                <input type="text" id="bf_address" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 병원</label>
+                <input type="text" id="bf_hospital" placeholder="제휴 병원 중 선택 또는 기입" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 날짜 (7일 기간으로 입력)</label>
+                <input type="text" id="bf_dateRange" placeholder="예: 2024.05.01 ~ 2024.05.07" required>
+            </div>
+            <div class="form-group">
+                <label>추가 검사 항목 유무</label>
+                <select id="bf_extraItems">
+                    <option value="none">없음</option>
+                    <option value="yes">있음 (상담 필요)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>개인 희망 서류 (선택 사항)</label>
+                <textarea id="bf_documents" placeholder="예: 실손보험 청구용 서류 등" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">신청서 제출하기</button>
+        </form>
+    </div>
+</div>
+
+<!-- Alimtalk Paste Modal HTML -->
+<div id="alimtalkModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeAlimtalkModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>예약 확정 정보 올리기</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">병원에서 받으신 한국어 알림톡이나 문자 내용을 아래에 복사해서 붙여넣어 주세요.</p>
+        <div class="form-group">
+            <textarea id="alimtalkContent" placeholder="여기에 내용을 붙여넣으세요..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
+        </div>
+        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">내용 전송하기</button>
+    </div>
+</div>
+
+<!-- Translation Modal HTML -->
+<div id="translationModalOverlay" class="modal-overlay">
+    <div class="booking-modal" style="max-width: 850px;">
+        <button class="close-modal" onclick="document.getElementById('translationModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>검진 결과 번역 (Translated Result)</h3>
+        
+        <div id="translationContent" style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>결과지를 분석하여 번역 중입니다...</p>
             </div>
         </div>
+        
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 20px; text-align: center;">
+            <i class="fa-solid fa-circle-info"></i> 이 번역은 AI에 의해 자동 생성되었으며, 정확한 진단은 반드시 의사와 상담하시기 바랍니다.
+        </p>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script>    const firebaseConfig = {
+</div>
+
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+<script>
+    const firebaseConfig = {
         apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
         authDomain: "checkit-43341.firebaseapp.com",
         projectId: "checkit-43341",
@@ -169,102 +529,13 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    let chatUnsub = null;
+    const storage = firebase.storage();
 
-    const transTable = {
-        ko: {
-            menuProgress: '\ub098\uc758 \uc9c4\ud589\uc0c1\ud669',
-            menuChat: '1:1 \ub300\ud654\ubc29',
-            menuResults: '\uacb0\uacbc \uad00\ub9ac',
-            welcomePre: '\uc548\ub155\ud558\uc138\uc694, ',
-            bannerSub: '\ub098\uc758 \uac74\uac15\uacb0\uc9c4 \ud604\ud669\uacfc \uc81c\ud734 \ubcd1\uc6d0 \uc815\ubcf4\ub97c \ud655\uc778\ud558\uc138\uc694.',
-            h_myStatus: '\ub098\uc758 \uacb0\uc9c4 \ud604\ud669',
-            h_hospitals: '\uc81c\ud734 \ubcd1\uc6d0 \uc548\ub0b4',
-            h_required: '\uae30\uc5c5 \ud544\uc694 \uc11c\ub958',
-            h_chatTitle: 'CHECKIT 1:1 \ucf00\uc5b4 \uc13c\ud130',
-            p_chatStatus: '\uc0c1\ub2f4\uc6d0\uc774 \uc628\ub77c\uc778\uc785\ub2c8\ub2e4',
-            chatInput: '\uad81\uae08\ud55c \uc810\uc744 \ub0a8\uaca8\uc8fc\uc138\uc694...',
-            h_submitResult: '\uae30\uc5c5\uc5d0 \uacb0\uacbc\uc9c0 \uc11c\ucd9c\ud558\uae30',
-            p_noResult: '\uc544\uc9c1 \uc11c\ucd9c\ub41c \uacb0\uacbc\uc9c0\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.',
-            p_resultInst: '\uacb0\uc9c4 \uacb0\uacbc\uc9c0(\ub610\ub294 \ubcf4\uac74\uc99d)\ub97c \ucc0d\uc5b4 \uc5c5\ub85c\ub4dc\ud558\uac70\ub098,<br>\ud655\uc778 \ubc84\ud2bc\uc744 \ub20c\ub7ec \uae30\uc5c5\uc5d0 \uacb0\uc9c4 \uc644\ub8cc\ub97c \uc54c\ub9b4 \uc218 \uc788\uc2b5\ub2c8\ub2e4.',
-            b_uploadPhoto: '\uc0ac\uc9c4 \uc5c5\ub85c\ub4dc',
-            b_submitNow: '\ubc14\ub85c \uc11c\ucd9c\ud558\uae30',
-            t_loading: '\ubd88\ub7ec\uc624\ub294 \uc911...',
-            t_loadChat: '\ub300\ud654 \ub0b4\uc6a9\uc744 \ubd88\ub7ec\uc624\ub294 \uc911...',
-            logout: '\ub85c\uadf8\uc544\uc6c3',
-            masterBadge: '\ub9c8\uc2a4\ud130 \uc804\uc6a9'
-        },
-        en: {
-            menuProgress: 'My Progress',
-            menuChat: '1:1 Chat',
-            menuResults: 'Results',
-            welcomePre: 'Welcome, ',
-            bannerSub: 'Check your health checkup status and partner hospitals.',
-            h_myStatus: 'My Checkup Status',
-            h_hospitals: 'Partner Hospitals',
-            h_required: 'Required Documents',
-            h_chatTitle: 'CHECKIT 1:1 Care Center',
-            p_chatStatus: 'Counselors Online',
-            chatInput: 'Type your message here...',
-            h_submitResult: 'Submit Results',
-            p_noResult: 'No results submitted yet.',
-            p_resultInst: 'Upload a photo of your results or medical certificate,<br>or click to notify completion.',
-            b_uploadPhoto: 'Upload Photo',
-            b_submitNow: 'Submit Now',
-            t_loading: 'Loading...',
-            t_loadChat: 'Loading chat history...',
-            logout: 'Logout',
-            masterBadge: 'MASTER'
-        },
-        cn: {
-            menuProgress: '\u6211\u7684\u8fdb\u5ea6',
-            menuChat: '1:1 \u804a\u5929',
-            menuResults: '\u7ed3\u679c\u7ba1\u7406',
-            welcomePre: '\u60a8\u597d, ',
-            bannerSub: '\u67e5\u770b\u60a8\u7684\u5065\u5eb7\u4f53\u68c0\u72b6\u6001\u548c\u5408\u4f5c\u533b\u9662\u3002',
-            h_myStatus: '\u6211\u7684\u4f53\u68c0\u72b6\u6001',
-            h_hospitals: '\u5408\u4f5c\u533b\u9662\u6307\u5357',
-            h_required: '\u4f01\u4e1a\u6240\u9700\u6587\u4ef6',
-            h_chatTitle: 'CHECKIT 1:1 \u62a4\u7406\u4e2d\u5fc3',
-            p_chatStatus: '\u5ba2\u670d\u5728\u7ebf',
-            chatInput: '\u8bf7\u7559\u4e0b\u60a8\u7684\u95ee\u9898...',
-            h_submitResult: '\u5411\u4f01\u4e1a\u63d0\u4ea4\u7ed3\u679c',
-            p_noResult: '\u5c1a\u672a\u63d0\u4ea4\u7ed3\u679c\u3002',
-            p_resultInst: '\u62cd\u7167\u4e0a\u4f20\u4f53\u68c0\u7ed3\u679c\u6216\u533b\u7597\u8bc1\u660e\uff0c<br>\u6216\u70b9\u51fb\u786e\u8ba4\u4ee5\u901a\u77e5\u4f01\u4e1a\u5b8c\u6210\u3002',
-            b_uploadPhoto: '\u4e0a\u4f20\u7167\u7247',
-            b_submitNow: '\u7acb\u5373\u63d0\u4ea4',
-            t_loading: '\u52a0\u8f7d\u4e2d...',
-            t_loadChat: '\u6b63\u5728\u52a0\u8f7d\u804a\u5929\u8bb0\u5f55...',
-            logout: '\u9000\u51fa\u767b\u5f55',
-            masterBadge: '\u7ba1\u7406\u5458'
-        },
-        vn: {
-            menuProgress: 'Ti\u1ebfn \u0111\u1ed9 c\u1ee7a t\u00f4i',
-            menuChat: 'Tr\u00f2 chuy\u1ec7n 1:1',
-            menuResults: 'Qu\u1ea3n l\u00fd k\u1ebft qu\u1ea3',
-            welcomePre: 'Xin ch\u00e0o, ',
-            bannerSub: 'Ki\u1ec3m tra t\u00ecnh tr\u1ea1ng s\u1ee9c kh\u1ecfe v\u00e0 b\u1ec7nh vi\u1ec7n li\u00ean k\u1ebft.',
-            h_myStatus: 'T\u00ecnh tr\u1ea1ng ki\u1ec3m tra',
-            h_hospitals: 'B\u1ec7nh vi\u1ec7n li\u00ean k\u1ebft',
-            h_required: 'Gi\u1ea5y t\u1edd y\u00eau c\u1ea7u',
-            h_chatTitle: 'Trung t\u00e2m ch\u0103m s\u00f3c 1:1 CHECKIT',
-            p_chatStatus: 'T\u01b0 v\u1ea5n vi\u00ean tr\u1ef1c tuy\u1ebfn',
-            chatInput: 'Vui l\u00f2ng \u0111\u1ec3 l\u1ea1i c\u00e2u h\u1ecfi c\u1ee7a b\u1ea1n...',
-            h_submitResult: 'N\u1ed9p k\u1ebft qu\u1ea3 cho c\u00f4ng ty',
-            p_noResult: 'Ch\u01b0a c\u00f3 k\u1ebft qu\u1ea3 n\u00e0o \u0111\u01b0\u1ee3c n\u1ed9p.',
-            p_resultInst: 'Ch\u1ee5p \u1ea3nh v\u00e0 t\u1ea3i l\u00ean k\u1ebft qu\u1ea3 ki\u1ec3m tra,<br>ho\u1eb7c nh\u1ea5n x\u00e1c nh\u1eadn \u0111\u1ec3 th\u00f4ng b\u00e1o ho\u00e0n th\u00e0nh.',
-            b_uploadPhoto: 'T\u1ea3i \u1ea3nh l\u00ean',
-            b_submitNow: 'N\u1ed9p ngay',
-            t_loading: '\u0110ang t\u1ea3i...',
-            t_loadChat: '\u0110ang t\u1ea3i n\u1ed9p dung tr\u00f2 chuy\u1ec7n...',
-            logout: '\u0110\u0103ng xu\u1ea5t',
-            masterBadge: 'QU\u1ea2N TR\u1eca'
-        }
-    };
-
+    // Section Switching
     window.switchSection = (target) => {
         const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
         const menus = ['menuProgress', 'menuChat', 'menuResults'];
+
         sections.forEach(s => {
             const el = document.getElementById(s);
             if (el) el.classList.add('hidden');
@@ -273,161 +544,164 @@
             const el = document.getElementById(m);
             if (el) el.classList.remove('active');
         });
+
         const targetSection = document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1));
         const targetMenu = document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1));
+        
         if (targetSection) targetSection.classList.remove('hidden');
         if (targetMenu) targetMenu.classList.add('active');
+        
         if (target === 'chat') {
             const chatBody = document.getElementById('chatMessages');
-            if (chatBody) setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+            if (chatBody) {
+                setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+            }
         } else if (target === 'results') {
             window.renderResultsSection();
         }
     };
 
-    window.changePortalLanguage = async function(lang) {
-        console.log("Changing language to:", lang);
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-        });
-        const user = auth.currentUser;
-        if (user) {
-            try {
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                const workerDocId = userDoc.data()?.workerDocId;
-                if (workerDocId) {
-                    await db.collection('workers').doc(workerDocId).update({ prefLang: lang });
-                }
-            } catch (e) { console.error("Lang save error", e); }
-        }
-        translateStaticUI(lang);
-    };
-
-    function translateStaticUI(lang) {
-        const t = transTable[lang] || transTable.ko;
-        const menuMap = {
-            menuProgress: { icon: 'fa-person-walking-arrow-right', key: 'menuProgress' },
-            menuChat:     { icon: 'fa-comments',                   key: 'menuChat' },
-            menuResults:  { icon: 'fa-file-shield',                key: 'menuResults' }
-        };
-        Object.entries(menuMap).forEach(([id, cfg]) => {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = `<i class="fa-solid ${cfg.icon}"></i> ${t[cfg.key] || ''}`;
-        });
-        const textIds = ['welcomePre', 'bannerSub',
-                         'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle',
-                         'h_submitResult', 'p_noResult',
-                         'b_uploadPhoto', 'b_submitNow', 't_loadChat', 'masterBadge'];
-        textIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
-                else el.textContent = t[id] || '';
-            }
-        });
-        const chatInput = document.getElementById('chatInput');
-        if (chatInput) chatInput.placeholder = t.chatInput;
-        document.querySelectorAll('.t-loading').forEach(el => el.textContent = t.t_loading);
-    }
+    let chatUnsub = null;
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
-
-        // 안전망: 최대 5초 후 로더가 남아있으면 강제로 숨김
-        const loaderTimeout = setTimeout(() => {
-            if (loader && loader.style.display !== 'none') {
-                console.warn('pageLoader timeout: forcing hide');
-                loader.style.display = 'none';
-                const pc = document.getElementById('portalContent');
-                if (pc) pc.classList.remove('hidden');
-            }
-        }, 5000);
-
         if (!user) {
-            clearTimeout(loaderTimeout);
             window.location.href = 'index.html';
             return;
         }
+
         const urlParams = new URLSearchParams(window.location.search);
-        let workerDocId = urlParams.get('workerDocId');
-        let companyId = urlParams.get('companyId');
+        const paramWorkerDocId = urlParams.get('workerDocId');
+        const paramCompanyId = urlParams.get('companyId');
 
         try {
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            if (!userDoc.exists) {
-                clearTimeout(loaderTimeout);
-                loader.style.display = 'none';
-                return;
-            }
-            const userData = userDoc.data();
-            const isMaster = userData.role === 'master';
-            if (!workerDocId) workerDocId = userData.workerDocId;
-            if (!companyId) companyId = userData.companyId;
+            // Check if Master Admin or regular worker
+            db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
+                const userData = userDoc.data() || {};
+                const isMaster = user.email === "master@checkit.com";
+                
+                let workerDocId = userData.workerDocId;
+                let companyId = userData.companyId;
 
-            if (isMaster && urlParams.get('workerDocId')) {
-                document.getElementById('masterBadge').classList.remove('hidden');
-                document.getElementById('logoutBtn').classList.add('hidden');
-                document.getElementById('closeBtn').classList.remove('hidden');
-            }
-
-            document.getElementById('displayName').textContent = userData.name || (isMaster ? 'Master' : 'Worker');
-            document.getElementById('welcomeName').textContent = userData.name || (isMaster ? 'Master' : 'Worker');
-
-            if (workerDocId) {
-                db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
-                    if (workerDoc.exists) {
-                        const wData = workerDoc.data();
-                        if (isMaster) document.getElementById('welcomeName').textContent = wData.name;
-                        const prefLang = wData.prefLang || 'ko';
-                        translateStaticUI(prefLang);
-                        renderCheckupStatus(wData);
-                        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang));
-                    }
-                    clearTimeout(loaderTimeout);
+                // Mode: Master Viewing a specific worker
+                if (isMaster && paramWorkerDocId && paramCompanyId) {
+                    workerDocId = paramWorkerDocId;
+                    companyId = paramCompanyId;
+                    
+                    document.getElementById('masterBadge').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.add('hidden');
+                    document.getElementById('closeBtn').classList.remove('hidden');
+                } else if (!userDoc.exists || userData.role !== 'worker') {
+                    console.warn('Worker record not found or invalid role');
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
-                }, () => {
-                    clearTimeout(loaderTimeout);
-                    loader.style.display = 'none';
-                    document.getElementById('portalContent').classList.remove('hidden');
-                });
-                loadChatMessages(workerDocId);
-            } else {
-                clearTimeout(loaderTimeout);
+                    return;
+                }
+
+                // 기본 정보 표시
+                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                if (workerDocId) {
+                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                        if (workerDoc.exists) {
+                            const wData = workerDoc.data();
+                            if (isMaster) {
+                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                document.getElementById('welcomeName').textContent = wData.name;
+                            }
+                            const prefLang = wData.prefLang || 'ko';
+                            document.querySelectorAll('.lang-btn').forEach(btn => {
+                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                            });
+                            renderCheckupStatus(wData);
+                        } else {
+                            if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
+                        }
+                    });
+                    loadChatMessages(workerDocId);
+                }
+
+                if (companyId) {
+                    db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                        renderHospitals(hospSnap.docs);
+                    });
+                }
+
                 loader.style.display = 'none';
                 document.getElementById('portalContent').classList.remove('hidden');
-            }
-            if (companyId) {
-                db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
-                    renderHospitals(hospSnap.docs);
-                });
-            }
+            });
         } catch (err) {
-            console.error('Auth error:', err);
-            clearTimeout(loaderTimeout);
+            console.error('Portal sync error:', err);
             loader.style.display = 'none';
-            document.getElementById('portalContent').classList.remove('hidden');
         }
     });
 
+    // Chat / Workflow Logic
     function loadChatMessages(workerDocId) {
         if (chatUnsub) chatUnsub();
-        chatUnsub = db.collection('messages').where('workerDocId', '==', workerDocId)
-            .onSnapshot(snap => {
+        chatUnsub = db.collection('messages')
+            .where('workerDocId', '==', (workerDocId || 'none'))
+            .onSnapshot({ includeMetadataChanges: true }, snap => {
                 const chatBody = document.getElementById('chatMessages');
                 if (!chatBody) return;
-                const docs = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (a.timestamp?.seconds||0) - (b.timestamp?.seconds||0));
-                chatBody.innerHTML = docs.map(msg => renderMessage(msg)).join('');
-                chatBody.scrollTop = chatBody.scrollHeight;
+
+                try {
+                    const docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    
+                    // Manual Sort
+                    docs.sort((a, b) => {
+                        const tA = (a.timestamp && a.timestamp.toMillis) ? a.timestamp.toMillis() : 0;
+                        const tB = (b.timestamp && b.timestamp.toMillis) ? b.timestamp.toMillis() : 0;
+                        return tA - tB;
+                    });
+
+                    const hasCareGuide = docs.some(m => m.type === 'guide' || m.type === 'action_check');
+
+                    if (!hasCareGuide && workerDocId) {
+                        if (!window._guideSentFor?.includes(workerDocId)) {
+                            window._guideSentFor = window._guideSentFor || [];
+                            window._guideSentFor.push(workerDocId);
+                            sendSystemGuide(workerDocId);
+                        }
+                    }
+
+                    if (snap.empty) {
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
+                        return;
+                    }
+
+                    let html = '';
+                    docs.forEach(msg => {
+                        html += renderMessage(msg);
+                    });
+                    chatBody.innerHTML = html;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } catch (e) {
+                    console.error("Render error:", e);
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 표시 중 오류가 발생했습니다.</div>';
+                }
+            }, err => {
+                console.error("Chat sync error:", err);
+                const chatBody = document.getElementById('chatMessages');
+                if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
             });
     }
 
     function renderMessage(msg) {
-        const isWorker = msg.sender === 'worker';
+        if (!msg) return '';
         const isSystem = msg.sender === 'system';
         const isAdmin = msg.sender === 'admin';
-        let timestamp = '';
-        if (msg.timestamp) timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const isWorker = msg.sender === 'worker';
+        
+        let timestamp = '전송 중...';
+        try {
+            if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
+                timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else if (msg.timestamp instanceof Date) {
+                timestamp = msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+        } catch (e) { console.error("Time format error", e); }
 
         let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
         if (isWorker) wrapperStyle += ' align-items: flex-end;';
@@ -439,121 +713,1401 @@
         else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
         else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
 
-        if (msg.type === 'guide') {
-            return `<div style="${wrapperStyle}"><div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);"><div style="background: var(--dark); color: white; padding: 15px; font-weight: 700;">Guide</div><div style="padding: 18px;"><p style="font-size: 0.85rem; line-height: 1.6;">${msg.text}</p></div></div><span style="font-size: 0.65rem; color: #94a3b8;">${timestamp}</span></div>`;
+        // Automated Translation Logic for worker view
+        let translationHtml = '';
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        if (!isWorker && prefLang !== 'ko' && msg.text && msg.type === 'text') {
+            const cacheKey = `${msg.id || msg.timestamp?.seconds || 'temp'}_${prefLang}`;
+            if (window.translationCache && window.translationCache[cacheKey]) {
+                translationHtml = `<div class="translation-box"><i class="fa-solid fa-language"></i> ${window.translationCache[cacheKey]}</div>`;
+            } else {
+                translationHtml = `<div class="translation-box" id="trans_${cacheKey}"><i class="fa-solid fa-spinner fa-spin"></i> Translating...</div>`;
+                triggerTranslation(msg.text, prefLang, cacheKey);
+            }
         }
-        const statusText = (isAdmin && msg.read) ? 'Read' : '';
-        return `<div style="${wrapperStyle}"><div style="${bubbleStyle}">${msg.text}</div><span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px;">${statusText} ${timestamp}</span></div>`;
+
+        if (msg.type === 'guide') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'booking') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">예약 신청서 작성하기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'action_check') {
+            const btnColor = msg.btnColor || 'var(--primary)';
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
+                        <div style="padding: 15px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'date_input_request') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <input type="date" class="resv-date-input" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
+                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'recheck_notice') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--danger); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1); margin-bottom: 2px;">
+                        <div style="background: var(--danger); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 8px;"></i> 재검사 안내 공지
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">안내 사항 자세히 보기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        return `
+            <div style="${wrapperStyle}">
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                <div style="${bubbleStyle}">
+                    ${(msg.text || '').replace(/\n/g, '<br>')}
+                </div>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+            </div>`;
     }
 
     async function sendChatMessage() {
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         if (!text) return;
+
         const user = auth.currentUser;
         if (!user) return;
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const workerDocId = userDoc.data().workerDocId;
-        if (!workerDocId) return;
-        input.value = '';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            input.value = '';
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Chat send error:", e);
+            showToast("메시지 전송에 실패했습니다.", "error");
+        }
+    }
+
+    async function sendSystemGuide(workerDocId) {
+        // This simulates a system-initiated message flow
         await db.collection('messages').add({
             workerDocId: workerDocId,
-            sender: 'worker',
-            text: text,
-            type: 'text',
+            sender: 'system',
+            text: 'CHECKIT 케어 서비스가 시작되었습니다.',
+            type: 'system',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        await db.collection('messages').add({
+            workerDocId: workerDocId,
+            sender: 'admin',
+            text: '안녕하세요! CHECKIT 케어 센터입니다. 귀하의 소속 기업 건강검진 안내를 확인해 주세요.',
+            type: 'guide',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
     }
 
-    function renderCheckupStatus(data) {
-        const container = document.getElementById('checkupStatus');
-        const statuses = ['진행 중', '예약완료', '결진완료', '결과완료', '재결대상자', '재결완료'];
-        const statusLabel = data.status || '진행 중';
-        const currentIdx = statuses.indexOf(statusLabel);
-        let badgeClass = 'status-pending';
-        if (statusLabel === '예약완료') badgeClass = 'status-reservation';
-        else if (statusLabel === '결진완료') badgeClass = 'status-checkup';
-        else if (statusLabel === '결과완료') badgeClass = 'status-result';
+    async function showMyRegisteredInfo() {
+        const user = auth.currentUser;
+        if (!user) return;
 
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const data = workerDoc.data();
+
+            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}`;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: infoText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Add the next step booking buttons
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '정보를 확인하셨나요? 이제 아래 버튼을 통해 제휴 병원을 확인하고 예약 신청서를 작성해 주세요.',
+                type: 'booking',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+        } catch (e) { console.error("Show info error:", e); }
+    }
+
+    async function completeHospitalSelection() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원을 선택했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '좋습니다! 그럼 해당 병원에 예약을 진행해 주세요. 예약이 완료되면 아래 버튼을 눌러주세요.',
+                type: 'action_check',
+                btnText: '예약완료',
+                action: 'completeBooking()',
+                btnColor: '#10b981',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Hospital select error:", e); }
+    }
+
+    async function completeBooking() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: '병원 예약을 완료했습니다.',
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '예약을 완료하셨군요! 병원에서 받으신 **예약 확정문자(캡쳐본 또는 내용)**를 아래 버튼을 통해 제출해 주세요.',
+                type: 'action_check',
+                btnText: '확정 내용 전송하기',
+                action: 'requestConfirmation()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Booking complete error:", e); }
+    }
+
+    async function requestConfirmation() {
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Request confirmation error:", e); }
+    }
+
+    async function submitReservationDate(btn) {
+        let dateVal = '';
+        if (btn) {
+            const input = btn.parentElement.querySelector('.resv-date-input');
+            if (input) dateVal = input.value;
+        } else {
+            // Fallback for older code if any
+            const input = document.getElementById('resvDateInput');
+            if (input) dateVal = input.value;
+        }
+        
+        if (!dateVal) { alert('날짜를 선택해 주세요.'); return; }
+
+        const user = auth.currentUser;
+        if (!user) return;
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `${dateVal}로 예약을 완료했습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Save to worker doc
+            await db.collection('workers').doc(workerDocId).update({
+                reservedDate: dateVal,
+                status: '예약완료'
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 아래와 같이 실시간 주의사항 알림톡(D-7, 5, 3, 2, 1)이 자동으로 발송 예약되었습니다.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Simulate the reminder schedule display
+            const reminders = [
+                { d: 7, text: "음주 및 과식 금지 가이드" },
+                { d: 5, text: "복용 중인 약물 확인 및 중단 안내" },
+                { d: 3, text: "검진 전 최종 확인 및 문진표 작성 안내" },
+                { d: 2, text: "금식 시작 및 준비물 체크리스트" },
+                { d: 1, text: "내일 검진 시간 및 병원 위치 재안내" }
+            ];
+
+            let scheduleText = "📅 **발송 예약된 알림톡 일정**\n";
+            reminders.forEach(r => {
+                const rDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000)).toLocaleDateString();
+                scheduleText += `\n- **D-${r.d} (${rDate})**: ${r.text}`;
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'system',
+                text: scheduleText,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        } catch (e) { console.error("Submit date error:", e); }
+    }
+
+    window.startConfirmationFlow = () => {
+        openAlimtalkModal();
+    };
+
+    window.openAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'flex';
+        const textarea = document.getElementById('alimtalkContent');
+        if (textarea) {
+            textarea.value = '';
+            textarea.focus();
+        }
+    };
+
+    window.closeAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'none';
+    };
+
+    async function submitAlimtalk() {
+        const text = document.getElementById('alimtalkContent').value.trim();
+        if (!text) {
+            alert('내용을 입력해 주세요.');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Send original message
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Get preferred language and translate
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const prefLang = workerDoc.data().prefLang || 'ko';
+
+            if (prefLang !== 'ko') {
+                showToast(`번역 중 (${prefLang})...`, "info");
+                const translated = await translateText(text, prefLang);
+                if (translated) {
+                    await db.collection('messages').add({
+                        workerDocId: workerDocId,
+                        sender: 'admin',
+                        text: `[Translation to ${prefLang}]\n\n${translated}`,
+                        type: 'text',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeAlimtalkModal();
+            showToast("정보가 성공적으로 전송되었습니다.", "success");
+        } catch (e) {
+            console.error("Submit alimtalk error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+
+    window.translationCache = {};
+    window.ongoingTranslations = {};
+
+    async function triggerTranslation(text, lang, cacheKey) {
+        if (window.ongoingTranslations[cacheKey]) return;
+        window.ongoingTranslations[cacheKey] = true;
+        
+        const translated = await translateText(text, lang);
+        if (translated) {
+            window.translationCache[cacheKey] = translated;
+            const el = document.getElementById(`trans_${cacheKey}`);
+            if (el) el.innerHTML = `<i class="fa-solid fa-language"></i> ${translated}`;
+        }
+        delete window.ongoingTranslations[cacheKey];
+    }
+
+    async function translateText(text, targetLang) {
+        if (!text || targetLang === 'ko') return text;
+        try {
+            // Split text into chunks if it's too long (limit ~2000 chars for GET)
+            const MAX_CHUNK = 1000;
+            const chunks = [];
+            for (let i = 0; i < text.length; i += MAX_CHUNK) {
+                chunks.push(text.substring(i, i + MAX_CHUNK));
+            }
+
+            const translatedChunks = await Promise.all(chunks.map(async (chunk) => {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data && data[0]) {
+                    return data[0].map(x => x[0]).join('');
+                }
+                return chunk;
+            }));
+
+            return translatedChunks.join('\n');
+        } catch (e) {
+            console.error("Translation error:", e);
+            return text;
+        }
+    }
+
+    window.setChatLanguage = async (lang) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Update UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            // Save to Firestore
+            await db.collection('workers').doc(workerDocId).update({
+                prefLang: lang
+            });
+            
+            // Re-render chat locally
+            renderChatHistory();
+            
+            showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
+        } catch (e) {
+            console.error("Set language error:", e);
+        }
+    };
+
+    // Registration Form Functions
+    window.openBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'flex';
+        // Auto-fill name if available
+        const nameDisplay = document.getElementById('displayName').textContent;
+        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '관리자' && nameDisplay !== '근로자') {
+            document.getElementById('bf_name').value = nameDisplay.split(' ')[0];
+        }
+    };
+
+    window.closeBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+    };
+
+    async function submitBookingForm(event) {
+        event.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const formData = {
+            name: document.getElementById('bf_name').value,
+            dob: document.getElementById('bf_dob').value,
+            phone: document.getElementById('bf_phone').value,
+            address: document.getElementById('bf_address').value,
+            hospital: document.getElementById('bf_hospital').value,
+            dateRange: document.getElementById('bf_dateRange').value,
+            extraItems: document.getElementById('bf_extraItems').value,
+            documents: document.getElementById('bf_documents').value,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: '신청완료'
+        };
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const companyId = userDoc.data().companyId;
+
+            formData.workerDocId = workerDocId;
+            formData.companyId = companyId;
+
+            // Save to bookings collection
+            await db.collection('bookings').add(formData);
+
+            // Add chat notification
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `검진 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '신청서가 성공적으로 접수되었습니다.\n\ncheckit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요.\n\n예약 확정 안내를 받은 분은 아래 \'예약 확정 문자 올리기\' 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
+                type: 'action_check',
+                btnText: '예약 확정 문자 올리기',
+                action: 'startConfirmationFlow()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeBookingForm();
+            alert('신청서가 성공적으로 제출되었습니다.');
+        } catch (e) {
+            console.error("Booking submission error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+    async function tryToRelinkWorker(uid, name, compId) {
+        try {
+            const snap = await db.collection('workers')
+                .where('companyId', '==', compId)
+                .where('name', '==', name)
+                .limit(1).get();
+            
+            if (!snap.empty) {
+                const newDocId = snap.docs[0].id;
+                await db.collection('users').doc(uid).update({ workerDocId: newDocId });
+            } else {
+                const statusEl = document.getElementById('checkupStatus');
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+                const docsEl = document.getElementById('requiredDocs');
+                if(docsEl) docsEl.textContent = '명단 등록 후 확인 가능합니다.';
+            }
+        } catch (e) { console.error("Relink error:", e); }
+    }
+
+    function renderCheckupStatus(data) {
+        const statusLabel = data.status || '진행 전';
+        const statuses = ['진행 전', '예약완료', '검사완료', '결과완료', '재검대상자', '재검완료'];
+        const currentIdx = statuses.indexOf(statusLabel);
+
+        let badgeClass = 'status-pending';
+        let icon = 'fa-circle-dot';
+        
+        switch(statusLabel) {
+            case '예약완료': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
+            case '검사완료': badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
+            case '결과완료': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
+            case '재검대상자': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
+            case '재검완료': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
+        }
+
+        const statusContainer = document.getElementById('checkupStatus');
+        if (!statusContainer) return;
+
+        // Progress Stepper HTML
         let stepperHtml = '<div class="stepper">';
         statuses.forEach((s, idx) => {
-            if (s === '진행 중') return;
-            let stepClass = idx < currentIdx ? 'completed' : (idx === currentIdx ? 'active' : '');
-            stepperHtml += `<div class="step ${stepClass}"><div class="step-icon"></div><div class="step-label">${s}</div></div>`;
+            if (s === '진행 전') return; // Skip "진행 전" in the visual stepper for space
+            let stepClass = '';
+            
+            if (idx < currentIdx) stepClass = 'completed';
+            else if (idx === currentIdx) stepClass = 'active';
+            
+            // Special handling for re-examination
+            if (statusLabel === '재검대상자' && s === '재검대상자') stepClass = 'warning active';
+            if (statusLabel === '재검완료' && s === '재검대상자') stepClass = 'completed';
+
+            stepperHtml += `
+                <div class="step ${stepClass}">
+                    <div class="step-icon">${idx < currentIdx ? '<i class="fa-solid fa-check"></i>' : idx}</div>
+                    <div class="step-label">${s}</div>
+                </div>
+            `;
         });
         stepperHtml += '</div>';
 
-        if (container) {
-            container.innerHTML = `
-                <div style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <span class="status-badge ${badgeClass}">${statusLabel}</span>
+        const recheckAlertHtml = (data.status === '재검대상자' && data.recheckInformed) ? `
+            <div style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #fecaca; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.05);">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <div style="width: 48px; height: 48px; background: #e11d48; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
-                    ${stepperHtml}
+                    <div style="flex: 1;">
+                        <h4 style="color: #9f1239; margin-bottom: 6px; font-size: 1.05rem; font-weight: 800;">재검사 대상 안내</h4>
+                        <p style="color: #be123c; font-size: 0.88rem; line-height: 1.6; margin-bottom: 15px; font-weight: 500;">
+                            건강검진 결과, 일부 항목에 대한 정밀 검사 또는 재검사가 필요합니다.<br>
+                            나의 건강을 위해 가까운 시일 내에 병원에 방문해 주세요.
+                        </p>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="switchSection('chat')" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 상담하기</button>
+                            <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검 예약 신청서 쓰기</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-grid" style="margin-top:20px;">
-                    <div class="info-item"><div class="label">검진 병원</div><div class="value">${data.hospitalName || '-'}</div></div>
-                    <div class="info-item"><div class="label">검진 일자</div><div class="value">${data.checkupDate || '-'}</div></div>
-                </div>`;
-        }
-        const reqDocs = document.getElementById('requiredDocs');
-        if (reqDocs) reqDocs.textContent = data.docs || '등록된 서류 없음';
+            </div>
+        ` : '';
+
+        statusContainer.innerHTML = `
+            ${recheckAlertHtml}
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <span class="status-badge ${badgeClass}">
+                        <i class="fa-solid ${icon}"></i> ${statusLabel}
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+                        마지막 업데이트: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '기록 없음'}
+                    </span>
+                </div>
+                
+                ${stepperHtml}
+
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border);">
+                    <button onclick="updateStatus('예약완료')" class="status-btn" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">예약완료</button>
+                    <button onclick="updateStatus('검사완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">검사완료</button>
+                    <button onclick="updateStatus('결과완료')" class="status-btn" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">결과완료</button>
+                    <button onclick="updateStatus('재검대상자')" class="status-btn" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검대상자</button>
+                    <button onclick="updateStatus('재검완료')" class="status-btn" style="background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검완료</button>
+                </div>
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">소속 현장</div>
+                    <div class="value">${data.site || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">국적</div>
+                    <div class="value">${data.nationality || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">필수 검진 항목</div>
+                    <div class="value">${data.checkup || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">검진 가능 기간</div>
+                    <div class="value">${data.period || '-'}</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
+
+        // Update Results Section
         window.renderResultsSection(data);
     }
 
-    window.renderResultsSection = async function(w) {
-        const area = document.getElementById('resultSubmissionArea');
-        if (!area) return;
-        if (!w) {
+    // Original renderResults function removed to avoid redundancy with renderResultsSection
+
+    window.reSubmitResult = () => {
+        // Direct trigger of file input for smoother UX as requested
+        const fileInput = document.getElementById('resultFileInput');
+        if (fileInput) fileInput.click();
+    };
+
+    // Helper to normalize images for OCR (Handles CORS, resizing, and format conversion)
+    async function normalizeImageForOCR(imageSrc) {
+        console.log("Starting normalizeImageForOCR...");
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            // Only set crossOrigin for external URLs to avoid issues with Data URLs
+            if (imageSrc && imageSrc.startsWith('http')) {
+                img.crossOrigin = 'Anonymous';
+            }
+            
+            const timeout = setTimeout(() => {
+                img.src = ""; // Stop loading
+                reject(new Error('이미지 분석 시간 초과 (15초)'));
+            }, 15000);
+
+            img.onload = () => {
+                clearTimeout(timeout);
+                console.log("Image loaded for normalization:", img.width, "x", img.height);
+                try {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Resize if too large for Firestore (Max ~600KB base64 safe)
+                    const MAX_DIM = 1200;
+                    if (width > MAX_DIM || height > MAX_DIM) {
+                        if (width > height) {
+                            height *= MAX_DIM / width;
+                            width = MAX_DIM;
+                        } else {
+                            width *= MAX_DIM / height;
+                            height = MAX_DIM;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convert to high-quality JPEG Data URL (smaller than PNG)
+                    const result = canvas.toDataURL('image/jpeg', 0.8);
+                    console.log("Normalization complete. Result size:", Math.round(result.length / 1024), "KB");
+                    resolve(result);
+                } catch (e) {
+                    console.error("Canvas normalization error:", e);
+                    reject(e);
+                }
+            };
+
+            img.onerror = (err) => {
+                clearTimeout(timeout);
+                console.error("Image load error for normalization:", err);
+                reject(new Error('이미지를 읽을 수 없습니다. (데이터 오류)'));
+            };
+
+            img.src = imageSrc;
+        });
+    }
+
+    // Disease extraction dictionary
+    // Disease extraction dictionary (KCD-8 / ICD-10 based)
+    const DISEASE_DIC = [
+        // Cardiovascular
+        { key: /고혈압|혈압고|하이퍼텐션|hypertension|high blood pressure/i, name: '고혈압 (Hypertension)', kcd: 'I10', icd: 'I10' },
+        { key: /심부전|하트페일|heart failure/i, name: '심부전 (Heart Failure)', kcd: 'I50', icd: 'I50.9' },
+        { key: /협심증|안지나|angina/i, name: '협심증 (Angina Pectoris)', kcd: 'I20', icd: 'I20.9' },
+        { key: /심근경색|마이오카디알|myocardial infarction|heart attack/i, name: '심근경색 (Myocardial Infarction)', kcd: 'I21', icd: 'I21.9' },
+        { key: /부정맥|아리스미아|arrhythmia/i, name: '부정맥 (Arrhythmia)', kcd: 'I49', icd: 'I49.9' },
+        { key: /뇌졸중|중풍|뇌경색|스트로크|stroke/i, name: '뇌졸중/뇌경색 (Stroke)', kcd: 'I63', icd: 'I63.9' },
+
+        // Endocrine & Metabolic
+        { key: /당뇨|혈당|글루코스|디아베테스|diabetes/i, name: '당뇨병 (Diabetes Mellitus)', kcd: 'E10-E14', icd: 'E11' },
+        { key: /이상지질혈증|고지혈증|콜레스테롤|중성지방|트리글리|dyslipidemia|hyperlipidemia/i, name: '이상지질혈증 (Dyslipidemia)', kcd: 'E78', icd: 'E78.5' },
+        { key: /갑상선|서이로이드|thyroid/i, name: '갑상선 질환 (Thyroid Disease)', kcd: 'E00-E07', icd: 'E07.9' },
+        { key: /통풍|가우트|gout/i, name: '통풍 (Gout)', kcd: 'M10', icd: 'M10.9' },
+        { key: /비만|오베시티|obesity/i, name: '비만 (Obesity)', kcd: 'E66', icd: 'E66.9' },
+
+        // Digestive
+        { key: /위염|가스트리티스|gastritis/i, name: '위염 (Gastritis)', kcd: 'K29', icd: 'K29.7' },
+        { key: /위궤양|거스트릭 울서|gastric ulcer/i, name: '위궤양 (Gastric Ulcer)', kcd: 'K25', icd: 'K25.9' },
+        { key: /역류성 식도염|식도염|reflux esophagitis|gerd/i, name: '역류성 식도염 (GERD)', kcd: 'K21.0', icd: 'K21.0' },
+        { key: /지방간|패티리버|fatty liver/i, name: '지방간 (Fatty Liver)', kcd: 'K76.0', icd: 'K76.0' },
+        { key: /간염|헤파티티스|hepatitis/i, name: '간염 (Hepatitis)', kcd: 'B15-B19', icd: 'B19' },
+        { key: /간경변|서로시스|cirrhosis/i, name: '간경변 (Liver Cirrhosis)', kcd: 'K74.6', icd: 'K74.6' },
+        { key: /치질|헤모라이드|hemorrhoids/i, name: '치질 (Hemorrhoids)', kcd: 'K64', icd: 'K64.9' },
+        { key: /담석|콜레리스|gallstone/i, name: '담석증 (Gallstone)', kcd: 'K80', icd: 'K80.2' },
+
+        // Respiratory
+        { key: /결핵|티비|tuberculosis|tb/i, name: '결핵 (Tuberculosis)', kcd: 'A15-A19', icd: 'A15' },
+        { key: /천식|아스마|asthma/i, name: '천식 (Asthma)', kcd: 'J45', icd: 'J45' },
+        { key: /비염|라이나이티스|rhinitis/i, name: '비염 (Rhinitis)', kcd: 'J31.0', icd: 'J31.0' },
+        { key: /폐렴|뉴모니아|pneumonia/i, name: '폐렴 (Pneumonia)', kcd: 'J12-J18', icd: 'J18.9' },
+        { key: /만성 폐쇄성 폐질환|만성폐질환|copd/i, name: '만성 폐쇄성 폐질환 (COPD)', kcd: 'J44', icd: 'J44.9' },
+
+        // Renal & Urology
+        { key: /신부전|콩팥|kidney failure|renal failure/i, name: '신부전 (Renal Failure)', kcd: 'N17-N19', icd: 'N19' },
+        { key: /만성 신장병|신장질환|ckd/i, name: '만성 신장병 (CKD)', kcd: 'N18', icd: 'N18.9' },
+        { key: /방광염|시스티티스|cystitis/i, name: '방광염 (Cystitis)', kcd: 'N30', icd: 'N30.9' },
+        { key: /요로결석|유리너리 스톤|urinary stone/i, name: '요로결석 (Urinary Stone)', kcd: 'N20', icd: 'N20.9' },
+
+        // Musculoskeletal
+        { key: /관절염|아쓰라이티스|arthritis/i, name: '관절염 (Arthritis)', kcd: 'M13', icd: 'M13.9' },
+        { key: /골다공증|오스테오포로|osteoporosis/i, name: '골다공증 (Osteoporosis)', kcd: 'M81', icd: 'M81.9' },
+        { key: /디스크|추간판|disc/i, name: '추간판 장애 (Disc)', kcd: 'M51', icd: 'M51.2' },
+
+        // Others
+        { key: /빈혈|어지럼|아네미아|anemia/i, name: '빈혈 (Anemia)', kcd: 'D64.9', icd: 'D64.9' },
+        { key: /백내장|카타랙트|cataract/i, name: '백내장 (Cataract)', kcd: 'H26', icd: 'H26.9' },
+        { key: /두드러기|얼티카리아|urticaria/i, name: '두드러기 (Urticaria)', kcd: 'L50', icd: 'L50.9' },
+        { key: /아토피|atopy/i, name: '아토피 피부염 (Atopic Dermatitis)', kcd: 'L20', icd: 'L20.9' },
+
+        // Cancers (Common)
+        { key: /위암|stomach cancer|gastric cancer/i, name: '위암 (Gastric Cancer)', kcd: 'C16', icd: 'C16.9' },
+        { key: /간암|liver cancer|hcc/i, name: '간암 (Liver Cancer)', kcd: 'C22', icd: 'C22.0' },
+        { key: /폐암|lung cancer/i, name: '폐암 (Lung Cancer)', kcd: 'C34', icd: 'C34.9' },
+        { key: /대장암|colorectal cancer/i, name: '대장암 (Colorectal Cancer)', kcd: 'C18-C20', icd: 'C18.9' },
+        { key: /유방암|breast cancer/i, name: '유방암 (Breast Cancer)', kcd: 'C50', icd: 'C50.9' }
+    ];
+
+    function extractDiseaseCodes(text) {
+        if (!text) return [];
+        const found = [];
+        DISEASE_DIC.forEach(d => {
+            if (d.key.test(text)) {
+                found.push({ name: d.name, kcd: d.kcd, icd: d.icd });
+            }
+        });
+        return found;
+    }
+
+    // Translation Logic
+    window.openTranslationModal = async () => {
+        const modal = document.getElementById('translationModalOverlay');
+        const content = document.getElementById('translationContent');
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        modal.style.display = 'flex';
+        content.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p id="ocrStatusText">결과지 이미지를 분석하는 중입니다...</p>
+                <div id="ocrProgressBar" style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 15px; overflow: hidden;">
+                    <div id="ocrProgressInner" style="width: 0%; height: 100%; background: var(--primary); transition: 0.3s;"></div>
+                </div>
+            </div>
+        `;
+
+        try {
             const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const workerDoc = await db.collection('workers').doc(userDoc.data().workerDocId).get();
-            w = workerDoc.data();
+            const userData = userDoc.data();
+            if (!userData || !userData.workerDocId) throw new Error('근로자 정보가 연결되지 않았습니다.');
+            
+            const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
+            const wData = workerDoc.data();
+            const fileContent = wData.resultFileUrl || wData.resultFileBase64;
+
+            if (!wData || !fileContent) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
+                return;
+            }
+
+            let rawImageSource = fileContent;
+            let processingImage = null;
+
+            // Prefer the optimized base64 for OCR to bypass CORS entirely
+            if (wData.resultOcrBase64) {
+                processingImage = wData.resultOcrBase64;
+            } else if (wData.resultFileType === 'application/pdf') {
+                const statusEl = document.getElementById('ocrStatusText');
+                if (statusEl) statusEl.innerText = 'PDF 스마트 판독 준비 중...';
+                
+                try {
+                    let bytes = null;
+                    if (rawImageSource.startsWith('data:')) {
+                        // Data URL
+                        const base64Content = rawImageSource.split(',')[1];
+                        const binaryContent = atob(base64Content);
+                        bytes = new Uint8Array(binaryContent.length);
+                        for (let i = 0; i < binaryContent.length; i++) {
+                            bytes[i] = binaryContent.charCodeAt(i);
+                        }
+                    } else {
+                        // Storage URL - pdf.js fetch and convert to array buffer
+                        if (statusEl) statusEl.innerText = 'PDF 데이터 수신 중...';
+                        const response = await fetch(rawImageSource);
+                        const buffer = await response.arrayBuffer();
+                        bytes = new Uint8Array(buffer);
+                    }
+
+                    const loadingTask = pdfjsLib.getDocument({ data: bytes });
+                    const pdf = await loadingTask.promise;
+                    const page = await pdf.getPage(1);
+                    const viewport = page.getViewport({ scale: 2.0 });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    processingImage = canvas.toDataURL('image/png');
+                } catch (pdfErr) {
+                    console.error('PDF Conversion Error:', pdfErr);
+                    throw new Error('PDF 파일 변환에 실패했습니다. (CORS 또는 파일 오류)');
+                }
+            } else {
+                // For images without resultOcrBase64, try normalization
+                const statusEl = document.getElementById('ocrStatusText');
+                if (statusEl) statusEl.innerText = '이미지 데이터 최적화 중...';
+                try {
+                    processingImage = await normalizeImageForOCR(rawImageSource);
+                } catch (normErr) {
+                    console.error('Normalization error:', normErr);
+                    // Fallback: If it's already a data URL, try it directly
+                    if (rawImageSource.startsWith('data:')) {
+                        processingImage = rawImageSource;
+                    } else {
+                        throw new Error('보안 정책(CORS)으로 인해 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
+                    }
+                }
+            }
+
+            if (!processingImage) throw new Error('처리할 이미지를 생성할 수 없습니다.');
+
+            // OCR Start
+            const ocrStatusEl = document.getElementById('ocrStatusText');
+            if (ocrStatusEl) ocrStatusEl.innerText = '인공지능 분석 엔진 초기화 중...';
+            
+            // Use high-level simplify API for better stability in Tesseract v5
+            const { data: { text } } = await Tesseract.recognize(processingImage, 'kor', {
+                logger: m => {
+                    if (m && m.status === 'recognizing text') {
+                        const pct = Math.round((m.progress || 0) * 100);
+                        const progressEl = document.getElementById('ocrProgressInner');
+                        const statusEl = document.getElementById('ocrStatusText');
+                        if (progressEl) progressEl.style.width = pct + '%';
+                        if (statusEl) statusEl.innerText = `텍스트 판독 중... (${pct}%)`;
+                    }
+                }
+            });
+
+            if (!text || text.trim().length === 0) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">데이터를 분석할 수 없습니다. 문서 가림이나 흔들림이 없는 사진을 다시 업로드해 주세요.</div>';
+                return;
+            }
+
+            // Translation Start
+            const statusEl = document.getElementById('ocrStatusText');
+            if (statusEl) statusEl.innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
+            const translated = await translateText(text, prefLang);
+
+            // Display Results
+            const langName = { ko: '한국어', en: 'English', cn: 'Chinese', vn: 'Vietnamese' }[prefLang] || prefLang;
+            
+            content.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-file-lines"></i> 원본 텍스트 (Original Text)
+                        </h4>
+                        <div style="background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; max-height: 200px; overflow-y: auto; line-height: 1.6; white-space: pre-line;">
+                            ${text}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-language"></i> 번역된 결과 (Translated - ${langName})
+                        </h4>
+                        <div style="background: #f5f3ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd6fe; font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #4338ca;">
+                            ${translated}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" style="flex: 1; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-copy"></i> 번역 내용 복사
+                        </button>
+                        <button onclick="window.downloadTranslationAsPDF()" style="flex: 1; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-file-pdf"></i> PDF로 다운로드
+                        </button>
+                    </div>
+
+                    <!-- Disease Code Section -->
+                    <div id="diseaseInfoSection" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h4 style="color: #e11d48; font-size: 0.85rem; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <i class="fa-solid fa-file-medical"></i> 감지된 질병 코드 (Detected Disease Codes)
+                            </h4>
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                <div style="font-size: 0.65rem; color: var(--text-muted);"><i class="fa-solid fa-circle-info"></i> 궁금한 질병코드는 직접 검색 가능합니다.</div>
+                                <div style="display: flex; gap: 5px;">
+                                    <input type="text" id="diseaseSearchInput" placeholder="질병명 또는 코드 검색..." style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; width: 180px;">
+                                    <button onclick="window.manualSearchDisease()" style="background: var(--dark); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="diseaseCodeList" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <!-- Will be filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Process and display disease codes
+            const foundDiseases = extractDiseaseCodes(text);
+            const diseaseListEl = document.getElementById('diseaseCodeList');
+            if (foundDiseases.length > 0) {
+                diseaseListEl.innerHTML = foundDiseases.map(d => `
+                    <div style="background: white; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05);">
+                        <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name}</div>
+                        <div style="display: flex; gap: 8px;">
+                            <span style="background: #fff1f2; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                            <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                diseaseListEl.innerHTML = `
+                    <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px dashed var(--border); color: var(--text-muted); font-size: 0.85rem;">
+                        감지된 주요 질병 코드가 없습니다.
+                    </div>
+                `;
+            }
+
+        } catch (e) {
+            console.error('Translation process error:', e);
+            const errMsg = e && e.message ? e.message : String(e);
+            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">분석 중 오류 발생: ${errMsg}</div>`;
         }
-        const hasFile = w.resultFileUrl || w.resultFileBase64;
-        if (hasFile) {
-            area.innerHTML = `<div style="text-align:center;"><i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i><h3 style="color:#059669; margin-bottom:10px;">Submitted</h3><button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width:auto; padding:10px 25px; background:var(--dark);">Re-upload</button></div>`;
-            document.getElementById('translationCard')?.classList.remove('hidden');
+    };
+    
+    window.manualSearchDisease = () => {
+        const query = document.getElementById('diseaseSearchInput').value.trim().toLowerCase();
+        if (!query) {
+            alert('검색어를 입력해 주세요.');
+            return;
+        }
+
+        const results = DISEASE_DIC.filter(d => 
+            d.name.toLowerCase().includes(query) || 
+            d.kcd.toLowerCase().includes(query) || 
+            d.icd.toLowerCase().includes(query) ||
+            (d.key && d.key.test(query))
+        );
+
+        const diseaseListEl = document.getElementById('diseaseCodeList');
+        if (results.length > 0) {
+            const resultsHtml = results.map(d => `
+                <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05); margin-bottom: 10px;">
+                    <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name} <span style="font-size: 0.7rem; color: #e11d48;">(검색결과)</span></div>
+                    <div style="display: flex; gap: 8px;">
+                        <span style="background: white; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                        <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Prepend results if it's a search
+            diseaseListEl.innerHTML = resultsHtml + (diseaseListEl.innerHTML.includes('감지된 주요 질병 코드가 없습니다.') ? '' : diseaseListEl.innerHTML);
+            
+            showToast(`${results.length}개의 질병 코드를 찾았습니다.`, "success");
         } else {
-            area.innerHTML = `<div id="noSubmissionUI"><i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i><p>No results yet.</p><button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; background: var(--dark);">Upload Photo</button></div>`;
+            showToast("검색 결과가 없습니다.", "error");
         }
     };
 
-    window.handleResultFileUpload = async function(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const loader = document.getElementById('pageLoader');
-        loader.style.display = 'flex';
-        try {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const base64 = e.target.result;
-                const user = auth.currentUser;
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                await db.collection('workers').doc(userDoc.data().workerDocId).update({
-                    resultFileBase64: base64,
-                    resultFileName: file.name,
-                    resultFileType: file.type,
-                    resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    status: '\uacb0\uacbc\uc644\ub8cc'
-                });
-                loader.style.display = 'none';
-                location.reload();
-            };
-            reader.readAsDataURL(file);
-        } catch (err) { alert(err.message); loader.style.display = 'none'; }
+    window.downloadTranslationAsPDF = () => {
+        const element = document.getElementById('translationContent');
+        const nameText = document.getElementById('displayName').innerText.split(' ')[0] || 'worker';
+        const opt = {
+            margin:       [15, 15],
+            filename:     `CHECKIT_Result_${nameText}_${new Date().toISOString().slice(0,10)}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Create a clone for PDF rendering to avoid UI glitches
+        const clone = element.cloneNode(true);
+        clone.style.padding = '20px';
+        clone.style.background = 'white';
+        clone.style.width = '180mm'; // Fixed width for A4
+        
+        // Ensure all text is visible in PDF
+        const scrollDivs = clone.querySelectorAll('div[style*="overflow-y: auto"]');
+        scrollDivs.forEach(div => {
+            div.style.maxHeight = 'none';
+            div.style.overflow = 'visible';
+        });
+
+        // Add header to PDF
+        const header = document.createElement('div');
+        header.innerHTML = `
+            <div style="text-align:center; border-bottom: 2px solid #6366f1; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Pretendard', sans-serif;">
+                <h2 style="color: #1e1b4b; margin: 0;">CHECKIT Medical Result Translation</h2>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">AI Automated Translation Service</div>
+            </div>
+        `;
+        clone.prepend(header);
+
+        // Add footer
+        const footer = document.createElement('div');
+        footer.innerHTML = `
+            <div style="text-align:center; border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 30px; font-size: 0.7rem; color: #94a3b8; font-family: 'Pretendard', sans-serif;">
+                This translation is automatically generated by AI. Please consult a doctor for official diagnosis.
+            </div>
+        `;
+        clone.appendChild(footer);
+
+        showToast("PDF 생성을 시작합니다...", "info");
+        html2pdf().set(opt).from(clone).save().then(() => {
+            showToast("PDF 다운로드가 완료되었습니다.", "success");
+        }).catch(err => {
+            console.error("PDF generation error:", err);
+            showToast("PDF 생성에 실패했습니다.", "error");
+        });
     };
+
+    window.copyTranslationToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('복사되었습니다!', 'success');
+        }).catch(err => {
+            showToast('복사 실패', 'error');
+        });
+    };
+
+    async function updateStatus(newStatus) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                alert('연결된 직원 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            const loader = document.getElementById('pageLoader');
+            loader.style.display = 'flex';
+            
+            await db.collection('workers').doc(workerDocId).update({
+                status: newStatus,
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Local refresh will be handled by the state change listener if we were using one,
+            // but here we just reload the data manually for simplicity.
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+            
+            alert(`검진 상태가 '${newStatus}'(으)로 업데이트되었습니다.`);
+        } catch (err) {
+            console.error('Status update error:', err);
+            alert('상태 업데이트에 실패했습니다.');
+        } finally {
+            document.getElementById('pageLoader').style.display = 'none';
+        }
+    }
 
     function renderHospitals(docs) {
         const container = document.getElementById('hospitalList');
+        if (docs.length === 0) {
+            container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
+            return;
+        }
         let html = '';
         docs.forEach(doc => {
             const h = doc.data();
-            html += `<div class="hospital-item"><div><div class="hospital-name">${h.name}</div><div class="hospital-meta">${h.address}</div></div><div><a class="hospital-link" href="${h.mapUrl || '#'}" target="_blank">Book</a></div></div>`;
+            const linkHtml = h.hasLink === 'Y' && h.link
+                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기</a>`
+                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> 예약 사이트 없음</span>`;
+            html += `
+                <div class="hospital-item">
+                    <div>
+                        <div class="hospital-name">${h.name}</div>
+                        <div class="hospital-meta">검진 기간: ${h.schedule || '-'} &nbsp;|&nbsp; 예약 기간: ${h.period || '-'}</div>
+                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">추가 비용: ${h.extraCost}</div>` : ''}
+                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">회사 코드: <strong>${h.code}</strong></div>` : ''}
+                    </div>
+                    <div>${linkHtml}</div>
+                </div>`;
         });
-        container.innerHTML = html || 'No hospitals.';
+        container.innerHTML = html;
     }
 
-    function doLogout() { auth.signOut().then(() => { window.location.href = 'index.html'; }); }</script>
+    function doLogout() {
+        auth.signOut().then(() => { window.location.href = 'index.html'; });
+    }
+
+    function showToast(message, type = 'success') {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3100);
+    }
+
+    // ========== RESULT FILE UPLOAD & SUBMISSION ==========
+    window.handleResultFileUpload = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        console.log("File selected (Base64 Mode):", file.name, file.size);
+        const isPdf = file.type === 'application/pdf';
+
+        const loader = document.getElementById('pageLoader');
+        const lt = loader ? loader.querySelector('p') : null;
+        
+        if (loader) {
+            loader.style.display = 'flex';
+            if (lt) lt.innerText = '파일 처리 중...';
+        }
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+
+            // 1. Convert to Base64 with Compression fallback
+            let finalBase64 = null;
+            
+            if (!isPdf && file.type.startsWith('image/')) {
+                if (lt) lt.innerText = '이미지 최적화 중...';
+                // Image Compression logic using Canvas
+                finalBase64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            // Max dimension 1600px for 1MB safety
+                            const MAX_SIDE = 1600;
+                            if (width > MAX_SIDE || height > MAX_SIDE) {
+                                if (width > height) {
+                                    height = Math.round((height * MAX_SIDE) / width);
+                                    width = MAX_SIDE;
+                                } else {
+                                    width = Math.round((width * MAX_SIDE) / height);
+                                    height = MAX_SIDE;
+                                }
+                            }
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            
+                            // High compression for photos
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+                            console.log("Compressed size:", Math.round(dataUrl.length / 1024), "KB");
+                            resolve(dataUrl);
+                        };
+                        img.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.'));
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                // PDF or other - generic base64
+                if (lt) lt.innerText = '파일 읽는 중...';
+                finalBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // Safety check for Firestore (~1MB)
+            if (finalBase64.length > 1.4 * 1024 * 1024) { // Roughly 1MB limit for document
+                 throw new Error('파일이 너무 커서 저장할 수 없습니다. 더 작은 파일이나 해상도가 낮은 사진을 사용해 주세요.');
+            }
+
+            // 2. Direct Firestore Update (No Storage)
+            if (lt) lt.innerText = '데이터베이스에 저장 중...';
+            await db.collection('workers').doc(workerDocId).update({
+                resultFileBase64: finalBase64,
+                resultFileName: file.name,
+                resultFileType: file.type,
+                resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: '결과완료',
+                docsReceived: true,
+                resultFileUrl: null // Clear storage reference if exists
+            });
+
+            showToast('성공적으로 제출되었습니다!', 'success');
+            
+        } catch (err) {
+            console.error('Upload Error:', err);
+            showToast('오류: ' + err.message, 'error');
+        } finally {
+            if (loader) loader.style.display = 'none';
+            input.value = '';
+        }
+    };
+
+    window.submitResultToCompany = async function() {
+        const user = auth.currentUser;
+        if (!user) return;
+        if (!confirm('파일 없이 검진 완료를 기업에 알리시겠습니까?')) return;
+
+        const loader = document.getElementById('pageLoader');
+        loader.style.display = 'flex';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+
+            await db.collection('workers').doc(workerDocId).update({
+                status: '수령완료',
+                docsReceived: true,
+                resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast('검진 완료가 기업에 전달되었습니다!', 'success');
+            renderResultsSection();
+        } catch (err) {
+            console.error('Submit error:', err);
+            showToast('제출 실패: ' + err.message, 'error');
+        } finally {
+            loader.style.display = 'none';
+        }
+    };
+
+    window.renderResultsSection = async function(workerDocData) {
+        const area = document.getElementById('resultSubmissionArea');
+        if (!area) return;
+
+        let w = workerDocData;
+        if (!w) {
+            const user = auth.currentUser;
+            if (!user) return;
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = (userDoc.data() || {}).workerDocId;
+            if (!workerDocId) return;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            if (!workerDoc.exists) return;
+            w = workerDoc.data();
+        }
+
+        try {
+            const hasFile = w.resultFileUrl || w.resultFileBase64;
+            if (hasFile) {
+                const fileSource = w.resultFileUrl || w.resultFileBase64;
+                const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
+                const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
+                
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">결과지 제출 완료</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">파일명: ${w.resultFileName || '첨부파일'}</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">제출일: ${submittedAt}</p>
+                        ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${fileSource}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
+                        <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; display:inline-flex; align-items:center; gap:8px; background:var(--dark);">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i> 결과지 다시 올리기
+                        </button>
+                    </div>
+                `;
+
+                // Show translation card
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.remove('hidden');
+            } else if (w.status === '결과완료') {
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">검진 완료 보고됨</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">파일이 첨부되지 않았습니다. 결과지를 추가로 업로드할 수 있습니다.</p>
+                        <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
+                            <i class="fa-solid fa-camera"></i> 결과지 업로드
+                        </button>
+                    </div>
+                `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
+            } else {
+                area.innerHTML = `
+                    <div id="noSubmissionUI">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                        <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                <i class="fa-solid fa-camera"></i> 사진 업로드
+                            </button>
+                            <button type="button" onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                            </button>
+                        </div>
+                    </div>
+                `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
+            }
+        } catch (e) {
+            console.error('Render results error:', e);
+        }
+    };
+
+</script>
+
 </body>
 </html>

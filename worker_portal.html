@@ -327,7 +327,19 @@
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
+
+        // 안전망: 최대 5초 후 로더가 남아있으면 강제로 숨김
+        const loaderTimeout = setTimeout(() => {
+            if (loader && loader.style.display !== 'none') {
+                console.warn('pageLoader timeout: forcing hide');
+                loader.style.display = 'none';
+                const pc = document.getElementById('portalContent');
+                if (pc) pc.classList.remove('hidden');
+            }
+        }, 5000);
+
         if (!user) {
+            clearTimeout(loaderTimeout);
             window.location.href = 'index.html';
             return;
         }
@@ -338,6 +350,7 @@
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             if (!userDoc.exists) {
+                clearTimeout(loaderTimeout);
                 loader.style.display = 'none';
                 return;
             }
@@ -365,14 +378,17 @@
                         renderCheckupStatus(wData);
                         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang));
                     }
+                    clearTimeout(loaderTimeout);
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
                 }, () => {
+                    clearTimeout(loaderTimeout);
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
                 });
                 loadChatMessages(workerDocId);
             } else {
+                clearTimeout(loaderTimeout);
                 loader.style.display = 'none';
                 document.getElementById('portalContent').classList.remove('hidden');
             }
@@ -383,6 +399,7 @@
             }
         } catch (err) {
             console.error('Auth error:', err);
+            clearTimeout(loaderTimeout);
             loader.style.display = 'none';
             document.getElementById('portalContent').classList.remove('hidden');
         }

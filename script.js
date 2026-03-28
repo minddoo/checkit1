@@ -1942,9 +1942,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }
 
+                        // [핵심 수정] 업데이트 이후 최신 문서를 재조회하여 workerDocId를 정확히 가져옴
+                        const freshUserDoc = await db.collection('users').doc(cred.user.uid).get();
+                        const workerId = freshUserDoc.data()?.workerDocId || '';
+
                         const data = translations[currentLang] || translations['ko'];
                         alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                        const workerId = (userDoc.data() && userDoc.data().workerDocId) ? userDoc.data().workerDocId : '';
                         window.location.href = `worker_portal.html?workerDocId=${workerId}`;
                     } else {
                         alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');

@@ -18,13 +18,13 @@
     --font-family: 'Pretendard', sans-serif;
     --font-family-cn: 'Noto Sans SC', sans-serif;
     
-    /* Modern Effects */
-    --glass-bg: rgba(255, 255, 255, 0.82);
-    --glass-border: rgba(255, 255, 255, 0.18);
-    --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.06);
-    --shadow-hover: 0 20px 50px -12px rgba(46, 204, 113, 0.15);
-    --border-radius-md: 16px;
-    --border-radius-lg: 24px;
+    /* Premium Modern Effects */
+    --glass-bg: rgba(255, 255, 255, 0.55); /* More transparent for better glass look */
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-blur: blur(18px);
+    --neon-glow-primary: 0 0 25px rgba(46, 204, 113, 0.35), 0 0 50px rgba(46, 204, 113, 0.15);
+    --shadow-premium: 0 30px 60px -12px rgba(0,0,0,0.08), 0 18px 36px -18px rgba(0,0,0,0.1);
+    --border-radius-lg: 32px; /* Slightly more rounded for premium look */
 
     /* Package Colors */
     --package1-color: #f59e0b;

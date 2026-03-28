@@ -352,14 +352,14 @@ body {
 
 /* Premium Full-Width Section Card */
 .premium-full-card {
-    background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(240, 253, 244, 0.88));
-    backdrop-filter: blur(30px) saturate(200%);
-    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    background: linear-gradient(rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.9));
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border-radius: 40px;
-    border: 1px solid rgba(46, 204, 113, 0.3);
+    border: 1px solid rgba(226, 232, 240, 0.8);
     box-shadow: 
-        0 15px 45px rgba(0, 0, 0, 0.05),
-        0 30px 100px rgba(46, 204, 113, 0.12),
+        0 4px 20px rgba(0, 0, 0, 0.02),
+        0 12px 35px rgba(15, 23, 42, 0.05),
         inset 0 0 0 1px rgba(255, 255, 255, 0.8);
     padding: 40px 30px; /* 더 작게 조정 */
     max-width: 720px; /* 너비 추가 축소 */

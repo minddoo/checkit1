@@ -42,6 +42,29 @@
     --input-border: #e2e8f0;
 }
 
+/* Character Base & Animation */
+.hero-character {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    animation: float-bounce 2.5s ease-in-out infinite;
+    filter: saturate(1.1) drop-shadow(0 15px 35px rgba(0,0,0,0.1));
+}
+
+@keyframes float-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+#corporate-hero .hero-character {
+    background-image: url('assets/기.png');
+    width: 700px;
+    height: 700px;
+}
+
 
 body { 
     font-family: var(--font-family); 

@@ -35,52 +35,68 @@
                         <div class="hero-slide" style="background-image: url('assets/hero-9.jpg'); background-size: cover; background-position: center;"></div>
                     </div>
 
-                    <!-- Synchronized captions for each slide -->
-                    <div class="hero-caption-container" style="margin-top: 15px; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
-                        <div class="hero-caption active" data-index="0" style="font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">기업 보건관리자가 엑셀로 근로자 명단과 병원 정보를 간편하게 등록하여,<br>실시간 보건관리의 체계적인 기초 데이터를 구축합니다.</div>
-                        <div class="hero-caption" data-index="1" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">등록된 근로자와 계약 병원 목록을 한눈에 비교하고 관리하며,<br>혹시 모를 누락 데이터까지 꼼꼼하게 실시간으로 체크할 수 있습니다.</div>
-                        <div class="hero-caption" data-index="2" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">근로자의 검진 수행 과정을 실시간 데이터로 즉각 확인할 수 있어,<br>진행 상황 파악을 위한 별도의 연락이나 번거로운 확인 절차가 사라집니다.</div>
-                        <div class="hero-caption" data-index="3" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">현장별 검진 현황, 참여율, 재검률 등 핵심 지표를 시각화된 데이터로 제공하며,<br>보건관리 사후 관리 단계까지 한눈에 실시간 모니터링이 가능합니다.</div>
-                        <div class="hero-caption" data-index="4" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">버튼 클릭 한 번으로 재검 대상자에게 개인 포털 안내를 완료할 수 있어,<br>가장 까다로운 사후 관리와 재검 일정 조율이 압도적으로 편리해집니다.</div>
-                        <div class="hero-caption" data-index="5" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">근로자는 개인 포털에서 모국어로 검진 정보를 직접 확인하고 관리하며,<br>관리자에게 문의할 필요 없이 스스로 검진 여정을 순조롭게 이행합니다.</div>
-                        <div class="hero-caption" data-index="6" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">본인의 검진 결과 및 재검 대상 여부 확인부터 실제 예약 진행까지,<br>근로자 개인 포털 안내창을 통해 실시간으로 정체 없이 한 번에 이루어집니다.</div>
-                        <div class="hero-caption" data-index="7" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">한국어 결과지를 업로드하면 모국어 번역 결과와 국제 질병코드가 함께 제공되어,<br>외국인 근로자도 본인의 건강 상태를 정확하고 투명하게 이해할 수 있습니다.</div>
-                        <div class="hero-caption" data-index="8" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; transition: 0.5s opacity;">내원 일정에 맞춰 발송되는 단계별 예약 리마인더 시스템으로,<br>검사 누락과 노쇼를 사전에 방지하여 기업 보건관리를 막힘없이 지원합니다.</div>
+                    <!-- Indicators (9 dots) -->
+                    <div class="hero-indicator">
+                        <div class="hero-dot active"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
+                        <div class="hero-dot"></div>
                     </div>
 
+                    <!-- Synchronized captions for each slide -->
+                    <div class="hero-caption-container" style="min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+                        <div class="hero-caption active" data-index="0" style="font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 1;">기업 보건관리자가 엑셀로 근로자 명단과 병원 정보를 간편하게 등록하여,<br>실시간 보건관리의 체계적인 기초 데이터를 구축합니다.</div>
+                        <div class="hero-caption" data-index="1" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">등록된 근로자와 계약 병원 목록을 한눈에 비교하고 관리하며,<br>혹시 모를 누락 데이터까지 꼼꼼하게 실시간으로 체크할 수 있습니다.</div>
+                        <div class="hero-caption" data-index="2" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">근로자의 검진 수행 과정을 실시간 데이터로 즉각 확인할 수 있어,<br>진행 상황 파악을 위한 별도의 연락이나 번거로운 확인 절차가 사라집니다.</div>
+                        <div class="hero-caption" data-index="3" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">현장별 검진 현황, 참여율, 재검률 등 핵심 지표를 시각화된 데이터로 제공하며,<br>보건관리 사후 관리 단계까지 한눈에 실시간 모니터링이 가능합니다.</div>
+                        <div class="hero-caption" data-index="4" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">버튼 클릭 한 번으로 재검 대상자에게 개인 포털 안내를 완료할 수 있어,<br>가장 까다로운 사후 관리와 재검 일정 조율이 압도적으로 편리해집니다.</div>
+                        <div class="hero-caption" data-index="5" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">근로자는 개인 포털에서 모국어로 검진 정보를 직접 확인하고 관리하며,<br>관리자에게 문의할 필요 없이 스스로 검진 여정을 순조롭게 이행합니다.</div>
+                        <div class="hero-caption" data-index="6" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">본인의 검진 결과 및 재검 대상 여부 확인부터 실제 예약 진행까지,<br>근로자 개인 포털 안내창을 통해 실시간으로 정체 없이 한 번에 이루어집니다.</div>
+                        <div class="hero-caption" data-index="7" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">한국어 결과지를 업로드하면 모국어 번역 결과와 국제 질병코드가 함께 제공되어,<br>외국인 근로자도 본인의 건강 상태를 정확하고 투명하게 이해할 수 있습니다.</div>
+                        <div class="hero-caption" data-index="8" style="display: none; font-size: 1.15rem; color: var(--text-color); font-weight: 600; opacity: 0; transition: 0.3s opacity;">내원 일정에 맞춰 발송되는 단계별 예약 리마인더 시스템으로,<br>검사 누락과 노쇼를 사전에 방지하여 기업 보건관리를 막힘없이 지원합니다.</div>
+                    </div>
                 </div>
             </div>
 
             <script>
-                // 5초 간격 슬라이드쇼 및 캡션 동기화 스크립트
+                // 3초 간격 슬라이드쇼 및 캡션/인디케이터 동기화 스크립트
                 document.addEventListener('DOMContentLoaded', function() {
-                    const slides = document.querySelectorAll('#hero .hero-slide');
-                    const captions = document.querySelectorAll('#hero .hero-caption');
+                    const heroSection = document.getElementById('hero');
+                    const slides = heroSection.querySelectorAll('.hero-slide');
+                    const captions = heroSection.querySelectorAll('.hero-caption');
+                    const dots = heroSection.querySelectorAll('.hero-dot');
                     let currentSlide = 0;
                     
                     if (slides.length > 0) {
                         setInterval(() => {
                             const prevSlideIndex = currentSlide;
                             
-                            // 1. 현재 슬라이드 퇴장 (왼쪽으로)
+                            // 1. 현재 슬라이드 및 캡션 퇴장
                             slides[prevSlideIndex].classList.remove('active');
                             slides[prevSlideIndex].classList.add('exit-left');
+                            dots[prevSlideIndex].classList.remove('active');
                             
                             if (captions[prevSlideIndex]) {
                                 captions[prevSlideIndex].style.opacity = '0';
+                                // 중첩 방지: 즉시 보이지 않게 처리 (transition 시간이 끝난 후가 아닌 더 빠르게)
                                 setTimeout(() => {
                                     captions[prevSlideIndex].classList.remove('active');
                                     captions[prevSlideIndex].style.display = 'none';
-                                }, 500);
+                                }, 300);
                             }
 
                             // 2. 인덱스 업데이트
                             currentSlide = (currentSlide + 1) % slides.length;
 
-                            // 3. 다음 슬라이드 등장 (오른쪽에서)
-                            // 혹시 대기 중인 슬라이드에 exit-left가 있다면 제거
+                            // 3. 다음 슬라이드 및 캡션 등장
                             slides[currentSlide].classList.remove('exit-left');
                             slides[currentSlide].classList.add('active');
+                            dots[currentSlide].classList.add('active');
 
                             if (captions[currentSlide]) {
                                 captions[currentSlide].style.display = 'block';
@@ -90,12 +106,12 @@
                                 }, 50);
                             }
                             
-                            // 4. 퇴장 완료된 슬라이드 클래스 정리 (다음 차례를 위해 다시 오른쪽 100% 대기 상태로)
+                            // 4. 퇴장 완료된 슬라이드 클래스 정리
                             setTimeout(() => {
                                 slides[prevSlideIndex].classList.remove('exit-left');
-                            }, 800); // CSS transition 시간(0.8s)과 일치
+                            }, 800);
 
-                        }, 5000);
+                        }, 3000); // 3초 간격
                     }
                 });
             </script>

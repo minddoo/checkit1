@@ -328,6 +328,28 @@ body {
     z-index: 1;
 }
 
+/* Indicators (Pagination Dots) */
+.hero-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.hero-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.hero-dot.active {
+    background: var(--primary-color);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+}
+
 /* Hero Container Grid Isolation */
 #individual-hero .container,
 #corporate-hero .container {

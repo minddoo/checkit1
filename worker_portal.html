@@ -526,13 +526,21 @@
 
 
 <style>
-    /* Hide Google Translate UI artifacts */
-    #google_translate_element { display: none !important; }
-    .goog-te-banner-frame.skiptranslate { display: none !important; }
-    body { top: 0px !important; }
-    .goog-tooltip { display: none !important; }
-    .goog-tooltip:hover { display: none !important; }
+    /* 1. Hide the Google Translate iframe banner completely */
+    iframe.goog-te-banner-frame { display: none !important; }
+    
+    /* 2. Prevent body from shifting down */
+    body { top: 0px !important; position: static !important; }
+    
+    /* 3. Hide the Google Translate popup/tooltip when hovering over translated text */
+    #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+    
+    /* 4. Remove yellow highlight on translated text */
     .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+    font { background: transparent !important; }
+    
+    /* 5. Hide the translation widget completely */
+    #google_translate_element { display: none !important; z-index: -9999999 !important; }
 </style>
 
 <div id="google_translate_element"></div>

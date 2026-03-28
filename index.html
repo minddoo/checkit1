@@ -17,8 +17,8 @@
     <header id="main-header"></header>
 
     <main>
-        <!-- HERO -->
-        <section id="hero" class="reveal" style="position: relative;">
+        <!-- HERO (FULL PHOTO SECTION) -->
+        <section id="hero" class="reveal" style="position: relative; height: 75vh; padding: 0;">
             <!-- Background Slideshow -->
             <div class="hero-slideshow">
                 <div class="hero-slide active" style="background-image: url('assets/hero-1.jpg');"></div>
@@ -31,9 +31,7 @@
                 <div class="hero-slide" style="background-image: url('assets/hero-8.jpg');"></div>
                 <div class="hero-slide" style="background-image: url('assets/hero-9.jpg');"></div>
             </div>
-            <div class="hero-slideshow-overlay"></div>
-
-            <!-- Hero content moved to the section below -->
+            <div class="hero-slideshow-overlay" style="background: rgba(0,0,0,0.2); position: absolute; top:0; left:0; width:100%; height:100%; z-index:1;"></div>
 
             <script>
                 // 3초 간격 슬라이드쇼 스크립트
@@ -52,11 +50,11 @@
             </script>
         </section>
 
-        <!-- HERO TEXT & CTA -->
-        <section id="hero-text-cta" class="section reveal" style="background-color: var(--white); text-align: center; padding: 60px 20px 20px;">
+        <!-- HERO TEXT & CTA SECTION -->
+        <section id="hero-text-cta" class="section reveal" style="background-color: var(--white); text-align: center; padding: 80px 20px;">
             <div class="container">
-                <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; color: var(--text-color);" data-lang-key="hero_title"></h2>
-                <p style="font-size: 1.15rem; color: var(--text-light); margin-bottom: 30px;" data-lang-key="hero_subtitle"></p>
+                <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 20px; color: var(--text-color);" data-lang-key="hero_title"></h2>
+                <p style="font-size: 1.15rem; color: var(--text-light); margin-bottom: 40px; line-height: 1.8;" data-lang-key="hero_subtitle"></p>
                 <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
             </div>
         </section>

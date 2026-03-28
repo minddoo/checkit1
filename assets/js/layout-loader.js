@@ -40,7 +40,6 @@ const LayoutLoader = {
                     <h4 class="footer-title">고객센터 정보</h4>
                     <p>상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong></p>
                     <p>상담/주문 이메일: <strong>checkit082@gmail.com</strong></p>
-                    <p>CS운영시간: 평일 10:00 - 18:00 (주말 및 공휴일 휴무)</p>
                 </div>
             </div>
             <div class="footer-bottom">

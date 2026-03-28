@@ -525,181 +525,65 @@
 </div>
 
 
+<style>
+    /* Hide Google Translate UI artifacts */
+    #google_translate_element { display: none !important; }
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0px !important; }
+    .goog-tooltip { display: none !important; }
+    .goog-tooltip:hover { display: none !important; }
+    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ko', 
+    includedLanguages: 'ko,en,zh-CN,vi',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <script>
-    const workerTranslations = {
-        ko: {
-            menuProgress: '나의 진행상황',
-            menuChat: 'CHECKIT 1:1 대화방',
-            menuResults: '결과 관리',
-            bannerSub: '나의 건강검진 현황과 제휴 병원 정보를 확인하세요.',
-            h_myStatus: '나의 검진 현황',
-            h_hospitals: '제휴 병원 안내',
-            h_required: '기업 필요 서류',
-            h_chatTitle: 'CHECKIT 1:1 케어 센터',
-            p_chatStatus: '온라인 상담 대기 중',
-            chatInput: '궁금한 점을 남겨주세요...',
-            h_submitResult: '기업에 결과지 제출하기',
-            p_noResult: '아직 제출된 결과지가 없습니다.',
-            b_uploadPhoto: '사진 업로드',
-            b_submitNow: '바로 제출하기',
-            t_loading: '불러오는 중...',
-            t_loadChat: '대화 내용을 불러오는 중...',
-            h_transTitle: '나의 언어로 번역보기 (Translation)',
-            transDesc1: '제출하신 한국어 결과지를 분석하여 나의 언어로 번역된 결과를 제공합니다.',
-            b_transCheck: '번역된 결과 확인하기',
-            h_transModalTitle: '검진 결과 번역 (Translated Result)',
-            transAlertTitle: '읽어보시고 꼭 참고해 주세요!'
-        },
-        en: {
-            menuProgress: 'My Progress',
-            menuChat: '1:1 Chat',
-            menuResults: 'Results',
-            bannerSub: 'Check your health checkup status and partner hospitals.',
-            h_myStatus: 'My Checkup Status',
-            h_hospitals: 'Partner Hospitals',
-            h_required: 'Required Documents',
-            h_chatTitle: 'CHECKIT Care Center',
-            p_chatStatus: 'Counselors Online',
-            chatInput: 'Type your message here...',
-            h_submitResult: 'Submit Results',
-            p_noResult: 'No results submitted yet.',
-            b_uploadPhoto: 'Upload Photo',
-            b_submitNow: 'Submit Now',
-            t_loading: 'Loading...',
-            t_loadChat: 'Loading chat...',
-            h_transTitle: 'View Translation',
-            transDesc1: 'We provide translated results based on your submitted Korean result sheet.',
-            b_transCheck: 'Check Translated Result',
-            h_transModalTitle: 'Translated Result',
-            transAlertTitle: 'Please read carefully!'
-        },
-        cn: {
-            menuProgress: '我的进度',
-            menuChat: '1:1 聊天',
-            menuResults: '结果管理',
-            bannerSub: '查看您的健康体检状态和合作医院。',
-            h_myStatus: '我的体检状态',
-            h_hospitals: '合作医院指南',
-            h_required: '企业所需文件',
-            h_chatTitle: 'CHECKIT 护理中心',
-            p_chatStatus: '客服在线',
-            chatInput: '请写下您的问题...',
-            h_submitResult: '向企业提交结果',
-            p_noResult: '尚未提交结果。',
-            b_uploadPhoto: '上传照片',
-            b_submitNow: '立即提交',
-            t_loading: '加载中...',
-            t_loadChat: '聊天记录加载中...',
-            h_transTitle: '查看翻译',
-            transDesc1: '我们将根据您提交的韩语体检结果为您提供翻译。',
-            b_transCheck: '查看翻译结果',
-            h_transModalTitle: '体检结果翻译',
-            transAlertTitle: '请务必阅读！'
-        },
-        vn: {
-            menuProgress: 'Tiến độ của tôi',
-            menuChat: 'Trò chuyện 1:1',
-            menuResults: 'Quản lý kết quả',
-            bannerSub: 'Kiểm tra tình trạng sức khỏe và bệnh viện liên kết.',
-            h_myStatus: 'Tình trạng kiểm tra',
-            h_hospitals: 'Bệnh viện liên kết',
-            h_required: 'Giấy tờ yêu cầu',
-            h_chatTitle: 'Trung tâm chăm sóc CHECKIT',
-            p_chatStatus: 'Tư vấn viên trực tuyến',
-            chatInput: 'Nhập câu hỏi của bạn...',
-            h_submitResult: 'Nộp kết quả',
-            p_noResult: 'Chưa có kết quả nào.',
-            b_uploadPhoto: 'Tải ảnh lên',
-            b_submitNow: 'Nộp ngay',
-            t_loading: 'Đang tải...',
-            t_loadChat: 'Đang tải tin nhắn...',
-            h_transTitle: 'Xem bản dịch',
-            transDesc1: 'Chúng tôi cung cấp kết quả dịch dựa trên giấy tờ tiếng Hàn của bạn.',
-            b_transCheck: 'Xem kết quả đã dịch',
-            h_transModalTitle: 'Kết quả đã dịch',
-            transAlertTitle: 'Vui lòng đọc kỹ!'
-        }
-    };
-
-    window.changePortalLanguage = function(lang) {
+    window.changePortalLanguage = function(langCode) {
+        // Update active button UI
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-        });
-        
-        const t = workerTranslations[lang] || workerTranslations.ko;
-        const qs = (sel, htmlContext) => { const el = document.querySelector(sel); if(el && htmlContext) el.innerHTML = htmlContext; return el; };
-        
-        qs('#menuProgress', `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.menuProgress}`);
-        qs('#menuChat', `<i class="fa-solid fa-comments"></i> ${t.menuChat}`);
-        qs('#menuResults', `<i class="fa-solid fa-file-shield"></i> ${t.menuResults}`);
-        
-        const welcomeH2 = document.querySelector('.welcome-banner h2');
-        if (welcomeH2 && document.getElementById('welcomeName')) {
-             welcomeH2.innerHTML = `${lang === 'ko' ? '안녕하세요, ' : lang === 'cn' ? '您好, ' : lang === 'vn' ? 'Xin chào, ' : 'Welcome, '}<span id="welcomeName">${document.getElementById('welcomeName').textContent}</span>${lang === 'ko' ? ' 님 👋' : ' 👋'}`;
-        }
-        
-        qs('.welcome-banner p', t.bannerSub);
-        
-        const cardHeaders = document.querySelectorAll('.card-header h3');
-        if (cardHeaders.length >= 3) {
-            cardHeaders[0].textContent = t.h_myStatus;
-            cardHeaders[1].textContent = t.h_hospitals;
-            cardHeaders[2].textContent = t.h_required;
-        }
-
-        const chatH4 = document.querySelector('#sectionChat h4');
-        if (chatH4) chatH4.textContent = t.h_chatTitle;
-        const chatP = document.querySelector('#sectionChat h4 + p');
-        if (chatP) chatP.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> ${t.p_chatStatus}`;
-        const chatInput = document.getElementById('chatInput');
-        if (chatInput) chatInput.placeholder = t.chatInput;
-
-        const resHeader = document.querySelector('#sectionResults .card-header h3');
-        if (resHeader) resHeader.textContent = t.h_submitResult;
-        
-        const noResultP = document.querySelector('#noSubmissionUI p:nth-child(2)');
-        if (noResultP) noResultP.textContent = t.p_noResult;
-        
-        const btns = document.querySelectorAll('#noSubmissionUI .btn-submit');
-        if (btns.length >= 2) {
-            btns[0].innerHTML = `<i class="fa-solid fa-camera"></i> ${t.b_uploadPhoto}`;
-            btns[1].innerHTML = `<i class="fa-solid fa-paper-plane"></i> ${t.b_submitNow}`;
-        }
-
-        const transCardH3 = document.querySelector('#translationCard .card-header h3');
-        if (transCardH3) transCardH3.textContent = t.h_transTitle;
-        const transDesc = document.querySelector('#translationCard div p');
-        if (transDesc) transDesc.textContent = t.transDesc1;
-        const transBtn = document.querySelector('#translationCard .btn-submit');
-        if (transBtn) transBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> ${t.b_transCheck}`;
-
-        const transModalH3 = document.querySelector('#translationModalOverlay h3');
-        if (transModalH3) transModalH3.innerHTML = `<i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>${t.h_transModalTitle}`;
-        const alertTitle = document.querySelector('#translationModalOverlay .fa-triangle-exclamation');
-        if (alertTitle && alertTitle.parentElement) alertTitle.parentElement.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${t.transAlertTitle}`;
-
-        document.querySelectorAll('.loading-text').forEach(el => {
-            if (el.innerHTML.includes('fa-spinner')) {
-                el.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${el.innerHTML.includes('대화') ? t.t_loadChat : t.t_loading}`;
-            }
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === langCode);
         });
 
+        // Save preference to Firebase & LocalStorage
+        localStorage.setItem('checkit_lang', langCode);
         const user = window.auth && window.auth.currentUser;
         if (user && window.db) {
             window.db.collection('users').doc(user.uid).get().then(doc => {
                 if(doc.exists && doc.data().workerDocId) {
-                    window.db.collection('workers').doc(doc.data().workerDocId).update({ prefLang: lang });
+                    window.db.collection('workers').doc(doc.data().workerDocId).update({ prefLang: langCode });
                 }
             }).catch(e => console.error("Lang save error", e));
         }
+
+        // Trigger Google Translate Widget
+        const langMap = { 'ko': 'ko', 'en': 'en', 'cn': 'zh-CN', 'vn': 'vi' };
+        const targetLang = langMap[langCode] || 'ko';
+        const selectField = document.querySelector("select.goog-te-combo");
         
-        localStorage.setItem('checkit_lang', lang);
+        if (selectField) {
+            selectField.value = targetLang;
+            selectField.dispatchEvent(new Event('change'));
+        } else {
+            // Retry if the widget hasn't loaded yet
+            setTimeout(() => window.changePortalLanguage(langCode), 500);
+        }
     };
 
     document.addEventListener("DOMContentLoaded", () => {
         const savedLang = localStorage.getItem('checkit_lang');
         if (savedLang) {
-            setTimeout(() => window.changePortalLanguage(savedLang), 500);
+            setTimeout(() => window.changePortalLanguage(savedLang), 1000);
         }
     });
 </script>

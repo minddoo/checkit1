@@ -352,7 +352,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_privacy_label': '[필수] 개인정보 수집 및 이용 동의',
             'signup_consent_admin_label': '[필수] 비의료 행정 지원 및 대리 예약 서비스 동의',
             'signup_consent_medical_label': '[필수] 민감정보(의료 데이터) 처리 및 결과지 수신 동의',
-            'signup_consent_view_details': '내용 보기 ▾'
+            'signup_consent_view_details': '내용 보기 ▾',
+            'footer_company_title': '쇼핑몰 기본정보',
+            'footer_company_name': '상호명: <strong>주식회사 체킷</strong>',
+            'footer_representative': '대표자명: 김선홍',
+            'footer_address': '사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)',
+            'footer_phone': '대표 전화: 01051093459',
+            'footer_business_no': '사업자 등록번호: 8718803241',
+            'footer_privacy_officer': '개인정보보호책임자: 남민정',
+            'footer_cs_title': '고객센터 정보',
+            'footer_cs_phone': '상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': '상담/주문 이메일: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.'
         },
         en: {
             'main_page_title': 'CHECKIT - Health Check-up for Foreigners',
@@ -677,7 +688,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_privacy_label': '[Required] Personal Information Collection and Use',
             'signup_consent_admin_label': '[Required] Non-medical Administrative Support & Proxy Booking',
             'signup_consent_medical_label': '[Required] Sensitive Info (Medical Data) Processing',
-            'signup_consent_view_details': 'View Details ▾'
+            'signup_consent_view_details': 'View Details ▾',
+            'footer_company_title': 'Mall Information',
+            'footer_company_name': 'Company Name: <strong>CHECKIT Co., Ltd.</strong>',
+            'footer_representative': 'Representative: Sang-hong Kim',
+            'footer_address': 'Business Address: Room AF08-0019, 8th Floor, 202 Dasanjigeum-ro, Namyangju-si, Gyeonggi-do (Hyundai Terra Tower DIMC)',
+            'footer_phone': 'Representative Phone: +82 10 5109 3459',
+            'footer_business_no': 'Business Registration No: 8718803241',
+            'footer_privacy_officer': 'Privacy Officer: Min-jung Nam',
+            'footer_cs_title': 'Customer Service Info',
+            'footer_cs_phone': 'Consultation/Order Phone: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': 'Consultation/Order Email: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd. All Rights Reserved.'
         },
         cn: {
             'main_page_title': 'CHECKIT - 外国人健康检查预约',
@@ -1001,7 +1023,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_privacy_label': '[必选] 个人信息收集及使用同意',
             'signup_consent_admin_label': '[必选] 非医疗行政支援及代办预约服务同意',
             'signup_consent_medical_label': '[必选] 敏感信息（医疗数据）处理同意',
-            'signup_consent_view_details': '查看详情 ▾'
+            'signup_consent_view_details': '查看详情 ▾',
+            'footer_company_title': '商城基本信息',
+            'footer_company_name': '公司名称: <strong>株式会社 CHECKIT</strong>',
+            'footer_representative': '代表人: 金善洪',
+            'footer_address': '营业地址: 京畿道南杨州市多山至今路202, 第8层 AF08-0019号 (多山洞, 现代 Terra Tower DIMC)',
+            'footer_phone': '代表电话: 01051093459',
+            'footer_business_no': '工商注册号: 8718803241',
+            'footer_privacy_officer': '个人信息保护负责人: 南敏正',
+            'footer_cs_title': '客户服务中心',
+            'footer_cs_phone': '咨询/订购电话: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': '咨询/订购电邮: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 株式会社 CHECKIT (CHECKIT). All Rights Reserved.'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
@@ -1326,7 +1359,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_privacy_label': '[Bắt buộc] Thu thập thông tin cá nhân',
             'signup_consent_admin_label': '[Bắt buộc] Hỗ trợ hành chính',
             'signup_consent_medical_label': '[Bắt buộc] Xử lý dữ liệu y tế',
-            'signup_consent_view_details': 'Xem chi tiết ▾'
+            'signup_consent_view_details': 'Xem chi tiết ▾',
+            'footer_company_title': 'Thông tin cơ bản về trung tâm mua sắm',
+            'footer_company_name': 'Tên công ty: <strong>Công ty Cổ phần CHECKIT</strong>',
+            'footer_representative': 'Người đại diện: Kim Sun-hong',
+            'footer_address': 'Địa chỉ kinh doanh: Phòng AF08-0019, Tầng 8, 202 Dasanjigeum-ro, Namyangju-si, Gyeonggi-do (Dasan-dong, Hyundai Terra Tower DIMC)',
+            'footer_phone': 'Điện thoại đại diện: 01051093459',
+            'footer_business_no': 'Mã số đăng ký kinh doanh: 8718803241',
+            'footer_privacy_officer': 'Người chịu trách nhiệm bảo mật thông tin cá nhân: Nam Min-jung',
+            'footer_cs_title': 'Thông tin Trung tâm Khách hàng',
+            'footer_cs_phone': 'Điện thoại Tư vấn/Đặt hàng: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': 'Email Tư vấn/Đặt hàng: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 Công ty Cổ phần CHECKIT (CHECKIT). All Rights Reserved.'
         }
     };
 
@@ -2136,4 +2180,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Corporate FAQ Accordion Logic ---
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all other items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        });
+    });
 });

@@ -28,22 +28,22 @@ const LayoutLoader = {
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-info">
-                    <h4 class="footer-title">쇼핑몰 기본정보</h4>
-                    <p>상호명: <strong>주식회사 체킷</strong></p>
-                    <p>대표자명: 김선홍</p>
-                    <p>사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)</p>
-                    <p>대표 전화: 01051093459</p>
-                    <p>사업자 등록번호: 8718803241</p>
-                    <p>개인정보보호책임자: 남민정</p>
+                    <h4 class="footer-title" data-lang-key="footer_company_title">쇼핑몰 기본정보</h4>
+                    <p data-lang-key="footer_company_name">상호명: <strong>주식회사 체킷</strong></p>
+                    <p data-lang-key="footer_representative">대표자명: 김선홍</p>
+                    <p data-lang-key="footer_address">사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)</p>
+                    <p data-lang-key="footer_phone">대표 전화: 01051093459</p>
+                    <p data-lang-key="footer_business_no">사업자 등록번호: 8718803241</p>
+                    <p data-lang-key="footer_privacy_officer">개인정보보호책임자: 남민정</p>
                 </div>
                 <div class="footer-cs">
-                    <h4 class="footer-title">고객센터 정보</h4>
-                    <p>상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong></p>
-                    <p>상담/주문 이메일: <strong>checkit082@gmail.com</strong></p>
+                    <h4 class="footer-title" data-lang-key="footer_cs_title">고객센터 정보</h4>
+                    <p data-lang-key="footer_cs_phone">상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong></p>
+                    <p data-lang-key="footer_cs_email">상담/주문 이메일: <strong>checkit082@gmail.com</strong></p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.</p>
+                <p data-lang-key="footer_copyright">&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.</p>
             </div>
         </div>
     `,

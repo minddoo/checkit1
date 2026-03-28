@@ -60,22 +60,41 @@
                     
                     if (slides.length > 0) {
                         setInterval(() => {
-                            // 이전 상태 제거
-                            slides[currentSlide].classList.remove('active');
-                            if (captions[currentSlide]) {
-                                captions[currentSlide].classList.remove('active');
-                                captions[currentSlide].style.display = 'none';
+                            const prevSlideIndex = currentSlide;
+                            
+                            // 1. 현재 슬라이드 퇴장 (왼쪽으로)
+                            slides[prevSlideIndex].classList.remove('active');
+                            slides[prevSlideIndex].classList.add('exit-left');
+                            
+                            if (captions[prevSlideIndex]) {
+                                captions[prevSlideIndex].style.opacity = '0';
+                                setTimeout(() => {
+                                    captions[prevSlideIndex].classList.remove('active');
+                                    captions[prevSlideIndex].style.display = 'none';
+                                }, 500);
                             }
 
-                            // 다음 인덱스로 전환
+                            // 2. 인덱스 업데이트
                             currentSlide = (currentSlide + 1) % slides.length;
 
-                            // 새로운 상태 적용
+                            // 3. 다음 슬라이드 등장 (오른쪽에서)
+                            // 혹시 대기 중인 슬라이드에 exit-left가 있다면 제거
+                            slides[currentSlide].classList.remove('exit-left');
                             slides[currentSlide].classList.add('active');
+
                             if (captions[currentSlide]) {
-                                captions[currentSlide].classList.add('active');
                                 captions[currentSlide].style.display = 'block';
+                                setTimeout(() => {
+                                    captions[currentSlide].classList.add('active');
+                                    captions[currentSlide].style.opacity = '1';
+                                }, 50);
                             }
+                            
+                            // 4. 퇴장 완료된 슬라이드 클래스 정리 (다음 차례를 위해 다시 오른쪽 100% 대기 상태로)
+                            setTimeout(() => {
+                                slides[prevSlideIndex].classList.remove('exit-left');
+                            }, 800); // CSS transition 시간(0.8s)과 일치
+
                         }, 5000);
                     }
                 });

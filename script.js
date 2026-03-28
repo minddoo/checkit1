@@ -1221,6 +1221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentLang = 'ko';
     const switchLanguage = (newLang) => {
         currentLang = newLang;
+        localStorage.setItem('preferredLanguage', newLang);
         document.documentElement.lang = newLang;
         const data = translations[newLang] || translations['ko'];
         
@@ -1744,7 +1745,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    switchLanguage('ko');
+    const savedLang = localStorage.getItem('preferredLanguage') || 'ko';
+    switchLanguage(savedLang);
 
     // --- Tab Switching for Login/Signup modals ---
     window.switchLoginTab = (role) => {

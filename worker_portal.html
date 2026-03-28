@@ -528,6 +528,8 @@
 <style>
     /* 1. Hide the Google Translate iframe banner completely */
     iframe.goog-te-banner-frame { display: none !important; }
+    iframe[id^="goog-te-banner-frame"] { display: none !important; }
+    .goog-te-banner-frame { display: none !important; visibility: hidden !important; }
     
     /* 2. Prevent body from shifting down */
     body { top: 0px !important; position: static !important; }
@@ -541,6 +543,11 @@
     
     /* 5. Hide the translation widget completely */
     #google_translate_element { display: none !important; z-index: -9999999 !important; }
+    
+    /* 6. Hide NEW Google Translate classes */
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc { display: none !important; }
+    .skiptranslate > iframe { display: none !important; }
 </style>
 
 <div id="google_translate_element"></div>
@@ -555,6 +562,29 @@ function googleTranslateElementInit() {
 }
 </script>
 <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    // Forcefully remove Google Translate banner and fix layout shifts using MutationObserver
+    const observer = new MutationObserver(() => {
+        // Force body top back to 0
+        if (document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.setProperty('top', '0px', 'important');
+        }
+        
+        // Target any new/old banner iframes and hide them
+        document.querySelectorAll('iframe.goog-te-banner-frame, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf, .skiptranslate > iframe').forEach(el => {
+            if (el.style.display !== 'none') {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+            }
+        });
+    });
+    
+    // Start observing the body for injected elements and style modifications
+    document.addEventListener("DOMContentLoaded", () => {
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+    });
+</script>
 
 <script>
     window.changePortalLanguage = function(langCode) {

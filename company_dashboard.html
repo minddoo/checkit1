@@ -286,25 +286,6 @@
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>연락처</label>
-                            <div class="input-wrapper">
-                                <i class="fa-solid fa-phone"></i>
-                                <input type="tel" id="hospPhone" placeholder="예: 02-1234-5678">
-                            </div>
-                        </div>
-                        <div class="input-group" style="grid-column: span 2;">
-                            <label>병원 주소</label>
-                            <div style="display: flex; gap: 10px;">
-                                <div class="input-wrapper" style="flex: 1;">
-                                    <i class="fa-solid fa-map-location-dot"></i>
-                                    <input type="text" id="hospAddress" placeholder="주소 검색을 이용해 주세요" readonly required style="background: #f8fafc;">
-                                </div>
-                                <button type="button" onclick="window.execDaumPostcode()" class="btn-outline" style="border-color: #cbd5e1;">주소 검색</button>
-                            </div>
-                            <input type="hidden" id="hospLat">
-                            <input type="hidden" id="hospLng">
-                        </div>
-                        <div class="input-group">
                             <label>검진 가능 기간</label>
                             <div class="input-wrapper">
                                 <i class="fa-regular fa-calendar-check"></i>
@@ -1378,16 +1359,12 @@ window.saveWorker = async (event) => {
 
         const info = {
             name: document.getElementById("hospName").value.trim(),
-            address: document.getElementById("hospAddress").value.trim(),
-            phone: document.getElementById("hospPhone").value.trim(),
             schedule: document.getElementById("hospSchedule").value.trim(),
             period: document.getElementById("hospPeriod").value.trim(),
             extraCost: document.getElementById("hospExtraCost").value.trim(),
             hasLink: hasLink,
             link: hasLink === 'Y' ? document.getElementById("hospLink").value.trim() : '',
             code: hasLink === 'Y' ? document.getElementById("hospCode").value.trim() : '',
-            lat: document.getElementById("hospLat").value,
-            lng: document.getElementById("hospLng").value
         };
 
         if(!info.name) {

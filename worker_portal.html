@@ -2174,16 +2174,19 @@ function googleTranslateElementInit() {
             const h = doc.data();
             const id = doc.id;
             
-            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name + ' ' + (h.address || ''))}`;
-            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name + ' ' + (h.address || ''))}`;
+            const cardId = `hospCard_${idx}`;
+            
+            // Standard fallback URLs using name
+            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name)}`;
+            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name)}`;
 
             html += `
-                <div class="hospital-card">
+                <div class="hospital-card" id="${cardId}">
                     <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
-                    <div class="h-card-address"><i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${h.address || '주소 정보 없음'}</div>
+                    <div class="h-card-address" id="${cardId}_address"><i class="fa-solid fa-spinner fa-spin"></i> 정밀 주소 확인 중...</div>
                     <div class="h-card-meta">
                         <div class="item" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-calendar-check"></i> ${h.schedule || '25.10.01 ~ 11.30'}</div>
-                        <div class="item"><i class="fa-solid fa-phone"></i> ${h.phone || '연락처 미등록'}</div>
+                        <div class="item" id="${cardId}_phone"><i class="fa-solid fa-spinner fa-spin"></i> 연락처 확인 중...</div>
                     </div>
                     
                     <!-- Portal Aggregated Action -->
@@ -2191,21 +2194,70 @@ function googleTranslateElementInit() {
                         <i class="fa-solid fa-circle-info"></i> 실제 포털에서 상세 정보(진료 시간 등)를 확인하세요
                     </div>
                     <div class="h-card-actions">
-                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" onclick="event.stopPropagation()">
+                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" id="${cardId}_naver" onclick="event.stopPropagation()">
                             <img src="https://www.naver.com/favicon.ico" style="width:14px;height:14px;border-radius:2px;"> 네이버
                         </a>
-                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" onclick="event.stopPropagation()">
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" id="${cardId}_kakao" onclick="event.stopPropagation()">
                             <i class="fa-comment fa-solid" style="font-size:0.8rem;"></i> 카카오
                         </a>
-                        ${h.phone ? `<a href="tel:${h.phone}" class="btn-h-action btn-h-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>` : ''}
+                        <a href="#" class="btn-h-action btn-h-call hidden" id="${cardId}_callBtn" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>
                     </div>
                     <div class="h-card-actions" style="margin-top: -5px;">
                         ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 간편 예약</a>` : ''}
-                        <a href="https://map.kakao.com/link/to/${h.name},${h.lat},${h.lng}" target="_blank" class="btn-h-action btn-h-map" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-h-map" id="${cardId}_route" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
                     </div>
                 </div>`;
+            
+            // Trigger Real-time Data Fetch from Portals
+            setTimeout(() => fetchHospitalLiveInfo(h.name, cardId), 100 * idx);
         });
         container.innerHTML = html;
+    }
+
+    // [New] Real-time Hospital Info Aggregation logic
+    function fetchHospitalLiveInfo(hospName, cardId) {
+        if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) return;
+        
+        const ps = new kakao.maps.services.Places();
+        ps.keywordSearch(hospName, (data, status) => {
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const info = data[0]; // Take the most relevant match
+                
+                // Update Address
+                const addrEl = document.getElementById(`${cardId}_address`);
+                if (addrEl) addrEl.innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${info.address_name}`;
+                
+                // Update Phone
+                const phoneEl = document.getElementById(`${cardId}_phone`);
+                if (phoneEl) {
+                    if (info.phone) {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${info.phone}`;
+                        const callBtn = document.getElementById(`${cardId}_callBtn`);
+                        if (callBtn) {
+                            callBtn.href = `tel:${info.phone}`;
+                            callBtn.classList.remove('hidden');
+                        }
+                    } else {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+                    }
+                }
+
+                // Update Action Links with precise location info if available
+                const naverBtn = document.getElementById(`${cardId}_naver`);
+                const kakaoBtn = document.getElementById(`${cardId}_kakao`);
+                const routeBtn = document.getElementById(`${cardId}_route`);
+
+                const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
+                if (naverBtn) naverUserUrl = `https://map.naver.com/v5/search/${query}`;
+                if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
+                if (routeBtn) routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+
+            } else {
+                // Fallback for search failure
+                document.getElementById(`${cardId}_address`).innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> 주소 정보 없음`;
+                document.getElementById(`${cardId}_phone`).innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+            }
+        });
     }
 
     function doLogout() {

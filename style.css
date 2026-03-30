@@ -107,6 +107,7 @@
     color: #1e3a28;
     line-height: 1.8;
     opacity: 0.9;
+    word-break: keep-all;
 }
 
 #corporate-hero .hero-character {
@@ -491,6 +492,8 @@ body {
     line-height: 1.8;
     letter-spacing: 0.005em;
     text-align: center; /* Changed from left to center */
+    word-break: keep-all; /* Natural Korean word wrapping */
+    overflow-wrap: break-word;
 }
 
 .hero-caption.active {

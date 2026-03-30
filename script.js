@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'hero_subtitle': '빠르게 증가하는 근로자의 보건관리를 <br class="mobile-only">하나의 흐름으로 체계적이고, <br class="desktop-only">지속 가능한 구조로 만들어줍니다.',
             'service_for_title': '빠르게 늘어나는 외국인 근로자가 <br class="mobile-only">필수인 기업을 위한 서비스',
             'corporate_title': '현장 업계 기업 전문',
-            'corporate_desc': '현장 인력의 보건관리와 검진 프로세스를 자동화하여, <br class="mobile-only">기업의 운영 효율성과 성장을 돕습니다.',
+            'corporate_desc': '현장 인력의 보건관리와 검진 프로세스를 자동화하여,<br>기업의 운영 효율성과 성장을 돕습니다.',
             'why_us_title': '왜 <span class="highlight">CHECKIT</span>을 선택해야 할까요?',
             'why_us_subtitle_new': '복잡한 외국인 근로자 보건관리, <br class="mobile-only">이제 단 하나의 플랫폼으로 해결하세요.',
             'why_us_feature1_title': '실시간 보건관리 모니터링',

@@ -61,7 +61,7 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background: linear-gradient(135deg, #f7fee7 0%, #ecfccb 50%, #f0fdf4 100%); /* Fresh light-green (lime) gradient */
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%); /* Pure light-green gradient */
     color: #1e293b;
     padding: 100px 0 60px;
     position: relative;

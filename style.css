@@ -61,7 +61,7 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background-color: #3d8c55; /* Matched with Main */
+    background: linear-gradient(135deg, #3d8c55 0%, #2e7a46 100%);
     color: #ffffff;
     padding: 100px 0 60px;
     position: relative;
@@ -78,6 +78,7 @@
 #corporate-hero .hero-text-content {
     flex: 1;
     z-index: 2;
+    padding-left: 120px; /* Text moved closer to character */
 }
 
 #corporate-hero .hero-title {

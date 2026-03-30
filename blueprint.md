@@ -171,7 +171,8 @@ The user wanted to change the corporate hero background to a custom construction
 ### Implemented Changes
 1.  **Saved Asset**: Copied provided construction site image to `assets/건건.png`.
 2.  **`style.css`**:
-    *   Set `background-image` to `url('assets/건건.png')` with a 45% white overlay for contrast.
+    *   Set `background-image` to `url('assets/건건.png')` with a 45% dark-tinted overlay (`rgba(0,0,0,0.45)`) for a premium, high-contrast look.
+    *   Updated text colors (`hero-title`, `hero-subtitle`) to white (`#ffffff`) with strong dark shadows for maximum legibility.
     *   Consolidated redundant CSS blocks for `#corporate-hero`.
 3.  **Deployment**: All changes staged and pushed to the repository.
 

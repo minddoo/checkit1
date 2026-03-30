@@ -1517,9 +1517,14 @@ window.saveWorker = async (event) => {
     // =============================================
     // 배치전 건강진단 규정 안내 (Regulatory Notice)
     // =============================================
+    const REG_NOTICE_VERSION = '20250330_v2';
+
     window.showRegulatoryNotice = async (callback) => {
         const skipUntil = localStorage.getItem('hideRegNoticeUntil');
-        if (skipUntil && new Date().getTime() < parseInt(skipUntil)) {
+        const savedVersion = localStorage.getItem('regNoticeVersion');
+
+        // 버전이 다르거나 시간이 경과한 경우에만 표시
+        if (savedVersion === REG_NOTICE_VERSION && skipUntil && new Date().getTime() < parseInt(skipUntil)) {
             callback();
             return;
         }
@@ -1557,6 +1562,7 @@ window.saveWorker = async (event) => {
                 const tomorrow = new Date();
                 tomorrow.setHours(24, 0, 0, 0);
                 localStorage.setItem('hideRegNoticeUntil', tomorrow.getTime());
+                localStorage.setItem('regNoticeVersion', REG_NOTICE_VERSION);
             }
             overlay.classList.remove('show');
             callback();

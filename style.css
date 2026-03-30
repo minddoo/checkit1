@@ -953,7 +953,7 @@ body {
 /* ------------------- 
  * 4. Section: Why Choose Us? & Feature Grids
  * ------------------- */
-.features-grid-new { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; margin-top: 60px; }
+.features-grid-new { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; text-align: center; margin-top: 60px; max-width: 900px; margin-left: auto; margin-right: auto; }
 .feature-item-new { 
     background: var(--white); 
     padding: 40px; 

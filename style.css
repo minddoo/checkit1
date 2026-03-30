@@ -78,7 +78,7 @@
 #corporate-hero .hero-text-content {
     flex: 1;
     z-index: 2;
-    padding-left: 220px; /* Text moved even closer to character */
+    padding-left: 350px; /* Shifted even further right to be closer to character */
 }
 
 #corporate-hero .hero-title {

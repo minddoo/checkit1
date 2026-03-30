@@ -1570,27 +1570,44 @@ window.saveWorker = async (event) => {
 
     window.getDefaultRegNotice = () => {
         return `
-            <div class="reg-notice-box">
-                <i class="fa-solid fa-circle-info" style="color: #22c55e; margin-top: 3px;"></i>
-                <div>
-                    <strong>배출전 건강진단 제도가 개정되었습니다.</strong><br>
-                    불필요한 중복 검사를 방지하기 위해 아래 내용을 확인해 주세요.
+            <div class="reg-notice-box" style="background: #fff1f2; border-color: #fecaca;">
+                <i class="fa-solid fa-triangle-exclamation" style="color: #e11d48; margin-top: 3px;"></i>
+                <div style="color: #9f1239;">
+                    <strong>산업안전보건법 개정에 따른 공식 지침 안내</strong><br>
+                    배치전건강진단 제도가 대폭 개정되었습니다. 실제 법령 위반으로 인한 행정처분 및 과태료 예방을 위해 내용을 숙지해 주세요.
                 </div>
             </div>
-            <h4 style="margin: 0 0 12px; color: #1e293b;">1. 배치전 건강진단 면제 기준</h4>
-            <ul class="reg-list">
-                <li>이전 사업장에서 12개월 이내에 배치전/특수/임시/수시 건강진단을 동일한 항목으로 받았다면 <strong>면제 가능</strong>합니다.</li>
-                <li>대상 물질이 다르더라도 배치전 건강진단의 모든 항목을 포함하는 검사를 했다면 동일하게 면제됩니다.</li>
-                <li style="color: #e11d48; font-weight: 600;">단, 다음 7종 물질은 12개월이 아닌 <u>6개월까지만 인정</u>됩니다.<br>
-                    (N,N-디메틸아세트아미드, 디메틸포름아미드, 벤젠, 1,1,2,2-테트라클로로에탄, 사염화탄소, 아크릴로니트릴, 염화비닐)
+            
+            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-circle-1" style="color: var(--primary); font-size: 0.8rem;"></i> 인정 기간 확대 (12개월)
+            </h4>
+            <ul class="reg-list" style="margin-bottom: 25px;">
+                <li>타 사업장에서 <strong>12개월 이내</strong>에 배치전·특수·수시·임시진단을 동일 항목으로 받았다면 면제됩니다.</li>
+                <li>대상 유해인자가 다르더라도 배치전 항목을 모두 포함했다면 면제가 가능합니다.</li>
+                <li style="color: #e11d48; font-weight: 700;">[예외] 특정 유해인자 7종은 <u>6개월까지만 인정</u>됩니다.<br>
+                    <small style="font-weight: 400; color: #64748b;">(벤젠, 사염화탄소, 아크릴로니트릴, 염화비닐, DMA, DMF, 1,1,2,2-테트라클로로에탄)</small>
                 </li>
             </ul>
-            <h4 style="margin: 20px 0 12px; color: #1e293b;">2. 검진 시기 관련 주의사항</h4>
-            <ul class="reg-list">
-                <li>배치전 건강진단을 입사일 이전으로 진행할 경우 특수건강진단기관이 행정처분을 받을 수 있습니다.</li>
-                <li><strong>예외:</strong> 근무 기간이 30일 이내인 경우 예외적으로 허용됩니다.</li>
-                <li><strong>계도 기간:</strong> 제도 정착을 위해 2025년 4월 30일까지 계도 기간이 부여됩니다.</li>
+
+            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-circle-2" style="color: var(--primary); font-size: 0.8rem;"></i> 결과 보고 의무 신설 (K2B)
+            </h4>
+            <ul class="reg-list" style="margin-bottom: 25px;">
+                <li>실시일로부터 <strong>30일 이내</strong>에 고용노동부(K2B 시스템)에 결과를 반드시 보고해야 합니다.</li>
+                <li>보고 누락 시 관련 규정에 따라 과태료가 부과될 수 있습니다.</li>
             </ul>
+
+            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-circle-3" style="color: var(--primary); font-size: 0.8rem;"></i> 실시 시기 및 행정처분
+            </h4>
+            <ul class="reg-list">
+                <li>배치전진단은 "업무 배치 전" 실시가 원칙이며, 입사일 이전 진단 시 <strong>기관 행정처분 대상</strong>이 될 수 있습니다.</li>
+                <li>근무 기간이 30일 이내인 경우에 한하여 예외적으로 소급 적용이 허용됩니다.</li>
+            </ul>
+
+            <div style="margin-top: 25px; padding: 15px; background: #f8fafc; border-radius: 10px; font-size:0.8rem; color:#64748b;">
+                <i class="fa-solid fa-link"></i> <a href="https://www.moel.go.kr" target="_blank" style="color:#4f46e5; text-decoration:none;">고용노동부 공식 보도자료 및 지침 전문 확인하기</a>
+            </div>
         `;
     };
 

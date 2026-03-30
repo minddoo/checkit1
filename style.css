@@ -698,7 +698,7 @@ body {
     grid-column: 2;
     text-align: center;
     max-width: 1000px;
-    padding-left: 480px; /* 캐릭터와 가깝게 강제로 우측 이동 */
+    padding-left: 140px; /* 캐릭터와 겹치지 않는 선에서 우측으로 이동 */
     z-index: 2;
 }
 

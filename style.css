@@ -345,18 +345,6 @@ body {
     display: none;
 }
 
-/* Green accent line at top */
-.hero-premium-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent 0%, #2ecc71 30%, #a8f0c8 60%, transparent 100%);
-    z-index: 20;
-    opacity: 0.85;
-}
 
 .hero-slideshow {
     position: absolute;

@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': '고객센터 정보',
             'footer_cs_phone': '상담 전화: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': '상담 이메일: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.'
+            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT)'
         },
         en: {
             'main_page_title': 'CHECKIT - Health Check-up for Foreigners',
@@ -753,7 +753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': 'Customer Service Info',
             'footer_cs_phone': 'Consultation Phone: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': 'Consultation Email: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd. All Rights Reserved.'
+            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd.'
         },
         cn: {
             'main_page_title': 'CHECKIT - 外国人健康检查预约',
@@ -1088,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': '客户服务中心',
             'footer_cs_phone': '咨询电话: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': '咨询电邮: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 株式会社 CHECKIT (CHECKIT). All Rights Reserved.'
+            'footer_copyright': '&copy; 2026 株式会社 CHECKIT (CHECKIT)'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
@@ -1424,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': 'Thông tin Trung tâm Khách hàng',
             'footer_cs_phone': 'Điện thoại Tư vấn: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': 'Email Tư vấn: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 Công ty Cổ phần CHECKIT (CHECKIT). All Rights Reserved.'
+            'footer_copyright': '&copy; 2026 Công ty Cổ phần CHECKIT (CHECKIT)'
         }
     };
 

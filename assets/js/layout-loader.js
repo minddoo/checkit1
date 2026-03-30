@@ -75,7 +75,7 @@ const LayoutLoader = {
                 </div>
             </div>
             <div class="footer-bottom">
-                <p data-lang-key="footer_copyright">&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.</p>
+                <p data-lang-key="footer_copyright">&copy; 2026 주식회사 체킷 (CHECKIT)</p>
             </div>
         </div>
     `,

@@ -512,17 +512,17 @@ body {
 
 /* Premium Full-Width Section Card */
 .premium-full-card {
-    background: linear-gradient(rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.9));
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(240, 255, 248, 0.95)); /* Very light green gradient */
     backdrop-filter: blur(30px) saturate(180%);
     -webkit-backdrop-filter: blur(30px) saturate(180%);
     border-radius: 40px;
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    border: 1px solid rgba(46, 204, 113, 0.12); /* Subtle green border */
     box-shadow: 
         0 4px 20px rgba(0, 0, 0, 0.02),
         0 12px 35px rgba(15, 23, 42, 0.05),
         inset 0 0 0 1px rgba(255, 255, 255, 0.8);
-    padding: 40px 30px; /* 더 작게 조정 */
-    max-width: 720px; /* 너비 추가 축소 */
+    padding: 40px 30px; 
+    max-width: 620px; /* Reduced width further as requested */
     margin: 0 auto;
     text-align: center;
     position: relative;
@@ -592,9 +592,9 @@ body {
     padding: 16px 40px;
     background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
     color: white;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    border-radius: 50px;
+    border-radius: 14px; /* Rounded rectangle instead of pill shape */
     box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2); /* 네온 효과 제거 및 그림자 축소 */
     transition: all 0.3s ease;
     text-decoration: none;

@@ -197,7 +197,11 @@ The user wanted to change the corporate hero background to a custom construction
     *   Cleaned up "Checking..." loading indicators for a smoother UI.
 3.  **`corporate.html`**:
     *   Removed the floating chatbot button (`#open-chatbot`) and the chatbot container (`#chatbot-container`).
-4.  **`style.css`**:
+4.  **`index.html` (Main Page)**:
+    *   Updated the hero caption container (`.hero-caption-container`) to have a dark glass background (`rgba(0,0,0,0.45)`) for design consistency with the corporate page.
+    *   Changed all hero caption text (headline and body) to white (`#ffffff`) for a high-contrast, premium look.
+5.  **`style.css`**:
     *   Cleaned up all redundant chatbot-related CSS variables and style rules.
+    *   Applied consistent "Premium Dark" styles to both main and corporate hero sections.
 
 ### Status: Completed

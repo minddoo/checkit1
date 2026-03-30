@@ -445,18 +445,19 @@ body {
     max-width: calc(100% - 20px); /* Tighter 10px margins for full-width feel */
     margin: 0 10px 25px 10px; /* Reduced bottom margin */
     text-align: center; /* Changed from left to center */
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(0, 0, 0, 0.45); /* Dark glass to match corporate style */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Bold slide headline — dark green, readable on photo */
 .hero-caption-headline {
     font-size: 1.6rem;
     font-weight: 800;
-    color: #0a5c2e;
+    color: #ffffff; /* Contrast against dark glass */
     line-height: 1.35;
     margin: 0 0 10px;
     letter-spacing: -0.025em;
@@ -464,9 +465,9 @@ body {
 }
 
 .hero-caption-headline .accent {
-    color: #1a7a3a;
+    color: #4ade80; /* Brighter neon green for dark background */
     background: none;
-    -webkit-text-fill-color: #1a7a3a;
+    -webkit-text-fill-color: #4ade80;
 }
 
 /* Caption body text */
@@ -474,7 +475,7 @@ body {
     display: none;
     opacity: 0;
     transition: opacity 0.65s ease;
-    color: #1e3a28;
+    color: rgba(255, 255, 255, 0.9); /* Bright white text */
     font-size: 0.97rem;
     font-weight: 500;
     line-height: 1.8;

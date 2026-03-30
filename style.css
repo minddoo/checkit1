@@ -400,17 +400,19 @@ body {
     color: #a8f0c8;
 }
 
-/* Caption area — aligned to the left with a subtle readable backdrop */
+/* Caption area — discrete card with rounded corners, aligned to the far left */
 .hero-caption-container {
     position: relative;
     z-index: 10;
-    padding: 12px 40px 32px;
-    max-width: 780px; /* Slightly narrowed */
-    width: 100%;
+    padding: 24px 32px;
+    max-width: 720px;
+    margin: 0 0 40px 20px; /* Small 20px space from the left */
     text-align: left;
-    background: linear-gradient(to right, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.4) 80%, transparent 100%);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px; /* Rounded corners like photo card */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* Bold slide headline — dark green, readable on photo */
@@ -448,14 +450,14 @@ body {
     opacity: 1;
 }
 
-/* Indicators — circular dots, aligned LEFT above the text panel */
+/* Indicators — circular dots, horizontally centered above the text panel */
 .hero-indicator {
     position: relative;
     z-index: 10;
     display: flex;
-    justify-content: flex-start; /* Changed from center to left */
-    gap: 8px;
-    padding: 16px 40px 8px; /* Matched left padding with caption container */
+    justify-content: center; /* Set back to center */
+    gap: 12px;
+    padding: 20px 0; /* Equal spacing above and below */
 }
 
 .hero-dot {

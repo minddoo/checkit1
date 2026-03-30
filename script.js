@@ -1447,112 +1447,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        document.querySelectorAll('.lang-btn, .chatbot-lang-btn').forEach(btn => {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === newLang);
         });
-        renderSuggestedQuestions();
     };
     window.changeLanguage = switchLanguage;
 
     document.addEventListener('click', (e) => {
-        const langBtn = e.target.closest('.lang-btn, .chatbot-lang-btn');
+        const langBtn = e.target.closest('.lang-btn');
         if (langBtn && langBtn.hasAttribute('data-lang')) {
             switchLanguage(langBtn.getAttribute('data-lang'));
         }
     });
 
-    // --- Chatbot Logic ---
-    const chatbotContainer = document.getElementById('chatbot-container');
-    const openChatbotBtn = document.getElementById('open-chatbot');
-    const closeChatbotBtn = document.getElementById('close-chatbot');
-    const chatbotMessages = document.getElementById('chatbot-messages');
-    const chatbotInput = document.getElementById('chatbot-input');
-    const chatbotSend = document.getElementById('chatbot-send');
-    const suggestedContainer = document.getElementById('chatbot-suggested-questions');
 
-    function renderSuggestedQuestions() {
-        if (!suggestedContainer) return;
-        const data = translations[currentLang] || translations['ko'];
-        suggestedContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'suggested-question-btn';
-            btn.textContent = data[`chatbot_q${i}`];
-            btn.onclick = () => handleUserInput(data[`chatbot_q${i}`], data[`chatbot_a${i}`]);
-            suggestedContainer.appendChild(btn);
-        }
-    }
-
-    const greetingKeywords = {
-        ko: ['안녕', '반가', '하이', '헬로'],
-        en: ['hi', 'hello', 'hey', 'greetings'],
-        cn: ['你好', '您好'],
-        vn: ['xin chào', 'chào']
-    };
-
-    async function handleUserInput(userInput, presetAnswer = null) {
-        if (!userInput.trim()) return;
-        addUserMessage(userInput);
-        chatbotInput.value = '';
-
-        const loadingMsg = document.createElement('div');
-        loadingMsg.className = 'message bot loading-indicator';
-        loadingMsg.innerHTML = '<span></span><span></span><span></span>';
-        chatbotMessages.appendChild(loadingMsg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-        setTimeout(() => {
-            loadingMsg.remove();
-            const data = translations[currentLang] || translations['ko'];
-            if (presetAnswer) {
-                addBotMessage(presetAnswer);
-            } else {
-                const lowerInput = userInput.toLowerCase();
-                const isGreeting = (greetingKeywords[currentLang] || greetingKeywords['ko']).some(k => lowerInput.includes(k));
-                addBotMessage(isGreeting ? data['chatbot_greeting_reply'] : data['chatbot_fallback_reply']);
-            }
-        }, 1000);
-    }
-
-    function addUserMessage(text) {
-        if (!chatbotMessages) return;
-        const msg = document.createElement('div');
-        msg.className = 'message user';
-        msg.innerHTML = text;
-        chatbotMessages.appendChild(msg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-    }
-
-    if (openChatbotBtn) {
-        openChatbotBtn.addEventListener('click', () => {
-            chatbotContainer.classList.add('show');
-            document.body.classList.add('chatbot-open');
-            if (chatbotMessages.children.length === 0) {
-                addBotMessage(translations[currentLang]['chatbot_welcome'], 'chatbot_welcome');
-                renderSuggestedQuestions();
-            }
-        });
-    }
-
-    if (closeChatbotBtn) {
-        closeChatbotBtn.addEventListener('click', () => {
-            chatbotContainer.classList.remove('show');
-            document.body.classList.remove('chatbot-open');
-        });
-    }
-
-    if (chatbotSend) chatbotSend.addEventListener('click', () => handleUserInput(chatbotInput.value));
-    if (chatbotInput) chatbotInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleUserInput(chatbotInput.value));
-
-    function addBotMessage(text, langKey = null) {
-        if (!chatbotMessages) return;
-        const msg = document.createElement('div');
-        msg.className = 'message bot';
-        if (langKey) msg.setAttribute('data-lang-key', langKey);
-        msg.innerHTML = text;
-        chatbotMessages.appendChild(msg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-    }
     
     // --- Firebase & Auth Logic ---
     const firebaseConfig = {

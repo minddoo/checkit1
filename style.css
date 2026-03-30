@@ -546,7 +546,7 @@ body {
     box-shadow: 
         0 20px 45px rgba(0, 0, 0, 0.04),
         0 30px 80px rgba(15, 23, 42, 0.08);
-    border-color: rgba(46, 204, 113, 0.15); /* More subtle, less neon */
+    border-color: rgba(0, 0, 0, 0.05); /* Completely removed neon green border */
 }
 
 /* Background Graphic Elements */
@@ -632,7 +632,7 @@ body {
     padding: 40px 30px;
     text-align: center;
     position: relative;
-    border: 1px solid rgba(46, 204, 113, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     transition: all 0.4s ease;
     display: flex;
@@ -643,7 +643,7 @@ body {
 .process-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
-    border-color: rgba(46, 204, 113, 0.2);
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .process-card .step-number {
@@ -1396,7 +1396,7 @@ body.chatbot-open { overflow: hidden; }
 .welfare-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-    border-color: rgba(46, 204, 113, 0.2);
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .welfare-icon-box {
@@ -1441,7 +1441,7 @@ body.chatbot-open { overflow: hidden; }
 
 .comparison-column.highlight {
     background: var(--white);
-    border: 1px solid rgba(46, 204, 113, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: var(--shadow-md);
     position: relative;
     z-index: 2;

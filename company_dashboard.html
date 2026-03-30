@@ -6,6 +6,8 @@
     <title>CHECKIT 기업 관리자 대시보드</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
     <style>
         :root { --primary: #4F46E5; --dark: #1e293b; --bg: #f8fafc; --danger: #ef4444; --text-muted: #64748b; }
         body { font-family: 'Pretendard', sans-serif; margin: 0; background: var(--bg); color: #334155; display: flex; height: 100vh; overflow: hidden; }
@@ -280,21 +282,47 @@
                             <label>병원 이름</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-house-medical"></i>
-                                <input type="text" id="hospName" placeholder="예: CHECKIT 지정병원">
+                                <input type="text" id="hospName" placeholder="예: CHECKIT 지정병원" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>연락처</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-phone"></i>
+                                <input type="tel" id="hospPhone" placeholder="예: 02-1234-5678">
+                            </div>
+                        </div>
+                        <div class="input-group" style="grid-column: span 2;">
+                            <label>병원 주소</label>
+                            <div style="display: flex; gap: 10px;">
+                                <div class="input-wrapper" style="flex: 1;">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    <input type="text" id="hospAddress" placeholder="주소 검색을 이용해 주세요" readonly required style="background: #f8fafc;">
+                                </div>
+                                <button type="button" onclick="window.execDaumPostcode()" class="btn-outline" style="border-color: #cbd5e1;">주소 검색</button>
+                            </div>
+                            <input type="hidden" id="hospLat">
+                            <input type="hidden" id="hospLng">
+                        </div>
+                        <div class="input-group">
+                            <label>운영 시간</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-clock"></i>
+                                <input type="text" id="hospHours" placeholder="예: 평일 09-18시, 토요일 09-13시">
                             </div>
                         </div>
                         <div class="input-group">
                             <label>검진 가능 기간</label>
                             <div class="input-wrapper">
                                 <i class="fa-regular fa-calendar-check"></i>
-                                <input type="text" id="hospSchedule" placeholder="근로자가 검진 받을 수 있는 기간 (예: 25.10.01 ~ 11.30)">
+                                <input type="text" id="hospSchedule" placeholder="예: 25.10.01 ~ 11.30" required>
                             </div>
                         </div>
                         <div class="input-group">
                             <label>예약 가능 기간</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-clock-rotate-left"></i>
-                                <input type="text" id="hospPeriod" placeholder="예: 25.10.01 ~ 25.11.30">
+                                <input type="text" id="hospPeriod" placeholder="예: 25.10.01 ~ 25.11.30" required>
                             </div>
                         </div>
                         <div class="input-group">
@@ -1357,12 +1385,17 @@ window.saveWorker = async (event) => {
 
         const info = {
             name: document.getElementById("hospName").value.trim(),
+            address: document.getElementById("hospAddress").value.trim(),
+            phone: document.getElementById("hospPhone").value.trim(),
+            businessHours: document.getElementById("hospHours").value.trim(),
             schedule: document.getElementById("hospSchedule").value.trim(),
             period: document.getElementById("hospPeriod").value.trim(),
             extraCost: document.getElementById("hospExtraCost").value.trim(),
             hasLink: hasLink,
             link: hasLink === 'Y' ? document.getElementById("hospLink").value.trim() : '',
-            code: hasLink === 'Y' ? document.getElementById("hospCode").value.trim() : ''
+            code: hasLink === 'Y' ? document.getElementById("hospCode").value.trim() : '',
+            lat: document.getElementById("hospLat").value,
+            lng: document.getElementById("hospLng").value
         };
 
         if(!info.name) {
@@ -1406,6 +1439,28 @@ window.saveWorker = async (event) => {
             document.getElementById('hospLink').value = '';
             document.getElementById('hospCode').value = '';
         }
+    };
+
+    // Daum Postcode + Geocoding
+    window.execDaumPostcode = () => {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                const addr = data.address;
+                document.getElementById('hospAddress').value = addr;
+                
+                // Geocoding to get Lat/Lng
+                if (window.kakao && window.kakao.maps && window.kakao.maps.services) {
+                    const geocoder = new kakao.maps.services.Geocoder();
+                    geocoder.addressSearch(addr, function(results, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            document.getElementById('hospLat').value = results[0].y;
+                            document.getElementById('hospLng').value = results[0].x;
+                            showToast("위치 좌표가 자동으로 설정되었습니다.", "success");
+                        }
+                    });
+                }
+            }
+        }).open();
     };
     
     // Excel Download Template

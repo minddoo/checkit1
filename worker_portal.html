@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
     <script>
         // Set PDF.js worker source
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -91,15 +92,30 @@
         .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
 
         /* Hospital List */
-        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .hospital-item:last-child { border-bottom: none; }
-        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
-        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-        .hospital-link:hover { background: #4f46e5; }
-        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+        .hospital-guide-container { display: flex; flex-direction: column; gap: 20px; }
+        .map-section { width: 100%; height: 320px; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; background: #eaeff5; position: relative; }
+        .hospital-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 640px) { .hospital-cards { grid-template-columns: 1fr; } }
+        
+        .hospital-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; gap: 12px; }
+        .hospital-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+        .h-card-status { position: absolute; top: 15px; right: 20px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+        .status-open { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-closed { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        .h-card-name { font-size: 1.05rem; font-weight: 800; color: #1e1b4b; display: flex; align-items: center; gap: 8px; }
+        .h-card-address { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+        .h-card-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.82rem; color: #94a3b8; }
+        .h-card-meta item { display: flex; align-items: center; gap: 5px; }
 
-        /* Loading state */
+        .h-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .btn-h-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .btn-h-call { background: #f1f5f9; color: #475569; }
+        .btn-h-call:hover { background: #e2e8f0; }
+        .btn-h-book { background: var(--primary); color: white; }
+        .btn-h-book:hover { background: #4f46e5; }
+        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
 
         /* Sidebar Layout */
@@ -333,8 +349,16 @@
                         <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
                         <h3>제휴 병원 안내</h3>
                     </div>
-                    <div id="hospitalList">
-                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    <div id="hospitalGuide" class="hospital-guide-container">
+                        <div id="hospitalMap" class="map-section">
+                            <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#94a3b8;">
+                                <i class="fa-solid fa-map-location-dot fa-bounce" style="font-size:2rem; margin-bottom:10px;"></i>
+                                <p style="font-size:0.85rem; margin-left:10px;">지도를 불러오는 중...</p>
+                            </div>
+                        </div>
+                        <div id="hospitalList" class="hospital-cards">
+                            <!-- Cards will be injected here -->
+                        </div>
                     </div>
                 </div>
 
@@ -2125,31 +2149,79 @@ function googleTranslateElementInit() {
         }
     }
 
+    let kakaoMap = null;
+    let markers = [];
+
     function renderHospitals(docs) {
         const container = document.getElementById('hospitalList');
         if (docs.length === 0) {
             container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
             return;
         }
+
+        // Initialize Map once
+        if (!kakaoMap && window.kakao && kakaoMap === null) {
+            const mapContainer = document.getElementById('hospitalMap');
+            const mapOption = { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 8 };
+            kakaoMap = new kakao.maps.Map(mapContainer, mapOption);
+        }
+
         let html = '';
-        docs.forEach(doc => {
+        const now = new Date();
+        const day = now.getDay(); // 0:Sun, 1:Mon...
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+        docs.forEach((doc, idx) => {
             const h = doc.data();
-            const linkHtml = h.hasLink === 'Y' && h.link
-                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기</a>`
-                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> 예약 사이트 없음</span>`;
+            const id = doc.id;
+            
+            // Logic for status badge (Very simplified, can be expanded)
+            let isOpen = true; 
+            if (h.businessHours && h.businessHours.includes('09-18시')) {
+                const hour = now.getHours();
+                if (hour < 9 || hour >= 18) isOpen = false;
+            }
+
+            const statusClass = isOpen ? 'status-open' : 'status-closed';
+            const statusText = isOpen ? '진료 중' : '진료 종료';
+
             html += `
-                <div class="hospital-item">
-                    <div>
-                        <div class="hospital-name">${h.name}</div>
-                        <div class="hospital-meta">검진 기간: ${h.schedule || '-'} &nbsp;|&nbsp; 예약 기간: ${h.period || '-'}</div>
-                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">추가 비용: ${h.extraCost}</div>` : ''}
-                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">회사 코드: <strong>${h.code}</strong></div>` : ''}
+                <div class="hospital-card" onclick="focusHospital(${h.lat}, ${h.lng}, '${h.name}')">
+                    <span class="h-card-status ${statusClass}">${statusText}</span>
+                    <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
+                    <div class="h-card-address"><i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${h.address || '주소 정보 없음'}</div>
+                    <div class="h-card-meta">
+                        <div class="item"><i class="fa-solid fa-clock"></i> ${h.businessHours || h.schedule || '09:00 - 18:00'}</div>
+                        <div class="item"><i class="fa-solid fa-phone"></i> ${h.phone || '연락처 미등록'}</div>
                     </div>
-                    <div>${linkHtml}</div>
+                    <div class="h-card-actions">
+                        ${h.phone ? `<a href="tel:${h.phone}" class="btn-h-action btn-h-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>` : ''}
+                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 예약</a>` : ''}
+                        <a href="https://map.kakao.com/link/to/${h.name},${h.lat},${h.lng}" target="_blank" class="btn-h-action btn-h-map" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
+                    </div>
                 </div>`;
+            
+            // Add Marker to Map
+            if (kakaoMap && h.lat && h.lng) {
+                const position = new kakao.maps.LatLng(h.lat, h.lng);
+                const marker = new kakao.maps.Marker({ position: position, map: kakaoMap });
+                markers.push(marker);
+                if (idx === 0) kakaoMap.setCenter(position);
+            }
         });
         container.innerHTML = html;
+        
+        // Relayout map fix
+        if (kakaoMap) {
+            setTimeout(() => { kakaoMap.relayout(); }, 500);
+        }
     }
+
+    window.focusHospital = (lat, lng, name) => {
+        if (!kakaoMap || !lat || !lng) return;
+        const pos = new kakao.maps.LatLng(lat, lng);
+        kakaoMap.panTo(pos);
+    };
 
     function doLogout() {
         auth.signOut().then(() => { window.location.href = 'index.html'; });

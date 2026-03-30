@@ -161,3 +161,17 @@ The user wants to refocus the "Why choose CHECKIT" section on the main page (`in
 2.  **Update `index.html`** with new icons.
 3.  **Update `script.js`** with new translation strings.
 4.  **Verify** across all languages and ensure no structural or visual regressions.
+
+## Completed Task: Update Corporate Hero Background with `건건.png`
+
+### Problem Description
+The user wanted to change the corporate hero background to a custom construction site image (`건건.png`) while maintaining text readability. 
+
+### Implemented Changes
+1.  **Saved Asset**: Copied provided construction site image to `assets/건건.png`.
+2.  **`style.css`**:
+    *   Set `background-image` to `url('assets/건건.png')` with a 45% white overlay for contrast.
+    *   Consolidated redundant CSS blocks for `#corporate-hero`.
+3.  **Deployment**: All changes staged and pushed to the repository.
+
+### Status: Completed

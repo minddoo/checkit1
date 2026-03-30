@@ -61,18 +61,25 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%); /* Pure light-green gradient */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)), url('assets/건건.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #1e293b;
     padding: 100px 0 60px;
     position: relative;
     overflow: hidden;
     text-align: left;
+    height: 500px;
+    display: flex;
+    align-items: center;
 }
 
 #corporate-hero .container {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    width: 100%;
 }
 
 #corporate-hero .hero-text-content {
@@ -328,16 +335,6 @@ body {
     display: flex;
     align-items: center;
     overflow: hidden;
-    position: relative;
-}
-
-#corporate-hero {
-    padding: 0;
-    background-color: var(--hero-bg-color);
-    height: 500px; /* PC 기본 높이 확인 */
-    display: flex;
-    align-items: center;
-    overflow: hidden; /* 영역 밖 숨김 */
     position: relative;
 }
 

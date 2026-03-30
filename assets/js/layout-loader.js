@@ -10,7 +10,14 @@ const LayoutLoader = {
                 <img src="assets/로고2.png" alt="CHECKIT Logo" class="header-logo">
                 CHECKIT
             </a>
-            <nav>
+
+            <!-- Mobile Navigation Toggle -->
+            <button id="mobile-menu-toggle" class="mobile-only">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Main Navigation -->
+            <nav id="main-nav">
                 <div id="language-switcher">
                     <button class="lang-btn active" data-lang="ko">KR</button>
                     <button class="lang-btn" data-lang="en">EN</button>
@@ -21,6 +28,31 @@ const LayoutLoader = {
                 <button id="nav-mypage" class="cta-button-secondary" style="display: none;" data-lang-key="mypage">마이페이지</button>
                 <button id="nav-logout" class="cta-button-secondary" style="display: none;" data-lang-key="logout">로그아웃</button>
             </nav>
+
+            <!-- Mobile Menu Overlay -->
+            <div id="mobile-menu-overlay" class="mobile-only">
+                <div class="mobile-menu-content">
+                    <button id="close-mobile-menu">&times;</button>
+                    
+                    <!-- Language Switcher in Mobile Menu -->
+                    <div class="mobile-lang-switcher">
+                        <button class="lang-btn active" data-lang="ko">KR</button>
+                        <button class="lang-btn" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="cn">CN</button>
+                        <button class="lang-btn" data-lang="vn">VN</button>
+                    </div>
+
+                    <div class="mobile-menu-links">
+                        <a href="index.html" data-lang-key="nav_home">홈</a>
+                        <a href="corporate.html" data-lang-key="nav_corporate">기업 서비스</a>
+                        <div class="mobile-menu-auth">
+                            <button id="mobile-nav-login" class="cta-button-secondary" data-lang-key="nav_login">로그인</button>
+                            <button id="mobile-nav-mypage" class="cta-button-secondary" style="display: none;" data-lang-key="mypage">마이페이지</button>
+                            <button id="mobile-nav-logout" class="cta-button-secondary" style="display: none;" data-lang-key="logout">로그아웃</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     `,
 

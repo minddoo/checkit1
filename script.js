@@ -4,6 +4,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('main-header');
     const revealElements = document.querySelectorAll('.reveal');
 
+    // [Mobile Menu Toggle Logic]
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const closeMobileMenu = document.getElementById('close-mobile-menu');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+    if (mobileMenuToggle && mobileMenuOverlay) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeMobileMenu && mobileMenuOverlay) {
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // [Mobile Sticky CTA Generator]
+    function renderMobileStickyCTA() {
+        if (window.innerWidth <= 768 && !document.getElementById('sticky-mobile-cta')) {
+            const stickyCTA = document.createElement('div');
+            stickyCTA.id = 'sticky-mobile-cta';
+            stickyCTA.className = 'mobile-only';
+            stickyCTA.innerHTML = `
+                <a href="#contact-form" class="sticky-cta-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span data-lang-key="hero_cta">기업 서비스 상담 신청</span>
+                </a>
+            `;
+            document.body.appendChild(stickyCTA);
+            
+            // Re-translate new element
+            if (typeof updateTranslations === 'function') {
+                updateTranslations();
+            }
+        }
+    }
+
     // Header scroll background effect
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -12,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
     });
+
+    // Initial check for mobile features
+    renderMobileStickyCTA();
+    window.addEventListener('resize', renderMobileStickyCTA);
 
     // Intersection Observer for Reveal Animations
     const revealObserver = new IntersectionObserver((entries) => {
@@ -35,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_title': 'CHECKIT 플랫폼', 'platform_status_title': '나의 서비스 현황',
             'platform_close': '닫기', 'contact_success': '문의가 성공적으로 접수되었습니다!',
             'admin_title': '매니저 관리 대시보드', 'onboarding_title': '프로필 완성하기',
-            'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
+            'nav_home': '홈', 'nav_corporate': '기업 서비스', 'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
             'mypage': '마이페이지', 'logout': '로그아웃',
             'hero_title': '기업을 위한 근로자 보건관리 플랫폼',
             'hero_subtitle': '빠르게 증가하는 근로자의 보건관리를 하나의 흐름으로 체계적이고, 지속 가능한 구조로 만들어줍니다.',
@@ -370,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
             'platform_title': 'CHECKIT PLATFORM', 'platform_status_title': 'Service Status',
             'platform_close': 'Close', 'contact_success': 'Message Sent!',
-            'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
+            'nav_home': 'Home', 'nav_corporate': 'Business Service', 'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
             'mypage': 'My Page', 'logout': 'Logout',
             'hero_title': 'Worker Health Management Platform for Enterprises',
             'hero_subtitle': 'We transform the rapidly increasing healthcare management of workers into a systematic and sustainable structure through a single flow.',
@@ -706,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_home': '首页', 'hero_cta': '立即申请', 'learn_more': '了解更多',
             'platform_title': 'CHECKIT 平台', 'platform_status_title': '我的服务状态',
             'platform_close': '关闭', 'contact_success': '咨询已成功受理！',
-            'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
+            'nav_home': '首页', 'nav_corporate': '企业服务', 'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
             'mypage': '我的页面', 'logout': '登出',
             'hero_title': '面向企业的员工健康管理平台',
             'hero_subtitle': '我们将快速增长的员工健康管理转化为单一流程中系统化、可持续的结构。',
@@ -1041,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
             'platform_title': 'Nền tảng CHECKIT', 'platform_status_title': 'Trạng thái dịch vụ',
             'platform_close': 'Đóng', 'contact_success': 'Đã gửi yêu cầu!',
-            'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
+            'nav_home': 'Trang chủ', 'nav_corporate': 'Dịch vụ doanh nghiệp', 'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
             'mypage': 'Trang của tôi', 'logout': 'Đăng xuất',
             'hero_title': 'Nền tảng quản lý sức khỏe người lao động cho doanh nghiệp',
             'hero_subtitle': 'Chúng tôi chuyển đổi việc quản lý sức khỏe đang tăng nhanh của người lao động thành một cấu trúc hệ thống và bền vững thông qua một quy trình duy nhất.',
@@ -1530,91 +1584,80 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserData = { role: 'customer', cid: null };
 
     auth.onAuthStateChanged(user => {
+        const updateButtons = (isLoggedIn) => {
+            const loginBtns = [navLogin, loginBtn, document.getElementById('mobile-nav-login')];
+            const logoutBtns = [navLogout, document.getElementById('mobile-nav-logout')];
+            const mypageBtns = [navMyPage, document.getElementById('mobile-nav-mypage')];
+
+            loginBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'none' : 'inline-block'));
+            logoutBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+            mypageBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+        };
+
         if (user) {
-            if (navLogin) navLogin.style.display = 'none';
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (navLogout) navLogout.style.display = 'inline-block';
-            if (navMyPage) navMyPage.style.display = 'inline-block';
+            updateButtons(true);
             if (loginModalOverlay) loginModalOverlay.style.display = 'none';
             
             db.collection('users').doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     const data = doc.data();
-                    // [보안/기능 강화] Firestore 데이터 우선, 없을 경우 세션 정보로 보완
                     currentUserData.role = data.role || 'customer';
                     currentUserData.cid = data.companyId || null;
                     currentUserData.securityKey = data.securityKey || null;
                 }
             }).catch(err => console.error("Error fetching user data:", err));
         } else {
-            if (navLogin) navLogin.style.display = 'inline-block';
-            if (loginBtn) loginBtn.style.display = 'inline-block';
-            if (navLogout) navLogout.style.display = 'none';
-            if (navMyPage) navMyPage.style.display = 'none';
+            updateButtons(false);
             currentUserData = { role: 'customer', cid: null };
         }
     });
 
     // Robust event delegation for nav-login to handle dynamic header injection
     document.addEventListener('click', (e) => {
-        if (e.target.closest('#nav-login')) {
+        // Login
+        if (e.target.closest('#nav-login') || e.target.closest('#mobile-nav-login')) {
             if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
+            if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+        }
+        
+        // Logout
+        if (e.target.closest('#nav-logout') || e.target.closest('#mobile-nav-logout')) {
+            auth.signOut();
+            location.reload();
+        }
+
+        // My Page
+        if (e.target.closest('#nav-mypage') || e.target.closest('#mobile-nav-mypage')) {
+            handleMyPageNavigation();
         }
     });
 
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
+    function handleMyPageNavigation() {
+        const user = auth.currentUser;
+        if (!user) {
             if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
-        });
-    }
+            return;
+        }
 
-    if (navLogout) {
-        navLogout.addEventListener('click', () => {
-            auth.signOut();
-            location.reload();
-        });
-    }
+        if (user.email === "master@checkit.com") {
+            window.location.href = 'platform.html?role=master';
+            return;
+        }
 
-    if (navMyPage) {
-        navMyPage.addEventListener('click', () => {
-            // [강력 로직] 현재 유저의 상태를 실시간으로 다시 확인하여 정확한 이동 보장
-            const user = auth.currentUser;
-            if (!user) {
-                console.log("No user session found on My Page click.");
-                if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
-                return;
-            }
+        db.collection('users').doc(user.uid).get().then(doc => {
+            let role = 'worker';
+            if (doc.exists) role = doc.data().role;
 
-            // --- [특급 1순위] 마스터 계정은 이메일로 즉시 판별 (DB 대기 없음) ---
-            if (user.email === "master@checkit.com") {
-                console.log("Master account redirection triggered by email check.");
+            if (role === 'master' || role === 'super_admin') {
                 window.location.href = 'platform.html?role=master';
-                return;
+            } else if (role === 'company_admin') {
+                window.location.href = `company_dashboard.html`;
+            } else {
+                window.location.href = 'platform.html?role=worker';
             }
-
-            // --- [2순위] 일반 유저/기업 관리자 DB 조회 ---
-            db.collection('users').doc(user.uid).get().then(doc => {
-                let role = 'worker'; // 기본값
-                let cid = null;
-
-                if (doc.exists) {
-                    const data = doc.data();
-                    role = data.role;
-                    cid = data.companyId;
-                }
-
-                if (role === 'master' || role === 'super_admin') {
-                    window.location.href = 'platform.html?role=master';
-                } else if (role === 'company_admin') {
-                    window.location.href = `company_dashboard.html`;
-                } else {
-                    window.location.href = 'platform.html?role=worker';
-                }
-            }).catch(err => {
-                console.error("Error on My Page redirection:", err);
-                // 에러 발생 시 안전하게 포털 메인으로 (role 없이)
-                window.location.href = 'platform.html';
-            });
+        }).catch(err => {
+            console.error("Error on My Page redirection:", err);
+            window.location.href = 'platform.html';
         });
     }
 

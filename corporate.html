@@ -23,24 +23,24 @@
         </div>
     </section>
 
-            <!-- 실무 과정 슬라이드 모달 (이미지 슬라이드 방식) -->
-            <div id="processModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5000; justify-content: center; align-items: center;">
-                <div class="modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);"></div>
-                
-                <div class="pptContainer" style="position: relative; background: #fff; width: 95%; max-width: 900px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 1; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center;">
-                    <button id="closeProcess" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #333; font-weight: bold; z-index: 10;">X</button>
-                    
-                    <div style="width: 100%; display: flex; justify-content: center; align-items: center; min-height: 200px; margin-bottom: 20px;">
-                        <img id="processImage" src="" style="max-width: 100%; max-height: 75vh; object-fit: contain; border: 1px solid #eee; border-radius: 8px;" />
-                    </div>
-                    
-                    <div class="nav" style="display: flex; align-items: center; gap: 20px; margin-top: 10px;">
-                        <button id="prevBtn" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-chevron-left"></i></button>
-                        <span id="indicator" style="font-weight: 700; color: #555; font-size: 1rem; min-width: 60px;"></span>
-                        <button id="nextBtn" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
+    <!-- 실무 과정 슬라이드 모달 (이미지 슬라이드 방식) -->
+    <div id="processModal" class="ppt-modal-overlay">
+        <div class="ppt-modal-bg"></div>
+        
+        <div class="ppt-container">
+            <button id="closeProcess">X</button>
+            
+            <div class="ppt-image-wrapper">
+                <img id="processImage" src="" />
             </div>
+            
+            <div class="ppt-nav">
+                <button id="prevBtn" class="ppt-nav-btn"><i class="fas fa-chevron-left"></i></button>
+                <span id="indicator" style="font-weight: 700; color: #555; font-size: 1rem; min-width: 60px;"></span>
+                <button id="nextBtn" class="ppt-nav-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
 
 
     <!-- 섹션 1: 외국인 근로자는 선택이 아닌 필수인 현실 -->

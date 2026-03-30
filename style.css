@@ -307,17 +307,17 @@ body {
     align-items: center; /* Center the card */
 }
 
-/* Topbar: sits ABOVE the photo — no overlap */
+/* Topbar: transparent layout above the card */
 .hero-topbar {
-    background: #2e7a45;
-    padding: 10px 40px;
+    background: transparent;
+    padding: 0 0 20px 0; /* Spacing to the card below */
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the brand chip */
+    justify-content: center;
     flex-shrink: 0;
     z-index: 20;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    width: 100%; /* Spans the card width */
+    border-bottom: none;
+    width: 100%;
 }
 
 .hero-premium-card {

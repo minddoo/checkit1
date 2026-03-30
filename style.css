@@ -374,22 +374,23 @@ body {
     transform: translateX(-100%);
 }
 
-/* Brand chip — inside topbar, normal flow (no absolute) */
+/* Brand chip — dark green solid box inside transparent topbar */
 .hero-brand-chip {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.15);
+    background: #0a5c2e; /* Dark green box as requested */
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 100px;
-    padding: 6px 18px;
-    font-size: 0.78rem;
+    padding: 6px 20px;
+    font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: #ffffff;
     white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 .hero-brand-chip i {
     font-size: 0.5rem;

@@ -320,7 +320,16 @@ body {
     opacity: 0.9;
 }
 
-#individual-hero,
+#individual-hero {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+    padding: 0;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
 #corporate-hero {
     padding: 0;
     background-color: var(--hero-bg-color);

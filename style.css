@@ -78,7 +78,7 @@
 #corporate-hero .hero-text-content {
     flex: 1;
     z-index: 2;
-    padding-left: 350px; /* Shifted even further right to be closer to character */
+    padding-left: 520px; /* Shifted even further right for optimal balance */
 }
 
 #corporate-hero .hero-title {
@@ -642,9 +642,9 @@ body {
 }
 
 .process-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.22);
 }
 
 .process-card .step-number {
@@ -848,8 +848,8 @@ body {
     border: 1px solid rgba(0,0,0,0.03);
 }
 #service-for .package-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
     border-color: rgba(0, 0, 0, 0.05); /* Removed neon green border */
 }
 #service-for .card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 20px; }
@@ -992,8 +992,9 @@ body {
     border: 1px solid rgba(46, 204, 113, 0.1);
 }
 .feature-item-new:hover { 
-    transform: translateY(-10px); 
-    box-shadow: var(--shadow-hover); 
+    transform: translateY(-12px); 
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.2);
 }
 .feature-item-new i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
 .feature-item-new h3 { font-size: 1.5rem; margin-bottom: 10px; }
@@ -1175,7 +1176,11 @@ body {
     transition: transform 0.3s, box-shadow 0.3s;
     border: 1px solid rgba(46, 204, 113, 0.1);
 }
-.testimonial-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-md); }
+.testimonial-card:hover { 
+    transform: translateY(-12px); 
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.15);
+}
 .testimonial-text { font-style: italic; color: var(--text-light); margin-bottom: 25px; position: relative; padding-left: 25px; }
 .testimonial-text::before { content: '\f10d'; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--primary-color); font-size: 1.5rem; position: absolute; left: -10px; top: -10px; opacity: 0.2; }
 .testimonial-author { margin-top: auto; text-align: right; }
@@ -1279,8 +1284,9 @@ body.chatbot-open { overflow: hidden; }
 }
 
 .option-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.15);
 }
 
 .option-title {
@@ -1401,9 +1407,9 @@ body.chatbot-open { overflow: hidden; }
 }
 
 .welfare-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.2);
 }
 
 .welfare-icon-box {
@@ -1524,6 +1530,11 @@ body.chatbot-open { overflow: hidden; }
     border: 1px solid rgba(0, 0, 0, 0.04); /* Removed neon green border from Corporate page card */
 }
 
+.reason-item:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.15);
+}
 .reason-item h4 {
     font-size: 1.3rem;
     font-weight: 700;
@@ -1627,6 +1638,13 @@ body.chatbot-open { overflow: hidden; }
     text-align: center;
     border: 1px solid rgba(46, 204, 113, 0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    transition: all 0.4s ease;
+}
+
+.safety-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.15);
 }
 
 .safety-card i {
@@ -1713,8 +1731,9 @@ body.chatbot-open { overflow: hidden; }
 }
 
 .roadmap-item:hover .roadmap-content {
-    transform: translateX(10px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-12px) translateX(10px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 30px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.15);
 }
 
 .roadmap-content h4 {

@@ -88,6 +88,23 @@
         .notice-item.unread { background: #eef2ff; border-left: 3px solid var(--primary); }
         .notice-item:hover { background: #f8fafc; }
         .notice-item-date { font-size: 0.72rem; color: #94a3b8; margin-top: 5px; }
+
+        /* Regulatory Notice Modal */
+        .reg-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 10005; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; box-sizing: border-box; }
+        .reg-modal-overlay.show { display: flex; }
+        .reg-modal { background: white; width: 100%; max-width: 600px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; animation: regZoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes regZoom { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .reg-modal-header { padding: 25px 30px; background: #f8fafc; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; }
+        .reg-modal-title { font-size: 1.1rem; font-weight: 800; color: #1e293b; margin: 0; }
+        .reg-modal-content { padding: 30px; max-height: 60vh; overflow-y: auto; font-size: 0.95rem; line-height: 1.7; color: #334155; }
+        .reg-notice-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; display: flex; gap: 12px; }
+        .reg-list { list-style: none; padding: 0; margin: 0; }
+        .reg-list li { position: relative; padding-left: 20px; margin-bottom: 12px; }
+        .reg-list li::before { content: '•'; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+        .reg-modal-footer { padding: 20px 30px; border-top: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 15px; background: #fff; }
+        .reg-confirm-btn { width: 100%; background: var(--primary); color: white; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .reg-confirm-btn:hover { background: #4338ca; transform: translateY(-1px); }
+        .reg-today-hide { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #64748b; cursor: pointer; justify-content: center; }
     </style>
 </head>
 <body>
@@ -1199,14 +1216,16 @@
     // Helper: Generate Random Key
     const generateKey = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    window.saveWorker = async (e) => {
-        e.preventDefault();
+window.saveWorker = async (event) => {
+        event.preventDefault();
         
-        if (!currentCompanyId) {
-            showToast("기업 정보가 확인되지 않아 등록할 수 없습니다.", "error");
-            return;
-        }
+        // Show Regulatory Notice first if not hidden
+        window.showRegulatoryNotice(() => {
+            window.executeSaveWorker();
+        });
+    };
 
+    window.executeSaveWorker = async () => {
         const site = document.getElementById("workerSite").value.trim();
         const name = document.getElementById("workerName").value.trim();
         const birthDate = document.getElementById("workerBirth").value;
@@ -1416,206 +1435,165 @@
             return;
         }
 
-        const loader = document.getElementById("pageLoader");
-        document.getElementById("loaderMessage").innerText = "엑셀 데이터를 처리 중입니다...";
-        loader.style.display = "flex";
+        window.showRegulatoryNotice(async () => {
+            const loader = document.getElementById("pageLoader");
+            document.getElementById("loaderMessage").innerText = "엑셀 데이터를 처리 중입니다...";
+            loader.style.display = "flex";
 
-        const reader = new FileReader();
-        reader.onload = async (evt) => {
-            try {
-                const data = evt.target.result;
-                const workbook = XLSX.read(data, { type: 'binary' });
-                const firstSheet = workbook.SheetNames[0];
-                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
+            const reader = new FileReader();
+            reader.onload = async (evt) => {
+                try {
+                    const workbook = XLSX.read(evt.target.result, { type: 'binary' });
+                    const firstSheet = workbook.SheetNames[0];
+                    const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
 
-                if(excelRows.length === 0) {
-                    throw new Error("엑셀 파일에 데이터가 없습니다.");
-                }
+                    if(excelRows.length === 0) throw new Error("엑셀 파일에 데이터가 없습니다.");
 
-                // Batch Write (Firebase Firestore supports up to 500 writes per batch)
-                let batch = db.batch();
-                let count = 0;
-                let totalAdded = 0;
+                    let batch = db.batch();
+                    let count = 0, totalAdded = 0;
 
-                for (let i = 0; i < excelRows.length; i++) {
-                    const row = excelRows[i];
+                    for (let i = 0; i < excelRows.length; i++) {
+                        const row = excelRows[i];
+                        
+                        const getVal = (key) => {
+                            const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
+                            return actualKey ? String(row[actualKey] || "").trim() : "";
+                        };
+
+                        const site = getVal("소속현장");
+                        const name = getVal("성함");
+                        
+                        if (i === 0 && name === "성함") continue;
+
+                        const birth = getVal("생년월일");
+                        const nat = getVal("국적");
+                        const checkup = getVal("필수검진");
+                        const period = getVal("검진기간");
+                        const docs = getVal("기업필요서류");
+                        const notes = getVal("특이사항");
+
+                        if (!name) continue; 
+
+                        const docRef = db.collection("workers").doc();
+                        batch.set(docRef, {
+                            companyId: currentCompanyId,
+                            site: site,
+                            name: name,
+                            birthDate: birth,
+                            nationality: nat,
+                            checkup: checkup,
+                            period: period,
+                            docs: docs,
+                            notes: notes,
+                            status: "진행 전",
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+
+                        count++; totalAdded++;
+                        if (count === 490) { await batch.commit(); batch = db.batch(); count = 0; }
+                    }
+                    if (count > 0) await batch.commit();
                     
-                    const getVal = (key) => {
-                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
-                        return actualKey ? String(row[actualKey] || "").trim() : "";
-                    };
-
-                    const name = getVal("성함");
-                    const site = getVal("소속현장");
-                    if (i === 0 && name === "홍길동" && site === "제1공장") continue;
-
-                    const birthDate = getVal("생년월일");
-                    const nationality = getVal("국적");
-                    const checkup = getVal("필수검진");
-                    const period = getVal("검진기간");
-                    const docs = getVal("기업필요서류");
-                    const notes = getVal("특이사항");
-
-                    // 필수값 누락 시 해당 행 건너뜀 (특이사항 제외)
-                    if (!site || !name || !birthDate || !nationality || !checkup || !period || !docs) {
-                        continue; 
+                    if (totalAdded > 0) {
+                        showToast(`총 ${totalAdded}명의 직원이 일괄 등록되었습니다!`, "success");
+                    } else {
+                        showToast("성공적으로 추가된 직원이 없습니다 (성함 누락 확인).", "error");
                     }
 
-                    const docRef = db.collection("workers").doc(); // Create new ref
-                    batch.set(docRef, {
-                        companyId: currentCompanyId,
-                        site: site,
-                        name: name,
-                        birthDate: birthDate,
-                        nationality: nationality,
-                        checkup: checkup,
-                        period: period,
-                        docs: docs,
-                        notes: notes,
-                        passwordKey: generateKey(),
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    count++;
-                    totalAdded++;
-
-                    if (count === 490) {
-                        await batch.commit();
-                        batch = db.batch();
-                        count = 0;
-                    }
+                } catch (err) {
+                    console.error("Excel Upload Error:", err);
+                    showToast("엑셀 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
+                } finally {
+                    loader.style.display = "none";
+                    document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
+                    e.target.value = ""; // Reset file input
                 }
-
-                if (count > 0) {
-                    await batch.commit();
-                }
-                
-                if (totalAdded > 0) {
-                    showToast(`총 ${totalAdded}명의 직원이 일괄 등록되었습니다!`, "success");
-                } else {
-                    showToast("성공적으로 추가된 직원이 없습니다 (필수값 누락 확인).", "error");
-                }
-
-            } catch (err) {
-                console.error("Excel Upload Error:", err);
-                showToast("엑셀 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
-            } finally {
+            };
+            
+            reader.onerror = () => {
                 loader.style.display = "none";
-                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
-                e.target.value = ""; // Reset file input
-            }
-        };
-        
-        reader.onerror = () => {
-             loader.style.display = "none";
-             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
-        };
+                showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
+            };
 
-        reader.readAsBinaryString(file);
+            reader.readAsBinaryString(file);
+        });
     };
     
-    // Hospital Excel Upload/Download logic
-    window.downloadHospExcelTemplate = () => {
-        const wsData = [
-            ["병원 이름", "검진 가능 기간", "예약 가능 기간", "추가 항목 비용", "예약 사이트 링크(URL)", "예약 회사코드"],
-            ["CHECKIT 지정병원", "25.10.01 ~ 11.30", "25.10.01 ~ 11.30", "위내시경 추가 시 50,000원", "https://hospital-booking.com", "CHK_2025"]
-        ];
-        const ws = XLSX.utils.aoa_to_sheet(wsData);
-        ws['!cols'] = [ {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 150}, {wpx: 200}, {wpx: 100} ];
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "병원일괄등록양식");
-        XLSX.writeFile(wb, "CHECKIT_병원목록_일괄등록_양식.xlsx");
-    };
-
-    window.handleHospExcelUpload = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        if (!currentCompanyId) {
-            showToast("기업 정보가 확인되지 않습니다.", "error");
+    // =============================================
+    // 배치전 건강진단 규정 안내 (Regulatory Notice)
+    // =============================================
+    window.showRegulatoryNotice = async (callback) => {
+        const skipUntil = localStorage.getItem('hideRegNoticeUntil');
+        if (skipUntil && new Date().getTime() < parseInt(skipUntil)) {
+            callback();
             return;
         }
 
-        const loader = document.getElementById("pageLoader");
-        document.getElementById("loaderMessage").innerText = "병원 엑셀 데이터를 처리 중입니다...";
-        loader.style.display = "flex";
+        const overlay = document.getElementById('regNoticeModalOverlay');
+        const body = document.getElementById('regModalBody');
+        const updateSpan = document.getElementById('regLastUpdate');
+        overlay.classList.add('show');
 
-        const reader = new FileReader();
-        reader.onload = async (evt) => {
-            try {
-                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                const firstSheet = workbook.SheetNames[0];
-                const excelRows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: "" });
-
-                if(excelRows.length === 0) throw new Error("엑셀 파일에 데이터가 없습니다.");
-
-                let batch = db.batch();
-                let count = 0, totalAdded = 0;
-
-                for (let i = 0; i < excelRows.length; i++) {
-                    const row = excelRows[i];
-                    
-                    const getVal = (key) => {
-                        const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
-                        return actualKey ? String(row[actualKey] || "").trim() : "";
-                    };
-
-                    const name = getVal("병원 이름");
-                    if (i === 0 && name === "CHECKIT 지정병원") continue;
-
-                    const schedule = getVal("검진 가능 기간");
-                    const period = getVal("예약 가능 기간");
-                    const extra = getVal("추가 항목 비용");
-                    const link = getVal("예약 사이트 링크(URL)");
-                    const code = getVal("예약 회사코드");
-
-                    if (!name) continue; 
-
-                    const docRef = db.collection("hospitals").doc();
-                    batch.set(docRef, {
-                        companyId: currentCompanyId,
-                        name: name,
-                        schedule: schedule,
-                        period: period,
-                        extraCost: extra,
-                        hasLink: link ? 'Y' : 'N',
-                        link: link,
-                        code: code,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    count++; totalAdded++;
-                    if (count === 490) { await batch.commit(); batch = db.batch(); count = 0; }
+        // Fetch 실시간 데이터
+        try {
+            const doc = await db.collection('settings').doc('regulatory_notice').get();
+            if (doc.exists) {
+                const data = doc.data();
+                body.innerHTML = data.content || window.getDefaultRegNotice();
+                if (data.updatedAt) {
+                    updateSpan.innerText = new Date(data.updatedAt.seconds * 1000).toLocaleDateString('ko-KR');
                 }
-                if (count > 0) await batch.commit();
-                
-                if (totalAdded > 0) {
-                    showToast(`총 ${totalAdded}개의 병원이 일괄 등록되었습니다!`, "success");
-                } else {
-                    showToast("성공적으로 추가된 병원이 없습니다 (병원 이름 누락 확인).", "error");
-                }
-
-            } catch (err) {
-                console.error("Hosp Upload Error:", err);
-                showToast("엑셀 병원 파일 처리 중 오류가 발생했습니다. 양식을 확인해주세요.", "error");
-            } finally {
-                loader.style.display = "none";
-                document.getElementById("loaderMessage").innerText = "데이터를 불러오는 중입니다...";
-                e.target.value = ""; 
+            } else {
+                body.innerHTML = window.getDefaultRegNotice();
+                // DB에 없을 경우 초기값 저장 (관리자 권한 시)
+                db.collection('settings').doc('regulatory_notice').set({
+                    content: window.getDefaultRegNotice(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(() => {}); 
             }
-        };
-        
-        reader.onerror = () => {
-             loader.style.display = "none";
-             showToast("파일을 읽는 중 오류가 발생했습니다.", "error");
-        };
+        } catch (e) {
+            console.warn('Regulatory notice load error:', e);
+            body.innerHTML = window.getDefaultRegNotice();
+        }
 
-        reader.readAsBinaryString(file);
+        const confirmBtn = document.getElementById('regConfirmBtn');
+        confirmBtn.onclick = () => {
+            if (document.getElementById('regHideToday').checked) {
+                const tomorrow = new Date();
+                tomorrow.setHours(24, 0, 0, 0);
+                localStorage.setItem('hideRegNoticeUntil', tomorrow.getTime());
+            }
+            overlay.classList.remove('show');
+            callback();
+        };
     };
-    
-    // =============================================
-    // 공지사항 (NOTICE) 로직
-    // =============================================
+
+    window.getDefaultRegNotice = () => {
+        return `
+            <div class="reg-notice-box">
+                <i class="fa-solid fa-circle-info" style="color: #22c55e; margin-top: 3px;"></i>
+                <div>
+                    <strong>배출전 건강진단 제도가 개정되었습니다.</strong><br>
+                    불필요한 중복 검사를 방지하기 위해 아래 내용을 확인해 주세요.
+                </div>
+            </div>
+            <h4 style="margin: 0 0 12px; color: #1e293b;">1. 배치전 건강진단 면제 기준</h4>
+            <ul class="reg-list">
+                <li>이전 사업장에서 12개월 이내에 배치전/특수/임시/수시 건강진단을 동일한 항목으로 받았다면 <strong>면제 가능</strong>합니다.</li>
+                <li>대상 물질이 다르더라도 배치전 건강진단의 모든 항목을 포함하는 검사를 했다면 동일하게 면제됩니다.</li>
+                <li style="color: #e11d48; font-weight: 600;">단, 다음 7종 물질은 12개월이 아닌 <u>6개월까지만 인정</u>됩니다.<br>
+                    (N,N-디메틸아세트아미드, 디메틸포름아미드, 벤젠, 1,1,2,2-테트라클로로에탄, 사염화탄소, 아크릴로니트릴, 염화비닐)
+                </li>
+            </ul>
+            <h4 style="margin: 20px 0 12px; color: #1e293b;">2. 검진 시기 관련 주의사항</h4>
+            <ul class="reg-list">
+                <li>배치전 건강진단을 입사일 이전으로 진행할 경우 특수건강진단기관이 행정처분을 받을 수 있습니다.</li>
+                <li><strong>예외:</strong> 근무 기간이 30일 이내인 경우 예외적으로 허용됩니다.</li>
+                <li><strong>계도 기간:</strong> 제도 정착을 위해 2025년 4월 30일까지 계도 기간이 부여됩니다.</li>
+            </ul>
+        `;
+    };
+
     window.loadNotices = () => {
         if (!currentCompanyId) return;
         const list = document.getElementById('noticeList');
@@ -2087,6 +2065,34 @@
 </script>
 
 <!-- Notice Modal -->
+<!-- Regulatory Notice Modal (Real-time DB Linked) -->
+<div id="regNoticeModalOverlay" class="reg-modal-overlay">
+    <div class="reg-modal">
+        <div class="reg-modal-header">
+            <div style="background: #eef2ff; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                <i class="fa-solid fa-scale-balanced" style="font-size: 1.4rem;"></i>
+            </div>
+            <div>
+                <h3 class="reg-modal-title">특수/배치전 건강진단 주요 안내</h3>
+                <p style="margin: 3px 0 0; font-size: 0.75rem; color: #94a3b8;">최종 업데이트: <span id="regLastUpdate">2025.03.30</span></p>
+            </div>
+        </div>
+        <div class="reg-modal-content" id="regModalBody">
+            <div style="text-align:center; padding:30px;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem; color:var(--primary); margin-bottom:10px;"></i>
+                <p>최신 법령 정보를 불러오는 중입니다...</p>
+            </div>
+        </div>
+        <div class="reg-modal-footer">
+            <button class="reg-confirm-btn" id="regConfirmBtn">위 내용을 확인했습니다</button>
+            <label class="reg-today-hide">
+                <input type="checkbox" id="regHideToday" style="accent-color: var(--primary);">
+                오늘 하루 다시 보지 않기
+            </label>
+        </div>
+    </div>
+</div>
+
 <div id="noticeModalOverlay" class="notice-modal-overlay" onclick="if(event.target===this) window.toggleNoticeModal()">
     <div class="notice-modal">
         <div class="notice-modal-header">

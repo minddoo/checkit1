@@ -139,3 +139,25 @@ The user requested several improvements to the Master Dashboard (`platform.html`
 
 ## Final Review & Quality Assurance
 The project is now stable with a fully functional Master Dashboard that supports historical data and provides an improved administrative experience. All changes have been pushed to the main repository.
+
+## Current Task: Reconstruct "Why Choose CHECKIT" for B2B
+
+### Problem Description
+The user wants to refocus the "Why choose CHECKIT" section on the main page (`index.html`) to target B2B customers (Corporate/HR admins). Currently, the section is general-purpose, but the goal is to highlight management efficiency, legal compliance, and specialized administrative support.
+
+### Proposed Changes
+1.  **`index.html`**: Update Font Awesome icons in the features grid to match B2B themes (monitoring, professional support, medical results, legal safety).
+2.  **`script.js`**: Update translations for `why_us_title`, `why_us_subtitle_new`, and the 4 feature items in all 4 languages (KO, EN, CN, VN) to reflect B2B value propositions.
+
+### Detailed B2B Content Plan (Korean)
+- **Title**: 왜 CHECKIT 기업 보건관리 솔루션을 선택해야 할까요?
+- **Feature 1**: 실시간 보건관리 모니터링 (HR 관리 효율 극대화)
+- **Feature 2**: 1:1 모국어 전담 매니저 매칭 (행정 공백 및 소통 장벽 제거)
+- **Feature 3**: 모국어 결과지 번역 및 데이터화 (투명한 데이터 분석 및 관리)
+- **Feature 4**: 법적 리스크 및 OHS 완벽 대응 (기업의 법적 의무 이행 지원)
+
+### Plan
+1.  **Finalize translations** for all 4 languages based on the B2B focus.
+2.  **Update `index.html`** with new icons.
+3.  **Update `script.js`** with new translation strings.
+4.  **Verify** across all languages and ensure no structural or visual regressions.

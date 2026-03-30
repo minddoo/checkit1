@@ -61,8 +61,8 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background: linear-gradient(135deg, #3d8c55 0%, #2e7a46 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    color: #1e293b;
     padding: 100px 0 60px;
     position: relative;
     overflow: hidden;
@@ -84,14 +84,14 @@
 #corporate-hero .hero-title {
     font-size: 3.5rem;
     font-weight: 800;
-    color: #ffffff; /* White for readability on green */
+    color: #1e293b; /* Darker text for readability on light green */
     line-height: 1.25;
     margin-bottom: 25px;
 }
 
 #corporate-hero .hero-subtitle {
     font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.95);
+    color: #475569;
     line-height: 1.8;
     word-break: keep-all;
 }

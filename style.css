@@ -529,6 +529,15 @@ body {
     overflow: hidden;
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     z-index: 10;
+    cursor: pointer;
+}
+
+.premium-full-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 
+        0 15px 45px rgba(46, 204, 113, 0.12),
+        0 25px 80px rgba(15, 23, 42, 0.08);
+    border-color: rgba(46, 204, 113, 0.35);
 }
 
 /* Background Graphic Elements */

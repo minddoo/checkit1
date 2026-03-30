@@ -311,6 +311,7 @@ body {
     padding: 10px 40px;
     display: flex;
     align-items: center;
+    justify-content: center; /* Center the brand chip */
     flex-shrink: 0;
     z-index: 20;
     border-bottom: 1px solid rgba(255,255,255,0.12);

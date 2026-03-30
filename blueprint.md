@@ -30,7 +30,8 @@ The CHECKIT project is a framework-less web application (HTML, CSS, JavaScript) 
 
 **Permitted Modification:**
 *   Login/Authentication logic, Login Modals, and associated User Profile (RBAC) handling.
-*   Any modification to Login must have ZERO impact on the visual or structural integrity of the locked pages.
+*   **EXPLICIT EXCEPTION**: The user has requested the removal of the Chatbot from the Corporate Page (`corporate.html`), superseding the previous lock on this element for that specific page.
+*   **EXPLICIT EXCEPTION**: Hospital registration forms and worker portal data display (removed address/phone fields and added real-time Kakao Map API integration).
 
 ## Previous Task: Enhance Individual Customer My Page (Add Process Tracker)
 
@@ -173,5 +174,29 @@ The user wanted to change the corporate hero background to a custom construction
     *   Set `background-image` to `url('assets/건건.png')` with a 45% white overlay for contrast.
     *   Consolidated redundant CSS blocks for `#corporate-hero`.
 3.  **Deployment**: All changes staged and pushed to the repository.
+
+### Status: Completed
+
+## Current Task: Hospital Data Optimization & UI Cleanup
+
+### Problem Description
+1.  **Simplified Hospital Registration**: Corporate admins found it tedious to manually enter hospital addresses and phone numbers. They only want to enter the hospital name.
+2.  **Real-time Worker Portal Data**: The worker portal should fetch the actual address and contact information for the registered hospital names in real-time using an external API.
+3.  **UI Refinement**: Removed "Checking..." loading states in the worker portal and improved the visibility of prompts directing users to external portals (Naver/Kakao Maps).
+4.  **Chatbot Removal**: The user requested to remove the chatbot from the Corporate Page (`corporate.html`) to simplify the interface.
+
+### Implemented Changes
+1.  **`company_dashboard.html`**:
+    *   Removed "Address" and "Contact Number" input fields from the hospital registration form.
+    *   Updated `saveHospitalInfo` to exclude these fields from Firestore.
+2.  **`worker_portal.html`**:
+    *   Implemented `fetchHospitalLiveInfo` using the **Kakao Maps API (Places Services)** to dynamically fetch address and category/phone data based on the hospital name.
+    *   Removed the "In Treatment/Closed" status logic and replaced it with a prominent Info Box prompting users to check real-time details on portals.
+    *   Added direct links to Naver Maps and Kakao Maps for each hospital card.
+    *   Cleaned up "Checking..." loading indicators for a smoother UI.
+3.  **`corporate.html`**:
+    *   Removed the floating chatbot button (`#open-chatbot`) and the chatbot container (`#chatbot-container`).
+4.  **`style.css`**:
+    *   Cleaned up all redundant chatbot-related CSS variables and style rules.
 
 ### Status: Completed

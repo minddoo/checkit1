@@ -1450,29 +1450,20 @@ window.saveWorker = async (event) => {
                     if(excelRows.length === 0) throw new Error("엑셀 파일에 데이터가 없습니다.");
 
                     let batch = db.batch();
-                    let count = 0, totalAdded = 0;
+                    let count = 0;
+                    let totalAdded = 0;
 
-                    for (let i = 0; i < excelRows.length; i++) {
-                        const row = excelRows[i];
-                        
-                        const getVal = (key) => {
-                            const actualKey = Object.keys(row).find(k => k.replace(/\s+/g, '') === key.replace(/\s+/g, ''));
-                            return actualKey ? String(row[actualKey] || "").trim() : "";
-                        };
+                    for(const row of excelRows) {
+                        const site = (row["소속현장"] || "").toString().trim();
+                        const name = (row["성함"] || "").toString().trim();
+                        const birth = (row["생년월일"] || "").toString().trim();
+                        const nat = (row["국적"] || "").toString().trim();
+                        const checkup = (row["필수검진"] || "").toString().trim();
+                        const period = (row["검진기간"] || "").toString().trim();
+                        const docs = (row["기업필요서류"] || "").toString().trim();
+                        const notes = (row["특이사항"] || "").toString().trim();
 
-                        const site = getVal("소속현장");
-                        const name = getVal("성함");
-                        
-                        if (i === 0 && name === "성함") continue;
-
-                        const birth = getVal("생년월일");
-                        const nat = getVal("국적");
-                        const checkup = getVal("필수검진");
-                        const period = getVal("검진기간");
-                        const docs = getVal("기업필요서류");
-                        const notes = getVal("특이사항");
-
-                        if (!name) continue; 
+                        if(!name) continue;
 
                         const docRef = db.collection("workers").doc();
                         batch.set(docRef, {
@@ -1490,7 +1481,11 @@ window.saveWorker = async (event) => {
                         });
 
                         count++; totalAdded++;
-                        if (count === 490) { await batch.commit(); batch = db.batch(); count = 0; }
+                        if (count === 400) { 
+                            await batch.commit(); 
+                            batch = db.batch(); 
+                            count = 0; 
+                        }
                     }
                     if (count > 0) await batch.commit();
                     
@@ -1569,45 +1564,39 @@ window.saveWorker = async (event) => {
     };
 
     window.getDefaultRegNotice = () => {
+        const today = new Date().toLocaleDateString('ko-KR');
         return `
-            <div class="reg-notice-box" style="background: #fff1f2; border-color: #fecaca;">
-                <i class="fa-solid fa-triangle-exclamation" style="color: #e11d48; margin-top: 3px;"></i>
-                <div style="color: #9f1239;">
-                    <strong>산업안전보건법 개정에 따른 공식 지침 안내</strong><br>
-                    배치전건강진단 제도가 대폭 개정되었습니다. 실제 법령 위반으로 인한 행정처분 및 과태료 예방을 위해 내용을 숙지해 주세요.
+            <div class="reg-notice-box">
+                <i class="fa-solid fa-circle-info" style="color: #22c55e; margin-top: 3px;"></i>
+                <div>
+                    <strong>[고용노동부] 2025-2026 개정 산업안전보건법 안내</strong><br>
+                    배치전 건강진단 제도 합리화 및 결과 보고 의무 강화 내용을 확인하시어 법적 불이익이 없도록 유의하시기 바랍니다.
                 </div>
             </div>
             
-            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-circle-1" style="color: var(--primary); font-size: 0.8rem;"></i> 인정 기간 확대 (12개월)
+            <h4 style="margin: 0 0 12px; color: #1e293b; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-calendar-check" style="color:var(--primary);"></i> 1. 건강진단 실시 인정기간 합리화 (24.12.29 시행)
             </h4>
-            <ul class="reg-list" style="margin-bottom: 25px;">
-                <li>타 사업장에서 <strong>12개월 이내</strong>에 배치전·특수·수시·임시진단을 동일 항목으로 받았다면 면제됩니다.</li>
-                <li>대상 유해인자가 다르더라도 배치전 항목을 모두 포함했다면 면제가 가능합니다.</li>
-                <li style="color: #e11d48; font-weight: 700;">[예외] 특정 유해인자 7종은 <u>6개월까지만 인정</u>됩니다.<br>
-                    <small style="font-weight: 400; color: #64748b;">(벤젠, 사염화탄소, 아크릴로니트릴, 염화비닐, DMA, DMF, 1,1,2,2-테트라클로로에탄)</small>
+            <ul class="reg-list" style="font-size:0.9rem; margin-bottom: 20px;">
+                <li><strong>일반 유해인자 (174종):</strong> 최근 12개월 이내 검진 이력이 있다면 <u>배치전 건강진단 면제</u> 가능</li>
+                <li><strong>특정 유해인자 (7종*):</strong> 최근 6개월 이내 검진 이력만 인정 (6개월 초과 시 재검사 필수)</li>
+                <li style="font-size:0.8rem; color:#64748b; list-style:none; padding-left:0; margin-top:5px;">
+                    * 특정 7종: 벤젠, N,N-디메틸아세트아미드, 디메틸포름아미드(DMF), 1,1,2,2-테트라클로로에탄, 사염화탄소, 아크릴로니트릴, 염화비닐
                 </li>
             </ul>
 
-            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-circle-2" style="color: var(--primary); font-size: 0.8rem;"></i> 결과 보고 의무 신설 (K2B)
+            <h4 style="margin: 0 0 12px; color: #1e293b; display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-file-export" style="color:#f59e0b;"></i> 2. 결과 보고 및 시스템 개선 (2025.01.01 시행)
             </h4>
-            <ul class="reg-list" style="margin-bottom: 25px;">
-                <li>실시일로부터 <strong>30일 이내</strong>에 고용노동부(K2B 시스템)에 결과를 반드시 보고해야 합니다.</li>
-                <li>보고 누락 시 관련 규정에 따라 과태료가 부과될 수 있습니다.</li>
+            <ul class="reg-list" style="font-size:0.9rem;">
+                <li><strong>결과 보고 의무 확대:</strong> ‘배치전 진단’ 실시 후 30일 이내 관할 지방고용노동관서장에게 결과를 반드시 보고해야 합니다.</li>
+                <li><strong>KOSHA 전산 개선:</strong> 입사일이 진단일보다 늦더라도 전산 전송이 가능하도록 개선되었습니다. <u>(계도 기간 종료)</u></li>
+                <li><strong>면제 확인 절차:</strong> 이전 사업장의 결과 사본을 통해 동일 유해인자 및 인정 기간 부합 여부를 철저히 확인하시기 바랍니다.</li>
             </ul>
-
-            <h4 style="margin: 0 0 12px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-circle-3" style="color: var(--primary); font-size: 0.8rem;"></i> 실시 시기 및 행정처분
-            </h4>
-            <ul class="reg-list">
-                <li>배치전진단은 "업무 배치 전" 실시가 원칙이며, 입사일 이전 진단 시 <strong>기관 행정처분 대상</strong>이 될 수 있습니다.</li>
-                <li>근무 기간이 30일 이내인 경우에 한하여 예외적으로 소급 적용이 허용됩니다.</li>
-            </ul>
-
-            <div style="margin-top: 25px; padding: 15px; background: #f8fafc; border-radius: 10px; font-size:0.8rem; color:#64748b;">
-                <i class="fa-solid fa-link"></i> <a href="https://www.moel.go.kr" target="_blank" style="color:#4f46e5; text-decoration:none;">고용노동부 공식 보도자료 및 지침 전문 확인하기</a>
-            </div>
+            
+            <p style="margin-top:20px; font-size:0.75rem; color:#94a3b8; text-align:right;">
+                최종 확인일: ${today} | 관련 근거: 산업안전보건법 시행규칙 제201조
+            </p>
         `;
     };
 

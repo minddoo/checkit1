@@ -698,7 +698,7 @@ body {
     grid-column: 2;
     text-align: center;
     max-width: 1000px;
-    padding-left: 0; /* 모든 임의 여백 제거 */
+    padding-left: 140px; /* 캐릭터와 겹치지 않는 선에서 우측으로 이동 */
     z-index: 2;
 }
 

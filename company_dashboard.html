@@ -1537,17 +1537,23 @@ window.saveWorker = async (event) => {
         // Fetch 실시간 데이터
         try {
             const doc = await db.collection('settings').doc('regulatory_notice').get();
-            if (doc.exists) {
-                const data = doc.data();
-                body.innerHTML = data.content || window.getDefaultRegNotice();
-                if (data.updatedAt) {
-                    updateSpan.innerText = new Date(data.updatedAt.seconds * 1000).toLocaleDateString('ko-KR');
+            if (doc.exists && doc.data().content) {
+                content = doc.data().content;
+                // 긴급 오타 보정 및 DB 동기화
+                if (content.includes('배출전')) {
+                    content = content.replace(/배출전/g, '배치전');
+                    await db.collection('settings').doc('regulatory_notice').update({ content: content });
+                }
+                body.innerHTML = content;
+                if (doc.data().updatedAt) {
+                    updateSpan.innerText = new Date(doc.data().updatedAt.seconds * 1000).toLocaleDateString('ko-KR');
                 }
             } else {
-                body.innerHTML = window.getDefaultRegNotice();
+                content = window.getDefaultRegNotice();
+                body.innerHTML = content;
                 // DB에 없을 경우 초기값 저장 (관리자 권한 시)
-                db.collection('settings').doc('regulatory_notice').set({
-                    content: window.getDefaultRegNotice(),
+                await db.collection('settings').doc('regulatory_notice').set({
+                    content: content,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(() => {}); 
             }

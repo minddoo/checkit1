@@ -28,7 +28,7 @@ const LayoutLoader = {
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-info">
-                    <h4 class="footer-title" data-lang-key="footer_company_title">쇼핑몰 기본정보</h4>
+                    <h4 class="footer-title" data-lang-key="footer_company_title">플랫폼 이용 정보</h4>
                     <p data-lang-key="footer_company_name">상호명: <strong>주식회사 체킷</strong></p>
                     <p data-lang-key="footer_representative">대표자명: 김선홍</p>
                     <p data-lang-key="footer_address">사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)</p>

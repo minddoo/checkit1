@@ -110,11 +110,16 @@
 
         .h-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
         .btn-h-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: 0.2s; }
-        .btn-h-call { background: #f1f5f9; color: #475569; }
-        .btn-h-call:hover { background: #e2e8f0; }
-        .btn-h-book { background: var(--primary); color: white; }
-        .btn-h-book:hover { background: #4f46e5; }
-        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        .btn-h-call { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .btn-h-call:hover { background: #f1f5f9; }
+        .btn-h-book { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .btn-h-book:hover { background: #4f46e5; transform: translateY(-1px); }
+        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; display: none; } /* Hidden by default if specialized buttons exist */
+        
+        .btn-portal-naver { background: #03cf5d; color: white; }
+        .btn-portal-naver:hover { background: #02b350; transform: translateY(-1px); }
+        .btn-portal-kakao { background: #fee500; color: #3c1e1e; }
+        .btn-portal-kakao:hover { background: #fada00; transform: translateY(-1px); }
 
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
 
@@ -2169,29 +2174,34 @@ function googleTranslateElementInit() {
             const h = doc.data();
             const id = doc.id;
             
-            // Logic for status badge (Very simplified, can be expanded)
-            let isOpen = true; 
-            if (h.businessHours && h.businessHours.includes('09-18시')) {
-                const hour = now.getHours();
-                if (hour < 9 || hour >= 18) isOpen = false;
-            }
-
-            const statusClass = isOpen ? 'status-open' : 'status-closed';
-            const statusText = isOpen ? '진료 중' : '진료 종료';
+            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name + ' ' + (h.address || ''))}`;
+            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name + ' ' + (h.address || ''))}`;
 
             html += `
                 <div class="hospital-card">
-                    <span class="h-card-status ${statusClass}">${statusText}</span>
                     <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
                     <div class="h-card-address"><i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${h.address || '주소 정보 없음'}</div>
                     <div class="h-card-meta">
-                        <div class="item"><i class="fa-solid fa-clock"></i> ${h.businessHours || h.schedule || '09:00 - 18:00'}</div>
+                        <div class="item" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-calendar-check"></i> ${h.schedule || '25.10.01 ~ 11.30'}</div>
                         <div class="item"><i class="fa-solid fa-phone"></i> ${h.phone || '연락처 미등록'}</div>
                     </div>
+                    
+                    <!-- Portal Aggregated Action -->
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom: -5px; display:flex; align-items:center; gap:5px;">
+                        <i class="fa-solid fa-circle-info"></i> 실제 포털에서 상세 정보(진료 시간 등)를 확인하세요
+                    </div>
                     <div class="h-card-actions">
+                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" onclick="event.stopPropagation()">
+                            <img src="https://www.naver.com/favicon.ico" style="width:14px;height:14px;border-radius:2px;"> 네이버
+                        </a>
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" onclick="event.stopPropagation()">
+                            <i class="fa-comment fa-solid" style="font-size:0.8rem;"></i> 카카오
+                        </a>
                         ${h.phone ? `<a href="tel:${h.phone}" class="btn-h-action btn-h-call" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>` : ''}
-                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 예약</a>` : ''}
-                        <a href="https://map.kakao.com/link/to/${h.name},${h.lat},${h.lng}" target="_blank" class="btn-h-action btn-h-map" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
+                    </div>
+                    <div class="h-card-actions" style="margin-top: -5px;">
+                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 간편 예약</a>` : ''}
+                        <a href="https://map.kakao.com/link/to/${h.name},${h.lat},${h.lng}" target="_blank" class="btn-h-action btn-h-map" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
                     </div>
                 </div>`;
         });

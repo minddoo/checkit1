@@ -70,8 +70,8 @@ const LayoutLoader = {
                 </div>
                 <div class="footer-cs">
                     <h4 class="footer-title" data-lang-key="footer_cs_title">고객센터 정보</h4>
-                    <p data-lang-key="footer_cs_phone">상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong></p>
-                    <p data-lang-key="footer_cs_email">상담/주문 이메일: <strong>checkit082@gmail.com</strong></p>
+                    <p data-lang-key="footer_cs_phone">상담 전화: <strong>010-5109-3459 / 010-2209-7951</strong></p>
+                    <p data-lang-key="footer_cs_email">상담 이메일: <strong>checkit082@gmail.com</strong></p>
                 </div>
             </div>
             <div class="footer-bottom">

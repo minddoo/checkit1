@@ -301,6 +301,19 @@ body {
 
 .hero-glass-section {
     background: #3d8c55;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topbar: sits ABOVE the photo — no overlap */
+.hero-topbar {
+    background: #2e7a45;
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 20;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .hero-premium-card {
@@ -365,31 +378,26 @@ body {
     transform: translateX(-100%);
 }
 
-/* Brand chip — fixed top-left of the card */
+/* Brand chip — inside topbar, normal flow (no absolute) */
 .hero-brand-chip {
-    position: absolute;
-    top: 28px;
-    left: 40px;
-    z-index: 15;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(46, 204, 113, 0.45);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 100px;
-    padding: 7px 18px;
-    font-size: 0.76rem;
+    padding: 6px 18px;
+    font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 0.10em;
-    text-transform: uppercase;
-    color: #7ff5b0;
+    letter-spacing: 0.06em;
+    color: #ffffff;
     white-space: nowrap;
 }
 .hero-brand-chip i {
     font-size: 0.5rem;
-    color: #2ecc71;
+    color: #a8f0c8;
 }
 
 /* Caption area — bottom-left with frosted backdrop for readability without overlay */

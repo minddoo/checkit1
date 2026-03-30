@@ -61,11 +61,11 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)), url('assets/건건.png');
-    background-size: 108% auto; /* Slight zoom to hide the diamond logo in bottom right */
-    background-position: -2% -2%; /* Adjusting focal point to ensure logo is cropped out */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), url('assets/건건.png');
+    background-size: 104% auto; /* Optimized zoom for photo quality while keeping the logo hidden */
+    background-position: -1% -1%; /* Shifting to hide the logo with minimal crop */
     background-repeat: no-repeat;
-    color: #1e293b;
+    color: #0f172a;
     padding: 100px 0 60px;
     position: relative;
     overflow: hidden;
@@ -94,7 +94,7 @@
     color: #0f172a; /* Deeper slate for better contrast */
     line-height: 1.25;
     margin-bottom: 25px;
-    text-shadow: 0 4px 20px rgba(255, 255, 255, 0.5); /* Subtle light glow to pop from background */
+    text-shadow: 0 2.5px 12px rgba(255, 255, 255, 0.95), 0 0 40px rgba(255, 255, 255, 0.5); /* Stronger glow for maximum readability against photo */
 }
 
 #corporate-hero .hero-subtitle {
@@ -103,6 +103,7 @@
     line-height: 1.8;
     word-break: keep-all;
     font-weight: 600; /* Medium-bold for visibility */
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.8); /* Added shadow to subtitle for better contrast */
 }
 
 #corporate-hero .hero-character {
@@ -1526,7 +1527,7 @@ body.chatbot-open { overflow: hidden; }
     border-radius: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.03);
     text-align: left;
-    border: 1px solid rgba(0, 0, 0, 0.04); /* Removed neon green border from Corporate page card */
+    border: 1px solid rgba(0, 0, 0, 0.08); /* Slightly increased definition */
 }
 
 .reason-item:hover {

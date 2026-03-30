@@ -948,7 +948,7 @@ body {
     background-position: center; 
     top: -100px; 
     left: 100%; 
-    margin-left: -20px; /* Pull it closer to text without overlapping */
+    margin-left: -50px; /* Pull it tighter to text */
     animation: float-bounce 2.5s ease-in-out infinite; 
     filter: saturate(1.3) contrast(1.1);
 }

@@ -235,11 +235,14 @@ body {
  * 2.5. Hero Section
  * ------------------- */
 #hero {
-    background-color: #f8fafc;
+    background-color: #05101a;
     text-align: center;
-    padding: 160px 0;
+    padding: 0;
     position: relative;
     overflow: hidden;
+    min-height: 620px;
+    display: flex;
+    align-items: stretch;
 }
 
 #hero .hero-title {
@@ -291,7 +294,55 @@ body {
     position: relative;
 }
 
-/* Hero Slideshow Styles */
+
+/* ---------------------------------------------
+ * HERO - Premium Full-Bleed Slideshow
+ * --------------------------------------------- */
+
+.hero-glass-section {
+    background: #051018;
+}
+
+.hero-premium-card {
+    position: relative;
+    width: 100%;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Slideshow fills the entire hero */
+.hero-slideshow-container {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+/* Multi-layer premium dark overlay */
+.hero-slideshow-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to right, rgba(4,12,24,0.72) 0%, rgba(4,12,24,0.28) 60%, rgba(4,12,24,0.12) 100%),
+        linear-gradient(to top,  rgba(4,12,24,0.88) 0%, rgba(4,12,24,0.10) 55%, transparent 100%);
+    z-index: 2;
+}
+
+/* Thin horizontal gold accent line at very top */
+.hero-premium-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, #2ecc71 30%, #a8f0c8 60%, transparent 100%);
+    z-index: 20;
+    opacity: 0.9;
+}
+
 .hero-slideshow {
     position: absolute;
     top: 0;
@@ -300,6 +351,7 @@ body {
     height: 100%;
     z-index: 0;
 }
+
 .hero-slide {
     position: absolute;
     top: 0;
@@ -309,7 +361,7 @@ body {
     background-size: cover;
     background-position: center;
     transform: translateX(100%);
-    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
     will-change: transform;
 }
 .hero-slide.active {
@@ -318,36 +370,92 @@ body {
 .hero-slide.exit-left {
     transform: translateX(-100%);
 }
-.hero-slideshow-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.45); /* 가독성을 위한 검은색 반투명 레이어 */
-    z-index: 1;
+
+/* Caption area — sits above slideshow overlay */
+.hero-caption-container {
+    position: relative;
+    z-index: 10;
+    padding: 0 48px 52px;
+    max-width: 780px;
+    text-align: left;
 }
 
-/* Indicators (Pagination Dots) */
-.hero-indicator {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 20px;
+.hero-caption {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.65s ease;
+    color: rgba(255,255,255,0.82);
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
 }
+
+.hero-caption.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Enterprise brand label chip */
+.hero-brand-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46, 204, 113, 0.12);
+    border: 1px solid rgba(46, 204, 113, 0.35);
+    border-radius: 100px;
+    padding: 6px 18px;
+    margin-bottom: 22px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5df0a8;
+}
+.hero-brand-chip i {
+    font-size: 0.7rem;
+    color: #2ecc71;
+}
+
+/* Bold caption headline */
+.hero-caption-headline {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.35;
+    margin-bottom: 14px;
+    letter-spacing: -0.025em;
+}
+
+.hero-caption-headline .accent {
+    background: linear-gradient(90deg, #2ecc71, #a8f0c8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Slide indicators */
+.hero-indicator {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 0 48px 28px;
+}
+
 .hero-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.1);
-    border: 1px solid rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.22);
+    transition: all 0.4s ease;
     cursor: pointer;
 }
 .hero-dot.active {
-    background: var(--primary-color);
-    transform: scale(1.2);
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+    background: #2ecc71;
+    width: 44px;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
 }
 
 /* Premium Full-Width Section Card */
@@ -1373,6 +1481,38 @@ body.chatbot-open { overflow: hidden; }
     text-align: center;
     font-size: 0.75rem;
     color: #94a3b8;
+}
+
+/* Hero Enterprise - Mobile responsive */
+@media (max-width: 768px) {
+    #hero,
+    .hero-glass-section,
+    .hero-premium-card {
+        min-height: 520px;
+    }
+    .hero-caption-container {
+        padding: 0 24px 40px;
+    }
+    .hero-caption-headline {
+        font-size: 1.2rem;
+    }
+    .hero-caption {
+        font-size: 0.92rem;
+        line-height: 1.7;
+    }
+    .hero-brand-chip {
+        font-size: 0.7rem;
+        padding: 5px 14px;
+    }
+    .hero-indicator {
+        padding: 0 24px 22px;
+    }
+    .hero-dot {
+        width: 20px;
+    }
+    .hero-dot.active {
+        width: 32px;
+    }
 }
 
 @media (max-width: 768px) {

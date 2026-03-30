@@ -2177,52 +2177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Corporate Page Slideshow Logic ---
-    const openSlideBtn = document.getElementById('openProcessSlide');
-    const processModal = document.getElementById('processModal');
-    const closeSlideBtn = document.getElementById('closeProcess');
-    const processImage = document.getElementById('processImage');
-    const prevSlideBtn = document.getElementById('prevBtn');
-    const nextSlideBtn = document.getElementById('nextBtn');
-    const slideIndicator = document.getElementById('indicator');
-
-    if (openSlideBtn && processModal) {
-        let currentSlide = 1;
-        const totalSlides = 18; 
-
-        const updateSlide = () => {
-            const slidePath = `assets/process_${currentSlide.toString().padStart(2, '0')}.png`;
-            processImage.src = slidePath;
-            slideIndicator.textContent = `${currentSlide} / ${totalSlides}`;
-        };
-
-        openSlideBtn.addEventListener('click', () => {
-            processModal.style.display = 'flex';
-            currentSlide = 1;
-            updateSlide();
-        });
-
-        closeSlideBtn.addEventListener('click', () => {
-            processModal.style.display = 'none';
-        });
-
-        prevSlideBtn.addEventListener('click', () => {
-            currentSlide = currentSlide > 1 ? currentSlide - 1 : totalSlides;
-            updateSlide();
-        });
-
-        nextSlideBtn.addEventListener('click', () => {
-            currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1;
-            updateSlide();
-        });
-
-        // Close on overlay click
-        processModal.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                processModal.style.display = 'none';
-            }
-        });
-    }
+    // --- Corporate Page Slideshow Logic 제거됨 ---
 
     // --- Corporate FAQ Accordion Logic ---
     const faqQuestions = document.querySelectorAll('.faq-question');

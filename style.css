@@ -1900,8 +1900,6 @@ html[lang="vn"] #corporate-hero .hero-title {
         gap: 15px !important;
     }
     #why-us .feature-item-new {
-        aspect-ratio: 1/1 !important;
-        justify-content: center !important;
         padding: 15px !important;
     }
 
@@ -1920,22 +1918,16 @@ html[lang="vn"] #corporate-hero .hero-title {
         align-items: center !important;
     }
 
-    /* [1-5. Testimonials Slider] */
+    /* [1-5. Testimonials Grid (2x2 requested for 4, but since it's 3, we'll follow 3-per-row or 2x2 as 3 items)] */
     .testimonial-grid {
-        display: flex !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory !important;
-        gap: 20px !important;
-        padding: 30px 20px !important;
-        margin: 0 -20px !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        overflow-x: visible !important;
     }
     .testimonial-card {
-        flex: 0 0 80% !important;
-        scroll-snap-align: center !important;
-        transform: scale(0.95);
+        padding: 15px !important;
     }
-    /* Focus effect simulator */
-    .testimonial-card:nth-child(2) { transform: scale(1.05); z-index: 2; }
 
     /* [2-1. Individual Page Reality Slider] */
     .reality-grid {
@@ -1957,17 +1949,15 @@ html[lang="vn"] #corporate-hero .hero-title {
         line-height: 1.5 !important;
     }
 
-    /* [2-3. Solution Slider] */
+    /* [2-3. Solution Slider -> 3 per row] */
     #checkit-solution .features-grid-new {
-        display: flex !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory !important;
-        gap: 15px !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 10px !important;
+        overflow-x: visible !important;
     }
     #checkit-solution .feature-item-new {
-        flex: 0 0 80% !important;
-        aspect-ratio: 1/1 !important;
-        scroll-snap-align: center !important;
+        padding: 10px !important;
     }
 
     /* [2-4. Package Slider] */
@@ -1997,17 +1987,15 @@ html[lang="vn"] #corporate-hero .hero-title {
         width: 100% !important;
     }
 
-    /* [3-2 & 3-3. Corporate Section 1 & 2 Sliders] */
+    /* [3-2 & 3-3. Corporate Section 1 & 2 -> Grid] */
     #corporate-necessity .features-grid-new, .welfare-visual-grid {
-        display: flex !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory !important;
-        gap: 15px !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        overflow-x: visible !important;
     }
     .feature-item-new, .welfare-card {
-        flex: 0 0 80% !important;
-        aspect-ratio: 1/1 !important;
-        scroll-snap-align: center !important;
+        padding: 12px 8px !important;
     }
 
     /* [3-4. Corporate Section 3: Long cards stack] */
@@ -2026,14 +2014,19 @@ html[lang="vn"] #corporate-hero .hero-title {
         overflow: hidden;
     }
 
-    /* [3-6 & 3-7. Corporate Section 5 & 6 Stack] */
-    .only-reason-grid, .safety-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
+    /* [3-6 & 3-7. Corporate Section 5 & 6 -> 2x2 and 3-per-row] */
+    .only-reason-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .safety-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
     }
     .reason-item, .safety-card {
-        width: 100% !important;
+        padding: 12px !important;
     }
 
     /* [3-8. Corporate Section 7 Padding] */
@@ -3184,19 +3177,21 @@ body.platform-view-active #mypage-overlay { display: flex; }
         order: -1; /* Character on top for better mobile vibe */
     }
 
-    /* 2x2 Grid for 4-item sections */
+    /* Final Consolidated Grid Rules */
+    /* 4 items -> 2x2 */
     #why-us .features-grid-new, 
-    .testimonial-grid, 
     .only-reason-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
     }
 
-    /* 1x3 Grid for 3-item sections */
+    /* 3 items -> 3 per row */
     .process-card-container, 
     .welfare-visual-grid, 
     .safety-grid, 
+    .testimonial-grid,
+    #checkit-solution .features-grid-new,
     #corporate-necessity .features-grid-new {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
@@ -3205,34 +3200,27 @@ body.platform-view-active #mypage-overlay { display: flex; }
 
     /* Card Item Refinements for Grid Fit */
     .feature-item-new, .process-card, .welfare-card, .reality-card, .safety-card, .testimonial-card, .reason-item {
-        padding: 15px 10px !important;
-        margin-bottom: 0 !important; /* Managed by grid gap */
+        padding: 12px 8px !important;
+        margin-bottom: 0 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+        border-radius: 10px !important;
     }
 
-    .feature-item-new i, .welfare-icon-box i, .safety-card i {
-        font-size: 1.2rem !important;
-        margin-bottom: 8px !important;
+    .feature-item-new i, .welfare-icon-box i, .safety-card i, .process-card i {
+        font-size: 1rem !important;
+        margin-bottom: 6px !important;
     }
 
     .feature-item-new h3, .process-card h3, .welfare-card h4, .safety-card h4, .reason-item h4 {
-        font-size: 0.85rem !important;
+        font-size: 0.75rem !important;
         line-height: 1.2 !important;
+        font-weight: 800 !important;
     }
 
     .feature-item-new p, .process-card p, .welfare-card p, .safety-card p, .reason-item p, .testimonial-text {
-        font-size: 0.72rem !important;
-        line-height: 1.4 !important;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .reality-grid {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
+        font-size: 0.65rem !important;
+        line-height: 1.3 !important;
+        margin-top: 5px !important;
     }
 
     /* Roadmap Polish */

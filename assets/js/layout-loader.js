@@ -11,6 +11,14 @@ const LayoutLoader = {
                 CHECKIT
             </a>
 
+            <!-- Mobile Language Switcher (Visible in Header) -->
+            <div class="mobile-only mobile-header-lang">
+                <button class="lang-btn active" data-lang="ko">KR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="cn">CN</button>
+                <button class="lang-btn" data-lang="vn">VN</button>
+            </div>
+
             <!-- Mobile Navigation Toggle -->
             <button id="mobile-menu-toggle" class="mobile-only">
                 <i class="fas fa-bars"></i>
@@ -34,14 +42,6 @@ const LayoutLoader = {
                 <div class="mobile-menu-content">
                     <button id="close-mobile-menu">&times;</button>
                     
-                    <!-- Language Switcher in Mobile Menu -->
-                    <div class="mobile-lang-switcher">
-                        <button class="lang-btn active" data-lang="ko">KR</button>
-                        <button class="lang-btn" data-lang="en">EN</button>
-                        <button class="lang-btn" data-lang="cn">CN</button>
-                        <button class="lang-btn" data-lang="vn">VN</button>
-                    </div>
-
                     <div class="mobile-menu-links">
                         <a href="index.html" data-lang-key="nav_home">홈</a>
                         <a href="corporate.html" data-lang-key="nav_corporate">기업 서비스</a>

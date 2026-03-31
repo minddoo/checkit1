@@ -283,13 +283,15 @@ body {
 #individual-hero,
 #corporate-hero {
     padding: 0;
-    background-color: var(--hero-bg-color);
-    height: 500px; /* PC 기본 높이 확인 */
+    height: 500px;
     display: flex;
     align-items: center;
-    overflow: hidden; /* 영역 밖 숨김 */
+    overflow: hidden;
     position: relative;
 }
+
+#individual-hero { background-color: var(--hero-bg-color); }
+#corporate-hero { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }
 
 /* Hero Slideshow Styles */
 .hero-slideshow {
@@ -545,11 +547,11 @@ body {
     color: #000;
 }
 
-/* Corporate Page Hero Text (Dark) */
+/* Corporate Page Hero Text (White) */
 #corporate-hero .hero-title,
 #corporate-hero .hero-subtitle {
-    color: #1e293b;
-    text-shadow: none;
+    color: #ffffff;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
 }
 
 .hero-title {

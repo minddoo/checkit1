@@ -545,8 +545,8 @@
     .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
     font { background: transparent !important; }
     
-    /* 5. Hide the translation widget completely */
-    #google_translate_element { display: none !important; z-index: -9999999 !important; }
+    /* 5. Hide the translation widget completely without breaking functionality */
+    #google_translate_element { opacity: 0 !important; position: absolute !important; left: -9999px !important; z-index: -9999999 !important; pointer-events: none !important; }
     
     /* 6. Hide NEW Google Translate classes */
     .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
@@ -611,11 +611,25 @@ function googleTranslateElementInit() {
         // Trigger Google Translate Widget
         const langMap = { 'ko': 'ko', 'en': 'en', 'cn': 'zh-CN', 'vn': 'vi' };
         const targetLang = langMap[langCode] || 'ko';
-        const selectField = document.querySelector("select.goog-te-combo");
         
+        if (targetLang === 'ko') {
+            // To restore Korean, clear cookies and reload or use Google's restore
+            const iframe = document.querySelector('iframe.goog-te-banner-frame');
+            if (iframe) {
+                const restoreBtn = iframe.contentWindow.document.getElementById('restore');
+                if (restoreBtn) restoreBtn.click();
+            } else {
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname;
+                window.location.reload();
+            }
+            return;
+        }
+
+        const selectField = document.querySelector("select.goog-te-combo");
         if (selectField) {
             selectField.value = targetLang;
-            selectField.dispatchEvent(new Event('change'));
+            selectField.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
         } else {
             // Retry if the widget hasn't loaded yet
             setTimeout(() => window.changePortalLanguage(langCode), 500);

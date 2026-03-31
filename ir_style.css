@@ -55,14 +55,13 @@ body {
     .page {
         margin: 0 !important;
         box-shadow: none !important;
-        page-break-after: always !important;
         width: 100% !important;
-        min-height: 297.1mm !important; /* Ensuring it covers A4 height but can grow */
-        overflow: visible !important; /* Allowing content to flow naturally */
-        padding: 15mm 20mm !important; /* Slightly reduced top/bottom padding to fit more */
+        overflow: visible !important;
+        padding: 40px !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         position: relative;
+        page-break-after: auto !important; /* Allow natural page breaks */
     }
     .watermark {
         opacity: 0.1 !important;

@@ -2577,12 +2577,19 @@ body.platform-view-active #mypage-overlay { display: flex; }
         z-index: 5000;
         display: none; /* Controlled by toggle */
         flex-direction: column;
-        padding: 40px 20px;
-        backdrop-filter: blur(10px);
+        padding: 60px 40px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        animation: fadeIn 0.3s ease;
     }
     
     #mobile-menu-overlay.active {
         display: flex;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .mobile-menu-content {
@@ -3177,8 +3184,52 @@ body.platform-view-active #mypage-overlay { display: flex; }
         order: -1; /* Character on top for better mobile vibe */
     }
 
-    /* Grids to Stack but with PC-like Cards */
-    .features-grid-new, .welfare-visual-grid, .reality-grid, .safety-grid, .only-reason-grid {
+    /* 2x2 Grid for 4-item sections */
+    #why-us .features-grid-new, 
+    .testimonial-grid, 
+    .only-reason-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    /* 1x3 Grid for 3-item sections */
+    .process-card-container, 
+    .welfare-visual-grid, 
+    .safety-grid, 
+    #corporate-necessity .features-grid-new {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    /* Card Item Refinements for Grid Fit */
+    .feature-item-new, .process-card, .welfare-card, .reality-card, .safety-card, .testimonial-card, .reason-item {
+        padding: 15px 10px !important;
+        margin-bottom: 0 !important; /* Managed by grid gap */
+    }
+
+    .feature-item-new i, .welfare-icon-box i, .safety-card i {
+        font-size: 1.2rem !important;
+        margin-bottom: 8px !important;
+    }
+
+    .feature-item-new h3, .process-card h3, .welfare-card h4, .safety-card h4, .reason-item h4 {
+        font-size: 0.85rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .feature-item-new p, .process-card p, .welfare-card p, .safety-card p, .reason-item p, .testimonial-text {
+        font-size: 0.72rem !important;
+        line-height: 1.4 !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .reality-grid {
         display: flex !important;
         flex-direction: column !important;
         gap: 15px !important;

@@ -1158,8 +1158,8 @@ function googleTranslateElementInit() {
 
     window.sendKakaoLink = function(dateVal) {
         if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
-            console.error('Kakao SDK not initialized');
-            alert('카카오 SDK 초기화에 실패했습니다.');
+            console.warn('Kakao SDK not initialized. Direct sharing is unavailable.');
+            showToast('카카오톡 공유가 현재 불가능합니다. (SDK 초기화 대기 중)', 'warning');
             return;
         }
         

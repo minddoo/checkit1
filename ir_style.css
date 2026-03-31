@@ -57,9 +57,9 @@ body {
         box-shadow: none !important;
         page-break-after: always !important;
         width: 100% !important;
-        height: 296.5mm !important; /* Precision height to prevent blank pages */
-        overflow: hidden !important; /* Strict clipping */
-        padding: 20mm !important; /* Maintaining consistent internal padding */
+        min-height: 297.1mm !important; /* Ensuring it covers A4 height but can grow */
+        overflow: visible !important; /* Allowing content to flow naturally */
+        padding: 15mm 20mm !important; /* Slightly reduced top/bottom padding to fit more */
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
         position: relative;
@@ -73,9 +73,9 @@ body {
     .intro-container {
         gap: 10px;
     }
-    .card, .section, .phase-item {
-        page-break-inside: avoid;
-        break-inside: avoid;
+    .card, .section, .phase-item, .intro-frame, .profile-grid, .summary-box {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
     }
 }
 

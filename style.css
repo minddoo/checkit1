@@ -335,8 +335,7 @@ body {
     position: relative;
 }
 
-#individual-hero { background-color: var(--hero-bg-color); }
-#corporate-hero { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }
+
 
 /* ---------------------------------------------
  * HERO - Premium Full-Bleed Slideshow
@@ -719,12 +718,7 @@ body {
     color: #000;
 }
 
-/* Corporate Page Hero Text (White) */
-#corporate-hero .hero-title,
-#corporate-hero .hero-subtitle {
-    color: #ffffff;
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
-}
+
 
 .hero-title {
     font-size: 3rem; /* 겹침 방지를 위해 크기 소폭 조절 */

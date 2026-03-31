@@ -636,15 +636,18 @@ function googleTranslateElementInit() {
         const targetLang = langMap[langCode] || 'ko';
         
         if (targetLang === 'ko') {
-            // To restore Korean, clear cookies and reload or use Google's restore
             const iframe = document.querySelector('iframe.goog-te-banner-frame');
             if (iframe) {
                 const restoreBtn = iframe.contentWindow.document.getElementById('restore');
                 if (restoreBtn) restoreBtn.click();
             } else {
-                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname;
-                window.location.reload();
+                // To restore Korean, clear cookies and reload only if googtrans cookie exists
+                const hasTransCookie = document.cookie.split(';').some(c => c.trim().startsWith('googtrans='));
+                if (hasTransCookie) {
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname;
+                    window.location.reload();
+                }
             }
             return;
         }
@@ -661,10 +664,12 @@ function googleTranslateElementInit() {
 
     document.addEventListener("DOMContentLoaded", () => {
         const savedLang = localStorage.getItem('checkit_lang');
-        if (savedLang) {
+        // Initial translation only if not in the default Korean state to avoid unnecessary reloads
+        if (savedLang && savedLang !== 'ko') {
             setTimeout(() => window.changePortalLanguage(savedLang), 1000);
         }
     });
+
 
     // Chat input Enter key listener
     document.getElementById('chatInput').addEventListener('keydown', function(e) {

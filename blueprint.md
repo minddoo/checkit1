@@ -30,7 +30,8 @@ The CHECKIT project is a framework-less web application (HTML, CSS, JavaScript) 
 
 **Permitted Modification:**
 *   Login/Authentication logic, Login Modals, and associated User Profile (RBAC) handling.
-*   Any modification to Login must have ZERO impact on the visual or structural integrity of the locked pages.
+*   **EXPLICIT EXCEPTION**: The user has requested the removal of the Chatbot from the Corporate Page (`corporate.html`), superseding the previous lock on this element for that specific page.
+*   **EXPLICIT EXCEPTION**: Hospital registration forms and worker portal data display (removed address/phone fields and added real-time Kakao Map API integration).
 
 ## Previous Task: Enhance Individual Customer My Page (Add Process Tracker)
 
@@ -139,3 +140,65 @@ The user requested several improvements to the Master Dashboard (`platform.html`
 
 ## Final Review & Quality Assurance
 The project is now stable with a fully functional Master Dashboard that supports historical data and provides an improved administrative experience. All changes have been pushed to the main repository.
+
+## Current Task: Reconstruct "Why Choose CHECKIT" for B2B
+
+### Problem Description
+The user wants to refocus the "Why choose CHECKIT" section on the main page (`index.html`) to target B2B customers (Corporate/HR admins). Currently, the section is general-purpose, but the goal is to highlight management efficiency, legal compliance, and specialized administrative support.
+
+### Proposed Changes
+1.  **`index.html`**: Update Font Awesome icons in the features grid to match B2B themes (monitoring, professional support, medical results, legal safety).
+2.  **`script.js`**: Update translations for `why_us_title`, `why_us_subtitle_new`, and the 4 feature items in all 4 languages (KO, EN, CN, VN) to reflect B2B value propositions.
+
+### Detailed B2B Content Plan (Korean)
+- **Title**: 왜 CHECKIT 기업 보건관리 솔루션을 선택해야 할까요?
+- **Feature 1**: 실시간 보건관리 모니터링 (HR 관리 효율 극대화)
+- **Feature 2**: 1:1 모국어 전담 매니저 매칭 (행정 공백 및 소통 장벽 제거)
+- **Feature 3**: 모국어 결과지 번역 및 데이터화 (투명한 데이터 분석 및 관리)
+- **Feature 4**: 법적 리스크 및 OHS 완벽 대응 (기업의 법적 의무 이행 지원)
+
+### Plan
+1.  **Finalize translations** for all 4 languages based on the B2B focus.
+2.  **Update `index.html`** with new icons.
+3.  **Update `script.js`** with new translation strings.
+4.  **Verify** across all languages and ensure no structural or visual regressions.
+
+## Completed Task: Update Corporate Hero Background with `건건.png`
+
+### Problem Description
+The user wanted to change the corporate hero background to a custom construction site image (`건건.png`) while maintaining text readability. 
+
+### Implemented Changes
+1.  **Saved Asset**: Copied provided construction site image to `assets/건건.png`.
+2.  **`style.css`**:
+    *   Set `background-image` to `url('assets/건건.png')` with a 45% dark-tinted overlay (`rgba(0,0,0,0.45)`) for a premium, high-contrast look.
+    *   Updated text colors (`hero-title`, `hero-subtitle`) to white (`#ffffff`) with strong dark shadows for maximum legibility.
+    *   Consolidated redundant CSS blocks for `#corporate-hero`.
+3.  **Deployment**: All changes staged and pushed to the repository.
+
+### Status: Completed
+
+## Current Task: Hospital Data Optimization & UI Cleanup
+
+### Problem Description
+1.  **Simplified Hospital Registration**: Corporate admins found it tedious to manually enter hospital addresses and phone numbers. They only want to enter the hospital name.
+2.  **Real-time Worker Portal Data**: The worker portal should fetch the actual address and contact information for the registered hospital names in real-time using an external API.
+3.  **UI Refinement**: Removed "Checking..." loading states in the worker portal and improved the visibility of prompts directing users to external portals (Naver/Kakao Maps).
+4.  **Chatbot Removal**: The user requested to remove the chatbot from the Corporate Page (`corporate.html`) to simplify the interface.
+
+### Implemented Changes
+1.  **`company_dashboard.html`**:
+    *   Removed "Address" and "Contact Number" input fields from the hospital registration form.
+    *   Updated `saveHospitalInfo` to exclude these fields from Firestore.
+2.  **`worker_portal.html`**:
+    *   Implemented `fetchHospitalLiveInfo` using the **Kakao Maps API (Places Services)** to dynamically fetch address and category/phone data based on the hospital name.
+    *   Removed the "In Treatment/Closed" status logic and replaced it with a prominent Info Box prompting users to check real-time details on portals.
+    *   Added direct links to Naver Maps and Kakao Maps for each hospital card.
+    *   Cleaned up "Checking..." loading indicators for a smoother UI.
+3.  **`corporate.html`**:
+    *   Removed the floating chatbot button (`#open-chatbot`) and the chatbot container (`#chatbot-container`).
+4.  **`style.css`**:
+    *   Cleaned up all redundant chatbot-related CSS variables and style rules.
+    *   Applied "Premium Dark" styles (dark overlay + white text) **only to the corporate hero section** as requested.
+
+### Status: Completed

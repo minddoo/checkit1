@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
     <script>
         // Set PDF.js worker source
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -91,15 +92,35 @@
         .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
 
         /* Hospital List */
-        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .hospital-item:last-child { border-bottom: none; }
-        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
-        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-        .hospital-link:hover { background: #4f46e5; }
-        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+        .hospital-guide-container { display: flex; flex-direction: column; gap: 20px; }
+        .map-section { width: 100%; height: 320px; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; background: #eaeff5; position: relative; }
+        .hospital-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 640px) { .hospital-cards { grid-template-columns: 1fr; } }
+        
+        .hospital-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; gap: 12px; }
+        .hospital-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+        .h-card-status { position: absolute; top: 15px; right: 20px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+        .status-open { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-closed { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        .h-card-name { font-size: 1.05rem; font-weight: 800; color: #1e1b4b; display: flex; align-items: center; gap: 8px; }
+        .h-card-address { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+        .h-card-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.82rem; color: #94a3b8; }
+        .h-card-meta item { display: flex; align-items: center; gap: 5px; }
 
-        /* Loading state */
+        .h-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .btn-h-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .btn-h-call { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .btn-h-call:hover { background: #f1f5f9; }
+        .btn-h-book { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .btn-h-book:hover { background: #4f46e5; transform: translateY(-1px); }
+        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; display: none; } /* Hidden by default if specialized buttons exist */
+        
+        .btn-portal-naver { background: #03cf5d; color: white; }
+        .btn-portal-naver:hover { background: #02b350; transform: translateY(-1px); }
+        .btn-portal-kakao { background: #fee500; color: #3c1e1e; }
+        .btn-portal-kakao:hover { background: #fada00; transform: translateY(-1px); }
+
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
 
         /* Sidebar Layout */
@@ -333,8 +354,10 @@
                         <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
                         <h3>제휴 병원 안내</h3>
                     </div>
-                    <div id="hospitalList">
-                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    <div id="hospitalGuide" class="hospital-guide-container">
+                        <div id="hospitalList" class="hospital-cards">
+                            <!-- Cards will be injected here -->
+                        </div>
                     </div>
                 </div>
 
@@ -2139,30 +2162,124 @@ function googleTranslateElementInit() {
         }
     }
 
+    let kakaoMap = null;
+    let markers = [];
+
     function renderHospitals(docs) {
         const container = document.getElementById('hospitalList');
         if (docs.length === 0) {
             container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
             return;
         }
+
+        // Initialize Map once
+        if (!kakaoMap && window.kakao && kakaoMap === null) {
+            const mapContainer = document.getElementById('hospitalMap');
+            const mapOption = { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 8 };
+            kakaoMap = new kakao.maps.Map(mapContainer, mapOption);
+        }
+
         let html = '';
-        docs.forEach(doc => {
+        const now = new Date();
+        const day = now.getDay(); // 0:Sun, 1:Mon...
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+        docs.forEach((doc, idx) => {
             const h = doc.data();
-            const linkHtml = h.hasLink === 'Y' && h.link
-                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 예약 바로가기</a>`
-                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> 예약 사이트 없음</span>`;
+            const id = doc.id;
+            
+            const cardId = `hospCard_${idx}`;
+            
+            // Standard fallback URLs using name
+            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name)}`;
+            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name)}`;
+
             html += `
-                <div class="hospital-item">
-                    <div>
-                        <div class="hospital-name">${h.name}</div>
-                        <div class="hospital-meta">검진 기간: ${h.schedule || '-'} &nbsp;|&nbsp; 예약 기간: ${h.period || '-'}</div>
-                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">추가 비용: ${h.extraCost}</div>` : ''}
-                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">회사 코드: <strong>${h.code}</strong></div>` : ''}
+                <div class="hospital-card" id="${cardId}">
+                    <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
+                    <div class="h-card-address" id="${cardId}_address"></div>
+                    <div class="h-card-meta">
+                        <div class="item" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-calendar-check"></i> ${h.schedule || '25.10.01 ~ 11.30'}</div>
+                        <div class="item" id="${cardId}_phone"></div>
                     </div>
-                    <div>${linkHtml}</div>
+                    
+                    <!-- Portal Aggregated Action: Highlighted Prompt -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin: 5px 0 2px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:24px; height:24px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                                <i class="fa-solid fa-clock" style="font-size:0.8rem; color:var(--primary);"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.78rem; font-weight:800; color:#1e1b4b;">포털 정보 확인 필요</div>
+                                <div style="font-size:0.7rem; color:#64748b; line-height:1.3;">실제 포털(네이버/카카오)에서 **진료 시간, 점심 시간, 휴진일** 등을 확인하세요.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-card-actions">
+                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" id="${cardId}_naver" onclick="event.stopPropagation()">
+                            <img src="https://www.naver.com/favicon.ico" style="width:14px;height:14px;border-radius:2px;"> 네이버
+                        </a>
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" id="${cardId}_kakao" onclick="event.stopPropagation()">
+                            <i class="fa-comment fa-solid" style="font-size:0.8rem;"></i> 카카오
+                        </a>
+                        <a href="#" class="btn-h-action btn-h-call hidden" id="${cardId}_callBtn" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>
+                    </div>
+                    <div class="h-card-actions" style="margin-top: -5px;">
+                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 간편 예약</a>` : ''}
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-h-map" id="${cardId}_route" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
+                    </div>
                 </div>`;
+            
+            // Trigger Real-time Data Fetch from Portals
+            setTimeout(() => fetchHospitalLiveInfo(h.name, cardId), 100 * idx);
         });
         container.innerHTML = html;
+    }
+
+    // [New] Real-time Hospital Info Aggregation logic
+    function fetchHospitalLiveInfo(hospName, cardId) {
+        if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) return;
+        
+        const ps = new kakao.maps.services.Places();
+        ps.keywordSearch(hospName, (data, status) => {
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const info = data[0]; // Take the most relevant match
+                
+                // Update Address
+                const addrEl = document.getElementById(`${cardId}_address`);
+                if (addrEl) addrEl.innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${info.address_name}`;
+                
+                // Update Phone
+                const phoneEl = document.getElementById(`${cardId}_phone`);
+                if (phoneEl) {
+                    if (info.phone) {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${info.phone}`;
+                        const callBtn = document.getElementById(`${cardId}_callBtn`);
+                        if (callBtn) {
+                            callBtn.href = `tel:${info.phone}`;
+                            callBtn.classList.remove('hidden');
+                        }
+                    } else {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+                    }
+                }
+
+                // Update Action Links with precise location info if available
+                const naverBtn = document.getElementById(`${cardId}_naver`);
+                const kakaoBtn = document.getElementById(`${cardId}_kakao`);
+                const routeBtn = document.getElementById(`${cardId}_route`);
+
+                const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
+                if (naverBtn) naverUserUrl = `https://map.naver.com/v5/search/${query}`;
+                if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
+                if (routeBtn) routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+
+            } else {
+                // Fallback for search failure
+                document.getElementById(`${cardId}_address`).innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> 주소 정보 없음`;
+                document.getElementById(`${cardId}_phone`).innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+            }
+        });
     }
 
     function doLogout() {

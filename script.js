@@ -4,6 +4,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('main-header');
     const revealElements = document.querySelectorAll('.reveal');
 
+    // [Mobile Menu Toggle Logic]
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const closeMobileMenu = document.getElementById('close-mobile-menu');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+    if (mobileMenuToggle && mobileMenuOverlay) {
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeMobileMenu && mobileMenuOverlay) {
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-menu-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // [Mobile Sticky CTA Generator]
+    function renderMobileStickyCTA() {
+        if (window.innerWidth <= 768 && !document.getElementById('sticky-mobile-cta')) {
+            const stickyCTA = document.createElement('div');
+            stickyCTA.id = 'sticky-mobile-cta';
+            stickyCTA.className = 'mobile-only';
+            stickyCTA.innerHTML = `
+                <a href="#contact-form" class="sticky-cta-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span data-lang-key="hero_cta">기업 서비스 상담 신청</span>
+                </a>
+            `;
+            document.body.appendChild(stickyCTA);
+            
+            // Re-translate new element
+            if (typeof updateTranslations === 'function') {
+                updateTranslations();
+            }
+        }
+    }
+
     // Header scroll background effect
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -12,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
     });
+
+    // Initial check for mobile features
+    renderMobileStickyCTA();
+    window.addEventListener('resize', renderMobileStickyCTA);
 
     // Intersection Observer for Reveal Animations
     const revealObserver = new IntersectionObserver((entries) => {
@@ -35,32 +89,32 @@ document.addEventListener('DOMContentLoaded', () => {
             'platform_title': 'CHECKIT 플랫폼', 'platform_status_title': '나의 서비스 현황',
             'platform_close': '닫기', 'contact_success': '문의가 성공적으로 접수되었습니다!',
             'admin_title': '매니저 관리 대시보드', 'onboarding_title': '프로필 완성하기',
-            'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
+            'nav_home': '홈', 'nav_corporate': '기업 서비스', 'nav_mypage': '마이페이지', 'nav_login': '로그인', 'nav_logout': '로그아웃',
             'mypage': '마이페이지', 'logout': '로그아웃',
-            'hero_title': '기업을 위한 근로자 보건관리 플랫폼',
-            'hero_subtitle': '빠르게 증가하는 근로자의 보건관리를 하나의 흐름으로 체계적이고, 지속 가능한 구조로 만들어줍니다.',
-            'service_for_title': '빠르게 늘어나는 외국인 근로자가 필수인 기업을 위한 서비스',
-            'corporate_title': '건설 · 제조 · 토목 등 현장 업계 기업',
-            'corporate_desc': '현장 인력의 보건관리와 검진 프로세스를 자동화하여,<br>기업의 운영 효율성과 지속 가능한 성장을 돕습니다.',
-            'why_us_title': '왜 CHECKIT을 선택해야 할까요?',
-            'why_us_subtitle_new': '의료 서비스의 높은 질에도 불구하고, 외국인들은 예약, 접수, 결과 확인 등 \'비의료 과정\'에서 어려움을 겪습니다.<br><br>CHECKIT은 바로 이 공백을 채웁니다.',
-            'why_us_feature1_title': '커뮤니케이션 전문',
-            'why_us_feature1_desc': '병원 선택부터 결과 번역까지, 언어와 문화의 장벽으로 인한 모든 소통 문제를 해결합니다.',
-            'why_us_feature2_title': '100% 고객 중심',
-            'why_us_feature2_desc': '병원과의 계약 없이 오직 고객의 입장에서, 고객에게 필요한 최적의 선택지를 제안하고 과정을 돕습니다.',
-            'why_us_feature3_title': '비의료 과정에 집중',
-            'why_us_feature3_desc': '의료 행위를 제외한 모든 부수적인 절차를 대행하여, 고객이 오직 건강검진에만 집중할 수 있도록 합니다.',
-            'why_us_feature4_title': '합리적인 비용',
-            'why_us_feature4_desc': '의료기관과 연계 없이 독립적으로 운영되므로, 불필요한 중개 수수료가 없습니다. 순수 서비스 이용료만으로 이용 가능합니다.',
+            'hero_title': '기업을 위한 <br class="mobile-only">근로자 보건관리 플랫폼',
+            'hero_subtitle': '빠르게 증가하는 근로자의 보건관리를 <br class="mobile-only">하나의 흐름으로 체계적이고, <br class="desktop-only">지속 가능한 구조로 만들어줍니다.',
+            'service_for_title': '빠르게 늘어나는 외국인 근로자가 <br class="mobile-only">필수인 기업을 위한 서비스',
+            'corporate_title': '현장 업계 기업 전문',
+            'corporate_desc': '현장 인력의 보건관리와 검진 프로세스를 자동화하여,<br>기업의 운영 효율성과 성장을 돕습니다.',
+            'why_us_title': '왜 <span class="highlight">CHECKIT</span>을 선택해야 할까요?',
+            'why_us_subtitle_new': '복잡한 외국인 근로자 보건관리, <br class="mobile-only">이제 단 하나의 플랫폼으로 해결하세요.',
+            'why_us_feature1_title': '실시간 모니터링',
+            'why_us_feature1_desc': '실시간 보건관리 모니터링<br>엑셀 명단 업로드 한 번으로<br>수백 명 근로자의 검진 현황을',
+            'why_us_feature2_title': '모국어 전담 매니저',
+            'why_us_feature2_desc': '1:1 모국어 전담 매니저 매칭<br>전담 매니저가 근로자와 1:1로<br>직접 소통하여 예약부터 행정까지',
+            'why_us_feature3_title': '결과지 번역 및 데이터화',
+            'why_us_feature3_desc': '모국어 결과지 번역 및 데이터화<br>한국어 결과지를 모국어로 번역해<br>근로자의 알 권리를 충실히 보장하고',
+            'why_us_feature4_title': '법적 리스크 완벽 대응',
+            'why_us_feature4_desc': '법적 리스크 및 OHS 완벽 대응<br>산업안전보건법을 엄격히 준수하며<br>검진 누락 방지와 사후 관리를 통해',
             'process_title': 'CHECKIT 이용 과정',
-            'process_step1_title': '상담 및 병원 선택 지원',
-            'process_step1_desc_new': '원하는 검진 항목과 일정 상담 후, 조건에 맞는 최적의 병원 리스트를 제공하여 선택을 돕고 예약을 진행합니다.',
+            'process_step1_title': '상담 및 <br class="mobile-only">병원 선택 지원',
+            'process_step1_desc_new': '원하는 검진 항목과 일정 상담 후, <br class="mobile-only">조건에 맞는 최적의 병원 리스트를 제공합니다.',
             'process_step2_title': '실시간 소통 지원',
-            'process_step2_desc_new': '검진 당일, 병원 내에서 발생하는 모든 소통을 실시간으로 지원하여 불편함이 없도록 합니다.',
+            'process_step2_desc_new': '검진 당일, 병원 내에서 발생하는 <br class="mobile-only">모든 소통을 실시간으로 지원합니다.',
             'process_step3_title_new': '결과 번역 파일 전달',
             'process_step3_desc_new': '고객님이 전달해주신 결과지를 고객님의 언어로 단순 번역 및 요약하여, 이메일이나 메신저를 통해 파일로 전달합니다.',
                         'testimonials_title': '기업 고객 이용 후기',
-                        'testimonials_subtitle': '이미 많은 기업들이 CHECKIT을 통해 외국인 근로자 보건관리를 혁신하고 있습니다.',
+                        'testimonials_subtitle': '이미 많은 기업들이 CHECKIT을 통해 <br class="mobile-only">외국인 근로자 보건관리를 혁신하고 있습니다.',
                         'testimonial1_text': '“외국인 직원 300명의 정기 검진 예약이 매년 큰 업무 부담이었는데, CHECKIT 도입 후 모든 과정이 자동화되었습니다. 특히 결과지 요약 서비스에 대한 직원들의 만족도가 매우 높습니다.”',
                         'testimonial1_author': '김이사', 'testimonial1_type': '건설사 인사팀',
                         'testimonial2_text': '“병원마다 다른 예약 방식과 언어 소통 문제로 현장 관리자들이 고생이 많았어요. CHECKIT은 하나의 창구로 모든 소통이 가능해져 실무진의 업무 효율이 2배 이상 올랐습니다.”',
@@ -76,10 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'contact_form_message_label': '문의 내용',
             'contact_form_message_placeholder': '',
             'contact_form_submit_button': '문의하기',
-            'corporate_page_title': '기업 고객 토탈 솔루션',
-            'corporate_page_subtitle': '외국인 근로자의 건강을 체계적으로 관리하여,<br>기업의 생산성을 높이고 보건 관리 부담을 덜어드립니다.',
+            'corporate_page_title': '기업 고객 <br class="mobile-only">토탈 솔루션',
+            'corporate_page_subtitle': '외국인 근로자의 건강을 <br class="mobile-only">체계적으로 관리하여, <br class="desktop-only">기업의 생산성을 높이고 보건 관리 부담을 덜어드립니다.',
             'individual_page_title': '개인 고객 서비스',
-            'individual_page_subtitle': 'CHECKIT은 한국에 거주하거나 방문하는 모든 외국인 개인이<br><br>언어의 장벽 없이 최상의 건강검진을 받을 수 있도록 돕습니다.',
+            'individual_page_subtitle': '언어의 장벽 없이 <br class="mobile-only">최상의 건강검진을 받을 수 있도록 돕습니다.',
             'expectation_title': '외국인들이 기대하는 한국 의료 서비스',
             'expectation_subtitle': '"한국에서 건강검진을 받아볼까?"<br>해외 커뮤니티에서 자주 언급되는 한국 의료의 특징들',
             'expectation_item_title_1': '#1. 비용 효율성',
@@ -276,19 +330,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_a5': '전문 용어가 가득한 한국어 결과지를 근로자가 이해하기 쉬운 모국어 핵심 요약본으로 제공합니다. 이는 의학적 소견이 아닌 \'내용 전달\' 목적의 단순 번역으로, 근로자의 알 권리를 보장합니다.',
             'contact_form_company_label': '기업명',
             'view_workflow': '실무과정 보기',
-            'chatbot_header': 'Check봇',
+            'chatbot_header': '자주 하는 질문 (FAQ)',
+            'chatbot_subtitle': 'CHECKIT에 대해 가장 궁금해하시는 질문들을 모았습니다.',
             'chatbot_placeholder': '메시지를 입력하세요...',
             'chatbot_welcome': '안녕하세요! CHECKIT 상담 봇입니다. 무엇을 도와드릴까요?',
-            'chatbot_q1': '1. 예약은 어떻게 하나요?',
-            'chatbot_a1': 'CHECKIT 전담 매니저가 도와드립니다. 원하시는 검진 항목과 일정을 알려주시면, 조건에 맞는 병원 목록을 전달드려 선택을 돕고, 예약까지 한 번에 진행해드립니다. \'지금 바로 상담 신청\' 버튼을 눌러 문의를 남겨주세요!',
-            'chatbot_q2': '2. 병원/의료인과 계약 구조인가요?',
-            'chatbot_a2': '아닙니다. CHECKIT은 특정 병과 계약 관계를 맺지 않습니다. 저희는 오직 고객님의 입장에서, 가장 적합한 병원을 찾으실 수 있도록 객관적인 정보 제공으로 선택을 돕습니다. 고객님의 건강과 만족이 저희의 최우선 목표입니다.',
-            'chatbot_q3': '3. 의료행위나 진료 알선도 하나요?',
-            'chatbot_a3': '아니요, CHECKIT은 의료법을 준수하며 어떠한 의료 행위나 진료 알선도 하지 않습니다. 저희는 병원 예약, 통역, 결과지 번역 등 \'비의료 과정\'에 집중하여 고객님께서 건강검진에만 집중하실 수 있도록 돕는 서비스입니다.',
-            'chatbot_q4': '4. 검진 당일 어떤 도움을 받을 수 있나요?',
-            'chatbot_a4': '검진 당일, 언어의 장벽으로 인해 혼자라는 느낌이 들지 않도록 Check봇 매니저가 모든 순간을 함께합니다. 병원 내 접수, 문진, 수납 등 모든 의사소통 과정을 실시간으로 지원하여, 언어 문제로 인한 불편함이나 외로움 없이 편안하게 검진에만 집중하실 수 있도록 돕습니다.',
-            'chatbot_q5': '5. 결과지는 어떻게 전달이 되나요?',
-            'chatbot_a5': '고객님께서 병원으로부터 수령한 한국어 결과지를 전달해주시면, 저희가 고객님의 모국어로 핵심 내용을 단순 번역 및 요약하여 전달해 드립니다. 저희는 의료법을 준수하기에, 의학적 소견이나 상세한 설명은 제공하지 않습니다.',
+            'chatbot_q1': '예약은 어떻게 하나요?',
+            'chatbot_a1': '기업이 검진 대상자 명단을 전달해 주시면, CHECKIT이 개별 근로자와 직접 접촉하여 예약 확정까지 모두 대행합니다.',
+            'chatbot_q2': '병원/의료인과 계약 구조인가요?',
+            'chatbot_a2': '특정 병원과 계약 없이 독립적으로 운영되므로, 기업이 기존에 이용하시던 병원을 그대로 사용하실 수 있습니다.',
+            'chatbot_q3': '의료행위나 진료 알선도 하나요?',
+            'chatbot_a3': '의료법을 완벽히 준수하며 예약 대행·통역·행정 지원 등 비의료 서비스만 제공하여 기업의 법적 리스크가 없습니다.',
+            'chatbot_q4': '검진 당일 어떤 도움을 받을 수 있나요?',
+            'chatbot_a4': '전담 매니저가 근로자와 실시간 소통하여 언어 장벽을 해소하고, 담당자는 별도 개입 없이 업무에 집중하실 수 있습니다.',
+            'chatbot_q5': '결과지는 어떻게 전달이 되나요?',
+            'chatbot_a5': '결과지의 핵심 내용을 모국어로 단순 번역 및 요약하여 안전하게 전달해 드립니다.',
             'chatbot_greeting_reply': '안녕하세요! 만나서 반갑습니다. 무엇을 도와드릴까요?',
             'chatbot_fallback_reply': '소중한 문의 감사합니다! 현재 입력하신 내용은 담당 매니저가 확인 후 답변 드릴 예정입니다. 보다 상세한 안내를 원하시면 메인 페이지 하단의 \'문의하기\'를 통해 메시지를 남겨주시면 더욱 정확한 답변이 가능합니다.',
             'login_title': 'CHECKIT 로그인',
@@ -353,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_admin_label': '[필수] 비의료 행정 지원 및 대리 예약 서비스 동의',
             'signup_consent_medical_label': '[필수] 민감정보(의료 데이터) 처리 및 결과지 수신 동의',
             'signup_consent_view_details': '내용 보기 ▾',
-            'footer_company_title': '쇼핑몰 기본정보',
+            'footer_company_title': '플랫폼 이용 정보',
             'footer_company_name': '상호명: <strong>주식회사 체킷</strong>',
             'footer_representative': '대표자명: 김선홍',
             'footer_address': '사업장 주소: 경기도 남양주시 다산지금로202, 제8층 제에이에프08-0019호(다산동, 현대테라타워디아이엠씨)',
@@ -361,32 +416,32 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_business_no': '사업자 등록번호: 8718803241',
             'footer_privacy_officer': '개인정보보호책임자: 남민정',
             'footer_cs_title': '고객센터 정보',
-            'footer_cs_phone': '상담/주문 전화: <strong>010-5109-3459 / 010-2209-7951</strong>',
-            'footer_cs_email': '상담/주문 이메일: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT). All Rights Reserved.'
+            'footer_cs_phone': '상담 전화: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': '상담 이메일: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT)'
         },
         en: {
             'main_page_title': 'CHECKIT - Health Check-up for Foreigners',
             'nav_home': 'Home', 'hero_cta': 'Apply Now', 'learn_more': 'Learn More',
             'platform_title': 'CHECKIT PLATFORM', 'platform_status_title': 'Service Status',
             'platform_close': 'Close', 'contact_success': 'Message Sent!',
-            'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
+            'nav_home': 'Home', 'nav_corporate': 'Business Service', 'nav_mypage': 'My Page', 'nav_login': 'Login', 'nav_logout': 'Logout',
             'mypage': 'My Page', 'logout': 'Logout',
             'hero_title': 'Worker Health Management Platform for Enterprises',
             'hero_subtitle': 'We transform the rapidly increasing healthcare management of workers into a systematic and sustainable structure through a single flow.',
             'service_for_title': 'Services for companies where foreign workers are essential',
             'corporate_title': 'Construction · Manufacturing · Civil industries',
             'corporate_desc': 'We help operational efficiency and sustainable growth by automating health management and check-up processes for field workers.',
-            'why_us_title': 'Why Choose CHECKIT?',
-            'why_us_subtitle_new': 'Despite high-quality medical services, foreigners face difficulties in "non-medical processes" such as booking and results.<br><br>CHECKIT fills this gap.',
-            'why_us_feature1_title': 'Communication Experts',
-            'why_us_feature1_desc': 'From hospital selection to result translation, we solve all communication issues caused by language and cultural barriers.',
-            'why_us_feature2_title': '100% Customer Centric',
-            'why_us_feature2_desc': 'Without hospital contracts, we propose the best options and assist the process solely from the customer\'s perspective.',
-            'why_us_feature3_title': 'Non-Medical Focus',
-            'why_us_feature3_desc': 'We handle all incidental procedures except medical acts, allowing customers to focus solely on their health check-up.',
-            'why_us_feature4_title': 'Reasonable Cost',
-            'why_us_feature4_desc': 'Operating independently without medical institution links, there are no unnecessary brokerage fees. Only service fees apply.',
+            'why_us_title': 'Why Choose CHECKIT for Corporate Health Management?',
+            'why_us_subtitle_new': 'Smartly solve complex health management for foreign workers with a single platform.',
+            'why_us_feature1_title': 'Real-time Monitoring & Efficiency',
+            'why_us_feature1_desc': 'Upload employee lists and monitor check-up status in real-time on our dashboard, significantly reducing HR workload.',
+            'why_us_feature2_title': '1:1 Native Language Managers',
+            'why_us_feature2_desc': 'Dedicated managers communicate 1:1 with workers, providing close management for all processes from booking to administrative guidance.',
+            'why_us_feature3_title': 'Result Summaries & Translation',
+            'why_us_feature3_desc': 'We provide core summaries of Korean medical results in native languages, ensuring workers\' right to know while providing standardized data.',
+            'why_us_feature4_title': 'Legal Compliance & Safety',
+            'why_us_feature4_desc': 'Fully compliant with the Industrial Safety and Health Act and Medical Act, minimizing legal risks through thorough follow-up management.',
             'process_title': 'Service Process',
             'process_step1_title': 'Consultation & Hospital Support',
             'process_step1_desc_new': 'After consulting on check-up items and schedules, we provide an optimal hospital list and proceed with the booking.',
@@ -611,19 +666,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_a5': 'We provide summaries in native languages for "delivery of content," ensuring the worker\'s right to know.',
             'contact_form_company_label': 'Company Name',
             'view_workflow': 'View Workflow',
-            'chatbot_header': 'CheckBot',
+            'chatbot_header': '자주 하는 질문 (FAQ)',
+            'chatbot_subtitle': 'The most frequently asked questions about CHECKIT.',
             'chatbot_placeholder': 'Type a message...',
             'chatbot_welcome': 'Hello! This is the CHECKIT support bot. How can I help you today?',
-            'chatbot_q1': '1. How do I make a reservation?',
-            'chatbot_a1': 'A CHECKIT dedicated manager will help you. Let us know the desired check-up items and schedule, and we will provide a list of hospitals that meet your conditions and handle the booking. Click \'Apply Now\' to leave an inquiry!',
-            'chatbot_q2': '2. Do you have contracts with hospitals/doctors?',
-            'chatbot_a2': 'No. CHECKIT does not have contract relationships with specific hospitals. We provide objective information to help you find the most suitable hospital from your perspective.',
-            'chatbot_q3': '3. Do you perform medical acts or referrals?',
-            'chatbot_a3': 'No, CHECKIT complies with medical laws and does not perform any medical acts or referrals. We focus on "non-medical processes" like booking, interpretation, and result translation.',
-            'chatbot_q4': '4. What help can I get on the day of check-up?',
-            'chatbot_a4': 'On the day of the check-up, our CheckBot manager will be with you every moment so you don\'t feel alone due to language barriers. We support all communication processes in real-time.',
-            'chatbot_q5': '5. How are the results delivered?',
-            'chatbot_a5': 'Provide the Korean result you received from the hospital, and we will translate and summarize the core content into your native language. We do not provide medical opinions or detailed medical explanations.',
+            'chatbot_q1': 'How does the reservation process work?',
+            'chatbot_a1': 'Once a company submits the worker list, CHECKIT directly contacts each worker and handles the entire booking process on your behalf.',
+            'chatbot_q2': 'Do you have contracts with hospitals?',
+            'chatbot_a2': 'No. We operate independently, so companies can continue using their existing partner hospitals without any changes.',
+            'chatbot_q3': 'Do you perform medical acts or patient referrals?',
+            'chatbot_a3': 'No. We fully comply with medical law and provide only non-medical services — booking, interpretation, and admin support — eliminating any legal risk for your company.',
+            'chatbot_q4': 'What support do workers get on the day?',
+            'chatbot_a4': 'A dedicated manager communicates with workers in real-time to remove language barriers, so your HR team doesn\'t need to intervene.',
+            'chatbot_q5': 'How are check-up results delivered?',
+            'chatbot_a5': 'We translate and summarize core results into your native language for easy understanding.',
             'chatbot_greeting_reply': 'Hello! Nice to meet you. How can I help you today?',
             'chatbot_fallback_reply': 'Thank you for your valuable inquiry! A dedicated manager will check your message and respond soon. For a more detailed response, please leave a message via the \'Contact Us\' section at the bottom of the main page.',
             'login_title': 'CHECKIT LOGIN',
@@ -689,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_admin_label': '[Required] Non-medical Administrative Support & Proxy Booking',
             'signup_consent_medical_label': '[Required] Sensitive Info (Medical Data) Processing',
             'signup_consent_view_details': 'View Details ▾',
-            'footer_company_title': 'Mall Information',
+            'footer_company_title': 'Platform Information',
             'footer_company_name': 'Company Name: <strong>CHECKIT Co., Ltd.</strong>',
             'footer_representative': 'Representative: Sang-hong Kim',
             'footer_address': 'Business Address: Room AF08-0019, 8th Floor, 202 Dasanjigeum-ro, Namyangju-si, Gyeonggi-do (Hyundai Terra Tower DIMC)',
@@ -697,32 +753,32 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_business_no': 'Business Registration No: 8718803241',
             'footer_privacy_officer': 'Privacy Officer: Min-jung Nam',
             'footer_cs_title': 'Customer Service Info',
-            'footer_cs_phone': 'Consultation/Order Phone: <strong>010-5109-3459 / 010-2209-7951</strong>',
-            'footer_cs_email': 'Consultation/Order Email: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd. All Rights Reserved.'
+            'footer_cs_phone': 'Consultation Phone: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': 'Consultation Email: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd.'
         },
         cn: {
             'main_page_title': 'CHECKIT - 外国人健康检查预约',
             'nav_home': '首页', 'hero_cta': '立即申请', 'learn_more': '了解更多',
             'platform_title': 'CHECKIT 平台', 'platform_status_title': '我的服务状态',
             'platform_close': '关闭', 'contact_success': '咨询已成功受理！',
-            'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
+            'nav_home': '首页', 'nav_corporate': '企业服务', 'nav_mypage': '我的页面', 'nav_login': '登录', 'nav_logout': '登出',
             'mypage': '我的页面', 'logout': '登出',
             'hero_title': '面向企业的员工健康管理平台',
             'hero_subtitle': '我们将快速增长的员工健康管理转化为单一流程中系统化、可持续的结构。',
             'service_for_title': '面向日益增长的外国劳动力至关 중요한 企业的服务',
             'corporate_title': '建设 · 制造 · 土木等现场企业',
             'corporate_desc': '我们通过自动化现场人员的健康管理和检查流程，帮助企业实现运营效率和可持续增长。',
-            'why_us_title': '为什么选择 CHECKIT？',
-            'why_us_subtitle_new': '尽管医疗服务质量很高，但外国人在预约、挂号、结果确认等“非医疗过程”中仍面临困难。<br><br>CHECKIT 填补了这一空白。',
-            'why_us_feature1_title': '沟通专家',
-            'why_us_feature1_desc': '从医院选择到结果翻译，我们解决因语言和文化障碍引起的所有沟通问题。',
-            'why_us_feature2_title': '100% 以客户为中心',
-            'why_us_feature2_desc': '在不与医院签约的情况下，仅从客户的角度出发，建议并协助完成最佳选择。',
-            'why_us_feature3_title': '专注于非医疗过程',
-            'why_us_feature3_desc': '我们代办除医疗行为外的所有附带程序，让客户只专注于健康检查。',
-            'why_us_feature4_title': '费用合理',
-            'why_us_feature4_desc': '与医疗机构无关联独立运营，无不必要的中介费。仅收取纯服务费。',
+            'why_us_title': '为什么选择 CHECKIT 企业健康管理解决方案？',
+            'why_us_subtitle_new': '通过一个平台，智能解决外国员工复杂的健康管理问题。',
+            'why_us_feature1_title': '实时健康管理监控',
+            'why_us_feature1_desc': '只需上传 Excel 名单，即可在实时仪表板中即时查看数百名员工的体检状态，大幅提高 HR 管理效率。',
+            'why_us_feature2_title': '1:1 母语专属经理匹配',
+            'why_us_feature2_desc': '专属经理与员工进行 1:1 沟通，提供从预约到行政指导的全流程贴身管理。',
+            'why_us_feature3_title': '母语结果翻译与数据化',
+            'why_us_feature3_desc': '将韩文结果简单翻译为母语，保障员工的知情权，并为企业提供标准化的健康指标报告。',
+            'why_us_feature4_title': '法律风险与 OHS 完美应对',
+            'why_us_feature4_desc': '严格遵守《产业安全保健法》和《医疗法》，通过防止体检漏检和事后管理，全面支持企业的法律责任履行。',
             'process_title': '服务流程',
             'process_step1_title': '咨询与医院支持',
             'process_step1_desc_new': '在咨询检查项目和日程后，提供最佳医院列表并进行预约。',
@@ -947,19 +1003,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_a5': '我们会将充满专业术语的韩文体检报告，翻译成外籍员工容易理解的母语核心摘要。这不包含医学诊断，而是以“传递内容”为目的的简单翻译，以保障员工的知情权。',
             'contact_form_company_label': '企业名称',
             'view_workflow': '查看流程',
-            'chatbot_header': '机器人',
+            'chatbot_header': '자주 하는 질문 (FAQ)',
+            'chatbot_subtitle': '收集了关于 CHECKIT 最常被问到的问题。',
             'chatbot_placeholder': '输入消息...',
             'chatbot_welcome': '您好！我是 CHECKIT 咨询机器人。有什么我可以帮您的吗？',
-            'chatbot_q1': '1. 如何预约？',
-            'chatbot_a1': 'CHECKIT 专属经理将为您提供帮助. 请告知我们您希望的检查项目 and 日程，我们将提供符合您条件的医院列表并协助您完成预约. 点击“立即申请”留下您的咨询！',
-            'chatbot_q2': '2. 你们与医院/医生有合同关系吗？',
-            'chatbot_a2': '不. CHECKIT 与特定医院没有合同关系. 我们仅从您的角度出发，提供客观信息以帮助您找到最合适的医院。',
-            'chatbot_q3': '3. 你们也提供医疗行为 or 医疗中介吗？',
-            'chatbot_a3': '不, CHECKIT 遵守医疗法，不提供任何医疗行为 or 中介. 我们专注于预约、翻译、结果报告翻译等“非医疗过程”。',
-            'chatbot_q4': '4. 检查当天我可以得到什么帮助？',
-            'chatbot_a4': '检查当天，我们的 Check 机器人经理将全程陪伴您，解决因语言障碍引起的孤独感. 我们实时支持医院内的挂号、问诊、结算等所有沟通环节。',
-            'chatbot_q5': '5. 结果报告如何交付？',
-            'chatbot_a5': '请将您从医院收到的韩文结果报告发送给我们，我们将把核心内容翻译并总结成您的母语. 我们遵守医疗法，不提供医疗建议. ',
+            'chatbot_q1': '预约流程是怎样的？',
+            'chatbot_a1': '企业提交体检名单后，CHECKIT将直接与每位员工联系，代理完成从预约到确认的全部流程。',
+            'chatbot_q2': '你们与医院有合同关系吗？',
+            'chatbot_a2': '没有。我们独立运营，企业可以继续使用现有合作医院，无需做任何改变。',
+            'chatbot_q3': '你们提供医疗行为或患者介绍服务吗？',
+            'chatbot_a3': '严格遵守医疗法，仅提供预约代理、翻译、行政支援等非医疗服务，为企业完全规避法律风险。',
+            'chatbot_q4': '体检当天员工能获得哪些支持？',
+            'chatbot_a4': '专属经理全程实时协助员工，消除语言障碍，企业负责人无需额外介入即可专注于本职工作。',
+            'chatbot_q5': '体检结果如何交付？',
+            'chatbot_a5': '我们将把结果报告的核心内容翻译并总结成您的母语安全交付。',
             'chatbot_greeting_reply': '您好！见到您很高兴. 有什么我可以帮您的吗？',
             'chatbot_fallback_reply': '感谢您的宝贵咨询！目前您输入的内容将由担当经理确认后进行答复. 如需更详细的说明，请通过首页下方的“联系我们”留下信息，以便我们提供更准确的回复. ',
             'login_title': 'CHECKIT 登录',
@@ -1024,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_admin_label': '[必选] 非医疗行政支援及代办预约服务同意',
             'signup_consent_medical_label': '[必选] 敏感信息（医疗数据）处理同意',
             'signup_consent_view_details': '查看详情 ▾',
-            'footer_company_title': '商城基本信息',
+            'footer_company_title': '平台基本信息',
             'footer_company_name': '公司名称: <strong>株式会社 CHECKIT</strong>',
             'footer_representative': '代表人: 金善洪',
             'footer_address': '营业地址: 京畿道南杨州市多山至今路202, 第8层 AF08-0019号 (多山洞, 现代 Terra Tower DIMC)',
@@ -1032,32 +1089,32 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_business_no': '工商注册号: 8718803241',
             'footer_privacy_officer': '个人信息保护负责人: 南敏正',
             'footer_cs_title': '客户服务中心',
-            'footer_cs_phone': '咨询/订购电话: <strong>010-5109-3459 / 010-2209-7951</strong>',
-            'footer_cs_email': '咨询/订购电邮: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 株式会社 CHECKIT (CHECKIT). All Rights Reserved.'
+            'footer_cs_phone': '咨询电话: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': '咨询电邮: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 株式会社 CHECKIT (CHECKIT)'
         },
         vn: {
             'main_page_title': 'CHECKIT - Đặt lịch khám sức khỏe cho người nước ngoài',
             'nav_home': 'Trang chủ', 'hero_cta': 'Đăng ký ngay', 'learn_more': 'Xem thêm',
             'platform_title': 'Nền tảng CHECKIT', 'platform_status_title': 'Trạng thái dịch vụ',
             'platform_close': 'Đóng', 'contact_success': 'Đã gửi yêu cầu!',
-            'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
+            'nav_home': 'Trang chủ', 'nav_corporate': 'Dịch vụ doanh nghiệp', 'nav_mypage': 'Trang của tôi', 'nav_login': 'Đăng nhập', 'nav_logout': 'Đăng xuất',
             'mypage': 'Trang của tôi', 'logout': 'Đăng xuất',
             'hero_title': 'Nền tảng quản lý sức khỏe người lao động cho doanh nghiệp',
             'hero_subtitle': 'Chúng tôi chuyển đổi việc quản lý sức khỏe đang tăng nhanh của người lao động thành một cấu trúc hệ thống và bền vững thông qua một quy trình duy nhất.',
             'service_for_title': 'Dịch vụ dành cho các doanh nghiệp mà lao động nước ngoài là thiết yếu',
             'corporate_title': 'Doanh nghiệp tại hiện trường như Xây dựng · Sản xuất · Công trình dân dụng',
             'corporate_desc': 'Chúng tôi hỗ trợ hiệu quả vận hành và tăng trưởng bền vững bằng cách tự động hóa quy trình quản lý và kiểm tra sức khỏe của nhân viên.',
-            'why_us_title': 'Tại sao chọn CHECKIT?',
-            'why_us_subtitle_new': 'Bất chấp dịch vụ y tế chất lượng cao, người nước ngoài vẫn gặp khó khăn trong "quy trình phi y tế".<br><br>CHECKIT lấp thêm khoảng trống này.',
-            'why_us_feature1_title': 'Chuyên gia giao tiếp',
-            'why_us_feature1_desc': 'Từ chọn bệnh viện đến dịch kết quả, chúng tôi giải quyết mọi vấn đề giao tiếp.',
-            'why_us_feature2_title': '100% hướng tới khách hàng',
-            'why_us_feature2_desc': 'Chúng tôi đề xuất phương án tốt nhất chỉ từ góc độ khách hàng.',
-            'why_us_feature3_title': 'Tập trung phi y tế',
-            'why_us_feature3_desc': 'Chúng tôi xử lý mọi thủ tục phụ trừ hành vi y tế.',
-            'why_us_feature4_title': 'Chi phí hợp lý',
-            'why_us_feature4_desc': 'Hoạt động độc lập, không có phí môi giới. Chỉ áp dụng phí dịch vụ.',
+            'why_us_title': 'Tại sao nên chọn giải pháp quản lý sức khỏe doanh nghiệp CHECKIT?',
+            'why_us_subtitle_new': 'Giải quyết thông minh quy trình quản lý sức khỏe lao động nước ngoài với một nền tảng duy nhất.',
+            'why_us_feature1_title': 'Giám sát sức khỏe thời gian thực',
+            'why_us_feature1_desc': 'Chỉ với một lần tải danh sách Excel, có thể kiểm tra ngay lập tức tình trạng khám sức khỏe của hàng trăm nhân viên thông qua Dashboard thời gian thực.',
+            'why_us_feature2_title': 'Manager chuyên trách 1:1 bằng tiếng mẹ đẻ',
+            'why_us_feature2_desc': 'Manager chuyên trách trao đổi 1:1 với lao động, quản lý sát sao toàn bộ quy trình từ đặt lịch đến hướng dẫn hành chính.',
+            'why_us_feature3_title': 'Dịch và dữ liệu hóa kết quả tiếng mẹ đẻ',
+            'why_us_feature3_desc': 'Cung cấp bản dịch tóm tắt kết quả tiếng Hàn sang tiếng mẹ đẻ để đảm bảo quyền được biết của lao động và báo cáo chỉ số sức khỏe tiêu chuẩn cho doanh nghiệp.',
+            'why_us_feature4_title': 'Ứng phó rủi ro pháp lý và OHS hoàn hảo',
+            'why_us_feature4_desc': 'Tuân thủ nghiêm ngặt Luật An toàn Sức khỏe Nghề nghiệp và Luật Y tế, hỗ trợ đầy đủ trách nhiệm pháp lý doanh nghiệp qua việc quản lý tình trạng khám và sau khám.',
             'process_title': 'Quy trình dịch vụ',
             'process_step1_title': 'Tư vấn & Hỗ trợ',
             'process_step1_desc_new': 'Sau khi tư vấn, chúng tôi cung cấp danh sách bệnh viện and đặt lịch.',
@@ -1282,19 +1339,20 @@ document.addEventListener('DOMContentLoaded', () => {
             'corp_faq_a5': 'Chúng tôi sẽ dịch báo cáo kết quả tiếng Hàn đầy thuật ngữ chuyên môn thành bản tóm tắt cốt lõi bằng tiếng mẹ đẻ dễ hiểu cho người lao động. Đây không phải là đánh giá y khoa, mà chỉ là bản dịch thuật đơn giản với mục đích "truyền đạt nội dung", nhằm đảm bảo quyền được biết của người lao động.',
             'contact_form_company_label': 'Tên doanh nghiệp',
             'view_workflow': 'Quy trình thực vụ',
-            'chatbot_header': 'CheckBot',
+            'chatbot_header': '자주 하는 질문 (FAQ)',
+            'chatbot_subtitle': 'Những câu hỏi thường gặp nhất về CHECKIT.',
             'chatbot_placeholder': 'Nhập tin nhắn...',
             'chatbot_welcome': 'Xin chào! Đây là chatbot hỗ trợ của CHECKIT. Tôi có thể giúp gì cho bạn?',
-            'chatbot_q1': '1. Làm thế nào để đặt lịch?',
-            'chatbot_a1': 'Quản lý tận tâm của CHECKIT sẽ giúp bạn. Hãy cho chúng tôi biết các hạng mục khám and lịch trình mong muốn, chúng tôi sẽ cung cấp danh sách bệnh viện phù hợp and xử lý việc đặt lịch. Nhấn \'Đăng ký ngay\' để gửi yêu cầu!',
-            'chatbot_q2': '2. Các bạn có hợp đồng với bệnh viện/bác sĩ không?',
-            'chatbot_a2': 'Không. CHECKIT không có quan hệ hợp đồng với các bệnh viện cụ thể. Chúng tôi cungGLISH thông tin khách quan để giúp bạn tìm thấy bệnh viện phù hợp nhất từ góc độ của mình.',
-            'chatbot_q3': '3. Các bạn có thực hiện hành vi y tế hoặc giới thiệu bệnh nhân không?',
-            'chatbot_a3': 'Không, CHECKIT tuân thủ luật y tế and không thực hiện bất kỳ hành vi y tế or giới thiệu nào. Chúng tôi tập trung vào "quy trình phi y tế" như đặt lịch, thông dịch and dịch kết quả.',
-            'chatbot_q4': '4. Tôi có thể nhận được sự giúp đỡ gì vào ngày khám?',
-            'chatbot_a4': 'Vào ngày khám, quản lý CheckBot của chúng tôi sẽ đồng hành cùng bạn để bạn không cảm thấy cô đơn do rào cản ngôn ngữ. Chúng tôi hỗ trợ tất cả quy trình giao tiếp trong bệnh viện theo thời gian thực.',
-            'chatbot_q5': '5. Kết quả được giao như thế nào?',
-            'chatbot_a5': 'Hãy gửi cho chúng tôi kết quả tiếng Hàn bạn nhận được từ bệnh viện, chúng tôi sẽ dịch and tóm tắt nội dung cốt lõi sang ngôn ngữ của bạn. Chúng tôi không cung cấp ý kiến y khoa.',
+            'chatbot_q1': 'Quy trình đặt lịch khám hoạt động như thế nào?',
+            'chatbot_a1': 'Sau khi doanh nghiệp gửi danh sách người lao động, CHECKIT liên hệ trực tiếp từng người và xử lý toàn bộ quy trình đặt lịch thay mặt doanh nghiệp.',
+            'chatbot_q2': 'Các bạn có hợp đồng với bệnh viện không?',
+            'chatbot_a2': 'Không. Chúng tôi hoạt động độc lập, doanh nghiệp có thể tiếp tục sử dụng bệnh viện đối tác hiện có mà không cần thay đổi.',
+            'chatbot_q3': 'Các bạn có thực hiện hành vi y tế hay môi giới bệnh nhân không?',
+            'chatbot_a3': 'Hoàn toàn không. Chúng tôi tuân thủ luật y tế và chỉ cung cấp dịch vụ phi y tế, giúp doanh nghiệp tránh mọi rủi ro pháp lý.',
+            'chatbot_q4': 'Người lao động được hỗ trợ gì vào ngày khám?',
+            'chatbot_a4': 'Quản lý chuyên trách giao tiếp thời gian thực với người lao động để xóa rào cản ngôn ngữ, bộ phận nhân sự không cần can thiệp thêm.',
+            'chatbot_q5': 'Kết quả khám được chuyển giao như thế nào?',
+            'chatbot_a5': 'Chúng tôi dịch và tóm tắt nội dung cốt lõi của kết quả sang tiếng mẹ đẻ của bạn.',
             'chatbot_greeting_reply': 'Xin chào! Rất vui được gặp bạn. Tôi có thể giúp gì cho bạn?',
             'chatbot_fallback_reply': 'Cảm ơn sự tư vấn quý báu của bạn! Nội dung bạn nhập sẽ được quản lý phụ trách kiểm tra and phản hồi sớm. Để được phản hồi chính xác hơn, vui lòng để lại lời nhắn qua mục \'Liên hệ\' ở cuối trang chủ.',
             'login_title': 'CHECKIT ĐĂNG NHẬP',
@@ -1360,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'signup_consent_admin_label': '[Bắt buộc] Hỗ trợ hành chính',
             'signup_consent_medical_label': '[Bắt buộc] Xử lý dữ liệu y tế',
             'signup_consent_view_details': 'Xem chi tiết ▾',
-            'footer_company_title': 'Thông tin cơ bản về trung tâm mua sắm',
+            'footer_company_title': 'Thông tin cơ bản về nền tảng',
             'footer_company_name': 'Tên công ty: <strong>Công ty Cổ phần CHECKIT</strong>',
             'footer_representative': 'Người đại diện: Kim Sun-hong',
             'footer_address': 'Địa chỉ kinh doanh: Phòng AF08-0019, Tầng 8, 202 Dasanjigeum-ro, Namyangju-si, Gyeonggi-do (Dasan-dong, Hyundai Terra Tower DIMC)',
@@ -1368,9 +1426,9 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_business_no': 'Mã số đăng ký kinh doanh: 8718803241',
             'footer_privacy_officer': 'Người chịu trách nhiệm bảo mật thông tin cá nhân: Nam Min-jung',
             'footer_cs_title': 'Thông tin Trung tâm Khách hàng',
-            'footer_cs_phone': 'Điện thoại Tư vấn/Đặt hàng: <strong>010-5109-3459 / 010-2209-7951</strong>',
-            'footer_cs_email': 'Email Tư vấn/Đặt hàng: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 Công ty Cổ phần CHECKIT (CHECKIT). All Rights Reserved.'
+            'footer_cs_phone': 'Điện thoại Tư vấn: <strong>010-5109-3459 / 010-2209-7951</strong>',
+            'footer_cs_email': 'Email Tư vấn: <strong>checkit082@gmail.com</strong>',
+            'footer_copyright': '&copy; 2026 Công ty Cổ phần CHECKIT (CHECKIT)'
         }
     };
 
@@ -1393,112 +1451,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        document.querySelectorAll('.lang-btn, .chatbot-lang-btn').forEach(btn => {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-lang') === newLang);
         });
-        renderSuggestedQuestions();
     };
     window.changeLanguage = switchLanguage;
 
     document.addEventListener('click', (e) => {
-        const langBtn = e.target.closest('.lang-btn, .chatbot-lang-btn');
+        const langBtn = e.target.closest('.lang-btn');
         if (langBtn && langBtn.hasAttribute('data-lang')) {
             switchLanguage(langBtn.getAttribute('data-lang'));
         }
     });
 
-    // --- Chatbot Logic ---
-    const chatbotContainer = document.getElementById('chatbot-container');
-    const openChatbotBtn = document.getElementById('open-chatbot');
-    const closeChatbotBtn = document.getElementById('close-chatbot');
-    const chatbotMessages = document.getElementById('chatbot-messages');
-    const chatbotInput = document.getElementById('chatbot-input');
-    const chatbotSend = document.getElementById('chatbot-send');
-    const suggestedContainer = document.getElementById('chatbot-suggested-questions');
 
-    function renderSuggestedQuestions() {
-        if (!suggestedContainer) return;
-        const data = translations[currentLang] || translations['ko'];
-        suggestedContainer.innerHTML = '';
-        for (let i = 1; i <= 5; i++) {
-            const btn = document.createElement('button');
-            btn.className = 'suggested-question-btn';
-            btn.textContent = data[`chatbot_q${i}`];
-            btn.onclick = () => handleUserInput(data[`chatbot_q${i}`], data[`chatbot_a${i}`]);
-            suggestedContainer.appendChild(btn);
-        }
-    }
-
-    const greetingKeywords = {
-        ko: ['안녕', '반가', '하이', '헬로'],
-        en: ['hi', 'hello', 'hey', 'greetings'],
-        cn: ['你好', '您好'],
-        vn: ['xin chào', 'chào']
-    };
-
-    async function handleUserInput(userInput, presetAnswer = null) {
-        if (!userInput.trim()) return;
-        addUserMessage(userInput);
-        chatbotInput.value = '';
-
-        const loadingMsg = document.createElement('div');
-        loadingMsg.className = 'message bot loading-indicator';
-        loadingMsg.innerHTML = '<span></span><span></span><span></span>';
-        chatbotMessages.appendChild(loadingMsg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-        setTimeout(() => {
-            loadingMsg.remove();
-            const data = translations[currentLang] || translations['ko'];
-            if (presetAnswer) {
-                addBotMessage(presetAnswer);
-            } else {
-                const lowerInput = userInput.toLowerCase();
-                const isGreeting = (greetingKeywords[currentLang] || greetingKeywords['ko']).some(k => lowerInput.includes(k));
-                addBotMessage(isGreeting ? data['chatbot_greeting_reply'] : data['chatbot_fallback_reply']);
-            }
-        }, 1000);
-    }
-
-    function addUserMessage(text) {
-        if (!chatbotMessages) return;
-        const msg = document.createElement('div');
-        msg.className = 'message user';
-        msg.innerHTML = text;
-        chatbotMessages.appendChild(msg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-    }
-
-    if (openChatbotBtn) {
-        openChatbotBtn.addEventListener('click', () => {
-            chatbotContainer.classList.add('show');
-            document.body.classList.add('chatbot-open');
-            if (chatbotMessages.children.length === 0) {
-                addBotMessage(translations[currentLang]['chatbot_welcome'], 'chatbot_welcome');
-                renderSuggestedQuestions();
-            }
-        });
-    }
-
-    if (closeChatbotBtn) {
-        closeChatbotBtn.addEventListener('click', () => {
-            chatbotContainer.classList.remove('show');
-            document.body.classList.remove('chatbot-open');
-        });
-    }
-
-    if (chatbotSend) chatbotSend.addEventListener('click', () => handleUserInput(chatbotInput.value));
-    if (chatbotInput) chatbotInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleUserInput(chatbotInput.value));
-
-    function addBotMessage(text, langKey = null) {
-        if (!chatbotMessages) return;
-        const msg = document.createElement('div');
-        msg.className = 'message bot';
-        if (langKey) msg.setAttribute('data-lang-key', langKey);
-        msg.innerHTML = text;
-        chatbotMessages.appendChild(msg);
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-    }
     
     // --- Firebase & Auth Logic ---
     const firebaseConfig = {
@@ -1530,91 +1496,80 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserData = { role: 'customer', cid: null };
 
     auth.onAuthStateChanged(user => {
+        const updateButtons = (isLoggedIn) => {
+            const loginBtns = [navLogin, loginBtn, document.getElementById('mobile-nav-login')];
+            const logoutBtns = [navLogout, document.getElementById('mobile-nav-logout')];
+            const mypageBtns = [navMyPage, document.getElementById('mobile-nav-mypage')];
+
+            loginBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'none' : 'inline-block'));
+            logoutBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+            mypageBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+        };
+
         if (user) {
-            if (navLogin) navLogin.style.display = 'none';
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (navLogout) navLogout.style.display = 'inline-block';
-            if (navMyPage) navMyPage.style.display = 'inline-block';
+            updateButtons(true);
             if (loginModalOverlay) loginModalOverlay.style.display = 'none';
             
             db.collection('users').doc(user.uid).get().then(doc => {
                 if (doc.exists) {
                     const data = doc.data();
-                    // [보안/기능 강화] Firestore 데이터 우선, 없을 경우 세션 정보로 보완
                     currentUserData.role = data.role || 'customer';
                     currentUserData.cid = data.companyId || null;
                     currentUserData.securityKey = data.securityKey || null;
                 }
             }).catch(err => console.error("Error fetching user data:", err));
         } else {
-            if (navLogin) navLogin.style.display = 'inline-block';
-            if (loginBtn) loginBtn.style.display = 'inline-block';
-            if (navLogout) navLogout.style.display = 'none';
-            if (navMyPage) navMyPage.style.display = 'none';
+            updateButtons(false);
             currentUserData = { role: 'customer', cid: null };
         }
     });
 
     // Robust event delegation for nav-login to handle dynamic header injection
     document.addEventListener('click', (e) => {
-        if (e.target.closest('#nav-login')) {
+        // Login
+        if (e.target.closest('#nav-login') || e.target.closest('#mobile-nav-login')) {
             if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
+            if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+        }
+        
+        // Logout
+        if (e.target.closest('#nav-logout') || e.target.closest('#mobile-nav-logout')) {
+            auth.signOut();
+            location.reload();
+        }
+
+        // My Page
+        if (e.target.closest('#nav-mypage') || e.target.closest('#mobile-nav-mypage')) {
+            handleMyPageNavigation();
         }
     });
 
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
+    function handleMyPageNavigation() {
+        const user = auth.currentUser;
+        if (!user) {
             if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
-        });
-    }
+            return;
+        }
 
-    if (navLogout) {
-        navLogout.addEventListener('click', () => {
-            auth.signOut();
-            location.reload();
-        });
-    }
+        if (user.email === "master@checkit.com") {
+            window.location.href = 'platform.html?role=master';
+            return;
+        }
 
-    if (navMyPage) {
-        navMyPage.addEventListener('click', () => {
-            // [강력 로직] 현재 유저의 상태를 실시간으로 다시 확인하여 정확한 이동 보장
-            const user = auth.currentUser;
-            if (!user) {
-                console.log("No user session found on My Page click.");
-                if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
-                return;
-            }
+        db.collection('users').doc(user.uid).get().then(doc => {
+            let role = 'worker';
+            if (doc.exists) role = doc.data().role;
 
-            // --- [특급 1순위] 마스터 계정은 이메일로 즉시 판별 (DB 대기 없음) ---
-            if (user.email === "master@checkit.com") {
-                console.log("Master account redirection triggered by email check.");
+            if (role === 'master' || role === 'super_admin') {
                 window.location.href = 'platform.html?role=master';
-                return;
+            } else if (role === 'company_admin') {
+                window.location.href = `company_dashboard.html`;
+            } else {
+                window.location.href = 'platform.html?role=worker';
             }
-
-            // --- [2순위] 일반 유저/기업 관리자 DB 조회 ---
-            db.collection('users').doc(user.uid).get().then(doc => {
-                let role = 'worker'; // 기본값
-                let cid = null;
-
-                if (doc.exists) {
-                    const data = doc.data();
-                    role = data.role;
-                    cid = data.companyId;
-                }
-
-                if (role === 'master' || role === 'super_admin') {
-                    window.location.href = 'platform.html?role=master';
-                } else if (role === 'company_admin') {
-                    window.location.href = `company_dashboard.html`;
-                } else {
-                    window.location.href = 'platform.html?role=worker';
-                }
-            }).catch(err => {
-                console.error("Error on My Page redirection:", err);
-                // 에러 발생 시 안전하게 포털 메인으로 (role 없이)
-                window.location.href = 'platform.html';
-            });
+        }).catch(err => {
+            console.error("Error on My Page redirection:", err);
+            window.location.href = 'platform.html';
         });
     }
 
@@ -2134,52 +2089,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Corporate Page Slideshow Logic ---
-    const openSlideBtn = document.getElementById('openProcessSlide');
-    const processModal = document.getElementById('processModal');
-    const closeSlideBtn = document.getElementById('closeProcess');
-    const processImage = document.getElementById('processImage');
-    const prevSlideBtn = document.getElementById('prevBtn');
-    const nextSlideBtn = document.getElementById('nextBtn');
-    const slideIndicator = document.getElementById('indicator');
-
-    if (openSlideBtn && processModal) {
-        let currentSlide = 1;
-        const totalSlides = 18; 
-
-        const updateSlide = () => {
-            const slidePath = `assets/process_${currentSlide.toString().padStart(2, '0')}.png`;
-            processImage.src = slidePath;
-            slideIndicator.textContent = `${currentSlide} / ${totalSlides}`;
-        };
-
-        openSlideBtn.addEventListener('click', () => {
-            processModal.style.display = 'flex';
-            currentSlide = 1;
-            updateSlide();
-        });
-
-        closeSlideBtn.addEventListener('click', () => {
-            processModal.style.display = 'none';
-        });
-
-        prevSlideBtn.addEventListener('click', () => {
-            currentSlide = currentSlide > 1 ? currentSlide - 1 : totalSlides;
-            updateSlide();
-        });
-
-        nextSlideBtn.addEventListener('click', () => {
-            currentSlide = currentSlide < totalSlides ? currentSlide + 1 : 1;
-            updateSlide();
-        });
-
-        // Close on overlay click
-        processModal.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                processModal.style.display = 'none';
-            }
-        });
-    }
+    // --- Corporate Page Slideshow Logic 제거됨 ---
 
     // --- Corporate FAQ Accordion Logic ---
     const faqQuestions = document.querySelectorAll('.faq-question');

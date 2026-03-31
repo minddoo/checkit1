@@ -10,7 +10,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js" integrity="sha384-l68m6T+U6uOQuq28mIu+1Xe+P7Xh+yO9t548jOnqYmDk3rX7Z+z6l1Jj+8H+9+t" crossorigin="anonymous"></script>
     <script>
+        // Initialize Kakao SDK immediately if possible
+        window.addEventListener('load', () => {
+            if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+                Kakao.init('713836b01fc11196150f09');
+                console.log('Kakao SDK Initialized');
+            }
+        });
         // Set PDF.js worker source
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
     </script>
@@ -933,12 +941,13 @@ function googleTranslateElementInit() {
 
         if (msg.type === 'action_check') {
             const btnColor = msg.btnColor || 'var(--primary)';
+            const btnTextColor = msg.btnTextColor || 'white';
             return `
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
                         <div style="padding: 15px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
-                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: ${btnTextColor}; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -1147,6 +1156,36 @@ function googleTranslateElementInit() {
         } catch (e) { console.error("Booking complete error:", e); }
     }
 
+    window.sendKakaoLink = function(dateVal) {
+        if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
+            console.error('Kakao SDK not initialized');
+            alert('카카오 SDK 초기화에 실패했습니다.');
+            return;
+        }
+        
+        Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: 'CHECKIT 건강검진 일정 안내',
+                description: `예약 날짜: ${dateVal}\n건강한 미래를 위한 첫 걸음, CHECKIT이 함께합니다.`,
+                imageUrl: 'https://checkit082082.pages.dev/assets/logo.png',
+                link: {
+                    mobileWebUrl: window.location.href,
+                    webUrl: window.location.href,
+                },
+            },
+            buttons: [
+                {
+                    title: '예약 내용 확인하기',
+                    link: {
+                        mobileWebUrl: window.location.href,
+                        webUrl: window.location.href,
+                    },
+                },
+            ],
+        });
+    };
+
     async function requestConfirmation() {
         const user = auth.currentUser;
         if (!user) return;
@@ -1271,8 +1310,12 @@ function googleTranslateElementInit() {
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.`,
-                type: 'text',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.\n\n아래 버튼을 눌러 지금 바로 카카오톡 일정을 받으실 수도 있습니다.`,
+                type: 'action_check',
+                btnText: '카톡으로 일정 전송하기',
+                action: `sendKakaoLink('${dateVal}')`,
+                btnColor: '#fee500',
+                btnTextColor: '#3c1e1e',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 

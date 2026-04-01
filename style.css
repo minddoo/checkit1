@@ -1180,6 +1180,16 @@ body {
     .testimonial-card {
         flex: 0 0 100%;
     }
+    /* Fixed: Centering Hero Caption on Mobile */
+    .hero-premium-card {
+        justify-content: center !important;
+        height: 420px !important; /* Slightly taller for better centering */
+    }
+    .hero-caption-container {
+        margin: 10px auto !important;
+        width: 85% !important;
+        text-align: center !important;
+    }
 }
 .testimonial-dot-container {
     display: none !important;

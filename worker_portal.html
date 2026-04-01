@@ -40,6 +40,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .hidden { display: none !important; }
+        .visible-mobile { display: none; }
+        @media (max-width: 768px) {
+            .hidden-mobile { display: none !important; }
+            .visible-mobile { display: block !important; }
+            .visible-mobile-flex { display: flex !important; }
+        }
 
         /* Loader */
         #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
@@ -139,9 +145,11 @@
 
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
 
-        /* Sidebar Layout */
-        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
-        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout (Desktop) */
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); position: relative; }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; transition: 0.3s; }
         .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
 
         .sidebar-menu { list-style: none; margin-top: 10px; }
@@ -161,13 +169,71 @@
         .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
         .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
 
+        /* Mobile Hamburger Button (Hidden on Desktop) */
+        .menu-toggle { display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; align-items: center; justify-content: center; }
+
         @media (max-width: 768px) {
+            .top-bar { padding: 10px 15px; }
+            .top-bar .logo { font-size: 1.15rem; }
+            .top-bar .user-info { gap: 10px; }
+            .top-bar .user-info .name-badge { font-size: 0.75rem; padding: 5px 10px; }
+            .lang-switcher { display: none; } /* Move to mobile menu */
+            .menu-toggle { display: flex; order: -1; margin-right: 10px; }
+
             .portal-wrapper { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px 20px; }
-            .sidebar-menu { display: flex; gap: 10px; overflow-x: auto; margin-top: 0; padding-bottom: 5px; }
-            .sidebar-menu li { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.85rem; }
-            .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
-            .main-content { padding: 20px; }
+            .sidebar { 
+                position: fixed; 
+                top: 0; 
+                left: -100%; 
+                width: 280px; 
+                height: 100%; 
+                z-index: 3000; 
+                box-shadow: 20px 0 50px rgba(0,0,0,0.2); 
+                transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: linear-gradient(180deg, var(--dark) 0%, #312e81 100%);
+                color: white;
+                border-right: none;
+                padding-top: 60px;
+            }
+            .sidebar.active { left: 0; }
+            .sidebar .sidebar-menu li { color: rgba(255,255,255,0.7); }
+            .sidebar .sidebar-menu li:hover { background: rgba(255,255,255,0.1); color: white; }
+            .sidebar .sidebar-menu li.active { 
+                background: rgba(255,255,255,0.2); 
+                color: white; 
+                border-left: 4px solid var(--primary-light); 
+                margin-left: -20px; 
+                padding-left: 34px;
+                border-radius: 0 12px 12px 0;
+            }
+            
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2999; }
+            .sidebar-overlay.active { display: block; }
+            
+            .main-content { padding: 15px; }
+            .welcome-banner { padding: 20px; border-radius: 12px; }
+            .welcome-banner h2 { font-size: 1.3rem; }
+            
+            /* Horizontal Scroll for Cards */
+            .hospital-cards { 
+                display: flex; 
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory; 
+                gap: 15px; 
+                padding: 5px 5px 15px 5px; 
+                margin: 0 -15px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .hospital-cards::-webkit-scrollbar { display: none; }
+            .hospital-card { 
+                flex: 0 0 calc(85%); 
+                scroll-snap-align: center;
+                margin-bottom: 0;
+            }
+            .hospital-card:first-child { margin-left: 15px; }
+            .hospital-card:last-child { margin-right: 15px; }
+
+            .info-grid { grid-template-columns: 1fr; }
         }
         /* Existing styles... */
         /* Booking Form Modal */
@@ -311,6 +377,7 @@
 <div id="portalContent" class="hidden">
     <!-- Top Bar -->
     <div class="top-bar">
+        <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
         <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
         
         <div class="lang-switcher">
@@ -328,8 +395,12 @@
     </div>
 
     <div class="portal-wrapper">
+        <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div id="sideDrawer" class="sidebar">
+            <div style="padding: 0 0 20px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;" class="visible-mobile">
+                <div style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-briefcase-medical" style="color: var(--primary-light);"></i> CHECKIT</div>
+            </div>
             <ul class="sidebar-menu">
                 <li id="menuProgress" class="active" onclick="switchSection('progress')">
                     <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
@@ -341,6 +412,16 @@
                     <i class="fa-solid fa-file-shield"></i> 결과 관리
                 </li>
             </ul>
+            
+            <div class="visible-mobile" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 15px; font-weight: 700;">LANGUAGE 설정</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button class="lang-btn" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -717,8 +798,31 @@ function googleTranslateElementInit() {
     const db = firebase.firestore();
     const storage = firebase.storage();
 
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+    }
+
     // Section Switching
     window.switchSection = (target) => {
+        // Close mobile menu if open
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && sidebar.classList.contains('active')) {
+            toggleMobileMenu();
+        }
+
         const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
         const menus = ['menuProgress', 'menuChat', 'menuResults'];
 
@@ -1026,6 +1130,22 @@ function googleTranslateElementInit() {
                 </div>
                 <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;
+    }
+
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
     }
 
     async function sendChatMessage() {

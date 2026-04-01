@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
     <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js" integrity="sha384-l68m6T+U6uOQuq28mIu+1Xe+P7Xh+yO9t548jOnqYmDk3rX7Z+z6l1Jj+8H+9+t" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Initialize Kakao SDK immediately if possible
         window.addEventListener('load', () => {
@@ -1211,11 +1212,12 @@ function googleTranslateElementInit() {
     }
 
     window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate, scheduledDate = null) {
-        // [필수 입력] 회원가입 후 발급받은 실제 API 키 정보를 여기에 입력하세요
-        const API_KEY = '58.140.153.24'; 
+        // [필수 입력] 제공해주신 솔라피 API 키
+        const API_KEY = 'NCS3LR13SE2MENQS'; 
         const API_SECRET = 'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD';
-        const PF_ID = 'ENTER_YOUR_KAKAOTALK_CHANNEL_ID'; // 카카오톡 채널 아이디 (예: @checkit)
-        const TEMPLATE_ID = 'ENTER_YOUR_TEMPLATE_ID'; // 승인받은 알림톡 템플릿 아이디
+        const PF_ID = 'KA01PF260401123510015EukHvlIDzQP'; 
+        const TEMPLATE_ID = 'KA01TP260401123529786bxLeVETmEai'; 
+        const SENDER_NUMBER = '01051093459'; // 솔라피에 등록하신 대표님 번호 적용됨
 
         if (PF_ID.includes('ENTER_YOUR') || TEMPLATE_ID.includes('ENTER_YOUR')) {
             console.log("알림톡 발신자 정보(PF_ID)나 템플릿(TEMPLATE_ID)이 누락되어 실제 발송은 생략됩니다.");
@@ -1232,11 +1234,14 @@ function googleTranslateElementInit() {
         const payload = {
             message: {
                 to: phoneNumber.replace(/[^0-9]/g, ''),
-                from: "01000000000", // 사전에 등록된 발신번호 입력 필수
+                from: SENDER_NUMBER.replace(/[^0-9]/g, ''), 
                 kakaoOptions: {
                     pfId: PF_ID,
                     templateId: TEMPLATE_ID,
-                    variables: { "#{날짜}": reservedDate }
+                    variables: { 
+                        "#{날짜}": reservedDate,
+                        "#{성함}": "고객"
+                    }
                 }
             }
         };
@@ -1255,6 +1260,12 @@ function googleTranslateElementInit() {
             const result = await response.json();
             console.log("알림톡 전송 요청 결과:", result);
         } catch (error) { console.error("알림톡 전송 중 오류 발생:", error); }
+    };
+
+    window.triggerRealAlimtalk = async function(phone, date) {
+        showToast("알림톡을 다시 전송합니다...", "info");
+        await window.sendKakaoAlimtalk(phone, date);
+        showToast("전송 완료!", "success");
     };
 
     async function submitReservationDate(btn) {
@@ -1296,11 +1307,10 @@ function googleTranslateElementInit() {
 
             // 2. D-day별 리마인드 알림톡 예약 발송 등록
             const reminders = [
-                { d: 7, text: "음주 및 과식 금지 가이드" },
-                { d: 5, text: "복용 중인 약물 확인 및 중단 안내" },
-                { d: 3, text: "검진 전 최종 확인 및 문진표 작성 안내" },
-                { d: 2, text: "금식 시작 및 준비물 체크리스트" },
-                { d: 1, text: "내일 검진 시간 및 병원 위치 재안내" }
+                { d: 7, text: "D-7 [약물 상담 및 중단 안내]" },
+                { d: 5, text: "D-5 [보조제 섭취 중단 안내]" },
+                { d: 3, text: "D-3 [식단 조절 시작 안내]" },
+                { d: 1, text: "D-1 [물 포함 완전 금식 안내]" }
             ];
 
             for (const r of reminders) {
@@ -1309,18 +1319,17 @@ function googleTranslateElementInit() {
                 targetDate.setHours(10, 0, 0, 0);
                 
                 // 현재보다 미래일 경우에만 예약 등록
-                if (targetDate > new Date()) {
-                    await window.sendKakaoAlimtalk(workerPhone, dateVal, targetDate);
-                }
+                await window.sendKakaoAlimtalk(workerPhone, dateVal);
+                showToast("카카오톡 일정이 전송되었습니다.", "success");
             }
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.\n\n아래 버튼을 눌러 지금 바로 카카오톡 일정을 받으실 수도 있습니다.`,
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.\n\n아래 버튼을 눌러 지금 바로 카카오톡 일정을 다시 받으실 수도 있습니다.`,
                 type: 'action_check',
-                btnText: '카톡으로 일정 전송하기',
-                action: `sendKakaoLink('${dateVal}')`,
+                btnText: '카톡으로 일정 다시받기',
+                action: `triggerRealAlimtalk('${workerPhone}', '${dateVal}')`,
                 btnColor: '#fee500',
                 btnTextColor: '#3c1e1e',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()

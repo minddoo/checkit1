@@ -1164,34 +1164,27 @@ function googleTranslateElementInit() {
         } catch (e) { console.error("Booking complete error:", e); }
     }
 
-    window.sendKakaoLink = function(dateVal) {
-        if (typeof Kakao === 'undefined' || !Kakao.isInitialized()) {
-            console.warn('Kakao SDK not initialized. Direct sharing is unavailable.');
-            showToast('카카오톡 공유가 현재 불가능합니다. (SDK 초기화 대기 중)', 'warning');
-            return;
-        }
+    window.sendKakaoLink = async function(dateVal) {
+        // 기존 SDK 공유하기 대신 실시간 알림톡을 호출하도록 변경 (에러 방지용)
+        const user = auth.currentUser;
+        if (!user) return;
         
-        Kakao.Share.sendDefault({
-            objectType: 'feed',
-            content: {
-                title: 'CHECKIT 건강검진 일정 안내',
-                description: `예약 날짜: ${dateVal}\n건강한 미래를 위한 첫 걸음, CHECKIT이 함께합니다.`,
-                imageUrl: 'https://checkit082082.pages.dev/assets/logo.png',
-                link: {
-                    mobileWebUrl: window.location.href,
-                    webUrl: window.location.href,
-                },
-            },
-            buttons: [
-                {
-                    title: '예약 내용 확인하기',
-                    link: {
-                        mobileWebUrl: window.location.href,
-                        webUrl: window.location.href,
-                    },
-                },
-            ],
-        });
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const phone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber) : null;
+            
+            if (phone) {
+                showToast("기존 시스템 대신 '실시간 알림톡'을 전송합니다.", "info");
+                await window.sendKakaoAlimtalk(phone, dateVal);
+                showToast("알림톡 전송 완료!", "success");
+            } else {
+                showToast("근로자 연락처가 없어 전송할 수 없습니다.", "error");
+            }
+        } catch (e) {
+            console.error("sendKakaoLink fallback error:", e);
+        }
     };
 
     async function requestConfirmation() {

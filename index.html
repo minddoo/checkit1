@@ -321,6 +321,7 @@
                         const dots = dotsContainer.querySelectorAll('.testimonial-dot');
 
                         function updateDots(idx) {
+                            if (window.innerWidth > 768) return; 
                             dots.forEach((d, i) => d.classList.toggle('active', i === idx));
                         }
 
@@ -347,7 +348,7 @@
 
                         // Auto Play
                         setInterval(() => {
-                            if (document.visibilityState === 'visible') {
+                            if (document.visibilityState === 'visible' && window.innerWidth <= 768) {
                                 moveTestimonial(1);
                             }
                         }, 5000);

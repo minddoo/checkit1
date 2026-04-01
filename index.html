@@ -274,29 +274,86 @@
             <div class="container">
                 <h2 class="section-title" data-lang-key="testimonials_title"></h2>
                 <p class="section-subtitle" data-lang-key="testimonials_subtitle"></p>
-                <div class="testimonial-grid">
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial1_text"></p>
-                        <div class="testimonial-author">
-                            <strong data-lang-key="testimonial1_author"></strong>
-                            <span data-lang-key="testimonial1_type"></span>
+                <div class="testimonial-slider-container">
+                    <button class="testimonial-arrow prev" onclick="moveTestimonial(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <div class="testimonial-grid" id="testimonialSlider">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial1_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial1_author"></strong>
+                                <span data-lang-key="testimonial1_type"></span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial2_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial2_author"></strong>
+                                <span data-lang-key="testimonial2_type"></span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial3_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial3_author"></strong>
+                                <span data-lang-key="testimonial3_type"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial2_text"></p>
-                        <div class="testimonial-author">
-                            <strong data-lang-key="testimonial2_author"></strong>
-                            <span data-lang-key="testimonial2_type"></span>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <p class="testimonial-text" data-lang-key="testimonial3_text"></p>
-                        <div class="testimonial-author">
-                            <strong data-lang-key="testimonial3_author"></strong>
-                            <span data-lang-key="testimonial3_type"></span>
-                        </div>
-                    </div>
+                    <button class="testimonial-arrow next" onclick="moveTestimonial(1)"><i class="fas fa-chevron-right"></i></button>
+                    <div class="testimonial-dot-container" id="testimonialDots"></div>
                 </div>
+
+                <script>
+                    function initTestimonialSlider() {
+                        const slider = document.getElementById('testimonialSlider');
+                        const dotsContainer = document.getElementById('testimonialDots');
+                        const cards = slider.querySelectorAll('.testimonial-card');
+                        let currentIdx = 0;
+
+                        // Create Dots
+                        cards.forEach((_, i) => {
+                            const dot = document.createElement('div');
+                            dot.className = 'testimonial-dot' + (i === 0 ? ' active' : '');
+                            dot.onclick = () => scrollToSlide(i);
+                            dotsContainer.appendChild(dot);
+                        });
+
+                        const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+
+                        function updateDots(idx) {
+                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                        }
+
+                        function scrollToSlide(idx) {
+                            const cardWidth = cards[0].offsetWidth + 24; // width + gap
+                            slider.scrollTo({ left: cardWidth * idx, behavior: 'smooth' });
+                            updateDots(idx);
+                            currentIdx = idx;
+                        }
+
+                        window.moveTestimonial = (dir) => {
+                            currentIdx = (currentIdx + dir + cards.length) % cards.length;
+                            scrollToSlide(currentIdx);
+                        };
+
+                        // Sync dots on manual scroll
+                        slider.addEventListener('scroll', () => {
+                            const idx = Math.round(slider.scrollLeft / (cards[0].offsetWidth + 24));
+                            if (idx !== currentIdx) {
+                                currentIdx = idx;
+                                updateDots(idx);
+                            }
+                        });
+
+                        // Auto Play
+                        setInterval(() => {
+                            if (document.visibilityState === 'visible') {
+                                moveTestimonial(1);
+                            }
+                        }, 5000);
+                    }
+                    document.addEventListener('DOMContentLoaded', initTestimonialSlider);
+                </script>
             </div>
         </section>
 

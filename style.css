@@ -1642,7 +1642,7 @@ body {
     }
     .hero-topbar {
         position: absolute !important;
-        top: 20px !important;
+        top: 45px !important; /* Lowered to center within the top visual margin of the photo */
         left: 0 !important;
         width: 100% !important;
         z-index: 20 !important;

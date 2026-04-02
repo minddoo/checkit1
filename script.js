@@ -33,26 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // [Mobile Sticky CTA Generator]
-    function renderMobileStickyCTA() {
-        if (window.innerWidth <= 768 && !document.getElementById('sticky-mobile-cta')) {
-            const stickyCTA = document.createElement('div');
-            stickyCTA.id = 'sticky-mobile-cta';
-            stickyCTA.className = 'mobile-only';
-            stickyCTA.innerHTML = `
-                <a href="#contact-form" class="sticky-cta-btn">
-                    <i class="fas fa-paper-plane"></i>
-                    <span data-lang-key="hero_cta">기업 서비스 상담 신청</span>
-                </a>
-            `;
-            document.body.appendChild(stickyCTA);
-            
-            // Re-translate new element
-            if (typeof updateTranslations === 'function') {
-                updateTranslations();
-            }
-        }
-    }
+
 
     // Header scroll background effect
     window.addEventListener('scroll', () => {
@@ -63,9 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initial check for mobile features
-    renderMobileStickyCTA();
-    window.addEventListener('resize', renderMobileStickyCTA);
+
 
     // Intersection Observer for Reveal Animations
     const revealObserver = new IntersectionObserver((entries) => {

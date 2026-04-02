@@ -1617,10 +1617,14 @@ body {
 /* Hero Enterprise - Mobile responsive */
 @media (max-width: 768px) {
     #hero,
-    .hero-glass-section,
+    .hero-glass-section {
+        height: auto !important;
+        min-height: auto !important;
+        padding: 40px 0 !important;
+    }
     .hero-premium-card {
-        height: 580px !important; /* Increased height to prevent text clipping */
-        min-height: 580px !important;
+        height: 620px !important; /* Further increased to provide ample text room */
+        min-height: 620px !important;
         overflow: hidden !important;
     }
     .hero-slide {

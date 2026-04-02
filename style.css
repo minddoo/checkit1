@@ -3138,7 +3138,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(46, 204, 113, 0.15);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    padding: 16px 20px;
+    padding: 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 72px;
 }
 
 /* Single horizontal row of pill buttons */
@@ -3148,6 +3152,9 @@ body.platform-view-active #mypage-overlay { display: flex; }
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
 }
 
 /* Base pill button style */

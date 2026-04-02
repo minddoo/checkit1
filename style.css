@@ -1195,6 +1195,24 @@ body {
     display: none !important;
 }
 
+/* Mobile Hero Frame Optimization (Narrative Slides) */
+@media (max-width: 768px) {
+    .intro-container {
+        gap: 15px !important;
+    }
+    .intro-frame {
+        height: 280px !important; /* Standardize height for all narrative frames on mobile */
+        width: 100% !important;
+        overflow: hidden !important;
+        border-radius: 12px;
+    }
+    .intro-frame img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; /* Fill the design without distortion */
+    }
+}
+
 @media (max-width: 768px) {
     .testimonial-slider-container {
         padding: 0 15px;
@@ -1601,8 +1619,14 @@ body {
     #hero,
     .hero-glass-section,
     .hero-premium-card {
-        height: 520px !important; /* Fixed height to keep image sizes identical */
-        min-height: 520px;
+        height: 520px !important; /* Strictly fixed height for identical sizing */
+        min-height: 520px !important;
+        overflow: hidden !important;
+    }
+    .hero-slide {
+        height: 100% !important;
+        background-size: cover !important; /* Ensure all images fill the card */
+        background-position: center !important;
     }
     .hero-caption-container {
         padding: 0 24px 36px;

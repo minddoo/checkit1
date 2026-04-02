@@ -280,6 +280,26 @@ body {
     font-size: 15px;
 }
 
+/* Mobile Narrative Slide Optimization */
+@media (max-width: 768px) {
+    .intro-container {
+        gap: 15px !important;
+        flex-direction: column !important;
+    }
+    .intro-frame {
+        height: 280px !important; /* Strictly fixed height for all frames on mobile */
+        width: 100% !important;
+        overflow: hidden !important;
+        border-radius: 12px;
+    }
+    .intro-frame img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+    }
+}
+
 .phase-badge {
     font-size: 11px;
     padding: 2px 8px;

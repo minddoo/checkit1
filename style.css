@@ -1619,21 +1619,24 @@ body {
     #hero,
     .hero-glass-section,
     .hero-premium-card {
-        height: 520px !important; /* Strictly fixed height for identical sizing */
-        min-height: 520px !important;
+        height: 580px !important; /* Increased height to prevent text clipping */
+        min-height: 580px !important;
         overflow: hidden !important;
     }
     .hero-slide {
         height: 100% !important;
-        background-size: contain !important; /* Use contain instead of cover to ensure padding top/bottom */
+        background-size: cover !important; /* Return other photos to original size */
         background-repeat: no-repeat !important;
         background-position: center !important;
-        background-color: #ffffff !important; /* Ensure white background inside the card gaps */
+        background-color: #ffffff !important;
+    }
+    .hero-slide:nth-child(8) {
+        background-size: contain !important; /* Keep 8th photo as contained as requested */
     }
     .hero-caption-container {
         padding: 0 24px 36px;
-        max-height: 200px; /* Limit caption height to prevent overflow on fixed card */
-        overflow: hidden;
+        max-height: none; /* Allow text to flow naturally with increased card height */
+        overflow: visible;
     }
     .hero-caption-headline {
         font-size: 1.15rem;

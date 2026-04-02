@@ -1623,31 +1623,50 @@ body {
         padding: 40px 0 !important;
     }
     .hero-premium-card {
-        height: 620px !important; /* Further increased to provide ample text room */
+        height: 620px !important;
         min-height: 620px !important;
         overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important; /* Keep content at the bottom, but structure it better */
     }
     .hero-slide {
         height: 100% !important;
-        background-size: cover !important; /* Return other photos to original size */
+        background-size: cover !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
         background-color: #ffffff !important;
     }
     .hero-slide:nth-child(8) {
-        background-size: contain !important; /* Keep 8th photo as contained as requested */
+        background-size: contain !important;
     }
     .hero-caption-container {
-        padding: 0 24px 36px;
-        max-height: none; /* Allow text to flow naturally with increased card height */
-        overflow: visible;
+        position: relative !important;
+        z-index: 10 !important;
+        width: 100% !important; /* Take full width within card */
+        flex-shrink: 0 !important;
+        padding: 20px 20px 30px !important; /* Balanced padding for centering feel */
+        margin: 0 !important; 
+        background: rgba(255, 255, 255, 0.95) !important;
+        border-radius: 0 0 20px 20px !important; /* Match card bottom rounding */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 160px !important; /* Ensure enough height for central feel */
     }
     .hero-caption-headline {
-        font-size: 1.15rem;
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+        line-height: 1.3 !important;
+        width: 100% !important;
     }
     .hero-caption {
-        font-size: 0.9rem;
-        line-height: 1.7;
+        font-size: 0.82rem !important; /* Smaller font to fit 2 lines */
+        line-height: 1.5 !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        word-break: keep-all !important;
     }
     .hero-brand-chip {
         font-size: 0.68rem;

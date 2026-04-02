@@ -1601,10 +1601,13 @@ body {
     #hero,
     .hero-glass-section,
     .hero-premium-card {
+        height: 520px !important; /* Fixed height to keep image sizes identical */
         min-height: 520px;
     }
     .hero-caption-container {
         padding: 0 24px 36px;
+        max-height: 200px; /* Limit caption height to prevent overflow on fixed card */
+        overflow: hidden;
     }
     .hero-caption-headline {
         font-size: 1.15rem;

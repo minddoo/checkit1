@@ -36,21 +36,27 @@ const LayoutLoader = {
                 <button id="nav-mypage" class="cta-button-secondary" style="display: none;" data-lang-key="mypage">마이페이지</button>
                 <button id="nav-logout" class="cta-button-secondary" style="display: none;" data-lang-key="logout">로그아웃</button>
             </nav>
+        </div>
 
-            <!-- Mobile Menu Overlay -->
-            <div id="mobile-menu-overlay" class="mobile-only">
-                <div class="mobile-menu-content">
-                    <button id="close-mobile-menu">&times;</button>
-                    
-                    <div class="mobile-menu-links">
-                        <a href="index.html" data-lang-key="nav_home">홈</a>
-                        <a href="corporate.html" data-lang-key="nav_corporate">기업 서비스</a>
-                        <div class="mobile-menu-auth">
-                            <button id="mobile-nav-login" class="cta-button-secondary" data-lang-key="nav_login">로그인</button>
-                            <button id="mobile-nav-mypage" class="cta-button-secondary" style="display: none;" data-lang-key="mypage">마이페이지</button>
-                            <button id="mobile-nav-logout" class="cta-button-secondary" style="display: none;" data-lang-key="logout">로그아웃</button>
-                        </div>
-                    </div>
+        <!-- Mobile Dropdown Menu (slides down from header) -->
+        <div id="mobile-menu-overlay" class="mobile-only">
+            <div class="mobile-menu-content">
+                <div class="mobile-menu-row">
+                    <a href="index.html" class="mobile-nav-pill" data-lang-key="nav_home">
+                        <i class="fas fa-home"></i>홈
+                    </a>
+                    <a href="corporate.html" class="mobile-nav-pill" data-lang-key="nav_corporate">
+                        <i class="fas fa-building"></i>기업 서비스
+                    </a>
+                    <button id="mobile-nav-mypage" class="mobile-nav-pill mobile-nav-pill--auth" style="display: none;" data-lang-key="mypage">
+                        <i class="fas fa-user"></i>마이페이지
+                    </button>
+                    <button id="mobile-nav-login" class="mobile-nav-pill mobile-nav-pill--cta" data-lang-key="nav_login">
+                        <i class="fas fa-sign-in-alt"></i>로그인
+                    </button>
+                    <button id="mobile-nav-logout" class="mobile-nav-pill mobile-nav-pill--auth" style="display: none;" data-lang-key="logout">
+                        <i class="fas fa-sign-out-alt"></i>로그아웃
+                    </button>
                 </div>
             </div>
         </div>

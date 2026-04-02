@@ -4,35 +4,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('main-header');
     const revealElements = document.querySelectorAll('.reveal');
 
-    // [Mobile Menu Toggle Logic]
+    // [Mobile Menu Toggle Logic — Dropdown Pill Menu]
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const closeMobileMenu = document.getElementById('close-mobile-menu');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
 
-    if (mobileMenuToggle && mobileMenuOverlay) {
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileMenuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-
-    if (closeMobileMenu && mobileMenuOverlay) {
-        closeMobileMenu.addEventListener('click', () => {
+    function closeMobileDropdown() {
+        if (mobileMenuOverlay) {
             mobileMenuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+        }
+    }
+
+    if (mobileMenuToggle && mobileMenuOverlay) {
+        mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileMenuOverlay.classList.toggle('active');
         });
     }
 
-    // Close mobile menu on link click
-    document.querySelectorAll('.mobile-menu-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (mobileMenuOverlay) {
-                mobileMenuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+    // Close when clicking any nav pill link or button
+    document.addEventListener('click', (e) => {
+        if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) {
+            // If click is outside the header, close the menu
+            const header = document.getElementById('main-header');
+            if (header && !header.contains(e.target)) {
+                closeMobileDropdown();
             }
-        });
+        }
     });
 
+    // Close on any pill link/button click inside menu
+    document.querySelectorAll('.mobile-nav-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+            closeMobileDropdown();
+        });
+    });
 
 
     // Header scroll background effect

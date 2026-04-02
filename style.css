@@ -3106,44 +3106,115 @@ body.platform-view-active #mypage-overlay { display: flex; }
 }
 
 
-/* [Mobile Navigation: Sub-components] */
-.mobile-lang-switcher {
+/* ============================================================
+ * [Mobile Navigation: Dropdown pill-button menu]
+ * ============================================================ */
+
+/* The dropdown wrapper sits outside .container, directly under #main-header */
+#mobile-menu-overlay {
+    position: absolute;
+    top: 100%; /* immediately below the header */
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    /* Hidden state */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#mobile-menu-overlay.active {
+    max-height: 200px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mobile-menu-content {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(46, 204, 113, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    padding: 16px 20px;
+}
+
+/* Single horizontal row of pill buttons */
+.mobile-menu-row {
     display: flex;
+    align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 30px;
-    padding: 10px;
+    flex-wrap: wrap;
 }
 
-.mobile-lang-switcher .lang-btn {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #64748b;
+/* Base pill button style */
+.mobile-nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s;
+    font-family: var(--font-family);
+    transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    white-space: nowrap;
+    /* Default: ghost style */
+    background: #f1f5f9;
+    color: #334155;
+    border: 1.5px solid #e2e8f0;
 }
 
-.mobile-lang-switcher .lang-btn.active {
-    background: var(--primary-color);
-    color: #fff;
+.mobile-nav-pill i {
+    font-size: 0.78rem;
+    opacity: 0.75;
+}
+
+.mobile-nav-pill:hover {
+    background: #e8fdf3;
     border-color: var(--primary-color);
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.18);
 }
 
+/* Auth variant (mypage / logout) */
+.mobile-nav-pill--auth {
+    background: #f8fafc;
+    color: #475569;
+    border-color: #dde3ec;
+}
+
+/* CTA variant (login) — green filled */
+.mobile-nav-pill--cta {
+    background: var(--primary-gradient);
+    color: #ffffff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(46, 204, 113, 0.3);
+}
+
+.mobile-nav-pill--cta:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+    border-color: transparent;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+/* Ensure header is position:relative so the dropdown anchors correctly */
+#main-header {
+    position: sticky;
+    /* Override — make it a positioning context */
+}
+
+/* Keep old mobile-menu-auth styles for compatibility */
 .mobile-menu-auth {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.mobile-menu-auth button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1rem;
+    display: none; /* hidden — replaced by new row */
 }
 
 /* [Header: Scrolled State] */

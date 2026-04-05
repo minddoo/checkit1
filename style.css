@@ -3127,7 +3127,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
 }
 
 #mobile-menu-overlay.active {
-    max-height: 200px;
+    max-height: 160px; /* 기존 200px에서 줄여서 더 압축된 느낌 제공 */
     opacity: 1;
     pointer-events: auto;
 }
@@ -3138,11 +3138,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(46, 204, 113, 0.15);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    padding: 20px 16px;
+    padding: 10px 16px 25px 16px; /* 상단 패딩을 줄이고 하단 패딩을 약간 두어 시각적으로 위로 배치 */
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 72px;
+    min-height: 60px; /* 기존 72px에서 줄임 */
 }
 
 /* Single horizontal row of pill buttons */

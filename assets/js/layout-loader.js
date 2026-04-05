@@ -19,10 +19,11 @@ const LayoutLoader = {
                 <button class="lang-btn" data-lang="vn">VN</button>
             </div>
 
-            <!-- Mobile Navigation Toggle -->
-            <button id="mobile-menu-toggle" class="mobile-only">
-                <i class="fas fa-bars"></i>
-            </button>
+            <!-- Mobile Header Buttons (Direct Login/Auth) -->
+            <div class="mobile-only mobile-header-auth">
+                <button id="mobile-header-mypage" class="mobile-header-btn" style="display: none;" data-lang-key="mypage">마이페이지</button>
+                <button id="mobile-header-login" class="mobile-header-btn mobile-login-btn" data-lang-key="nav_login">로그인</button>
+            </div>
 
             <!-- Main Navigation -->
             <nav id="main-nav">

@@ -1481,6 +1481,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     auth.onAuthStateChanged(user => {
         const updateButtons = (isLoggedIn) => {
+            const loginBtnLabel = document.getElementById('mobile-header-login');
+            const mypageBtn = document.getElementById('mobile-header-mypage');
+
             const loginBtns = [navLogin, loginBtn, document.getElementById('mobile-nav-login')];
             const logoutBtns = [navLogout, document.getElementById('mobile-nav-logout')];
             const mypageBtns = [navMyPage, document.getElementById('mobile-nav-mypage')];
@@ -1488,6 +1491,14 @@ document.addEventListener('DOMContentLoaded', () => {
             loginBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'none' : 'inline-block'));
             logoutBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
             mypageBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+
+            // Mobile Header Logic (Direct Buttons)
+            if (loginBtnLabel) {
+                loginBtnLabel.innerHTML = isLoggedIn ? (currentLang === 'ko' ? '로그아웃' : 'Logout') : (currentLang === 'ko' ? '로그인' : 'Login');
+            }
+            if (mypageBtn) {
+                mypageBtn.style.display = isLoggedIn ? 'inline-block' : 'none';
+            }
         };
 
         if (user) {
@@ -1510,23 +1521,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Robust event delegation for nav-login to handle dynamic header injection
     document.addEventListener('click', (e) => {
-        // Login
-        if (e.target.closest('#nav-login') || e.target.closest('#mobile-nav-login')) {
-            if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
-            if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
-        }
-        
-        // Logout
-        if (e.target.closest('#nav-logout') || e.target.closest('#mobile-nav-logout')) {
-            auth.signOut();
-            location.reload();
-        }
+            // Login
+            if (e.target.closest('#nav-login') || e.target.closest('#mobile-nav-login') || e.target.closest('#mobile-header-login')) {
+                const loginBtn = e.target.closest('#mobile-header-login');
+                const isLogoutAction = loginBtn && (loginBtn.innerText === '로그아웃' || loginBtn.innerText === 'Logout');
 
-        // My Page
-        if (e.target.closest('#nav-mypage') || e.target.closest('#mobile-nav-mypage')) {
-            handleMyPageNavigation();
-        }
-    });
+                if (isLogoutAction) {
+                    auth.signOut();
+                    location.reload();
+                } else if (!auth.currentUser) {
+                    if (loginModalOverlay) loginModalOverlay.style.display = 'flex';
+                    if (typeof mobileMenuOverlay !== 'undefined' && mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+                }
+            }
+            
+            // Logout
+            if (e.target.closest('#nav-logout') || e.target.closest('#mobile-nav-logout')) {
+                auth.signOut();
+                location.reload();
+            }
+
+            // My Page
+            if (e.target.closest('#nav-mypage') || e.target.closest('#mobile-nav-mypage') || e.target.closest('#mobile-header-mypage')) {
+                handleMyPageNavigation();
+            }
+        });
 
     function handleMyPageNavigation() {
         const user = auth.currentUser;

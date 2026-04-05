@@ -2826,6 +2826,10 @@ body.platform-view-active #mypage-overlay { display: flex; }
         justify-content: center;
         gap: 10px;
     }
+
+    .testimonial-arrow, .testimonial-dot-container {
+        display: none !important;
+    }
 }
 
 

@@ -2164,9 +2164,17 @@ html[lang="vn"] #corporate-hero .hero-title {
         padding: 0 20px !important;
     }
 
-    /* Floating CTA */
-    .cta-button-primary {
-        min-height: 44px !important;
+    /* Floating CTA & Main Buttons Adjustment */
+    .cta-button-primary, 
+    .cta-button-premium {
+        min-height: 40px !important;
+        padding: 10px 24px !important; /* 패딩 축소 */
+        font-size: 0.95rem !important; /* 폰트 축소 */
+        width: fit-content !important; /* 가득 차지 않게 조정 */
+        margin: 0 auto !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
     }
 
     /* Expectation Section Mobile Adjustment */

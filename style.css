@@ -3288,22 +3288,24 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     
     h2.section-title {
-        font-size: 1.6rem !important;
+        font-size: 1.4rem !important; /* 1.6rem -> 1.4rem */
         line-height: 1.4 !important;
-        margin-bottom: 25px !important;
+        margin-bottom: 20px !important;
         word-break: keep-all;
+        overflow-wrap: break-word;
     }
     
     .section-subtitle {
-        font-size: 0.95rem !important;
+        font-size: 0.88rem !important; /* 0.95rem -> 0.88rem */
         line-height: 1.6 !important;
-        margin-bottom: 35px !important;
+        margin-bottom: 30px !important;
         padding: 0 10px;
         word-break: keep-all;
+        color: #64748b !important;
     }
 
     .hero-caption {
-        font-size: 0.9rem !important;
+        font-size: 0.85rem !important; /* 0.9rem -> 0.85rem */
         line-height: 1.5 !important;
         padding: 0 15px;
     }
@@ -3312,8 +3314,8 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .feature-item-new h3, 
     .process-card h3,
     .welfare-card h4 {
-        font-size: 1.1rem !important;
-        margin-bottom: 10px !important;
+        font-size: 0.98rem !important; /* 1.1rem -> 0.98rem */
+        margin-bottom: 8px !important;
         word-break: keep-all;
     }
 
@@ -3325,8 +3327,8 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .comparison-list li,
     .reason-item p,
     .faq-answer p {
-        font-size: 0.92rem !important;
-        line-height: 1.6 !important;
+        font-size: 0.85rem !important; /* 0.92rem -> 0.85rem */
+        line-height: 1.5 !important;
         word-break: keep-all !important;
         color: #4b5563 !important;
     }
@@ -3384,10 +3386,10 @@ body.platform-view-active #mypage-overlay { display: flex; }
         padding: 50px 20px;
     }
     #hero-text-cta h2 {
-        font-size: 1.8rem;
+        font-size: 1.5rem; /* 1.8rem -> 1.5rem */
     }
     #hero-text-cta p {
-        font-size: 1rem;
+        font-size: 0.92rem; /* 1rem -> 0.92rem */
         line-height: 1.6;
     }
     #service-for {

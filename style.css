@@ -3499,11 +3499,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
 
     .process-card, .testimonial-card {
-        flex: 0 0 85% !important; /* 슬라이더용 카드 너비 */
+        flex: 0 0 80% !important; /* 85% -> 80%로 축소하여 다음 카드를 더 많이 노출 */
         scroll-snap-align: center !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        transform: scale(0.9) !important; /* 기본 상태 작게 */
-        opacity: 0.4 !important; /* 기본 상태 흐리게 */
+        transform: scale(0.9) !important;
+        opacity: 0.4 !important;
     }
 
     .active-card {

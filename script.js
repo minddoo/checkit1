@@ -2111,5 +2111,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 faqItem.classList.add('active');
             }
         });
-    });
+    /* --- [New] Mobile Slider Focus Logic (Intersection Observer) --- */
+    function initMobileSliderFocus() {
+        const isMobile = window.innerWidth <= 768;
+        const sliderCards = document.querySelectorAll('.process-card, .testimonial-card');
+        
+        if (!sliderCards.length) return;
+
+        // Reset if not mobile
+        if (!isMobile) {
+            sliderCards.forEach(card => {
+                card.classList.remove('active-card');
+                card.style.opacity = "";
+                card.style.transform = "";
+            });
+            return;
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px -20% 0px -20%', // 중앙 영역 감지 최적화
+            threshold: 0.6
+        };
+
+        const sliderObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active-card');
+                } else {
+                    entry.target.classList.remove('active-card');
+                }
+            });
+        }, observerOptions);
+
+        sliderCards.forEach(card => {
+            sliderObserver.unobserve(card);
+            sliderObserver.observe(card);
+        });
+    }
+
+    // Initial run and resize bind
+    initMobileSliderFocus();
+    window.addEventListener('resize', initMobileSliderFocus);
 });

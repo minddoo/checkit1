@@ -3501,6 +3501,16 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .process-card, .testimonial-card {
         flex: 0 0 85% !important; /* 슬라이더용 카드 너비 */
         scroll-snap-align: center !important;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform: scale(0.9) !important; /* 기본 상태 작게 */
+        opacity: 0.4 !important; /* 기본 상태 흐리게 */
+    }
+
+    .active-card {
+        transform: scale(1.0) !important; /* 중앙 강조 */
+        opacity: 1 !important;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important;
+        z-index: 2;
     }
 
     .feature-item-new i, .welfare-icon-box i, .safety-card i, .process-card i {

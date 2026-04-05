@@ -11,18 +11,18 @@ const LayoutLoader = {
                 CHECKIT
             </a>
 
-            <!-- Mobile Language Switcher (Visible in Header) -->
-            <div class="mobile-only mobile-header-lang">
-                <button class="lang-btn active" data-lang="ko">KR</button>
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="cn">CN</button>
-                <button class="lang-btn" data-lang="vn">VN</button>
-            </div>
-
-            <!-- Mobile Header Buttons (Direct Login/Auth) -->
-            <div class="mobile-only mobile-header-auth">
-                <button id="mobile-header-mypage" class="mobile-header-btn" style="display: none;" data-lang-key="mypage">마이페이지</button>
-                <button id="mobile-header-login" class="mobile-header-btn mobile-login-btn" data-lang-key="nav_login">로그인</button>
+            <!-- Mobile Header Controls Group -->
+            <div class="mobile-only mobile-header-right-group">
+                <div class="mobile-header-lang">
+                    <button class="lang-btn active" data-lang="ko">KR</button>
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="cn">CN</button>
+                    <button class="lang-btn" data-lang="vn">VN</button>
+                </div>
+                <div class="mobile-header-auth">
+                    <button id="mobile-header-mypage" class="mobile-header-btn" style="display: none;" data-lang-key="mypage">마이페이지</button>
+                    <button id="mobile-header-login" class="mobile-header-btn mobile-login-btn" data-lang-key="nav_login">로그인</button>
+                </div>
             </div>
 
             <!-- Main Navigation -->

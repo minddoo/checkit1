@@ -2675,18 +2675,37 @@ body.platform-view-active #mypage-overlay { display: flex; }
 @media (max-width: 768px) {
     .pc-only { display: none !important; }
     
+    #main-header {
+        padding: 18px 0 28px 0; /* 하단 여백 대폭 추가 (흰색 공간 확보) */
+    }
+    
+    #main-header .container {
+        align-items: flex-start; /* 상단 고정 정렬 */
+    }
+
+    .logo {
+        margin-top: 5px; /* 버튼 그룹과 높이 밸런스 조정 */
+    }
+
     /* [Navigation: Mobile Header Elements] */
+    .mobile-header-right-group {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-end; /* 우측 정렬 */
+        gap: 10px; /* 언어 버튼과 로그인 버튼 사이 간격 */
+    }
+
     .mobile-header-lang {
         display: flex !important;
         gap: 2px !important;
-        margin-right: 8px; /* 간격 소폭 조정 */
+        margin-right: 0; /* 그룹화되었으므로 개별 마진 제거 */
     }
 
     .mobile-header-lang .lang-btn {
         background: none;
         border: none;
         padding: 4px 6px;
-        font-size: 0.72rem;
+        font-size: 0.70rem; /* 더 작게 조절하여 공간 확보 */
         font-weight: 700;
         color: #94a3b8;
         cursor: pointer;
@@ -2708,7 +2727,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .mobile-header-btn {
         background: #fff;
         border: 1px solid #e2e8f0;
-        padding: 6px 12px;
+        padding: 6px 14px; /* 가로 패딩 약간 더 여유있게 */
         border-radius: 12px;
         font-size: 0.75rem;
         font-weight: 800;

@@ -2111,6 +2111,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 faqItem.classList.add('active');
             }
         });
+    });
+
     /* --- [New] Mobile Slider Focus Logic (Intersection Observer) --- */
     function initMobileSliderFocus() {
         const isMobile = window.innerWidth <= 768;

@@ -131,10 +131,11 @@ body {
     display: inline-block; 
     background: var(--primary-gradient); 
     color: var(--white); 
-    padding: 18px 40px; 
+    padding: 14px 32px; /* 18px 40px -> 14px 32px로 축소 */
     border-radius: 12px; 
     text-decoration: none; 
     font-weight: 700; 
+    font-size: 1rem; /* 명시적으로 크기 지정 */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     box-shadow: 0 10px 20px -5px rgba(46, 204, 113, 0.3); 
     border: none; 
@@ -602,13 +603,13 @@ body {
 
 .premium-full-card .cta-button-premium {
     display: inline-block;
-    padding: 16px 40px;
+    padding: 12px 32px; /* 16px 40px -> 12px 32px로 축소 */
     background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
     color: white;
-    font-size: 1.1rem;
+    font-size: 1rem; /* 1.1rem -> 1rem으로 축소 */
     font-weight: 700;
-    border-radius: 14px; /* Rounded rectangle instead of pill shape */
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2); /* 네온 효과 제거 및 그림자 축소 */
+    border-radius: 14px; 
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2); 
     transition: all 0.3s ease;
     text-decoration: none;
 }
@@ -2164,17 +2165,9 @@ html[lang="vn"] #corporate-hero .hero-title {
         padding: 0 20px !important;
     }
 
-    /* Floating CTA & Main Buttons Adjustment */
-    .cta-button-primary, 
-    .cta-button-premium {
-        min-height: 40px !important;
-        padding: 10px 24px !important; /* 패딩 축소 */
-        font-size: 0.95rem !important; /* 폰트 축소 */
-        width: fit-content !important; /* 가득 차지 않게 조정 */
-        margin: 0 auto !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
+    /* Floating CTA */
+    .cta-button-primary {
+        min-height: 44px !important;
     }
 
     /* Expectation Section Mobile Adjustment */
@@ -3566,6 +3559,14 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     .faq-question h4 {
         font-size: 1rem !important;
+    }
+
+    /* CTA Button Scaledown for Mobile */
+    .cta-button-primary,
+    .cta-button-premium {
+        padding: 10px 24px !important;
+        font-size: 0.9rem !important;
+        border-radius: 10px !important;
     }
 }
 @media (min-width: 769px) {

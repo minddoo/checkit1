@@ -3512,6 +3512,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
 
     .process-card-container::-webkit-scrollbar,
     .testimonial-grid::-webkit-scrollbar,
+    #corporate-necessity .features-grid-new::-webkit-scrollbar,
     .welfare-visual-grid::-webkit-scrollbar {
         display: none;
     }
@@ -3534,7 +3535,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
 
     .process-card, .testimonial-card, #corporate-necessity .feature-item-new, .welfare-card {
-        flex: 0 0 80% !important; /* 85% -> 80%로 축소하여 다음 카드를 더 많이 노출 */
+        flex: 0 0 72% !important; /* Reduced from 80% to clearly show side cards */
         scroll-snap-align: center !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
         transform: scale(0.9) !important;

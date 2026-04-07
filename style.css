@@ -2207,7 +2207,7 @@ html[lang="vn"] #corporate-hero .hero-title {
         line-height: 1.3 !important;
     }
     #corporate-reality-pain .section-subtitle {
-        color: rgba(255, 255, 255, 0.95) !important;
+        color: #000000 !important; /* Set to Black as requested */
         font-weight: 600 !important;
         line-height: 1.6 !important;
     }
@@ -2218,10 +2218,13 @@ html[lang="vn"] #corporate-hero .hero-title {
     .reality-card {
         aspect-ratio: auto !important;
         width: 100% !important;
-        text-align: center !important; /* Centered as requested */
+        text-align: center !important; 
         padding: 30px 25px !important;
-        border-left: none !important; /* Remove side border for symmetry */
-        border-top: 5px solid var(--danger-color) !important; /* Top border for accent */
+        background: rgba(245, 245, 245, 0.75) !important; /* Semi-transparent off-white */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-left: none !important; 
+        border-top: 5px solid var(--danger-color) !important; 
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
     }
     .reality-card .reality-item-title {

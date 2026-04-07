@@ -3615,15 +3615,24 @@ body.platform-view-active #mypage-overlay { display: flex; }
     .pc-layout-wrapper { display: none !important; }
     .mobile-layout-wrapper { 
         display: block !important; 
-        background: 
-            radial-gradient(at 0% 0%, oklch(96% 0.04 145 / 0.8) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, oklch(98% 0.03 160 / 0.7) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, oklch(95% 0.06 140 / 0.8) 0px, transparent 50%),
-            radial-gradient(at 0% 100%, oklch(97% 0.04 155 / 0.7) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, oklch(99% 0.01 150 / 0.5) 0px, transparent 80%),
-            oklch(98% 0.01 150) !important;
+        background: linear-gradient(
+            180deg, 
+            #ffffff 0%, 
+            #f7fffb 5%,
+            #e8fdf2 15%,
+            #d1fae5 40%,
+            #86efac 100%
+        ) !important;
         position: relative;
         min-height: 100vh;
+    }
+
+    /* Force transparency for all sections inside mobile wrapper to let the main gradient show through */
+    .mobile-layout-wrapper section,
+    .mobile-layout-wrapper .section,
+    .mobile-layout-wrapper .alternate-bg {
+        background: transparent !important;
+        background-color: transparent !important;
     }
 
     .mobile-layout-wrapper::before {

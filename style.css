@@ -1478,16 +1478,17 @@ body {
     background: #fdfdfd;
     padding: 50px 40px;
     border-radius: var(--border-radius-lg);
-    border: 1px solid #eee;
+    border: 2px solid #ccc !important; /* Sharp Gray Border */
     text-align: left;
+    box-shadow: none !important; /* No effects as requested */
 }
 
 .comparison-column.highlight {
     background: var(--white);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: var(--shadow-md);
+    border: 2px solid var(--primary-color) !important; /* Sharp Green Border */
+    box-shadow: none !important;
     position: relative;
-    z-index: 2;
+    z-index: 1;
 }
 
 .comparison-column h3 {

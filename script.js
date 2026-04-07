@@ -2192,7 +2192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* --- [New] Mobile Slider Focus Logic (Intersection Observer) --- */
     function initMobileSliderFocus() {
         const isMobile = window.innerWidth <= 768;
-        const sliderCards = document.querySelectorAll('.process-card, .testimonial-card, #corporate-necessity .feature-item-new, .welfare-card');
+        const sliderCards = document.querySelectorAll('.process-card, .testimonial-card, .feature-item-new, .welfare-card');
         
         if (!sliderCards.length) return;
 

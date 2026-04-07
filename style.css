@@ -3435,7 +3435,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         min-height: 480px !important; /* Fixed height for better photo centering */
         height: auto !important;
         text-align: center;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(255, 255, 255, 1) 100%), url('assets/건건.png') !important; /* Bottom fade effect */
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(255, 255, 255, 1) 100%), url('assets/건건.png') !important; /* Darker top, bottom fade */
         background-size: cover !important;
         background-position: center center !important; /* Explicitly centered in both axes */
         display: flex !important;
@@ -3493,9 +3493,10 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
 
     /* 3 items -> 3 per row */
-    /* 1. Swipe Slider for Process & Testimonials */
+    /* 1. Swipe Slider for Process, Testimonials, & Corporate Sec 1 */
     .process-card-container, 
-    .testimonial-grid {
+    .testimonial-grid,
+    #corporate-necessity .features-grid-new {
         display: flex !important;
         flex-direction: row !important;
         overflow-x: auto !important;
@@ -3516,8 +3517,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
     /* 2. Grid for other 3-item lists */
     .welfare-visual-grid, 
     .safety-grid, 
-    #checkit-solution .features-grid-new,
-    #corporate-necessity .features-grid-new {
+    #checkit-solution .features-grid-new {
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 8px !important;
@@ -3532,7 +3532,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         padding: 25px 20px !important;
     }
 
-    .process-card, .testimonial-card {
+    .process-card, .testimonial-card, #corporate-necessity .feature-item-new {
         flex: 0 0 80% !important; /* 85% -> 80%로 축소하여 다음 카드를 더 많이 노출 */
         scroll-snap-align: center !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;

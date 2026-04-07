@@ -3431,13 +3431,16 @@ body.platform-view-active #mypage-overlay { display: flex; }
 
     /* Corporate Hero Refinement */
     #corporate-hero {
-        padding: 50px 20px 40px !important; 
-        min-height: auto !important;
+        padding: 60px 20px 40px !important; /* Increased top padding slightly for text room */
+        min-height: 480px !important; /* Fixed height for better photo centering */
         height: auto !important;
         text-align: center;
         background-size: cover !important;
-        background-position: center !important;
-        display: block !important;
+        background-position: center center !important; /* Explicitly centered in both axes */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
     }
     #corporate-hero .container {
         display: flex !important;
@@ -3449,20 +3452,23 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     #corporate-hero .hero-character {
         position: relative !important;
-        width: 160px !important; 
-        height: 160px !important;
-        margin-bottom: 20px !important;
+        width: 180px !important; 
+        height: 180px !important;
+        margin-top: 20px !important;
+        margin-bottom: 0 !important;
         background-image: url('assets/기.png') !important;
         background-size: contain !important;
         background-repeat: no-repeat !important;
         background-position: center !important;
-        order: -1; /* 캐릭터를 상단에 배치하여 텍스트 강조 */
+        order: 2; /* Move character below text */
     }
     #corporate-hero .hero-text-content {
         width: 100% !important;
-        text-align: center !important; /* 다시 중앙 정렬 */
+        text-align: center !important; 
         padding: 0 !important;
         z-index: 5;
+        order: 1; /* Ensure text is on top */
+        margin-bottom: 30px !important;
     }
     #corporate-hero .hero-title {
         font-size: 1.35rem !important; /* 한 줄 배치를 보장하는 크기 */

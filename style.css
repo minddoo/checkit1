@@ -3471,7 +3471,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         margin-bottom: 30px !important;
     }
     #corporate-hero .hero-title {
-        font-size: 1.25rem !important; /* Slightly smaller for guaranteed single-line */
+        font-size: 1.2rem !important; /* Single-line guaranteed scale */
         font-weight: 800 !important;
         line-height: 1.4 !important;
         margin-bottom: 12px !important;

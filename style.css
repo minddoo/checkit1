@@ -2200,13 +2200,47 @@ html[lang="vn"] #corporate-hero .hero-title {
         word-break: keep-all !important;
     }
 
-    /* [3-4. Corporate Section 3: Long cards stack] */
+    /* [3-4. Corporate Section 3: Vivid Header and Centered Cards] */
+    #corporate-reality-pain .section-title {
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        line-height: 1.3 !important;
+    }
+    #corporate-reality-pain .section-subtitle {
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-weight: 600 !important;
+        line-height: 1.6 !important;
+    }
     .reality-grid {
         flex-direction: column !important;
+        gap: 20px !important;
     }
     .reality-card {
         aspect-ratio: auto !important;
         width: 100% !important;
+        text-align: center !important; /* Centered as requested */
+        padding: 30px 25px !important;
+        border-left: none !important; /* Remove side border for symmetry */
+        border-top: 5px solid var(--danger-color) !important; /* Top border for accent */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+    .reality-card .reality-item-title {
+        text-align: center !important;
+        margin-bottom: 20px !important;
+        font-size: 1.5rem !important;
+    }
+    .reality-list {
+        text-align: center !important;
+        list-style: none !important;
+    }
+    .reality-list li {
+        padding-left: 0 !important;
+        margin-bottom: 12px !important;
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+    }
+    .reality-list li::before {
+        display: none !important; /* Remove bullet */
     }
 
     /* [3-5. Corporate Section 4: Title One Line] */

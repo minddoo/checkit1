@@ -1,4 +1,4 @@
-﻿/*==================================================
+/*==================================================
   CHECKIT - Main Stylesheet
 ==================================================*/
 
@@ -3613,5 +3613,26 @@ body.platform-view-active #mypage-overlay { display: flex; }
 
 @media (max-width: 768px) {
     .pc-layout-wrapper { display: none !important; }
-    .mobile-layout-wrapper { display: block !important; }
+    .mobile-layout-wrapper { 
+        display: block !important; 
+        background: 
+            radial-gradient(at 0% 0%, oklch(96% 0.04 145 / 0.8) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, oklch(98% 0.03 160 / 0.7) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, oklch(95% 0.06 140 / 0.8) 0px, transparent 50%),
+            radial-gradient(at 0% 100%, oklch(97% 0.04 155 / 0.7) 0px, transparent 50%),
+            radial-gradient(at 50% 50%, oklch(99% 0.01 150 / 0.5) 0px, transparent 80%),
+            oklch(98% 0.01 150) !important;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    .mobile-layout-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.04;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        z-index: 0;
+    }
 }

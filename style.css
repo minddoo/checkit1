@@ -3618,11 +3618,10 @@ body.platform-view-active #mypage-overlay { display: flex; }
         background: linear-gradient(
             180deg, 
             #ffffff 0%, 
-            #f0fdf4 2%,
-            #dcfce7 8%,
-            #4ade80 20%,
-            #166534 60%,
-            #14532d 100%
+            #fbfdfc 20%,
+            #f7fffb 50%,
+            #f0fdf4 85%,
+            #e6faf0 100%
         ) !important;
         position: relative;
         min-height: 100vh;

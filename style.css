@@ -2117,15 +2117,87 @@ html[lang="vn"] #corporate-hero .hero-title {
         width: 100% !important;
     }
 
-    /* [3-2 & 3-3. Corporate Section 1 & 2 -> Grid] */
-    #corporate-necessity .features-grid-new, .welfare-visual-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 8px !important;
-        overflow-x: visible !important;
+    /* [3-2 & 3-3. Corporate Section 1 & 2 -> Convex Carousel] */
+    #corporate-necessity .features-grid-new, 
+    .welfare-visual-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 20px !important; 
+        padding: 40px 20px !important;
+        margin: 0 -20px !important;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
     }
+
     .feature-item-new, .welfare-card {
-        padding: 12px 8px !important;
+        flex: 0 0 85% !important; 
+        scroll-snap-align: center !important;
+        padding: 35px 25px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important; /* Sharper border */
+        border-radius: 24px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        transform: scale(0.94); 
+        opacity: 0.8; /* Subtle fade for non-focused cards */
+    }
+
+    /* Convex Lens Magnification - Vivid & Sharp */
+    .feature-item-new:active, .welfare-card:active,
+    .feature-item-new:hover, .welfare-card:hover {
+        transform: scale(1.04) !important;
+        opacity: 1 !important;
+        box-shadow: 0 25px 50px rgba(46, 204, 113, 0.2) !important;
+        border-color: var(--primary-color) !important;
+        z-index: 10;
+    }
+
+    /* Icon Clarity - Vivid & Large */
+    .feature-item-new i, .welfare-icon-box i {
+        font-size: 3.5rem !important; 
+        color: var(--primary-color) !important;
+        filter: drop-shadow(0 6px 12px rgba(46, 204, 113, 0.25)) !important;
+        transition: transform 0.3s ease;
+    }
+    .welfare-card:hover i, .feature-item-new:hover i {
+        transform: scale(1.1);
+    }
+    .welfare-icon-box {
+        background-color: #f0fdf4 !important;
+        width: 100px !important;
+        height: 100px !important;
+        margin: 0 auto 30px !important;
+    }
+
+    /* Text Clarity - Deep Black & High Contrast */
+    .feature-item-new h3, .welfare-card h4 {
+        font-size: 1.6rem !important;
+        font-weight: 800 !important;
+        color: #000000 !important; /* Pure black for maximum sharpness */
+        margin-bottom: 18px !important;
+        letter-spacing: -0.02em !important;
+    }
+    .feature-item-new p, .welfare-card p {
+        font-size: 1rem !important;
+        line-height: 1.7 !important;
+        color: #1e293b !important; /* Deeper slate for legibility */
+        font-weight: 500 !important;
+        word-break: keep-all !important;
+    }
+
+    /* Text Readability for Section 1 & 2 */
+    .feature-item-new h3, .welfare-card h4 {
+        font-size: 1.6rem !important;
+        font-weight: 800 !important;
+        color: #000000 !important;
+        margin-bottom: 20px !important;
+    }
+    .feature-item-new p, .welfare-card p {
+        font-size: 1rem !important;
+        line-height: 1.8 !important;
+        color: #1e293b !important;
+        word-break: keep-all !important;
     }
 
     /* [3-4. Corporate Section 3: Long cards stack] */
@@ -2144,19 +2216,55 @@ html[lang="vn"] #corporate-hero .hero-title {
         overflow: hidden;
     }
 
-    /* [3-6 & 3-7. Corporate Section 5 & 6 -> 2x2 and 3-per-row] */
-    .only-reason-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
-    }
+    /* [3-6 & 3-7. Corporate Sections -> Sharper Cards] */
+    .only-reason-grid,
     .safety-grid {
-        display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 8px !important;
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        gap: 15px !important;
+        padding: 35px 20px !important;
+        margin: 0 -20px !important;
+        scrollbar-width: none;
     }
+
     .reason-item, .safety-card {
-        padding: 12px !important;
+        flex: 0 0 85% !important;
+        scroll-snap-align: center !important;
+        padding: 35px 25px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+        transform: scale(0.95);
+        opacity: 0.85;
+        transition: all 0.4s ease !important;
+    }
+    
+    .reason-item:active, .safety-card:active,
+    .reason-item:hover, .safety-card:hover {
+        transform: scale(1.03) !important;
+        opacity: 1 !important;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1) !important;
+        border-color: var(--primary-color) !important;
+    }
+
+    .reason-item h4, .safety-card h4 {
+        font-size: 1.4rem !important;
+        font-weight: 800 !important;
+        color: #000000 !important;
+        margin-bottom: 15px !important;
+    }
+    .safety-card i {
+        font-size: 3.5rem !important;
+        color: var(--primary-color) !important;
+        filter: drop-shadow(0 6px 12px rgba(46, 204, 113, 0.2)) !important;
+        margin-bottom: 25px !important;
+    }
+    .reason-item p, .safety-card p {
+        font-size: 1rem !important;
+        line-height: 1.7 !important;
+        color: #1e293b !important;
     }
 
     /* [3-8. Corporate Section 7 Padding] */
@@ -3534,30 +3642,35 @@ body.platform-view-active #mypage-overlay { display: flex; }
         padding: 25px 20px !important;
     }
 
-    .process-card, .testimonial-card, #corporate-necessity .feature-item-new, .welfare-card {
+    .process-card, .testimonial-card, .feature-item-new, .welfare-card {
         flex: 0 0 72% !important; /* Reduced from 80% to clearly show side cards */
         scroll-snap-align: center !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        transform: scale(0.9) !important;
-        opacity: 0.4 !important;
+        transform: scale(0.92) !important; /* Subtle scale diff */
+        opacity: 0.65 !important; /* Darker than 0.4 to reduce blurry feel */
+        filter: grayscale(0.5) blur(0.3px) !important; /* Side cards slightly desaturated */
     }
 
     .active-card {
-        transform: scale(1.0) !important; /* 중앙 강조 */
+        transform: scale(1.03) !important; /* Slight convex pulse */
         opacity: 1 !important;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important;
+        filter: grayscale(0) blur(0) !important;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.18) !important;
+        border: 2px solid var(--primary-color) !important; /* Bold focus border */
         z-index: 2;
     }
 
     .feature-item-new i, .welfare-icon-box i, .safety-card i, .process-card i {
-        font-size: 1rem !important;
+        font-size: 1.4rem !important; /* Larger icons */
         margin-bottom: 6px !important;
+        color: var(--primary-color) !important; /* Solid primary color */
     }
 
     .feature-item-new h3, .process-card h3, .welfare-card h4, .safety-card h4, .reason-item h4 {
-        font-size: 0.95rem !important;
+        font-size: 1.05rem !important; /* Slightly larger */
         line-height: 1.2 !important;
-        font-weight: 800 !important;
+        font-weight: 900 !important; /* Extra Bold for clarity */
+        color: #111 !important; /* Deep black text */
     }
 
     .main-heading {

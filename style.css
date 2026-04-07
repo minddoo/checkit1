@@ -2288,7 +2288,14 @@ html[lang="vn"] #corporate-hero .hero-title {
         border-color: var(--primary-color) !important;
     }
 
-    .reason-item h4, .safety-card h4 {
+    .reason-item h4 {
+        font-size: 1.4rem !important;
+        font-weight: 800 !important;
+        color: var(--primary-color) !important; /* Green title as requested */
+        text-align: center !important; /* Centered as requested */
+        margin-bottom: 15px !important;
+    }
+    .safety-card h4 {
         font-size: 1.4rem !important;
         font-weight: 800 !important;
         color: #000000 !important;

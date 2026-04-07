@@ -1474,7 +1474,7 @@ body {
 }
 
 .comparison-column {
-    flex: 1;
+    flex: 0.8 !important; /* Smaller left card as requested */
     background: #fdfdfd;
     padding: 50px 40px;
     border-radius: var(--border-radius-lg);
@@ -1484,6 +1484,7 @@ body {
 }
 
 .comparison-column.highlight {
+    flex: 1.2 !important; /* Larger right card */
     background: var(--white);
     border: 2px solid var(--primary-color) !important; /* Sharp Green Border */
     box-shadow: none !important;

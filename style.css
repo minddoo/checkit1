@@ -3618,16 +3618,17 @@ body.platform-view-active #mypage-overlay { display: flex; }
         background: linear-gradient(
             180deg, 
             #ffffff 0%, 
-            #f0fdf4 5%,
-            #dcfce7 15%,
-            #86efac 40%,
-            #22c55e 100%
+            #f0fdf4 2%,
+            #dcfce7 8%,
+            #4ade80 20%,
+            #166534 60%,
+            #14532d 100%
         ) !important;
         position: relative;
         min-height: 100vh;
     }
 
-    /* Dramatically increase transparency for all sections inside mobile wrapper */
+    /* Keep transparency for sections, but ensure cards are solid again */
     .mobile-layout-wrapper section,
     .mobile-layout-wrapper .section,
     .mobile-layout-wrapper .alternate-bg {
@@ -3636,13 +3637,15 @@ body.platform-view-active #mypage-overlay { display: flex; }
         backdrop-filter: none !important;
     }
 
-    /* Enhance card transparency for glass effect */
+    /* Restore solid white backgrounds for mobile cards as requested */
     .mobile-layout-wrapper div[style*="background: #ffffff"],
     .mobile-layout-wrapper div[style*="background:#ffffff"] {
-        background: rgba(255, 255, 255, 0.4) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: #ffffff !important;
+        opacity: 1 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
     }
 
     .mobile-layout-wrapper::before {

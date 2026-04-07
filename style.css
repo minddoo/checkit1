@@ -3493,10 +3493,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
 
     /* 3 items -> 3 per row */
-    /* 1. Swipe Slider for Process, Testimonials, & Corporate Sec 1 */
+    /* 1. Swipe Slider for Process, Testimonials, Corporate Sec 1, & Welfare */
     .process-card-container, 
     .testimonial-grid,
-    #corporate-necessity .features-grid-new {
+    #corporate-necessity .features-grid-new,
+    .welfare-visual-grid {
         display: flex !important;
         flex-direction: row !important;
         overflow-x: auto !important;
@@ -3510,12 +3511,12 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
 
     .process-card-container::-webkit-scrollbar,
-    .testimonial-grid::-webkit-scrollbar {
+    .testimonial-grid::-webkit-scrollbar,
+    .welfare-visual-grid::-webkit-scrollbar {
         display: none;
     }
 
     /* 2. Grid for other 3-item lists */
-    .welfare-visual-grid, 
     .safety-grid, 
     #checkit-solution .features-grid-new {
         display: grid !important;
@@ -3532,7 +3533,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         padding: 25px 20px !important;
     }
 
-    .process-card, .testimonial-card, #corporate-necessity .feature-item-new {
+    .process-card, .testimonial-card, #corporate-necessity .feature-item-new, .welfare-card {
         flex: 0 0 80% !important; /* 85% -> 80%로 축소하여 다음 카드를 더 많이 노출 */
         scroll-snap-align: center !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;

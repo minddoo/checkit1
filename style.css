@@ -3618,21 +3618,31 @@ body.platform-view-active #mypage-overlay { display: flex; }
         background: linear-gradient(
             180deg, 
             #ffffff 0%, 
-            #f7fffb 5%,
-            #e8fdf2 15%,
-            #d1fae5 40%,
-            #86efac 100%
+            #f0fdf4 5%,
+            #dcfce7 15%,
+            #86efac 40%,
+            #22c55e 100%
         ) !important;
         position: relative;
         min-height: 100vh;
     }
 
-    /* Force transparency for all sections inside mobile wrapper to let the main gradient show through */
+    /* Dramatically increase transparency for all sections inside mobile wrapper */
     .mobile-layout-wrapper section,
     .mobile-layout-wrapper .section,
     .mobile-layout-wrapper .alternate-bg {
         background: transparent !important;
         background-color: transparent !important;
+        backdrop-filter: none !important;
+    }
+
+    /* Enhance card transparency for glass effect */
+    .mobile-layout-wrapper div[style*="background: #ffffff"],
+    .mobile-layout-wrapper div[style*="background:#ffffff"] {
+        background: rgba(255, 255, 255, 0.4) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
     }
 
     .mobile-layout-wrapper::before {

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +17,8 @@
     <header id="main-header"></header>
 
     <main>
+    <!-- PC LAYOUT (Protected) -->
+    <div class="pc-layout-wrapper">
         <!-- HERO - ENTERPRISE PREMIUM FULL-BLEED -->
         <section id="hero" class="hero-glass-section">
 
@@ -439,7 +441,386 @@
                 </form>
             </div>
         </section>
-    </main>
+        </div><!-- /pc-layout-wrapper -->
+
+    <!-- MOBILE LAYOUT (Customizable) -->
+    <div class="mobile-layout-wrapper">
+        <!-- HERO - ENTERPRISE PREMIUM FULL-BLEED -->
+                <section id="hero-mobile">
+            <div style="display: flex; flex-direction: column; gap: 65px; width: 100%; padding: 40px 24px 100px; box-sizing: border-box; background: #fdfdfd;">
+                
+                <header style="text-align: center; margin-bottom: 25px;">
+                    <div style="display: inline-block; font-size: 0.7rem; font-weight: 750; color: #4f46e5; background: rgba(79, 70, 229, 0.05); padding: 6px 16px; border-radius: 100px; margin-bottom: 16px; text-transform: uppercase;">CHECKIT Platform</div>
+                    <h1 style="font-size: 1.85rem; font-weight: 850; line-height: 1.35; color: #0f172a; margin: 0;">泥닿퀎?곸씠怨?吏?띻??ν븳<br><span style="color: #4f46e5;">蹂닿굔愿由??뚮옯??湲곕뒫</span></h1>
+                </header>
+
+                <div style="background: #ffffff; border-radius: 32px; overflow: hidden; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.03);">
+                    <img src="assets/hero-1.jpg" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 35px 28px;">
+                        <div style="display: inline-block; font-size: 0.75rem; font-weight: 850; color: #4f46e5; background: rgba(79, 70, 229, 0.08); padding: 4px 14px; border-radius: 100px; margin-bottom: 14px;">STEP 01</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 16px; color: #111827; font-weight: 800; line-height: 1.35;">洹쇰줈??紐낅떒 &amp; 蹂묒썝 ?뺣낫 <span style="color: #4f46e5; display: block;">?먯뒪???깅줉</span></h3>
+                        <p style="font-size: 1.05rem; line-height: 1.8; color: #4b5563; margin: 0; word-break: keep-all;">湲곗뾽 蹂닿굔愿由ъ옄媛 ?묒?濡?洹쇰줈??紐낅떒怨?蹂묒썝 ?뺣낫瑜?媛꾪렪?섍쾶 ?깅줉?섏뿬 湲곗큹 ?곗씠?곕? 援ъ텞?⑸땲??</p>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border-radius: 32px; overflow: hidden; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.03);">
+                    <img src="assets/hero-2.jpg" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 35px 28px;">
+                        <div style="display: inline-block; font-size: 0.75rem; font-weight: 850; color: #4f46e5; background: rgba(79, 70, 229, 0.08); padding: 4px 14px; border-radius: 100px; margin-bottom: 14px;">STEP 02</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 16px; color: #111827; font-weight: 800; line-height: 1.35;">?꾨씫 ?곗씠??<span style="color: #4f46e5; display: block;">?ㅼ떆媛?泥댄겕</span></h3>
+                        <p style="font-size: 1.05rem; line-height: 1.8; color: #4b5563; margin: 0; word-break: keep-all;">?깅줉??洹쇰줈?먯? 怨꾩빟 蹂묒썝 紐⑸줉??鍮꾧탳 愿由ы븯硫??꾨씫 ?곗씠?곌퉴吏 ?ㅼ떆媛꾩쑝濡?泥댄겕?⑸땲??</p>
+                    </div>
+                </div>
+                
+                <!-- 異붽? ?④퀎???숈씪???⑦꽩?쇰줈 蹂듭젣 ??蹂寃??먰븯??-->
+                
+            </div>
+        </section>
+
+            <script>
+                // 히어로 슬라이드 제어 스크립트 (무한 루프 전환 품질 고도화)
+                document.addEventListener('DOMContentLoaded', function() {
+                    const heroSection = document.getElementById('hero');
+                    const slides = heroSection.querySelectorAll('.hero-slide');
+                    const captions = heroSection.querySelectorAll('.hero-caption');
+                    const dots = heroSection.querySelectorAll('.hero-dot');
+                    let currentSlide = 0;
+                    let autoPlay;
+                    let isPaused = false;
+                    
+                    if (slides.length > 0) {
+                        // 슬라이드 이동 핵심 함수 (z-index 제어 포함)
+                        function goToSlide(n) {
+                            const prevSlideIndex = currentSlide;
+                            
+                            // 1. 모든 이전 상태 초기화 (중첩 방지)
+                            slides.forEach((s, idx) => {
+                                if (idx !== prevSlideIndex) {
+                                    s.classList.remove('exit-left');
+                                    s.style.zIndex = '1'; // 기본 z-index
+                                }
+                            });
+                            
+                            captions.forEach(c => {
+                                c.classList.remove('active');
+                                c.style.display = 'none';
+                                c.style.opacity = '0';
+                            });
+                            dots.forEach(d => d.classList.remove('active'));
+
+                            // 2. 레이어 순서 정교화 (새로운 슬라이드를 무조건 위로)
+                            slides[prevSlideIndex].style.zIndex = '10'; // 퇴장하는 슬라이드
+                            slides[n].style.zIndex = '20'; // 입장하는 슬라이드
+
+                            // 3. 퇴장 효과 적용
+                            if (!isPaused) {
+                                slides[prevSlideIndex].classList.remove('active');
+                                slides[prevSlideIndex].classList.add('exit-left');
+                            } else {
+                                slides[prevSlideIndex].classList.remove('active');
+                            }
+
+                            // 4. 인덱스 업데이트
+                            currentSlide = n;
+
+                            // 5. 신규 슬라이드 및 도트 활성화
+                            slides[currentSlide].classList.remove('exit-left');
+                            slides[currentSlide].classList.add('active');
+                            dots[currentSlide].classList.add('active');
+
+                            if (captions[currentSlide]) {
+                                captions[currentSlide].style.display = 'block';
+                                setTimeout(() => {
+                                    captions[currentSlide].classList.add('active');
+                                    captions[currentSlide].style.opacity = '1';
+                                }, 30);
+                            }
+                            
+                            // 6. 클래스 및 z-index 정리
+                            setTimeout(() => {
+                                if (slides[prevSlideIndex]) {
+                                    slides[prevSlideIndex].classList.remove('exit-left');
+                                }
+                            }, 800);
+                        }
+
+                        // 자동 재생 시작 (3초 간격)
+                        function startAutoPlay() {
+                            autoPlay = setInterval(() => {
+                                let next = (currentSlide + 1) % slides.length;
+                                goToSlide(next);
+                            }, 3000);
+                        }
+
+                        startAutoPlay();
+
+                        // 도트 클릭 이벤트 바인딩
+                        dots.forEach((dot, index) => {
+                            dot.addEventListener('click', () => {
+                                // 자동 재생 중지 (clearInterval 및 플래그 설정)
+                                clearInterval(autoPlay);
+                                isPaused = true;
+                                goToSlide(index);
+                            });
+                        });
+                    }
+                });
+            </script>
+        </section>
+
+        <!-- HERO TEXT & CTA SECTION -->
+        <section id="hero-text-cta-mobile" class="section reveal">
+            <div class="container">
+                <h2 data-lang-key="hero_title"></h2>
+                <p data-lang-key="hero_subtitle"></p>
+                <a href="#contact-form" class="cta-button-primary" data-lang-key="hero_cta"></a>
+            </div>
+        </section>
+
+        <!-- SERVICE FOR (Integrated Premium Card) -->
+        <section id="service-for-mobile" class="section reveal">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="service_for_title">빠르게 늘어나는 외국인 근로자가 <br class="mobile-only">필수인 기업을 위한 서비스</h2>
+                <div class="premium-full-card">
+                    <div class="card-content">
+                        <i class="fas fa-building main-icon"></i>
+                        <h3 class="main-heading" data-lang-key="corporate_title"></h3>
+                        <p class="description" data-lang-key="corporate_desc"></p>
+                        <a href="corporate.html" class="cta-button-premium" data-lang-key="learn_more"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY CHOOSE US -->
+        <section id="why-us-mobile" class="section alternate-bg reveal">
+            <div class="container">
+                <div class="section-title-container">
+                    <h2 class="section-title" data-lang-key="why_us_title">왜 <span class="highlight">CHECKIT</span>을 선택해야 할까요?</h2>
+                    <div class="blinking-character"></div>
+                </div>
+                <p class="section-subtitle" data-lang-key="why_us_subtitle_new"></p>
+                <div class="features-grid-new">
+                    <div class="feature-item-new">
+                        <i class="fas fa-chart-line"></i>
+                        <h3 data-lang-key="why_us_feature1_title"></h3>
+                        <p data-lang-key="why_us_feature1_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-user-tie"></i>
+                        <h3 data-lang-key="why_us_feature2_title"></h3>
+                        <p data-lang-key="why_us_feature2_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-file-medical"></i>
+                        <h3 data-lang-key="why_us_feature3_title"></h3>
+                        <p data-lang-key="why_us_feature3_desc"></p>
+                    </div>
+                    <div class="feature-item-new">
+                        <i class="fas fa-shield-halved"></i>
+                        <h3 data-lang-key="why_us_feature4_title"></h3>
+                        <p data-lang-key="why_us_feature4_desc"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROCESS -->
+        <section id="process-new-mobile" class="section reveal">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="process_title"></h2>
+                <div class="process-card-container">
+                    <div class="process-card">
+                        <div class="step-number">1</div>
+                        <h3 data-lang-key="process_step1_title"></h3>
+                        <p data-lang-key="process_step1_desc_new"></p>
+                    </div>
+                    <div class="process-card">
+                        <div class="step-number">2</div>
+                        <h3 data-lang-key="process_step2_title"></h3>
+                        <p data-lang-key="process_step2_desc_new"></p>
+                    </div>
+                    <div class="process-card">
+                        <div class="step-number">3</div>
+                        <h3 data-lang-key="process_step3_title_new"></h3>
+                        <p data-lang-key="process_step3_desc_new"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section id="testimonials-mobile" class="section alternate-bg reveal">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="testimonials_title"></h2>
+                <p class="section-subtitle" data-lang-key="testimonials_subtitle"></p>
+                <div class="testimonial-slider-container">
+                    <div class="testimonial-grid" id="testimonialSlider-mobile">
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial1_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial1_author"></strong>
+                                <span data-lang-key="testimonial1_type"></span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial2_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial2_author"></strong>
+                                <span data-lang-key="testimonial2_type"></span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <p class="testimonial-text" data-lang-key="testimonial3_text"></p>
+                            <div class="testimonial-author">
+                                <strong data-lang-key="testimonial3_author"></strong>
+                                <span data-lang-key="testimonial3_type"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function initTestimonialSlider() {
+                        const slider = document.getElementById('testimonialSlider');
+                        const dotsContainer = document.getElementById('testimonialDots');
+                        const cards = slider.querySelectorAll('.testimonial-card');
+                        let currentIdx = 0;
+
+                        // Create Dots
+                        cards.forEach((_, i) => {
+                            const dot = document.createElement('div');
+                            dot.className = 'testimonial-dot' + (i === 0 ? ' active' : '');
+                            dot.onclick = () => scrollToSlide(i);
+                            dotsContainer.appendChild(dot);
+                        });
+
+                        const dots = dotsContainer.querySelectorAll('.testimonial-dot');
+
+                        function updateDots(idx) {
+                            if (window.innerWidth > 768) return; 
+                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                        }
+
+                        function scrollToSlide(idx) {
+                            const cardWidth = cards[0].offsetWidth + 24; // width + gap
+                            slider.scrollTo({ left: cardWidth * idx, behavior: 'smooth' });
+                            updateDots(idx);
+                            currentIdx = idx;
+                        }
+
+                        window.moveTestimonial = (dir) => {
+                            currentIdx = (currentIdx + dir + cards.length) % cards.length;
+                            scrollToSlide(currentIdx);
+                        };
+
+                        // Sync dots on manual scroll
+                        slider.addEventListener('scroll', () => {
+                            const idx = Math.round(slider.scrollLeft / (cards[0].offsetWidth + 24));
+                            if (idx !== currentIdx) {
+                                currentIdx = idx;
+                                updateDots(idx);
+                            }
+                        });
+
+                        // Auto Play
+                        setInterval(() => {
+                            if (document.visibilityState === 'visible' && window.innerWidth <= 768) {
+                                moveTestimonial(1);
+                            }
+                        }, 5000);
+                    }
+                    document.addEventListener('DOMContentLoaded', initTestimonialSlider);
+                </script>
+            </div>
+        </section>
+
+        <!-- CONTACT FORM -->
+        <!-- FAQ SECTION (Q&A) -->
+        <section id="main-faq-mobile" class="section alternate-bg reveal">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="chatbot_header">자주 하는 질문 (FAQ)</h2>
+                <p class="section-subtitle" data-lang-key="chatbot_subtitle">CHECKIT에 대해 가장 궁금해하시는 질문들을 모았습니다.</p>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-q-badge">Q</span>
+                            <h4 data-lang-key="chatbot_q1"></h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p data-lang-key="chatbot_a1"></p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-q-badge">Q</span>
+                            <h4 data-lang-key="chatbot_q2"></h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p data-lang-key="chatbot_a2"></p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-q-badge">Q</span>
+                            <h4 data-lang-key="chatbot_q3"></h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p data-lang-key="chatbot_a3"></p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-q-badge">Q</span>
+                            <h4 data-lang-key="chatbot_q4"></h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p data-lang-key="chatbot_a4"></p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span class="faq-q-badge">Q</span>
+                            <h4 data-lang-key="chatbot_q5"></h4>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p data-lang-key="chatbot_a5"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact-form-mobile" class="section reveal">
+            <div class="container">
+                <h2 class="section-title" data-lang-key="contact_title_new"></h2>
+                <p class="section-subtitle" data-lang-key="contact_subtitle_new"></p>
+                <form class="contact-form-body">
+                    <div class="form-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="email" data-lang-key="contact_form_email_label"></label>
+                            <input type="email" id="email-mobile" name="email" required data-lang-key="contact_form_email_placeholder">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" data-lang-key="contact_form_phone_label"></label>
+                        <input type="tel" id="phone-mobile" name="phone" data-lang-key="contact_form_phone_placeholder">
+                    </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="message" data-lang-key="contact_form_message_label"></label>
+                        <textarea id="message-mobile" name="message" rows="6" required data-lang-key="contact_form_message_placeholder"></textarea>
+                    </div>
+                    <button type="submit" class="cta-button-primary" data-lang-key="contact_form_submit_button"></button>
+                </form>
+            </div>
+        </section>
+        </div><!-- /mobile-layout-wrapper -->
+</main>
 
     <!-- My Page Overlay -->
     <div id="mypage-overlay"></div>
@@ -621,3 +1002,5 @@
     </div>
 </body>
 </html>
+
+

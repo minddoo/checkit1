@@ -1,0 +1,300 @@
+﻿diff --git a/index.html b/index.html
+index f57ad9a..a1aadea 100644
+--- a/index.html
++++ b/index.html
+@@ -4,7 +4,7 @@
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title data-lang-key="main_page_title">CHECKIT - ?멸뎅??嫄닿컯寃吏??덉빟</title>
+-    <link rel="stylesheet" href="style.css?v=6.0">
++    <link rel="stylesheet" href="style.css?v=9.7">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.8/dist/web/static/pretendard.css" rel="stylesheet">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+@@ -18,16 +18,15 @@
+ 
+     <main>
+         <!-- HERO - ENTERPRISE PREMIUM FULL-BLEED -->
++        <!--         <!-- HERO SECTION -->
+         <section id="hero" class="hero-glass-section">
+-
+-            <!-- Topbar: separate above the card -->
+-            <div class="hero-topbar">
+-                <div class="hero-brand-chip"><i class="fas fa-circle"></i> CHECKIT??泥닿퀎?곸씠怨?吏?띻??ν븳 ?뚮옯??湲곕뒫</div>
++            
++            <div class="hero-topbar pc-only-hero">
++                <div class="hero-brand-chip"><i class="fas fa-circle"></i> CHECKIT??泥닿퀎?곸씤 蹂닿굔愿由??뚮옯??湲곕뒫</div>
+             </div>
+ 
+-            <div class="hero-premium-card">
+-
+-                <!-- Full-bleed slideshow background -->
++            <!-- PC VERSION: SLIDESHOW (Fixed for PC Viewport) -->
++            <div class="hero-premium-card pc-only-hero">
+                 <div class="hero-slideshow-container hero-slideshow">
+                     <div class="hero-slide active" style="background-image: url('assets/hero-1.jpg');"></div>
+                     <div class="hero-slide" style="background-image: url('assets/hero-2.jpg');"></div>
+@@ -39,66 +38,138 @@
+                     <div class="hero-slide" style="background-image: url('assets/hero-8.jpg');"></div>
+                     <div class="hero-slide" style="background-image: url('assets/hero-9.jpg');"></div>
+                 </div>
+-
+-                <!-- Circular dots: aligned to the left above the text panel -->
+                 <div class="hero-indicator">
+-                    <div class="hero-dot active"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
+-                    <div class="hero-dot"></div>
++                    <div class="hero-dot active"></div><div class="hero-dot"></div><div class="hero-dot"></div>
++                    <div class="hero-dot"></div><div class="hero-dot"></div><div class="hero-dot"></div>
++                    <div class="hero-dot"></div><div class="hero-dot"></div><div class="hero-dot"></div>
+                 </div>
+-
+-                <!-- Captions: bottom-left, headline + body -->
+                 <div class="hero-caption-container">
+-
+                     <div class="hero-caption active" data-index="0">
+                         <p class="hero-caption-headline">洹쇰줈??紐낅떒 &amp; 蹂묒썝 ?뺣낫 <span class="accent">?먯뒪???깅줉</span></p>
+-                        湲곗뾽 蹂닿굔愿由ъ옄媛 ?묒?濡?洹쇰줈??紐낅떒怨?蹂묒썝 ?뺣낫瑜?媛꾪렪?섍쾶 ?깅줉?섏뿬,<br>?ㅼ떆媛?蹂닿굔愿由ъ쓽 泥닿퀎?곸씤 湲곗큹 ?곗씠?곕? 援ъ텞?⑸땲??
++                        湲곗뾽 蹂닿굔愿由ъ옄媛 ?묒?濡?洹쇰줈??紐낅떒怨?蹂묒썝 ?뺣낫瑜?媛꾪렪?섍쾶 ?깅줉?섏뿬, ?ㅼ떆媛?蹂닿굔愿由ъ쓽 泥닿퀎?곸씤 湲곗큹 ?곗씠?곕? 援ъ텞?⑸땲??
+                     </div>
+                     <div class="hero-caption" data-index="1">
+                         <p class="hero-caption-headline">?꾨씫 ?곗씠??<span class="accent">?ㅼ떆媛?泥댄겕</span></p>
+-                        ?깅줉??洹쇰줈?먯? 怨꾩빟 蹂묒썝 紐⑸줉???쒕늿??鍮꾧탳?섍퀬 愿由ы븯硫?<br>?뱀떆 紐⑤? ?꾨씫 ?곗씠?곌퉴吏 瑗쇨세?섍쾶 ?ㅼ떆媛꾩쑝濡?泥댄겕?????덉뒿?덈떎.
++                        ?깅줉??洹쇰줈?먯? 怨꾩빟 蹂묒썝 紐⑸줉???쒕늿??鍮꾧탳?섍퀬 愿由ы븯硫? ?뱀떆 紐⑤? ?꾨씫 ?곗씠?곌퉴吏 瑗쇨세?섍쾶 ?ㅼ떆媛꾩쑝濡?泥댄겕?????덉뒿?덈떎.
+                     </div>
+                     <div class="hero-caption" data-index="2">
+                         <p class="hero-caption-headline">寃吏?吏꾪뻾 ?꾪솴 <span class="accent">利됯컖 ?뺤씤</span></p>
+-                        洹쇰줈?먯쓽 寃吏??섑뻾 怨쇱젙???ㅼ떆媛??곗씠?곕줈 利됯컖 ?뺤씤?????덉뼱,<br>吏꾪뻾 ?곹솴 ?뚯븙???꾪븳 蹂꾨룄???곕씫?대굹 踰덇굅濡쒖슫 ?뺤씤 ?덉감媛 ?щ씪吏묐땲??
++                        洹쇰줈?먯쓽 寃吏??섑뻾 怨쇱젙???ㅼ떆媛??곗씠?곕줈 利됯컖 ?뺤씤?????덉뼱, 吏꾪뻾 ?곹솴 ?뚯븙???꾪븳 蹂꾨룄???곕씫?대굹 踰덇굅濡쒖슫 ?뺤씤 ?덉감媛 ?щ씪吏묐땲??
++                    </div>
++                </div>
++            </div>
++
++            <!-- MOBILE VERSION: PREMIUM VERTICAL DETAIL LIST (Only on Mobile) -->
++            <!-- MOBILE VERSION: PROCESS DETAIL LIST (Steps 1-9) -->
++            <div class="mobile-only-hero mobile-hero-detail-list">
++                
++                <header class="mobile-hero-header">
++                    <div class="mobile-brand-chip">CHECKIT Platform</div>
++                    <h1 class="mobile-hero-title">泥닿퀎?곸씠怨?吏?띻??ν븳<br><span class="accent">蹂닿굔愿由??뚮옯??湲곕뒫</span></h1>
++                </header>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-1.jpg" alt="Step 1" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 01</div>
++                        <h3 class="mobile-detail-headline">洹쇰줈??紐낅떒 &amp; 蹂묒썝 ?뺣낫 <span class="accent">?먯뒪???깅줉</span></h3>
++                        <p>湲곗뾽 蹂닿굔愿由ъ옄媛 ?묒?濡?洹쇰줈??紐낅떒怨?蹂묒썝 ?뺣낫瑜?媛꾪렪?섍쾶 ?깅줉?섏뿬, ?ㅼ떆媛?蹂닿굔愿由ъ쓽 湲곗큹 ?곗씠?곕? 援ъ텞?⑸땲??</p>
++                    </div>
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-2.jpg" alt="Step 2" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 02</div>
++                        <h3 class="mobile-detail-headline">?꾨씫 ?곗씠??<span class="accent">?ㅼ떆媛?泥댄겕</span></h3>
++                        <p>?깅줉??洹쇰줈?먯? 怨꾩빟 蹂묒썝 紐⑸줉???쒕늿??鍮꾧탳 愿由ы븯硫? ?꾨씫 ?곗씠?곌퉴吏 瑗쇨세?섍쾶 ?ㅼ떆媛꾩쑝濡?泥댄겕?⑸땲??</p>
++                    </div>
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-3.jpg" alt="Step 3" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 03</div>
++                        <h3 class="mobile-detail-headline">寃吏?吏꾪뻾 ?꾪솴 <span class="accent">利됯컖 ?뺤씤</span></h3>
++                        <p>洹쇰줈?먯쓽 寃吏??섑뻾 怨쇱젙???ㅼ떆媛??곗씠?곕줈 ?뺤씤?섏뿬, 吏꾪뻾 ?곹솴 ?뚯븙???꾪븳 踰덇굅濡쒖슫 ?뺤씤 ?덉감媛 ?щ씪吏묐땲??</p>
++                    </div>
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-4.jpg" alt="Step 4" class="mobile-detail-img">
+                     </div>
+-                    <div class="hero-caption" data-index="3">
+-                        <p class="hero-caption-headline">?듭떖 吏??<span class="accent">?쒓컖??紐⑤땲?곕쭅</span></p>
+-                        ?꾩옣蹂?寃吏??꾪솴, 李몄뿬?? ?ш?瑜????듭떖 吏?쒕? ?쒓컖?붾맂 ?곗씠?곕줈 ?쒓났?섎ŉ,<br>蹂닿굔愿由??ы썑 愿由??④퀎源뚯? ?쒕늿???ㅼ떆媛?紐⑤땲?곕쭅??媛?ν빀?덈떎.
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 04</div>
++                        <h3 class="mobile-detail-headline">?듭떖 吏??<span class="accent">?쒓컖??紐⑤땲?곕쭅</span></h3>
++                        <p>?꾩옣蹂?寃吏??꾪솴, 李몄뿬?? ?ш?瑜????듭떖 吏?쒕? ?쒓컖?뷀븯?? ?ы썑 愿由??④퀎源뚯? ?쒕늿??紐⑤땲?곕쭅 媛?ν빀?덈떎.</p>
+                     </div>
+-                    <div class="hero-caption" data-index="4">
+-                        <p class="hero-caption-headline">?ш? ?ы썑愿由?<span class="accent">?먰겢由??꾨즺</span></p>
+-                        踰꾪듉 ?대┃ ??踰덉쑝濡??ш? ??곸옄?먭쾶 媛쒖씤 ?ы꽭 ?덈궡瑜??꾨즺?????덉뼱,<br>媛??源뚮떎濡쒖슫 ?ы썑 愿由ъ? ?ш? ?쇱젙 議곗쑉???뺣룄?곸쑝濡??몃━?댁쭛?덈떎.
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-5.jpg" alt="Step 5" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 05</div>
++                        <h3 class="mobile-detail-headline">?ш? ?ы썑愿由?<span class="accent">?먰겢由??꾨즺</span></h3>
++                        <p>踰꾪듉 ?대┃ ??踰덉쑝濡??ш? ??곸옄?먭쾶 媛쒖씤 ?ы꽭 ?덈궡瑜??꾨즺?섏뿬, 源뚮떎濡쒖슫 ?ш? ?쇱젙 議곗쑉???뺣룄?곸쑝濡??몃━?댁쭛?덈떎.</p>
++                    </div>
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-6.jpg" alt="Step 6" class="mobile-detail-img">
+                     </div>
+-                    <div class="hero-caption" data-index="5">
+-                        <p class="hero-caption-headline">洹쇰줈???먯쑉 愿由?<span class="accent">紐④뎅???ы꽭</span></p>
+-                        洹쇰줈?먮뒗 媛쒖씤 ?ы꽭?먯꽌 紐④뎅?대줈 寃吏??뺣낫瑜?吏곸젒 ?뺤씤?섍퀬 愿由ы븯硫?<br>愿由ъ옄?먭쾶 臾몄쓽???꾩슂 ?놁씠 ?ㅼ뒪濡?寃吏??ъ젙???쒖“濡?쾶 ?댄뻾?⑸땲??
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 06</div>
++                        <h3 class="mobile-detail-headline">洹쇰줈???먯쑉 愿由?<span class="accent">紐④뎅???ы꽭</span></h3>
++                        <p>洹쇰줈?먮뒗 媛쒖씤 ?ы꽭?먯꽌 紐④뎅?대줈 寃吏??뺣낫瑜?吏곸젒 ?뺤씤?섎ŉ, ?ㅼ뒪濡?寃吏??ъ젙???쒖“濡?쾶 ?댄뻾?⑸땲??</p>
+                     </div>
+-                    <div class="hero-caption" data-index="6">
+-                        <p class="hero-caption-headline">寃곌낵 ?뺤씤遺???덉빟源뚯? <span class="accent">?먯뒪??泥섎━</span></p>
+-                        蹂몄씤??寃吏?寃곌낵 諛??ш? ????щ? ?뺤씤遺???ㅼ젣 ?덉빟 吏꾪뻾源뚯?,<br>洹쇰줈??媛쒖씤 ?ы꽭 ?덈궡李쎌쓣 ?듯빐 ?ㅼ떆媛꾩쑝濡??뺤껜 ?놁씠 ??踰덉뿉 ?대（?댁쭛?덈떎.
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-7.jpg" alt="Step 7" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 07</div>
++                        <h3 class="mobile-detail-headline">寃곌낵 ?뺤씤遺???덉빟源뚯? <span class="accent">?먯뒪??泥섎━</span></h3>
++                        <p>蹂몄씤??寃吏?寃곌낵 ?뺤씤遺???ㅼ젣 ?덉빟 吏꾪뻾源뚯?, 媛쒖씤 ?ы꽭 ?덈궡李쎌쓣 ?듯빐 ?ㅼ떆媛꾩쑝濡???踰덉뿉 ?대（?댁쭛?덈떎.</p>
+                     </div>
+-                    <div class="hero-caption" data-index="7">
+-                        <p class="hero-caption-headline">寃곌낵吏 踰덉뿭 &amp; <span class="accent">援?젣 吏덈퀝肄붾뱶 ?쒓났</span></p>
+-                        ?쒓뎅??寃곌낵吏瑜??낅줈?쒗븯硫?紐④뎅??踰덉뿭 寃곌낵? 援?젣 吏덈퀝肄붾뱶媛 ?④퍡 ?쒓났?섏뼱,<br>?멸뎅??洹쇰줈?먮룄 蹂몄씤??嫄닿컯 ?곹깭瑜??뺥솗?섍퀬 ?щ챸?섍쾶 ?댄빐?????덉뒿?덈떎.
++                </div>
++
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-8.jpg" alt="Step 8" class="mobile-detail-img">
+                     </div>
+-                    <div class="hero-caption" data-index="8">
+-                        <p class="hero-caption-headline">?④퀎蹂?由щ쭏?몃뜑濡?<span class="accent">?몄눥 Zero</span></p>
+-                        ?댁썝 ?쇱젙??留욎떠 諛쒖넚?섎뒗 ?④퀎蹂??덉빟 由щ쭏?몃뜑 ?쒖뒪?쒖쑝濡?<br>寃???꾨씫怨??몄눥瑜??ъ쟾??諛⑹??섏뿬 湲곗뾽 蹂닿굔愿由щ? 留됲옒?놁씠 吏?먰빀?덈떎.
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 08</div>
++                        <h3 class="mobile-detail-headline">寃곌낵吏 踰덉뿭 &amp; <span class="accent">援?젣 吏덈퀝肄붾뱶 ?쒓났</span></h3>
++                        <p>?쒓뎅??寃곌낵吏瑜??낅줈?쒗븯硫?紐④뎅??踰덉뿭 寃곌낵? 援?젣 吏덈퀝肄붾뱶媛 ?④퍡 ?쒓났?섏뼱, ?먯떊??嫄닿컯 ?곹깭瑜??뺥솗?섍쾶 ?댄빐?⑸땲??</p>
+                     </div>
+                 </div>
+ 
++                <div class="mobile-detail-item">
++                    <div class="mobile-detail-img-container">
++                        <img src="assets/hero-9.jpg" alt="Step 9" class="mobile-detail-img">
++                    </div>
++                    <div class="mobile-detail-text">
++                        <div class="mobile-detail-step">STEP 09</div>
++                        <h3 class="mobile-detail-headline">?④퀎蹂?由щ쭏?몃뜑濡?<span class="accent">?몄눥 Zero</span></h3>
++                        <p>?댁썝 ?쇱젙??留욎떠 諛쒖넚?섎뒗 ?④퀎蹂??덉빟 由щ쭏?몃뜑 ?쒖뒪?쒖쑝濡? 寃???꾨씫怨??몄눥瑜??ъ쟾??諛⑹??⑸땲??</p>
++                    </div>
++                </div>
+             </div>
+-        </section>
+ 
+             <script>
+-                // ?덉뼱濡??щ씪?대뱶 ?쒖뼱 ?ㅽ겕由쏀듃 (臾댄븳 猷⑦봽 ?꾪솚 ?덉쭏 怨좊룄??
++                // ?덉뼱濡??щ씪?대뱶 ?쒖뼱 ?ㅽ겕由쏀듃 (PC ?꾩슜)
+                 document.addEventListener('DOMContentLoaded', function() {
+                     const heroSection = document.getElementById('hero');
+                     const slides = heroSection.querySelectorAll('.hero-slide');
+@@ -106,65 +177,25 @@
+                     const dots = heroSection.querySelectorAll('.hero-dot');
+                     let currentSlide = 0;
+                     let autoPlay;
+-                    let isPaused = false;
+                     
+                     if (slides.length > 0) {
+-                        // ?щ씪?대뱶 ?대룞 ?듭떖 ?⑥닔 (z-index ?쒖뼱 ?ы븿)
+                         function goToSlide(n) {
+-                            const prevSlideIndex = currentSlide;
+-                            
+-                            // 1. 紐⑤뱺 ?댁쟾 ?곹깭 珥덇린??(以묒꺽 諛⑹?)
+-                            slides.forEach((s, idx) => {
+-                                if (idx !== prevSlideIndex) {
+-                                    s.classList.remove('exit-left');
+-                                    s.style.zIndex = '1'; // 湲곕낯 z-index
+-                                }
+-                            });
+-                            
++                            slides.forEach(s => s.classList.remove('active'));
+                             captions.forEach(c => {
+                                 c.classList.remove('active');
+                                 c.style.display = 'none';
+-                                c.style.opacity = '0';
+                             });
+                             dots.forEach(d => d.classList.remove('active'));
+ 
+-                            // 2. ?덉씠???쒖꽌 ?뺢탳??(?덈줈???щ씪?대뱶瑜?臾댁“嫄??꾨줈)
+-                            slides[prevSlideIndex].style.zIndex = '10'; // ?댁옣?섎뒗 ?щ씪?대뱶
+-                            slides[n].style.zIndex = '20'; // ?낆옣?섎뒗 ?щ씪?대뱶
+-
+-                            // 3. ?댁옣 ?④낵 ?곸슜
+-                            if (!isPaused) {
+-                                slides[prevSlideIndex].classList.remove('active');
+-                                slides[prevSlideIndex].classList.add('exit-left');
+-                            } else {
+-                                slides[prevSlideIndex].classList.remove('active');
+-                            }
+-
+-                            // 4. ?몃뜳???낅뜲?댄듃
+                             currentSlide = n;
+-
+-                            // 5. ?좉퇋 ?щ씪?대뱶 諛??꾪듃 ?쒖꽦??-                            slides[currentSlide].classList.remove('exit-left');
+                             slides[currentSlide].classList.add('active');
+                             dots[currentSlide].classList.add('active');
+-
+                             if (captions[currentSlide]) {
+                                 captions[currentSlide].style.display = 'block';
+-                                setTimeout(() => {
+-                                    captions[currentSlide].classList.add('active');
+-                                    captions[currentSlide].style.opacity = '1';
+-                                }, 30);
++                                setTimeout(() => captions[currentSlide].classList.add('active'), 10);
+                             }
+-                            
+-                            // 6. ?대옒??諛?z-index ?뺣━
+-                            setTimeout(() => {
+-                                if (slides[prevSlideIndex]) {
+-                                    slides[prevSlideIndex].classList.remove('exit-left');
+-                                }
+-                            }, 800);
+                         }
+ 
+-                        // ?먮룞 ?ъ깮 ?쒖옉 (3珥?媛꾧꺽)
+                         function startAutoPlay() {
+                             autoPlay = setInterval(() => {
+                                 let next = (currentSlide + 1) % slides.length;
+@@ -173,20 +204,16 @@
+                         }
+ 
+                         startAutoPlay();
+-
+-                        // ?꾪듃 ?대┃ ?대깽??諛붿씤??                         dots.forEach((dot, index) => {
+                             dot.addEventListener('click', () => {
+-                                // ?먮룞 ?ъ깮 以묒? (clearInterval 諛??뚮옒洹??ㅼ젙)
+                                 clearInterval(autoPlay);
+-                                isPaused = true;
+                                 goToSlide(index);
++                                startAutoPlay();
+                             });
+                         });
+                     }
+                 });
+             </script>
+-        </section>
+ 
+         <!-- HERO TEXT & CTA SECTION -->
+         <section id="hero-text-cta" class="section reveal">

@@ -25,10 +25,10 @@
     </script>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
+            --primary: #27ae60;
+            --primary-light: #2ecc71;
             --dark: #1e1b4b;
-            --bg: #f0f4ff;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-muted: #64748b;
@@ -74,9 +74,9 @@
         .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
         .card-header h3 { font-size: 1.1rem; color: var(--text); }
         .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-        .icon-purple { background: #ede9fe; color: var(--primary); }
-        .icon-green { background: #d1fae5; color: var(--success); }
-        .icon-blue { background: #dbeafe; color: #3b82f6; }
+        .icon-purple { background: rgba(39, 174, 96, 0.08); color: var(--primary); }
+        .icon-green { background: rgba(39, 174, 96, 0.08); color: var(--primary); }
+        .icon-blue { background: rgba(39, 174, 96, 0.08); color: var(--primary); }
 
         /* Status Badge */
         .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; transition: 0.3s; }
@@ -539,7 +539,7 @@
 
                 <div id="translationCard" class="card hidden">
                     <div class="card-header">
-                        <div class="card-icon icon-blue"><i class="fa-solid fa-language"></i></div>
+                        <div class="card-icon icon-green"><i class="fa-solid fa-language"></i></div>
                         <h3>나의 언어로 번역보기 (Translation)</h3>
                     </div>
                     <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
@@ -2130,7 +2130,7 @@ function googleTranslateElementInit() {
                         <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">
                             <i class="fa-solid fa-language"></i> 번역된 결과 (Translated - ${langName})
                         </h4>
-                        <div style="background: #f5f3ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd6fe; font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #4338ca;">
+                        <div style="background: rgba(39, 174, 96, 0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(39, 174, 96, 0.15); font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #166534;">
                             ${translated}
                         </div>
                     </div>

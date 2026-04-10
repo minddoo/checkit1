@@ -3,146 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkit Global | Premium Health Checkup Coordination for Foreigners</title>
-    <meta name="description" content="Checkit Global provides seamless medical checkup coordination, translation, and lifetime health record management for international citizens in Korea.">
+    <title>Checkit Global | Premium Health Coordination for Global Citizens</title>
+    <meta name="description" content="Premium medical checkup coordination, professional translation, and lifetime health records for foreigners in Korea.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header id="mainHeader">
-        <a href="#" class="logo">CHECKIT<span>GLOBAL</span></a>
-        <nav>
-            <ul>
-                <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#hospitals">Hospitals</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="nav-actions">
-            <div class="language-selector">
-                <div class="selected-lang">
-                    <i class="fa-solid fa-globe"></i>
-                    <span id="current-lang">English</span>
-                    <i class="fa-solid fa-chevron-down"></i>
+    <header id="main-header">
+        <div class="container">
+            <a href="/" class="logo">
+                <img src="assets/logo.png" alt="Checkit" class="header-logo">
+                CHECKIT<span>GLOBAL</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#hospitals">Hospitals</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <div class="language-selector">
+                    <div class="selected-lang">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="current-lang">English</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px;"></i>
+                    </div>
+                    <div class="lang-dropdown">
+                        <div class="lang-option" data-lang="en">English</div>
+                        <div class="lang-option" data-lang="ko">한국어</div>
+                        <div class="lang-option" data-lang="zh-CN">简体中文</div>
+                        <div class="lang-option" data-lang="ja">日本語</div>
+                        <div class="lang-option" data-lang="vi">Tiếng Việt</div>
+                        <div class="lang-option" data-lang="id">Bahasa Indonesia</div>
+                        <div class="lang-option" data-lang="th">ไทย</div>
+                        <div class="lang-option" data-lang="es">Español</div>
+                        <div class="lang-option" data-lang="fr">Français</div>
+                    </div>
                 </div>
-                <div class="lang-dropdown">
-                    <div class="lang-option" data-lang="en">English</div>
-                    <div class="lang-option" data-lang="ko">한국어</div>
-                    <div class="lang-option" data-lang="zh-CN">简体中文</div>
-                    <div class="lang-option" data-lang="ja">日本語</div>
-                    <div class="lang-option" data-lang="vi">Tiếng Việt</div>
-                    <div class="lang-option" data-lang="th">ไทย</div>
-                    <div class="lang-option" data-lang="id">Bahasa Indonesia</div>
-                    <div class="lang-option" data-lang="es">Español</div>
-                    <div class="lang-option" data-lang="fr">Français</div>
-                    <div class="lang-option" data-lang="de">Deutsch</div>
-                    <div class="lang-option" data-lang="ru">Русский</div>
-                </div>
+                <a href="#" class="btn-signup">Get Started</a>
             </div>
-            <a href="#" class="btn-login">Sign In</a>
-            <a href="#" class="btn-signup">Get Started</a>
         </div>
     </header>
 
     <main>
         <section class="hero" id="home">
-            <div class="hero-content">
-                <span class="badge-new">Now Serving Global Citizens</span>
-                <h1>Your Health, <span>Our Global Priority.</span></h1>
-                <p>Experience world-class health checkups in Korea with zero language barriers. Professional coordination, medical translation, and lifetime health tracking, all in one place.</p>
-                <div class="hero-btns">
-                    <a href="#services" class="btn-primary">Explore Services</a>
-                    <a href="#contact" class="btn-secondary">Book a Call</a>
-                </div>
+            <div class="hero-slideshow">
+                <div class="hero-slide active" style="background-image: url('assets/hero-1.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('assets/hero-2.jpg');"></div>
+                <div class="hero-slide" style="background-image: url('assets/hero-3.jpg');"></div>
             </div>
-            <div class="hero-image">
-                <div class="hero-img-wrapper">
-                    <img src="./assets/hero.png" alt="Premium Medical Coordination">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="hero-badge">Serving 50,000+ Global Citizens</span>
+                    <h1>Your Health, <br><span>Without Boundaries.</span></h1>
+                    <p>Experience Korea's world-class medical system with zero language barriers. Professional coordination, medical translation, and lifetime health tracking tailored for you.</p>
+                    <div class="hero-btns">
+                        <a href="#services" class="btn-primary">Explore Services</a>
+                        <a href="#hospitals" class="btn-secondary">Partner Hospitals</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="features" id="services">
-            <div class="section-head">
-                <h2>Tailored for Your Global Journey</h2>
-                <p>We've eliminated the friction of navigating a foreign healthcare system so you can focus on what matters—your well-being.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-language"></i>
-                    </div>
-                    <h3>Medical Translation</h3>
-                    <p>Professional English-speaking coordinators ensure your medical history and results are perfectly understood.</p>
+            <div class="container">
+                <div class="section-head reveal">
+                    <h2>Tailored for Your Global Journey</h2>
+                    <p>We've eliminated the friction of navigating a foreign healthcare system so you can focus on what matters—your well-being.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-hospital-user"></i>
+                <div class="features-grid">
+                    <div class="feature-card reveal">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <h3>Medical Translation</h3>
+                        <p>Certified medical coordinators ensure your medical history and results are perfectly understood and translated.</p>
                     </div>
-                    <h3>Smart Matching</h3>
-                    <p>We match you with Korea's top-tier hospitals based on your health needs, location, and lifestyle.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-clipboard-list"></i>
+                    <div class="feature-card reveal">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-hospital-user"></i>
+                        </div>
+                        <h3>Smart Matching</h3>
+                        <p>We match you with Korea's top-tier hospitals based on your health needs, location, and language preference.</p>
                     </div>
-                    <h3>Result Analysis</h3>
-                    <p>Receive simplified, English-translated health reports and personal AI analysis of your checkup data.</p>
+                    <div class="feature-card reveal">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                        </div>
+                        <h3>Digital Health Portal</h3>
+                        <p>Access your health records and medical reports anywhere in your native language with our AI-powered portal.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section class="cta-banner">
-            <div class="cta-box">
-                <h2>Ready for Your Next Checkup?</h2>
-                <p>Join thousands of international residents who trust Checkit Global for their health management.</p>
-                <a href="#" class="btn-primary" style="background: var(--white); color: var(--primary);">Start Your Free Account</a>
+        <section class="cta-banner reveal">
+            <div class="container">
+                <div style="background: var(--primary-gradient); border-radius: 40px; padding: 100px 50px; text-align: center; color: white;">
+                    <h2 style="font-size: 3rem; font-weight: 800; margin-bottom: 24px;">Ready for Your Next Checkup?</h2>
+                    <p style="font-size: 1.25rem; margin-bottom: 40px; opacity: 0.9;">Join thousands of international residents who trust Checkit Global.</p>
+                    <a href="#" class="btn-primary" style="background: white; color: var(--primary-dark);">Start Your Free Account</a>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer id="contact">
-        <div class="footer-grid">
-            <div class="footer-info">
-                <div class="footer-logo">CHECKIT<span>GLOBAL</span></div>
-                <p>Empowering the international community in Korea with premium, accessible, and high-tech healthcare solutions.</p>
-                <div style="margin-top: 30px; display: flex; gap: 20px; font-size: 1.5rem;">
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+    <footer style="padding: 100px 0 40px; background: #0f172a; color: #94a3b8;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 80px;">
+                <div>
+                    <div style="color: white; font-size: 1.8rem; font-weight: 800; margin-bottom: 25px;">CHECKIT<span>GLOBAL</span></div>
+                    <p>Empowering the international community in Korea with premium healthcare solutions.</p>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 25px;">Company</h4>
+                    <ul style="list-style: none;">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 25px;">Support</h4>
+                    <ul style="list-style: none;">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 25px;">Contact</h4>
+                    <p>hello@checkitglobal.com</p>
+                    <p>+82 2-1234-5678</p>
                 </div>
             </div>
-            <div>
-                <div class="footer-link-head">Checkit</div>
-                <ul>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Partner Hospitals</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Press</a></li>
-                </ul>
+            <div style="text-align: center; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);">
+                &copy; 2026 Checkit Global Inc. All rights reserved.
             </div>
-            <div>
-                <div class="footer-link-head">Support</div>
-                <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Booking Guide</a></li>
-                    <li><a href="#">Service Status</a></li>
-                    <li><a href="#">Refund Policy</a></li>
-                </ul>
-            </div>
-            <div>
-                <div class="footer-link-head">Contact</div>
-                <ul>
-                    <li>hello@checkitglobal.com</li>
-                    <li>+82 2-1234-5678</li>
-                    <li>Gangnam, Seoul, Korea</li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            &copy; 2026 Checkit Global Inc. All rights reserved. Professional Healthcare Platform.
         </div>
     </footer>
 

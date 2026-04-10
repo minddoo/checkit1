@@ -1,0 +1,13 @@
+{
+  "name": "checkit-global-b2c",
+  "version": "1.0.0",
+  "description": "Premium B2C Healthcare Platform for Foreigners",
+  "main": "index.html",
+  "scripts": {
+    "start": "servor",
+    "build": "echo 'No build step required' && exit 0"
+  },
+  "keywords": ["health", "b2c", "foreigners", "medical"],
+  "author": "Antigravity AI",
+  "license": "MIT"
+}

@@ -453,15 +453,6 @@ ul {
     border-color: var(--primary-light);
 }
 
-.program-card.highlighted {
-    border: 2px solid var(--primary);
-    transform: scale(1.03);
-}
-
-.program-card.highlighted:hover {
-    transform: scale(1.03) translateY(-15px);
-}
-
 .program-header {
     margin-bottom: 24px;
 }
@@ -571,9 +562,6 @@ ul {
 @media (max-width: 768px) {
     .programs-grid {
         grid-template-columns: 1fr;
-    }
-    .program-card.highlighted {
-        transform: scale(1);
     }
 }
 

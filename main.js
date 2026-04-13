@@ -97,3 +97,41 @@ document.querySelectorAll('nav a').forEach(anchor => {
         }
     });
 });
+// Reddit Slider Logic
+const slider = document.getElementById('reddit-slider');
+const dots = document.querySelectorAll('.dot');
+let currentSlide = 0;
+const totalSlides = document.querySelectorAll('.slide').length;
+
+if (slider) {
+    function goToSlide(n) {
+        slider.style.transform = `translateX(-${n * 100}%)`;
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[n]) dots[n].classList.add('active');
+        currentSlide = n;
+    }
+
+    function nextSlide() {
+        let n = (currentSlide + 1) % totalSlides;
+        goToSlide(n);
+    }
+
+    // Auto-play every 5 seconds
+    let slideInterval = setInterval(nextSlide, 5000);
+
+    // Click on dots to jump to slide
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000); // Reset timer on manual interaction
+        });
+    });
+
+    // Pause on hover
+    slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+    slider.addEventListener('mouseleave', () => {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+    });
+}

@@ -274,6 +274,16 @@ function handleGoogleSignIn(response) {
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userPicture', user.picture);
     
+    // Send Confirmation Email via Google Apps Script for Google Users
+    if (user.email) {
+        fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: user.email, name: user.name })
+        }).catch(err => console.error('Social Login Email error:', err));
+    }
+    
     updateAuthUI();
     
     // Close modal if open

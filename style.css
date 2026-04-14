@@ -1536,9 +1536,9 @@ ul {
 .modal-container {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
-    width: 90%;
-    max-width: 480px;
-    padding: 48px;
+    width: 95%;
+    max-width: 400px;
+    padding: 40px 32px;
     border-radius: 32px;
     position: relative;
     transform: translateY(40px) scale(0.95);
@@ -1553,8 +1553,8 @@ ul {
 
 .modal-close {
     position: absolute;
-    top: 24px;
-    right: 24px;
+    top: 16px;
+    right: 16px;
     background: rgba(0,0,0,0.05);
     border: none;
     width: 36px;

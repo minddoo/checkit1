@@ -356,6 +356,19 @@ if (authModal && loginBtn) {
                 const authFooter = document.querySelector('.auth-footer');
 
                 if (successView) {
+                    // Send Confirmation Email via Google Apps Script
+                    const emailInput = form.querySelector('input[type="email"]');
+                    const email = emailInput ? emailInput.value : '';
+                    
+                    if (email) {
+                        fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
+                            method: 'POST',
+                            mode: 'no-cors', // Important for GAS redirect
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: email, name: displayName })
+                        }).catch(err => console.error('Email send error:', err));
+                    }
+
                     signupForm.style.display = 'none';
                     authTabs.style.display = 'none';
                     if (socialDivider) socialDivider.style.display = 'none';

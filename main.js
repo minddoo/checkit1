@@ -345,20 +345,44 @@ if (authModal && loginBtn) {
 
             setTimeout(() => {
                 const nameInput = form.querySelector('input[type="text"]');
-                const passwordInput = form.querySelector('input[type="password"]');
                 const displayName = nameInput ? nameInput.value : 'User';
                 
-                // Save state
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userName', displayName);
-                
-                // Update UI
-                updateAuthUI();
-                closeModal();
-                
-                // Reset form
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
+                // Show Success View
+                const successView = document.getElementById('signup-success');
+                const signupForm = document.getElementById('signup-form');
+                const authTabs = document.querySelector('.auth-tabs');
+                const socialDivider = document.querySelector('.social-divider');
+                const socialGrid = document.querySelector('.social-grid-single');
+                const authFooter = document.querySelector('.auth-footer');
+
+                if (successView) {
+                    signupForm.style.display = 'none';
+                    authTabs.style.display = 'none';
+                    if (socialDivider) socialDivider.style.display = 'none';
+                    if (socialGrid) socialGrid.style.display = 'none';
+                    if (authFooter) authFooter.style.display = 'none';
+                    
+                    successView.classList.add('active');
+
+                    // After 2.5 seconds, transition to Login Form
+                    setTimeout(() => {
+                        successView.classList.remove('active');
+                        // Show everything again but on Login Tab
+                        authTabs.style.display = 'flex';
+                        if (socialDivider) socialDivider.style.display = 'block';
+                        if (socialGrid) socialGrid.style.display = 'flex';
+                        if (authFooter) authFooter.style.display = 'block';
+                        
+                        // Switch to Login Tab
+                        const loginTab = document.querySelector('[data-tab="login"]');
+                        if (loginTab) loginTab.click();
+                        
+                        // Re-enable submit button for next use
+                        submitBtn.innerText = originalText;
+                        submitBtn.disabled = false;
+                        signupForm.style.display = ''; // Restore original display state
+                    }, 2500);
+                }
             }, 1000);
         });
     });

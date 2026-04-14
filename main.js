@@ -48,25 +48,37 @@ if (langSelector) {
             localStorage.setItem('preferred-lang-name', langName);
         });
     });
+    });
+}
+
+// Cookie Helpers for Translation
+function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
 function changeLanguage(langCode) {
+    // 1. Set the Google Translate Cookie (The most reliable way)
+    const cookieValue = (langCode === 'en') ? '/en/en' : `/en/${langCode}`;
+    setCookie('googtrans', cookieValue, 1);
+
+    // 2. Attempt to trigger the dropdown for instant feedback
     const googleSelect = document.querySelector('select.goog-te-combo');
     if (googleSelect) {
-        // If langCode is 'en' (source language), we want to show original
         const targetValue = (langCode === 'en') ? '' : langCode;
-        
         googleSelect.value = targetValue;
         googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
         
-        // Hide the Google Translate toolbar if it appears
+        // Hide UI artifacts
         setTimeout(() => {
             const frame = document.querySelector('.goog-te-banner-frame');
             if (frame) frame.style.display = 'none';
             document.body.style.top = '0';
         }, 800);
     } else {
-        // Retry if Google Translate isn't loaded yet
+        // Retry logic if DOM isn't ready
         setTimeout(() => changeLanguage(langCode), 500);
     }
 }
@@ -78,7 +90,9 @@ window.addEventListener('load', () => {
     
     if (savedLang && savedLang !== 'en') {
         if (currentLangText) currentLangText.innerText = savedLangName;
-        // Wait for Google script to fully initialize
+        // Apply cookie and try to trigger widget
+        const cookieValue = `/en/${savedLang}`;
+        setCookie('googtrans', cookieValue, 1);
         setTimeout(() => changeLanguage(savedLang), 1500);
     }
 });

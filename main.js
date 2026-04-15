@@ -297,8 +297,19 @@ function handleGoogleSignIn(response) {
 if (authModal && loginBtn) {
     // Open Modal
     loginBtn.addEventListener('click', (e) => {
-        if (localStorage.getItem('isLoggedIn')) return;
         e.preventDefault();
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        
+        if (isLoggedIn) {
+            // Open My Page instead of Auth Modal
+            const mypageModal = document.getElementById('mypage-modal');
+            if (mypageModal) {
+                mypageModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            return;
+        }
+
         authModal.classList.add('show');
         document.body.style.overflow = 'hidden';
         
@@ -403,34 +414,68 @@ if (authModal && loginBtn) {
                         // Re-enable submit button for next use
                         submitBtn.innerText = originalText;
                         submitBtn.disabled = false;
-                        signupForm.style.display = ''; // Restore original display state
-                    }, 2500);
-                }
-            }, 1000);
-        });
+                signupForm.style.display = ''; // Restore original display state
+            }, 2500);
+        }
+    }, 1000);
+});
+});
+}
+
+// My Page Modal Logic
+const mypageModal = document.getElementById('mypage-modal');
+const mypageClose = document.getElementById('mypage-close');
+const logoutBtn = document.getElementById('logout-btn');
+
+if (mypageModal && mypageClose) {
+    const closeMypage = () => {
+        mypageModal.classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+    mypageClose.addEventListener('click', closeMypage);
+    mypageModal.addEventListener('click', (e) => {
+        if (e.target === mypageModal) closeMypage();
     });
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPicture');
+                location.reload();
+            }
+        });
+    }
 }
 
 function updateAuthUI() {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const userName = localStorage.getItem('userName') || 'User';
+    const userEmail = localStorage.getItem('userEmail') || 'user@email.com';
+    const userPicture = localStorage.getItem('userPicture');
     const loginLink = document.getElementById('login-btn');
 
     if (isLoggedIn && loginLink) {
-        loginLink.innerHTML = `<i class="fa-solid fa-user-circle"></i> ${userName}`;
-        loginLink.style.background = 'rgba(46, 204, 113, 0.1)';
-        loginLink.style.color = 'var(--primary)';
-        loginLink.style.borderColor = 'var(--primary)';
+        // Update Nav Button
+        loginLink.innerHTML = `<i class="fa-solid fa-user-circle"></i> My Page`;
+        loginLink.classList.add('logged-in');
         
-        // Add logout option (simple alert for now)
-        loginLink.onclick = (e) => {
-            e.preventDefault();
-            if (confirm('Would you like to log out?')) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userName');
-                location.reload();
-            }
-        };
+        // Update My Page Modal Display
+        const nameDisplay = document.getElementById('user-name-display');
+        const emailDisplay = document.getElementById('user-email-display');
+        const avatarDisplay = document.getElementById('user-avatar-display');
+
+        if (nameDisplay) nameDisplay.innerText = userName;
+        if (emailDisplay) emailDisplay.innerText = userEmail;
+        if (avatarDisplay && userPicture) {
+            avatarDisplay.innerHTML = `<img src="${userPicture}" alt="${userName}">`;
+        }
+    } else if (loginLink) {
+        loginLink.innerHTML = `Login`;
+        loginLink.classList.remove('logged-in');
     }
 }
 

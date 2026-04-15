@@ -849,6 +849,42 @@
             </div>
         </div>
     </div>
+    
+    <!-- My Page Modal -->
+    <div id="mypage-modal" class="modal-overlay">
+        <div class="modal-container reveal-modal">
+            <button class="modal-close" id="mypage-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-content">
+                <div class="auth-header">
+                    <div class="profile-header">
+                        <div class="profile-avatar" id="user-avatar-display">
+                            <i class="fa-solid fa-user-circle"></i>
+                        </div>
+                        <h3 id="user-name-display">User Name</h3>
+                        <p id="user-email-display">user@email.com</p>
+                    </div>
+                </div>
+
+                <div class="mypage-section">
+                    <h4 class="section-title">Service Status</h4>
+                    <div class="status-card">
+                        <div class="status-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <div class="status-info">
+                            <span class="status-label">Consultation Status</span>
+                            <span class="status-value highlight-green">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mypage-section">
+                    <h4 class="section-title">Settings</h4>
+                    <button id="logout-btn" class="btn-secondary auth-submit">
+                        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="main.js"></script>

@@ -1474,22 +1474,20 @@ body {
 }
 
 .comparison-column {
-    flex: 0.8 !important; /* Smaller left card as requested */
+    flex: 1;
     background: #fdfdfd;
     padding: 50px 40px;
     border-radius: var(--border-radius-lg);
-    border: 2px solid #ccc !important; /* Sharp Gray Border */
+    border: 1px solid #eee;
     text-align: left;
-    box-shadow: none !important; /* No effects as requested */
 }
 
 .comparison-column.highlight {
-    flex: 1.2 !important; /* Larger right card */
     background: var(--white);
-    border: 2px solid var(--primary-color) !important; /* Sharp Green Border */
-    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .comparison-column h3 {
@@ -2248,11 +2246,24 @@ html[lang="vn"] #corporate-hero .hero-title {
         display: none !important; /* Remove bullet */
     }
 
-    /* [3-5. Corporate Section 4: Title One Line] */
+    /* [3-5. Corporate Section 4: Mobile Size & Borders] */
+    .solution-comparison {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+    .comparison-column {
+        flex: 0.8 !important; /* Left smaller */
+        border: 2px solid #ccc !important;
+        box-shadow: none !important;
+    }
+    .comparison-column.highlight {
+        flex: 1.2 !important; /* Right larger */
+        border: 2px solid #2ECC71 !important;
+        box-shadow: none !important;
+    }
     .comparison-column h3 {
-        font-size: 1rem !important;
-        white-space: nowrap !important;
-        overflow: hidden;
+        font-size: 1.1rem !important;
+        white-space: normal !important; /* Allow wrapping on small screens */
     }
 
     /* [3-6 & 3-7. Corporate Sections -> Sharper Cards] */
@@ -2291,9 +2302,9 @@ html[lang="vn"] #corporate-hero .hero-title {
     .reason-item h4 {
         font-size: 1.4rem !important;
         font-weight: 800 !important;
-        color: var(--primary-color) !important; /* Green title as requested */
-        text-align: center !important; /* Centered as requested */
-        margin-bottom: 15px !important;
+        color: #2ECC71 !important; /* Direct green color override */
+        text-align: center !important; 
+        margin-bottom: 20px !important;
     }
     .safety-card h4 {
         font-size: 1.4rem !important;
@@ -3181,12 +3192,16 @@ body.platform-view-active #mypage-overlay { display: flex; }
 
 /* [Mobile Refinement for Modals] */
 @media (max-width: 768px) {
-    .modal-box {
+    .modal-box, .login-modal-box {
         padding: 60px 20px 30px;
         width: 100%;
-        height: 100%;
-        max-height: 100%;
+        height: auto;
+        min-height: 100%;
+        max-height: 100dvh;
+        overflow-y: auto;
         border-radius: 0;
+        display: flex;
+        flex-direction: column;
     }
     .modal-tab-btn {
         font-size: 0.9rem;
@@ -3818,4 +3833,6 @@ body.platform-view-active #mypage-overlay { display: flex; }
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         z-index: 0;
     }
-}.highlight-green { color: #2ECC71 !important; }
+} /* Properly Close Media Query */
+
+.highlight-green { color: #2ECC71 !important; }

@@ -479,6 +479,51 @@ function showView(viewName) {
     
     // Always scroll to top on view change
     window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // If entering mypage, initialize dashboard logic
+    if (viewName === 'mypage') {
+        initDashboard();
+    }
+}
+
+// Dashboard Sub-View Logic
+function initDashboard() {
+    const dashLinks = document.querySelectorAll('.dash-nav-link');
+    const dashSections = document.querySelectorAll('.dash-section');
+    
+    dashLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const target = link.getAttribute('data-dash');
+            
+            // Update Links
+            dashLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            
+            // Update Sections
+            dashSections.forEach(sec => {
+                sec.classList.remove('active');
+                if (sec.id === `dash-${target}`) {
+                    sec.classList.add('active');
+                }
+            });
+            
+            // Mobile: if sidebar is visible as a menu, you might want to auto-scroll or close it
+        });
+    });
+
+    // Dashboard Logout
+    const dashLogoutBtn = document.getElementById('dash-logout-btn');
+    if (dashLogoutBtn) {
+        dashLogoutBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPicture');
+                location.reload();
+            }
+        });
+    }
 }
 
 function updateAuthUI() {
@@ -502,6 +547,21 @@ function updateAuthUI() {
         if (emailDisplay) emailDisplay.innerText = userEmail;
         if (avatarDisplay && userPicture) {
             avatarDisplay.innerHTML = `<img src="${userPicture}" alt="${userName}">`;
+        }
+
+        // Update Dashboard Sidebar Info
+        const dashName = document.getElementById('dash-user-name');
+        const dashEmail = document.getElementById('dash-user-email');
+        const dashAvatar = document.getElementById('dash-avatar');
+
+        if (dashName) dashName.innerText = userName;
+        if (dashEmail) dashEmail.innerText = userEmail;
+        if (dashAvatar) {
+            if (userPicture) {
+                dashAvatar.innerHTML = `<img src="${userPicture}" alt="${userName}">`;
+            } else {
+                dashAvatar.innerText = userName.charAt(0);
+            }
         }
     } else if (loginLink) {
         loginLink.innerHTML = `Login`;

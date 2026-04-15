@@ -452,7 +452,9 @@ if (mypageModal && mypageClose) {
 
     const mypageDetailBtn = document.getElementById('btn-mypage-detail');
     if (mypageDetailBtn) {
-        mypageDetailBtn.addEventListener('click', () => {
+        mypageDetailBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("Go to My Page button clicked");
             showView('mypage');
         });
     }
@@ -482,18 +484,27 @@ function showView(viewName) {
 
     // If entering mypage, initialize dashboard logic
     if (viewName === 'mypage') {
+        console.log("Initializing Dashboard View");
         initDashboard();
     }
 }
 
+let dashboardInitialized = false;
 // Dashboard Sub-View Logic
 function initDashboard() {
+    // Only attach listeners once
+    if (dashboardInitialized) return;
+
     const dashLinks = document.querySelectorAll('.dash-nav-link');
     const dashSections = document.querySelectorAll('.dash-section');
     
+    if (dashLinks.length === 0) return;
+    
     dashLinks.forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
             const target = link.getAttribute('data-dash');
+            console.log("Dashboard tab switched to:", target);
             
             // Update Links
             dashLinks.forEach(l => l.classList.remove('active'));
@@ -506,10 +517,10 @@ function initDashboard() {
                     sec.classList.add('active');
                 }
             });
-            
-            // Mobile: if sidebar is visible as a menu, you might want to auto-scroll or close it
         });
     });
+
+    dashboardInitialized = true;
 
     // Dashboard Logout
     const dashLogoutBtn = document.getElementById('dash-logout-btn');

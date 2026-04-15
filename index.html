@@ -749,8 +749,8 @@
                     </div>
                 </aside>
 
-                <!-- Main Dashboard Content -->
-                <main class="dash-main-content">
+                <!-- Main Dashboard Content (Changed from main to div to avoid nesting issues) -->
+                <div class="dash-main-content">
                     <!-- Overview Section -->
                     <section id="dash-overview" class="dash-section active">
                         <div class="section-header">
@@ -939,7 +939,7 @@
                             </div>
                         </div>
                     </section>
-                </main>
+                </div>
             </div>
         </div>
     </main>
@@ -949,10 +949,10 @@
         <div class="container">
             <div class="footer-main">
                 <div class="footer-brand">
-                    <div class="logo">
+                    <a href="javascript:void(0)" onclick="showView('home')" class="logo">
                         <img src="assets/logo.png" alt="CHECKIT" style="height: 40px;">
                         <span>CHECKIT GLOBAL</span>
-                    </div>
+                    </a>
                     <p>Premium Healthcare Coordination for Global Citizens in South Korea.</p>
                 </div>
                 <div>

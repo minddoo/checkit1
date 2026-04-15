@@ -511,36 +511,134 @@ window.showView = function(viewName) {
 function showView(name) { window.showView(name); }
 
 let dashboardInitialized = false;
-// Dashboard Sub-View Logic
+// Dashboard Chat Logic
 function initDashboard() {
     console.log("initDashboard called");
-    // Only attach listeners once
     if (dashboardInitialized) return;
 
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
     const dashLinks = document.querySelectorAll('.dash-nav-link');
-    const dashSections = document.querySelectorAll('.dash-section');
-    
-    if (dashLinks.length === 0) return;
-    
+
+    // Utility: Append Message
+    window.appendMessage = function(sender, content, type = 'text') {
+        const row = document.createElement('div');
+        row.className = `message-row ${sender}`;
+        
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (type === 'text') {
+            row.innerHTML = `
+                <div class="msg-bubble">
+                    ${content}
+                    <div class="msg-time">${timeStr}</div>
+                </div>
+            `;
+        } else if (type === 'system') {
+            row.className = 'message-row system';
+            row.innerHTML = content; // Assuming content is pre-formatted HTML for system-block
+        }
+
+        chatMessages.appendChild(row);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    // Utility: Show Specific Service Block
+    window.showChatBlock = function(blockType) {
+        let blockHtml = '';
+        let welcomeText = '';
+
+        switch(blockType) {
+            case 'booking':
+                welcomeText = "Great! Let's find the best hospital for you. Here are our top recommendations in Seoul based on your profile.";
+                blockHtml = `
+                    <div class="system-block">
+                        <div class="block-icon"><i class="fa-solid fa-hospital"></i></div>
+                        <div class="block-content">
+                            <p><strong>Step 1: Hospital Matching</strong></p>
+                            <span>View detailed programs from SNU and Asan Medical Center.</span>
+                            <div class="block-actions">
+                                <button class="btn-block-primary">Open Hospital List</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                break;
+            case 'prep':
+                welcomeText = "Preparation is key for a successful check-up. I've prepared a personalized checklist for you.";
+                blockHtml = `
+                    <div class="system-block">
+                        <div class="block-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div class="block-content">
+                            <p><strong>Step 2: Prep Checklist</strong></p>
+                            <span>Fasting guide and required documents are listed here.</span>
+                            <div class="block-actions">
+                                <button class="btn-block-primary">View Checklist</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                break;
+            case 'results':
+                welcomeText = "Your medical results are ready! I've translated them into your language for easier review.";
+                blockHtml = `
+                    <div class="system-block">
+                        <div class="block-icon"><i class="fa-solid fa-file-medical"></i></div>
+                        <div class="block-content">
+                            <p><strong>Step 4: Results Hub</strong></p>
+                            <span>Download 2026.04.22 Comprehensive Report (English/Korean).</span>
+                            <div class="block-actions">
+                                <button class="btn-block-primary">Download Report</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                break;
+        }
+
+        if (welcomeText) window.appendMessage('coord', welcomeText);
+        if (blockHtml) setTimeout(() => window.appendMessage('system', blockHtml, 'system'), 500);
+    };
+
+    // Handle Sidebar Navigation as Shortcuts
     dashLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const target = link.getAttribute('data-dash');
-            console.log("Dashboard tab switched to:", target);
             
-            // Update Links
+            // UI Feedback
             dashLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             
-            // Update Sections
-            dashSections.forEach(sec => {
-                sec.classList.remove('active');
-                if (sec.id === `dash-${target}`) {
-                    sec.classList.add('active');
-                }
-            });
+            // Trigger Chat Action
+            if (target !== 'overview') {
+                window.showChatBlock(target);
+            }
         });
     });
+
+    // Handle User Message Sending
+    function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        window.appendMessage('user', text);
+        chatInput.value = '';
+
+        // Simulated Response
+        setTimeout(() => {
+            window.appendMessage('coord', "I've received your request. Let me check that for you right away!");
+        }, 1200);
+    }
+
+    if (chatSend && chatInput) {
+        chatSend.addEventListener('click', handleSendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSendMessage();
+        });
+    }
 
     dashboardInitialized = true;
 
@@ -549,10 +647,7 @@ function initDashboard() {
     if (dashLogoutBtn) {
         dashLogoutBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to sign out?')) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('userPicture');
+                localStorage.clear();
                 location.reload();
             }
         });

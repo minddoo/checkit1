@@ -749,196 +749,58 @@
                     </div>
                 </aside>
 
-                <!-- Main Dashboard Content (Changed from main to div to avoid nesting issues) -->
-                <div class="dash-main-content">
-                    <!-- Overview Section -->
-                    <section id="dash-overview" class="dash-section active">
-                        <div class="section-header">
-                            <h2>Dashboard <span class="highlight">Overview</span></h2>
-                            <p>Track your health check-up journey in Korea.</p>
-                        </div>
-                        
-                        <div class="dash-status-stepper">
-                            <div class="stepper-step completed">
-                                <div class="stepper-circle"><i class="fa-solid fa-check"></i></div>
-                                <span>Booking</span>
+                <!-- Main Dashboard Content (Concierge Chat) -->
+                <div class="dash-main-content dash-chat-view">
+                    <div class="dash-chat-container">
+                        <div class="chat-header">
+                            <div class="coordinator-profile">
+                                <div class="coord-avatar">
+                                    <img src="assets/avatar_coord.png" alt="Coordinator" onerror="this.src='https://ui-avatars.com/api/?name=C&background=00d084&color=fff'">
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div class="coord-info">
+                                    <h4>Coordinator Jean</h4>
+                                    <span>Professional Health Concierge</span>
+                                </div>
                             </div>
-                            <div class="stepper-line"></div>
-                            <div class="stepper-step active">
-                                <div class="stepper-circle">2</div>
-                                <span>Prep</span>
-                            </div>
-                            <div class="stepper-line"></div>
-                            <div class="stepper-step">
-                                <div class="stepper-circle">3</div>
-                                <span>D-Day</span>
-                            </div>
-                            <div class="stepper-line"></div>
-                            <div class="stepper-step">
-                                <div class="stepper-circle">4</div>
-                                <span>Results</span>
+                            <div class="chat-header-actions">
+                                <button class="btn-chat-action"><i class="fa-solid fa-phone"></i></button>
+                                <button class="btn-chat-action"><i class="fa-solid fa-ellipsis-v"></i></button>
                             </div>
                         </div>
 
-                        <div class="dash-grid-row">
-                            <div class="dash-card">
-                                <h3>Upcoming Schedule</h3>
-                                <div class="schedule-summary">
-                                    <div class="date-tile">
-                                        <span class="month">APR</span>
-                                        <span class="day">18</span>
-                                    </div>
-                                    <div class="event-details">
-                                        <h4>General Health Check-up</h4>
-                                        <p><i class="fa-solid fa-location-dot"></i> Seoul St. Mary's Hospital</p>
-                                        <p><i class="fa-solid fa-clock"></i> 08:30 AM</p>
-                                    </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Welcome Message -->
+                            <div class="message-row coord">
+                                <div class="msg-bubble">
+                                    Hello! I'm Jean, your personal health coordinator. I'll be guiding you through your medical check-up journey in Korea. How can I help you today?
+                                    <div class="msg-time">09:00 AM</div>
                                 </div>
                             </div>
-                            <div class="dash-card">
-                                <h3>Recent Alerts</h3>
-                                <ul class="alerts-list">
-                                    <li><i class="fa-solid fa-bell"></i> Don't forget to fast from 9 PM tonight!</li>
-                                    <li><i class="fa-solid fa-envelope"></i> Your English guide has been sent.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
 
-                    <!-- Booking Section -->
-                    <section id="dash-booking" class="dash-section">
-                        <div class="section-header">
-                            <h2>1. Booking & <span class="highlight">Matching</span></h2>
-                            <p>Select your hospital and check-up programs.</p>
-                        </div>
-                        <div class="hospital-filter">
-                            <button class="filter-chip active">All</button>
-                            <button class="filter-chip">Seoul</button>
-                            <button class="filter-chip">University Hospitals</button>
-                        </div>
-                        <div class="hospital-grid">
-                            <!-- Hospital 1 -->
-                            <div class="dash-hospital-card">
-                                <img src="assets/hospital_1.png" alt="Hospital" class="hospital-thumb">
-                                <div class="hospital-info">
-                                    <h4>Seoul National University Hospital</h4>
-                                    <p class="h-tag">National Landmark</p>
-                                    <div class="h-programs">
-                                        <div class="h-p-item"><span>Basic Checkup</span> <strong>500k KRW</strong></div>
-                                        <div class="h-p-item"><span>Comprehensive</span> <strong>850k KRW</strong></div>
-                                    </div>
-                                    <button class="btn-primary-small">View Details</button>
-                                </div>
-                            </div>
-                            <!-- Hospital 2 -->
-                            <div class="dash-hospital-card">
-                                <img src="assets/hospital_2.png" alt="Hospital" class="hospital-thumb">
-                                <div class="hospital-info">
-                                    <h4>Asan Medical Center</h4>
-                                    <p class="h-tag">Premium Care</p>
-                                    <div class="h-programs">
-                                        <div class="h-p-item"><span>Elite Choice</span> <strong>1.2M KRW</strong></div>
-                                        <div class="h-p-item"><span>Cancer Screening</span> <strong>1.5M KRW</strong></div>
-                                    </div>
-                                    <button class="btn-primary-small">View Details</button>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Preparation Section -->
-                    <section id="dash-prep" class="dash-section">
-                        <div class="section-header">
-                            <h2>2. Preparation <span class="highlight">Guide</span></h2>
-                            <p>Ensuring zero mistakes for your successful check-up.</p>
-                        </div>
-                        <div class="prep-checklist-wrap">
-                            <div class="dash-card">
-                                <h3>Preparation Checklist</h3>
-                                <div class="check-item"><input type="checkbox" checked> <span>Confirm Reservation Date (Completed)</span></div>
-                                <div class="check-item"><input type="checkbox"> <span>Review Fasting Instructions (Important)</span></div>
-                                <div class="check-item"><input type="checkbox"> <span>Prepare Health Questionnaire</span></div>
-                                <div class="check-item"><input type="checkbox"> <span>ID Card / Passport Ready</span></div>
-                            </div>
-                            <div class="dash-card">
-                                <h3>Notification Status</h3>
-                                <div class="notification-toggles">
-                                    <div class="toggle-row">
-                                        <span><i class="fa-brands fa-whatsapp"></i> WhatsApp Alert</span>
-                                        <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-                                    </div>
-                                    <div class="toggle-row">
-                                        <span><i class="fa-solid fa-comment"></i> Kakao Alimtalk</span>
-                                        <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-                                    </div>
-                                </div>
-                                <p class="small-info">We'll send you alerts 3 days, 1 day, and 12 hours before your exam.</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Exam Day Section -->
-                    <section id="dash-dday" class="dash-section">
-                        <div class="section-header">
-                            <h2>3. Exam Day <span class="highlight">Support</span></h2>
-                            <p>Real-time communication with your professional coordinator.</p>
-                        </div>
-                        <div class="live-support-card">
-                            <div class="support-status">
-                                <div class="indicator online"></div>
-                                <span>Coordinator is <strong>Online</strong> and ready for your D-Day.</span>
-                            </div>
-                            <div class="support-actions">
-                                <a href="https://wa.me/+821051093459" class="btn-whatsapp-dash">
-                                    <i class="fa-brands fa-whatsapp"></i> Start Live Chat Assistance
-                                </a>
-                                <button class="btn-outline-dash">
-                                    <i class="fa-solid fa-map-location-dot"></i> Get Hospital Navigation
-                                </button>
-                            </div>
-                            <div class="support-hints">
-                                <h4>Common D-Day Phrases (Helpful)</h4>
-                                <div class="phrase-tag">Where is the changing room? -> 탈의실이 어디인가요?</div>
-                                <div class="phrase-tag">I am here for a check-up. -> 건강검진 받으러 왔습니다.</div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Results Section -->
-                    <section id="dash-results" class="dash-section">
-                        <div class="section-header">
-                            <h2>4. Medical <span class="highlight">Results</span></h2>
-                            <p>Review and translate your professional medical reports.</p>
-                        </div>
-                        <div class="results-management">
-                            <div class="dash-card">
-                                <div class="results-header">
-                                    <h3>Latest Reports</h3>
-                                    <div class="translation-toggle-wrap">
-                                        <span>Show English Translation</span>
-                                        <label class="switch"><input type="checkbox" id="trans-toggle"><span class="slider round"></span></label>
-                                    </div>
-                                </div>
-                                <div class="report-table">
-                                    <div class="report-row">
-                                        <div class="report-info">
-                                            <span class="report-date">2026.04.22</span>
-                                            <span class="report-name">Comprehensive Result File</span>
-                                        </div>
-                                        <div class="report-actions">
-                                            <button class="btn-view-icd"><i class="fa-solid fa-magnifying-glass"></i> View KCD Codes</button>
-                                            <button class="btn-download-dash"><i class="fa-solid fa-download"></i></button>
+                            <!-- System Message / Interactive Block Example (Booking) -->
+                            <div class="message-row system">
+                                <div class="system-block">
+                                    <div class="block-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                                    <div class="block-content">
+                                        <p><strong>Step 1: Hospital Selection</strong></p>
+                                        <span>Please review the recommended hospitals and select your preferred program.</span>
+                                        <div class="block-actions">
+                                            <button class="btn-block-primary" onclick="window.showChatBlock('booking')">View Hospitals</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="dash-card disease-code-ref">
-                                <h3>Disease Code (KCD/ICD) Reference</h3>
-                                <p>Korean hospitals use KCD-O codes. We provide standard ICD comparisons for your home country doctors.</p>
-                                <button class="btn-primary-small">Open Code Explorer</button>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <div class="chat-input-wrapper">
+                                <button class="btn-chat-attach"><i class="fa-solid fa-plus"></i></button>
+                                <input type="text" id="chat-input" placeholder="Type your message here...">
+                                <button class="btn-chat-send" id="chat-send"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
-                    </section>
+                    </div>
                 </div>
             </div>
         </div>

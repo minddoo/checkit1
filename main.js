@@ -454,44 +454,66 @@ if (mypageModal && mypageClose) {
     if (mypageDetailBtn) {
         mypageDetailBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log("Go to My Page button clicked");
-            showView('mypage');
+            console.log("Internal listener: Go to My Page clicked");
+            if (window.showView) {
+                window.showView('mypage');
+            } else {
+                showView('mypage');
+            }
         });
     }
 }
 
-// Global View Switcher
-function showView(viewName) {
+// Global View Switcher (Exposed to window for HTML onclick fallback)
+window.showView = function(viewName) {
+    console.log("Switching view to:", viewName);
     const homeView = document.getElementById('home-view');
     const mypageView = document.getElementById('mypage-view');
+    const mypageModal = document.getElementById('mypage-modal');
     
     if (viewName === 'mypage') {
-        if (homeView) homeView.classList.add('hidden-view');
-        if (mypageView) mypageView.classList.remove('hidden-view');
-        // Close modal if open
-        const mypageModal = document.getElementById('mypage-modal');
+        // Explicit alert to confirm the function is reached
+        alert('Checkit Service Hub로 전환을 시작합니다. 잠시만 기다려주세요.'); 
+        
+        if (homeView) {
+            homeView.classList.add('hidden-view');
+            homeView.style.display = 'none';
+        }
+        if (mypageView) {
+            mypageView.classList.remove('hidden-view');
+            mypageView.style.display = 'block';
+        }
+        
+        // Close modal
         if (mypageModal) {
             mypageModal.classList.remove('show');
             document.body.style.overflow = '';
         }
-    } else {
-        if (homeView) homeView.classList.remove('hidden-view');
-        if (mypageView) mypageView.classList.add('hidden-view');
+        
+        if (typeof initDashboard === 'function') {
+            initDashboard();
+        }
+    } else if (viewName === 'home') {
+        if (homeView) {
+            homeView.classList.remove('hidden-view');
+            homeView.style.display = 'block';
+        }
+        if (mypageView) {
+            mypageView.classList.add('hidden-view');
+            mypageView.style.display = 'none';
+        }
     }
     
-    // Always scroll to top on view change
     window.scrollTo({ top: 0, behavior: 'instant' });
+};
 
-    // If entering mypage, initialize dashboard logic
-    if (viewName === 'mypage') {
-        console.log("Initializing Dashboard View");
-        initDashboard();
-    }
-}
+// Internal alias
+function showView(name) { window.showView(name); }
 
 let dashboardInitialized = false;
 // Dashboard Sub-View Logic
 function initDashboard() {
+    console.log("initDashboard called");
     // Only attach listeners once
     if (dashboardInitialized) return;
 

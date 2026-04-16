@@ -581,27 +581,30 @@ function initDashboard() {
 
         switch(blockType) {
             case 'booking':
-                welcomeText = "주요 의료기관 리스트입니다. 각 기관의 홈페이지를 통해 진행 중인 프로그램을 확인하실 수 있습니다.";
+                welcomeText = "주요 의료기관 정보입니다. 기관명과 위치를 확인하실 수 있으며, 홈페이지를 통해 상세 정보를 확인하실 수 있습니다.";
                 
                 const hospitals = [
-                    { name: "KMI 한국의학연구소", url: "https://www.kmi.or.kr/checkup/program" },
-                    { name: "하나로의료재단", url: "https://www.hanaromf.com/program/program01.jsp" },
-                    { name: "세브란스병원", url: "https://severance.healthcare/severance/program/index.do" },
-                    { name: "삼성서울병원", url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do" },
-                    { name: "세란병원", url: "https://www.seran.co.kr/05_center/center01_03.php" }
+                    { name: "KMI 한국의학연구소", loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", url: "https://www.kmi.or.kr/checkup/program" },
+                    { name: "하나로의료재단", loc: "서울(종로, 강남)", url: "https://www.hanaromf.com/program/program01.jsp" },
+                    { name: "세브란스병원 센터", loc: "서울(신촌, 강남)", url: "https://severance.healthcare/severance/program/index.do" },
+                    { name: "삼성서울병원 센터", loc: "서울(일원동)", url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do" },
+                    { name: "세란병원 센터", loc: "서울(종로/독립문)", url: "https://www.seran.co.kr/05_center/center01_03.php" }
                 ];
 
                 blockHtml = `
-                    <div class="hospital-list-grid" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px; width: 100%; align-items: flex-start;">
-                        ${hospitals.map(h => {
-                            const proxyUrl = `https://translate.google.com/translate?sl=ko&tl=${lang}&u=${encodeURIComponent(h.url)}`;
-                            return `
-                                <div class="hospital-card" style="background: white; border-radius: 12px; padding: 12px 16px; border: 1px solid #edf2f7; width: 85%; align-self: flex-start;">
-                                    <h5 style="margin:0 0 10px 0; font-weight:800; color:var(--text-dark);">${h.name}</h5>
-                                    <a href="${proxyUrl}" target="_blank" class="btn-block-primary" style="display:inline-block; text-align:center; text-decoration:none; padding:8px 12px; font-size:0.8rem; border-radius:8px;">홈페이지 이동</a>
-                                </div>
-                            `;
-                        }).join('')}
+                    <div class="msg-bubble hospital-integrated-card" style="background: white; border-radius: 12px; padding: 16px; border: 1px solid #edf2f7; width: 90%; align-self: flex-start;">
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            ${hospitals.map((h, i) => {
+                                const proxyUrl = `https://translate.google.com/translate?sl=ko&tl=${lang}&u=${encodeURIComponent(h.url)}`;
+                                return `
+                                    <li style="padding: 12px 0; border-bottom: ${i === hospitals.length - 1 ? 'none' : '1px solid #f1f5f9'};">
+                                        <div style="font-weight: 800; color: var(--text-dark); font-size: 0.95rem; margin-bottom: 4px;">${h.name}</div>
+                                        <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 8px;"><i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>${h.loc}</div>
+                                        <a href="${proxyUrl}" target="_blank" style="display: inline-block; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; text-decoration: none; font-size: 0.75rem; font-weight: 600;">홈페이지 / 정보 보기</a>
+                                    </li>
+                                `;
+                            }).join('')}
+                        </ul>
                     </div>
                 `;
                 break;

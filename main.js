@@ -584,11 +584,51 @@ function initDashboard() {
                 welcomeText = "주요 의료기관 정보입니다. 기관명과 위치를 확인하실 수 있으며, 홈페이지를 통해 상세 정보를 확인하실 수 있습니다.";
                 
                 const hospitals = [
-                    { name: "KMI 한국의학연구소", loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", url: "https://www.kmi.or.kr/HLCHK/PERSONAL" },
-                    { name: "하나로의료재단", loc: "서울(종로, 강남)", url: "https://www.hanaromf.com/program/program01.jsp" },
-                    { name: "세브란스병원 센터", loc: "서울(신촌, 강남)", url: "https://severance.healthcare/severance/program/index.do" },
-                    { name: "삼성서울병원 센터", loc: "서울(일원동)", url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do" },
-                    { name: "세란병원 센터", loc: "서울(종로/독립문)", url: "https://www.seran.co.kr/05_center/center01_03.php" }
+                    { 
+                        name: "KMI 한국의학연구소", 
+                        loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", 
+                        url: "https://www.kmi.or.kr/HLCHK/PERSONAL",
+                        programs: [
+                            { title: "White (Basic)", items: "신체계측, 혈액검사(당뇨,간,고지혈), 흉부X선, 초음파(택1)" },
+                            { title: "Silver/Gold", items: "Basic + 정밀초음파(갑상선,경동맥), 위/대장 내시경, 각종 CT" }
+                        ]
+                    },
+                    { 
+                        name: "하나로의료재단", 
+                        loc: "서울(종로, 강남)", 
+                        url: "https://www.hanaromf.com/program/program01.jsp",
+                        programs: [
+                            { title: "기본 종합검진", items: "기초검사, 소화기(위내시경), 복부초음파, 종양표지자(암)" },
+                            { title: "골드 검진", items: "심혈관 및 뇌혈관 질환 특화 정밀 프로그램" }
+                        ]
+                    },
+                    { 
+                        name: "세브란스병원 센터", 
+                        loc: "서울(신촌, 강남)", 
+                        url: "https://severance.healthcare/severance/program/index.do",
+                        programs: [
+                            { title: "기본검진", items: "프리미엄 성인 필수 정밀 검사 중심" },
+                            { title: "특화 패키지", items: "소화기, 순환기(심장), 뇌졸중 정밀, SAFE암" }
+                        ]
+                    },
+                    { 
+                        name: "삼성서울병원 센터", 
+                        loc: "서울(일원동)", 
+                        url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do",
+                        programs: [
+                            { title: "기본 정밀", items: "전담 교수 상담 포함, 핵심 영상 및 소화기 검사" },
+                            { title: "프리미엄", items: "CT, MRI, PET 등 최첨단 영상 장비 정밀 종합검진" }
+                        ]
+                    },
+                    { 
+                        name: "세란병원 센터", 
+                        loc: "서울(종로/독립문)", 
+                        url: "https://www.seran.co.kr/05_center/center01_03.php",
+                        programs: [
+                            { title: "그린/블루 종합", items: "초음파, 위/대장 내시경, 핵심 혈액 정밀 검사" },
+                            { title: "실버/골드", items: "특수 혈액, 유전자 검사, 뇌 MRI/MRA 정밀 검진" }
+                        ]
+                    }
                 ];
 
                 blockHtml = `
@@ -596,11 +636,26 @@ function initDashboard() {
                         <ul style="list-style: none; padding: 0; margin: 0;">
                             ${hospitals.map((h, i) => {
                                 const proxyUrl = `https://translate.google.com/translate?sl=ko&tl=${lang}&u=${encodeURIComponent(h.url)}`;
+                                const hospitalId = `hospital-${i}`;
                                 return `
                                     <li style="padding: 12px 0; border-bottom: ${i === hospitals.length - 1 ? 'none' : '1px solid #f1f5f9'};">
                                         <div class="notranslate" style="font-weight: 800; color: var(--text-dark); font-size: 0.95rem; margin-bottom: 4px;">${h.name}</div>
                                         <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 8px;"><i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>${h.loc}</div>
-                                        <a href="${proxyUrl}" target="_blank" style="display: inline-block; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; text-decoration: none; font-size: 0.75rem; font-weight: 600;">홈페이지 / 정보 보기</a>
+                                        <div style="display: flex; gap: 8px;">
+                                            <a href="${proxyUrl}" target="_blank" style="display: inline-block; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; text-decoration: none; font-size: 0.75rem; font-weight: 600;">홈페이지 / 정보 보기</a>
+                                            <button onclick="toggleHospitalPrograms('${hospitalId}')" class="btn-toggle-programs">검진 항목 보기</button>
+                                        </div>
+                                        
+                                        <div id="${hospitalId}" class="hospital-programs">
+                                            ${h.programs.map(p => `
+                                                <div class="program-box">
+                                                    <div class="program-header-box">
+                                                        <span class="program-tag notranslate">${p.title}</span>
+                                                    </div>
+                                                    <div class="program-items-list">${p.items}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
                                     </li>
                                 `;
                             }).join('')}
@@ -642,6 +697,17 @@ function initDashboard() {
 
         if (welcomeText) window.appendMessage('coord', welcomeText);
         if (blockHtml) setTimeout(() => window.appendMessage('system', blockHtml, 'system'), 500);
+    };
+
+    window.toggleHospitalPrograms = function(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.toggle('active');
+            const btn = el.previousElementSibling.querySelector('.btn-toggle-programs');
+            if (btn) {
+                btn.innerText = el.classList.contains('active') ? '상세 정보 닫기' : '검진 항목 보기';
+            }
+        }
     };
 
     // Handle Sidebar Navigation as Shortcuts

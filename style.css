@@ -2627,3 +2627,77 @@ input:checked + .slider:before {
     display: none !important;
 }
 
+
+/* Hospital Program Details (Accordion) */
+.hospital-programs {
+    margin-top: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    display: none; /* Hidden by default */
+    animation: slideDown 0.3s ease-out;
+}
+
+.hospital-programs.active {
+    display: block;
+}
+
+.program-box {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #cbd5e1;
+}
+
+.program-box:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.program-header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.program-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: white;
+    text-transform: uppercase;
+}
+
+.program-items-list {
+    font-size: 0.75rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.btn-toggle-programs {
+    background: none;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: var(--transition);
+}
+
+.btn-toggle-programs:hover {
+    background: var(--primary);
+    color: white;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

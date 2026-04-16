@@ -814,8 +814,22 @@ function renderInlineConsultationForm() {
             </div>
 
             <div class="c-form-group" style="margin-top:10px;">
-                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Desired Documents</label>
-                <textarea id="c-docs" rows="2" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;" placeholder="e.g. English Report, CD..."></textarea>
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Required Documents (Multiple Selection)</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" name="c-docs-check" value="영수증"> 영수증 (Receipt)
+                    </label>
+                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" name="c-docs-check" value="검진확인서"> 검진확인서 (Confirm)
+                    </label>
+                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" name="c-docs-check" value="결과CD"> 결과CD (Result CD)
+                    </label>
+                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" name="c-docs-check" value="기타"> 기타 (Other)
+                    </label>
+                </div>
+                <input type="text" id="c-docs-other" placeholder="Other specific requests..." style="width:100%; padding:8px; margin-top:8px; border-radius:8px; border:1px solid #ddd; font-size:0.85rem;">
             </div>
 
             <button type="button" class="btn-block-primary" style="width:100%; margin-top:15px; background:var(--primary); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="handleInlineFormSubmit()">Complete Registration</button>
@@ -835,8 +849,13 @@ window.handleInlineFormSubmit = function() {
         time: document.querySelector('input[name="c-time"]:checked').value,
         type: document.getElementById('c-type').value,
         reception: document.getElementById('c-reception').value,
-        docs: document.getElementById('c-docs').value
+        docs: Array.from(document.querySelectorAll('input[name="c-docs-check"]:checked')).map(el => el.value),
+        docsOther: document.getElementById('c-docs-other').value
     };
+
+    // Combine docs checkbox and other text
+    let finalDocs = data.docs.join(', ');
+    if (data.docsOther) finalDocs += (finalDocs ? ', ' : '') + data.docsOther;
 
     if (!data.name || !data.dob || !data.phone || !data.email) {
         alert('Please fill out the essential fields.');
@@ -845,7 +864,7 @@ window.handleInlineFormSubmit = function() {
 
     // 1. Send User Bubble
     if (window.appendMessage) {
-        window.appendMessage('user', `I've completed my consultation request.<br><b>Type:</b> ${data.type}<br><b>Period:</b> ${data.period}`);
+        window.appendMessage('user', `I've completed my consultation request.<br><b>Type:</b> ${data.type}<br><b>Period:</b> ${data.period}<br><b>Documents:</b> ${finalDocs || 'None'}`);
     }
 
     // 2. Hide Form Block

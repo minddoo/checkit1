@@ -2828,10 +2828,33 @@ input:checked + .slider:before {
 .program-modal-footer {
     flex: 0 0 auto;
     background: white;
-    padding: 20px 40px 32px 40px;
+    padding: 16px 40px 24px 40px; /* Reduced vertical padding */
     border-top: 1px solid #f1f5f9;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
     z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content */
+}
+
+.program-modal-footer .disclaimer {
+    font-size: 0.7rem; /* Smaller font */
+    color: #94a3b8;
+    margin-bottom: 12px;
+    text-align: center;
+    line-height: 1.4;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.program-modal-footer .btn-primary {
+    width: auto;
+    min-width: 160px; /* Specific smaller width */
+    padding: 10px 24px; /* Reduced padding */
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin: 0 auto;
 }
 
 #modal-program-name {

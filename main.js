@@ -804,6 +804,23 @@ function renderInlineConsultationForm() {
             </div>
 
             <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Hospital Preference (희망 병원 유무)</label>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <label style="flex:1; border:1px solid #ddd; padding:10px; text-align:center; border-radius:8px; cursor:pointer;" onclick="document.getElementById('c-hospital-input-area').style.display='block'; document.getElementById('c-hospital-list-area').style.display='none';"><input type="radio" name="c-hospital-opt" value="Yes"> Yes</label>
+                    <label style="flex:1; border:1px solid #ddd; padding:10px; text-align:center; border-radius:8px; cursor:pointer;" onclick="document.getElementById('c-hospital-input-area').style.display='none'; document.getElementById('c-hospital-list-area').style.display='block';"><input type="radio" name="c-hospital-opt" value="No" checked> No</label>
+                </div>
+                
+                <div id="c-hospital-input-area" style="display:none;">
+                    <input type="text" id="c-pref-hospital" placeholder="Enter preferred hospital name" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                
+                <div id="c-hospital-list-area" style="display:block; background:#fff9db; padding:12px; border-radius:12px; border:1px solid #ffec99;">
+                    <p style="font-size:0.8rem; color:#856404; margin-bottom:8px;">희망하시는 병원이 없으신가요? CHECKIT의 추천 리스트를 받아보시겠습니까?</p>
+                    <button type="button" class="btn-block-primary" id="btn-request-list" style="background:#fcc419; color:#000; font-size:0.85rem; padding:8px 15px; width:100%;" onclick="this.classList.toggle('active'); this.innerText=this.classList.contains('active') ? '✓ List Requested' : 'Receive CHECKIT Recommendation List';">Receive CHECKIT Recommendation List</button>
+                </div>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
                 <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Result Reception</label>
                 <select id="c-reception" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                     <option value="Email">Email (이메일)</option>
@@ -844,7 +861,10 @@ window.handleInlineFormSubmit = function() {
         type: document.getElementById('c-type').value,
         reception: document.getElementById('c-reception').value,
         docs: document.getElementById('c-docs-select').value,
-        docsOther: document.getElementById('c-docs-other').value
+        docsOther: document.getElementById('c-docs-other').value,
+        hospitalOpt: document.querySelector('input[name="c-hospital-opt"]:checked').value,
+        prefHospital: document.getElementById('c-pref-hospital').value,
+        requestList: document.getElementById('c-hospital-list-area').style.display === 'block'
     };
 
     // Combine docs select and other text
@@ -866,6 +886,7 @@ window.handleInlineFormSubmit = function() {
                 • <b>Schedule:</b> ${data.arrival} ~ ${data.departure}<br>
                 • <b>Preferred Period:</b> ${data.period} (${data.time === 'AM' ? 'Morning' : 'Afternoon'})<br>
                 • <b>Type:</b> ${data.type}<br>
+                • <b>Hospital:</b> ${data.hospitalOpt === 'Yes' ? data.prefHospital : 'Request Recommended List'}<br>
                 • <b>Results:</b> ${data.reception}<br>
                 • <b>Documents:</b> ${finalDocs || 'None'}<br>
                 ${data.address ? `• <b>Address:</b> ${data.address}` : ''}

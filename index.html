@@ -778,15 +778,16 @@
                                 </div>
                             </div>
 
-                            <!-- System Message / Interactive Block Example (Booking) -->
-                            <div class="message-row system">
-                                <div class="system-block">
-                                    <div class="block-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                            <!-- Step 1: Detailed Consultation Form -->
+                            <div class="message-row system" id="step-consultation">
+                                <div class="system-block consultation-block">
+                                    <div class="block-icon"><i class="fa-solid fa-file-waveform"></i></div>
                                     <div class="block-content">
-                                        <p><strong>Step 1: Hospital Selection</strong></p>
-                                        <span>Please review the recommended hospitals and select your preferred program.</span>
-                                        <div class="block-actions">
-                                            <button class="btn-block-primary" onclick="window.showChatBlock('booking')">View Hospitals</button>
+                                        <p><strong>Step 1: Consultation Details</strong></p>
+                                        <span>To start your premium coordination, please provide your initial details.</span>
+                                        
+                                        <div id="inline-consultation-form-container">
+                                            <!-- The detailed 12-field form will be rendered here by main.js -->
                                         </div>
                                     </div>
                                 </div>

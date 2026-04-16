@@ -667,6 +667,9 @@ function initDashboard() {
     }
 
     dashboardInitialized = true;
+    
+    // Auto-render Consultation Form as Step 1
+    renderInlineConsultationForm();
 
     // Dashboard Logout
     const dashLogoutBtn = document.getElementById('dash-logout-btn');
@@ -725,3 +728,142 @@ function updateAuthUI() {
 
 // Initial UI Update Check
 window.addEventListener('DOMContentLoaded', updateAuthUI);
+
+// --- Consultation Form Integration Functions ---
+function renderInlineConsultationForm() {
+    const container = document.getElementById('inline-consultation-form-container');
+    if (!container) return;
+    
+    // Pre-fill user data
+    const savedName = localStorage.getItem('userName') || '';
+    const savedEmail = localStorage.getItem('userEmail') || '';
+
+    container.innerHTML = `
+        <div class="chat-form-box" style="margin: 15px 0 0 0; padding: 20px; background: rgba(255,255,255,0.8); border-radius: 20px; border: 1.5px solid rgba(46, 204, 113, 0.2);">
+            <div class="c-form-group">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Full Name</label>
+                <input type="text" id="c-name" value="${savedName}" placeholder="Name of test-taker" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                <div class="c-form-group">
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">DOB (YYMMDD)</label>
+                    <input type="text" id="c-dob" placeholder="6 digits" maxlength="6" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                <div class="c-form-group">
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Phone (Alimtalk)</label>
+                    <input type="tel" id="c-phone" placeholder="+82..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Email Address</label>
+                <input type="email" id="c-email" value="${savedEmail}" placeholder="your@email.com" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Korea Address (Optional)</label>
+                <input type="text" id="c-address" placeholder="For kit delivery" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+                <div class="c-form-group">
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Arrival Date</label>
+                    <input type="date" id="c-arrival" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+                <div class="c-form-group">
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Departure Date</label>
+                    <input type="date" id="c-departure" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Preferred 1-Week Period</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <input type="date" id="c-period-start" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                    <input type="date" id="c-period-end" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                </div>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Preferred Time</label>
+                <div style="display:flex; gap:10px;">
+                    <label style="flex:1; border:1px solid #ddd; padding:10px; text-align:center; border-radius:8px; cursor:pointer;"><input type="radio" name="c-time" value="AM" checked> AM</label>
+                    <label style="flex:1; border:1px solid #ddd; padding:10px; text-align:center; border-radius:8px; cursor:pointer;"><input type="radio" name="c-time" value="PM"> PM</label>
+                </div>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Type of Checkup</label>
+                <select id="c-type" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                    <option value="종합검진">General (종합검진)</option>
+                    <option value="기본 검사">Basic (기본 고해상)</option>
+                    <option value="채용검진">Employment (채용/비자)</option>
+                    <option value="단일항목">Single (대장내시경 등)</option>
+                </select>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Result Reception</label>
+                <select id="c-reception" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                    <option value="Email">Email (이메일)</option>
+                    <option value="내원">Visit (내원)</option>
+                    <option value="우편">Post (우편)</option>
+                    <option value="Online">Online (온라인)</option>
+                </select>
+            </div>
+
+            <div class="c-form-group" style="margin-top:10px;">
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Desired Documents</label>
+                <textarea id="c-docs" rows="2" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;" placeholder="e.g. English Report, CD..."></textarea>
+            </div>
+
+            <button type="button" class="btn-block-primary" style="width:100%; margin-top:15px; background:var(--primary); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="handleInlineFormSubmit()">Complete Registration</button>
+        </div>
+    `;
+}
+
+window.handleInlineFormSubmit = function() {
+    const data = {
+        name: document.getElementById('c-name').value,
+        dob: document.getElementById('c-dob').value,
+        phone: document.getElementById('c-phone').value,
+        email: document.getElementById('c-email').value,
+        arrival: document.getElementById('c-arrival').value,
+        departure: document.getElementById('c-departure').value,
+        period: `${document.getElementById('c-period-start').value} ~ ${document.getElementById('c-period-end').value}`,
+        time: document.querySelector('input[name="c-time"]:checked').value,
+        type: document.getElementById('c-type').value,
+        reception: document.getElementById('c-reception').value,
+        docs: document.getElementById('c-docs').value
+    };
+
+    if (!data.name || !data.dob || !data.phone || !data.email) {
+        alert('Please fill out the essential fields.');
+        return;
+    }
+
+    // 1. Send User Bubble
+    if (window.appendMessage) {
+        window.appendMessage('user', `I've completed my consultation request.<br><b>Type:</b> ${data.type}<br><b>Period:</b> ${data.period}`);
+    }
+
+    // 2. Hide Form Block
+    const consultationBlock = document.getElementById('step-consultation');
+    if (consultationBlock) consultationBlock.style.display = 'none';
+
+    // 3. System Response & Trigger Next Step
+    setTimeout(() => {
+        if (window.appendMessage) {
+            window.appendMessage('coord', `Thank you, <b>${data.name}</b>! I've received your request. I am now searching for hospitals that match your desired type (<b>${data.type}</b>).`);
+        }
+
+        // Trigger existing booking step
+        if (typeof window.showChatBlock === 'function') {
+            setTimeout(() => window.showChatBlock('booking'), 1500);
+        }
+    }, 1200);
+
+    // Save locally
+    localStorage.setItem('consultationData', JSON.stringify(data));
+};

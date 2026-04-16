@@ -589,8 +589,10 @@ function initDashboard() {
                         loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", 
                         url: "https://www.kmi.or.kr/HLCHK/PERSONAL",
                         programs: [
-                            { title: "White (Basic)", items: "신체계측, 혈액검사(당뇨,간,고지혈), 흉부X선, 초음파(택1)" },
-                            { title: "Silver/Gold", items: "Basic + 정밀초음파(갑상선,경동맥), 위/대장 내시경, 각종 CT" }
+                            { title: "화이트 (White)", items: "가장 필수적인 기본 종합검진. 성인병 예방 및 기초 질환 조기 발견." },
+                            { title: "실버 (Silver)", items: "화이트 + 정밀초음파(경동맥, 심장), CT(폐/요추/경추 등) 강화." },
+                            { title: "골드 (Gold)", items: "40세 이상 권장. 실버 + 심혈관 및 소화기 정밀 검사 강화." },
+                            { title: "특화 정밀", items: "폐, 심혈관, 소화기, 뇌혈관, 여성, 알레르기 정밀 패키지 선택." }
                         ]
                     },
                     { 
@@ -598,8 +600,10 @@ function initDashboard() {
                         loc: "서울(종로, 강남)", 
                         url: "https://www.hanaromf.com/program/program01.jsp",
                         programs: [
-                            { title: "기본 종합검진", items: "기초검사, 소화기(위내시경), 복부초음파, 종양표지자(암)" },
-                            { title: "골드 검진", items: "심혈관 및 뇌혈관 질환 특화 정밀 프로그램" }
+                            { title: "기본 종합검진", items: "기본적인 성인병 및 6대 암 조기 진단을 위한 필수 프로그램." },
+                            { title: "준종합검진", items: "기초 검사에 100여 가지 정밀 진단 항목을 추가한 심층 검진." },
+                            { title: "골드 검진", items: "뇌혈관 및 심장혈관 질환 위험 인자 확인에 특화된 정밀 프로그램." },
+                            { title: "맞춤형 정밀", items: "뇌, 심장, 폐, 소화기 등 특정 부위 집중 정밀 패키지." }
                         ]
                     },
                     { 
@@ -607,8 +611,9 @@ function initDashboard() {
                         loc: "서울(신촌, 강남)", 
                         url: "https://severance.healthcare/severance/program/index.do",
                         programs: [
-                            { title: "기본검진", items: "프리미엄 성인 필수 정밀 검사 중심" },
-                            { title: "특화 패키지", items: "소화기, 순환기(심장), 뇌졸중 정밀, SAFE암" }
+                            { title: "기본 검진", items: "세브란스 프리미엄 성인 필수 정밀 검사 중심의 기본형." },
+                            { title: "프리미엄/플래티넘", items: "정밀도 높은 심층 검사와 첨단 장비를 활용한 고품격 프로그램." },
+                            { title: "분야별 정밀", items: "심장, 뇌졸중, SAFE암 등 특정 질환 집중 조기 진단 패키지." }
                         ]
                     },
                     { 
@@ -616,8 +621,9 @@ function initDashboard() {
                         loc: "서울(일원동)", 
                         url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do",
                         programs: [
-                            { title: "기본 정밀", items: "전담 교수 상담 포함, 핵심 영상 및 소화기 검사" },
-                            { title: "프리미엄", items: "CT, MRI, PET 등 최첨단 영상 장비 정밀 종합검진" }
+                            { title: "라이프스테이지별", items: "연령 및 생애 주기별 특성에 맞춘 맞춤형 건강검진 코스." },
+                            { title: "분야별 정밀", items: "암, 심혈관 등 특정 분야에 집중된 고해상도 정밀 검사 패키지." },
+                            { title: "프리미엄", items: "전담 교수 상담과 최첨단 장비(PET-CT 등) 중심의 프리미엄 검진." }
                         ]
                     },
                     { 
@@ -625,8 +631,9 @@ function initDashboard() {
                         loc: "서울(종로/독립문)", 
                         url: "https://www.seran.co.kr/05_center/center01_03.php",
                         programs: [
-                            { title: "그린/블루 종합", items: "초음파, 위/대장 내시경, 핵심 혈액 정밀 검사" },
-                            { title: "실버/골드", items: "특수 혈액, 유전자 검사, 뇌 MRI/MRA 정밀 검진" }
+                            { title: "베이직/그린/블루", items: "합리적인 비용의 실속형 종합검진 및 핵심 정밀 항목 조합." },
+                            { title: "실버/골드", items: "뇌 MRI/MRA, 특수 혈액검사 등이 추가된 고화질 정밀 검진." },
+                            { title: "크리스탈", items: "PET-CT 및 전신 정밀 검사가 포함된 세란병원 최고급 프로그램." }
                         ]
                     }
                 ];

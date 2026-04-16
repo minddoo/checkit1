@@ -856,9 +856,22 @@ window.handleInlineFormSubmit = function() {
         return;
     }
 
-    // 1. Send User Bubble
+    // 1. Send User Bubble (Rich Format)
     if (window.appendMessage) {
-        window.appendMessage('user', `I've completed my consultation request.<br><b>Type:</b> ${data.type}<br><b>Period:</b> ${data.period}<br><b>Documents:</b> ${finalDocs || 'None'}`);
+        const summary = `
+            <div class="consultation-summary" style="font-size: 0.9rem; line-height: 1.6;">
+                <strong style="display:block; margin-bottom:8px; font-size:1rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:5px;">📋 Medical Consultation Request</strong>
+                • <b>Name:</b> ${data.name} (${data.dob})<br>
+                • <b>Contact:</b> ${data.phone} / ${data.email}<br>
+                • <b>Schedule:</b> ${data.arrival} ~ ${data.departure}<br>
+                • <b>Preferred Period:</b> ${data.period} (${data.time === 'AM' ? 'Morning' : 'Afternoon'})<br>
+                • <b>Type:</b> ${data.type}<br>
+                • <b>Results:</b> ${data.reception}<br>
+                • <b>Documents:</b> ${finalDocs || 'None'}<br>
+                ${data.address ? `• <b>Address:</b> ${data.address}` : ''}
+            </div>
+        `;
+        window.appendMessage('user', summary);
     }
 
     // 2. Hide Form Block

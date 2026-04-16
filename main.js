@@ -1318,10 +1318,7 @@ function initDashboard() {
                                                     <div class="program-tags-container">
                                                         ${cat.programs.map((p, pIdx) => `
                                                             <div class="program-item-chip" onclick="event.stopPropagation(); openProgramModal(${i}, ${catIdx}, ${pIdx})">
-                                                                <div style="display: flex; align-items: center; gap: 8px;">
-                                                                    <span class="chip-title notranslate">${p.title}</span>
-                                                                    <button class="btn-chip-select" onclick="event.stopPropagation(); selectProgram(${i}, ${catIdx}, ${pIdx})">선택</button>
-                                                                </div>
+                                                                <span class="chip-title notranslate">${p.title}</span>
                                                                 <i class="fa-solid fa-chevron-right chip-arrow"></i>
                                                             </div>
                                                         `).join('')}
@@ -1445,18 +1442,52 @@ function initDashboard() {
     };
 
     window.selectHospital = function(hIdx, hospitalId) {
-        // Toggle programs list
-        const el = document.getElementById(hospitalId);
-        if (el && !el.classList.contains('active')) {
-            window.toggleHospitalPrograms(hospitalId);
-        }
+        // Instead of expanding list, open the dedicated selection modal
+        window.openSelectionModal(hIdx);
         
-        // Highlight selection
+        // Highlight selection on the list briefly
         document.querySelectorAll('.hospital-list-item').forEach(item => item.classList.remove('selected'));
         const li = document.getElementById(`li-hospital-${hIdx}`);
         if (li) li.classList.add('selected');
+    };
+
+    window.openSelectionModal = function(hIdx) {
+        const hospitals = JSON.parse(document.body.getAttribute('data-hospitals') || '[]');
+        const hospital = hospitals[hIdx];
+        if (!hospital) return;
+
+        const modal = document.getElementById('selection-modal');
+        const hospitalNameEl = document.getElementById('selection-hospital-name');
+        const listContainer = document.getElementById('selection-list-container');
+
+        hospitalNameEl.innerText = hospital.name;
         
-        console.log(`Hospital ${hIdx} pre-selected. Now pick a program.`);
+        let html = '';
+        hospital.categories.forEach((cat, catIdx) => {
+            cat.programs.forEach((p, pIdx) => {
+                html += `
+                    <div class="selection-item">
+                        <div class="selection-info">
+                            <span class="selection-cat">${cat.name}</span>
+                            <span class="selection-title notranslate">${p.title}</span>
+                        </div>
+                        <button class="btn-confirm-selection" onclick="selectProgram(${hIdx}, ${catIdx}, ${pIdx})">선택하기</button>
+                    </div>
+                `;
+            });
+        });
+
+        listContainer.innerHTML = html;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeSelectionModal = function() {
+        const modal = document.getElementById('selection-modal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
     };
 
     window.selectProgram = function(hIdx, catIdx, pIdx) {
@@ -1464,7 +1495,8 @@ function initDashboard() {
         const hospital = hospitals[hIdx];
         const program = hospital.categories[catIdx].programs[pIdx];
         
-        // Close modal
+        // Close modals
+        window.closeSelectionModal();
         window.closeProgramModal();
         
         // Feedback message
@@ -1472,13 +1504,18 @@ function initDashboard() {
             const confirmMsg = `확인되었습니다! **${hospital.name}**의 **${program.title}** 프로그램을 선택하셨습니다. <br><br>예약 및 추가 상담을 이어가시겠습니까?`;
             window.appendMessage('coord', confirmMsg);
             
-            // Highlight the chip in the background UI if needed, but chat bubbles are ephemeral.
-            // We can add a "Selected" state to the hospital card
+            // Highlight the hospital card
             document.querySelectorAll('.hospital-list-item').forEach(item => item.classList.remove('selected'));
             const li = document.getElementById(`li-hospital-${hIdx}`);
             if (li) li.classList.add('selected');
         }, 300);
     };
+
+    // Close listeners for selection modal
+    document.getElementById('selection-modal-close').addEventListener('click', window.closeSelectionModal);
+    document.getElementById('selection-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'selection-modal') window.closeSelectionModal();
+    });
 
     window.closeProgramModal = function() {
         const modal = document.getElementById('program-modal');

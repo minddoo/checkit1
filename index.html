@@ -983,7 +983,7 @@
         </div>
     </div>
     
-    <!-- Program Details Modal -->
+    <!-- Program Details Modal (Info Only) -->
     <div id="program-modal" class="modal-overlay">
         <div class="modal-container reveal-modal" style="max-width: 700px;">
             <button class="modal-close" id="program-modal-close"><i class="fa-solid fa-xmark"></i></button>
@@ -1002,6 +1002,29 @@
                 <div class="program-modal-footer">
                     <p class="disclaimer">※ 병원 사정에 따라 상세 항목 및 장비는 변경될 수 있습니다.</p>
                     <button class="btn-primary" onclick="closeProgramModal()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Program Selection Modal (Pick a Program) -->
+    <div id="selection-modal" class="modal-overlay">
+        <div class="modal-container reveal-modal" style="max-width: 600px; height: 80vh;">
+            <button class="modal-close" id="selection-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-content-wrap">
+                <div class="program-modal-header" style="padding-bottom: 20px;">
+                    <div id="selection-hospital-name" class="hospital-sub">병원 선택</div>
+                    <h2 style="margin:0; font-size: 1.5rem; color: var(--text-dark);">프로그램 선택</h2>
+                </div>
+                
+                <div class="program-modal-body" style="padding-top: 20px; border-top: 1px solid #f1f5f9;">
+                    <div id="selection-list-container">
+                        <!-- Selectable programs will be injected here -->
+                    </div>
+                </div>
+
+                <div class="program-modal-footer" style="padding-top: 20px;">
+                    <p class="disclaimer">원하시는 프로그램을 선택해 주세요.</p>
                 </div>
             </div>
         </div>

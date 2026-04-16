@@ -809,6 +809,8 @@ function initDashboard() {
                         </ul>
                     </div>
                 `;
+                // Store hospitals in body for easier access by modal
+                document.body.setAttribute('data-hospitals', JSON.stringify(hospitals));
                 break;
             case 'prep':
                 welcomeText = "Preparation is key for a successful check-up. I've prepared a personalized checklist for you.";
@@ -846,8 +848,6 @@ function initDashboard() {
         if (blockHtml) {
             setTimeout(() => {
                 window.appendMessage('system', blockHtml, 'system');
-                // Store hospitals in body for easier access by modal
-                document.body.setAttribute('data-hospitals', JSON.stringify(hospitals));
             }, 500);
         }
     };

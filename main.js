@@ -584,7 +584,7 @@ function initDashboard() {
                 welcomeText = "주요 의료기관 정보입니다. 기관명과 위치를 확인하실 수 있으며, 홈페이지를 통해 상세 정보를 확인하실 수 있습니다.";
                 
                 const hospitals = [
-                    { name: "KMI 한국의학연구소", loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", url: "https://www.kmi.or.kr/checkup/program" },
+                    { name: "KMI 한국의학연구소", loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", url: "https://www.kmi.or.kr/HLCHK/PERSONAL" },
                     { name: "하나로의료재단", loc: "서울(종로, 강남)", url: "https://www.hanaromf.com/program/program01.jsp" },
                     { name: "세브란스병원 센터", loc: "서울(신촌, 강남)", url: "https://severance.healthcare/severance/program/index.do" },
                     { name: "삼성서울병원 센터", loc: "서울(일원동)", url: "https://www.samsunghospital.com/home/health/program/individual/basic_info.do" },
@@ -598,7 +598,7 @@ function initDashboard() {
                                 const proxyUrl = `https://translate.google.com/translate?sl=ko&tl=${lang}&u=${encodeURIComponent(h.url)}`;
                                 return `
                                     <li style="padding: 12px 0; border-bottom: ${i === hospitals.length - 1 ? 'none' : '1px solid #f1f5f9'};">
-                                        <div style="font-weight: 800; color: var(--text-dark); font-size: 0.95rem; margin-bottom: 4px;">${h.name}</div>
+                                        <div class="notranslate" style="font-weight: 800; color: var(--text-dark); font-size: 0.95rem; margin-bottom: 4px;">${h.name}</div>
                                         <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 8px;"><i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>${h.loc}</div>
                                         <a href="${proxyUrl}" target="_blank" style="display: inline-block; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; color: #475569; text-decoration: none; font-size: 0.75rem; font-weight: 600;">홈페이지 / 정보 보기</a>
                                     </li>
@@ -774,7 +774,7 @@ function generateConsultationSummaryHtml(data) {
             • <b>Schedule:</b> ${data.arrival} ~ ${data.departure}<br>
             • <b>Preferred Period:</b> ${data.period} (${data.time === 'AM' ? 'Morning' : 'Afternoon'})<br>
             • <b>Type:</b> ${data.type}<br>
-            • <b>Hospital:</b> ${data.hospitalOpt === 'Yes' ? data.prefHospital : 'Request Recommended List'}<br>
+            • <b>Hospital:</b> ${data.hospitalOpt === 'Yes' ? `<span class="notranslate">${data.prefHospital}</span>` : 'Request Recommended List'}<br>
             • <b>Results:</b> ${data.reception}<br>
             • <b>Documents:</b> ${finalDocs || 'None'}<br>
             ${data.address ? `• <b>Address:</b> ${data.address}` : ''}

@@ -739,7 +739,7 @@ function renderInlineConsultationForm() {
     const savedEmail = localStorage.getItem('userEmail') || '';
 
     container.innerHTML = `
-        <div class="chat-form-box" style="margin: 15px 0 0 0; padding: 20px; background: rgba(255,255,255,0.8); border-radius: 20px; border: 1.5px solid rgba(46, 204, 113, 0.2);">
+        <div class="chat-form-box notranslate" style="margin: 15px 0 0 0; padding: 20px; background: rgba(255,255,255,0.8); border-radius: 20px; border: 1.5px solid rgba(46, 204, 113, 0.2);">
             <div class="c-form-group">
                 <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Full Name</label>
                 <input type="text" id="c-name" value="${savedName}" placeholder="Name of test-taker" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
@@ -814,21 +814,15 @@ function renderInlineConsultationForm() {
             </div>
 
             <div class="c-form-group" style="margin-top:10px;">
-                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Required Documents (Multiple Selection)</label>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" name="c-docs-check" value="영수증"> 영수증 (Receipt)
-                    </label>
-                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" name="c-docs-check" value="검진확인서"> 검진확인서 (Confirm)
-                    </label>
-                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" name="c-docs-check" value="결과CD"> 결과CD (Result CD)
-                    </label>
-                    <label style="background:#f8fafc; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:8px;">
-                        <input type="checkbox" name="c-docs-check" value="기타"> 기타 (Other)
-                    </label>
-                </div>
+                <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Required Documents (Selection)</label>
+                <select id="c-docs-select" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                    <option value="영수증">영수증 (Receipt)</option>
+                    <option value="검진확인서">검진확인서 (Confirmation)</option>
+                    <option value="결과CD">결과CD (Result CD)</option>
+                    <option value="영수증+확인서">영수증 + 확인서</option>
+                    <option value="전체 (영수증+확인서+CD)">전체 (Receipt+Confirm+CD)</option>
+                    <option value="기타">기타 직접 입력 (Other)</option>
+                </select>
                 <input type="text" id="c-docs-other" placeholder="Other specific requests..." style="width:100%; padding:8px; margin-top:8px; border-radius:8px; border:1px solid #ddd; font-size:0.85rem;">
             </div>
 
@@ -849,12 +843,12 @@ window.handleInlineFormSubmit = function() {
         time: document.querySelector('input[name="c-time"]:checked').value,
         type: document.getElementById('c-type').value,
         reception: document.getElementById('c-reception').value,
-        docs: Array.from(document.querySelectorAll('input[name="c-docs-check"]:checked')).map(el => el.value),
+        docs: document.getElementById('c-docs-select').value,
         docsOther: document.getElementById('c-docs-other').value
     };
 
-    // Combine docs checkbox and other text
-    let finalDocs = data.docs.join(', ');
+    // Combine docs select and other text
+    let finalDocs = data.docs;
     if (data.docsOther) finalDocs += (finalDocs ? ', ' : '') + data.docsOther;
 
     if (!data.name || !data.dob || !data.phone || !data.email) {

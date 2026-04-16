@@ -589,11 +589,11 @@ function initDashboard() {
                         loc: "서울(광화문,여의도,강남), 수원, 대구, 부산, 광주, 제주", 
                         url: "https://www.kmi.or.kr/HLCHK/PERSONAL",
                         programs: [
-                            { title: "화이트 (White)", items: "가장 필수적인 기본 종합검진. 성인병 예방 및 기초 질환 조기 발견." },
-                            { title: "실버 (Silver)", items: "화이트 + 정밀초음파(경동맥, 심장), CT(폐/요추/경추 등) 강화." },
-                            { title: "골드(남) (Gold Male)", items: "40세 이상 남성 권장. 실버 + 전립선 정밀, 심혈관 및 소화기 검사 강화." },
-                            { title: "골드(여) (Gold Female)", items: "40세 이상 여성 권장. 실버 + 부인과 정밀, 소화기 및 유방 검사 강화." },
-                            { title: "카네이션 (Carnation)", items: "부모님을 위한 프리미엄 효도 검진. 노인성 질환 집중 및 전신 정밀 스캔." }
+                            { title: "화이트 (White)", items: "" },
+                            { title: "실버 (Silver)", items: "" },
+                            { title: "골드(남) (Gold Male)", items: "" },
+                            { title: "골드(여) (Gold Female)", items: "" },
+                            { title: "카네이션 (Carnation)", items: "" }
                         ]
                     },
                     { 

@@ -1021,7 +1021,7 @@ function initDashboard() {
                     <div class="msg-bubble hospital-integrated-card" style="background: white; border-radius: 12px; padding: 16px; border: 1px solid #edf2f7; width: 90%; align-self: flex-start;">
                         <ul style="list-style: none; padding: 0; margin: 0;">
                             ${hospitals.map((h, i) => {
-                                const proxyUrl = `https://translate.google.com/translate?sl=ko&tl=${lang}&u=${encodeURIComponent(h.url)}`;
+                                const proxyUrl = h.url;
                                 const hospitalId = `hospital-${i}`;
                                 return `
                                     <li class="hospital-list-item" style="padding: 12px 10px; border-bottom: ${i === hospitals.length - 1 ? 'none' : '1px solid #f1f5f9'}; border-radius: 12px; transition: var(--transition); cursor: pointer;" onclick="toggleHospitalPrograms('${hospitalId}')">

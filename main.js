@@ -1,5 +1,21 @@
+// Firebase Initialization
+const firebaseConfig = {
+    apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+    authDomain: "checkit-43341.firebaseapp.com",
+    projectId: "checkit-43341",
+    storageBucket: "checkit-43341.appspot.com",
+    messagingSenderId: "818434232492",
+    appId: "1:818434232492:web:713836b01fc11196150f09"
+};
+
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+
 // Sticky Header effect
 const header = document.getElementById('navbar');
+
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
         header.classList.add('scrolled');
@@ -251,8 +267,51 @@ if (slider) {
         slideInterval = setInterval(nextSlide, 5000);
     });
 }
+// Hero Workflow Slider (6-Steps)
+const heroDots = document.querySelectorAll('.hero-dot');
+const stepItems = document.querySelectorAll('.step-item');
+const imageTrack = document.querySelector('.image-slider-track');
+let currentHeroStep = 0;
+const totalHeroSteps = stepItems.length;
+
+if (stepItems.length > 0) {
+    function updateHeroStep(index) {
+        // Update Dots
+        heroDots.forEach(dot => dot.classList.remove('active'));
+        if (heroDots[index]) heroDots[index].classList.add('active');
+
+        // Update Text Items
+        stepItems.forEach(item => item.classList.remove('active'));
+        if (stepItems[index]) stepItems[index].classList.add('active');
+
+        // Update Image Track
+        if (imageTrack) {
+            imageTrack.style.transform = `translateX(-${index * (100 / totalHeroSteps)}%)`;
+        }
+        
+        currentHeroStep = index;
+    }
+
+    function nextHeroStep() {
+        let n = (currentHeroStep + 1) % totalHeroSteps;
+        updateHeroStep(n);
+    }
+
+    // Auto-play every 6 seconds for better readability
+    let heroInterval = setInterval(nextHeroStep, 6000);
+
+    // Dot Clicks
+    heroDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            updateHeroStep(index);
+            clearInterval(heroInterval);
+            heroInterval = setInterval(nextHeroStep, 6000);
+        });
+    });
+}
 
 // Auth Modal Logic
+
 const authModal = document.getElementById('auth-modal');
 const loginBtn = document.getElementById('login-btn');
 const modalClose = document.getElementById('modal-close');
@@ -295,7 +354,14 @@ function handleGoogleSignIn(response) {
     
     // Send Confirmation Email via Google Apps Script for Google Users
     if (user.email) {
+        // [MASTER ACCOUNT REDIRECTION]
+        if (user.email === "master@checkit.com" || user.email === "checkit082082@gmail.com") {
+            window.location.href = 'master_dashboard.html';
+            return;
+        }
+
         fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
+
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
@@ -364,9 +430,46 @@ if (authModal && loginBtn) {
         });
     });
 
+    // Master / Corporate Login Submission
+    const corporateForm = document.getElementById('corporate-form');
+    if (corporateForm) {
+        corporateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Corporate Login attempt...");
+            const companyKey = document.getElementById('corp-company-key').value.trim();
+            const securityKey = document.getElementById('corp-security-key').value.trim();
+
+            const isMaster = (companyKey.toLowerCase() === 'comp_체킷' && (securityKey === 'checkit03080!!' || securityKey === 'checkit082082!'));
+
+            if (isMaster) {
+                try {
+                    const masterEmail = "master@checkit.com";
+                    const masterPw = "master1234!";
+                    // Sign in to Firebase
+                    await firebase.auth().signInWithEmailAndPassword(masterEmail, masterPw);
+                    
+                    // Save session flag for UI consistency
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userName', 'Master Admin');
+                    localStorage.setItem('userEmail', masterEmail);
+                    
+                    // Redirect to specialized B2C Master Dashboard
+                    window.location.href = 'master_dashboard.html';
+                } catch (err) {
+                    console.error("Master Login Error:", err);
+                    alert("Authentication error: " + err.message);
+                }
+            } else {
+                alert("Incorrect Company Key or Security Key. Access Denied.");
+            }
+        });
+    }
+
     // Mock Form Submission
     authForms.forEach(form => {
+        if (form.id === 'corporate-form') return; // Handled separately
         form.addEventListener('submit', (e) => {
+
             e.preventDefault();
             
             // Check for PIPA agreement if it's the signup form
@@ -1816,7 +1919,18 @@ window.handleInlineFormSubmit = function() {
         return;
     }
 
+    // Save to Firestore (Real-time Lead Collection)
+    if (db) {
+        db.collection('leads').add({
+            ...data,
+            submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'New'
+        }).then(() => console.log('Lead saved to Firestore'))
+          .catch(err => console.error('Error saving lead:', err));
+    }
+
     // 1. Send User Bubble (Rich Format)
+
     if (window.appendMessage) {
         window.appendMessage('user', generateConsultationSummaryHtml(data));
     }

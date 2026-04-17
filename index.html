@@ -71,64 +71,84 @@
     <main>
         <!-- Home View -->
         <div id="home-view">
-        <!-- Hero Section: Dynamic Workflow Gallery -->
-        <section id="home" class="hero-new">
-            <div class="container">
-                <div class="hero-content-left reveal">
-                    <span class="hero-tag">Professional Coordination</span>
-                    <h1>Trustworthy Korea <br><span class="highlight">Health Journey</span></h1>
-                    <p class="subtitle">
-                        투명한 가격과 전문적인 코디네이션 서비스로<br>
-                        한국에서의 가장 안전한 검진 경험을 시작하세요.
-                    </p>
+        <!-- Hero Section: Dynamic 6-Step Workflow Slider -->
+        <section id="home" class="hero-workflow">
+            <div class="container container-hero">
+                <div class="hero-slider-content">
+                    <!-- Left: Text Slider -->
+                    <div class="hero-text-side reveal">
+                        <div class="hero-tag-wrap">
+                            <span class="hero-tag">Premium Health Coordination</span>
+                        </div>
+                        <div class="step-text-container">
+                            <!-- All 6 steps will be handled here, one active at a time -->
+                            <div class="step-item active" data-step="1">
+                                <div class="step-badge">STEP 01</div>
+                                <h2>개인 맞춤형 프로필 생성 후 <br><span class="highlight">1:1 관리 시작</span></h2>
+                            </div>
+                            <div class="step-item" data-step="2">
+                                <div class="step-badge">STEP 02</div>
+                                <h2>CHECKIT의 24시간 채팅 구조의 <br><span class="highlight">전담 마크 서비스 및 다국어 모듈 기능</span></h2>
+                            </div>
+                            <div class="step-item" data-step="3">
+                                <div class="step-badge">STEP 03</div>
+                                <h2>고객의 입출국, 희망 기간 및 <br><span class="highlight">상세한 요구사항 파악</span></h2>
+                            </div>
+                            <div class="step-item" data-step="4">
+                                <div class="step-badge">STEP 04</div>
+                                <h2>고객의 니즈에 적합한 병원 및 <br><span class="highlight">의료기관 바로 파악 가능 기능</span></h2>
+                            </div>
+                            <div class="step-item" data-step="5">
+                                <div class="step-badge">STEP 05</div>
+                                <h2>병원 별 프로그램 항목 비교 및 <br><span class="highlight">본인 맞춤 프로그램 선택 기능</span></h2>
+                            </div>
+                            <div class="step-item" data-step="6">
+                                <div class="step-badge">STEP 06</div>
+                                <h2>최종 병원 및 프로그램을 선택 후 <br><span class="highlight">예약 진행 시작</span></h2>
+                            </div>
+                        </div>
 
-                    <div class="step-summary-list">
-                        <div class="summary-item">
-                            <div class="s-num">1</div>
-                            <span>개인 맞춤형 프로필 생성 및 1:1 관리</span>
+                        <!-- Progress Dots / Navigation -->
+                        <div class="hero-nav">
+                            <div class="hero-dots">
+                                <span class="hero-dot active" data-index="0"></span>
+                                <span class="hero-dot" data-index="1"></span>
+                                <span class="hero-dot" data-index="2"></span>
+                                <span class="hero-dot" data-index="3"></span>
+                                <span class="hero-dot" data-index="4"></span>
+                                <span class="hero-dot" data-index="5"></span>
+                            </div>
                         </div>
-                        <div class="summary-item">
-                            <div class="s-num">2</div>
-                            <span>24시간 전담 마크 서비스 및 다국어 지원</span>
-                        </div>
-                        <div class="summary-item">
-                            <div class="s-num">3</div>
-                            <span>입출국 일정 및 상세 요구사항 파악</span>
-                        </div>
-                        <div class="summary-item">
-                            <div class="s-num">4</div>
-                            <span>맞춤형 병원 매칭 및 실시간 항목 확인</span>
-                        </div>
-                        <div class="summary-item">
-                            <div class="s-num">5</div>
-                            <span>항목 별 상세 비교 및 프로그램 선택</span>
-                        </div>
-                        <div class="summary-item">
-                            <div class="s-num">6</div>
-                            <span>최종 프로그램 확정 및 예약 가동</span>
+
+                        <div class="hero-cta-group">
+                            <a href="javascript:void(0)" onclick="openAuthModal()" class="nav-btn">Start Health Journey</a>
+                            <a href="https://wa.me/+821051093459" target="_blank" class="contact-sub">
+                                <i class="fa-brands fa-whatsapp"></i> WhatsApp Support
+                            </a>
                         </div>
                     </div>
 
-                    <div class="hero-cta-group">
-                        <a href="#transparency" class="nav-btn">Start Now</a>
-                        <a href="https://wa.me/+821051093459" target="_blank" style="font-weight: 700; color: var(--text-light); display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-brands fa-whatsapp"></i> Contact Support
-                        </a>
-                    </div>
-                </div>
-
-                <div class="hero-gallery-right reveal">
-                    <div class="gallery-stack">
-                        <div class="gs-img"><img src="assets/workflow/stage1/step1.png" alt="Step 1"></div>
-                        <div class="gs-img"><img src="assets/workflow/stage1/step2.png" alt="Step 2"></div>
-                        <div class="gs-img"><img src="assets/workflow/stage1/step3.png" alt="Step 3"></div>
-                        <div class="gs-img"><img src="assets/workflow/stage1/step4.png" alt="Step 4"></div>
-                        <div class="gs-img"><img src="assets/workflow/stage1/step5.png" alt="Step 5"></div>
-                        <div class="gs-img"><img src="assets/workflow/stage1/step6.png" alt="Step 6"></div>
+                    <!-- Right: Image Slider (Mobile Frame) -->
+                    <div class="hero-image-side reveal">
+                        <div class="mobile-frame-container">
+                            <div class="mobile-frame-inner">
+                                <div class="image-slider-track">
+                                    <div class="img-slide active"><img src="assets/workflow/stage1/step1.png" alt="Step 1"></div>
+                                    <div class="img-slide"><img src="assets/workflow/stage1/step2.png" alt="Step 2"></div>
+                                    <div class="img-slide"><img src="assets/workflow/stage1/step3.png" alt="Step 3"></div>
+                                    <div class="img-slide"><img src="assets/workflow/stage1/step4.png" alt="Step 4"></div>
+                                    <div class="img-slide"><img src="assets/workflow/stage1/step5.png" alt="Step 5"></div>
+                                    <div class="img-slide"><img src="assets/workflow/stage1/step6.png" alt="Step 6"></div>
+                                </div>
+                            </div>
+                            <!-- Mock Phone Elements -->
+                            <div class="phone-dynamic-island"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- Cinematic Film Story Reel -->
         <!-- Transparency & Pricing Section -->
@@ -954,6 +974,7 @@
                 <div class="auth-tabs">
                     <button class="auth-tab active" data-tab="login">Sign In</button>
                     <button class="auth-tab" data-tab="signup">Create Account</button>
+                    <button class="auth-tab" data-tab="corporate">Corporate</button>
                 </div>
                 
                 <!-- Login Form -->
@@ -1021,6 +1042,28 @@
                     </div>
 
                     <button type="submit" class="btn-primary auth-submit">Create Account</button>
+                </form>
+
+                <!-- Corporate Login Form (Master Code) -->
+                <form id="corporate-form" class="auth-form">
+                    <div class="form-group">
+                        <label>Company Identification Key</label>
+                        <div class="input-icon-wrap">
+                            <i class="fa-solid fa-building"></i>
+                            <input type="text" id="corp-company-key" placeholder="e.g. comp_checkit" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Security Key</label>
+                        <div class="input-icon-wrap">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" id="corp-security-key" placeholder="Enter security key" required>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">
+                        ※ Corporate administrators and Master users only.
+                    </p>
+                    <button type="submit" class="btn-primary auth-submit" style="margin-top: 20px;">Master Login</button>
                 </form>
 
                 <!-- Signup Success View -->
@@ -1129,7 +1172,12 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <script src="main.js"></script>
+
 </body>
 </html>

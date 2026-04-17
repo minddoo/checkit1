@@ -1,0 +1,89 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    /** 
+     * [SECURITY HELPERS]
+     */
+     
+    // Check if the user is the super-admin (Master)
+    function isMaster() {
+      return request.auth != null && 
+             (request.auth.token.email == "master@checkit.com" || 
+              request.auth.token.email == "checkit082082@gmail.com");
+    }
+
+    // Get the current user's profile data from the 'users' collection
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    /** 
+     * [GLOBAL RULES]
+     */
+
+    // Master account bypass - Full access to everything
+    match /{document=**} {
+      allow read, write: if isMaster();
+    }
+
+    /** 
+     * [COLLECTION RULES]
+     */
+
+    // [1] USERS: Core account metadata
+    match /users/{userId} {
+      // Users can only read/write their own profile
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
+    }
+
+    // [2] COMPANY_INFO: Corporate settings and admin keys
+    match /company_info/{companyId} {
+      // allow 'get' for specific ID to support company-key validation during login
+      allow get: if true; 
+      
+      // Full read/write for Master or the verified Company Admin
+      allow read, write: if isMaster() || 
+                           (request.auth != null && 
+                            getUserData().role == 'company_admin' && 
+                            getUserData().companyId == companyId);
+      
+      // Prevent listing all companies for non-admin users
+      allow list: if isMaster();
+    }
+
+    // [3] WORKERS: The roster of employees for medical checkups
+    match /workers/{workerId} {
+      // Allow reading if Master, or Company Admin of that worker, or the Worker themselves
+      allow read: if request.auth != null && (
+        isMaster() || 
+        (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId) ||
+        (resource.data.uid == request.auth.uid)
+      );
+      
+      // Allow creation by Master or any verified Company Admin
+      allow create: if request.auth != null && (isMaster() || getUserData().role == 'company_admin');
+      
+      // Only Master or Company Admin can update/delete records
+      allow update, delete: if request.auth != null && (
+        isMaster() || 
+        (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId)
+      );
+    }
+
+    // [4] USER_PROCESS: Individual medical journey tracking
+    match /user_process/{userId} {
+      // Strictly private: Only the owner or Master can access
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
+    }
+
+    // [5] LEADS: Consultation requests from B2C site (1-ckc.pages.dev)
+    match /leads/{leadId} {
+      // Anyone can submit a consultation request
+      allow create: if true;
+      // Only Master can read/manage incoming leads
+      allow read, write: if isMaster();
+    }
+  }
+}

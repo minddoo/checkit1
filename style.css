@@ -378,8 +378,7 @@ ul {
 }
 
 .template-frame-container {
-    width: 100%;
-    max-width: 580px; /* Enlarge visibility significantly */
+    width: 520px; /* FIXED WIDTH to ensure side margins are identical for all 6 photos */
     margin: 0 auto;
     background: transparent;
     padding: 0;
@@ -388,6 +387,7 @@ ul {
 
 @media (max-width: 992px) {
     .template-frame-container {
+        width: 100%;
         max-width: 450px;
     }
 }
@@ -429,18 +429,12 @@ ul {
 }
 
 .img-slide img {
-    width: 100%;
-    height: auto; /* Original Aspect Ratio preservation */
-    max-height: 80vh; 
+    width: 100%; /* Force fill the 520px container for consistent margins */
+    height: auto; 
     object-fit: contain; 
     display: block;
     border-radius: 24px;
     box-shadow: 0 30px 60px -15px rgba(0,0,0,0.2); 
-    transform: none;
-    transition: transform 0.3s ease;
-    image-rendering: -webkit-optimize-contrast;
-}
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
     transform: none;
     transition: transform 0.3s ease;
     image-rendering: -webkit-optimize-contrast;

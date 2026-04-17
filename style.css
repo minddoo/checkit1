@@ -686,8 +686,6 @@ ul {
     max-width: 800px;
 }
 
-@media (max-width: 992px) {
-
 /* Pricing Divide Visualization Upgraded */
 .system-divide-viz {
     margin-top: 50px;

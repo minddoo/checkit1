@@ -409,114 +409,198 @@ ul {
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Cinematic Film Reel Section */
-.film-reel-section {
-    background: #000;
-    padding: 30px 0;
+/* Transparency Comparison Section */
+.transparency-section {
+    padding: 120px 0;
+    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    position: relative;
     overflow: hidden;
-    position: relative;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Film Perforations (Sprocket Holes) */
-.film-reel-section::before,
-.film-reel-section::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background-image: repeating-linear-gradient(90deg, 
-        transparent 0, transparent 35px, 
-        #fff 35px, #fff 48px);
-    opacity: 0.12;
-    z-index: 2;
-}
-
-.film-reel-section::before { top: 10px; }
-.film-reel-section::after { bottom: 10px; }
-
-.film-strip-marquee {
-    display: flex;
-    white-space: nowrap;
-}
-
-.film-track {
-    display: flex;
-    animation: scrollFilm 40s linear infinite;
-}
-
-@keyframes scrollFilm {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-.film-frame {
-    flex: 0 0 auto;
-    width: 380px;
-    margin: 0 40px;
-    position: relative;
-    padding: 15px;
-    background: #111;
-    border: 8px solid #000;
-}
-
-.film-frame img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    filter: sepia(25%) contrast(105%) brightness(95%);
-    border-radius: 4px;
-    transition: var(--transition);
-}
-
-.frame-meta {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    font-size: 0.65rem;
-    font-weight: 800;
-    color: var(--white);
-    letter-spacing: 1.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    background: rgba(0,0,0,0.4);
-    padding: 3px 6px;
-    border-radius: 4px;
-    z-index: 10;
-}
-
-.rec-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: #e74c3c;
-    border-radius: 50%;
-    margin: 0 4px;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
-}
-
-.frame-caption {
-    margin-top: 12px;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    font-style: italic;
+.transparency-header {
     text-align: center;
+    margin-bottom: 80px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.transparency-header .badge-tp {
+    display: inline-block;
+    padding: 8px 20px;
+    background: rgba(46, 204, 113, 0.1);
+    color: var(--primary);
+    border-radius: 100px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.transparency-header h2 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.transparency-header p.subtitle {
+    font-size: 1.25rem;
+    color: var(--text-light);
     font-weight: 500;
 }
 
-@media (max-width: 768px) {
-    .film-frame {
-        width: 300px;
-        margin: 0 15px;
-    }
-    .film-frame img {
-        height: 160px;
-    }
+.comparison-grid-tp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 100px;
+}
+
+.tp-card {
+    background: var(--white);
+    border-radius: 32px;
+    padding: 60px;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.tp-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-premium);
+}
+
+.tp-card.industry {
+    background: #fdfdfd;
+    border-color: #f1f5f9;
+}
+
+.tp-card.checkit {
+    background: var(--white);
+    border: 2px solid var(--primary-light);
+    box-shadow: 0 20px 50px rgba(46, 204, 113, 0.08);
+}
+
+.card-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.industry .card-label { color: #94a3b8; }
+.checkit .card-label { color: var(--primary); }
+
+.tp-card h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    color: var(--text-dark);
+}
+
+.formula-box {
+    padding: 30px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    gap: 12px;
+}
+
+.industry .formula-box { background: #f1f5f9; color: #475569; }
+.checkit .formula-box { background: #f0fdf4; color: var(--primary-dark); border: 1px dashed var(--primary-light); }
+
+.formula-box b { color: var(--text-dark); }
+.industry .formula-box b.red { color: #ef4444; }
+.checkit .formula-box b.green { color: var(--primary); }
+
+.tp-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tp-features li {
+    padding: 16px 0;
+    border-top: 1px solid #f1f5f9;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.tp-features li i {
+    margin-top: 4px;
+    font-size: 0.9rem;
+}
+
+.industry .tp-features li i { color: #cbd5e1; }
+.checkit .tp-features li i { color: var(--primary); }
+
+.tp-features li b {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text-dark);
+}
+
+.tp-strength-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.strength-item {
+    text-align: center;
+    padding: 0 20px;
+}
+
+.strength-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--white);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin: 0 auto 24px;
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.1);
+    border: 1px solid var(--primary-light);
+}
+
+.strength-item h4 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.strength-item p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+    .comparison-grid-tp { grid-template-columns: 1fr; }
+    .tp-strength-row { grid-template-columns: 1fr; gap: 60px; }
+    .transparency-header h2 { font-size: 2.5rem; }
 }
 
 /* Checkit Global Programs Section */

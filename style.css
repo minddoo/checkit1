@@ -411,46 +411,75 @@ ul {
 
 /* Transparency Comparison Section */
 .transparency-section {
-    padding: 120px 0;
-    background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    padding: 140px 0;
+    background: linear-gradient(to bottom, #ffffff, #f1f5f9);
     position: relative;
     overflow: hidden;
 }
 
 .transparency-header {
     text-align: center;
-    margin-bottom: 80px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 100px;
 }
 
-.transparency-header .badge-tp {
-    display: inline-block;
-    padding: 8px 20px;
-    background: rgba(46, 204, 113, 0.1);
-    color: var(--primary);
-    border-radius: 100px;
-    font-weight: 800;
-    font-size: 0.9rem;
-    margin-bottom: 24px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+/* Kinetic Animated Headline */
+.kinetic-viewport {
+    height: 140px; /* Fixed height for animation */
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 30px;
 }
 
-.transparency-header h2 {
-    font-size: 3.5rem;
+.kinetic-track {
+    display: flex;
+    flex-direction: column;
+    animation: slideTP 7s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+}
+
+.kinetic-item {
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.kinetic-item h2 {
+    font-size: 4rem;
     font-weight: 800;
-    color: var(--text-dark);
-    margin-bottom: 20px;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+}
+
+.kinetic-item .sub-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Problem State Styling */
+.ki-problem h2 { color: #e11d48; filter: drop-shadow(0 0 20px rgba(225, 29, 72, 0.1)); }
+.ki-problem .sub-label { color: #f43f5e; opacity: 0.8; }
+
+/* Solution State Styling */
+.ki-solution h2 { color: var(--primary); filter: drop-shadow(0 0 20px rgba(46, 204, 113, 0.2)); }
+.ki-solution .sub-label { color: var(--primary-dark); }
+
+@keyframes slideTP {
+    0%, 40% { transform: translateY(0); }
+    45%, 95% { transform: translateY(-140px); }
+    100% { transform: translateY(0); }
 }
 
 .transparency-header p.subtitle {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: var(--text-light);
     font-weight: 500;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .comparison-grid-tp {
@@ -510,23 +539,44 @@ ul {
 }
 
 .formula-box {
-    padding: 30px;
+    padding: 35px 30px;
     border-radius: 20px;
     margin-bottom: 40px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     gap: 12px;
 }
 
-.industry .formula-box { background: #f1f5f9; color: #475569; }
-.checkit .formula-box { background: #f0fdf4; color: var(--primary-dark); border: 1px dashed var(--primary-light); }
+.industry .formula-box { 
+    background: #fef2f2; 
+    color: #991b1b; 
+    border: 1px solid #fee2e2;
+}
+.checkit .formula-box { 
+    background: #f0fdf4; 
+    color: var(--primary-dark); 
+    border: 2px dashed var(--primary-light);
+    box-shadow: 0 10px 30px rgba(46, 204, 113, 0.05);
+}
+
+.formula-main {
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+}
 
 .formula-box b { color: var(--text-dark); }
-.industry .formula-box b.red { color: #ef4444; }
+.industry .formula-box b.red { color: #dc2626; text-decoration: underline; }
 .checkit .formula-box b.green { color: var(--primary); }
+
+.formula-note {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-weight: 500;
+}
 
 .tp-features {
     list-style: none;

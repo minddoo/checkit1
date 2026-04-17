@@ -379,9 +379,8 @@ ul {
 
 .template-frame-container {
     width: 380px;
-    height: 520px; /* Adjusted height for the new floating card effect */
-    background: transparent; /* REMOVED white background to eliminate bars */
-    border-radius: 20px;
+    height: 520px; /* Standard height for floating content */
+    background: transparent;
     padding: 0;
     position: relative;
     border: none;
@@ -391,7 +390,7 @@ ul {
 @media (max-width: 600px) {
     .template-frame-container {
         width: 300px;
-        height: 410px;
+        height: 420px;
     }
 }
 
@@ -399,7 +398,7 @@ ul {
     width: 100%;
     height: 100%;
     background: transparent;
-    overflow: hidden;
+    overflow: visible; /* Allows the shadow to breathe */
     position: relative;
 }
 
@@ -417,19 +416,18 @@ ul {
     align-items: center;
     justify-content: center;
     background: transparent;
-    padding: 20px; /* Spells space for the shadow to be visible */
+    padding: 15px; /* Spells space for the rounded corners and shadow */
 }
 
 .img-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* USER REQUEST: Original uncropped photos */
     display: block;
-    border-radius: 24px; /* USER REQUEST: Circular/Rounded corners */
-    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.3), 
-                0 0 20px rgba(0,0,0,0.05); /* Premium Floating Card Look */
-    transform: scale(1.22); /* AGGRESSIVE CROP: Cuts off any baked-in white bars from the source files */
-    transition: transform 0.4s ease;
+    border-radius: 24px; /* USER REQUEST: Rounded corners */
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); /* Premium Soft Shadow */
+    transform: none; /* REMOVED all scaling to ensure NO cropping */
+    transition: transform 0.3s ease;
     image-rendering: -webkit-optimize-contrast;
 }
     word-break: keep-all; /* Better Korean wrapping */

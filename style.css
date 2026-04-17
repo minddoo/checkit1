@@ -440,26 +440,6 @@ ul {
     }
 }
 
-.img-slide {
-    width: 16.666%; /* 1/6th */
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-}
-
-.img-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Full visibility: no cropping of original data */
-    display: block;
-}
-
-/* Maintain sharpness for scaled images */
-.img-slide img {
-    image-rendering: -webkit-optimize-contrast;
-}
 
 
 @keyframes slideUpFade {

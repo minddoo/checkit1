@@ -138,4 +138,17 @@ The user requested several improvements to the Master Dashboard (`platform.html`
 *   Verified the 1-second loading animation triggers correctly upon clicking "저장 및 발급".
 
 ## Final Review & Quality Assurance
-The project is now stable with a fully functional Master Dashboard that supports historical data and provides an improved administrative experience. All changes have been pushed to the main repository.
+
+## Current Task: Worker Portal Restoration & Fix
+
+### Problem Description
+- `worker_portal.html` contains critical syntax errors where `${...}` template literals are missing backticks/brackets, rendering the page non-functional.
+- This was caused by the `write_portal.ps1` script using expanding here-strings (`@" ... "@`), which PowerShell processed as variable expansions.
+- The current `worker_portal.html` also lacks the "premium" sidebar-based design previously requested (from commit `fc156b1`).
+
+### Plan
+1.  **Fix Generate Script**: Update `write_portal.ps1` to use non-expanding here-strings (`@' ... '@`) or escape the dollar signs.
+2.  **Restore Premium Design**: Port the content from `worker_portal_fc156b1_utf8.html` into `worker_portal.html`.
+3.  **Fix Encoding**: Resolve garbled Korean text in the `fc156b1` version.
+4.  **Integrate Logic**: Ensure latest Firebase config and persistence logic (e.g., merging `company_info` collection) is maintained.
+5.  **Verify**: Confirm all sections (Progress, Chat, Results) work and display correctly in multiple languages.

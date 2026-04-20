@@ -2038,7 +2038,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 
                                 if (!workerSnap.empty) {
                                     await db.collection('users').doc(cred.user.uid).update({
-                                        workerDocId: workerSnap.docs[0].id
+                                        workerDocId: workerSnap.docs[0].id,
+                                        companyId: companyId
                                     });
                                     console.log("Worker document linked on direct login:", workerSnap.docs[0].id);
                                 }

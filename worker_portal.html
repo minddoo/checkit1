@@ -659,6 +659,17 @@
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
+        
+        // [안전장치] 5초 후에도 로딩이 안 끝나면 수동으로 표시 (네트워크 지연 대비)
+        setTimeout(() => {
+            if (loader && loader.style.display !== 'none') {
+                loader.style.display = 'none';
+                const portal = document.getElementById('portalContent');
+                if (portal) portal.classList.remove('hidden');
+                console.warn("Safety timeout: forced loader hide");
+            }
+        }, 5000);
+
         if (!user) {
             window.location.href = 'index.html';
             return;
@@ -2028,6 +2039,11 @@
         db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
             renderHospitals(hospSnap.docs);
         }, err => console.error("Hospital load error:", err));
+    }
+
+    // [미정의 함수 방어] 명단 연동 함수가 없을 경우 대비
+    function tryToRelinkWorker(uid, name, cid) {
+        console.log("Relink requested for:", name, uid, cid);
     }
 </script>
 

@@ -3621,7 +3621,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         padding: 0 !important;
     }
     #corporate-hero .hero-character {
-        display: none !important; /* Hide character as requested */
+        display: block !important;
     }
     #corporate-hero .hero-text-content {
         width: 100% !important;

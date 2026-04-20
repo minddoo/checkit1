@@ -1559,28 +1559,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentUserData = { role: 'customer', cid: null };
 
+    const updateButtons = (isLoggedIn) => {
+        const loginBtns = [
+            document.getElementById('nav-login'),
+            document.getElementById('login-btn'),
+            document.getElementById('mobile-nav-login')
+        ];
+        const logoutBtns = [
+            document.getElementById('nav-logout'),
+            document.getElementById('mobile-nav-logout')
+        ];
+        const mypageBtns = [
+            document.getElementById('nav-mypage'),
+            document.getElementById('mobile-nav-mypage')
+        ];
+        const loginBtnLabel = document.getElementById('mobile-header-login');
+        const mypageBtn = document.getElementById('mobile-header-mypage');
+
+        loginBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'none' : 'inline-block'));
+        logoutBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+        mypageBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
+
+        if (loginBtnLabel) {
+            loginBtnLabel.innerHTML = isLoggedIn ? (currentLang === 'ko' ? '로그아웃' : 'Logout') : (currentLang === 'ko' ? '로그인' : 'Login');
+        }
+        if (mypageBtn) {
+            mypageBtn.style.display = isLoggedIn ? 'inline-block' : 'none';
+        }
+    };
+
     auth.onAuthStateChanged(user => {
-        const updateButtons = (isLoggedIn) => {
-            const loginBtnLabel = document.getElementById('mobile-header-login');
-            const mypageBtn = document.getElementById('mobile-header-mypage');
-
-            const loginBtns = [navLogin, loginBtn, document.getElementById('mobile-nav-login')];
-            const logoutBtns = [navLogout, document.getElementById('mobile-nav-logout')];
-            const mypageBtns = [navMyPage, document.getElementById('mobile-nav-mypage')];
-
-            loginBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'none' : 'inline-block'));
-            logoutBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
-            mypageBtns.forEach(btn => btn && (btn.style.display = isLoggedIn ? 'inline-block' : 'none'));
-
-            // Mobile Header Logic (Direct Buttons)
-            if (loginBtnLabel) {
-                loginBtnLabel.innerHTML = isLoggedIn ? (currentLang === 'ko' ? '로그아웃' : 'Logout') : (currentLang === 'ko' ? '로그인' : 'Login');
-            }
-            if (mypageBtn) {
-                mypageBtn.style.display = isLoggedIn ? 'inline-block' : 'none';
-            }
-        };
-
         if (user) {
             updateButtons(true);
             if (loginModalOverlay) loginModalOverlay.style.display = 'none';
@@ -1596,6 +1604,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             updateButtons(false);
             currentUserData = { role: 'customer', cid: null };
+        }
+    });
+
+    // Back-Forward Cache (BFCache) 대응: 뒤로가기로 페이지 진입 시 인증 상태 재확인
+    window.addEventListener('pageshow', (event) => {
+        const user = auth.currentUser;
+        // BFCache에서 복구되거나 유저 정보가 이미 있는 경우 UI 강제 갱신
+        if (event.persisted || user) {
+            updateButtons(!!user);
         }
     });
 

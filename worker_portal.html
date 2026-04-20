@@ -395,8 +395,17 @@
                 const chatBody = document.getElementById('chatMessages');
                 if (!chatBody) return;
                 const docs = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a,b) => (a.timestamp?.seconds||0) - (b.timestamp?.seconds||0));
-                chatBody.innerHTML = docs.map(msg => renderMessage(msg)).join('');
+                if (docs.length === 0) {
+                    const t = transTable[document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko'];
+                    chatBody.innerHTML = `<p class="t-loading">${t.t_loadChat}</p>`;
+                } else {
+                    chatBody.innerHTML = docs.map(msg => renderMessage(msg)).join('');
+                }
                 chatBody.scrollTop = chatBody.scrollHeight;
+            }, err => {
+                console.error('Chat load error:', err);
+                const chatBody = document.getElementById('chatMessages');
+                if (chatBody) chatBody.innerHTML = `<p class="t-loading">Error loading chat.</p>`;
             });
     }
 

@@ -1644,7 +1644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (role === 'company_admin') {
                 window.location.href = `company_dashboard.html`;
             } else {
-                window.location.href = 'platform.html?role=worker';
+                window.location.href = 'worker_portal.html';
             }
         }).catch(err => {
             console.error("Error on My Page redirection:", err);
@@ -2004,8 +2004,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!userData.workerDocId) {
                             try {
                                 const workerSnap = await db.collection('workers')
-                                    .where('companyId', '==', companyId)
-                                    .where('passwordKey', '==', securityKey)
+                                    .where('uid', '==', cred.user.uid)
                                     .limit(1)
                                     .get();
                                 

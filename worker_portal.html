@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js" integrity="sha384-l68m6T+U6uOQuq28mIu+1Xe+P7Xh+yO9t548jOnqYmDk3rX7Z+z6l1Jj+8H+9+t" crossorigin="anonymous"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         // Initialize Kakao SDK immediately if possible
@@ -892,6 +892,21 @@ function googleTranslateElementInit() {
                 document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
                 document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
 
+                if (!workerDocId && !isMaster) {
+                    console.log("WorkerDocId missing, attempting to relink...");
+                    const snap = await db.collection('workers')
+                        .where('uid', '==', user.uid)
+                        .limit(1).get();
+                    
+                    if (!snap.empty) {
+                        workerDocId = snap.docs[0].id;
+                        await db.collection('users').doc(user.uid).update({ workerDocId: workerDocId });
+                        console.log("Relinked successfully:", workerDocId);
+                    } else {
+                        console.warn("No worker document found for UID:", user.uid);
+                    }
+                }
+
                 if (workerDocId) {
                     db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
                         if (workerDoc.exists) {
@@ -905,11 +920,15 @@ function googleTranslateElementInit() {
                                 btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
                             });
                             renderCheckupStatus(wData);
-                        } else {
-                            if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
                         }
                     });
                     loadChatMessages(workerDocId);
+                } else {
+                    console.warn("Final workerDocId is still empty.");
+                    if (!isMaster) {
+                        const statusEl = document.getElementById('checkupStatus');
+                        if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+                    }
                 }
 
                 if (companyId) {

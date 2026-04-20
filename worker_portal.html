@@ -532,6 +532,18 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
+    let chatUnsub = null;
+
+    // [최우선 안전장치] 스크립트 오류와 상관없이 3초 후 로딩창 강제 종료
+    setTimeout(() => {
+        const safetyLoader = document.getElementById('pageLoader');
+        const safetyPortal = document.getElementById('portalContent');
+        if (safetyLoader && safetyLoader.style.display !== 'none') {
+            safetyLoader.style.display = 'none';
+            if (safetyPortal) safetyPortal.classList.remove('hidden');
+            console.log("Global Safety Timeout: Loader hidden");
+        }
+    }, 3000);
 
     // Section Switching
     window.switchSection = (target) => {
@@ -659,16 +671,6 @@
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
-        
-        // [안전장치] 5초 후에도 로딩이 안 끝나면 수동으로 표시 (네트워크 지연 대비)
-        setTimeout(() => {
-            if (loader && loader.style.display !== 'none') {
-                loader.style.display = 'none';
-                const portal = document.getElementById('portalContent');
-                if (portal) portal.classList.remove('hidden');
-                console.warn("Safety timeout: forced loader hide");
-            }
-        }, 5000);
 
         if (!user) {
             window.location.href = 'index.html';

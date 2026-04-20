@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - 洹쇰줈???ы꽭 (v1.0.2)</title> <!-- fix nesting bug -->
+    <title>CHECKIT - Worker Portal</title> <!-- fix nesting bug -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -264,13 +264,9 @@
 </head>
 <body>
 
-<div id="pageLoader">
-    <div class="loader"></div>
-    <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">?ы꽭??遺덈윭?ㅻ뒗 以?..</p>
-    <button id="loaderCloseBtn" style="display: none; margin-top: 20px; background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; color: var(--text-muted);" onclick="this.parentElement.style.display='none'">?リ린 (李쎌씠 硫덉텣 寃쎌슦)</button>
-</div>
+<!-- Loader removed to prevent stick issues -->
 
-<div id="portalContent" class="hidden">
+<div id="portalContent">
     <!-- Top Bar -->
     <div class="top-bar">
         <div style="display: flex; align-items: center; gap: 15px;">
@@ -671,6 +667,7 @@
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
+        if (loader) loader.style.display = 'none';
 
         if (!user) {
             window.location.href = 'index.html';

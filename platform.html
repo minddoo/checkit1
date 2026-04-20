@@ -800,6 +800,7 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
     // 기존에 "checkit082"라는 특정 이름의 DB를 찾도록 설정되었으나,
     // (default) 기본 데이터베이스를 사용하도록 수정.
     const db = firebase.firestore();

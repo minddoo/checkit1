@@ -1547,7 +1547,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const auth = firebase.auth();
     // 세션 지속성 설정 (브라우저 종료 시 로그아웃)
-    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(console.error);
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
     const db = firebase.firestore();
 
     const navLogin = document.getElementById('nav-login');

@@ -1648,11 +1648,13 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (role === 'company_admin') {
                 window.location.href = `company_dashboard.html`;
             } else {
-                window.location.href = 'platform.html?role=worker';
+                const workerId = doc.exists ? doc.data().workerDocId : '';
+                window.location.href = `worker_portal.html?workerDocId=${workerId || ''}`;
             }
         }).catch(err => {
             console.error("Error on My Page redirection:", err);
-            window.location.href = 'platform.html';
+            // Fallback: If we don't know the role, but they are logged in, try to go to home or worker portal
+            window.location.href = 'index.html';
         });
     }
 

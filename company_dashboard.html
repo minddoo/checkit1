@@ -436,16 +436,21 @@
             
             <!-- List Card -->
             <div class="card">
-                <div class="table-toolbar">
-                    <h3><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
-                    <div class="search-box">
-                        <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                        <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-bottom: 15px; border-bottom: 1px solid #f1f5f9;" onclick="window.toggleWorkerList()">
+                    <h3 style="margin: 0;"><i class="fa-solid fa-address-book" style="color: var(--dark);"></i> 우리 회사 직원 목록</h3>
+                    <i id="workerListIcon" class="fa-solid fa-chevron-up" style="transition: transform 0.3s; color: #64748b; font-size: 1.2rem;"></i>
                 </div>
                 
-                <table id="workerTable">
-                    <thead>
+                <div id="workerListCollapsible" style="display: block; margin-top: 15px;">
+                    <div class="table-toolbar" style="margin-bottom: 15px;">
+                        <div class="search-box" style="margin-left: auto;">
+                            <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+                            <input type="text" id="searchInput" placeholder="이름 또는 소속현장으로 검색..." onkeyup="window.filterTable()">
+                        </div>
+                    </div>
+                
+                    <table id="workerTable">
+                        <thead>
                         <tr>
                             <th style="width: 15%">소속현장</th>
                             <th style="width: 12%">성함</th>
@@ -461,6 +466,7 @@
                         <tr><td colspan="8" style="text-align: center; color: #999;">로딩 중...</td></tr>
                     </tbody>
                 </table>
+                </div> <!-- End Collapsible -->
             </div>
             </div> <!-- End sectionRegistration -->
 
@@ -2169,6 +2175,18 @@
             if (container.parentNode) document.body.removeChild(container);
         } finally {
             if (loader) loader.style.display = 'none';
+        }
+    };
+
+    window.toggleWorkerList = () => {
+        const coll = document.getElementById('workerListCollapsible');
+        const icon = document.getElementById('workerListIcon');
+        if (coll.style.display === 'none') {
+            coll.style.display = 'block';
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            coll.style.display = 'none';
+            icon.style.transform = 'rotate(180deg)';
         }
     };
 

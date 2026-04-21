@@ -1822,8 +1822,8 @@ function googleTranslateElementInit() {
             closeBookingForm();
             alert('신청서가 성공적으로 제출되었습니다.');
         } catch (e) {
-            console.error("Booking submission error:", e);
-            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+            console.error("Booking submission error detail:", e);
+            alert('오류가 발생했습니다: ' + e.message + '\n관리자에게 문의해 주세요.');
         }
     }
 

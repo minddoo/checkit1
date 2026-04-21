@@ -55,7 +55,7 @@
         /* Header */
         .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); gap: 10px; }
         .top-bar > div { flex-shrink: 0; }
-        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; flex-shrink: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; flex-shrink: 0; white-space: nowrap; }
         .top-bar .logo i { color: var(--primary-light); }
         .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; flex-shrink: 0; }
         .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; white-space: nowrap; }
@@ -177,11 +177,16 @@
             /* Lang switcher gracefully kept visible on mobile */
         }
         @media (max-width: 768px) {
-            .top-bar { padding: 8px 12px; gap: 5px; }
-            .top-bar .logo { font-size: 1.1rem; }
-            .top-bar .user-info { gap: 8px; }
-            .top-bar .user-info .name-badge { font-size: 0.75rem; padding: 5px 10px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .top-bar { padding: 6px 8px; gap: 2px; }
+            .top-bar .logo { font-size: 0.95rem; gap: 4px; }
+            .top-bar .logo i { font-size: 0.9rem; }
+            .top-bar .user-info { gap: 4px; }
+            .top-bar .user-info .name-badge { font-size: 0.65rem; padding: 4px 6px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
             .top-bar .logout-btn { display: none !important; }
+            .menu-toggle { width: 34px !important; height: 34px !important; margin-right: 0px !important; font-size: 1rem !important; }
+            .mobile-home-btn { width: 34px !important; height: 34px !important; margin-left: 2px !important; margin-right: 2px !important; font-size: 1rem !important; }
+            .lang-switcher { margin: 0 4px !important; padding: 2px !important; gap: 2px !important; }
+            .lang-btn { padding: 3px 5px !important; font-size: 0.65rem !important; }
             .menu-toggle { display: flex; order: -1; margin-right: 10px; }
 
             .portal-wrapper { flex-direction: column; }
@@ -385,13 +390,13 @@
     <div class="top-bar">
         <div style="display: flex; align-items: center;">
             <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
-            <button onclick="window.location.href='index.html'" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin-left: 5px;" title="메인 홈으로">
+            <button class="mobile-home-btn" onclick="window.location.href='index.html'" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin-left: 5px;" title="메인 홈으로">
                 <i class="fa-solid fa-house"></i>
             </button>
         </div>
-        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
+        <div class="logo notranslate"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
         
-        <div class="lang-switcher">
+        <div class="lang-switcher notranslate">
             <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">KR</button>
             <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">EN</button>
             <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">CN</button>
@@ -399,7 +404,7 @@
         </div>
 
         <div class="user-info">
-            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
+            <span class="name-badge notranslate"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
             <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
             <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
         </div>

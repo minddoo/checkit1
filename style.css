@@ -4045,6 +4045,12 @@ body.platform-view-active #mypage-overlay { display: flex; }
         border-radius: 10px !important;
         width: auto !important; /* Force natural width on mobile for consistency */
     }
+
+    /* Center contact form button on mobile */
+    #corporate-inquiry .cta-button-primary {
+        display: block !important;
+        margin: 0 auto !important;
+    }
 }
 
 @media (max-width: 768px) {

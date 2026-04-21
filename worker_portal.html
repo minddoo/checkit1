@@ -1765,15 +1765,23 @@ function googleTranslateElementInit() {
 
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const workerDocId = userDoc.data().workerDocId;
-            const companyId = userDoc.data().companyId;
+            if (!userDoc.exists) throw new Error("User record not found");
+            
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
 
-            formData.workerDocId = workerDocId;
-            formData.companyId = companyId;
+            formData.workerDocId = workerDocId || "ADMIN_SUBMISSION";
+            formData.companyId = companyId || "UNKNOWN";
 
             // Determine booking type based on worker status
-            const workerDoc = await db.collection('workers').doc(workerDocId).get();
-            const currentStatus = workerDoc.data().status || '진행 전';
+            let currentStatus = '진행 전';
+            if (workerDocId) {
+                const workerDoc = await db.collection('workers').doc(workerDocId).get();
+                if (workerDoc.exists && workerDoc.data()) {
+                    currentStatus = workerDoc.data().status || '진행 전';
+                }
+            }
             formData.type = (currentStatus === '재검대상자') ? 'recheck' : 'general';
 
             // Save to bookings collection

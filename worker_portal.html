@@ -198,6 +198,8 @@
                 color: white;
                 border-right: none;
                 padding-top: 60px;
+                display: flex;
+                flex-direction: column;
             }
             .sidebar.active { left: 0; }
             .sidebar .sidebar-menu li { color: rgba(255,255,255,0.7); }
@@ -407,7 +409,7 @@
         <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
         <!-- Sidebar -->
         <div id="sideDrawer" class="sidebar">
-            <div style="padding: 0 5px 20px;">
+            <div class="hidden-mobile" style="padding: 0 5px 20px;">
                 <button onclick="window.location.href='index.html'" style="width: 100%; background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700;">
                     <i class="fa-solid fa-house" style="color: var(--primary);"></i> 메인 홈으로 돌아가기
                 </button>
@@ -427,6 +429,11 @@
                 </li>
             </ul>
             
+            <div class="visible-mobile" style="margin-top: auto; padding: 20px 5px 30px;">
+                <button onclick="window.location.href='index.html'" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; transition: 0.2s;">
+                    <i class="fa-solid fa-house" style="color: var(--primary-light);"></i> 메인 홈으로 돌아가기
+                </button>
+            </div>
         </div>
 
         <!-- Main Content -->

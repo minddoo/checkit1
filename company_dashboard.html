@@ -105,7 +105,7 @@
             .sidebar-menu li.active { border-left: none !important; border-bottom: 3px solid #22c55e !important; background: rgba(255,255,255,0.05) !important; color: white !important; }
             
             .main-content { min-width: 100vw; height: auto !important; display: block !important; overflow: visible !important; }
-            .header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header { display: none !important; }
             .content-area { padding: 15px; overflow: visible; }
             .form-grid { grid-template-columns: 1fr; gap: 12px; }
             .card { padding: 15px; margin-bottom: 15px; }
@@ -155,7 +155,10 @@
             </button>
         </div>
         <div class="sidebar-brand">
-            <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
+            <div style="display: flex; align-items: center;">
+                <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
+            </div>
+            <div id="mobileHeaderActions" style="display: none; align-items: center; gap: 8px;"></div>
         </div>
         <ul class="sidebar-menu">
             <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
@@ -178,19 +181,44 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 <h2 style="margin: 0; font-size: 1.2rem;">기업 관리자 대시보드</h2>
             </div>
-            <div style="display:flex; align-items:center; gap:12px;">
-                <button class="mobile-home-btn" style="display: none; background: #f1f5f9; border: none; color: #475569; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; align-items: center; justify-content: center; transition: 0.2s;" onclick="window.location.href='index.html'">
-                    <i class="fa-solid fa-house" style="font-size: 0.9rem;"></i>
-                </button>
-                <div class="notice-trigger" id="noticeTrigger" onclick="window.toggleNoticeModal()" title="공지사항">
-                    <i class="fa-solid fa-bell" style="font-size:1rem; color:#475569;"></i>
-                    <span id="noticeBadge" class="notice-badge hidden">0</span>
+            <div id="desktopHeaderActions" style="display:flex; align-items:center;">
+                <div id="headerActions" style="display:flex; align-items:center; gap:8px;">
+                    <button class="mobile-home-btn" style="display: none; background: #f1f5f9; border: none; color: #475569; width: 36px; height: 36px; border-radius: 12px; cursor: pointer; align-items: center; justify-content: center; transition: 0.2s;" onclick="window.location.href='index.html'">
+                        <i class="fa-solid fa-house" style="font-size: 0.9rem;"></i>
+                    </button>
+                    <div class="notice-trigger" id="noticeTrigger" onclick="window.toggleNoticeModal()" title="공지사항" style="background: #f1f5f9; width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <i class="fa-solid fa-bell" style="font-size:1rem; color:#475569;"></i>
+                        <span id="noticeBadge" class="notice-badge hidden">0</span>
+                    </div>
+                    <span class="company-badge" id="companyBadgeInfo" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-building"></i> <span id="displayCompanyName">로딩중...</span>
+                    </span>
                 </div>
-                <span class="company-badge" id="companyBadgeInfo">
-                    <i class="fa-solid fa-building"></i> <span id="displayCompanyName">로딩중...</span>
-                </span>
             </div>
         </header>
+        
+        <script>
+            function handleMobileHeader() {
+                const mobileContainer = document.getElementById('mobileHeaderActions');
+                const desktopContainer = document.getElementById('desktopHeaderActions');
+                const actions = document.getElementById('headerActions');
+                if (!mobileContainer || !desktopContainer || !actions) return;
+                
+                if (window.innerWidth <= 768) {
+                    if (actions.parentElement !== mobileContainer) {
+                        mobileContainer.appendChild(actions);
+                        mobileContainer.style.display = 'flex';
+                    }
+                } else {
+                    if (actions.parentElement !== desktopContainer) {
+                        desktopContainer.appendChild(actions);
+                        mobileContainer.style.display = 'none';
+                    }
+                }
+            }
+            window.addEventListener('resize', handleMobileHeader);
+            handleMobileHeader();
+        </script>
         
         <!-- Content Area -->
         <div class="content-area">

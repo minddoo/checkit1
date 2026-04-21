@@ -901,18 +901,20 @@ function googleTranslateElementInit() {
                     if (!snap.empty) {
                         const newDocId = snap.docs[0].id;
                         companyId = snap.docs[0].data().companyId;
+                        console.log("Diagnostic: Relink match found!", { newDocId, companyId });
                         await db.collection('users').doc(user.uid).update({ 
                             workerDocId: newDocId,
                             companyId: companyId
                         });
                         await db.collection('workers').doc(newDocId).update({ uid: user.uid });
-                        console.log("Relinked successfully by UID:", newDocId, companyId);
+                        console.log("Diagnostic: Relink sync complete.");
                     } else {
-                        console.warn("No worker document found for UID, trying manual relink...");
-                        // Also try to find by name within the company if companyId is known, or just name
+                        console.warn("Diagnostic: No worker doc found for UID. Trying manual...");
                         tryToRelinkWorker(user.uid, userData.name || user.displayName || user.email || '근로자', companyId);
                     }
                 }
+
+                console.log("Diagnostic: Current Session", { uid: user.uid, workerDocId, companyId, isMaster });
 
                 if (workerDocId) {
                     db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
@@ -1023,17 +1025,27 @@ function googleTranslateElementInit() {
                     chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 표시 중 오류가 발생했습니다.</div>';
                 }
             }, err => {
-                console.error("Chat sync error:", err);
+                console.error("Diagnostic: Chat sync error", { code: err.code, message: err.message, workerDocId });
                 const chatBody = document.getElementById('chatMessages');
                 if (!chatBody) return;
 
                 if (err.code === 'permission-denied' && retryCount < 5) {
-                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">채팅 서버에 연결 중입니다... (' + (retryCount+1) + ')</div>';
+                    chatBody.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #64748b;">
+                            <i class="fa-solid fa-sync fa-spin"></i><br>
+                            데이터 보안 동기화 중... (${retryCount + 1})<br>
+                            <span style="font-size:0.7rem; color:#94a3b8;">잠시만 기다려주세요.</span>
+                        </div>`;
                     setTimeout(() => loadChatMessages(workerDocId, companyId, retryCount + 1), 2000);
+                } else if (err.code === 'permission-denied') {
+                    chatBody.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #e74c3c;">
+                            <i class="fa-solid fa-shield-halved"></i><br>
+                            보안 권한이 만료되었습니다.<br>
+                            <span style="font-size:0.7rem; color:#94a3b8;">새로고침을 시도하거나 관리자에게 문의하세요.</span>
+                        </div>`;
                 } else {
-                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다. (연동 대기 중)</div>';
-                    // Retry once more after a long wait
-                    if (retryCount >= 5) setTimeout(() => loadChatMessages(workerDocId, companyId, 6), 5000);
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다. (네트워크 오류)</div>';
                 }
             });
     }

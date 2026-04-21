@@ -1851,7 +1851,7 @@
                         </button>
                     </td>
                     <td style="text-align:center;">
-                        ${w.resultFileUrl ? `
+                        ${(w.resultFileUrl || w.resultFileBase64) ? `
                             <button onclick="window.viewResultFile('${w.id}')" class="btn-outline" style="padding:4px 12px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; background:#eef2ff; border-color:#c7d2fe; color:#4f46e5; cursor:pointer;">
                                 <i class="fa-solid fa-eye"></i> 결과지 보기
                             </button>

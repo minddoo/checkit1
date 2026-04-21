@@ -1506,6 +1506,7 @@ function googleTranslateElementInit() {
             if (lt) lt.innerText = '결과지 제출 중...';
             await db.collection('workers').doc(workerDocId).update({
                 resultFileBase64: finalBase64,
+                resultFileUrl: firebase.firestore.FieldValue.delete(),
                 resultFileName: file.name,
                 resultFileType: file.type,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2011,7 +2012,7 @@ function googleTranslateElementInit() {
             
             const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
             const wData = workerDoc.data();
-            const fileContent = wData.resultFileUrl || wData.resultFileBase64;
+            const fileContent = wData.resultFileBase64 || wData.resultFileUrl;
 
             if (!wData || !fileContent) {
                 content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
@@ -2549,9 +2550,9 @@ function googleTranslateElementInit() {
         }
 
         try {
-            const hasFile = w.resultFileUrl || w.resultFileBase64;
+            const hasFile = w.resultFileBase64 || w.resultFileUrl;
             if (hasFile) {
-                const fileSource = w.resultFileUrl || w.resultFileBase64;
+                const fileSource = w.resultFileBase64 || w.resultFileUrl;
                 const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
                 const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
                 

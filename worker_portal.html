@@ -53,12 +53,13 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Header */
-        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); gap: 10px; }
+        .top-bar > div { flex-shrink: 0; }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; flex-shrink: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .top-bar .logo i { color: var(--primary-light); }
-        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; }
-        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; }
-        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; flex-shrink: 0; }
+        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; white-space: nowrap; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
         .top-bar .logout-btn:hover { background: rgba(255,255,255,0.1); }
 
         /* Main Content */
@@ -172,12 +173,14 @@
         /* Mobile Hamburger Button (Hidden on Desktop) */
         .menu-toggle { display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; align-items: center; justify-content: center; }
 
+        @media (max-width: 900px) {
+            .lang-switcher { display: none !important; } /* Move to mobile menu on tablets/phones to preserve space */
+        }
         @media (max-width: 768px) {
-            .top-bar { padding: 10px 15px; }
-            .top-bar .logo { font-size: 1.15rem; }
-            .top-bar .user-info { gap: 10px; }
-            .top-bar .user-info .name-badge { font-size: 0.75rem; padding: 5px 10px; }
-            .lang-switcher { display: none; } /* Move to mobile menu */
+            .top-bar { padding: 8px 12px; gap: 5px; }
+            .top-bar .logo { font-size: 1.1rem; }
+            .top-bar .user-info { gap: 8px; }
+            .top-bar .user-info .name-badge { font-size: 0.75rem; padding: 5px 10px; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
             .menu-toggle { display: flex; order: -1; margin-right: 10px; }
 
             .portal-wrapper { flex-direction: column; }
@@ -334,13 +337,12 @@
             to { transform: translateY(20px); opacity: 0; }
         }
 
-        /* Language Switcher */
-        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 15px; }
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 10px; flex-shrink: 0; }
         .lang-btn { 
             background: transparent; 
             border: none; 
             color: rgba(255,255,255,0.6); 
-            padding: 5px 12px; 
+            padding: 5px 10px; 
             border-radius: 7px; 
             font-size: 0.75rem; 
             font-weight: 700; 
@@ -349,6 +351,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            white-space: nowrap;
         }
         .lang-btn:hover { color: white; background: rgba(255,255,255,0.05); }
         .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -386,10 +389,10 @@
         <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
         
         <div class="lang-switcher">
-            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
-            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
-            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
-            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
+            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">KR</button>
+            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">EN</button>
+            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">CN</button>
+            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">VN</button>
         </div>
 
         <div class="user-info">
@@ -426,10 +429,10 @@
             <div class="visible-mobile" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
                 <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 15px; font-weight: 700;">LANGUAGE 설정</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <button class="lang-btn" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('ko')">KR</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('cn')">CN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('vn')">VN</button>
                 </div>
             </div>
         </div>

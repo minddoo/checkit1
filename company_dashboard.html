@@ -743,7 +743,7 @@
                     <!-- Signature Section -->
                     <div style="border-top: 2px solid #e2e8f0; padding-top: 25px;">
                         <h3 style="font-size: 1.05rem; margin-bottom: 18px;"><i class="fa-solid fa-pen-nib" style="color: var(--primary);"></i> 서명 및 날인</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div class="form-grid" style="margin-bottom: 20px;">
                             <div class="input-group">
                                 <label>관리자 성함</label>
                                 <div class="input-wrapper">
@@ -762,8 +762,8 @@
                         <!-- Signature Canvas -->
                         <div style="margin-bottom: 20px;">
                             <label style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">전자 서명 (아래에 서명해 주세요)</label>
-                            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #fafbfc; position: relative; overflow: hidden;">
-                                <canvas id="signatureCanvas" width="700" height="200" style="width: 100%; cursor: crosshair; touch-action: none;"></canvas>
+                            <div style="border: 2px dashed #cbd5e1; border-radius: 12px; background: #fafbfc; position: relative; overflow: hidden; max-width: 100%;">
+                                <canvas id="signatureCanvas" width="700" height="200" style="width: 100%; max-width: 100%; height: auto; cursor: crosshair; touch-action: none;"></canvas>
                                 <button type="button" onclick="window.clearSignature()" style="position: absolute; top: 10px; right: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; color: #64748b; cursor: pointer;">
                                     <i class="fa-solid fa-eraser"></i> 다시 쓰기
                                 </button>

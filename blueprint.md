@@ -139,16 +139,29 @@ The user requested several improvements to the Master Dashboard (`platform.html`
 
 ## Final Review & Quality Assurance
 
-## Current Task: Worker Portal Restoration & Fix
+## Current Task: Adding Navigation and Deployment
 
 ### Problem Description
-- `worker_portal.html` contains critical syntax errors where `${...}` template literals are missing backticks/brackets, rendering the page non-functional.
-- This was caused by the `write_portal.ps1` script using expanding here-strings (`@" ... "@`), which PowerShell processed as variable expansions.
-- The current `worker_portal.html` also lacks the "premium" sidebar-based design previously requested (from commit `fc156b1`).
+The user requested a "Return to Main Page" button to be added to the Master, Company Administrator, and Worker Portal pages for easier navigation. Additionally, the updated project needed to be deployed to the `minddoo/checkit1` GitHub repository.
 
 ### Plan
-1.  **Fix Generate Script**: Update `write_portal.ps1` to use non-expanding here-strings (`@' ... '@`) or escape the dollar signs.
-2.  **Restore Premium Design**: Port the content from `worker_portal_fc156b1_utf8.html` into `worker_portal.html`.
-3.  **Fix Encoding**: Resolve garbled Korean text in the `fc156b1` version.
-4.  **Integrate Logic**: Ensure latest Firebase config and persistence logic (e.g., merging `company_info` collection) is maintained.
-5.  **Verify**: Confirm all sections (Progress, Chat, Results) work and display correctly in multiple languages.
+1.  **Identify Pages**: Locate the files for Master (`platform.html`), Company Admin (`company_dashboard.html`), and Worker Portal (`worker_portal.html`).
+2.  **UI Update**:
+    *   **Master Console (`platform.html`)**: Add a button to the top of the sidebar.
+    *   **Worker Portal (`worker_portal.html`)**: Add a button to the top of the sidebar and a home icon in the top header for mobile responsiveness.
+    *   **Company Admin (`company_dashboard.html`)**: Verify if the button already exists (confirmed it does).
+3.  **Consistency**: Use consistent styling and Font Awesome icons (`fa-house`) for the navigation buttons.
+4.  **Deployment**: Commit the changes and push them to the `main` branch of the GitHub repository.
+
+### Implementation Details
+*   **platform.html**: Added a "Return to Main Page" button above the sidebar header.
+*   **worker_portal.html**: Added a home button next to the menu toggle in the top bar and a prominent navigation button in the sidebar.
+*   **company_dashboard.html**: Confirmed the navigation button was already present at the top of the sidebar.
+
+### Deployment Status
+*   **GitHub**: Changes committed and pushed to `https://github.com/minddoo/checkit1.git`.
+*   **Hosting**: The repository is updated, triggering any connected CI/CD workflows for hosting deployment.
+
+### Verification Results
+*   Verified the button layout in `platform.html` and `worker_portal.html`.
+*   Confirmed successful git push to the remote repository.

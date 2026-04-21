@@ -2329,6 +2329,9 @@ function googleTranslateElementInit() {
                 const updatedWorker = await db.collection('workers').doc(workerDocId).get();
                 renderCheckupStatus(updatedWorker.data());
                 showToast("재검대상자로 상태가 변경되었습니다.", "success");
+                
+                // [NEW] Automatically switch to status section to show the alert card
+                switchSection('progress');
             } catch (e) {
                 console.error("Self recheck error:", e);
                 alert("처리 중 오류가 발생했습니다.");

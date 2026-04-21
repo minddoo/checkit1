@@ -881,8 +881,8 @@ function googleTranslateElementInit() {
                     document.getElementById('masterBadge').classList.remove('hidden');
                     document.getElementById('logoutBtn').classList.add('hidden');
                     document.getElementById('closeBtn').classList.remove('hidden');
-                } else if (!userDoc.exists || userData.role !== 'worker') {
-                    console.warn('Worker record not found or invalid role');
+                } else if (userDoc.exists && userData.role !== 'worker' && !isMaster) {
+                    console.warn('Invalid role for current user');
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
                     return;

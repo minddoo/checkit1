@@ -899,16 +899,18 @@ function googleTranslateElementInit() {
                         .limit(1).get();
                     
                     if (!snap.empty) {
-                        workerDocId = snap.docs[0].id;
+                        const newDocId = snap.docs[0].id;
                         companyId = snap.docs[0].data().companyId;
                         await db.collection('users').doc(user.uid).update({ 
-                            workerDocId: workerDocId,
+                            workerDocId: newDocId,
                             companyId: companyId
                         });
-                        console.log("Relinked successfully by UID:", workerDocId, companyId);
+                        await db.collection('workers').doc(newDocId).update({ uid: user.uid });
+                        console.log("Relinked successfully by UID:", newDocId, companyId);
                     } else {
                         console.warn("No worker document found for UID, trying manual relink...");
-                        tryToRelinkWorker(user.uid, user.displayName || user.email || '근로자', companyId);
+                        // Also try to find by name within the company if companyId is known, or just name
+                        tryToRelinkWorker(user.uid, userData.name || user.displayName || user.email || '근로자', companyId);
                     }
                 }
 
@@ -941,7 +943,7 @@ function googleTranslateElementInit() {
                             renderCheckupStatus(wData);
                         }
                     });
-                    loadChatMessages(workerDocId);
+                    loadChatMessages(workerDocId, companyId);
                 } else {
                     console.warn("Final workerDocId is still empty.");
                     if (!isMaster) {
@@ -971,10 +973,16 @@ function googleTranslateElementInit() {
     });
 
     // Chat / Workflow Logic
-    function loadChatMessages(workerDocId) {
+    function loadChatMessages(workerDocId, companyId, retryCount = 0) {
+        if (!workerDocId) {
+            const chatBody = document.getElementById('chatMessages');
+            if (chatBody) chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">사용자 정보 확인 중...</div>';
+            return;
+        }
+
         if (chatUnsub) chatUnsub();
         chatUnsub = db.collection('messages')
-            .where('workerDocId', '==', (workerDocId || 'none'))
+            .where('workerDocId', '==', workerDocId)
             .onSnapshot({ includeMetadataChanges: true }, snap => {
                 const chatBody = document.getElementById('chatMessages');
                 if (!chatBody) return;
@@ -995,12 +1003,12 @@ function googleTranslateElementInit() {
                         if (!window._guideSentFor?.includes(workerDocId)) {
                             window._guideSentFor = window._guideSentFor || [];
                             window._guideSentFor.push(workerDocId);
-                            sendSystemGuide(workerDocId);
+                            sendSystemGuide(workerDocId, companyId);
                         }
                     }
 
                     if (snap.empty) {
-                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다. 1:1 케어센터에 궁금한 점을 남겨주세요.</div>';
                         return;
                     }
 
@@ -1017,7 +1025,16 @@ function googleTranslateElementInit() {
             }, err => {
                 console.error("Chat sync error:", err);
                 const chatBody = document.getElementById('chatMessages');
-                if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
+                if (!chatBody) return;
+
+                if (err.code === 'permission-denied' && retryCount < 5) {
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">채팅 서버에 연결 중입니다... (' + (retryCount+1) + ')</div>';
+                    setTimeout(() => loadChatMessages(workerDocId, companyId, retryCount + 1), 2000);
+                } else {
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다. (연동 대기 중)</div>';
+                    // Retry once more after a long wait
+                    if (retryCount >= 5) setTimeout(() => loadChatMessages(workerDocId, companyId, 6), 5000);
+                }
             });
     }
 
@@ -1173,6 +1190,82 @@ function googleTranslateElementInit() {
                 </div>
                 <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            if (!workerDocId) {
+                showToast("근로자 정보 연동 중입니다. 잠시 후 다시 시도해주세요.", "info");
+                return;
+            }
+
+            input.value = '';
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Chat send error:", e);
+            showToast("메시지 전송에 실패했습니다.", "error");
+        }
+    }
+
+    async function sendSystemGuide(workerDocId, companyId) {
+        try {
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'system',
+                text: '안녕하세요! 체킷 1:1 케어센터입니다. 건강검진 여정을 돕기 위해 매니저가 곧 연결될 예정입니다. 궁금한 점은 언제든 남겨주세요!',
+                type: 'guide',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Guide send error:", e); }
+    }
+
+    async function tryToRelinkWorker(uid, name, compId) {
+        try {
+            // Find by name matching
+            const q = compId 
+                ? db.collection('workers').where('companyId', '==', compId).where('name', '==', name)
+                : db.collection('workers').where('name', '==', name);
+
+            const snap = await q.limit(1).get();
+            
+            if (!snap.empty) {
+                const workerDoc = snap.docs[0];
+                const newDocId = workerDoc.id;
+                const newCompId = workerDoc.data().companyId;
+
+                await db.collection('users').doc(uid).update({ 
+                    workerDocId: newDocId,
+                    companyId: newCompId 
+                });
+                await db.collection('workers').doc(newDocId).update({ uid: uid });
+                console.log("Successfully manual-relinked:", newDocId);
+            } else {
+                const statusEl = document.getElementById('checkupStatus');
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+                const docsEl = document.getElementById('requiredDocs');
+                if(docsEl) docsEl.textContent = '명단 등록 후 확인 가능합니다.';
+            }
+        } catch (e) { console.error("Relink error:", e); }
     }
 
     function toggleMobileMenu() {

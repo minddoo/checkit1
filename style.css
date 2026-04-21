@@ -3371,24 +3371,26 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     
     #main-header nav {
-        flex-wrap: wrap !important;
-        justify-content: flex-end !important;
+        display: block !important;
+        text-align: right !important;
         width: 100% !important;
-        gap: 8px !important;
         margin-top: 5px !important;
     }
     
     #language-switcher {
-        width: 100% !important;
         display: flex !important;
-        justify-content: flex-end !important;
+        width: max-content !important;
+        margin-left: auto !important;
         gap: 4px !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 8px !important;
     }
     
     #main-header nav .cta-button-secondary {
+        display: inline-block !important; /* Force inline-block spacing behavior */
+        margin-left: 8px !important;
         padding: 6px 12px !important;
         font-size: 0.8rem !important;
+        vertical-align: middle !important;
     }
     
     #mobile-menu-overlay {

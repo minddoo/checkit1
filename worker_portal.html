@@ -377,7 +377,12 @@
 <div id="portalContent" class="hidden">
     <!-- Top Bar -->
     <div class="top-bar">
-        <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+        <div style="display: flex; align-items: center;">
+            <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+            <button onclick="window.location.href='index.html'" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin-left: 5px;" title="메인 홈으로">
+                <i class="fa-solid fa-house"></i>
+            </button>
+        </div>
         <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
         
         <div class="lang-switcher">
@@ -398,6 +403,11 @@
         <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
         <!-- Sidebar -->
         <div id="sideDrawer" class="sidebar">
+            <div style="padding: 0 5px 20px;">
+                <button onclick="window.location.href='index.html'" style="width: 100%; background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700;">
+                    <i class="fa-solid fa-house" style="color: var(--primary);"></i> 메인 홈으로 돌아가기
+                </button>
+            </div>
             <div style="padding: 0 0 20px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;" class="visible-mobile">
                 <div style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-briefcase-medical" style="color: var(--primary-light);"></i> CHECKIT</div>
             </div>

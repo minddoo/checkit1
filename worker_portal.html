@@ -921,6 +921,8 @@ function googleTranslateElementInit() {
                             if (!companyId && wData.companyId) {
                                 console.log("Recovered companyId from worker doc:", wData.companyId);
                                 companyId = wData.companyId;
+                                // Sync to users doc to satisfy Security Rules (which check getUserData().companyId)
+                                db.collection('users').doc(user.uid).update({ companyId: companyId }).catch(e => console.warn("Failed to sync companyId:", e));
                                 // Load hospitals now that we have companyId
                                 startHospitalSnapshot(companyId);
                             }
@@ -2415,10 +2417,11 @@ function googleTranslateElementInit() {
             html += `
                 <div class="hospital-card" id="${cardId}">
                     <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
-                    <div class="h-card-address" id="${cardId}_address"></div>
-                    <div class="h-card-meta">
-                        <div class="item" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-calendar-check"></i> ${h.schedule || '25.10.01 ~ 11.30'}</div>
-                        <div class="item" id="${cardId}_phone"></div>
+                    <div class="h-card-meta-detail" style="display:flex; flex-direction:column; gap:6px; margin-top:5px; border-top:1px dashed var(--border); padding-top:10px;">
+                        <div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-calendar-check" style="color:#10b981; margin-right:5px;"></i> <strong>검진기간:</strong> ${h.schedule || '-'}</div>
+                        <div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-clock" style="color:#0ea5e9; margin-right:5px;"></i> <strong>예약기간:</strong> ${h.period || '-'}</div>
+                        ${h.extraCost ? `<div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-comment-medical" style="color:#f43f5e; margin-right:5px;"></i> <strong>추가옵션:</strong> ${h.extraCost}</div>` : ''}
+                        <div id="${cardId}_phone" style="font-size:0.8rem; color:#64748b;"></div>
                     </div>
                     
                     <!-- Portal Aggregated Action: Highlighted Prompt -->
@@ -2443,7 +2446,13 @@ function googleTranslateElementInit() {
                         <a href="#" class="btn-h-action btn-h-call hidden" id="${cardId}_callBtn" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>
                     </div>
                     <div class="h-card-actions" style="margin-top: -5px;">
-                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 간편 예약</a>` : ''}
+                        ${h.hasLink === 'Y' && h.link ? `
+                        <div style="width:100%;">
+                            <a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" style="background:#4f46e5; color:white; width:100%;" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-calendar-check"></i> 간편 예약하기
+                            </a>
+                            ${h.code ? `<div style="text-align:center; font-size:0.7rem; color:#94a3b8; margin-top:5px;">기업코드: <strong>${h.code}</strong></div>` : ''}
+                        </div>` : ''}
                         <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-h-map" id="${cardId}_route" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
                     </div>
                 </div>`;
@@ -2490,7 +2499,10 @@ function googleTranslateElementInit() {
                 const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
                 if (naverBtn) naverBtn.href = `https://map.naver.com/v5/search/${query}`;
                 if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
-                if (routeBtn) routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+                if (routeBtn) {
+                    routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+                    routeBtn.style.display = 'flex';
+                }
 
             } else {
                 // Fallback for search failure

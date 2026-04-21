@@ -110,6 +110,11 @@
             .form-grid { grid-template-columns: 1fr; gap: 12px; }
             .card { padding: 15px; margin-bottom: 15px; }
             
+            /* Section Header Box on Mobile */
+            .section-header-box { flex-direction: column !important; gap: 15px; }
+            .excel-actions-group { width: 100%; flex-direction: column !important; gap: 8px !important; }
+            .excel-actions-group button { width: 100%; font-size: 0.85rem !important; padding: 10px !important; display: flex; justify-content: center; align-items: center; white-space: nowrap; }
+            
             /* Tables */
             .table-toolbar { flex-direction: column; gap: 10px; align-items: stretch !important; }
             .table-toolbar > div { flex-wrap: wrap; justify-content: flex-start; }
@@ -155,10 +160,10 @@
             </button>
         </div>
         <div class="sidebar-brand">
-            <div id="mobileHeaderActions" style="display: none; align-items: center; gap: 8px;"></div>
             <div style="display: flex; align-items: center;">
                 <i class="fa-solid fa-briefcase" style="color: var(--primary); margin-right: 10px;"></i> CHECKIT
             </div>
+            <div id="mobileHeaderActions" style="display: none; align-items: center; gap: 8px;"></div>
         </div>
         <ul class="sidebar-menu">
             <li id="menuReg" class="active" onclick="window.switchSection('registration')"><i class="fa-solid fa-users"></i> <span>직원 명단 관리 및<br>연계병원 등록</span></li>
@@ -227,14 +232,14 @@
             <div id="sectionRegistration" class="reveal">
                 <!-- Generate Card -->
                 <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div class="section-header-box" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                     <div>
                         <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> 직원(임직원) 명단 등록</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
                             우리 회사의 외국인 근로자 및 직원 정보를 등록하여 검진 명단으로 관리하세요.
                         </p>
                     </div>
-                    <div style="display: flex; gap: 10px;">
+                    <div class="excel-actions-group" style="display: flex; gap: 10px;">
                         <button class="btn-outline" onclick="window.downloadExcelTemplate()">
                             <i class="fa-solid fa-download"></i> 엑셀 양식 다운로드
                         </button>
@@ -322,14 +327,14 @@
             
             <!-- Hospital Info Card -->
             <div class="card" style="margin-bottom: 30px;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div class="section-header-box" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                     <div>
                         <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-hospital" style="color: #0ea5e9;"></i> 제휴 병원 및 검진 안내</h3>
                         <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0;">
                             우리 기업과 연계된 검진 병원의 정보를 근로자들에게 안내하기 위해 상세히 작성해 주세요. 여러 병원도 일괄 등록 가능합니다.
                         </p>
                     </div>
-                    <div style="display: flex; gap: 10px;">
+                    <div class="excel-actions-group" style="display: flex; gap: 10px;">
                         <button class="btn-outline" onclick="window.downloadHospExcelTemplate()" style="border-color: #0ea5e9; color: #0ea5e9;">
                             <i class="fa-solid fa-download"></i> 병원 양식 다운로드
                         </button>

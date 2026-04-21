@@ -3365,16 +3365,18 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     
     #main-header .container {
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-        padding-top: 10px !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        gap: 5px !important;
+        padding-top: 5px !important;
     }
     
     #main-header nav {
         display: block !important;
         text-align: right !important;
-        width: 100% !important;
-        margin-top: 5px !important;
+        width: auto !important;
+        margin-top: 2px !important;
     }
     
     #language-switcher {

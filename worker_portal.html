@@ -991,6 +991,7 @@ function googleTranslateElementInit() {
                     });
 
                     const hasCareGuide = docs.some(m => m.type === 'guide' || m.type === 'action_check');
+                    const hasRecheckSelfGuide = docs.some(m => m.type === 'action_check' && (m.text || '').includes('재검사가 필요한 항목'));
 
                     if (!hasCareGuide && workerDocId) {
                         if (!window._guideSentFor?.includes(workerDocId)) {
@@ -999,6 +1000,17 @@ function googleTranslateElementInit() {
                             sendSystemGuide(workerDocId, companyId);
                         }
                     }
+
+                    // [Trigger] Self-Recheck Guide when status is Result Complete
+                    db.collection('workers').doc(workerDocId).get().then(doc => {
+                        if (doc.exists && doc.data().status === '결과완료' && !hasRecheckSelfGuide) {
+                            if (!window._recheckGuideSentFor?.includes(workerDocId)) {
+                                window._recheckGuideSentFor = window._recheckGuideSentFor || [];
+                                window._recheckGuideSentFor.push(workerDocId);
+                                sendSelfRecheckGuide(workerDocId, companyId);
+                            }
+                        }
+                    });
 
                     if (snap.empty) {
                         chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다. 1:1 케어센터에 궁금한 점을 남겨주세요.</div>';
@@ -1240,6 +1252,22 @@ function googleTranslateElementInit() {
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch (e) { console.error("Guide send error:", e); }
+    }
+
+    async function sendSelfRecheckGuide(workerDocId, companyId) {
+        try {
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'admin',
+                text: '검진 결과를 확인해 보셨나요? 만약 결과표에 이상 소견이 있거나 재검사가 필요한 항목(재검대상자)인 것으로 확인되신다면, 아래 버튼을 눌러 상태를 업데이트해 주세요.',
+                type: 'action_check',
+                btnText: '재검대상자입니다',
+                btnColor: '#ef4444',
+                action: 'setSelfRecheckStatus()',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Self-recheck guide error:", e); }
     }
 
     async function tryToRelinkWorker(uid, name, compId) {
@@ -2120,6 +2148,12 @@ function googleTranslateElementInit() {
             alert('상태 업데이트에 실패했습니다.');
         } finally {
             document.getElementById('pageLoader').style.display = 'none';
+        }
+    }
+
+    window.setSelfRecheckStatus = async () => {
+        if (confirm("정말로 '재검대상자' 상태로 변경하시겠습니까?\n이 작업은 되돌릴 수 없으며 관리자가 확인하게 됩니다.")) {
+            await updateStatus('재검대상자');
         }
     }
 

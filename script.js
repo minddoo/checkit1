@@ -1720,9 +1720,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const data = translations[currentLang] || translations['ko'];
                     alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                    // [수정] 자동 이동 제거 - 이제 마이페이지 버튼을 클릭해야만 이동함
                     if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                     if (loader) loader.style.display = 'none';
+                    window.location.href = 'platform.html';
                 };
 
                 auth.signInWithEmailAndPassword(masterEmail, masterPw)
@@ -1797,9 +1797,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, { merge: true }).then(() => {
                     const data = translations[currentLang] || translations['ko'];
                     alert(data['login_success_msg'] || '관리자 로그인에 성공했습니다!');
-                    // [수정] 자동 이동 제거 - 이제 마이페이지 버튼을 클릭해야만 이동함
                     if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                     if (loader) loader.style.display = 'none';
+                    window.location.href = 'company_dashboard.html';
                 });
             };
 
@@ -2054,9 +2054,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         const data = translations[currentLang] || translations['ko'];
                         alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                        // [수정] 자동 이동 제거 - 이제 마이페이지 버튼을 클릭해야만 이동함
                         if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                         if (loader) loader.style.display = 'none';
+                        window.location.href = 'worker_portal.html';
                     } else {
                         alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');
                         auth.signOut();

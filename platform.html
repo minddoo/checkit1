@@ -275,10 +275,10 @@
             .sidebar { width: 100%; height: auto; border-bottom: 2px solid var(--primary); padding-top: 10px; }
             .sidebar-header { padding: 15px; }
             .alarm-panel { left: 10px; right: 10px; width: auto; max-width: calc(100vw - 20px); }
-            .sidebar-menu { display: flex; flex-wrap: wrap; padding: 10px 5px; }
-            .sidebar-menu li { flex: 1 1 30%; justify-content: center; flex-direction: column; gap: 5px; text-align: center; padding: 10px 5px; font-size: 0.75rem; border-left: none; border-bottom: 2px solid transparent; }
-            .sidebar-menu li.active { border-left: none; border-bottom: 2px solid var(--primary); background: rgba(255,255,255,0.05); }
-            .sidebar-menu li i { font-size: 1.2rem; }
+            .sidebar-menu { display: flex; flex-wrap: wrap; padding: 10px 5px !important; white-space: normal !important; gap: 0 !important; background: var(--dark); }
+            .sidebar-menu li { flex: 1 1 30%; display: flex !important; flex-direction: column !important; align-items: center; justify-content: center; text-align: center; padding: 15px 5px !important; border-left: none !important; border-bottom: 3px solid transparent !important; font-size: 0.75rem !important; gap: 8px !important; color: #cbd5e1; border-radius: 0; }
+            .sidebar-menu li i { font-size: 1.4rem !important; margin: 0 !important; }
+            .sidebar-menu li.active { border-left: none !important; border-bottom: 3px solid #22c55e !important; background: rgba(255,255,255,0.05) !important; color: white !important; }
             
             /* Main Content Adjustments */
             .main-content { overflow: visible; height: auto; display: block; }

@@ -65,8 +65,15 @@ service cloud.firestore {
       // Allow creation by Master or any verified Company Admin
       allow create: if request.auth != null && (isMaster() || getUserData().role == 'company_admin');
       
-      // Only Master or Company Admin can update/delete records
-      allow update, delete: if request.auth != null && (
+      // Allow update by Master, Company Admin, or the Worker themselves (to upload results)
+      allow update: if request.auth != null && (
+        isMaster() || 
+        (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId) ||
+        (resource.data.uid == request.auth.uid)
+      );
+
+      // Only Master or Company Admin can delete records
+      allow delete: if request.auth != null && (
         isMaster() || 
         (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId)
       );

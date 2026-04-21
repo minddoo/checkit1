@@ -871,7 +871,7 @@ function googleTranslateElementInit() {
                 const isMaster = user.email === "master@checkit.com";
                 
                 let workerDocId = userData.workerDocId;
-                let companyId = userData.companyId;
+                let companyId = userData.companyId || paramCompanyId;
 
                 // Mode: Master Viewing a specific worker
                 if (isMaster && paramWorkerDocId && paramCompanyId) {
@@ -893,17 +893,22 @@ function googleTranslateElementInit() {
                 document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
 
                 if (!workerDocId && !isMaster) {
-                    console.log("WorkerDocId missing, attempting to relink...");
+                    console.log("WorkerDocId missing, attempting to relink by UID...");
                     const snap = await db.collection('workers')
                         .where('uid', '==', user.uid)
                         .limit(1).get();
                     
                     if (!snap.empty) {
                         workerDocId = snap.docs[0].id;
-                        await db.collection('users').doc(user.uid).update({ workerDocId: workerDocId });
-                        console.log("Relinked successfully:", workerDocId);
+                        companyId = snap.docs[0].data().companyId;
+                        await db.collection('users').doc(user.uid).update({ 
+                            workerDocId: workerDocId,
+                            companyId: companyId
+                        });
+                        console.log("Relinked successfully by UID:", workerDocId, companyId);
                     } else {
-                        console.warn("No worker document found for UID:", user.uid);
+                        console.warn("No worker document found for UID, trying manual relink...");
+                        tryToRelinkWorker(user.uid, user.displayName || user.email || '근로자', companyId);
                     }
                 }
 
@@ -911,8 +916,20 @@ function googleTranslateElementInit() {
                     db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
                         if (workerDoc.exists) {
                             const wData = workerDoc.data();
+                            
+                            // Robustness: If companyId is missing from users doc, take it from worker doc
+                            if (!companyId && wData.companyId) {
+                                console.log("Recovered companyId from worker doc:", wData.companyId);
+                                companyId = wData.companyId;
+                                // Load hospitals now that we have companyId
+                                startHospitalSnapshot(companyId);
+                            }
+
                             if (isMaster) {
                                 document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                document.getElementById('welcomeName').textContent = wData.name;
+                            } else {
+                                document.getElementById('displayName').textContent = wData.name;
                                 document.getElementById('welcomeName').textContent = wData.name;
                             }
                             const prefLang = wData.prefLang || 'ko';
@@ -926,14 +943,18 @@ function googleTranslateElementInit() {
                 } else {
                     console.warn("Final workerDocId is still empty.");
                     if (!isMaster) {
-                        tryToRelinkWorker(user.uid, user.displayName || user.email || '근로자', companyId);
                         const statusEl = document.getElementById('checkupStatus');
-                        if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도했습니다. 새로고침 해주세요.</p>';
+                        if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도 중입니다...</p>';
                     }
                 }
 
                 if (companyId) {
-                    db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                    startHospitalSnapshot(companyId);
+                }
+
+                function startHospitalSnapshot(cid) {
+                    if (window._hospitalUnsub) window._hospitalUnsub();
+                    window._hospitalUnsub = db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
                         renderHospitals(hospSnap.docs);
                     });
                 }
@@ -1004,7 +1025,7 @@ function googleTranslateElementInit() {
         const isAdmin = msg.sender === 'admin';
         const isWorker = msg.sender === 'worker';
         
-        let timestamp = '전송 중...';
+        let timestamp = ''; // Clear default to avoid "전송 중..." showing briefly
         try {
             if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
                 timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -2467,7 +2488,7 @@ function googleTranslateElementInit() {
                 const routeBtn = document.getElementById(`${cardId}_route`);
 
                 const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
-                if (naverBtn) naverUserUrl = `https://map.naver.com/v5/search/${query}`;
+                if (naverBtn) naverBtn.href = `https://map.naver.com/v5/search/${query}`;
                 if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
                 if (routeBtn) routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
 

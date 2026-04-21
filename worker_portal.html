@@ -1356,9 +1356,10 @@ function googleTranslateElementInit() {
                             건강검진 결과, 일부 항목에 대한 정밀 검사 또는 재검사가 필요합니다.<br>
                             나의 건강을 위해 가까운 시일 내에 병원에 방문해 주세요.
                         </p>
-                        <div style="display: flex; gap: 10px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             <button onclick="switchSection('chat')" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 상담하기</button>
                             <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검 예약 신청서 쓰기</button>
+                            <button onclick="window.setRecheckDone()" style="background: #10b981; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);">재검사 완료 보고</button>
                         </div>
                     </div>
                 </div>
@@ -2292,7 +2293,37 @@ function googleTranslateElementInit() {
 
     window.setSelfRecheckStatus = async () => {
         if (confirm("정말로 '재검대상자' 상태로 변경하시겠습니까?\n이 작업은 되돌릴 수 없으며 관리자가 확인하게 됩니다.")) {
-            await updateStatus('재검대상자');
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const workerDocId = userDoc.data().workerDocId;
+                if (!workerDocId) return;
+
+                const loader = document.getElementById('pageLoader');
+                if (loader) loader.style.display = 'flex';
+
+                await db.collection('workers').doc(workerDocId).update({
+                    status: '재검대상자',
+                    recheckInformed: true,
+                    statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+                renderCheckupStatus(updatedWorker.data());
+                showToast("재검대상자로 상태가 변경되었습니다.", "success");
+            } catch (e) {
+                console.error("Self recheck error:", e);
+                alert("처리 중 오류가 발생했습니다.");
+            } finally {
+                document.getElementById('pageLoader').style.display = 'none';
+            }
+        }
+    }
+
+    window.setRecheckDone = async () => {
+        if (confirm("재검사를 모두 완료하셨습니까?\n상태를 '재검완료'로 변경하여 기업 담당자에게 알립니다.")) {
+            await updateStatus('재검완료');
         }
     }
 

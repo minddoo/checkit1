@@ -748,7 +748,8 @@
                         });
                         loadChatMessages(workerDocId);
                     } else {
-                        // No worker doc to link
+                        // Attempt to relink newly signed up workers missing their doc ID
+                        tryToRelinkWorker(user.uid, user.displayName, companyId);
                         loader.style.display = 'none';
                         document.getElementById('portalContent').classList.remove('hidden');
                     }
@@ -2040,10 +2041,7 @@
         }, err => console.error("Hospital load error:", err));
     }
 
-    // [미정의 함수 방어] 명단 연동 함수가 없을 경우 대비
-    function tryToRelinkWorker(uid, name, cid) {
-        console.log("Relink requested for:", name, uid, cid);
-    }
+    // Removed duplicate broken tryToRelinkWorker
 </script>
 
 </body>

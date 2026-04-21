@@ -55,7 +55,7 @@
 
 /* Corporate Hero Section - Layout restored, but background color synced with Main */
 #corporate-hero {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('assets/hero-wide.png');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('assets/건건.png');
     background-size: 104% auto; /* Optimized zoom for photo quality while keeping the logo hidden */
     background-position: -1% -1%; /* Shifting to hide the logo with minimal crop */
     background-repeat: no-repeat;
@@ -3604,7 +3604,7 @@ body.platform-view-active #mypage-overlay { display: flex; }
         min-height: 480px !important; /* Fixed height for better photo centering */
         height: auto !important;
         text-align: center;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(255, 255, 255, 1) 100%), url('assets/hero-wide.png') !important; /* Darker top, bottom fade */
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(255, 255, 255, 1) 100%), url('assets/건건.png') !important; /* Darker top, bottom fade */
         background-size: cover !important;
         background-position: center center !important; /* Explicitly centered in both axes */
         display: flex !important;

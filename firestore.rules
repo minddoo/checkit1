@@ -109,20 +109,13 @@ service cloud.firestore {
         (resource.data.workerDocId == getUserData().workerDocId) ||
         (getUserData().role == 'company_admin' && resource.data.companyId == getUserData().companyId)
       );
-      allow create: if request.auth != null && (
-        isMaster() || 
-        (request.resource.data.workerDocId == getUserData().workerDocId) ||
-        (getUserData().role == 'company_admin' && request.resource.data.companyId == getUserData().companyId)
-      );
+      allow create: if request.auth != null;
       allow update, delete: if isMaster();
     }
 
     // [8] BOOKINGS: Worker appointment requests
     match /bookings/{bookingId} {
-      allow create: if request.auth != null && (
-        isMaster() || 
-        (request.resource.data.workerDocId == getUserData().workerDocId)
-      );
+      allow create: if request.auth != null;
       allow read: if request.auth != null && (
         isMaster() || 
         (resource.data.workerDocId == getUserData().workerDocId) ||

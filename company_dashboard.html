@@ -134,6 +134,9 @@
             .notice-modal { width: 100%; border-radius: 16px 16px 0 0; max-height: 80vh; }
             .rv-header-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
             .rv-header-grid > div { padding: 8px !important; text-align: center; }
+            #resultViewerModal .modal-content { width: 95% !important; max-width: 95% !important; margin: 10% auto !important; padding: 15px !important; }
+            #rvPreviewArea { padding: 10px !important; overflow: hidden !important; }
+            #rvPreviewArea img { max-height: 50vh !important; object-fit: contain !important; width: 100% !important; }
             
             /* Home Buttons & Header Logic */
             .desktop-home-btn { display: none !important; }
@@ -2218,8 +2221,8 @@
 </html>
 
 <!-- Result File Viewer Modal -->
-<div id="resultViewerModal" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'" style="display:none;">
-    <div class="modal-content" style="max-width:700px;">
+<div id="resultViewerModal" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'" style="display:none; overflow-y: auto;">
+    <div class="modal-content" style="max-width:700px; width: 90%; margin: 5% auto;">
         <div class="modal-header">
             <h3 style="margin:0; font-size:1.05rem;"><i class="fa-solid fa-file-medical" style="color:#4f46e5;"></i> 근로자 결과지 보기</h3>
             <button onclick="document.getElementById('resultViewerModal').style.display='none'" style="background:none; border:none; font-size:1.2rem; color:#94a3b8; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>

@@ -85,5 +85,29 @@ service cloud.firestore {
       // Only Master can read/manage incoming leads
       allow read, write: if isMaster();
     }
+
+    // [6] HOSPITALS: Hospital list for each company
+    match /hospitals/{hospitalId} {
+      allow read: if request.auth != null && (
+        isMaster() || 
+        (getUserData().companyId == resource.data.companyId)
+      );
+      allow write: if isMaster();
+    }
+
+    // [7] MESSAGES: 1:1 Chat messages
+    match /messages/{messageId} {
+      allow read: if request.auth != null && (
+        isMaster() || 
+        (resource.data.workerDocId == getUserData().workerDocId) ||
+        (getUserData().role == 'company_admin' && resource.data.companyId == getUserData().companyId)
+      );
+      allow create: if request.auth != null && (
+        isMaster() || 
+        (request.resource.data.workerDocId == getUserData().workerDocId) ||
+        (getUserData().role == 'company_admin' && request.resource.data.companyId == getUserData().companyId)
+      );
+      allow update, delete: if isMaster();
+    }
   }
 }

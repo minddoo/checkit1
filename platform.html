@@ -339,9 +339,10 @@
             .integrated-body { flex-direction: column; overflow-y: auto; }
             .history-side { width: 100% !important; border-top: 1px solid #eee; height: auto; min-height: 300px; }
             .portal-side { border-right: none; height: auto; min-height: 400px; }
-            /* Home Buttons Logic */
+            /* Home Buttons & Header Logic */
             .desktop-home-btn { display: none !important; }
             .mobile-home-btn { display: flex !important; }
+            .mobile-logout-wrapper { display: none !important; }
         }
     </style>
 </head>
@@ -429,7 +430,7 @@
             <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> 시스템 설정</li>
             <li id="menuContracts" onclick="switchSection('Contracts')"><i class="fa-solid fa-file-contract"></i> 기업 계약서 관리</li>
         </ul>
-        <div style="margin-top: auto; padding: 20px;">
+        <div class="mobile-logout-wrapper" style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
             </button>

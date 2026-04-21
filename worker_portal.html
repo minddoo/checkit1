@@ -1357,7 +1357,7 @@ function googleTranslateElementInit() {
                             나의 건강을 위해 가까운 시일 내에 병원에 방문해 주세요.
                         </p>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="switchSection('chat')" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 상담하기</button>
+                            <button onclick="window.handleRecheckConsult()" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 안내받기</button>
                             <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검 예약 신청서 쓰기</button>
                             <button onclick="window.setRecheckDone()" style="background: #10b981; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);">재검사 완료 보고</button>
                         </div>
@@ -1771,14 +1771,30 @@ function googleTranslateElementInit() {
             formData.workerDocId = workerDocId;
             formData.companyId = companyId;
 
+            // Determine booking type based on status
+            const currentStatus = userDoc.data().status || '진행 전';
+            formData.type = (currentStatus === '재검대상자') ? 'recheck' : 'general';
+
             // Save to bookings collection
             await db.collection('bookings').add(formData);
+
+            // [NEW] Add to alarms collection for Master page
+            await db.collection('alarms').add({
+                type: 'new_booking',
+                workerName: formData.name,
+                companyId: companyId,
+                workerDocId: workerDocId,
+                bookingType: formData.type,
+                hospital: formData.hospital,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                message: `${formData.name}님 (${formData.type === 'recheck' ? '재검' : '일반'}) 예약 신청서 접수됨`
+            });
 
             // Add chat notification
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
-                text: `검진 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
+                text: `[${formData.type === 'recheck' ? '재검사' : '일반검진'}] 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -2325,6 +2341,13 @@ function googleTranslateElementInit() {
         if (confirm("재검사를 모두 완료하셨습니까?\n상태를 '재검완료'로 변경하여 기업 담당자에게 알립니다.")) {
             await updateStatus('재검완료');
         }
+    }
+
+    window.handleRecheckConsult = () => {
+        switchSection('chat');
+        setTimeout(() => {
+            openBookingForm();
+        }, 300);
     }
 
     let kakaoMap = null;

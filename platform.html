@@ -250,6 +250,21 @@
         .modal-body table { width: 100%; border-collapse: collapse; }
         .modal-body th { background: #f8fafc; color: #64748b; font-size: 0.8rem; padding: 12px; }
         .modal-body td { padding: 15px 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+
+        /* Integrated Detailed View Styles */
+        .integrated-modal { max-width: 1400px; width: 95%; height: 90vh; }
+        .integrated-body { display: flex; flex: 1; height: 100%; overflow: hidden; padding: 0; }
+        .portal-side { flex: 1; border-right: 1px solid #eee; background: #fff; display: flex; flex-direction: column; }
+        .history-side { width: 450px; background: #f8fafc; display: flex; flex-direction: column; }
+        .history-header { padding: 20px 25px; border-bottom: 1px solid #eee; background: #fff; }
+        .history-list { flex: 1; overflow-y: auto; padding: 20px; }
+        .booking-card { background: #fff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .booking-card .type-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; }
+        .type-general { background: #eff6ff; color: #3b82f6; border: 1px solid #dbeafe; }
+        .type-recheck { background: #fff1f2; color: #e11d48; border: 1px solid #ffe4e6; }
+        .booking-field { margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; gap: 10px; }
+        .booking-label { color: #64748b; font-weight: 500; min-width: 80px; }
+        .booking-value { color: #1e293b; font-weight: 600; text-align: right; }
     </style>
 </head>
 <body>
@@ -1662,7 +1677,7 @@
                                 <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
                             </td>
                             <td style="text-align:center;">
-                                <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.open('worker_portal.html?workerDocId=${u.workerDocId}&companyId=${u.companyId}', '_blank')">
+                                <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.openIntegratedWorkerDetail('${u.workerDocId}', '${u.companyId}', '${u.name || '근로자'}')">
                                     <i class="fa-solid fa-up-right-from-square"></i> 보기
                                 </button>
                             </td>
@@ -1680,6 +1695,82 @@
 
     window.closeModal = () => {
         document.getElementById('memberModal').style.display = 'none';
+    };
+
+    // Integrated Worker Detail View Logic
+    window.openIntegratedWorkerDetail = (workerDocId, companyId, workerName) => {
+        const modal = document.getElementById('workerDetailModal');
+        const iframe = document.getElementById('workerPortalIframe');
+        const title = document.getElementById('integratedTitle');
+        
+        title.innerHTML = `<i class="fa-solid fa-user-gear"></i> <strong>${workerName}</strong> 통합 상세 관리 (포털+예약내역)`;
+        iframe.src = `worker_portal.html?workerDocId=${workerDocId}&companyId=${companyId}`;
+        
+        modal.style.display = 'flex';
+        window.fetchBookingHistory(workerDocId);
+    };
+
+    window.closeIntegratedWorkerDetail = () => {
+        const modal = document.getElementById('workerDetailModal');
+        const iframe = document.getElementById('workerPortalIframe');
+        iframe.src = '';
+        modal.style.display = 'none';
+    };
+
+    window.fetchBookingHistory = async (workerDocId) => {
+        const container = document.getElementById('bookingHistoryList');
+        container.innerHTML = '<div style="padding: 40px; text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> 내역 불러오는 중...</div>';
+        
+        try {
+            const snap = await db.collection('bookings')
+                .where('workerDocId', '==', workerDocId)
+                .get();
+            
+            if (snap.empty) {
+                container.innerHTML = '<div style="padding: 40px; text-align:center; color: #94a3b8; font-size: 0.85rem;"><i class="fa-solid fa-file-circle-xmark" style="font-size:2rem; opacity:0.3; margin-bottom:15px;"></i><br>작성된 예약 신청서 내역이 없습니다.</div>';
+                return;
+            }
+
+            const docs = snap.docs.map(d => d.data());
+            docs.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+
+            let html = '';
+            docs.forEach(b => {
+                const dateStr = b.timestamp ? new Date(b.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
+                const isRecheck = b.type === 'recheck';
+                
+                html += `
+                    <div class="booking-card">
+                        <span class="type-badge ${isRecheck ? 'type-recheck' : 'type-general'}">
+                            ${isRecheck ? '재검사 예약' : '일반 검진 예약'}
+                        </span>
+                        <div class="booking-field">
+                            <span class="booking-label">신청 일시</span>
+                            <span class="booking-value">${dateStr}</span>
+                        </div>
+                        <div class="booking-field">
+                            <span class="booking-label">희망 병원</span>
+                            <span class="booking-value">${b.hospital || '-'}</span>
+                        </div>
+                        <div class="booking-field">
+                            <span class="booking-label">희망 일자</span>
+                            <span class="booking-value">${b.dateRange || '-'}</span>
+                        </div>
+                        <div class="booking-field">
+                            <span class="booking-label">추가 항목</span>
+                            <span class="booking-value">${b.extraItems === 'yes' ? '있음 (상담필요)' : '없음'}</span>
+                        </div>
+                        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #eee; font-size:0.8rem; color:#64748b; line-height:1.4;">
+                            <strong>희망 서류:</strong> ${b.documents || '없음'}
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        } catch (e) {
+            console.error("Fetch history error:", e);
+            container.innerHTML = '<div style="padding: 40px; text-align:center; color: var(--danger);">내역을 불러오지 못했습니다.</div>';
+        }
     };
 
 
@@ -1964,6 +2055,35 @@
             <h4 style="font-size:0.9rem; margin:20px 0 12px; color:#334155;"><i class="fa-solid fa-pen-nib" style="color:#8b5cf6;"></i> 전자 서명</h4>
             <div style="border:2px dashed #e2e8f0; border-radius:12px; padding:15px; text-align:center; background:#fafbfc;">
                 <img id="cdSignatureImg" src="" alt="서명" style="max-width:100%; max-height:180px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Integrated Worker Detail Modal -->
+<div id="workerDetailModal" class="modal-overlay" onclick="if(event.target === this) closeIntegratedWorkerDetail()">
+    <div class="modal-content integrated-modal">
+        <div class="modal-header">
+            <h3 id="integratedTitle" style="margin:0; font-size:1.1rem;">근로자 통합 상세 관리</h3>
+            <button class="btn-outline" style="padding: 5px 10px; border-radius: 50%; width: 32px; height: 32px; border: none; background: #eee;" onclick="closeIntegratedWorkerDetail()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body integrated-body">
+            <!-- Left: Portal Iframe -->
+            <div class="portal-side">
+                <iframe id="workerPortalIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+            <!-- Right: Booking History -->
+            <div class="history-side">
+                <div class="history-header">
+                    <h4 style="margin:0; font-size:0.95rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> 예약 신청 내역
+                    </h4>
+                </div>
+                <div id="bookingHistoryList" class="history-list">
+                    <!-- Injected via JS -->
+                </div>
             </div>
         </div>
     </div>

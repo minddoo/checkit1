@@ -88,6 +88,51 @@
         .notice-item.unread { background: #eef2ff; border-left: 3px solid var(--primary); }
         .notice-item:hover { background: #f8fafc; }
         .notice-item-date { font-size: 0.72rem; color: #94a3b8; margin-top: 5px; }
+
+        /* Mobile Optimization inspired by Master Page */
+        @media (max-width: 768px) {
+            body { font-size: 14px; }
+            #superSection { flex-direction: column !important; }
+            .sidebar { width: 100% !important; height: auto !important; padding: 0 !important; }
+            
+            .sidebar-brand { flex-direction: row !important; display: flex; justify-content: space-between; align-items: center; padding: 15px !important; margin-bottom: 0 !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            
+            .sidebar-menu { display: flex; overflow-x: auto; white-space: nowrap; padding: 0 !important; }
+            .sidebar-menu li { padding: 12px 15px !important; border-left: none !important; border-bottom: 3px solid transparent; font-size: 0.85rem; flex-direction: row; }
+            .sidebar-menu li span { display: inline-block; white-space: nowrap; line-height: 1.2; }
+            .sidebar-menu li br { display: none; }
+            .sidebar-menu li.active { border-bottom: 3px solid var(--primary); background: transparent !important; }
+            
+            .main-content { min-width: 100vw; }
+            .header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .content-area { padding: 15px; overflow: visible; }
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .card { padding: 15px; margin-bottom: 15px; }
+            
+            /* Tables */
+            .table-toolbar { flex-direction: column; gap: 10px; align-items: stretch !important; }
+            .table-toolbar > div { flex-wrap: wrap; justify-content: flex-start; }
+            .search-box { width: 100% !important; box-sizing: border-box; margin: 0 !important; }
+            .card > table, #hospitalTable, #workerTable, #statusTable, #followUpTable { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+            
+            /* Stats Row compression */
+            div[style*="repeat(auto-fit"] { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+            #sectionReport > div:nth-child(2) { grid-template-columns: repeat(3, 1fr) !important; gap: 5px !important; margin-bottom: 15px !important; }
+            #sectionReport > div:nth-child(2) .card { padding: 10px 5px !important; margin-bottom: 0 !important; border-top-width: 3px !important; text-align: center; }
+            #sectionReport > div:nth-child(2) .card h2 { font-size: 1.25rem !important; margin: 4px 0 0 !important; }
+            #sectionReport > div:nth-child(2) .card p { font-size: 0.65rem !important; }
+            #sectionReport > div:nth-child(2) .card:last-child { grid-column: span 3; padding: 12px !important; }
+            #sectionFollowUp > div:nth-child(2) { grid-template-columns: 1fr !important; }
+            
+            /* Notice Modal */
+            .notice-modal-overlay { padding: 0 !important; align-items: flex-end; justify-content: center; }
+            .notice-modal { width: 100%; border-radius: 16px 16px 0 0; max-height: 80vh; }
+            
+            /* Home Buttons & Header Logic */
+            .desktop-home-btn { display: none !important; }
+            .mobile-home-btn { display: flex !important; }
+            .mobile-logout-wrapper { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -103,7 +148,7 @@
 <div id="superSection" style="width: 100%; display: none;">
     <!-- Sidebar -->
     <div class="sidebar">
-        <div style="padding: 0 20px 15px;">
+        <div class="desktop-home-btn" style="padding: 0 20px 15px;">
             <button onclick="window.location.href='index.html'" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-house"></i> 메인 홈으로 돌아가기
             </button>
@@ -118,7 +163,7 @@
             <li id="menuFollowUp" onclick="window.switchSection('followup')"><i class="fa-solid fa-clipboard-check"></i> <span>사후관리 현황</span></li>
             <li id="menuContract" onclick="window.switchSection('contract')"><i class="fa-solid fa-file-signature"></i> <span>계약 및 동의</span></li>
         </ul>
-        <div style="margin-top: auto; padding: 20px;">
+        <div class="mobile-logout-wrapper" style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
             </button>
@@ -133,6 +178,9 @@
                 <h2 style="margin: 0; font-size: 1.2rem;">기업 관리자 대시보드</h2>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
+                <button class="mobile-home-btn" style="display: none; background: #f1f5f9; border: none; color: #475569; width: 36px; height: 36px; border-radius: 8px; cursor: pointer; align-items: center; justify-content: center; transition: 0.2s;" onclick="window.location.href='index.html'">
+                    <i class="fa-solid fa-house" style="font-size: 0.9rem;"></i>
+                </button>
                 <div class="notice-trigger" id="noticeTrigger" onclick="window.toggleNoticeModal()" title="공지사항">
                     <i class="fa-solid fa-bell" style="font-size:1rem; color:#475569;"></i>
                     <span id="noticeBadge" class="notice-badge hidden">0</span>

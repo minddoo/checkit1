@@ -339,6 +339,9 @@
             .integrated-body { flex-direction: column; overflow-y: auto; }
             .history-side { width: 100% !important; border-top: 1px solid #eee; height: auto; min-height: 300px; }
             .portal-side { border-right: none; height: auto; min-height: 400px; }
+            /* Home Buttons Logic */
+            .desktop-home-btn { display: none !important; }
+            .mobile-home-btn { display: flex !important; }
         }
     </style>
 </head>
@@ -381,7 +384,7 @@
     
     <!-- Sidebar -->
     <div class="sidebar">
-        <div style="padding: 15px 25px 0;">
+        <div class="desktop-home-btn" style="padding: 15px 25px 0;">
             <button onclick="window.location.href='index.html'" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <i class="fa-solid fa-house"></i> 메인 홈으로 돌아가기
             </button>
@@ -393,9 +396,14 @@
                     CHECKIT <span style="font-size: 0.7rem; font-weight: 400; opacity: 0.7;">Master</span>
                 </h1>
             </div>
-            <div class="alarm-trigger" id="alarmTrigger" onclick="toggleAlarmPanel()">
-                <i class="fa-solid fa-bell"></i>
-                <span id="alarmBadge" class="alarm-badge hidden">0</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <button class="mobile-home-btn" style="display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; align-items: center; justify-content: center; transition: 0.2s;" onclick="window.location.href='index.html'">
+                    <i class="fa-solid fa-house" style="font-size: 0.9rem;"></i>
+                </button>
+                <div class="alarm-trigger" id="alarmTrigger" onclick="toggleAlarmPanel()">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="alarmBadge" class="alarm-badge hidden">0</span>
+                </div>
             </div>
         </div>
 

@@ -2300,7 +2300,11 @@
         // If it's base64, we need to ensure it's treated as a download
         downloadBtn.download = worker.resultFileName || 'result';
 
-        document.getElementById('resultViewerModal').style.display = 'flex';
+        const modal = document.getElementById('resultViewerModal');
+        modal.style.display = 'flex';
+        // Force rendering over CSS hidden states
+        modal.style.opacity = '1';
+        modal.style.visibility = 'visible';
     };
 </script>
 

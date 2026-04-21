@@ -3364,8 +3364,23 @@ body.platform-view-active #mypage-overlay { display: flex; }
         box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
     }
     
-    #main-nav {
-        display: none !important; /* Hide standard nav on mobile */
+    #main-header .container {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        padding-top: 10px !important;
+    }
+    
+    #main-header nav {
+        flex-wrap: wrap !important;
+        justify-content: flex-end !important;
+        width: 100% !important;
+        gap: 8px !important;
+        margin-top: 5px !important;
+    }
+    
+    #main-header nav .cta-button-secondary {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
     }
     
     #mobile-menu-overlay {

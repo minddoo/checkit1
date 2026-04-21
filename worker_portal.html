@@ -174,7 +174,7 @@
         .menu-toggle { display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; align-items: center; justify-content: center; }
 
         @media (max-width: 900px) {
-            .lang-switcher { display: none !important; } /* Move to mobile menu on tablets/phones to preserve space */
+            /* Lang switcher gracefully kept visible on mobile */
         }
         @media (max-width: 768px) {
             .top-bar { padding: 8px 12px; gap: 5px; }
@@ -427,15 +427,6 @@
                 </li>
             </ul>
             
-            <div class="visible-mobile" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 15px; font-weight: 700;">LANGUAGE 설정</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <button class="lang-btn" onclick="changePortalLanguage('ko')">KR</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('en')">EN</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('cn')">CN</button>
-                    <button class="lang-btn" onclick="changePortalLanguage('vn')">VN</button>
-                </div>
-            </div>
         </div>
 
         <!-- Main Content -->
@@ -486,7 +477,7 @@
                             <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
                         </div>
                         <!-- Language Switcher -->
-                        <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                        <div id="chatLangSwitcher" class="hidden-mobile" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
                             <button onclick="setChatLanguage('ko')" class="lang-btn active" data-lang="ko" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">KR</button>
                             <button onclick="setChatLanguage('en')" class="lang-btn" data-lang="en" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">EN</button>
                             <button onclick="setChatLanguage('cn')" class="lang-btn" data-lang="cn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">CN</button>

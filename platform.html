@@ -265,6 +265,64 @@
         .booking-field { margin-bottom: 8px; font-size: 0.85rem; display: flex; justify-content: space-between; gap: 10px; }
         .booking-label { color: #64748b; font-weight: 500; min-width: 80px; }
         .booking-value { color: #1e293b; font-weight: 600; text-align: right; }
+
+        /* Mobile Optimization for Master Console (Safely Isolated) */
+        @media (max-width: 768px) {
+            body { height: auto; overflow: auto; }
+            #superSection { flex-direction: column; display: flex !important; height: auto !important; }
+            
+            /* Sidebar becomes top navigation */
+            .sidebar { width: 100%; height: auto; border-bottom: 2px solid var(--primary); padding-top: 10px; }
+            .sidebar-header { padding: 15px; }
+            .alarm-panel { left: 10px; right: 10px; width: auto; max-width: calc(100vw - 20px); }
+            .sidebar-menu { display: flex; flex-wrap: wrap; padding: 10px 5px; }
+            .sidebar-menu li { flex: 1 1 30%; justify-content: center; flex-direction: column; gap: 5px; text-align: center; padding: 10px 5px; font-size: 0.75rem; border-left: none; border-bottom: 2px solid transparent; }
+            .sidebar-menu li.active { border-left: none; border-bottom: 2px solid var(--primary); background: rgba(255,255,255,0.05); }
+            .sidebar-menu li i { font-size: 1.2rem; }
+            
+            /* Main Content Adjustments */
+            .main-content { overflow: visible; height: auto; display: block; }
+            .header { padding: 15px; flex-direction: column; align-items: flex-start; gap: 10px; }
+            .content-area { padding: 15px; overflow: visible; }
+            
+            /* Grids and Forms */
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .card { padding: 15px; margin-bottom: 15px; }
+            
+            /* Stats Section */
+            #sectionStats > div:first-child { grid-template-columns: 1fr; gap: 15px; }
+            #sysStatGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .sys-stat-card { padding: 15px; }
+            .sys-stat-card i { font-size: 1.3rem; }
+            .sys-stat-card div:nth-child(2) { font-size: 1.5rem !important; }
+            div[style*="repeat(3,1fr)"] { grid-template-columns: 1fr !important; }
+            
+            /* Tables */
+            .table-toolbar { flex-direction: column; gap: 10px; align-items: stretch; }
+            .search-box { width: 100%; box-sizing: border-box; }
+            .card > table, #sysLogTable table, #companyTable, #contractListBody { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+            
+            /* Chat Management */
+            .chat-layout { flex-direction: column; height: auto; border: 1px solid #e2e8f0; }
+            .chat-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e2e8f0; height: 300px; }
+            #chatSearchInput { max-width: 100%; }
+            .chat-main { height: 60vh; }
+            #chatWindowActive { height: 75vh; }
+            .chat-history { padding: 15px; }
+            .chat-bubble { max-width: 90%; }
+            .alimtalk-tool { padding: 10px; gap: 5px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .alim-btn { padding: 6px 10px; font-size: 0.7rem; white-space: nowrap; }
+            
+            /* Booking / Filters */
+            #bookingMilestoneFilters { flex-wrap: wrap; gap: 5px; }
+            #bookingMilestoneFilters button { flex: 1 1 calc(25% - 5px); padding: 6px; font-size: 0.7rem; }
+            
+            /* Overlays & Modals */
+            .modal-content { width: 95%; height: 90vh; margin: 5% auto; }
+            .integrated-body { flex-direction: column; overflow-y: auto; }
+            .history-side { width: 100% !important; border-top: 1px solid #eee; height: auto; min-height: 300px; }
+            .portal-side { border-right: none; height: auto; min-height: 400px; }
+        }
     </style>
 </head>
 <body>

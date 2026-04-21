@@ -858,106 +858,113 @@ function googleTranslateElementInit() {
         try {
             // Check if Master Admin or regular worker
             db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
-                const userData = userDoc.data() || {};
-                const isMaster = user.email === "master@checkit.com";
-                
-                let workerDocId = userData.workerDocId;
-                let companyId = userData.companyId || paramCompanyId;
-
-                // Mode: Master Viewing a specific worker
-                if (isMaster && paramWorkerDocId && paramCompanyId) {
-                    workerDocId = paramWorkerDocId;
-                    companyId = paramCompanyId;
+                try {
+                    const userData = userDoc.data() || {};
+                    const isMaster = user.email === "master@checkit.com";
                     
-                    document.getElementById('masterBadge').classList.remove('hidden');
-                    document.getElementById('logoutBtn').classList.add('hidden');
-                    document.getElementById('closeBtn').classList.remove('hidden');
-                } else if (userDoc.exists && userData.role !== 'worker' && !isMaster) {
-                    console.warn('Invalid role for current user');
+                    let workerDocId = userData.workerDocId;
+                    let companyId = userData.companyId || paramCompanyId;
+
+                    // Mode: Master Viewing a specific worker
+                    if (isMaster && paramWorkerDocId && paramCompanyId) {
+                        workerDocId = paramWorkerDocId;
+                        companyId = paramCompanyId;
+                        
+                        document.getElementById('masterBadge').classList.remove('hidden');
+                        document.getElementById('logoutBtn').classList.add('hidden');
+                        document.getElementById('closeBtn').classList.remove('hidden');
+                    } else if (userDoc.exists && userData.role !== 'worker' && !isMaster) {
+                        console.warn('Invalid role for current user');
+                        loader.style.display = 'none';
+                        document.getElementById('portalContent').classList.remove('hidden');
+                        return;
+                    }
+
+                    // 기본 정보 표시
+                    document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                    document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                    if (!workerDocId && !isMaster) {
+                        console.log("WorkerDocId missing, attempting to relink by UID...");
+                        const snap = await db.collection('workers')
+                            .where('uid', '==', user.uid)
+                            .limit(1).get();
+                        
+                        if (!snap.empty) {
+                            const newDocId = snap.docs[0].id;
+                            companyId = snap.docs[0].data().companyId;
+                            console.log("Diagnostic: Relink match found!", { newDocId, companyId });
+                            await db.collection('users').doc(user.uid).update({ 
+                                workerDocId: newDocId,
+                                companyId: companyId
+                            });
+                            await db.collection('workers').doc(newDocId).update({ uid: user.uid });
+                            console.log("Diagnostic: Relink sync complete.");
+                        } else {
+                            console.warn("Diagnostic: No worker doc found for UID. Trying manual...");
+                            tryToRelinkWorker(user.uid, userData.name || user.displayName || user.email || '근로자', companyId);
+                        }
+                    }
+
+                    console.log("Diagnostic: Current Session", { uid: user.uid, workerDocId, companyId, isMaster });
+
+                    if (workerDocId) {
+                        db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                            try {
+                                if (workerDoc.exists) {
+                                    const wData = workerDoc.data();
+                                    
+                                    // Robustness: If companyId is missing from users doc, take it from worker doc
+                                    if (!companyId && wData.companyId) {
+                                        console.log("Recovered companyId from worker doc:", wData.companyId);
+                                        companyId = wData.companyId;
+                                        // Sync to users doc to satisfy Security Rules (which check getUserData().companyId)
+                                        db.collection('users').doc(user.uid).update({ companyId: companyId }).catch(e => console.warn("Failed to sync companyId:", e));
+                                        // Load hospitals now that we have companyId
+                                        startHospitalSnapshot(companyId);
+                                    }
+
+                                    if (isMaster) {
+                                        document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                        document.getElementById('welcomeName').textContent = wData.name;
+                                    } else {
+                                        document.getElementById('displayName').textContent = wData.name;
+                                        document.getElementById('welcomeName').textContent = wData.name;
+                                    }
+                                    const prefLang = wData.prefLang || 'ko';
+                                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                                        btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                                    });
+                                    renderCheckupStatus(wData);
+                                }
+                            } catch (e) { console.error("Worker snapshot error:", e); }
+                        });
+                        loadChatMessages(workerDocId, companyId);
+                    } else {
+                        console.warn("Final workerDocId is still empty.");
+                        if (!isMaster) {
+                            const statusEl = document.getElementById('checkupStatus');
+                            if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도 중입니다...</p>';
+                        }
+                    }
+
+                    if (companyId) {
+                        startHospitalSnapshot(companyId);
+                    }
+
+                    function startHospitalSnapshot(cid) {
+                        if (window._hospitalUnsub) window._hospitalUnsub();
+                        window._hospitalUnsub = db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
+                            renderHospitals(hospSnap.docs);
+                        });
+                    }
+
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
-                    return;
+                } catch (snapErr) {
+                    console.error("Snapshot processing error:", snapErr);
+                    loader.style.display = 'none';
                 }
-
-                // 기본 정보 표시
-                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
-                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
-
-                if (!workerDocId && !isMaster) {
-                    console.log("WorkerDocId missing, attempting to relink by UID...");
-                    const snap = await db.collection('workers')
-                        .where('uid', '==', user.uid)
-                        .limit(1).get();
-                    
-                    if (!snap.empty) {
-                        const newDocId = snap.docs[0].id;
-                        companyId = snap.docs[0].data().companyId;
-                        console.log("Diagnostic: Relink match found!", { newDocId, companyId });
-                        await db.collection('users').doc(user.uid).update({ 
-                            workerDocId: newDocId,
-                            companyId: companyId
-                        });
-                        await db.collection('workers').doc(newDocId).update({ uid: user.uid });
-                        console.log("Diagnostic: Relink sync complete.");
-                    } else {
-                        console.warn("Diagnostic: No worker doc found for UID. Trying manual...");
-                        tryToRelinkWorker(user.uid, userData.name || user.displayName || user.email || '근로자', companyId);
-                    }
-                }
-
-                console.log("Diagnostic: Current Session", { uid: user.uid, workerDocId, companyId, isMaster });
-
-                if (workerDocId) {
-                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
-                        if (workerDoc.exists) {
-                            const wData = workerDoc.data();
-                            
-                            // Robustness: If companyId is missing from users doc, take it from worker doc
-                            if (!companyId && wData.companyId) {
-                                console.log("Recovered companyId from worker doc:", wData.companyId);
-                                companyId = wData.companyId;
-                                // Sync to users doc to satisfy Security Rules (which check getUserData().companyId)
-                                db.collection('users').doc(user.uid).update({ companyId: companyId }).catch(e => console.warn("Failed to sync companyId:", e));
-                                // Load hospitals now that we have companyId
-                                startHospitalSnapshot(companyId);
-                            }
-
-                            if (isMaster) {
-                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
-                                document.getElementById('welcomeName').textContent = wData.name;
-                            } else {
-                                document.getElementById('displayName').textContent = wData.name;
-                                document.getElementById('welcomeName').textContent = wData.name;
-                            }
-                            const prefLang = wData.prefLang || 'ko';
-                            document.querySelectorAll('.lang-btn').forEach(btn => {
-                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
-                            });
-                            renderCheckupStatus(wData);
-                        }
-                    });
-                    loadChatMessages(workerDocId, companyId);
-                } else {
-                    console.warn("Final workerDocId is still empty.");
-                    if (!isMaster) {
-                        const statusEl = document.getElementById('checkupStatus');
-                        if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도 중입니다...</p>';
-                    }
-                }
-
-                if (companyId) {
-                    startHospitalSnapshot(companyId);
-                }
-
-                function startHospitalSnapshot(cid) {
-                    if (window._hospitalUnsub) window._hospitalUnsub();
-                    window._hospitalUnsub = db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
-                        renderHospitals(hospSnap.docs);
-                    });
-                }
-
-                loader.style.display = 'none';
-                document.getElementById('portalContent').classList.remove('hidden');
             });
         } catch (err) {
             console.error('Portal sync error:', err);
@@ -1509,6 +1516,8 @@ function googleTranslateElementInit() {
         } finally {
             if (loader) loader.style.display = 'none';
         }
+    };
+
     window.submitResultToCompany = async function() {
         if (!confirm('결과지 파일 없이 검진 완료를 보고하시겠습니까?\n내역이 기업 담당자에게 즉시 전달됩니다.')) return;
 

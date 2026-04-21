@@ -1776,10 +1776,14 @@ function googleTranslateElementInit() {
 
             // Determine booking type based on worker status
             let currentStatus = '진행 전';
-            if (workerDocId) {
-                const workerDoc = await db.collection('workers').doc(workerDocId).get();
-                if (workerDoc.exists && workerDoc.data()) {
-                    currentStatus = workerDoc.data().status || '진행 전';
+            if (workerDocId && workerDocId !== "ADMIN_SUBMISSION") {
+                try {
+                    const workerDoc = await db.collection('workers').doc(workerDocId).get();
+                    if (workerDoc.exists && workerDoc.data()) {
+                        currentStatus = workerDoc.data().status || '진행 전';
+                    }
+                } catch (e) {
+                    console.warn("Worker doc fetch failed, defaulting to general:", e);
                 }
             }
             formData.type = (currentStatus === '재검대상자') ? 'recheck' : 'general';

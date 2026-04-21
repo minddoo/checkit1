@@ -325,10 +325,14 @@
             .alimtalk-tool { padding: 10px; gap: 5px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .alim-btn { padding: 6px 10px; font-size: 0.7rem; white-space: nowrap; }
             .mobile-chat-back { display: block !important; border: none; background: transparent; color: var(--dark); font-size: 1.2rem; cursor: pointer; padding: 0 15px 0 0; }
-            
             /* Booking / Filters */
-            #bookingMilestoneFilters { flex-wrap: wrap; gap: 5px; }
-            #bookingMilestoneFilters button { flex: 1 1 calc(25% - 5px); padding: 6px; font-size: 0.7rem; }
+            #sectionBookings > div:first-child { text-align: center; flex-direction: column; align-items: center; }
+            #sectionBookings > div:first-child > div { width: 100%; display: flex; flex-direction: column; align-items: center; }
+            #sectionBookings > div:first-child h3 { display: flex; justify-content: center; width: 100%; margin-bottom: 8px; font-size: 1.1rem; }
+            #sectionBookings .search-box { margin: 10px auto 0 !important; width: 100% !important; }
+            #sectionBookings .search-box input { text-align: center; }
+            #bookingMilestoneFilters { flex-wrap: wrap; gap: 6px; justify-content: center; }
+            #bookingMilestoneFilters button { flex: 1 1 calc(30% - 6px); padding: 8px 6px; font-size: 0.75rem; text-align: center; }
             
             /* Overlays & Modals */
             .modal-content { width: 95%; height: 90vh; margin: 5% auto; }

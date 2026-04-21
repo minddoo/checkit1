@@ -1771,8 +1771,9 @@ function googleTranslateElementInit() {
             formData.workerDocId = workerDocId;
             formData.companyId = companyId;
 
-            // Determine booking type based on status
-            const currentStatus = userDoc.data().status || '진행 전';
+            // Determine booking type based on worker status
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const currentStatus = workerDoc.data().status || '진행 전';
             formData.type = (currentStatus === '재검대상자') ? 'recheck' : 'general';
 
             // Save to bookings collection

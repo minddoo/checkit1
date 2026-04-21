@@ -299,9 +299,11 @@
             
             #sectionStats .card:last-child { display: none !important; }
 
-            #sysStatGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            /* Settings Section Formatting */
+            #sectionSettings div[style*="1fr 1fr"] { grid-template-columns: 1fr !important; gap: 15px !important; }
+            #sysStatGrid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
             .sys-stat-card { padding: 15px; }
-            .sys-stat-card i { font-size: 1.3rem; }
+            .sys-stat-card i { font-size: 1.3rem; margin-bottom: 5px !important; }
             .sys-stat-card div:nth-child(2) { font-size: 1.5rem !important; }
             div[style*="repeat(3,1fr)"]:not(#sectionStats > div:first-child) { grid-template-columns: 1fr !important; }
             

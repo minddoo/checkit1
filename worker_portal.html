@@ -749,12 +749,8 @@
                         loadChatMessages(workerDocId);
                     } else {
                         // No worker doc to link
-                        if (!isMaster) {
-                            tryToRelinkWorker(user.uid, userData.name, companyId);
-                        } else {
-                            loader.style.display = 'none';
-                            document.getElementById('portalContent').classList.remove('hidden');
-                        }
+                        loader.style.display = 'none';
+                        document.getElementById('portalContent').classList.remove('hidden');
                     }
 
                     if (companyId) {
@@ -2042,6 +2038,11 @@
         db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
             renderHospitals(hospSnap.docs);
         }, err => console.error("Hospital load error:", err));
+    }
+
+    // [미정의 함수 방어] 명단 연동 함수가 없을 경우 대비
+    function tryToRelinkWorker(uid, name, cid) {
+        console.log("Relink requested for:", name, uid, cid);
     }
 </script>
 

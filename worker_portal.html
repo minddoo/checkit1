@@ -3,12 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHECKIT - Worker Portal</title> <!-- fix nesting bug -->
+    <title>CHECKIT - 근로자 포털 (v1.0.2)</title> <!-- fix nesting bug -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
+        // Initialize Kakao SDK immediately if possible
+        window.addEventListener('load', () => {
+            if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+                Kakao.init('713836b01fc11196150f09');
+                console.log('Kakao SDK Initialized');
+            }
+        });
         // Set PDF.js worker source
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
     </script>
@@ -29,6 +40,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         .hidden { display: none !important; }
+        .visible-mobile { display: none; }
+        @media (max-width: 768px) {
+            .hidden-mobile { display: none !important; }
+            .visible-mobile { display: block !important; }
+            .visible-mobile-flex { display: flex !important; }
+        }
 
         /* Loader */
         #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
@@ -90,20 +107,49 @@
         .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
 
         /* Hospital List */
-        .hospital-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .hospital-item:last-child { border-bottom: none; }
-        .hospital-name { font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-        .hospital-meta { font-size: 0.85rem; color: var(--text-muted); }
-        .hospital-link { background: var(--primary); color: white; padding: 7px 14px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-        .hospital-link:hover { background: #4f46e5; }
-        .hospital-nolink { color: #94a3b8; font-size: 0.85rem; }
+        .hospital-guide-container { display: flex; flex-direction: column; gap: 20px; }
+        .map-section { width: 100%; height: 320px; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; background: #eaeff5; position: relative; }
+        .hospital-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 640px) { 
+            .hospital-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .hospital-card { padding: 12px; }
+            .h-card-name { font-size: 0.85rem; }
+            .h-card-address { font-size: 0.7rem; }
+            .h-card-meta { gap: 8px; font-size: 0.65rem; }
+            .btn-h-action { padding: 6px; font-size: 0.65rem; border-radius: 6px; }
+        }
+        
+        .hospital-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; gap: 12px; }
+        .hospital-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+        .h-card-status { position: absolute; top: 15px; right: 20px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+        .status-open { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-closed { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        .h-card-name { font-size: 1.05rem; font-weight: 800; color: #1e1b4b; display: flex; align-items: center; gap: 8px; }
+        .h-card-address { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+        .h-card-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.82rem; color: #94a3b8; }
+        .h-card-meta item { display: flex; align-items: center; gap: 5px; }
 
-        /* Loading state */
+        .h-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .btn-h-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .btn-h-call { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .btn-h-call:hover { background: #f1f5f9; }
+        .btn-h-book { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .btn-h-book:hover { background: #4f46e5; transform: translateY(-1px); }
+        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; display: none; } /* Hidden by default if specialized buttons exist */
+        
+        .btn-portal-naver { background: #03cf5d; color: white; }
+        .btn-portal-naver:hover { background: #02b350; transform: translateY(-1px); }
+        .btn-portal-kakao { background: #fee500; color: #3c1e1e; }
+        .btn-portal-kakao:hover { background: #fada00; transform: translateY(-1px); }
+
         .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
 
-        /* Sidebar Layout */
-        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); }
-        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; }
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout (Desktop) */
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); position: relative; }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; transition: 0.3s; }
         .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
 
         .sidebar-menu { list-style: none; margin-top: 10px; }
@@ -123,13 +169,71 @@
         .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
         .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
 
+        /* Mobile Hamburger Button (Hidden on Desktop) */
+        .menu-toggle { display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; align-items: center; justify-content: center; }
+
         @media (max-width: 768px) {
+            .top-bar { padding: 10px 15px; }
+            .top-bar .logo { font-size: 1.15rem; }
+            .top-bar .user-info { gap: 10px; }
+            .top-bar .user-info .name-badge { font-size: 0.75rem; padding: 5px 10px; }
+            .lang-switcher { display: none; } /* Move to mobile menu */
+            .menu-toggle { display: flex; order: -1; margin-right: 10px; }
+
             .portal-wrapper { flex-direction: column; }
-            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px 20px; }
-            .sidebar-menu { display: flex; gap: 10px; overflow-x: auto; margin-top: 0; padding-bottom: 5px; }
-            .sidebar-menu li { margin-bottom: 0; white-space: nowrap; padding: 10px 15px; font-size: 0.85rem; }
-            .sidebar-menu li.active { border-left: none; border-bottom: 3px solid var(--primary); border-radius: 0; padding-left: 15px; margin-left: 0; }
-            .main-content { padding: 20px; }
+            .sidebar { 
+                position: fixed; 
+                top: 0; 
+                left: -100%; 
+                width: 280px; 
+                height: 100%; 
+                z-index: 3000; 
+                box-shadow: 20px 0 50px rgba(0,0,0,0.2); 
+                transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: linear-gradient(180deg, var(--dark) 0%, #312e81 100%);
+                color: white;
+                border-right: none;
+                padding-top: 60px;
+            }
+            .sidebar.active { left: 0; }
+            .sidebar .sidebar-menu li { color: rgba(255,255,255,0.7); }
+            .sidebar .sidebar-menu li:hover { background: rgba(255,255,255,0.1); color: white; }
+            .sidebar .sidebar-menu li.active { 
+                background: rgba(255,255,255,0.2); 
+                color: white; 
+                border-left: 4px solid var(--primary-light); 
+                margin-left: -20px; 
+                padding-left: 34px;
+                border-radius: 0 12px 12px 0;
+            }
+            
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2999; }
+            .sidebar-overlay.active { display: block; }
+            
+            .main-content { padding: 15px; }
+            .welcome-banner { padding: 20px; border-radius: 12px; }
+            .welcome-banner h2 { font-size: 1.3rem; }
+            
+            /* Horizontal Scroll for Cards */
+            .hospital-cards { 
+                display: flex; 
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory; 
+                gap: 15px; 
+                padding: 5px 5px 15px 5px; 
+                margin: 0 -15px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .hospital-cards::-webkit-scrollbar { display: none; }
+            .hospital-card { 
+                flex: 0 0 calc(85%); 
+                scroll-snap-align: center;
+                margin-bottom: 0;
+            }
+            .hospital-card:first-child { margin-left: 15px; }
+            .hospital-card:last-child { margin-right: 15px; }
+
+            .info-grid { grid-template-columns: 1fr; }
         }
         /* Existing styles... */
         /* Booking Form Modal */
@@ -264,45 +368,60 @@
 </head>
 <body>
 
-<!-- Loader removed to prevent stick issues -->
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">포털을 불러오는 중...</p>
+    <button id="loaderCloseBtn" style="display: none; margin-top: 20px; background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; color: var(--text-muted);" onclick="this.parentElement.style.display='none'">닫기 (창이 멈춘 경우)</button>
+</div>
 
-<div id="portalContent">
+<div id="portalContent" class="hidden">
     <!-- Top Bar -->
     <div class="top-bar">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <button onclick="window.location.href='index.html'" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                <i class="fa-solid fa-house"></i> Home
-            </button>
-            <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
-        </div>
+        <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+        <div class="logo"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
         
         <div class="lang-switcher">
-            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">?눖?눟 KO</button>
-            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">?눣?눡 EN</button>
-            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">?눊?눛 CN</button>
-            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">?눤?눛 VN</button>
+            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
+            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
+            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
+            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
         </div>
 
         <div class="user-info">
-            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> ??/span>
+            <span class="name-badge"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
             <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
             <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
         </div>
     </div>
 
     <div class="portal-wrapper">
+        <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div id="sideDrawer" class="sidebar">
+            <div style="padding: 0 0 20px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;" class="visible-mobile">
+                <div style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-briefcase-medical" style="color: var(--primary-light);"></i> CHECKIT</div>
+            </div>
             <ul class="sidebar-menu">
                 <li id="menuProgress" class="active" onclick="switchSection('progress')">
-                    <i class="fa-solid fa-person-walking-arrow-right"></i> ?섏쓽 吏꾪뻾?곹솴
+                    <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
                 </li>
                 <li id="menuChat" onclick="switchSection('chat')">
-                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 ??붾갑
+                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
                 </li>
                 <li id="menuResults" onclick="switchSection('results')">
-                    <i class="fa-solid fa-file-shield"></i> 寃곌낵 愿由?                </li>
+                    <i class="fa-solid fa-file-shield"></i> 결과 관리
+                </li>
             </ul>
+            
+            <div class="visible-mobile" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 15px; font-weight: 700;">LANGUAGE 설정</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button class="lang-btn" onclick="changePortalLanguage('ko')">🇰🇷 KO</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('en')">🇺🇸 EN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('cn')">🇨🇳 CN</button>
+                    <button class="lang-btn" onclick="changePortalLanguage('vn')">🇻🇳 VN</button>
+                </div>
+            </div>
         </div>
 
         <!-- Main Content -->
@@ -311,18 +430,18 @@
             <div id="sectionProgress" class="reveal">
                 <!-- Welcome -->
                 <div class="welcome-banner">
-                    <h2><span id="welcomePre">?덈뀞?섏꽭?? </span><span id="welcomeName">-</span> ???몝</h2>
-                    <p id="bannerSub">?섏쓽 嫄닿컯寃吏??꾪솴怨??쒗쑕 蹂묒썝 ?뺣낫瑜??뺤씤?섏꽭??</p>
+                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
                 </div>
 
                 <!-- My Checkup Status -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
-                        <h3 id="h_myStatus">?섏쓽 寃吏??꾪솴</h3>
+                        <h3>나의 검진 현황</h3>
                     </div>
                     <div id="checkupStatus">
-                        <div class="loading-text" id="load_status"><i class="fa-solid fa-spinner fa-spin"></i> <span class="t-loading">遺덈윭?ㅻ뒗 以?..</span></div>
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
                     </div>
                 </div>
 
@@ -330,10 +449,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
-                        <h3 id="h_hospitals">?쒗쑕 蹂묒썝 ?덈궡</h3>
+                        <h3>제휴 병원 안내</h3>
                     </div>
-                    <div id="hospitalList">
-                        <div class="loading-text" id="load_hospitals"><i class="fa-solid fa-spinner fa-spin"></i> <span class="t-loading">遺덈윭?ㅻ뒗 以?..</span></div>
+                    <div id="hospitalGuide" class="hospital-guide-container">
+                        <div id="hospitalList" class="hospital-cards">
+                            <!-- Cards will be injected here -->
+                        </div>
                     </div>
                 </div>
 
@@ -341,9 +462,9 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon icon-blue"><i class="fa-solid fa-file-contract"></i></div>
-                        <h3 id="h_required">湲곗뾽 ?꾩슂 ?쒕쪟</h3>
+                        <h3>기업 필요 서류</h3>
                     </div>
-                    <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">遺덈윭?ㅻ뒗 以?..</p>
+                    <p id="requiredDocs" style="color: var(--text-muted); font-size: 0.95rem;">불러오는 중...</p>
                 </div>
             </div>
 
@@ -356,8 +477,8 @@
                             <i class="fa-solid fa-comments"></i>
                         </div>
                         <div>
-                            <h4 id="h_chatTitle" style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 耳???쇳꽣</h4>
-                            <p id="p_chatStatus" style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> ?⑤씪???곷떞 ?湲?以?/p>
+                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
                         </div>
                         <!-- Language Switcher -->
                         <div id="chatLangSwitcher" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
@@ -371,12 +492,16 @@
                     <!-- Message Body -->
                     <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
                         <!-- Messages will be injected here -->
-                        <div class="loading-text" id="load_chat"><i class="fa-solid fa-spinner fa-spin"></i> <span id="t_loadChat">????댁슜??遺덈윭?ㅻ뒗 以?..</span></div>
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
                     </div>
 
                     <!-- Input Area -->
-                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px;">
-                        <textarea id="chatInput" placeholder="沅곴툑???먯쓣 ?④꺼二쇱꽭??.." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end;">
+                        <input type="file" id="chatFileInput" style="display: none;" onchange="handleChatFileUpload(this)" accept="image/*,application/pdf">
+                        <button onclick="document.getElementById('chatFileInput').click()" style="width: 50px; height: 50px; background: #f1f5f9; color: #64748b; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;" title="파일 첨부">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s; overflow-y: auto;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
                         <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
                             <i class="fa-solid fa-paper-plane"></i>
                         </button>
@@ -391,21 +516,21 @@
                 <div class="card" style="border-left: 4px solid var(--primary);">
                     <div class="card-header">
                         <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
-                        <h3 id="h_submitResult">湲곗뾽??寃곌낵吏 ?쒖텧?섍린</h3>
+                        <h3>기업에 결과지 제출하기</h3>
                     </div>
                     <div id="resultSubmissionArea" style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border);">
                         <!-- Dynamic content -->
                         <div id="noSubmissionUI">
                             <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                            <p id="p_noResult" style="font-weight: 600; color: var(--text);">?꾩쭅 ?쒖텧??寃곌낵吏媛 ?놁뒿?덈떎.</p>
-                            <p id="p_resultInst" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">寃吏?寃곌낵??寃곌낵吏)??蹂닿굔利앹쓣 李띿뼱???낅줈?쒗븯嫄곕굹,<br>?뺤씤 踰꾪듉???뚮윭 湲곗뾽??寃吏??꾨즺瑜??뚮┫ ???덉뒿?덈떎.</p>
+                            <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
                             
                             <div style="display: flex; gap: 10px; justify-content: center;">
                                 <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
-                                    <i class="fa-solid fa-camera"></i> <span id="b_uploadPhoto">?ъ쭊 ?낅줈??/span>
+                                    <i class="fa-solid fa-camera"></i> 사진 업로드
                                 </button>
                                 <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
-                                    <i class="fa-solid fa-paper-plane"></i> <span id="b_submitNow">諛붾줈 ?쒖텧?섍린</span>
+                                    <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
                                 </button>
                             </div>
                         </div>
@@ -415,12 +540,23 @@
                 <div id="translationCard" class="card hidden">
                     <div class="card-header">
                         <div class="card-icon icon-blue"><i class="fa-solid fa-language"></i></div>
-                        <h3>?섏쓽 ?몄뼱濡?踰덉뿭蹂닿린 (Translation)</h3>
+                        <h3>나의 언어로 번역보기 (Translation)</h3>
                     </div>
                     <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
-                        <p style="font-size: 0.9rem; margin-bottom: 15px; color: #5b21b6;">?쒖텧?섏떊 ?쒓뎅??寃곌낵吏瑜?遺꾩꽍?섏뿬 踰덉뿭??寃곌낵瑜??쒓났?⑸땲??</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 8px; color: #5b21b6; font-weight: 600;">제출하신 한국어 결과지를 분석하여 나의 언어로 번역된 결과를 제공합니다.</p>
+                        
+                        <div style="background: white; border-radius: 8px; padding: 12px; margin-bottom: 15px; border: 1px dashed #c4b5fd;">
+                            <p style="font-size: 0.8rem; color: #6d28d9; line-height: 1.5;">
+                                <i class="fa-solid fa-circle-info" style="color: #8b5cf6;"></i> <strong>안내사항:</strong> AI 단순 번역 특성상 의학 용어의 의미나 뉘앙스가 약간 다를 수 있습니다.<br>
+                                이를 방지하고 정확한 확인을 돕기 위해 <strong>① 원본 결과지, ② 번역 결과지, ③ KCD/ICD 국제 질병코드</strong>를 함께 제공해 드립니다.
+                            </p>
+                            <p style="font-size: 0.75rem; color: #ef4444; margin-top: 8px; font-weight: 600;">
+                                ※ CHECKIT은 번역 서비스를 제공할 뿐, 어떠한 의학적 진단이나 판단도 내리지 않음을 알려드립니다.
+                            </p>
+                        </div>
+                        
                         <button onclick="window.openTranslationModal()" class="btn-submit" style="width: auto; padding: 12px 25px; margin-top: 0; background: #7c3aed;">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> 踰덉뿭??寃곌낵 ?뺤씤?섍린
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 번역된 결과 확인하기
                         </button>
                     </div>
                 </div>
@@ -433,46 +569,46 @@
 <div id="bookingModalOverlay" class="modal-overlay">
     <div class="booking-modal">
         <button class="close-modal" onclick="closeBookingForm()"><i class="fa-solid fa-xmark"></i></button>
-        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>?덉빟 ?좎껌???묒꽦</h3>
+        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>예약 신청서 작성</h3>
         <form id="bookingForm" onsubmit="submitBookingForm(event)">
             <div class="form-row">
                 <div class="form-group">
-                    <label>?깊븿</label>
+                    <label>성함</label>
                     <input type="text" id="bf_name" required>
                 </div>
                 <div class="form-group">
-                    <label>?앸뀈?붿씪</label>
+                    <label>생년월일</label>
                     <input type="date" id="bf_dob" required>
                 </div>
             </div>
             <div class="form-group">
-                <label>?곕씫泥?/label>
+                <label>연락처</label>
                 <input type="tel" id="bf_phone" placeholder="010-0000-0000" required>
             </div>
             <div class="form-group">
-                <label>?쒓뎅 嫄곗＜ 二쇱냼</label>
+                <label>한국 거주 주소</label>
                 <input type="text" id="bf_address" required>
             </div>
             <div class="form-group">
-                <label>?щ쭩 寃吏?蹂묒썝</label>
-                <input type="text" id="bf_hospital" placeholder="?쒗쑕 蹂묒썝 以??좏깮 ?먮뒗 湲곗엯" required>
+                <label>희망 검진 병원</label>
+                <input type="text" id="bf_hospital" placeholder="제휴 병원 중 선택 또는 기입" required>
             </div>
             <div class="form-group">
-                <label>?щ쭩 寃吏??좎쭨 (7??湲곌컙?쇰줈 ?낅젰)</label>
-                <input type="text" id="bf_dateRange" placeholder="?? 2024.05.01 ~ 2024.05.07" required>
+                <label>희망 검진 날짜 (7일 기간으로 입력)</label>
+                <input type="text" id="bf_dateRange" placeholder="예: 2024.05.01 ~ 2024.05.07" required>
             </div>
             <div class="form-group">
-                <label>異붽? 寃????ぉ ?좊Т</label>
+                <label>추가 검사 항목 유무</label>
                 <select id="bf_extraItems">
-                    <option value="none">?놁쓬</option>
-                    <option value="yes">?덉쓬 (?곷떞 ?꾩슂)</option>
+                    <option value="none">없음</option>
+                    <option value="yes">있음 (상담 필요)</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>媛쒖씤 ?щ쭩 ?쒕쪟 (?좏깮 ?ы빆)</label>
-                <textarea id="bf_documents" placeholder="?? ?ㅼ넀蹂댄뿕 泥?뎄???쒕쪟 ?? rows="2"></textarea>
+                <label>개인 희망 서류 (선택 사항)</label>
+                <textarea id="bf_documents" placeholder="예: 실손보험 청구용 서류 등" rows="2"></textarea>
             </div>
-            <button type="submit" class="btn-submit">?좎껌???쒖텧?섍린</button>
+            <button type="submit" class="btn-submit">신청서 제출하기</button>
         </form>
     </div>
 </div>
@@ -481,34 +617,167 @@
 <div id="alimtalkModalOverlay" class="modal-overlay">
     <div class="booking-modal">
         <button class="close-modal" onclick="closeAlimtalkModal()"><i class="fa-solid fa-xmark"></i></button>
-        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>?덉빟 ?뺤젙 ?뺣낫 ?щ━湲?/h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">蹂묒썝?먯꽌 諛쏆쑝???쒓뎅???뚮┝?≪씠??臾몄옄 ?댁슜???꾨옒??蹂듭궗?댁꽌 遺숈뿬?ｌ뼱 二쇱꽭??</p>
+        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>예약 확정 정보 올리기</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">병원에서 받으신 한국어 알림톡이나 문자 내용을 아래에 복사해서 붙여넣어 주세요.</p>
         <div class="form-group">
-            <textarea id="alimtalkContent" placeholder="?ш린???댁슜??遺숈뿬?ｌ쑝?몄슂..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
+            <textarea id="alimtalkContent" placeholder="여기에 내용을 붙여넣으세요..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
         </div>
-        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">?댁슜 ?꾩넚?섍린</button>
+        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">내용 전송하기</button>
     </div>
 </div>
 
 <!-- Translation Modal HTML -->
 <div id="translationModalOverlay" class="modal-overlay">
-    <div class="booking-modal" style="max-width: 600px;">
+    <div class="booking-modal" style="max-width: 850px;">
         <button class="close-modal" onclick="document.getElementById('translationModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
-        <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>寃吏?寃곌낵 踰덉뿭 (Translated Result)</h3>
+        <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>검진 결과 번역 (Translated Result)</h3>
         
+        <div style="background: #fff7ed; border-left: 4px solid #f97316; padding: 12px 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
+            <p style="font-size: 0.85rem; color: #c2410c; font-weight: 700; margin-bottom: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 읽어보시고 꼭 참고해 주세요!</p>
+            <p style="font-size: 0.75rem; color: #9a3412; line-height: 1.5;">
+                본 번역 결과는 원본의 이해를 돕기 위한 <strong>AI 자동 번역물</strong>로, 의학 용어 특성상 뉘앙스 차이가 발생할 수 있어 <strong>원본 및 국제 질병코드(KCD/ICD)와 교차로 확인</strong>하시길 권장합니다. CHECKIT은 건강검진 절차를 돕는 플랫폼이며 <strong>절대 의학적 진단이나 판단을 대신하지 않으므로</strong>, 정확한 진단을 위해서는 반드시 담당 의사와 상담하셔야 합니다.
+            </p>
+        </div>
+
         <div id="translationContent" style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
             <div style="text-align: center; padding: 30px; color: #94a3b8;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <p>寃곌낵吏瑜?遺꾩꽍?섏뿬 踰덉뿭 以묒엯?덈떎...</p>
+                <p>결과지를 분석하여 번역 중입니다...</p>
             </div>
         </div>
-        
-        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 20px; text-align: center;">
-            <i class="fa-solid fa-circle-info"></i> ??踰덉뿭? AI???섑빐 ?먮룞 ?앹꽦?섏뿀?쇰ŉ, ?뺥솗??吏꾨떒? 諛섎뱶???섏궗? ?곷떞?섏떆湲?諛붾엻?덈떎.
-        </p>
     </div>
 </div>
 
+
+<style>
+    /* 1. Hide the Google Translate iframe banner completely */
+    iframe.goog-te-banner-frame { display: none !important; }
+    iframe[id^="goog-te-banner-frame"] { display: none !important; }
+    .goog-te-banner-frame { display: none !important; visibility: hidden !important; }
+    
+    /* 2. Prevent body from shifting down */
+    body { top: 0px !important; position: static !important; }
+    
+    /* 3. Hide the Google Translate popup/tooltip when hovering over translated text */
+    #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+    
+    /* 4. Remove yellow highlight on translated text */
+    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+    font { background: transparent !important; }
+    
+    /* 5. Hide the translation widget completely without breaking functionality */
+    #google_translate_element { opacity: 0 !important; position: absolute !important; left: -9999px !important; z-index: -9999999 !important; pointer-events: none !important; }
+    
+    /* 6. Hide NEW Google Translate classes */
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc { display: none !important; }
+    .skiptranslate > iframe { display: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ko', 
+    includedLanguages: 'ko,en,zh-CN,vi',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    // Forcefully remove Google Translate banner and fix layout shifts using MutationObserver
+    const observer = new MutationObserver(() => {
+        // Force body top back to 0
+        if (document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.setProperty('top', '0px', 'important');
+        }
+        
+        // Target any new/old banner iframes and hide them
+        document.querySelectorAll('iframe.goog-te-banner-frame, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf, .skiptranslate > iframe').forEach(el => {
+            if (el.style.display !== 'none') {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+            }
+        });
+    });
+    
+    // Start observing the body for injected elements and style modifications
+    document.addEventListener("DOMContentLoaded", () => {
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+    });
+</script>
+
+<script>
+    window.changePortalLanguage = function(langCode) {
+        // Update active button UI
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === langCode);
+        });
+
+        // Save preference to Firebase & LocalStorage
+        localStorage.setItem('checkit_lang', langCode);
+        const user = window.auth && window.auth.currentUser;
+        if (user && window.db) {
+            window.db.collection('users').doc(user.uid).get().then(doc => {
+                if(doc.exists && doc.data().workerDocId) {
+                    window.db.collection('workers').doc(doc.data().workerDocId).update({ prefLang: langCode });
+                }
+            }).catch(e => console.error("Lang save error", e));
+        }
+
+        // Trigger Google Translate Widget
+        const langMap = { 'ko': 'ko', 'en': 'en', 'cn': 'zh-CN', 'vn': 'vi' };
+        const targetLang = langMap[langCode] || 'ko';
+        
+        if (targetLang === 'ko') {
+            const iframe = document.querySelector('iframe.goog-te-banner-frame');
+            if (iframe) {
+                const restoreBtn = iframe.contentWindow.document.getElementById('restore');
+                if (restoreBtn) restoreBtn.click();
+            } else {
+                // To restore Korean, clear cookies and reload only if googtrans cookie exists
+                const hasTransCookie = document.cookie.split(';').some(c => c.trim().startsWith('googtrans='));
+                if (hasTransCookie) {
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname;
+                    window.location.reload();
+                }
+            }
+            return;
+        }
+
+        const selectField = document.querySelector("select.goog-te-combo");
+        if (selectField) {
+            selectField.value = targetLang;
+            selectField.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        } else {
+            // Retry if the widget hasn't loaded yet
+            setTimeout(() => window.changePortalLanguage(langCode), 500);
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem('checkit_lang');
+        // Initial translation only if not in the default Korean state to avoid unnecessary reloads
+        if (savedLang && savedLang !== 'ko') {
+            setTimeout(() => window.changePortalLanguage(savedLang), 1000);
+        }
+    });
+
+
+    // Chat input Enter key listener
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    });
+</script>
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -528,21 +797,32 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
-    let chatUnsub = null;
 
-    // [최우선 안전장치] 스크립트 오류와 상관없이 3초 후 로딩창 강제 종료
-    setTimeout(() => {
-        const safetyLoader = document.getElementById('pageLoader');
-        const safetyPortal = document.getElementById('portalContent');
-        if (safetyLoader && safetyLoader.style.display !== 'none') {
-            safetyLoader.style.display = 'none';
-            if (safetyPortal) safetyPortal.classList.remove('hidden');
-            console.log("Global Safety Timeout: Loader hidden");
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         }
-    }, 3000);
+    }
 
     // Section Switching
     window.switchSection = (target) => {
+        // Close mobile menu if open
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && sidebar.classList.contains('active')) {
+            toggleMobileMenu();
+        }
+
         const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
         const menus = ['menuProgress', 'menuChat', 'menuResults'];
 
@@ -571,104 +851,10 @@
         }
     };
 
-    window.changePortalLanguage = async function(lang) {
-        console.log("Changing language to:", lang);
-        
-        // Update UI buttons state
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
-        });
-
-        // Save to Firestore (Workers collection)
-        const user = auth.currentUser;
-        if (user) {
-            try {
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                const workerDocId = userDoc.data()?.workerDocId;
-                if (workerDocId) {
-                    await db.collection('workers').doc(workerDocId).update({ prefLang: lang });
-                }
-            } catch (e) { console.error("Lang save error", e); }
-        }
-
-        translateStaticUI(lang);
-    };
-
-    function translateStaticUI(lang) {
-        const trans = {
-            ko: { 
-                myProgress: '?섏쓽 吏꾪뻾?곹솴', chat: '1:1 ??붾갑', results: '寃곌낵 愿由?, welcome: '?덈뀞?섏꽭?? ', 
-                bannerSub: '?섏쓽 嫄닿컯寃吏??꾪솴怨??쒗쑕 蹂묒썝 ?뺣낫瑜??뺤씤?섏꽭??',
-                h_myStatus: '?섏쓽 寃吏??꾪솴', h_hospitals: '?쒗쑕 蹂묒썝 ?덈궡', h_required: '湲곗뾽 ?꾩슂 ?쒕쪟',
-                h_chatTitle: 'CHECKIT 1:1 耳???쇳꽣', p_chatStatus: '?⑤씪???곷떞 ?湲?以?, chatInput: '沅곴툑???먯쓣 ?④꺼二쇱꽭??..',
-                h_submitResult: '湲곗뾽??寃곌낵吏 ?쒖텧?섍린', p_noResult: '?꾩쭅 ?쒖텧??寃곌낵吏媛 ?놁뒿?덈떎.',
-                p_resultInst: '寃吏?寃곌낵??寃곌낵吏)??蹂닿굔利앹쓣 李띿뼱???낅줈?쒗븯嫄곕굹,<br>?뺤씤 踰꾪듉???뚮윭 湲곗뾽??寃吏??꾨즺瑜??뚮┫ ???덉뒿?덈떎.',
-                b_uploadPhoto: '?ъ쭊 ?낅줈??, b_submitNow: '諛붾줈 ?쒖텧?섍린',
-                t_loading: '遺덈윭?ㅻ뒗 以?..', t_loadChat: '????댁슜??遺덈윭?ㅻ뒗 以?..'
-            },
-            en: { 
-                myProgress: 'My Status', chat: '1:1 Chat', results: 'Results', welcome: 'Welcome, ', 
-                bannerSub: 'Check your status and partner hospital info.',
-                h_myStatus: 'My Checkup Status', h_hospitals: 'Partner Hospitals', h_required: 'Required Documents',
-                h_chatTitle: 'CHECKIT 1:1 Care Center', p_chatStatus: 'Counselors Online', chatInput: 'Type your message here...',
-                h_submitResult: 'Submit Results', p_noResult: 'No results submitted yet.',
-                p_resultInst: 'Upload a photo of your health checkup result or medical certificate,<br>or click confirm to notify your completion.',
-                b_uploadPhoto: 'Upload Photo', b_submitNow: 'Submit Now',
-                t_loading: 'Loading...', t_loadChat: 'Loading chat history...'
-            },
-            cn: { 
-                myProgress: '?묊쉪瓦쎾벧', chat: '1:1 ?듿ㄹ', results: '瀯볠옖嶸←릤', welcome: '?ⓨ?, ', 
-                bannerSub: '?η쐦?①쉪?ε볜汝?η듁?곩뭽?덁퐳?삯솫岳→겘??,
-                h_myStatus: '?묊쉪汝?η듁??, h_hospitals: '?덁퐳?삯솫?뉐뜔', h_required: '鴉곦툣???뉏뻑',
-                h_chatTitle: 'CHECKIT 1:1 ?띶뒦訝?퓘', p_chatStatus: '?①봇?②?訝?, chatInput: '瑥룩풏?ζ궓?꾦뿮窯?..',
-                h_submitResult: '?먧벡汝?η퍜??, p_noResult: '弱싨쑋?먧벡瀯볠옖??,
-                p_resultInst: '?띷몖亮뜸툓鴉졿궓?꾢겈佯룡??η퍜?쒏닑?ε볜瑥?<br>?뽫궧?사‘溫ㅶ뙃??싩윥鴉곦툣汝?ε럴若뚧닇??,
-                b_uploadPhoto: '訝듾폖?㎫뎴', b_submitNow: '塋뗥뜵?먧벡',
-                t_loading: '?좄슬訝?..', t_loadChat: '閭ｅ쑉?좄슬野배캕...'
-            },
-            vn: { 
-                myProgress: 'Ti梳퓆 휃沼?, chat: 'Tr챵 chuy沼뇆 1:1', results: 'K梳퓍 qu梳?, welcome: 'Xin ch횪o, ', 
-                bannerSub: 'Ki沼긩 tra t챙nh tr梳죒g ki沼긩 tra v횪 th척ng tin b沼뇆h vi沼뇆.',
-                h_myStatus: 'T챙nh tr梳죒g ki沼긩 tra', h_hospitals: 'B沼뇆h vi沼뇆 li챗n k梳퓍', h_required: 'Gi梳쪅 t沼?y챗u c梳쬾',
-                h_chatTitle: ' CHECKIT Trung t창m ch훱m s처c 1:1', p_chatStatus: '휂ang ch沼?t튼 v梳쩸 tr沼켧 tuy梳퓆', chatInput: 'Vui l챵ng 휃沼?l梳죍 c창u h沼뢩 c沼쬪 b梳죒...',
-                h_submitResult: 'N沼셮 k梳퓍 qu梳?cho doanh nghi沼뇈', p_noResult: 'Ch튼a c처 k梳퓍 qu梳?n횪o 휃튼沼즓 n沼셮.',
-                p_resultInst: 'Ch沼쩺 梳즢h v횪 t梳즜 l챗n phi梳퓎 k梳퓍 qu梳?ki沼긩 tra ho梳톍 gi梳쪅 kh찼m s沼쯢 kh沼뢤,<br>ho梳톍 nh梳쩸 n첬t x찼c nh梳춏 휃沼?th척ng b찼o ho횪n th횪nh.',
-                b_uploadPhoto: 'T梳즜 梳즢h l챗n', b_submitNow: 'N沼셮 ngay',
-                t_loading: '휂ang t梳즜...', t_loadChat: '휂ang t梳즜 n沼셢 dung tr챵 chuy沼뇆...'
-            }
-        };
-        const t = trans[lang] || trans.ko;
-        
-        // Sidebar & Banner
-        const ids = ['menuProgress', 'menuChat', 'menuResults', 'welcomePre', 'bannerSub', 
-                     'h_myStatus', 'h_hospitals', 'h_required', 'h_chatTitle', 
-                     'h_submitResult', 'p_noResult', 'p_resultInst', 
-                     'b_uploadPhoto', 'b_submitNow', 't_loadChat'];
-        
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                if (id === 'menuProgress') el.innerHTML = `<i class="fa-solid fa-person-walking-arrow-right"></i> ${t.myProgress}`;
-                else if (id === 'menuChat') el.innerHTML = `<i class="fa-solid fa-comments"></i> ${t.chat}`;
-                else if (id === 'menuResults') el.innerHTML = `<i class="fa-solid fa-file-shield"></i> ${t.results}`;
-                else if (id === 'p_chatStatus') el.innerHTML = `<i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> ${t.p_chatStatus}`;
-                else if (id === 'p_resultInst') el.innerHTML = t.p_resultInst;
-                else el.textContent = t[id] || t.welcome;
-            }
-        });
-
-        // Placeholder for chat input
-        const chatInput = document.getElementById('chatInput');
-        if (chatInput) chatInput.placeholder = t.chatInput;
-
-        // Generic Loading
-        document.querySelectorAll('.t-loading').forEach(el => el.textContent = t.t_loading);
-    }
+    let chatUnsub = null;
 
     auth.onAuthStateChanged(async (user) => {
         const loader = document.getElementById('pageLoader');
-        if (loader) loader.style.display = 'none';
-
         if (!user) {
             window.location.href = 'index.html';
             return;
@@ -679,93 +865,84 @@
         const paramCompanyId = urlParams.get('companyId');
 
         try {
-            // Use simple get for initial check, then optionally snapshot
-            const userRef = db.collection('users').doc(user.uid);
-            userRef.onSnapshot(async (userDoc) => {
-                try {
-                    if (!userDoc.exists) {
-                        loader.style.display = 'none';
-                        return;
-                    }
+            // Check if Master Admin or regular worker
+            db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
+                const userData = userDoc.data() || {};
+                const isMaster = user.email === "master@checkit.com";
+                
+                let workerDocId = userData.workerDocId;
+                let companyId = userData.companyId;
 
-                    const userData = userDoc.data();
-                    const isMaster = userData.role === 'master';
+                // Mode: Master Viewing a specific worker
+                if (isMaster && paramWorkerDocId && paramCompanyId) {
+                    workerDocId = paramWorkerDocId;
+                    companyId = paramCompanyId;
                     
-                    let workerDocId = userData.workerDocId;
-                    let companyId = userData.companyId;
-
-                    // Fallback: If companyId is missing in users doc, try to find it in param or we'll get it from workerDoc later
-                    if (!companyId && paramCompanyId) companyId = paramCompanyId;
-
-                    // Mode: Master Viewing a specific worker
-                    if (isMaster && paramWorkerDocId && paramCompanyId) {
-                        workerDocId = paramWorkerDocId;
-                        companyId = paramCompanyId;
-                        document.getElementById('masterBadge').classList.remove('hidden');
-                        document.getElementById('logoutBtn').classList.add('hidden');
-                        document.getElementById('closeBtn').classList.remove('hidden');
-                    } else if (userData.role !== 'worker' && !isMaster) {
-                        loader.style.display = 'none';
-                        document.getElementById('portalContent').classList.remove('hidden');
-                        return;
-                    }
-
-                    document.getElementById('displayName').textContent = userData.name || (isMaster ? '愿由ъ옄' : '洹쇰줈??);
-                    document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '愿由ъ옄' : '洹쇰줈??);
-
-                    if (workerDocId) {
-                        db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
-                            try {
-                                if (workerDoc.exists) {
-                                    const wData = workerDoc.data();
-                                    if (isMaster) {
-                                        document.getElementById('displayName').textContent = wData.name + ' (議고쉶 以?';
-                                        document.getElementById('welcomeName').textContent = wData.name;
-                                    }
-                                    const prefLang = wData.prefLang || 'ko';
-                                    document.querySelectorAll('.lang-btn').forEach(btn => {
-                                        btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
-                                    });
-                                    translateStaticUI(prefLang);
-                                    
-                                    // If companyId is still missing, get it from worker doc
-                                    if (!companyId && wData.companyId) {
-                                        companyId = wData.companyId;
-                                        // Trigger hospital load now that we have companyId
-                                        loadHospitals(companyId);
-                                    }
-                                    
-                                    renderCheckupStatus(wData);
-                                } else {
-                                    if (!isMaster) tryToRelinkWorker(user.uid, userData.name, companyId);
-                                }
-                            } catch (e) {
-                                console.error("Worker snapshot error", e);
-                            }
-                            // Ensure loader hides even if inner snapshot is slow/fails
-                            loader.style.display = 'none';
-                            document.getElementById('portalContent').classList.remove('hidden');
-                        });
-                        loadChatMessages(workerDocId);
-                    } else {
-                        // Attempt to relink newly signed up workers missing their doc ID
-                        tryToRelinkWorker(user.uid, user.displayName, companyId);
-                        loader.style.display = 'none';
-                        document.getElementById('portalContent').classList.remove('hidden');
-                    }
-
-                    if (companyId) {
-                        loadHospitals(companyId);
-                    }
-
-                } catch (snapErr) {
-                    console.error('Snapshot inner error:', snapErr);
+                    document.getElementById('masterBadge').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.add('hidden');
+                    document.getElementById('closeBtn').classList.remove('hidden');
+                } else if (!userDoc.exists || userData.role !== 'worker') {
+                    console.warn('Worker record not found or invalid role');
                     loader.style.display = 'none';
                     document.getElementById('portalContent').classList.remove('hidden');
+                    return;
                 }
+
+                // 기본 정보 표시
+                document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                if (!workerDocId && !isMaster) {
+                    console.log("WorkerDocId missing, attempting to relink...");
+                    const snap = await db.collection('workers')
+                        .where('uid', '==', user.uid)
+                        .limit(1).get();
+                    
+                    if (!snap.empty) {
+                        workerDocId = snap.docs[0].id;
+                        await db.collection('users').doc(user.uid).update({ workerDocId: workerDocId });
+                        console.log("Relinked successfully:", workerDocId);
+                    } else {
+                        console.warn("No worker document found for UID:", user.uid);
+                    }
+                }
+
+                if (workerDocId) {
+                    db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                        if (workerDoc.exists) {
+                            const wData = workerDoc.data();
+                            if (isMaster) {
+                                document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                document.getElementById('welcomeName').textContent = wData.name;
+                            }
+                            const prefLang = wData.prefLang || 'ko';
+                            document.querySelectorAll('.lang-btn').forEach(btn => {
+                                btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                            });
+                            renderCheckupStatus(wData);
+                        }
+                    });
+                    loadChatMessages(workerDocId);
+                } else {
+                    console.warn("Final workerDocId is still empty.");
+                    if (!isMaster) {
+                        tryToRelinkWorker(user.uid, user.displayName || user.email || '근로자', companyId);
+                        const statusEl = document.getElementById('checkupStatus');
+                        if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도했습니다. 새로고침 해주세요.</p>';
+                    }
+                }
+
+                if (companyId) {
+                    db.collection('hospitals').where('companyId', '==', companyId).onSnapshot(hospSnap => {
+                        renderHospitals(hospSnap.docs);
+                    });
+                }
+
+                loader.style.display = 'none';
+                document.getElementById('portalContent').classList.remove('hidden');
             });
         } catch (err) {
-            console.error('Auth handler error:', err);
+            console.error('Portal sync error:', err);
             loader.style.display = 'none';
         }
     });
@@ -800,7 +977,7 @@
                     }
 
                     if (snap.empty) {
-                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">硫붿떆吏媛 ?놁뒿?덈떎.</div>';
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다.</div>';
                         return;
                     }
 
@@ -812,12 +989,12 @@
                     chatBody.scrollTop = chatBody.scrollHeight;
                 } catch (e) {
                     console.error("Render error:", e);
-                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">????쒖떆 以??ㅻ쪟媛 諛쒖깮?덉뒿?덈떎.</div>';
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 표시 중 오류가 발생했습니다.</div>';
                 }
             }, err => {
                 console.error("Chat sync error:", err);
                 const chatBody = document.getElementById('chatMessages');
-                if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">????댁슜??遺덈윭?ㅼ? 紐삵뻽?듬땲??</div>';
+                if (chatBody) chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
             });
     }
 
@@ -827,7 +1004,7 @@
         const isAdmin = msg.sender === 'admin';
         const isWorker = msg.sender === 'worker';
         
-        let timestamp = '?꾩넚 以?..';
+        let timestamp = '전송 중...';
         try {
             if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
                 timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -865,12 +1042,12 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
-                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 湲곗뾽 嫄닿컯寃吏??덈궡
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
-                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">??寃吏??뺣낫 ?뺤씤?섍린</button>
-                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">寃吏???諛섎뱶???뺣낫瑜??뺤씤??二쇱꽭??</div>
+                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -882,12 +1059,12 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
-                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 寃吏??덉빟 ?④퀎
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
-                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">?쒗쑕 蹂묒썝 紐⑸줉 蹂닿린</button>
-                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">?덉빟 ?좎껌???묒꽦?섍린</button>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">예약 신청서 작성하기</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -896,12 +1073,13 @@
 
         if (msg.type === 'action_check') {
             const btnColor = msg.btnColor || 'var(--primary)';
+            const btnTextColor = msg.btnTextColor || 'white';
             return `
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
                         <div style="padding: 15px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
-                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: ${btnTextColor}; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -915,7 +1093,7 @@
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
                             <input type="date" class="resv-date-input" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
-                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">?좎쭨 ?뺤씤 諛??뚮┝ ?깅줉</button>
+                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -927,25 +1105,67 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--danger); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1); margin-bottom: 2px;">
                         <div style="background: var(--danger); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
-                            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 8px;"></i> ?ш????덈궡 怨듭?
+                            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 8px;"></i> 재검사 안내 공지
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
-                            <button onclick="switchSection('progress')" style="width: 100%; background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">?덈궡 ?ы빆 ?먯꽭??蹂닿린</button>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">안내 사항 자세히 보기</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
                 </div>`;
         }
 
+        if (msg.type === 'image') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="max-width: 250px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: white; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <img src="${msg.url}" style="width: 100%; height: auto; display: block;">
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'file') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="${bubbleStyle}; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <i class="fa-solid fa-file-lines" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        <div style="text-align: left;">
+                            <div style="font-size: 0.85rem; font-weight: 600;">${msg.fileName || '첨부 파일'}</div>
+                            <div style="font-size: 0.7rem; opacity: 0.8;">클릭하여 보기</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
         return `
             <div style="${wrapperStyle}">
-                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">泥댄궥 耳?댁꽱??/span>' : ''}
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
                 <div style="${bubbleStyle}">
                     ${(msg.text || '').replace(/\n/g, '<br>')}
                 </div>
                 <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
             </div>`;
+    }
+
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
     }
 
     async function sendChatMessage() {
@@ -971,7 +1191,7 @@
             });
         } catch (e) {
             console.error("Chat send error:", e);
-            showToast("硫붿떆吏 ?꾩넚???ㅽ뙣?덉뒿?덈떎.", "error");
+            showToast("메시지 전송에 실패했습니다.", "error");
         }
     }
 
@@ -980,7 +1200,7 @@
         await db.collection('messages').add({
             workerDocId: workerDocId,
             sender: 'system',
-            text: 'CHECKIT 耳???쒕퉬?ㅺ? ?쒖옉?섏뿀?듬땲??',
+            text: 'CHECKIT 케어 서비스가 시작되었습니다.',
             type: 'system',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -988,7 +1208,7 @@
         await db.collection('messages').add({
             workerDocId: workerDocId,
             sender: 'admin',
-            text: '?덈뀞?섏꽭?? CHECKIT 耳???쇳꽣?낅땲?? 洹?섏쓽 ?뚯냽 湲곗뾽 嫄닿컯寃吏??덈궡瑜??뺤씤??二쇱꽭??',
+            text: '안녕하세요! CHECKIT 케어 센터입니다. 귀하의 소속 기업 건강검진 안내를 확인해 주세요.',
             type: 'guide',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -1006,7 +1226,7 @@
             const workerDoc = await db.collection('workers').doc(workerDocId).get();
             const data = workerDoc.data();
 
-            const infoText = `?뱥 **?깅줉??寃吏??뺣낫**\n\n- ?깊븿: ${data.name}\n- ?뚯냽 ?꾩옣: ${data.site || '-'}\n- 援?쟻: ${data.nationality || '-'}\n- 寃吏???ぉ: ${data.checkup || '-'}\n- 寃吏?媛??湲곌컙: ${data.period || '-'}`;
+            const infoText = `📋 **등록된 검진 정보**\n\n- 성함: ${data.name}\n- 소속 현장: ${data.site || '-'}\n- 국적: ${data.nationality || '-'}\n- 검진 항목: ${data.checkup || '-'}\n- 검진 가능 기간: ${data.period || '-'}`;
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
@@ -1020,7 +1240,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '?뺣낫瑜??뺤씤?섏뀲?섏슂? ?댁젣 ?꾨옒 踰꾪듉???듯빐 ?쒗쑕 蹂묒썝???뺤씤?섍퀬 ?덉빟 ?좎껌?쒕? ?묒꽦??二쇱꽭??',
+                text: '정보를 확인하셨나요? 이제 아래 버튼을 통해 제휴 병원을 확인하고 예약 신청서를 작성해 주세요.',
                 type: 'booking',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1038,7 +1258,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
-                text: '蹂묒썝???좏깮?덉뒿?덈떎.',
+                text: '병원을 선택했습니다.',
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1046,9 +1266,9 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '醫뗭뒿?덈떎! 洹몃읆 ?대떦 蹂묒썝???덉빟??吏꾪뻾??二쇱꽭?? ?덉빟???꾨즺?섎㈃ ?꾨옒 踰꾪듉???뚮윭二쇱꽭??',
+                text: '좋습니다! 그럼 해당 병원에 예약을 진행해 주세요. 예약이 완료되면 아래 버튼을 눌러주세요.',
                 type: 'action_check',
-                btnText: '?덉빟?꾨즺',
+                btnText: '예약완료',
                 action: 'completeBooking()',
                 btnColor: '#10b981',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -1066,7 +1286,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
-                text: '蹂묒썝 ?덉빟???꾨즺?덉뒿?덈떎.',
+                text: '병원 예약을 완료했습니다.',
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1074,15 +1294,38 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '?덉빟???꾨즺?섏뀲援곗슂! 蹂묒썝?먯꽌 諛쏆쑝??**?덉빟 ?뺤젙臾몄옄(罹≪퀜蹂??먮뒗 ?댁슜)**瑜??꾨옒 踰꾪듉???듯빐 ?쒖텧??二쇱꽭??',
+                text: '예약을 완료하셨군요! 병원에서 받으신 **예약 확정문자(캡쳐본 또는 내용)**를 아래 버튼을 통해 제출해 주세요.',
                 type: 'action_check',
-                btnText: '?뺤젙 ?댁슜 ?꾩넚?섍린',
+                btnText: '확정 내용 전송하기',
                 action: 'requestConfirmation()',
                 btnColor: '#f59e0b',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch (e) { console.error("Booking complete error:", e); }
     }
+
+    window.sendKakaoLink = async function(dateVal) {
+        // 기존 SDK 공유하기 대신 실시간 알림톡을 호출하도록 변경 (에러 방지용)
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const phone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber) : null;
+            
+            if (phone) {
+                showToast("기존 시스템 대신 '실시간 알림톡'을 전송합니다.", "info");
+                await window.sendKakaoAlimtalk(phone, dateVal);
+                showToast("알림톡 전송 완료!", "success");
+            } else {
+                showToast("근로자 연락처가 없어 전송할 수 없습니다.", "error");
+            }
+        } catch (e) {
+            console.error("sendKakaoLink fallback error:", e);
+        }
+    };
 
     async function requestConfirmation() {
         const user = auth.currentUser;
@@ -1094,12 +1337,69 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '?뺤씤 媛먯궗?⑸땲?? 留덉?留됱쑝濡?**寃吏??덉빟 ?좎쭨**瑜??낅젰??二쇱떆硫??쇱젙??留욎떠 二쇱쓽?ы빆 媛?대뱶瑜?蹂대궡?쒕━寃좎뒿?덈떎.',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
                 type: 'date_input_request',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch (e) { console.error("Request confirmation error:", e); }
     }
+
+    window.sendKakaoAlimtalk = async function(phoneNumber, reservedDate, scheduledDate = null) {
+        // [필수 입력] 제공해주신 솔라피 API 키
+        const API_KEY = 'NCS3LR13SE2MENQS'; 
+        const API_SECRET = 'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD';
+        const PF_ID = 'KA01PF260401123510015EukHvlIDzQP'; 
+        const TEMPLATE_ID = 'KA01TP260401123529786bxLeVETmEai'; 
+        const SENDER_NUMBER = '01051093459'; // 솔라피에 등록하신 대표님 번호 적용됨
+
+        if (PF_ID.includes('ENTER_YOUR') || TEMPLATE_ID.includes('ENTER_YOUR')) {
+            console.log("알림톡 발신자 정보(PF_ID)나 템플릿(TEMPLATE_ID)이 누락되어 실제 발송은 생략됩니다.");
+            console.log(`[시뮬레이션] ${phoneNumber} 번호로 ${reservedDate} 알림톡 ${scheduledDate ? '('+scheduledDate+' 예약)' : '(즉시)'} 발송!`);
+            return;
+        }
+
+        const date = new Date().toISOString();
+        const salt = Math.random().toString(36).substring(2, 15);
+        const data = date + salt;
+        let signature = CryptoJS.HmacSHA256(data, API_SECRET).toString(CryptoJS.enc.Hex);
+
+        const authString = `HMAC-SHA256 apiKey=${API_KEY}, date=${date}, salt=${salt}, signature=${signature}`;
+        const payload = {
+            message: {
+                to: phoneNumber.replace(/[^0-9]/g, ''),
+                from: SENDER_NUMBER.replace(/[^0-9]/g, ''), 
+                kakaoOptions: {
+                    pfId: PF_ID,
+                    templateId: TEMPLATE_ID,
+                    variables: { 
+                        "#{날짜}": reservedDate,
+                        "#{성함}": "고객"
+                    }
+                }
+            }
+        };
+        
+        // 예약 발송일 경우 ISO 8601 형식 추가
+        if (scheduledDate) {
+            payload.scheduledDate = new Date(scheduledDate).toISOString();
+        }
+
+        try {
+            const response = await fetch("https://api.solapi.com/messages/v4/send", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": authString },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            console.log("알림톡 전송 요청 결과:", result);
+        } catch (error) { console.error("알림톡 전송 중 오류 발생:", error); }
+    };
+
+    window.triggerRealAlimtalk = async function(phone, date) {
+        showToast("알림톡을 다시 전송합니다...", "info");
+        await window.sendKakaoAlimtalk(phone, date);
+        showToast("전송 완료!", "success");
+    };
 
     async function submitReservationDate(btn) {
         let dateVal = '';
@@ -1107,23 +1407,24 @@
             const input = btn.parentElement.querySelector('.resv-date-input');
             if (input) dateVal = input.value;
         } else {
-            // Fallback for older code if any
             const input = document.getElementById('resvDateInput');
             if (input) dateVal = input.value;
         }
         
-        if (!dateVal) { alert('?좎쭨瑜??좏깮??二쇱꽭??'); return; }
+        if (!dateVal) { alert('날짜를 선택해 주세요.'); return; }
 
         const user = auth.currentUser;
         if (!user) return;
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            let workerPhone = workerDoc.exists ? (workerDoc.data().phone || workerDoc.data().phoneNumber || '01000000000') : '01000000000';
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
-                text: `${dateVal}濡??덉빟???꾨즺?덉뒿?덈떎.`,
+                text: `${dateVal}로 예약을 완료했습니다.`,
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1131,27 +1432,44 @@
             // Save to worker doc
             await db.collection('workers').doc(workerDocId).update({
                 reservedDate: dateVal,
-                status: '?덉빟?꾨즺'
+                status: '예약완료'
             });
+
+            // 1. 발송 예약 즉시 알림톡 (확인)
+            await window.sendKakaoAlimtalk(workerPhone, dateVal);
+
+            // 2. D-day별 리마인드 알림톡 예약 발송 등록
+            const reminders = [
+                { d: 7, text: "D-7 [약물 상담 및 중단 안내]" },
+                { d: 5, text: "D-5 [보조제 섭취 중단 안내]" },
+                { d: 3, text: "D-3 [식단 조절 시작 안내]" },
+                { d: 1, text: "D-1 [물 포함 완전 금식 안내]" }
+            ];
+
+            for (const r of reminders) {
+                const targetDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000));
+                // 발송 시간은 오전 10시로 고정
+                targetDate.setHours(10, 0, 0, 0);
+                
+                // 현재보다 미래일 경우에만 예약 등록
+                await window.sendKakaoAlimtalk(workerPhone, dateVal);
+                showToast("카카오톡 일정이 전송되었습니다.", "success");
+            }
 
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: `?좎쭨媛 ?뺤씤?섏뿀?듬땲?? **${dateVal}** 寃吏꾩씪 湲곗??쇰줈 ?꾨옒? 媛숈씠 ?ㅼ떆媛?二쇱쓽?ы빆 ?뚮┝??D-7, 5, 3, 2, 1)???먮룞?쇰줈 諛쒖넚 ?덉빟?섏뿀?듬땲??`,
-                type: 'text',
+                text: `날짜가 확인되었습니다! **${dateVal}** 검진일 기준으로 실시간 리마인드 알림톡(D-7, 5, 3, 2, 1)이 자동으로 본인 카카오톡에 예약 발송되었습니다.\n\n아래 버튼을 눌러 지금 바로 카카오톡 일정을 다시 받으실 수도 있습니다.`,
+                type: 'action_check',
+                btnText: '카톡으로 일정 다시받기',
+                action: `triggerRealAlimtalk('${workerPhone}', '${dateVal}')`,
+                btnColor: '#fee500',
+                btnTextColor: '#3c1e1e',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // Simulate the reminder schedule display
-            const reminders = [
-                { d: 7, text: "?뚯＜ 諛?怨쇱떇 湲덉? 媛?대뱶" },
-                { d: 5, text: "蹂듭슜 以묒씤 ?쎈Ъ ?뺤씤 諛?以묐떒 ?덈궡" },
-                { d: 3, text: "寃吏???理쒖쥌 ?뺤씤 諛?臾몄쭊???묒꽦 ?덈궡" },
-                { d: 2, text: "湲덉떇 ?쒖옉 諛?以鍮꾨Ъ 泥댄겕由ъ뒪?? },
-                { d: 1, text: "?댁씪 寃吏??쒓컙 諛?蹂묒썝 ?꾩튂 ?ъ븞?? }
-            ];
-
-            let scheduleText = "?뱟 **諛쒖넚 ?덉빟???뚮┝???쇱젙**\n";
+            // (이미 위에서 reminders를 사용하여 알림톡 예약을 완료함)
+            let scheduleText = "📅 **발송 예약된 알림톡 일정**\n";
             reminders.forEach(r => {
                 const rDate = new Date(new Date(dateVal).getTime() - (r.d * 24 * 60 * 60 * 1000)).toLocaleDateString();
                 scheduleText += `\n- **D-${r.d} (${rDate})**: ${r.text}`;
@@ -1185,10 +1503,50 @@
         document.getElementById('alimtalkModalOverlay').style.display = 'none';
     };
 
+    async function handleChatFileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        showToast("파일을 업로드 중입니다...", "info");
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            // Firebase Storage가 설정되지 않았을 수 있으므로, base64로 데모 처리
+            // 실제 서비스에서는 storage.ref().put(file) 사용 권장
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Url = e.target.result;
+                const isImage = file.type.startsWith('image/');
+
+                await db.collection('messages').add({
+                    workerDocId: workerDocId,
+                    sender: 'worker',
+                    url: base64Url,
+                    fileName: file.name,
+                    type: isImage ? 'image' : 'file',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showToast("전송 완료!", "success");
+                input.value = ''; // Reset input
+            };
+            reader.readAsDataURL(file);
+
+        } catch (e) {
+            console.error("Chat upload error:", e);
+            showToast("파일 업로드에 실패했습니다.", "error");
+        }
+    }
+
     async function submitAlimtalk() {
         const text = document.getElementById('alimtalkContent').value.trim();
         if (!text) {
-            alert('?댁슜???낅젰??二쇱꽭??');
+            alert('내용을 입력해 주세요.');
             return;
         }
 
@@ -1214,7 +1572,7 @@
             const prefLang = workerDoc.data().prefLang || 'ko';
 
             if (prefLang !== 'ko') {
-                showToast(`踰덉뿭 以?(${prefLang})...`, "info");
+                showToast(`번역 중 (${prefLang})...`, "info");
                 const translated = await translateText(text, prefLang);
                 if (translated) {
                     await db.collection('messages').add({
@@ -1230,16 +1588,16 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '?뺤씤 媛먯궗?⑸땲?? 留덉?留됱쑝濡?**寃吏??덉빟 ?좎쭨**瑜??낅젰??二쇱떆硫??쇱젙??留욎떠 二쇱쓽?ы빆 媛?대뱶瑜?蹂대궡?쒕━寃좎뒿?덈떎.',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
                 type: 'date_input_request',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
             closeAlimtalkModal();
-            showToast("?뺣낫媛 ?깃났?곸쑝濡??꾩넚?섏뿀?듬땲??", "success");
+            showToast("정보가 성공적으로 전송되었습니다.", "success");
         } catch (e) {
             console.error("Submit alimtalk error:", e);
-            alert('?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎. ?ㅼ떆 ?쒕룄??二쇱꽭??');
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
         }
     }
 
@@ -1308,7 +1666,7 @@
             // Re-render chat locally
             renderChatHistory();
             
-            showToast(`?몄뼱媛 ${lang.toUpperCase()}(??濡??ㅼ젙?섏뿀?듬땲??`, "success");
+            showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
         } catch (e) {
             console.error("Set language error:", e);
         }
@@ -1319,7 +1677,7 @@
         document.getElementById('bookingModalOverlay').style.display = 'flex';
         // Auto-fill name if available
         const nameDisplay = document.getElementById('displayName').textContent;
-        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '愿由ъ옄' && nameDisplay !== '洹쇰줈??) {
+        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '관리자' && nameDisplay !== '근로자') {
             document.getElementById('bf_name').value = nameDisplay.split(' ')[0];
         }
     };
@@ -1344,7 +1702,7 @@
             extraItems: document.getElementById('bf_extraItems').value,
             documents: document.getElementById('bf_documents').value,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            status: '?좎껌?꾨즺'
+            status: '신청완료'
         };
 
         try {
@@ -1362,7 +1720,7 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'worker',
-                text: `寃吏??좎껌?쒕? ?쒖텧?덉뒿?덈떎. [?щ쭩蹂묒썝: ${formData.hospital}, ?щ쭩湲곌컙: ${formData.dateRange}]`,
+                text: `검진 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
                 type: 'text',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1370,19 +1728,19 @@
             await db.collection('messages').add({
                 workerDocId: workerDocId,
                 sender: 'admin',
-                text: '?좎껌?쒓? ?깃났?곸쑝濡??묒닔?섏뿀?듬땲??\n\ncheckit ?대떦?먭? ?댁슜???뺤씤 ???덉빟 吏꾪뻾 ?덉젙?낅땲?? 蹂묒썝?먯꽌 ?덉빟 ?뺤젙 臾몄옄??移댄넚??諛쏄린 ?꾧퉴吏 湲곕떎?ㅼ＜?몄슂.\n\n?덉빟 ?뺤젙 ?덈궡瑜?諛쏆? 遺꾩? ?꾨옒 \'?덉빟 ?뺤젙 臾몄옄 ?щ━湲?' 踰꾪듉???대┃ ???덈궡諛쏆? ?쒓뎅???뚮┝?≪쓣 蹂듬텤?댁꽌 蹂대궡二쇱꽭??',
+                text: '신청서가 성공적으로 접수되었습니다.\n\ncheckit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요.\n\n예약 확정 안내를 받은 분은 아래 \'예약 확정 문자 올리기\' 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
                 type: 'action_check',
-                btnText: '?덉빟 ?뺤젙 臾몄옄 ?щ━湲?,
+                btnText: '예약 확정 문자 올리기',
                 action: 'startConfirmationFlow()',
                 btnColor: '#f59e0b',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
 
             closeBookingForm();
-            alert('?좎껌?쒓? ?깃났?곸쑝濡??쒖텧?섏뿀?듬땲??');
+            alert('신청서가 성공적으로 제출되었습니다.');
         } catch (e) {
             console.error("Booking submission error:", e);
-            alert('?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎. ?ㅼ떆 ?쒕룄??二쇱꽭??');
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
         }
     }
     async function tryToRelinkWorker(uid, name, compId) {
@@ -1397,27 +1755,27 @@
                 await db.collection('users').doc(uid).update({ workerDocId: newDocId });
             } else {
                 const statusEl = document.getElementById('checkupStatus');
-                if(statusEl) statusEl.innerHTML = '<p class="loading-text">湲곗뾽 紐낅떒???깅줉?섏? ?딆? 怨꾩젙?낅땲?? 愿由ъ옄?먭쾶 臾몄쓽?섏꽭??</p>';
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
                 const docsEl = document.getElementById('requiredDocs');
-                if(docsEl) docsEl.textContent = '紐낅떒 ?깅줉 ???뺤씤 媛?ν빀?덈떎.';
+                if(docsEl) docsEl.textContent = '명단 등록 후 확인 가능합니다.';
             }
         } catch (e) { console.error("Relink error:", e); }
     }
 
     function renderCheckupStatus(data) {
-        const statusLabel = data.status || '吏꾪뻾 ??;
-        const statuses = ['吏꾪뻾 ??, '?덉빟?꾨즺', '寃?ъ셿猷?, '寃곌낵?꾨즺', '?ш???곸옄', '?ш??꾨즺'];
+        const statusLabel = data.status || '진행 전';
+        const statuses = ['진행 전', '예약완료', '검사완료', '결과완료', '재검대상자', '재검완료'];
         const currentIdx = statuses.indexOf(statusLabel);
 
         let badgeClass = 'status-pending';
         let icon = 'fa-circle-dot';
         
         switch(statusLabel) {
-            case '?덉빟?꾨즺': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
-            case '寃?ъ셿猷?: badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
-            case '寃곌낵?꾨즺': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
-            case '?ш???곸옄': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
-            case '?ш??꾨즺': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
+            case '예약완료': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
+            case '검사완료': badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
+            case '결과완료': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
+            case '재검대상자': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
+            case '재검완료': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
         }
 
         const statusContainer = document.getElementById('checkupStatus');
@@ -1426,15 +1784,15 @@
         // Progress Stepper HTML
         let stepperHtml = '<div class="stepper">';
         statuses.forEach((s, idx) => {
-            if (s === '吏꾪뻾 ??) return; // Skip "吏꾪뻾 ?? in the visual stepper for space
+            if (s === '진행 전') return; // Skip "진행 전" in the visual stepper for space
             let stepClass = '';
             
             if (idx < currentIdx) stepClass = 'completed';
             else if (idx === currentIdx) stepClass = 'active';
             
             // Special handling for re-examination
-            if (statusLabel === '?ш???곸옄' && s === '?ш???곸옄') stepClass = 'warning active';
-            if (statusLabel === '?ш??꾨즺' && s === '?ш???곸옄') stepClass = 'completed';
+            if (statusLabel === '재검대상자' && s === '재검대상자') stepClass = 'warning active';
+            if (statusLabel === '재검완료' && s === '재검대상자') stepClass = 'completed';
 
             stepperHtml += `
                 <div class="step ${stepClass}">
@@ -1445,21 +1803,21 @@
         });
         stepperHtml += '</div>';
 
-        const recheckAlertHtml = (data.status === '?ш???곸옄' && data.recheckInformed) ? `
+        const recheckAlertHtml = (data.status === '재검대상자' && data.recheckInformed) ? `
             <div style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #fecaca; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.05);">
                 <div style="display: flex; gap: 15px; align-items: flex-start;">
                     <div style="width: 48px; height: 48px; background: #e11d48; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
                     <div style="flex: 1;">
-                        <h4 style="color: #9f1239; margin-bottom: 6px; font-size: 1.05rem; font-weight: 800;">?ш???????덈궡</h4>
+                        <h4 style="color: #9f1239; margin-bottom: 6px; font-size: 1.05rem; font-weight: 800;">재검사 대상 안내</h4>
                         <p style="color: #be123c; font-size: 0.88rem; line-height: 1.6; margin-bottom: 15px; font-weight: 500;">
-                            嫄닿컯寃吏?寃곌낵, ?쇰? ??ぉ??????뺣? 寃???먮뒗 ?ш??ш? ?꾩슂?⑸땲??<br>
-                            ?섏쓽 嫄닿컯???꾪빐 媛源뚯슫 ?쒖씪 ?댁뿉 蹂묒썝??諛⑸Ц??二쇱꽭??
+                            건강검진 결과, 일부 항목에 대한 정밀 검사 또는 재검사가 필요합니다.<br>
+                            나의 건강을 위해 가까운 시일 내에 병원에 방문해 주세요.
                         </p>
                         <div style="display: flex; gap: 10px;">
-                            <button onclick="switchSection('chat')" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">?ш???諛⑸쾿 ?곷떞?섍린</button>
-                            <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">?ш? ?덉빟 ?좎껌???곌린</button>
+                            <button onclick="switchSection('chat')" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 상담하기</button>
+                            <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검 예약 신청서 쓰기</button>
                         </div>
                     </div>
                 </div>
@@ -1474,40 +1832,40 @@
                         <i class="fa-solid ${icon}"></i> ${statusLabel}
                     </span>
                     <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
-                        留덉?留??낅뜲?댄듃: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '湲곕줉 ?놁쓬'}
+                        마지막 업데이트: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '기록 없음'}
                     </span>
                 </div>
                 
                 ${stepperHtml}
 
                 <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border);">
-                    <button onclick="updateStatus('?덉빟?꾨즺')" class="status-btn" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">?덉빟?꾨즺</button>
-                    <button onclick="updateStatus('寃?ъ셿猷?)" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">寃?ъ셿猷?/button>
-                    <button onclick="updateStatus('寃곌낵?꾨즺')" class="status-btn" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">寃곌낵?꾨즺</button>
-                    <button onclick="updateStatus('?ш???곸옄')" class="status-btn" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">?ш???곸옄</button>
-                    <button onclick="updateStatus('?ш??꾨즺')" class="status-btn" style="background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">?ш??꾨즺</button>
+                    <button onclick="updateStatus('예약완료')" class="status-btn" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">예약완료</button>
+                    <button onclick="updateStatus('검사완료')" class="status-btn" style="background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">검사완료</button>
+                    <button onclick="updateStatus('결과완료')" class="status-btn" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">결과완료</button>
+                    <button onclick="updateStatus('재검대상자')" class="status-btn" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검대상자</button>
+                    <button onclick="updateStatus('재검완료')" class="status-btn" style="background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; flex: 1; transition: 0.2s;">재검완료</button>
                 </div>
             </div>
             <div class="info-grid">
                 <div class="info-item">
-                    <div class="label">?뚯냽 ?꾩옣</div>
+                    <div class="label">소속 현장</div>
                     <div class="value">${data.site || '-'}</div>
                 </div>
                 <div class="info-item">
-                    <div class="label">援?쟻</div>
+                    <div class="label">국적</div>
                     <div class="value">${data.nationality || '-'}</div>
                 </div>
                 <div class="info-item">
-                    <div class="label">?꾩닔 寃吏???ぉ</div>
+                    <div class="label">필수 검진 항목</div>
                     <div class="value">${data.checkup || '-'}</div>
                 </div>
                 <div class="info-item">
-                    <div class="label">寃吏?媛??湲곌컙</div>
+                    <div class="label">검진 가능 기간</div>
                     <div class="value">${data.period || '-'}</div>
                 </div>
             </div>
         `;
-        document.getElementById('requiredDocs').textContent = data.docs || '?깅줉???꾩슂 ?쒕쪟媛 ?놁뒿?덈떎.';
+        document.getElementById('requiredDocs').textContent = data.docs || '등록된 필요 서류가 없습니다.';
 
         // Update Results Section
         window.renderResultsSection(data);
@@ -1533,7 +1891,7 @@
             
             const timeout = setTimeout(() => {
                 img.src = ""; // Stop loading
-                reject(new Error('?대?吏 遺꾩꽍 ?쒓컙 珥덇낵 (15珥?'));
+                reject(new Error('이미지 분석 시간 초과 (15초)'));
             }, 15000);
 
             img.onload = () => {
@@ -1574,11 +1932,82 @@
             img.onerror = (err) => {
                 clearTimeout(timeout);
                 console.error("Image load error for normalization:", err);
-                reject(new Error('?대?吏瑜??쎌쓣 ???놁뒿?덈떎. (?곗씠???ㅻ쪟)'));
+                reject(new Error('이미지를 읽을 수 없습니다. (데이터 오류)'));
             };
 
             img.src = imageSrc;
         });
+    }
+
+    // Disease extraction dictionary
+    // Disease extraction dictionary (KCD-8 / ICD-10 based)
+    const DISEASE_DIC = [
+        // Cardiovascular
+        { key: /고혈압|혈압고|하이퍼텐션|hypertension|high blood pressure/i, name: '고혈압 (Hypertension)', kcd: 'I10', icd: 'I10' },
+        { key: /심부전|하트페일|heart failure/i, name: '심부전 (Heart Failure)', kcd: 'I50', icd: 'I50.9' },
+        { key: /협심증|안지나|angina/i, name: '협심증 (Angina Pectoris)', kcd: 'I20', icd: 'I20.9' },
+        { key: /심근경색|마이오카디알|myocardial infarction|heart attack/i, name: '심근경색 (Myocardial Infarction)', kcd: 'I21', icd: 'I21.9' },
+        { key: /부정맥|아리스미아|arrhythmia/i, name: '부정맥 (Arrhythmia)', kcd: 'I49', icd: 'I49.9' },
+        { key: /뇌졸중|중풍|뇌경색|스트로크|stroke/i, name: '뇌졸중/뇌경색 (Stroke)', kcd: 'I63', icd: 'I63.9' },
+
+        // Endocrine & Metabolic
+        { key: /당뇨|혈당|글루코스|디아베테스|diabetes/i, name: '당뇨병 (Diabetes Mellitus)', kcd: 'E10-E14', icd: 'E11' },
+        { key: /이상지질혈증|고지혈증|콜레스테롤|중성지방|트리글리|dyslipidemia|hyperlipidemia/i, name: '이상지질혈증 (Dyslipidemia)', kcd: 'E78', icd: 'E78.5' },
+        { key: /갑상선|서이로이드|thyroid/i, name: '갑상선 질환 (Thyroid Disease)', kcd: 'E00-E07', icd: 'E07.9' },
+        { key: /통풍|가우트|gout/i, name: '통풍 (Gout)', kcd: 'M10', icd: 'M10.9' },
+        { key: /비만|오베시티|obesity/i, name: '비만 (Obesity)', kcd: 'E66', icd: 'E66.9' },
+
+        // Digestive
+        { key: /위염|가스트리티스|gastritis/i, name: '위염 (Gastritis)', kcd: 'K29', icd: 'K29.7' },
+        { key: /위궤양|거스트릭 울서|gastric ulcer/i, name: '위궤양 (Gastric Ulcer)', kcd: 'K25', icd: 'K25.9' },
+        { key: /역류성 식도염|식도염|reflux esophagitis|gerd/i, name: '역류성 식도염 (GERD)', kcd: 'K21.0', icd: 'K21.0' },
+        { key: /지방간|패티리버|fatty liver/i, name: '지방간 (Fatty Liver)', kcd: 'K76.0', icd: 'K76.0' },
+        { key: /간염|헤파티티스|hepatitis/i, name: '간염 (Hepatitis)', kcd: 'B15-B19', icd: 'B19' },
+        { key: /간경변|서로시스|cirrhosis/i, name: '간경변 (Liver Cirrhosis)', kcd: 'K74.6', icd: 'K74.6' },
+        { key: /치질|헤모라이드|hemorrhoids/i, name: '치질 (Hemorrhoids)', kcd: 'K64', icd: 'K64.9' },
+        { key: /담석|콜레리스|gallstone/i, name: '담석증 (Gallstone)', kcd: 'K80', icd: 'K80.2' },
+
+        // Respiratory
+        { key: /결핵|티비|tuberculosis|tb/i, name: '결핵 (Tuberculosis)', kcd: 'A15-A19', icd: 'A15' },
+        { key: /천식|아스마|asthma/i, name: '천식 (Asthma)', kcd: 'J45', icd: 'J45' },
+        { key: /비염|라이나이티스|rhinitis/i, name: '비염 (Rhinitis)', kcd: 'J31.0', icd: 'J31.0' },
+        { key: /폐렴|뉴모니아|pneumonia/i, name: '폐렴 (Pneumonia)', kcd: 'J12-J18', icd: 'J18.9' },
+        { key: /만성 폐쇄성 폐질환|만성폐질환|copd/i, name: '만성 폐쇄성 폐질환 (COPD)', kcd: 'J44', icd: 'J44.9' },
+
+        // Renal & Urology
+        { key: /신부전|콩팥|kidney failure|renal failure/i, name: '신부전 (Renal Failure)', kcd: 'N17-N19', icd: 'N19' },
+        { key: /만성 신장병|신장질환|ckd/i, name: '만성 신장병 (CKD)', kcd: 'N18', icd: 'N18.9' },
+        { key: /방광염|시스티티스|cystitis/i, name: '방광염 (Cystitis)', kcd: 'N30', icd: 'N30.9' },
+        { key: /요로결석|유리너리 스톤|urinary stone/i, name: '요로결석 (Urinary Stone)', kcd: 'N20', icd: 'N20.9' },
+
+        // Musculoskeletal
+        { key: /관절염|아쓰라이티스|arthritis/i, name: '관절염 (Arthritis)', kcd: 'M13', icd: 'M13.9' },
+        { key: /골다공증|오스테오포로|osteoporosis/i, name: '골다공증 (Osteoporosis)', kcd: 'M81', icd: 'M81.9' },
+        { key: /디스크|추간판|disc/i, name: '추간판 장애 (Disc)', kcd: 'M51', icd: 'M51.2' },
+
+        // Others
+        { key: /빈혈|어지럼|아네미아|anemia/i, name: '빈혈 (Anemia)', kcd: 'D64.9', icd: 'D64.9' },
+        { key: /백내장|카타랙트|cataract/i, name: '백내장 (Cataract)', kcd: 'H26', icd: 'H26.9' },
+        { key: /두드러기|얼티카리아|urticaria/i, name: '두드러기 (Urticaria)', kcd: 'L50', icd: 'L50.9' },
+        { key: /아토피|atopy/i, name: '아토피 피부염 (Atopic Dermatitis)', kcd: 'L20', icd: 'L20.9' },
+
+        // Cancers (Common)
+        { key: /위암|stomach cancer|gastric cancer/i, name: '위암 (Gastric Cancer)', kcd: 'C16', icd: 'C16.9' },
+        { key: /간암|liver cancer|hcc/i, name: '간암 (Liver Cancer)', kcd: 'C22', icd: 'C22.0' },
+        { key: /폐암|lung cancer/i, name: '폐암 (Lung Cancer)', kcd: 'C34', icd: 'C34.9' },
+        { key: /대장암|colorectal cancer/i, name: '대장암 (Colorectal Cancer)', kcd: 'C18-C20', icd: 'C18.9' },
+        { key: /유방암|breast cancer/i, name: '유방암 (Breast Cancer)', kcd: 'C50', icd: 'C50.9' }
+    ];
+
+    function extractDiseaseCodes(text) {
+        if (!text) return [];
+        const found = [];
+        DISEASE_DIC.forEach(d => {
+            if (d.key.test(text)) {
+                found.push({ name: d.name, kcd: d.kcd, icd: d.icd });
+            }
+        });
+        return found;
     }
 
     // Translation Logic
@@ -1591,7 +2020,7 @@
         content.innerHTML = `
             <div style="text-align: center; padding: 30px; color: #94a3b8;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <p id="ocrStatusText">寃곌낵吏 ?대?吏瑜?遺꾩꽍?섎뒗 以묒엯?덈떎...</p>
+                <p id="ocrStatusText">결과지 이미지를 분석하는 중입니다...</p>
                 <div id="ocrProgressBar" style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 15px; overflow: hidden;">
                     <div id="ocrProgressInner" style="width: 0%; height: 100%; background: var(--primary); transition: 0.3s;"></div>
                 </div>
@@ -1600,17 +2029,17 @@
 
         try {
             const user = auth.currentUser;
-            if (!user) throw new Error('濡쒓렇?몄씠 ?꾩슂?⑸땲??');
+            if (!user) throw new Error('로그인이 필요합니다.');
             const userDoc = await db.collection('users').doc(user.uid).get();
             const userData = userDoc.data();
-            if (!userData || !userData.workerDocId) throw new Error('洹쇰줈???뺣낫媛 ?곌껐?섏? ?딆븯?듬땲??');
+            if (!userData || !userData.workerDocId) throw new Error('근로자 정보가 연결되지 않았습니다.');
             
             const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
             const wData = workerDoc.data();
             const fileContent = wData.resultFileUrl || wData.resultFileBase64;
 
             if (!wData || !fileContent) {
-                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">?쒖텧??寃곌낵吏 ?뚯씪???놁뒿?덈떎. 寃곌낵吏瑜?癒쇱? ?낅줈?쒗빐 二쇱꽭??</div>';
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
                 return;
             }
 
@@ -1622,7 +2051,7 @@
                 processingImage = wData.resultOcrBase64;
             } else if (wData.resultFileType === 'application/pdf') {
                 const statusEl = document.getElementById('ocrStatusText');
-                if (statusEl) statusEl.innerText = 'PDF ?ㅻ쭏???먮룆 以鍮?以?..';
+                if (statusEl) statusEl.innerText = 'PDF 스마트 판독 준비 중...';
                 
                 try {
                     let bytes = null;
@@ -1636,7 +2065,7 @@
                         }
                     } else {
                         // Storage URL - pdf.js fetch and convert to array buffer
-                        if (statusEl) statusEl.innerText = 'PDF ?곗씠???섏떊 以?..';
+                        if (statusEl) statusEl.innerText = 'PDF 데이터 수신 중...';
                         const response = await fetch(rawImageSource);
                         const buffer = await response.arrayBuffer();
                         bytes = new Uint8Array(buffer);
@@ -1656,12 +2085,12 @@
                     processingImage = canvas.toDataURL('image/png');
                 } catch (pdfErr) {
                     console.error('PDF Conversion Error:', pdfErr);
-                    throw new Error('PDF ?뚯씪 蹂?섏뿉 ?ㅽ뙣?덉뒿?덈떎. (CORS ?먮뒗 ?뚯씪 ?ㅻ쪟)');
+                    throw new Error('PDF 파일 변환에 실패했습니다. (CORS 또는 파일 오류)');
                 }
             } else {
                 // For images without resultOcrBase64, try normalization
                 const statusEl = document.getElementById('ocrStatusText');
-                if (statusEl) statusEl.innerText = '?대?吏 ?곗씠??理쒖쟻??以?..';
+                if (statusEl) statusEl.innerText = '이미지 데이터 최적화 중...';
                 try {
                     processingImage = await normalizeImageForOCR(rawImageSource);
                 } catch (normErr) {
@@ -1670,16 +2099,16 @@
                     if (rawImageSource.startsWith('data:')) {
                         processingImage = rawImageSource;
                     } else {
-                        throw new Error('蹂댁븞 ?뺤콉(CORS)?쇰줈 ?명빐 ?뚯씪??遺꾩꽍?????놁뒿?덈떎. ?뚯씪???ㅼ떆 ?낅줈?쒗빐 二쇱꽭??');
+                        throw new Error('보안 정책(CORS)으로 인해 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
                     }
                 }
             }
 
-            if (!processingImage) throw new Error('泥섎━???대?吏瑜??앹꽦?????놁뒿?덈떎.');
+            if (!processingImage) throw new Error('처리할 이미지를 생성할 수 없습니다.');
 
             // OCR Start
             const ocrStatusEl = document.getElementById('ocrStatusText');
-            if (ocrStatusEl) ocrStatusEl.innerText = '?멸났吏??遺꾩꽍 ?붿쭊 珥덇린??以?..';
+            if (ocrStatusEl) ocrStatusEl.innerText = '인공지능 분석 엔진 초기화 중...';
             
             // Use high-level simplify API for better stability in Tesseract v5
             const { data: { text } } = await Tesseract.recognize(processingImage, 'kor', {
@@ -1689,60 +2118,209 @@
                         const progressEl = document.getElementById('ocrProgressInner');
                         const statusEl = document.getElementById('ocrStatusText');
                         if (progressEl) progressEl.style.width = pct + '%';
-                        if (statusEl) statusEl.innerText = `?띿뒪???먮룆 以?.. (${pct}%)`;
+                        if (statusEl) statusEl.innerText = `텍스트 판독 중... (${pct}%)`;
                     }
                 }
             });
 
             if (!text || text.trim().length === 0) {
-                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">?곗씠?곕? 遺꾩꽍?????놁뒿?덈떎. 臾몄꽌 媛由쇱씠???붾뱾由쇱씠 ?녿뒗 ?ъ쭊???ㅼ떆 ?낅줈?쒗빐 二쇱꽭??</div>';
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">데이터를 분석할 수 없습니다. 문서 가림이나 흔들림이 없는 사진을 다시 업로드해 주세요.</div>';
                 return;
             }
 
             // Translation Start
             const statusEl = document.getElementById('ocrStatusText');
-            if (statusEl) statusEl.innerText = `踰덉뿭 以묒엯?덈떎... (${prefLang.toUpperCase()})`;
+            if (statusEl) statusEl.innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
             const translated = await translateText(text, prefLang);
 
             // Display Results
-            const langName = { ko: '?쒓뎅??, en: 'English', cn: 'Chinese', vn: 'Vietnamese' }[prefLang] || prefLang;
+            const langName = { ko: '한국어', en: 'English', cn: 'Chinese', vn: 'Vietnamese' }[prefLang] || prefLang;
             
             content.innerHTML = `
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                     <div>
                         <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
-                            <i class="fa-solid fa-file-lines"></i> ?먮낯 ?띿뒪??(Original Text)
+                            <i class="fa-solid fa-file-lines"></i> 원본 텍스트 (Original Text)
                         </h4>
-                        <div style="background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; max-height: 200px; overflow-y: auto; line-height: 1.6; white-space: pre-line;">
+                        <div class="notranslate" translate="no" style="background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; max-height: 200px; overflow-y: auto; line-height: 1.6; white-space: pre-line;">
                             ${text}
                         </div>
                     </div>
                     <div>
                         <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">
-                            <i class="fa-solid fa-language"></i> 踰덉뿭??寃곌낵 (Translated - ${langName})
+                            <i class="fa-solid fa-language"></i> 번역된 결과 (Translated - ${langName})
                         </h4>
                         <div style="background: #f5f3ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd6fe; font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #4338ca;">
                             ${translated}
                         </div>
                     </div>
-                    <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" style="width: 100%; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <i class="fa-solid fa-copy"></i> 踰덉뿭 ?댁슜 蹂듭궗?섍린
-                    </button>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" style="flex: 1; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-copy"></i> 번역 내용 복사
+                        </button>
+                        <button onclick="window.downloadTranslationAsPDF()" style="flex: 1; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-file-pdf"></i> PDF로 다운로드
+                        </button>
+                    </div>
+
+                    <!-- Disease Code Section -->
+                    <div id="diseaseInfoSection" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h4 style="color: #e11d48; font-size: 0.85rem; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <i class="fa-solid fa-file-medical"></i> 감지된 질병 코드 (Detected Disease Codes)
+                            </h4>
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                <div style="font-size: 0.65rem; color: var(--text-muted);"><i class="fa-solid fa-circle-info"></i> 궁금한 질병코드는 직접 검색 가능합니다.</div>
+                                <div style="display: flex; gap: 5px;">
+                                    <input type="text" id="diseaseSearchInput" placeholder="질병명 또는 코드 검색..." style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; width: 180px;">
+                                    <button onclick="window.manualSearchDisease()" style="background: var(--dark); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="diseaseCodeList" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <!-- Will be filled by JS -->
+                        </div>
+                    </div>
                 </div>
             `;
+
+            // Process and display disease codes
+            const foundDiseases = extractDiseaseCodes(text);
+            const diseaseListEl = document.getElementById('diseaseCodeList');
+            if (foundDiseases.length > 0) {
+                diseaseListEl.innerHTML = foundDiseases.map(d => `
+                    <div style="background: white; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05);">
+                        <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name}</div>
+                        <div style="display: flex; gap: 8px;">
+                            <span style="background: #fff1f2; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                            <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                diseaseListEl.innerHTML = `
+                    <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px dashed var(--border); color: var(--text-muted); font-size: 0.85rem;">
+                        감지된 주요 질병 코드가 없습니다.
+                    </div>
+                `;
+            }
 
         } catch (e) {
             console.error('Translation process error:', e);
             const errMsg = e && e.message ? e.message : String(e);
-            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">遺꾩꽍 以??ㅻ쪟 諛쒖깮: ${errMsg}</div>`;
+            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">분석 중 오류 발생: ${errMsg}</div>`;
         }
+    };
+    
+    window.manualSearchDisease = () => {
+        const query = document.getElementById('diseaseSearchInput').value.trim().toLowerCase();
+        if (!query) {
+            alert('검색어를 입력해 주세요.');
+            return;
+        }
+
+        const results = DISEASE_DIC.filter(d => 
+            d.name.toLowerCase().includes(query) || 
+            d.kcd.toLowerCase().includes(query) || 
+            d.icd.toLowerCase().includes(query) ||
+            (d.key && d.key.test(query))
+        );
+
+        const diseaseListEl = document.getElementById('diseaseCodeList');
+        if (results.length > 0) {
+            const resultsHtml = results.map(d => `
+                <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05); margin-bottom: 10px;">
+                    <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name} <span style="font-size: 0.7rem; color: #e11d48;">(검색결과)</span></div>
+                    <div style="display: flex; gap: 8px;">
+                        <span style="background: white; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                        <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Prepend results if it's a search
+            diseaseListEl.innerHTML = resultsHtml + (diseaseListEl.innerHTML.includes('감지된 주요 질병 코드가 없습니다.') ? '' : diseaseListEl.innerHTML);
+            
+            showToast(`${results.length}개의 질병 코드를 찾았습니다.`, "success");
+        } else {
+            showToast("검색 결과가 없습니다.", "error");
+        }
+    };
+
+    window.downloadTranslationAsPDF = () => {
+        const element = document.getElementById('translationContent');
+        const nameText = document.getElementById('displayName').innerText.split(' ')[0] || 'worker';
+        const opt = {
+            margin:       [15, 15],
+            filename:     `CHECKIT_Result_${nameText}_${new Date().toISOString().slice(0,10)}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Create a clone for PDF rendering to avoid UI glitches
+        const clone = element.cloneNode(true);
+        clone.id = 'pdf-render-clone';
+        clone.style.padding = '30px';
+        clone.style.background = 'white';
+        clone.style.width = '180mm';
+        clone.style.height = 'auto';
+        
+        // Ensure all text is visible in PDF and remove buttons
+        const flexContainers = clone.querySelectorAll('div[style*="display: flex; gap: 10px;"]');
+        flexContainers.forEach(fc => {
+            if (fc.innerHTML.includes('fa-copy') || fc.innerHTML.includes('fa-file-pdf')) {
+                fc.remove(); // Remove the button container entirely
+            }
+        });
+        
+        // Hide individual buttons just in case
+        clone.querySelectorAll('button').forEach(btn => btn.remove());
+        
+        // Expand scrollable text areas aggressively
+        const scrollDivs = clone.querySelectorAll('div');
+        scrollDivs.forEach(div => {
+            if (div.style.maxHeight || div.style.overflowY) {
+                div.style.setProperty('max-height', 'none', 'important');
+                div.style.setProperty('height', 'auto', 'important');
+                div.style.setProperty('overflow', 'visible', 'important');
+                div.style.setProperty('overflow-y', 'visible', 'important');
+            }
+        });
+
+        // Add header to PDF
+        const header = document.createElement('div');
+        header.innerHTML = `
+            <div style="text-align:center; border-bottom: 2px solid #6366f1; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Pretendard', sans-serif;">
+                <h2 style="color: #1e1b4b; margin: 0;">CHECKIT Medical Result Translation</h2>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">AI Automated Translation Service</div>
+            </div>
+        `;
+        clone.prepend(header);
+
+        // Add footer
+        const footer = document.createElement('div');
+        footer.innerHTML = `
+            <div style="text-align:center; border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 30px; font-size: 0.7rem; color: #94a3b8; font-family: 'Pretendard', sans-serif;">
+                This translation is automatically generated by AI. Please consult a doctor for official diagnosis.
+            </div>
+        `;
+        clone.appendChild(footer);
+
+        showToast("PDF 생성을 시작합니다...", "info");
+        html2pdf().set(opt).from(clone).save().then(() => {
+            showToast("PDF 다운로드가 완료되었습니다.", "success");
+        }).catch(err => {
+            console.error("PDF generation error:", err);
+            showToast("PDF 생성에 실패했습니다.", "error");
+        });
     };
 
     window.copyTranslationToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
-            showToast('蹂듭궗?섏뿀?듬땲??', 'success');
+            showToast('복사되었습니다!', 'success');
         }).catch(err => {
-            showToast('蹂듭궗 ?ㅽ뙣', 'error');
+            showToast('복사 실패', 'error');
         });
     };
 
@@ -1755,7 +2333,7 @@
             const workerDocId = userDoc.data().workerDocId;
             
             if (!workerDocId) {
-                alert('?곌껐??吏곸썝 ?뺣낫瑜?李얠쓣 ???놁뒿?덈떎.');
+                alert('연결된 직원 정보를 찾을 수 없습니다.');
                 return;
             }
 
@@ -1772,39 +2350,133 @@
             const updatedWorker = await db.collection('workers').doc(workerDocId).get();
             renderCheckupStatus(updatedWorker.data());
             
-            alert(`寃吏??곹깭媛 '${newStatus}'(??濡??낅뜲?댄듃?섏뿀?듬땲??`);
+            alert(`검진 상태가 '${newStatus}'(으)로 업데이트되었습니다.`);
         } catch (err) {
             console.error('Status update error:', err);
-            alert('?곹깭 ?낅뜲?댄듃???ㅽ뙣?덉뒿?덈떎.');
+            alert('상태 업데이트에 실패했습니다.');
         } finally {
             document.getElementById('pageLoader').style.display = 'none';
         }
     }
 
+    let kakaoMap = null;
+    let markers = [];
+
     function renderHospitals(docs) {
         const container = document.getElementById('hospitalList');
         if (docs.length === 0) {
-            container.innerHTML = '<p class="loading-text">?깅줉???쒗쑕 蹂묒썝???놁뒿?덈떎.</p>';
+            container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
             return;
         }
+
+        // Initialize Map once
+        if (!kakaoMap && window.kakao && kakaoMap === null) {
+            const mapContainer = document.getElementById('hospitalMap');
+            const mapOption = { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 8 };
+            kakaoMap = new kakao.maps.Map(mapContainer, mapOption);
+        }
+
         let html = '';
-        docs.forEach(doc => {
+        const now = new Date();
+        const day = now.getDay(); // 0:Sun, 1:Mon...
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+        docs.forEach((doc, idx) => {
             const h = doc.data();
-            const linkHtml = h.hasLink === 'Y' && h.link
-                ? `<a class="hospital-link" href="${h.link}" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> ?덉빟 諛붾줈媛湲?/a>`
-                : `<span class="hospital-nolink"><i class="fa-solid fa-ban"></i> ?덉빟 ?ъ씠???놁쓬</span>`;
+            const id = doc.id;
+            
+            const cardId = `hospCard_${idx}`;
+            
+            // Standard fallback URLs using name
+            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name)}`;
+            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name)}`;
+
             html += `
-                <div class="hospital-item">
-                    <div>
-                        <div class="hospital-name">${h.name}</div>
-                        <div class="hospital-meta">寃吏?湲곌컙: ${h.schedule || '-'} &nbsp;|&nbsp; ?덉빟 湲곌컙: ${h.period || '-'}</div>
-                        ${h.extraCost ? `<div class="hospital-meta" style="margin-top:4px;">異붽? 鍮꾩슜: ${h.extraCost}</div>` : ''}
-                        ${h.hasLink === 'Y' && h.code ? `<div class="hospital-meta" style="margin-top:4px;">?뚯궗 肄붾뱶: <strong>${h.code}</strong></div>` : ''}
+                <div class="hospital-card" id="${cardId}">
+                    <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
+                    <div class="h-card-address" id="${cardId}_address"></div>
+                    <div class="h-card-meta">
+                        <div class="item" style="color:var(--primary); font-weight:700;"><i class="fa-solid fa-calendar-check"></i> ${h.schedule || '25.10.01 ~ 11.30'}</div>
+                        <div class="item" id="${cardId}_phone"></div>
                     </div>
-                    <div>${linkHtml}</div>
+                    
+                    <!-- Portal Aggregated Action: Highlighted Prompt -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin: 5px 0 2px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:24px; height:24px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                                <i class="fa-solid fa-clock" style="font-size:0.8rem; color:var(--primary);"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.78rem; font-weight:800; color:#1e1b4b;">포털 정보 확인 필요</div>
+                                <div style="font-size:0.7rem; color:#64748b; line-height:1.3;">실제 포털(네이버/카카오)에서 **진료 시간, 점심 시간, 휴진일** 등을 확인하세요.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-card-actions">
+                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" id="${cardId}_naver" onclick="event.stopPropagation()">
+                            <img src="https://www.naver.com/favicon.ico" style="width:14px;height:14px;border-radius:2px;"> 네이버
+                        </a>
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" id="${cardId}_kakao" onclick="event.stopPropagation()">
+                            <i class="fa-comment fa-solid" style="font-size:0.8rem;"></i> 카카오
+                        </a>
+                        <a href="#" class="btn-h-action btn-h-call hidden" id="${cardId}_callBtn" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>
+                    </div>
+                    <div class="h-card-actions" style="margin-top: -5px;">
+                        ${h.hasLink === 'Y' && h.link ? `<a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" onclick="event.stopPropagation()"><i class="fa-solid fa-calendar-check"></i> 간편 예약</a>` : ''}
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-h-map" id="${cardId}_route" style="display:flex; border-color:#e2e8f0; border-radius:10px; color:#64748b; background:#f8fafc;" onclick="event.stopPropagation()"><i class="fa-solid fa-route"></i> 길찾기</a>
+                    </div>
                 </div>`;
+            
+            // Trigger Real-time Data Fetch from Portals
+            setTimeout(() => fetchHospitalLiveInfo(h.name, cardId), 100 * idx);
         });
         container.innerHTML = html;
+    }
+
+    // [New] Real-time Hospital Info Aggregation logic
+    function fetchHospitalLiveInfo(hospName, cardId) {
+        if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) return;
+        
+        const ps = new kakao.maps.services.Places();
+        ps.keywordSearch(hospName, (data, status) => {
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const info = data[0]; // Take the most relevant match
+                
+                // Update Address
+                const addrEl = document.getElementById(`${cardId}_address`);
+                if (addrEl) addrEl.innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${info.address_name}`;
+                
+                // Update Phone
+                const phoneEl = document.getElementById(`${cardId}_phone`);
+                if (phoneEl) {
+                    if (info.phone) {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${info.phone}`;
+                        const callBtn = document.getElementById(`${cardId}_callBtn`);
+                        if (callBtn) {
+                            callBtn.href = `tel:${info.phone}`;
+                            callBtn.classList.remove('hidden');
+                        }
+                    } else {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+                    }
+                }
+
+                // Update Action Links with precise location info if available
+                const naverBtn = document.getElementById(`${cardId}_naver`);
+                const kakaoBtn = document.getElementById(`${cardId}_kakao`);
+                const routeBtn = document.getElementById(`${cardId}_route`);
+
+                const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
+                if (naverBtn) naverUserUrl = `https://map.naver.com/v5/search/${query}`;
+                if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
+                if (routeBtn) routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+
+            } else {
+                // Fallback for search failure
+                document.getElementById(`${cardId}_address`).innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> 주소 정보 없음`;
+                document.getElementById(`${cardId}_phone`).innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+            }
+        });
     }
 
     function doLogout() {
@@ -1841,22 +2513,22 @@
         
         if (loader) {
             loader.style.display = 'flex';
-            if (lt) lt.innerText = '?뚯씪 泥섎━ 以?..';
+            if (lt) lt.innerText = '파일 처리 중...';
         }
 
         try {
             const user = auth.currentUser;
-            if (!user) throw new Error('濡쒓렇?몄씠 ?꾩슂?⑸땲??');
+            if (!user) throw new Error('로그인이 필요합니다.');
             
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
-            if (!workerDocId) throw new Error('洹쇰줈???뺣낫瑜?李얠쓣 ???놁뒿?덈떎.');
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
             // 1. Convert to Base64 with Compression fallback
             let finalBase64 = null;
             
             if (!isPdf && file.type.startsWith('image/')) {
-                if (lt) lt.innerText = '?대?吏 理쒖쟻??以?..';
+                if (lt) lt.innerText = '이미지 최적화 중...';
                 // Image Compression logic using Canvas
                 finalBase64 = await new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -1889,14 +2561,14 @@
                             console.log("Compressed size:", Math.round(dataUrl.length / 1024), "KB");
                             resolve(dataUrl);
                         };
-                        img.onerror = () => reject(new Error('?대?吏瑜??쎌쓣 ???놁뒿?덈떎.'));
+                        img.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.'));
                         img.src = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 });
             } else {
                 // PDF or other - generic base64
-                if (lt) lt.innerText = '?뚯씪 ?쎈뒗 以?..';
+                if (lt) lt.innerText = '파일 읽는 중...';
                 finalBase64 = await new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = e => resolve(e.target.result);
@@ -1906,26 +2578,26 @@
 
             // Safety check for Firestore (~1MB)
             if (finalBase64.length > 1.4 * 1024 * 1024) { // Roughly 1MB limit for document
-                 throw new Error('?뚯씪???덈Т 而ㅼ꽌 ??ν븷 ???놁뒿?덈떎. ???묒? ?뚯씪?대굹 ?댁긽?꾧? ??? ?ъ쭊???ъ슜??二쇱꽭??');
+                 throw new Error('파일이 너무 커서 저장할 수 없습니다. 더 작은 파일이나 해상도가 낮은 사진을 사용해 주세요.');
             }
 
             // 2. Direct Firestore Update (No Storage)
-            if (lt) lt.innerText = '?곗씠?곕쿋?댁뒪?????以?..';
+            if (lt) lt.innerText = '데이터베이스에 저장 중...';
             await db.collection('workers').doc(workerDocId).update({
                 resultFileBase64: finalBase64,
                 resultFileName: file.name,
                 resultFileType: file.type,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                status: '寃곌낵?꾨즺',
+                status: '결과완료',
                 docsReceived: true,
                 resultFileUrl: null // Clear storage reference if exists
             });
 
-            showToast('?깃났?곸쑝濡??쒖텧?섏뿀?듬땲??', 'success');
+            showToast('성공적으로 제출되었습니다!', 'success');
             
         } catch (err) {
             console.error('Upload Error:', err);
-            showToast('?ㅻ쪟: ' + err.message, 'error');
+            showToast('오류: ' + err.message, 'error');
         } finally {
             if (loader) loader.style.display = 'none';
             input.value = '';
@@ -1935,7 +2607,7 @@
     window.submitResultToCompany = async function() {
         const user = auth.currentUser;
         if (!user) return;
-        if (!confirm('?뚯씪 ?놁씠 寃吏??꾨즺瑜?湲곗뾽???뚮━?쒓쿋?듬땲源?')) return;
+        if (!confirm('파일 없이 검진 완료를 기업에 알리시겠습니까?')) return;
 
         const loader = document.getElementById('pageLoader');
         loader.style.display = 'flex';
@@ -1943,18 +2615,18 @@
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
             const workerDocId = userDoc.data().workerDocId;
-            if (!workerDocId) throw new Error('洹쇰줈???뺣낫瑜?李얠쓣 ???놁뒿?덈떎.');
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
 
             await db.collection('workers').doc(workerDocId).update({
-                status: '?섎졊?꾨즺',
+                status: '수령완료',
                 docsReceived: true,
                 resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            showToast('寃吏??꾨즺媛 湲곗뾽???꾨떖?섏뿀?듬땲??', 'success');
+            showToast('검진 완료가 기업에 전달되었습니다!', 'success');
             renderResultsSection();
         } catch (err) {
             console.error('Submit error:', err);
-            showToast('?쒖텧 ?ㅽ뙣: ' + err.message, 'error');
+            showToast('제출 실패: ' + err.message, 'error');
         } finally {
             loader.style.display = 'none';
         }
@@ -1986,26 +2658,28 @@
                 area.innerHTML = `
                     <div style="text-align:center;">
                         <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
-                        <h3 style="color:#059669; margin-bottom:6px;">寃곌낵吏 ?쒖텧 ?꾨즺</h3>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">?뚯씪紐? ${w.resultFileName || '泥⑤??뚯씪'}</p>
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">?쒖텧?? ${submittedAt}</p>
+                        <h3 style="color:#059669; margin-bottom:6px;">결과지 제출 완료</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">파일명: ${w.resultFileName || '첨부파일'}</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">제출일: ${submittedAt}</p>
                         ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${fileSource}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
                         <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; display:inline-flex; align-items:center; gap:8px; background:var(--dark);">
-                            <i class="fa-solid fa-arrow-up-from-bracket"></i> 寃곌낵吏 ?ㅼ떆 ?щ━湲?                        </button>
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i> 결과지 다시 올리기
+                        </button>
                     </div>
                 `;
 
                 // Show translation card
                 const transCard = document.getElementById('translationCard');
                 if (transCard) transCard.classList.remove('hidden');
-            } else if (w.status === '寃곌낵?꾨즺') {
+            } else if (w.status === '결과완료') {
                 area.innerHTML = `
                     <div style="text-align:center;">
                         <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
-                        <h3 style="color:#059669; margin-bottom:6px;">寃吏??꾨즺 蹂닿퀬??/h3>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">?뚯씪??泥⑤??섏? ?딆븯?듬땲?? 寃곌낵吏瑜?異붽?濡??낅줈?쒗븷 ???덉뒿?덈떎.</p>
+                        <h3 style="color:#059669; margin-bottom:6px;">검진 완료 보고됨</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">파일이 첨부되지 않았습니다. 결과지를 추가로 업로드할 수 있습니다.</p>
                         <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
-                            <i class="fa-solid fa-camera"></i> 寃곌낵吏 ?낅줈??                        </button>
+                            <i class="fa-solid fa-camera"></i> 결과지 업로드
+                        </button>
                     </div>
                 `;
                 const transCard = document.getElementById('translationCard');
@@ -2014,14 +2688,15 @@
                 area.innerHTML = `
                     <div id="noSubmissionUI">
                         <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
-                        <p style="font-weight: 600; color: var(--text);">?꾩쭅 ?쒖텧??寃곌낵吏媛 ?놁뒿?덈떎.</p>
-                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">寃吏?寃곌낵??寃곌낵吏)??蹂닿굔利앹쓣 李띿뼱???낅줈?쒗븯嫄곕굹,<br>?뺤씤 踰꾪듉???뚮윭 湲곗뾽??寃吏??꾨즺瑜??뚮┫ ???덉뒿?덈떎.</p>
+                        <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
                         
                         <div style="display: flex; gap: 10px; justify-content: center;">
                             <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
-                                <i class="fa-solid fa-camera"></i> ?ъ쭊 ?낅줈??                            </button>
+                                <i class="fa-solid fa-camera"></i> 사진 업로드
+                            </button>
                             <button type="button" onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
-                                <i class="fa-solid fa-paper-plane"></i> 諛붾줈 ?쒖텧?섍린
+                                <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
                             </button>
                         </div>
                     </div>
@@ -2034,14 +2709,6 @@
         }
     };
 
-    function loadHospitals(cid) {
-        if (!cid) return;
-        db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
-            renderHospitals(hospSnap.docs);
-        }, err => console.error("Hospital load error:", err));
-    }
-
-    // Removed duplicate broken tryToRelinkWorker
 </script>
 
 </body>

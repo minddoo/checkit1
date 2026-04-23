@@ -448,6 +448,21 @@
                     <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
                 </div>
 
+                <!-- Phone Number Registration (Added) -->
+                <div class="card" id="phoneRegistrationCard" style="border-left: 4px solid #f59e0b;">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: #fff7ed; color: #f59e0b;"><i class="fa-solid fa-phone"></i></div>
+                        <h3>알림톡 수신 번호 등록 (Kakao Notification Phone)</h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px;">알림톡을 받을 정확한 연락처를 입력해주세요. (Enter the phone number to receive Kakao notifications)</p>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="tel" id="workerPhoneInput" placeholder="010-0000-0000" style="flex: 1; padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none;">
+                            <button id="savePhoneBtn" onclick="updateWorkerPhone()" class="btn-submit" style="width: auto; margin-top: 0; padding: 10px 20px; background: #f59e0b;">저장 (Save)</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- My Checkup Status -->
                 <div class="card">
                     <div class="card-header">
@@ -945,7 +960,19 @@ function googleTranslateElementInit() {
                                         document.getElementById('displayName').textContent = wData.name;
                                         document.getElementById('welcomeName').textContent = wData.name;
                                     }
-                                    const prefLang = wData.prefLang || 'ko';
+                                                                         // Populate phone input if exists
+                                     const phoneVal = wData.연락처 || wData.phone || '';
+                                     const phoneInput = document.getElementById('workerPhoneInput');
+                                     if (phoneInput && !phoneInput.value) { 
+                                         phoneInput.value = phoneVal;
+                                     }
+                                     if (phoneVal) {
+                                         document.getElementById('phoneRegistrationCard').style.borderLeftColor = 'var(--primary)';
+                                         const sBtn = document.getElementById('savePhoneBtn');
+                                         if(sBtn) sBtn.innerText = '수정 (Edit)';
+                                     }
+
+                                     const prefLang = wData.prefLang || 'ko';
                                     document.querySelectorAll('.lang-btn').forEach(btn => {
                                         btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
                                     });
@@ -1745,6 +1772,44 @@ function googleTranslateElementInit() {
         }
     };
 
+    // [NEW] Update Worker Phone Number
+    window.updateWorkerPhone = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const phone = document.getElementById('workerPhoneInput').value.trim();
+        if (!phone) {
+            showToast("연락처를 입력해주세요.", "error");
+            return;
+        }
+
+        const saveBtn = document.getElementById('savePhoneBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                throw new Error("근로자 정보가 연동되지 않았습니다.");
+            }
+
+            await db.collection('workers').doc(workerDocId).update({
+                연락처: phone,
+                phone: phone
+            });
+
+            showToast("연락처가 성공적으로 등록되었습니다. 이제 알림톡을 받으실 수 있습니다!", "success");
+            saveBtn.innerText = '수정 (Edit)';
+        } catch (e) {
+            console.error("Phone update error:", e);
+            showToast("저장 실패: " + e.message, "error");
+        } finally {
+            saveBtn.disabled = false;
+        }
+    };
+
     // Registration Form Functions
     window.openBookingForm = () => {
         document.getElementById('bookingModalOverlay').style.display = 'flex';
@@ -1805,6 +1870,14 @@ function googleTranslateElementInit() {
 
             // Save to bookings collection
             await db.collection('bookings').add(formData);
+
+            // Sync phone number to workers collection for future notifications
+            if (workerDocId && workerDocId !== "ADMIN_SUBMISSION") {
+                await db.collection('workers').doc(workerDocId).update({
+                    연락처: formData.phone,
+                    phone: formData.phone // Also save as 'phone' for compatibility
+                }).catch(e => console.warn("Failed to sync phone to worker doc:", e));
+            }
 
             // [NEW] Add to alarms collection for Master page
             await db.collection('alarms').add({

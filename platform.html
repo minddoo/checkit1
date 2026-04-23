@@ -612,6 +612,7 @@
                         <!-- Alimtalk Tool -->
                         <div class="alimtalk-tool">
                             <span style="font-size: 0.75rem; color: #94a3b8; align-self: center; margin-right: 5px;">알림톡 툴:</span>
+                            <button class="alim-btn" style="border-color: var(--primary); color: var(--primary);" onclick="window.sendBookingGuide()"><i class="fa-solid fa-file-invoice"></i> 검진 가이드</button>
                             <button class="alim-btn" onclick="applyAlimtalkTemplate('7d')"><i class="fa-solid fa-bell"></i> 7일전</button>
                             <button class="alim-btn" onclick="applyAlimtalkTemplate('5d')"><i class="fa-solid fa-bell"></i> 5일전</button>
                             <button class="alim-btn" onclick="applyAlimtalkTemplate('3d')"><i class="fa-solid fa-bell"></i> 3일전</button>
@@ -1383,6 +1384,28 @@
         input.value = alimtalkTemplates[type] || '';
         input.focus();
         showToast('알림톡 템플릿이 입력되었습니다. 내용을 자유롭게 수정하세요.', 'info');
+    };
+
+    window.sendBookingGuide = async () => {
+        if (!activeChatWorkerId) {
+            showToast("먼저 근로자를 선택해주세요.", "error");
+            return;
+        }
+
+        if (!confirm("해당 근로자에게 '검진 가이드' 알림톡을 발송하시겠습니까?")) return;
+
+        try {
+            await db.collection('messages').add({
+                workerDocId: activeChatWorkerId,
+                sender: 'admin',
+                text: '[체킷] 건강검진 가이드가 발송되었습니다.',
+                type: 'booking_guide',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast("검진 가이드 알림톡 발송 요청을 완료했습니다.", "success");
+        } catch (e) {
+            showToast("발송 실패: " + e.message, "error");
+        }
     };
     
     // Statistics Logic

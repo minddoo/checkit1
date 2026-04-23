@@ -1722,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(data['login_success_msg'] || '로그인에 성공했습니다!');
                     if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                     if (loader) loader.style.display = 'none';
-                    window.location.href = 'platform.html';
+                    // window.location.href = 'platform.html'; // REMOVED: Stay on home page after login
                 };
 
                 auth.signInWithEmailAndPassword(masterEmail, masterPw)
@@ -1799,7 +1799,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(data['login_success_msg'] || '관리자 로그인에 성공했습니다!');
                     if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                     if (loader) loader.style.display = 'none';
-                    window.location.href = 'company_dashboard.html';
+                    // window.location.href = 'company_dashboard.html'; // REMOVED: Stay on home page after login
                 });
             };
 
@@ -2056,7 +2056,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert(data['login_success_msg'] || '로그인에 성공했습니다!');
                         if (loginModalOverlay) loginModalOverlay.style.display = 'none';
                         if (loader) loader.style.display = 'none';
-                        window.location.href = 'worker_portal.html';
+                        // window.location.href = 'worker_portal.html'; // REMOVED: Stay on home page after login
                     } else {
                         alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');
                         auth.signOut();

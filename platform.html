@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -350,7 +350,7 @@
 
 <div id="pageLoader">
     <div class="loader"></div>
-    <p id="loaderMessage">처리 중...</p>
+    <p id="loaderMessage">泥섎━ 以?..</p>
 </div>
 
 <div id="toast-container"></div>
@@ -360,23 +360,23 @@
     <div class="login-card">
         <div class="login-header">
             <h2>CHECKIT Console</h2>
-            <p style="color: #666; margin-top: 5px;">마스터 권한으로 로그인하세요</p>
+            <p style="color: #666; margin-top: 5px;">留덉뒪??沅뚰븳?쇰줈 濡쒓렇?명븯?몄슂</p>
         </div>
         <div class="input-group" style="margin-bottom: 15px;">
-            <label>관리자 아이디</label>
+            <label>愿由ъ옄 ?꾩씠??/label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-user"></i>
-                <input type="text" id="loginId" placeholder="아이디 입력">
+                <input type="text" id="loginId" placeholder="?꾩씠???낅젰">
             </div>
         </div>
         <div class="input-group" style="margin-bottom: 25px;">
-            <label>통합 암호키</label>
+            <label>?듯빀 ?뷀샇??/label>
             <div class="input-wrapper">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" id="loginPw" placeholder="암호키 입력">
+                <input type="password" id="loginPw" placeholder="?뷀샇???낅젰">
             </div>
         </div>
-        <button id="loginBtn" class="btn-primary" style="width: 100%; padding: 14px; font-size: 1.1rem;">로그인</button>
+        <button id="loginBtn" class="btn-primary" style="width: 100%; padding: 14px; font-size: 1.1rem;">濡쒓렇??/button>
     </div>
 </div>
 
@@ -387,7 +387,7 @@
     <div class="sidebar">
         <div class="desktop-home-btn" style="padding: 15px 25px 0;">
             <button onclick="window.location.href='index.html'" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <i class="fa-solid fa-house"></i> 메인 홈으로 돌아가기
+                <i class="fa-solid fa-house"></i> 硫붿씤 ?덉쑝濡??뚯븘媛湲?
             </button>
         </div>
         <div class="sidebar-header">
@@ -411,28 +411,28 @@
         <!-- Alarm Panel -->
         <div id="alarmPanel" class="alarm-panel">
             <div class="alarm-header">
-                <span style="font-weight: 700; font-size: 0.9rem; color: var(--dark);">오늘의 알림톡 대상자</span>
+                <span style="font-weight: 700; font-size: 0.9rem; color: var(--dark);">?ㅻ뒛???뚮┝????곸옄</span>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: #94a3b8;" onclick="toggleAlarmPanel()"></i>
             </div>
             <div id="alarmList" class="alarm-list">
                 <!-- Alarm Items -->
                 <div style="padding: 30px; text-align: center; color: #94a3b8; font-size: 0.8rem;">
                     <i class="fa-solid fa-calendar-check" style="font-size: 1.5rem; margin-bottom: 10px; opacity: 0.3;"></i>
-                    <br>오늘 전송할 알림톡이 없습니다.
+                    <br>?ㅻ뒛 ?꾩넚???뚮┝?≪씠 ?놁뒿?덈떎.
                 </div>
             </div>
         </div>
         <ul class="sidebar-menu">
-            <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 고객사 관리</li>
-            <li id="menuBookings" onclick="switchSection('Bookings')"><i class="fa-solid fa-calendar-days"></i> 검진 일정 관리</li>
-            <li id="menuChats" onclick="switchSection('Chats')"><i class="fa-solid fa-comments"></i> 1:1 채팅 관리</li>
-            <li id="menuStats" onclick="switchSection('Stats')"><i class="fa-solid fa-chart-line"></i> 통계 및 로그</li>
-            <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> 시스템 설정</li>
-            <li id="menuContracts" onclick="switchSection('Contracts')"><i class="fa-solid fa-file-contract"></i> 기업 계약서 관리</li>
+            <li id="menuComps" class="active" onclick="switchSection('Comps')"><i class="fa-solid fa-building"></i> 怨좉컼??愿由?/li>
+            <li id="menuBookings" onclick="switchSection('Bookings')"><i class="fa-solid fa-calendar-days"></i> 寃吏??쇱젙 愿由?/li>
+            <li id="menuChats" onclick="switchSection('Chats')"><i class="fa-solid fa-comments"></i> 1:1 梨꾪똿 愿由?/li>
+            <li id="menuStats" onclick="switchSection('Stats')"><i class="fa-solid fa-chart-line"></i> ?듦퀎 諛?濡쒓렇</li>
+            <li id="menuSettings" onclick="switchSection('Settings')"><i class="fa-solid fa-gears"></i> ?쒖뒪???ㅼ젙</li>
+            <li id="menuContracts" onclick="switchSection('Contracts')"><i class="fa-solid fa-file-contract"></i> 湲곗뾽 怨꾩빟??愿由?/li>
         </ul>
         <div class="mobile-logout-wrapper" style="margin-top: auto; padding: 20px;">
             <button class="btn-outline" style="width: 100%; border-color: rgba(255,255,255,0.2); color: white;" onclick="window.logout()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> 濡쒓렇?꾩썐
             </button>
         </div>
     </div>
@@ -442,9 +442,9 @@
         <!-- Header -->
         <header class="header">
             <div style="display: flex; align-items: center; gap: 20px;">
-                <h2 style="margin: 0; font-size: 1.2rem;">고객사 발급 센터</h2>
+                <h2 style="margin: 0; font-size: 1.2rem;">怨좉컼??諛쒓툒 ?쇳꽣</h2>
                 <div class="status-badge offline" id="debugStatus">
-                    <i class="fa-solid fa-circle-exclamation"></i> 연결 안됨
+                    <i class="fa-solid fa-circle-exclamation"></i> ?곌껐 ?덈맖
                 </div>
             </div>
             <div>
@@ -461,60 +461,60 @@
             <div id="sectionComps">
                 <!-- Generate Card -->
                 <div class="card">
-                    <h3><i class="fa-solid fa-building-user" style="color: var(--primary);"></i> 신규 고객사 보안키 발급</h3>
+                    <h3><i class="fa-solid fa-building-user" style="color: var(--primary);"></i> ?좉퇋 怨좉컼??蹂댁븞??諛쒓툒</h3>
                     <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.95rem;">
-                        새로운 고객사를 등록하고, 기업 관리자용 보안키를 생성하여 즉시 저장합니다.
+                        ?덈줈??怨좉컼?щ? ?깅줉?섍퀬, 湲곗뾽 愿由ъ옄??蹂댁븞?ㅻ? ?앹꽦?섏뿬 利됱떆 ??ν빀?덈떎.
                     </p>
                     <div class="form-grid">
                         <div class="input-group">
-                            <label>기업명</label>
+                            <label>湲곗뾽紐?/label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-signature"></i>
-                                <input type="text" id="companyName" placeholder="예: 삼성전자">
+                                <input type="text" id="companyName" placeholder="?? ?쇱꽦?꾩옄">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>고유 회사코드</label>
+                            <label>怨좎쑀 ?뚯궗肄붾뱶</label>
                             <div class="input-wrapper">
                                 <i class="fa-solid fa-hashtag"></i>
-                                <input type="text" id="companyCode" placeholder="예: SS2026">
+                                <input type="text" id="companyCode" placeholder="?? SS2026">
                             </div>
                         </div>
                         <div class="input-group">
-                            <label>생성된 관리자 암호키</label>
+                            <label>?앹꽦??愿由ъ옄 ?뷀샇??/label>
                             <div style="display: flex; gap: 10px;">
                                 <div class="input-wrapper" style="flex: 1;">
                                     <i class="fa-solid fa-key"></i>
-                                    <input type="text" id="adminKey" placeholder="자동 생성" readonly>
+                                    <input type="text" id="adminKey" placeholder="?먮룞 ?앹꽦" readonly>
                                 </div>
-                                <button type="button" class="btn-dark" onclick="window.generateAdminKey()"><i class="fa-solid fa-rotate"></i> 생성</button>
+                                <button type="button" class="btn-dark" onclick="window.generateAdminKey()"><i class="fa-solid fa-rotate"></i> ?앹꽦</button>
                             </div>
                         </div>
-                        <button id="saveBtn" class="btn-primary" style="height: 44px; margin-bottom: 2px;"><i class="fa-solid fa-check"></i> 저장 및 발급</button>
+                        <button id="saveBtn" class="btn-primary" style="height: 44px; margin-bottom: 2px;"><i class="fa-solid fa-check"></i> ???諛?諛쒓툒</button>
                     </div>
                 </div>
                 
                 <!-- List Card -->
                 <div class="card">
                     <div class="table-toolbar">
-                        <h3><i class="fa-solid fa-list-check" style="color: var(--dark);"></i> 영구 저장된 기업 목록</h3>
+                        <h3><i class="fa-solid fa-list-check" style="color: var(--dark);"></i> ?곴뎄 ??λ맂 湲곗뾽 紐⑸줉</h3>
                         <div class="search-box">
                             <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
-                            <input type="text" id="searchInput" placeholder="기업명 또는 코드로 검색..." onkeyup="window.filterTable()">
+                            <input type="text" id="searchInput" placeholder="湲곗뾽紐??먮뒗 肄붾뱶濡?寃??.." onkeyup="window.filterTable()">
                         </div>
                     </div>
                     
                     <table id="companyTable">
                         <thead>
                             <tr>
-                                <th style="width: 20%">기업명</th>
-                                <th style="width: 15%">회사코드</th>
-                                <th style="width: 25%">관리자 암호키</th>
-                                <th style="width: 40%; text-align: center;">관리</th>
+                                <th style="width: 20%">湲곗뾽紐?/th>
+                                <th style="width: 15%">?뚯궗肄붾뱶</th>
+                                <th style="width: 25%">愿由ъ옄 ?뷀샇??/th>
+                                <th style="width: 40%; text-align: center;">愿由?/th>
                             </tr>
                         </thead>
                         <tbody id="companyList">
-                            <tr><td colspan="4" style="text-align: center; color: #999;">로딩 중...</td></tr>
+                            <tr><td colspan="4" style="text-align: center; color: #999;">濡쒕뵫 以?..</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -524,8 +524,8 @@
             <div id="sectionBookings" class="hidden">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                     <div>
-                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-calendar-check" style="color: #10b981;"></i> 검진 일정 및 알림톡 대상자 관리</h3>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">근로자들의 예약 날짜를 기준으로 알림톡 발송 시점을 관리합니다.</p>
+                        <h3 style="margin-bottom: 5px;"><i class="fa-solid fa-calendar-check" style="color: #10b981;"></i> 寃吏??쇱젙 諛??뚮┝????곸옄 愿由?/h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">洹쇰줈?먮뱾???덉빟 ?좎쭨瑜?湲곗??쇰줈 ?뚮┝??諛쒖넚 ?쒖젏??愿由ы빀?덈떎.</p>
                     </div>
                 </div>
 
@@ -533,17 +533,17 @@
                     <!-- Milestone Filter Toolbar -->
                     <div style="padding: 20px; border-bottom: 1px solid #eee; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap;">
                         <div id="bookingMilestoneFilters" style="display: flex; gap: 8px;">
-                            <button class="alim-btn active" onclick="window.filterBookings('all')" style="border-color: var(--primary); color: var(--primary); background: #f0f7ff;">전체</button>
-                            <button class="alim-btn" onclick="window.filterBookings('7')">7일전</button>
-                            <button class="alim-btn" onclick="window.filterBookings('5')">5일전</button>
-                            <button class="alim-btn" onclick="window.filterBookings('3')">3일전</button>
-                            <button class="alim-btn" onclick="window.filterBookings('2')">2일전</button>
-                            <button class="alim-btn" onclick="window.filterBookings('1')">1일전</button>
-                            <button class="alim-btn" onclick="window.filterBookings('0')">당일</button>
+                            <button class="alim-btn active" onclick="window.filterBookings('all')" style="border-color: var(--primary); color: var(--primary); background: #f0f7ff;">?꾩껜</button>
+                            <button class="alim-btn" onclick="window.filterBookings('7')">7?쇱쟾</button>
+                            <button class="alim-btn" onclick="window.filterBookings('5')">5?쇱쟾</button>
+                            <button class="alim-btn" onclick="window.filterBookings('3')">3?쇱쟾</button>
+                            <button class="alim-btn" onclick="window.filterBookings('2')">2?쇱쟾</button>
+                            <button class="alim-btn" onclick="window.filterBookings('1')">1?쇱쟾</button>
+                            <button class="alim-btn" onclick="window.filterBookings('0')">?뱀씪</button>
                         </div>
                         <div class="search-box" style="margin: 0; width: 250px;">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="bookingSearchInput" placeholder="근로자 성함 검색..." onkeyup="window.filterBookings()">
+                            <input type="text" id="bookingSearchInput" placeholder="洹쇰줈???깊븿 寃??.." onkeyup="window.filterBookings()">
                         </div>
                     </div>
 
@@ -551,7 +551,7 @@
                         <!-- Company Groups injected here -->
                         <div style="padding: 40px; text-align: center; color: #94a3b8;">
                             <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px;"></i>
-                            <br>데이터를 불러오고 있습니다...
+                            <br>?곗씠?곕? 遺덈윭?ㅺ퀬 ?덉뒿?덈떎...
                         </div>
                     </div>
                 </div>
@@ -563,18 +563,18 @@
                     <!-- Chat List -->
                     <div class="chat-sidebar">
                         <div style="padding: 20px; background: #fcfcfc; border-bottom: 1px solid #efefef;">
-                            <h4 style="margin: 0; font-size: 1rem;"><i class="fa-solid fa-users-viewfinder"></i> 근로자 채팅 목록</h4>
+                            <h4 style="margin: 0; font-size: 1rem;"><i class="fa-solid fa-users-viewfinder"></i> 洹쇰줈??梨꾪똿 紐⑸줉</h4>
                         </div>
                         <div style="padding: 10px 15px; border-bottom: 1px solid #eee; background: #f8fafc;">
                             <div style="position: relative;">
                                 <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.8rem;"></i>
-                                <input type="text" id="chatSearchInput" placeholder="기업명 또는 이름 검색..." oninput="window.filterChatList()"
+                                <input type="text" id="chatSearchInput" placeholder="湲곗뾽紐??먮뒗 ?대쫫 寃??.." oninput="window.filterChatList()"
                                        style="width: calc(100% - 10px); max-width: 240px; padding: 8px 10px 8px 30px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border-color 0.2s; background: white;">
                             </div>
                         </div>
                         <div id="chatWorkerList" style="flex-grow: 1; overflow-y: auto;">
                             <!-- List of workers injected here -->
-                            <div style="padding: 30px; text-align: center; color: #999;">대화 목록을 불러오고 있습니다...</div>
+                            <div style="padding: 30px; text-align: center; color: #999;">???紐⑸줉??遺덈윭?ㅺ퀬 ?덉뒿?덈떎...</div>
                         </div>
                     </div>
 
@@ -582,8 +582,8 @@
                     <div class="chat-main" id="chatWindowPlaceholder">
                         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #cbd5e1; text-align: center; padding: 40px;">
                             <i class="fa-solid fa-comments" style="font-size: 4rem; margin-bottom: 20px;"></i>
-                            <h2>관리할 채팅을 선택해 주세요</h2>
-                            <p>좌측 목록에서 근로자를 선택하면 대화 내용이 표시됩니다.</p>
+                            <h2>愿由ы븷 梨꾪똿???좏깮??二쇱꽭??/h2>
+                            <p>醫뚯륫 紐⑸줉?먯꽌 洹쇰줈?먮? ?좏깮?섎㈃ ????댁슜???쒖떆?⑸땲??</p>
                         </div>
                     </div>
 
@@ -595,12 +595,12 @@
                                     <i class="fa-solid fa-arrow-left"></i>
                                 </button>
                                 <div>
-                                    <span id="activeWorkerName" style="font-weight: 700; font-size: 1.1rem; color: var(--dark);">근로자명</span>
-                                    <span id="activeWorkerComp" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">소속 기업</span>
+                                    <span id="activeWorkerName" style="font-weight: 700; font-size: 1.1rem; color: var(--dark);">洹쇰줈?먮챸</span>
+                                    <span id="activeWorkerComp" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">?뚯냽 湲곗뾽</span>
                                 </div>
                             </div>
                             <div style="font-size: 0.8rem; color: #10b981; font-weight: 600;">
-                                <i class="fa-solid fa-circle"></i> 대화 중
+                                <i class="fa-solid fa-circle"></i> ???以?
                             </div>
                         </div>
 
@@ -611,19 +611,19 @@
 
                         <!-- Alimtalk Tool -->
                         <div class="alimtalk-tool">
-                            <span style="font-size: 0.75rem; color: #94a3b8; align-self: center; margin-right: 5px;">알림톡 툴:</span>
-                            <button class="alim-btn" style="border-color: var(--primary); color: var(--primary);" onclick="window.sendBookingGuide()"><i class="fa-solid fa-file-invoice"></i> 검진 가이드</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('7d')"><i class="fa-solid fa-bell"></i> 7일전</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('5d')"><i class="fa-solid fa-bell"></i> 5일전</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('3d')"><i class="fa-solid fa-bell"></i> 3일전</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('2d')"><i class="fa-solid fa-bell"></i> 2일전</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('1d')"><i class="fa-solid fa-bell"></i> 1일전</button>
-                            <button class="alim-btn" onclick="applyAlimtalkTemplate('dday')"><i class="fa-solid fa-hospital-user"></i> 당일</button>
+                            <span style="font-size: 0.75rem; color: #94a3b8; align-self: center; margin-right: 5px;">?뚮┝????</span>
+                            <button class="alim-btn" style="border-color: var(--primary); color: var(--primary);" onclick="window.sendBookingGuide()"><i class="fa-solid fa-file-invoice"></i> 寃吏?媛?대뱶</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('7d')"><i class="fa-solid fa-bell"></i> 7?쇱쟾</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('5d')"><i class="fa-solid fa-bell"></i> 5?쇱쟾</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('3d')"><i class="fa-solid fa-bell"></i> 3?쇱쟾</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('2d')"><i class="fa-solid fa-bell"></i> 2?쇱쟾</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('1d')"><i class="fa-solid fa-bell"></i> 1?쇱쟾</button>
+                            <button class="alim-btn" onclick="applyAlimtalkTemplate('dday')"><i class="fa-solid fa-hospital-user"></i> ?뱀씪</button>
                         </div>
 
                         <!-- Footer Input -->
                         <div class="chat-footer">
-                            <textarea id="masterChatInput" class="chat-input" placeholder="답변을 입력하세요..."></textarea>
+                            <textarea id="masterChatInput" class="chat-input" placeholder="?듬????낅젰?섏꽭??.."></textarea>
                             <button onclick="sendMasterMessage()" class="btn-primary" style="width: 54px; height: 50px;">
                                 <i class="fa-solid fa-paper-plane"></i>
                             </button>
@@ -637,38 +637,38 @@
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 30px;">
                     <!-- Company Stats Card -->
                     <div class="card" style="text-align: center; padding: 30px;">
-                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-building"></i> 계약 기업 수</h4>
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-building"></i> 怨꾩빟 湲곗뾽 ??/h4>
                         <div style="height: 180px; position: relative; margin-bottom: 20px;">
                             <canvas id="companyChart"></canvas>
                         </div>
                         <div style="font-size: 2rem; font-weight: 800; color: #3b82f6;" id="countComps">0</div>
-                        <div style="color: #94a3b8; font-size: 0.85rem;">등록된 전체 기업</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">?깅줉???꾩껜 湲곗뾽</div>
                     </div>
 
                     <!-- Worker Roster Stats Card -->
                     <div class="card" style="text-align: center; padding: 30px;">
-                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-users"></i> 총 명단 등록 근로자</h4>
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-users"></i> 珥?紐낅떒 ?깅줉 洹쇰줈??/h4>
                         <div style="height: 180px; position: relative; margin-bottom: 20px;">
                             <canvas id="workerChart"></canvas>
                         </div>
                         <div style="font-size: 2rem; font-weight: 800; color: #10b981;" id="countWorkers">0</div>
-                        <div style="color: #94a3b8; font-size: 0.85rem;">관리 중인 전체 명단</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">愿由?以묒씤 ?꾩껜 紐낅떒</div>
                     </div>
 
                     <!-- Signup Progress Stats Card -->
                     <div class="card" style="text-align: center; padding: 30px;">
-                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-user-check"></i> 회원가입 완료 근로자</h4>
+                        <h4 style="margin: 0 0 20px 0; color: #64748b;"><i class="fa-solid fa-user-check"></i> ?뚯썝媛???꾨즺 洹쇰줈??/h4>
                         <div style="height: 180px; position: relative; margin-bottom: 20px;">
                             <canvas id="signupChart"></canvas>
                         </div>
                         <div style="font-size: 2rem; font-weight: 800; color: #f59e0b;" id="countSignedUp">0</div>
-                        <div style="color: #94a3b8; font-size: 0.85rem;">포털 이용 중인 근로자</div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">?ы꽭 ?댁슜 以묒씤 洹쇰줈??/div>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h4>최근 시스템 로그</h4>
-                    <p style="color: #999; font-size: 0.9rem;">실시간 시스템 활동 로그가 여기에 표시됩니다 (준비 중).</p>
+                    <h4>理쒓렐 ?쒖뒪??濡쒓렇</h4>
+                    <p style="color: #999; font-size: 0.9rem;">?ㅼ떆媛??쒖뒪???쒕룞 濡쒓렇媛 ?ш린???쒖떆?⑸땲??(以鍮?以?.</p>
                 </div>
             </div>
 
@@ -678,8 +678,8 @@
                 <!-- Header -->
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
                     <div>
-                        <h3 style="margin:0 0 5px;"><i class="fa-solid fa-gears" style="color:#6366f1;"></i> 시스템 관리</h3>
-                        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">마스터 전용 플랫폼 운영 도구 및 설정</p>
+                        <h3 style="margin:0 0 5px;"><i class="fa-solid fa-gears" style="color:#6366f1;"></i> ?쒖뒪??愿由?/h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">留덉뒪???꾩슜 ?뚮옯???댁쁺 ?꾧뎄 諛??ㅼ젙</p>
                     </div>
                     <span style="background:#eef2ff; color:#6366f1; padding:6px 14px; border-radius:20px; font-size:0.8rem; font-weight:700;">
                         <i class="fa-solid fa-shield-halved"></i> MASTER ONLY
@@ -689,28 +689,28 @@
                 <!-- CARD 1: Platform Stats -->
                 <div class="card" style="margin-bottom:20px; padding:25px;">
                     <h3 style="margin-bottom:20px; font-size:1rem;">
-                        <i class="fa-solid fa-chart-bar" style="color:#10b981;"></i> 플랫폼 현황 요약
+                        <i class="fa-solid fa-chart-bar" style="color:#10b981;"></i> ?뚮옯???꾪솴 ?붿빟
                     </h3>
                     <div id="sysStatGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:15px;">
                         <div class="sys-stat-card" style="background:linear-gradient(135deg,#667eea,#764ba2); color:white; border-radius:12px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-building" style="font-size:1.6rem; margin-bottom:10px; opacity:0.8;"></i>
                             <div style="font-size:2rem; font-weight:800;" id="statCompCount">-</div>
-                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">등록 기업 수</div>
+                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">?깅줉 湲곗뾽 ??/div>
                         </div>
                         <div class="sys-stat-card" style="background:linear-gradient(135deg,#f6d365,#fda085); color:white; border-radius:12px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-users" style="font-size:1.6rem; margin-bottom:10px; opacity:0.8;"></i>
                             <div style="font-size:2rem; font-weight:800;" id="statWorkerCount">-</div>
-                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">총 등록 근로자</div>
+                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">珥??깅줉 洹쇰줈??/div>
                         </div>
                         <div class="sys-stat-card" style="background:linear-gradient(135deg,#f093fb,#f5576c); color:white; border-radius:12px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-calendar-check" style="font-size:1.6rem; margin-bottom:10px; opacity:0.8;"></i>
                             <div style="font-size:2rem; font-weight:800;" id="statTodayCount">-</div>
-                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">오늘 검진 대상자</div>
+                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">?ㅻ뒛 寃吏???곸옄</div>
                         </div>
                         <div class="sys-stat-card" style="background:linear-gradient(135deg,#4facfe,#00f2fe); color:white; border-radius:12px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-comments" style="font-size:1.6rem; margin-bottom:10px; opacity:0.8;"></i>
                             <div style="font-size:2rem; font-weight:800;" id="statChatCount">-</div>
-                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">채팅 대화 수</div>
+                            <div style="font-size:0.8rem; opacity:0.85; margin-top:5px;">梨꾪똿 ?????/div>
                         </div>
                     </div>
                 </div>
@@ -720,49 +720,49 @@
                     <!-- CARD 2: Notice Broadcast -->
                     <div class="card" style="padding:25px;">
                         <h3 style="margin-bottom:5px; font-size:1rem;">
-                            <i class="fa-solid fa-bullhorn" style="color:#f59e0b;"></i> 공지사항 발송
+                            <i class="fa-solid fa-bullhorn" style="color:#f59e0b;"></i> 怨듭??ы빆 諛쒖넚
                         </h3>
-                        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">기업 대시보드에 공지를 전송합니다</p>
+                        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">湲곗뾽 ??쒕낫?쒖뿉 怨듭?瑜??꾩넚?⑸땲??/p>
 
                         <div style="margin-bottom:12px;">
-                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">수신 대상</label>
+                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">?섏떊 ???/label>
                             <select id="noticeTarget" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.9rem; outline:none;">
-                                <option value="all">전체 기업</option>
+                                <option value="all">?꾩껜 湲곗뾽</option>
                             </select>
                         </div>
                         <div style="margin-bottom:12px;">
-                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">공지 내용</label>
-                            <textarea id="noticeContent" rows="4" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.9rem; resize:vertical; outline:none; box-sizing:border-box;" placeholder="공지 내용을 입력하세요..."></textarea>
+                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">怨듭? ?댁슜</label>
+                            <textarea id="noticeContent" rows="4" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.9rem; resize:vertical; outline:none; box-sizing:border-box;" placeholder="怨듭? ?댁슜???낅젰?섏꽭??.."></textarea>
                         </div>
                         <button class="btn-primary" style="width:100%;" onclick="window.sendNotice()">
-                            <i class="fa-solid fa-paper-plane"></i> 공지 발송
+                            <i class="fa-solid fa-paper-plane"></i> 怨듭? 諛쒖넚
                         </button>
                     </div>
 
                     <!-- CARD 3: Master Password Change -->
                     <div class="card" style="padding:25px;">
                         <h3 style="margin-bottom:5px; font-size:1rem;">
-                            <i class="fa-solid fa-lock" style="color:#ef4444;"></i> 마스터 로그인 키 변경
+                            <i class="fa-solid fa-lock" style="color:#ef4444;"></i> 留덉뒪??濡쒓렇????蹂寃?
                         </h3>
-                        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">마스터 콘솔 로그인에 사용되는 암호키를 변경합니다</p>
+                        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">留덉뒪??肄섏넄 濡쒓렇?몄뿉 ?ъ슜?섎뒗 ?뷀샇?ㅻ? 蹂寃쏀빀?덈떎</p>
 
                         <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px 15px; margin-bottom:15px; font-size:0.8rem; color:#92400e;">
-                            <i class="fa-solid fa-triangle-exclamation"></i> 변경 후 반드시 새 키를 안전한 곳에 보관하세요.
+                            <i class="fa-solid fa-triangle-exclamation"></i> 蹂寃???諛섎뱶?????ㅻ? ?덉쟾??怨녹뿉 蹂닿??섏꽭??
                         </div>
                         <div style="margin-bottom:12px;">
-                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">현재 로그인 키</label>
-                            <div class="input-wrapper"><i class="fa-solid fa-key"></i><input type="password" id="currentMasterKey" placeholder="현재 키 입력"></div>
+                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">?꾩옱 濡쒓렇????/label>
+                            <div class="input-wrapper"><i class="fa-solid fa-key"></i><input type="password" id="currentMasterKey" placeholder="?꾩옱 ???낅젰"></div>
                         </div>
                         <div style="margin-bottom:12px;">
-                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">새 로그인 키</label>
-                            <div class="input-wrapper"><i class="fa-solid fa-lock"></i><input type="password" id="newMasterKey" placeholder="새 키 입력 (8자 이상)"></div>
+                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">??濡쒓렇????/label>
+                            <div class="input-wrapper"><i class="fa-solid fa-lock"></i><input type="password" id="newMasterKey" placeholder="?????낅젰 (8???댁긽)"></div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">새 키 확인</label>
-                            <div class="input-wrapper"><i class="fa-solid fa-lock"></i><input type="password" id="confirmMasterKey" placeholder="새 키 재입력"></div>
+                            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:6px;">?????뺤씤</label>
+                            <div class="input-wrapper"><i class="fa-solid fa-lock"></i><input type="password" id="confirmMasterKey" placeholder="?????ъ엯??></div>
                         </div>
                         <button class="btn-dark" style="width:100%;" onclick="window.changeMasterKey()">
-                            <i class="fa-solid fa-rotate"></i> 키 변경 저장
+                            <i class="fa-solid fa-rotate"></i> ??蹂寃????
                         </button>
                     </div>
 
@@ -772,16 +772,16 @@
                 <div class="card" style="margin-bottom:20px; padding:25px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                         <h3 style="margin:0; font-size:1rem;">
-                            <i class="fa-solid fa-clock-rotate-left" style="color:#8b5cf6;"></i> 시스템 접속 로그
+                            <i class="fa-solid fa-clock-rotate-left" style="color:#8b5cf6;"></i> ?쒖뒪???묒냽 濡쒓렇
                         </h3>
                         <div style="display:flex; gap:8px; align-items:center;">
                             <select id="logPeriod" onchange="window.loadSysLogs()" style="padding:8px 12px; border:1px solid #ddd; border-radius:8px; font-family:inherit; font-size:0.85rem; outline:none;">
-                                <option value="7">최근 7일</option>
-                                <option value="30">최근 30일</option>
-                                <option value="90">최근 90일</option>
+                                <option value="7">理쒓렐 7??/option>
+                                <option value="30">理쒓렐 30??/option>
+                                <option value="90">理쒓렐 90??/option>
                             </select>
                             <button class="btn-outline" style="padding:8px 14px; font-size:0.8rem;" onclick="window.exportLogCSV()">
-                                <i class="fa-solid fa-file-csv"></i> CSV 내보내기
+                                <i class="fa-solid fa-file-csv"></i> CSV ?대낫?닿린
                             </button>
                         </div>
                     </div>
@@ -789,14 +789,14 @@
                         <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
                             <thead>
                                 <tr>
-                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">시간</th>
-                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">기업</th>
-                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">이벤트</th>
-                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">세부내용</th>
+                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">?쒓컙</th>
+                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">湲곗뾽</th>
+                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">?대깽??/th>
+                                    <th style="padding:10px; background:#f8fafc; color:#64748b; text-align:left;">?몃??댁슜</th>
                                 </tr>
                             </thead>
                             <tbody id="sysLogBody">
-                                <tr><td colspan="4" style="text-align:center; padding:30px; color:#94a3b8;">로그를 불러오는 중...</td></tr>
+                                <tr><td colspan="4" style="text-align:center; padding:30px; color:#94a3b8;">濡쒓렇瑜?遺덈윭?ㅻ뒗 以?..</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -805,32 +805,32 @@
                 <!-- CARD 5: Data Management -->
                 <div class="card" style="padding:25px;">
                     <h3 style="margin-bottom:5px; font-size:1rem;">
-                        <i class="fa-solid fa-database" style="color:#e74c3c;"></i> 데이터 관리
+                        <i class="fa-solid fa-database" style="color:#e74c3c;"></i> ?곗씠??愿由?
                     </h3>
-                    <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">불필요한 데이터를 정리하여 시스템 성능을 유지합니다. <strong style="color:#ef4444;">실행 전 반드시 확인하세요.</strong></p>
+                    <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:20px;">遺덊븘?뷀븳 ?곗씠?곕? ?뺣━?섏뿬 ?쒖뒪???깅뒫???좎??⑸땲?? <strong style="color:#ef4444;">?ㅽ뻾 ??諛섎뱶???뺤씤?섏꽭??</strong></p>
                     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:15px;">
                         <div style="border:1px solid #fee2e2; border-radius:10px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-calendar-xmark" style="font-size:1.5rem; color:#ef4444; margin-bottom:10px;"></i>
-                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">만료 예약 정리</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">검진일이 지난 예약 데이터를 초기화합니다</div>
+                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">留뚮즺 ?덉빟 ?뺣━</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">寃吏꾩씪??吏???덉빟 ?곗씠?곕? 珥덇린?뷀빀?덈떎</div>
                             <button class="btn-danger" style="width:100%; font-size:0.8rem; padding:8px;" onclick="window.clearExpiredBookings()">
-                                <i class="fa-solid fa-broom"></i> 정리 실행
+                                <i class="fa-solid fa-broom"></i> ?뺣━ ?ㅽ뻾
                             </button>
                         </div>
                         <div style="border:1px solid #fef3c7; border-radius:10px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-comments" style="font-size:1.5rem; color:#f59e0b; margin-bottom:10px;"></i>
-                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">오래된 채팅 삭제</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">90일 이상 된 채팅 메시지를 삭제합니다</div>
+                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">?ㅻ옒??梨꾪똿 ??젣</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">90???댁긽 ??梨꾪똿 硫붿떆吏瑜???젣?⑸땲??/div>
                             <button class="btn-danger" style="width:100%; font-size:0.8rem; padding:8px; background:#f59e0b;" onclick="window.clearOldChats()">
-                                <i class="fa-solid fa-trash-can"></i> 삭제 실행
+                                <i class="fa-solid fa-trash-can"></i> ??젣 ?ㅽ뻾
                             </button>
                         </div>
                         <div style="border:1px solid #dbeafe; border-radius:10px; padding:20px; text-align:center;">
                             <i class="fa-solid fa-file-export" style="font-size:1.5rem; color:#3b82f6; margin-bottom:10px;"></i>
-                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">전체 데이터 내보내기</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">현재 근로자 전체 목록을 Excel로 저장합니다</div>
+                            <div style="font-weight:700; margin-bottom:5px; font-size:0.9rem;">?꾩껜 ?곗씠???대낫?닿린</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px;">?꾩옱 洹쇰줈???꾩껜 紐⑸줉??Excel濡???ν빀?덈떎</div>
                             <button class="btn-outline" style="width:100%; font-size:0.8rem; padding:8px; border-color:#3b82f6; color:#3b82f6;" onclick="window.exportAllWorkers()">
-                                <i class="fa-solid fa-file-excel"></i> 내보내기
+                                <i class="fa-solid fa-file-excel"></i> ?대낫?닿린
                             </button>
                         </div>
                     </div>
@@ -842,26 +842,26 @@
             <div id="sectionContracts" class="hidden">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
                     <div>
-                        <h3 style="margin:0 0 5px;"><i class="fa-solid fa-file-contract" style="color:#8b5cf6;"></i> 기업 동의서 및 계약서 관리</h3>
-                        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">각 기업의 서비스 이용 계약 체결 현황을 조회합니다.</p>
+                        <h3 style="margin:0 0 5px;"><i class="fa-solid fa-file-contract" style="color:#8b5cf6;"></i> 湲곗뾽 ?숈쓽??諛?怨꾩빟??愿由?/h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin:0;">媛?湲곗뾽???쒕퉬???댁슜 怨꾩빟 泥닿껐 ?꾪솴??議고쉶?⑸땲??</p>
                     </div>
-                    <button class="btn-outline" onclick="window.loadContracts()" style="font-size:0.85rem;"><i class="fa-solid fa-arrows-rotate"></i> 새로고침</button>
+                    <button class="btn-outline" onclick="window.loadContracts()" style="font-size:0.85rem;"><i class="fa-solid fa-arrows-rotate"></i> ?덈줈怨좎묠</button>
                 </div>
 
                 <div class="card" style="padding:0; overflow:hidden;">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead>
                             <tr>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:20%;">기업명 (Company ID)</th>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:15%;">서명자</th>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:15%;">체결일</th>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">상태</th>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">동의 항목</th>
-                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">상세</th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:20%;">湲곗뾽紐?(Company ID)</th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:15%;">?쒕챸??/th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:left; width:15%;">泥닿껐??/th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">?곹깭</th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">?숈쓽 ??ぉ</th>
+                                <th style="padding:15px 20px; background:#f8fafc; color:#64748b; text-align:center; width:12%;">?곸꽭</th>
                             </tr>
                         </thead>
                         <tbody id="contractListBody">
-                            <tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 계약서를 불러오는 중...</td></tr>
+                            <tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 怨꾩빟?쒕? 遺덈윭?ㅻ뒗 以?..</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -911,8 +911,8 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(console.error);
-    // 기존에 "checkit082"라는 특정 이름의 DB를 찾도록 설정되었으나,
-    // (default) 기본 데이터베이스를 사용하도록 수정.
+    // 湲곗〈??"checkit082"?쇰뒗 ?뱀젙 ?대쫫??DB瑜?李얜룄濡??ㅼ젙?섏뿀?쇰굹,
+    // (default) 湲곕낯 ?곗씠?곕쿋?댁뒪瑜??ъ슜?섎룄濡??섏젙.
     const db = firebase.firestore();
 
     let allCompanies = [];
@@ -941,11 +941,11 @@
     // Connection Check
     db.collection("company_info").limit(1).onSnapshot(() => {
         const badge = document.getElementById("debugStatus");
-        badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> 온라인 (정상 연결)`;
+        badge.innerHTML = `<i class="fa-solid fa-circle-check"></i> ?⑤씪??(?뺤긽 ?곌껐)`;
         badge.className = "status-badge online";
     }, (err) => {
         const badge = document.getElementById("debugStatus");
-        badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> 연결 오류`;
+        badge.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ?곌껐 ?ㅻ쪟`;
         badge.className = "status-badge offline";
     });
 
@@ -954,12 +954,12 @@
         let secureStr = '';
         for(let i=0; i<6; i++) secureStr += chars.charAt(Math.floor(Math.random() * chars.length));
         document.getElementById("adminKey").value = 'admin_' + secureStr;
-        showToast('새로운 보안키가 생성되었습니다.', 'success');
+        showToast('?덈줈??蹂댁븞?ㅺ? ?앹꽦?섏뿀?듬땲??', 'success');
     };
 
     window.copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
-            showToast('복사되었습니다.', 'success');
+            showToast('蹂듭궗?섏뿀?듬땲??', 'success');
         });
     };
 
@@ -969,11 +969,11 @@
         const key = document.getElementById("adminKey").value.trim();
         
         if(!name || !code || !key) {
-            showToast("모든 정보를 입력 및 생성해주세요.", "error"); return;
+            showToast("紐⑤뱺 ?뺣낫瑜??낅젰 諛??앹꽦?댁＜?몄슂.", "error"); return;
         }
 
         const loader = document.getElementById("pageLoader");
-        document.getElementById("loaderMessage").innerText = "보안키 발급 및 동기화 중...";
+        document.getElementById("loaderMessage").innerText = "蹂댁븞??諛쒓툒 諛??숆린??以?..";
         loader.style.display = "flex";
 
         try {
@@ -982,7 +982,7 @@
                 createdAt: new Date().toISOString()
             }, { merge: true });
             
-            showToast("성공적으로 저장되었습니다! 이 기록은 영구 보존됩니다.", "success");
+            showToast("?깃났?곸쑝濡???λ릺?덉뒿?덈떎! ??湲곕줉? ?곴뎄 蹂댁〈?⑸땲??", "success");
             
             document.getElementById("companyName").value = "";
             document.getElementById("companyCode").value = "";
@@ -990,8 +990,8 @@
             document.getElementById("searchInput").value = "";
         } catch(e) { 
             console.error("Firestore Error:", e);
-            showToast("실패: " + e.message, "error"); 
-            alert("상세 에러 내역이 브라우저 콘솔창(F12)에 출력되었습니다. 에러 메시지: " + e.message);
+            showToast("?ㅽ뙣: " + e.message, "error"); 
+            alert("?곸꽭 ?먮윭 ?댁뿭??釉뚮씪?곗? 肄섏넄李?F12)??異쒕젰?섏뿀?듬땲?? ?먮윭 硫붿떆吏: " + e.message);
         }
         finally { loader.style.display = "none"; }
     };
@@ -999,7 +999,7 @@
     window.renderTable = (dataArray) => {
         const list = document.getElementById("companyList");
         if(dataArray.length === 0) {
-            list.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">데이터가 없습니다.</td></tr>`;
+            list.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #999;">?곗씠?곌? ?놁뒿?덈떎.</td></tr>`;
             return;
         }
         
@@ -1018,18 +1018,18 @@
                     <div style="display: flex; flex-direction: column; gap: 5px; align-items: center; justify-content: center;">
                         <div style="display: flex; gap: 5px;">
                             <button class="btn-outline" style="padding: 6px 12px; font-size: 0.75rem; min-width: 90px;" onclick="window.open('company_dashboard.html?companyId=${d.companyKey}', '_blank')">
-                                <i class="fa-solid fa-up-right-from-square"></i> 관리
+                                <i class="fa-solid fa-up-right-from-square"></i> 愿由?
                             </button>
                             <button class="btn-outline" style="padding: 6px 12px; font-size: 0.75rem; min-width: 90px;" onclick="window.showMemberList('${d.companyKey}', '${d.name}')">
-                                <i class="fa-solid fa-users"></i> 명단
+                                <i class="fa-solid fa-users"></i> 紐낅떒
                             </button>
                         </div>
                         <div style="display: flex; gap: 5px;">
                             <button class="btn-dark" style="padding: 6px 12px; font-size: 0.75rem; min-width: 90px;" onclick="window.editAdminKey('${d.id}', '${d.adminKey}', '${d.name}')">
-                                <i class="fa-solid fa-key"></i> 키 수정
+                                <i class="fa-solid fa-key"></i> ???섏젙
                             </button>
                             <button class="btn-danger" style="padding: 6px 12px; font-size: 0.75rem; min-width: 90px;" onclick="window.delComp('${d.id}', '${d.name}')">
-                                <i class="fa-solid fa-trash-can"></i> 삭제
+                                <i class="fa-solid fa-trash-can"></i> ??젣
                             </button>
                         </div>
                     </div>
@@ -1060,30 +1060,30 @@
     };
 
     window.editAdminKey = async (id, currentKey, name) => {
-        const newKey = prompt(`[${name}] 기업의 새로운 보안키(6자리)를 입력해주세요.`, currentKey);
+        const newKey = prompt(`[${name}] 湲곗뾽???덈줈??蹂댁븞??6?먮━)瑜??낅젰?댁＜?몄슂.`, currentKey);
         if (newKey === null) return;
         
         const trimmedKey = newKey.trim();
         if (trimmedKey.length !== 6) {
-            alert("보안키는 반드시 6자리여야 합니다.");
+            alert("蹂댁븞?ㅻ뒗 諛섎뱶??6?먮━?ъ빞 ?⑸땲??");
             return;
         }
 
-        if (confirm(`보안키를 [${trimmedKey}](으)로 변경하시겠습니까?`)) {
+        if (confirm(`蹂댁븞?ㅻ? [${trimmedKey}](??濡?蹂寃쏀븯?쒓쿋?듬땲源?`)) {
             try {
                 await db.collection("company_info").doc(id).update({ adminKey: trimmedKey });
-                showToast("보안키가 성공적으로 변경되었습니다.", "success");
+                showToast("蹂댁븞?ㅺ? ?깃났?곸쑝濡?蹂寃쎈릺?덉뒿?덈떎.", "success");
             } catch (e) {
                 console.error("Key Update Error:", e);
-                showToast("보안키 변경 실패: " + e.message, "error");
+                showToast("蹂댁븞??蹂寃??ㅽ뙣: " + e.message, "error");
             }
         }
     };
 
     window.delComp = async (id, name) => { 
-        if(confirm(`[${name}] 기업 데이터를 완전히 삭제하시겠습니까?`)) {
-            try { await db.collection("company_info").doc(id).delete(); showToast("삭제되었습니다.", "success"); }
-            catch(e) { showToast("삭제 실패: " + e.message, "error"); }
+        if(confirm(`[${name}] 湲곗뾽 ?곗씠?곕? ?꾩쟾????젣?섏떆寃좎뒿?덇퉴?`)) {
+            try { await db.collection("company_info").doc(id).delete(); showToast("??젣?섏뿀?듬땲??", "success"); }
+            catch(e) { showToast("??젣 ?ㅽ뙣: " + e.message, "error"); }
         }
     };
 
@@ -1092,7 +1092,7 @@
         db.collection('messages').orderBy('timestamp', 'desc').onSnapshot({ includeMetadataChanges: true }, async snap => {
             const workerListEl = document.getElementById('chatWorkerList');
             if (snap.empty) {
-                workerListEl.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">표시할 대화가 없습니다.</div>';
+                workerListEl.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">?쒖떆????붽? ?놁뒿?덈떎.</div>';
                 return;
             }
 
@@ -1103,7 +1103,7 @@
             const workerPromises = uniqueWorkerIds.map(async wid => {
                 const latestMsg = snap.docs.find(d => d.data().workerDocId === wid).data();
                 const wDoc = await db.collection('workers').doc(wid).get();
-                const wData = wDoc.exists ? wDoc.data() : { name: '알 수 없는 사용자', companyId: 'unknown' };
+                const wData = wDoc.exists ? wDoc.data() : { name: '?????녿뒗 ?ъ슜??, companyId: 'unknown' };
                 chatData.push({ id: wid, name: wData.name, companyId: wData.companyId, latestMsg });
             });
 
@@ -1116,7 +1116,7 @@
                 return acc;
             }, {});
 
-            let html = '<div style="padding: 15px; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid #efefef;">활성 대화 (' + uniqueWorkerIds.length + ')</div>';
+            let html = '<div style="padding: 15px; font-size: 0.8rem; color: var(--text-muted); border-bottom: 1px solid #efefef;">?쒖꽦 ???(' + uniqueWorkerIds.length + ')</div>';
 
             // Sort companies (Master's company 'ch082082' first if exists)
             const sortedCompanyIds = Object.keys(grouped).sort((a, b) => {
@@ -1129,7 +1129,7 @@
                 const workers = grouped[cid];
                 // Find company name
                 const compInfo = allCompanies.find(c => c.companyKey === cid) || { name: cid };
-                const compDisplayName = cid === 'ch082082' ? '체킷 (본사)' : (compInfo.name || cid);
+                const compDisplayName = cid === 'ch082082' ? '泥댄궥 (蹂몄궗)' : (compInfo.name || cid);
 
                 html += `
                     <div class="company-header collapsed" onclick="toggleWorkerGroup('${cid}')">
@@ -1143,7 +1143,7 @@
                         <div class="chat-item ${activeChatWorkerId === w.id ? 'active' : ''}" id="chatItem-${w.id}" onclick="window.selectChat('${w.id}', '${w.name}', '${w.companyId}')">
                             <div class="name">
                                 <span>${w.name}</span>
-                                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: normal;">${w.latestMsg.timestamp ? '방금 전' : ''}</span>
+                                <span style="font-size: 0.65rem; color: #94a3b8; font-weight: normal;">${w.latestMsg.timestamp ? '諛⑷툑 ?? : ''}</span>
                             </div>
                             <div class="preview">${w.latestMsg.text}</div>
                         </div>
@@ -1210,7 +1210,7 @@
         const isWorker = msg.sender === 'worker';
         const isSystem = msg.sender === 'system';
         
-        let timestamp = '전송 중...';
+        let timestamp = '?꾩넚 以?..';
         try {
             if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
                 timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -1234,11 +1234,11 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
-                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내 (미리보기)
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 湲곗뾽 嫄닿컯寃吏??덈궡 (誘몃━蹂닿린)
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
-                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">내 검진 정보 확인하기</button>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">??寃吏??뺣낫 ?뺤씤?섍린</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -1250,12 +1250,12 @@
                 <div style="${wrapperStyle}">
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
                         <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
-                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계 (미리보기)
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 寃吏??덉빟 ?④퀎 (誘몃━蹂닿린)
                         </div>
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
-                            <button style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
-                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">예약 신청서 작성하기</button>
+                            <button style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem; margin-bottom: 8px;">?쒗쑕 蹂묒썝 紐⑸줉 蹂닿린</button>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">?덉빟 ?좎껌???묒꽦?섍린</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -1268,7 +1268,7 @@
                     <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid var(--primary);">
                         <div style="padding: 15px;">
                             <p style="font-size: 0.85rem; color: var(--text); margin-bottom: 12px; line-height: 1.5; font-weight: 500;">${msg.text || ''}</p>
-                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">${msg.btnText || '상세 보기(미리보기)'}</button>
+                            <button style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; opacity: 0.7; cursor: default; font-size: 0.85rem;">${msg.btnText || '?곸꽭 蹂닿린(誘몃━蹂닿린)'}</button>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -1281,7 +1281,7 @@
                     <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
                         <div style="padding: 18px;">
                             <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
-                            <div style="width: 100%; padding: 10px; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8;">근로자 날짜 입력 대기 중...</div>
+                            <div style="width: 100%; padding: 10px; border: 1px solid var(--border); background: #f8fafc; border-radius: 8px; margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8;">洹쇰줈???좎쭨 ?낅젰 ?湲?以?..</div>
                         </div>
                     </div>
                     <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
@@ -1290,7 +1290,7 @@
 
         return `
             <div style="${wrapperStyle}">
-                ${isMaster ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-right: 5px; font-weight: 600; text-align: right; width: 100%;">체킷 케어센터</span>' : ''}
+                ${isMaster ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-right: 5px; font-weight: 600; text-align: right; width: 100%;">泥댄궥 耳?댁꽱??/span>' : ''}
                 <div style="${bubbleStyle}">
                     ${(msg.text || '').replace(/\n/g, '<br>')}
                 </div>
@@ -1320,7 +1320,7 @@
                 const msgBody = document.getElementById('activeChatMessages');
                 
                 if (snap.empty) {
-                    msgBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">대화 기록이 없습니다.</div>';
+                    msgBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #94a3b8;">???湲곕줉???놁뒿?덈떎.</div>';
                     return;
                 }
 
@@ -1339,7 +1339,7 @@
                 msgBody.scrollTop = msgBody.scrollHeight;
             }, err => {
                 console.error("Chat sync error:", err);
-                document.getElementById('activeChatMessages').innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다.</div>';
+                document.getElementById('activeChatMessages').innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">????댁슜??遺덈윭?ㅼ? 紐삵뻽?듬땲??</div>';
             });
     };
 
@@ -1358,7 +1358,7 @@
             });
             input.value = '';
         } catch (e) {
-            showToast("전송 실패: " + e.message, "error");
+            showToast("?꾩넚 ?ㅽ뙣: " + e.message, "error");
         }
     };
 
@@ -1370,12 +1370,12 @@
     });
 
     const alimtalkTemplates = {
-        '7d': '[체킷] 건강검진 7일 전입니다. 예약된 병원과 시간을 확인해 주세요.',
-        '5d': '[체킷] 건강검진 5일 전입니다. 대변 채취 등 사전 준비 사항을 확인해 주세요.',
-        '3d': '[체킷] 건강검진 3일 전입니다. 금식 등 주의사항을 다시 한번 확인해 주세요.',
-        '2d': '[체킷] 건강검진 2일 전입니다. 내일 저녁 9시부터 금식입니다.',
-        '1d': '[체킷] 내일은 건강검진일입니다. 저녁 9시 이후부터 꼭 금식하시고, 신분증을 지참하여 방문 바랍니다.',
-        'dday': '[체킷] 오늘은 건강검진일입니다! 잊지 말고 병원을 방문해 주세요. (신분증 지참 필수)'
+        '7d': '[泥댄궥] 嫄닿컯寃吏?7???꾩엯?덈떎. ?덉빟??蹂묒썝怨??쒓컙???뺤씤??二쇱꽭??',
+        '5d': '[泥댄궥] 嫄닿컯寃吏?5???꾩엯?덈떎. ?蹂 梨꾩랬 ???ъ쟾 以鍮??ы빆???뺤씤??二쇱꽭??',
+        '3d': '[泥댄궥] 嫄닿컯寃吏?3???꾩엯?덈떎. 湲덉떇 ??二쇱쓽?ы빆???ㅼ떆 ?쒕쾲 ?뺤씤??二쇱꽭??',
+        '2d': '[泥댄궥] 嫄닿컯寃吏?2???꾩엯?덈떎. ?댁씪 ???9?쒕???湲덉떇?낅땲??',
+        '1d': '[泥댄궥] ?댁씪? 嫄닿컯寃吏꾩씪?낅땲?? ???9???댄썑遺??瑗?湲덉떇?섏떆怨? ?좊텇利앹쓣 吏李명븯??諛⑸Ц 諛붾엻?덈떎.',
+        'dday': '[泥댄궥] ?ㅻ뒛? 嫄닿컯寃吏꾩씪?낅땲?? ?딆? 留먭퀬 蹂묒썝??諛⑸Ц??二쇱꽭?? (?좊텇利?吏李??꾩닔)'
     };
 
     window.applyAlimtalkTemplate = (type) => {
@@ -1383,28 +1383,68 @@
         if (!input) return;
         input.value = alimtalkTemplates[type] || '';
         input.focus();
-        showToast('알림톡 템플릿이 입력되었습니다. 내용을 자유롭게 수정하세요.', 'info');
+        showToast('?뚮┝???쒗뵆由우씠 ?낅젰?섏뿀?듬땲?? ?댁슜???먯쑀濡?쾶 ?섏젙?섏꽭??', 'info');
+    };
+
+    // --- ?ㅺ뎅??寃吏?媛?대뱶 ?ㅼ젙 ---
+    const guidePacks = {
+        ko: "寃吏??덉빟 媛?대뱶 諛?以鍮꾩궗??쓣 ?뺤씤??二쇱꽭?? (湲덉떇 ?쒓컙 以??諛??좊텇利?吏李??꾩닔)",
+        en: "Please check the health check-up booking guide and preparation instructions. (Fast before check-up, bring ID card)",
+        zh: "瑥룡윥?뗥겈佯룝퐪汝窯꾤벧?뉐뜔?뚦뇛鸚뉑낏?뤶틟窈밤?(瑥룬겣若덄쫨繇잍뿶?댐펽亮뜻맳躍?벴餓썼칮餓?",
+        vi: "Vui l챵ng ki沼긩 tra h튼沼썀g d梳쳌 휃梳톞 l沼땉h kh찼m s沼쯢 kh沼뢤 v횪 c찼c l튼u 첵 chu梳쯰 b沼? (Tu창n th沼?th沼쓎 gian nh沼땙 훱n, mang theo CCCD/H沼?chi梳퓎)"
     };
 
     window.sendBookingGuide = async () => {
         if (!activeChatWorkerId) {
-            showToast("먼저 근로자를 선택해주세요.", "error");
+            showToast("癒쇱? 洹쇰줈?먮? ?좏깮?댁＜?몄슂.", "error");
             return;
         }
 
-        if (!confirm("해당 근로자에게 '검진 가이드' 알림톡을 발송하시겠습니까?")) return;
+        try {
+            // 洹쇰줈???뺣낫?먯꽌 ?몄뼱(lang/language/nationality) 媛?몄삤湲?
+            const workerDoc = await db.collection('workers').doc(activeChatWorkerId).get();
+            const workerData = workerDoc.data() || {};
+            const lang = (workerData.lang || workerData.language || 'ko').toLowerCase();
+            const workerName = workerData.name || '怨좉컼';
+
+            // 紐⑤떖 ?닿린 諛??댁슜 梨꾩슦湲?
+            const modal = document.getElementById('guideEditorModal');
+            const textarea = document.getElementById('guideEditorTextarea');
+            const langLabel = document.getElementById('guideLangLabel');
+            
+            langLabel.innerText = `[${lang.toUpperCase()}] ${workerName}??媛?대뱶 ?몄쭛`;
+            textarea.value = guidePacks[lang] || guidePacks['ko']; // 湲곕낯媛믪? ?쒓뎅??
+            
+            modal.style.display = 'flex';
+        } catch (e) {
+            showToast("?곗씠??濡쒕뱶 ?ㅽ뙣: " + e.message, "error");
+        }
+    };
+
+    window.closeGuideEditor = () => {
+        document.getElementById('guideEditorModal').style.display = 'none';
+    };
+
+    window.confirmSendBookingGuide = async () => {
+        const customText = document.getElementById('guideEditorTextarea').value;
+        if (!customText.trim()) {
+            alert("?댁슜???낅젰?댁＜?몄슂.");
+            return;
+        }
 
         try {
             await db.collection('messages').add({
                 workerDocId: activeChatWorkerId,
                 sender: 'admin',
-                text: '[체킷] 건강검진 가이드가 발송되었습니다.',
+                text: customText,
                 type: 'booking_guide',
+                customContent: customText, // ?쒕쾭?먯꽌 #{?덈궡?댁슜?덉떆}???ｌ쓣 媛?
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            showToast("검진 가이드 알림톡 발송 요청을 완료했습니다.", "success");
+            showToast("媛?대뱶 諛쒖넚 ?붿껌???꾨즺?섏뿀?듬땲??", "success");
+            closeGuideEditor();
         } catch (e) {
-            showToast("발송 실패: " + e.message, "error");
+            showToast("諛쒖넚 ?ㅽ뙣: " + e.message, "error");
         }
     };
     
@@ -1431,15 +1471,15 @@
 
             // Render/Update Charts with 100 as the base for visual filling
             // 1. Company
-            renderChart("company", [compCount, Math.max(0, 100 - compCount)], ["계약 기업", "잔여"], ["#3b82f6", "#f1f5f9"]);
+            renderChart("company", [compCount, Math.max(0, 100 - compCount)], ["怨꾩빟 湲곗뾽", "?붿뿬"], ["#3b82f6", "#f1f5f9"]);
             
             // 2. Roster
-            renderChart("worker", [totalWorkers, Math.max(0, 100 - totalWorkers)], ["등록 인원", "잔여"], ["#10b981", "#f1f5f9"]);
+            renderChart("worker", [totalWorkers, Math.max(0, 100 - totalWorkers)], ["?깅줉 ?몄썝", "?붿뿬"], ["#10b981", "#f1f5f9"]);
             
             // 3. Signup Ratio (Comparison within the roster)
             const nonSignedUp = Math.max(0, totalWorkers - signedUpWorkers);
             const signupData = totalWorkers > 0 ? [signedUpWorkers, nonSignedUp] : [0, 1];
-            renderChart("signup", signupData, ["가입 완료", "미가입"], ["#f59e0b", "#f1f5f9"]);
+            renderChart("signup", signupData, ["媛???꾨즺", "誘멸???], ["#f59e0b", "#f1f5f9"]);
 
         } catch (e) {
             console.error("Stats Error:", e);
@@ -1473,18 +1513,18 @@
         });
     }
 
-    // --- 검진 일정 관리 (Schedule Management) 로직 추가 ---
+    // --- 寃吏??쇱젙 愿由?(Schedule Management) 濡쒖쭅 異붽? ---
     let allBookings = [];
     let currentMilestone = 'all';
 
     window.loadBookings = () => {
         const loader = document.getElementById('pageLoader');
         if (loader) {
-            document.getElementById('loaderMessage').innerText = '일정 데이터를 불러오는 중...';
+            document.getElementById('loaderMessage').innerText = '?쇱젙 ?곗씠?곕? 遺덈윭?ㅻ뒗 以?..';
             loader.style.display = 'flex';
         }
 
-        // workers 컬렉션에서 reservedDate가 있는 모든 문서를 가져옵니다.
+        // workers 而щ젆?섏뿉??reservedDate媛 ?덈뒗 紐⑤뱺 臾몄꽌瑜?媛?몄샃?덈떎.
         db.collection('workers').onSnapshot(snap => {
             allBookings = [];
             snap.forEach(doc => {
@@ -1503,7 +1543,7 @@
                 }
             });
 
-            // 예약 날짜순으로 정렬
+            // ?덉빟 ?좎쭨?쒖쑝濡??뺣젹
             allBookings.sort((a, b) => new Date(a.reservedDate) - new Date(b.reservedDate));
             
             window.filterBookings(currentMilestone);
@@ -1512,7 +1552,7 @@
         }, err => {
             console.error("Load bookings error:", err);
             if (loader) loader.style.display = 'none';
-            showToast("일정 데이터를 불러오는데 실패했습니다.", "error");
+            showToast("?쇱젙 ?곗씠?곕? 遺덈윭?ㅻ뒗???ㅽ뙣?덉뒿?덈떎.", "error");
         });
     };
 
@@ -1532,11 +1572,11 @@
         if (!container) return;
 
         if (data.length === 0) {
-            container.innerHTML = '<div style="padding: 50px; text-align: center; color: #94a3b8;">해당하는 일정이 없습니다.</div>';
+            container.innerHTML = '<div style="padding: 50px; text-align: center; color: #94a3b8;">?대떦?섎뒗 ?쇱젙???놁뒿?덈떎.</div>';
             return;
         }
 
-        // 기업별 그룹화
+        // 湲곗뾽蹂?洹몃９??
         const grouped = data.reduce((acc, curr) => {
             if (!acc[curr.companyId]) acc[curr.companyId] = [];
             acc[curr.companyId].push(curr);
@@ -1547,7 +1587,7 @@
         Object.keys(grouped).forEach(cid => {
             const workers = grouped[cid];
             const compInfo = allCompanies.find(c => c.companyKey === cid) || { name: cid };
-            const compDisplayName = cid === 'ch082082' ? '체킷 (본사)' : (compInfo.name || cid);
+            const compDisplayName = cid === 'ch082082' ? '泥댄궥 (蹂몄궗)' : (compInfo.name || cid);
 
             html += `
                 <div class="booking-company-header" onclick="window.toggleBookingGroup('${cid}')">
@@ -1567,7 +1607,7 @@
                 let dDayClass = '';
                 
                 if (b.dDay < 0) {
-                    dDayLabel = '기간 도과';
+                    dDayLabel = '湲곌컙 ?꾧낵';
                     dDayClass = 'background: #f1f5f9; color: #64748b;';
                 } else if (b.dDay === 0) {
                     dDayLabel = 'D-Day';
@@ -1612,7 +1652,7 @@
         });
         container.innerHTML = html;
         
-        // 검색 중이거나 일수가 지정된 경우 자동으로 모두 펼치기 (옵션)
+        // 寃??以묒씠嫄곕굹 ?쇱닔媛 吏?뺣맂 寃쎌슦 ?먮룞?쇰줈 紐⑤몢 ?쇱튂湲?(?듭뀡)
         if (currentMilestone !== 'all' || document.getElementById('bookingSearchInput')?.value) {
             Object.keys(grouped).forEach(cid => window.toggleBookingGroup(cid, true));
         }
@@ -1638,16 +1678,16 @@
     window.filterBookings = (milestone) => {
         currentMilestone = milestone;
         
-        // 버튼 활성화 상태 업데이트
+        // 踰꾪듉 ?쒖꽦???곹깭 ?낅뜲?댄듃
         const buttons = document.querySelectorAll('#bookingMilestoneFilters .alim-btn');
         buttons.forEach(btn => {
             const btnText = btn.innerText;
-            if (milestone === 'all' && btnText === '전체') btn.classList.add('active');
+            if (milestone === 'all' && btnText === '?꾩껜') btn.classList.add('active');
             else if (btnText.includes(milestone) && milestone !== 'all') btn.classList.add('active');
             else btn.classList.remove('active');
         });
 
-        // 검색어 가져오기
+        // 寃?됱뼱 媛?몄삤湲?
         const query = document.getElementById('bookingSearchInput')?.value.trim().toLowerCase() || '';
 
         const filtered = allBookings.filter(b => {
@@ -1665,7 +1705,7 @@
     };
 
 
-    // --- 알림 패널 (Alarm Panel) 제어 로직 ---
+    // --- ?뚮┝ ?⑤꼸 (Alarm Panel) ?쒖뼱 濡쒖쭅 ---
     window.toggleAlarmPanel = (forceState) => {
         const panel = document.getElementById('alarmPanel');
         if (typeof forceState === 'boolean') {
@@ -1689,7 +1729,7 @@
             document.querySelector('.alarm-trigger i').classList.remove('ping');
         }
 
-        // 기본적으로 당일 명단을 패널에 채워둠 (열었을 때 바로 보이게)
+        // 湲곕낯?곸쑝濡??뱀씪 紐낅떒???⑤꼸??梨꾩썙??(?댁뿀????諛붾줈 蹂댁씠寃?
         if (currentMilestone === 'all') {
             window.populateAlarmList('0'); 
         }
@@ -1700,14 +1740,14 @@
         const headerTitle = document.querySelector('#alarmPanel .alarm-header span');
         
         let filtered = [];
-        let titlePrefix = '전체';
+        let titlePrefix = '?꾩껜';
         
         if (milestone === 'all') {
             filtered = allBookings;
-            titlePrefix = '전체 예약자';
+            titlePrefix = '?꾩껜 ?덉빟??;
         } else {
             filtered = allBookings.filter(b => b.dDay === parseInt(milestone));
-            titlePrefix = milestone === '0' ? '오늘(당일) 대상자' : `${milestone}일 전 대상자`;
+            titlePrefix = milestone === '0' ? '?ㅻ뒛(?뱀씪) ??곸옄' : `${milestone}??????곸옄`;
         }
 
         headerTitle.innerText = `${titlePrefix} (${filtered.length})`;
@@ -1716,7 +1756,7 @@
             listEl.innerHTML = `
                 <div style="padding: 40px 20px; text-align: center; color: #94a3b8; font-size: 0.85rem;">
                     <i class="fa-solid fa-calendar-xmark" style="font-size: 2rem; margin-bottom: 15px; opacity: 0.2;"></i>
-                    <br>해당하는 인원이 없습니다.
+                    <br>?대떦?섎뒗 ?몄썝???놁뒿?덈떎.
                 </div>
             `;
             return;
@@ -1725,7 +1765,7 @@
         let html = '';
         filtered.forEach(b => {
             const compInfo = allCompanies.find(c => c.companyKey === b.companyId) || { name: b.companyId };
-            const compDisplayName = b.companyId === 'ch082082' ? '체킷' : (compInfo.name || b.companyId);
+            const compDisplayName = b.companyId === 'ch082082' ? '泥댄궥' : (compInfo.name || b.companyId);
             
             html += `
                 <div class="alarm-item" onclick="window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats'); toggleAlarmPanel(false);">
@@ -1734,7 +1774,7 @@
                     </div>
                     <div class="alarm-info">
                         <div class="alarm-name">${b.name} <span style="font-weight: 400; font-size: 0.7rem; color: #94a3b8;">(${compDisplayName})</span></div>
-                        <div class="alarm-msg">${b.reservedDate} · D${b.dDay >= 0 ? '-' : '+'}${Math.abs(b.dDay)}</div>
+                        <div class="alarm-msg">${b.reservedDate} 쨌 D${b.dDay >= 0 ? '-' : '+'}${Math.abs(b.dDay)}</div>
                     </div>
                     <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem; color: #cbd5e1;"></i>
                 </div>
@@ -1756,8 +1796,8 @@
             const compInfo = allCompanies.find(c => c.companyKey === companyCode) || { name: companyCode };
             const companyName = compInfo.name || companyCode;
 
-            title.innerHTML = `<i class="fa-solid fa-building"></i> <strong>${companyName}</strong> 가입 근로자 명단`;
-            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> 로딩 중...</td></tr>';
+            title.innerHTML = `<i class="fa-solid fa-building"></i> <strong>${companyName}</strong> 媛??洹쇰줈??紐낅떒`;
+            listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> 濡쒕뵫 以?..</td></tr>';
             modal.style.display = 'flex';
 
             try {
@@ -1768,7 +1808,7 @@
                     .get();
 
                 if (snap.empty) {
-                    listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-user-slash"></i> 가입한 근로자가 없습니다.</td></tr>';
+                    listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-user-slash"></i> 媛?낇븳 洹쇰줈?먭? ?놁뒿?덈떎.</td></tr>';
                     return;
                 }
 
@@ -1791,11 +1831,11 @@
                             <td style="font-weight:700;">${u.name || '-'}</td>
                             <td style="text-align:center; color:#64748b; font-size:0.85rem;">${birthDate}</td>
                             <td style="text-align:center;">
-                                <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">가입완료</span>
+                                <span style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">媛?낆셿猷?/span>
                             </td>
                             <td style="text-align:center;">
-                                <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.openIntegratedWorkerDetail('${u.workerDocId}', '${u.companyId}', '${u.name || '근로자'}')">
-                                    <i class="fa-solid fa-up-right-from-square"></i> 보기
+                                <button class="btn-outline" style="padding: 4px 10px; font-size: 0.75rem; margin: 0 auto;" onclick="window.openIntegratedWorkerDetail('${u.workerDocId}', '${u.companyId}', '${u.name || '洹쇰줈??}')">
+                                    <i class="fa-solid fa-up-right-from-square"></i> 蹂닿린
                                 </button>
                             </td>
                         </tr>
@@ -1806,7 +1846,7 @@
                 listBody.innerHTML = rows.join('');
             } catch (err) {
                 console.error("Member list error:", err);
-                listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--danger);">데이터를 불러오지 못했습니다.</td></tr>';
+                listBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--danger);">?곗씠?곕? 遺덈윭?ㅼ? 紐삵뻽?듬땲??</td></tr>';
             }
         };
 
@@ -1820,7 +1860,7 @@
         const iframe = document.getElementById('workerPortalIframe');
         const title = document.getElementById('integratedTitle');
         
-        title.innerHTML = `<i class="fa-solid fa-user-gear"></i> <strong>${workerName}</strong> 통합 상세 관리 (포털+예약내역)`;
+        title.innerHTML = `<i class="fa-solid fa-user-gear"></i> <strong>${workerName}</strong> ?듯빀 ?곸꽭 愿由?(?ы꽭+?덉빟?댁뿭)`;
         iframe.src = `worker_portal.html?workerDocId=${workerDocId}&companyId=${companyId}`;
         
         modal.style.display = 'flex';
@@ -1836,7 +1876,7 @@
 
     window.fetchBookingHistory = async (workerDocId) => {
         const container = document.getElementById('bookingHistoryList');
-        container.innerHTML = '<div style="padding: 40px; text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> 내역 불러오는 중...</div>';
+        container.innerHTML = '<div style="padding: 40px; text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> ?댁뿭 遺덈윭?ㅻ뒗 以?..</div>';
         
         try {
             const snap = await db.collection('bookings')
@@ -1844,7 +1884,7 @@
                 .get();
             
             if (snap.empty) {
-                container.innerHTML = '<div style="padding: 40px; text-align:center; color: #94a3b8; font-size: 0.85rem;"><i class="fa-solid fa-file-circle-xmark" style="font-size:2rem; opacity:0.3; margin-bottom:15px;"></i><br>작성된 예약 신청서 내역이 없습니다.</div>';
+                container.innerHTML = '<div style="padding: 40px; text-align:center; color: #94a3b8; font-size: 0.85rem;"><i class="fa-solid fa-file-circle-xmark" style="font-size:2rem; opacity:0.3; margin-bottom:15px;"></i><br>?묒꽦???덉빟 ?좎껌???댁뿭???놁뒿?덈떎.</div>';
                 return;
             }
 
@@ -1859,26 +1899,26 @@
                 html += `
                     <div class="booking-card">
                         <span class="type-badge ${isRecheck ? 'type-recheck' : 'type-general'}">
-                            ${isRecheck ? '재검사 예약' : '일반 검진 예약'}
+                            ${isRecheck ? '?ш????덉빟' : '?쇰컲 寃吏??덉빟'}
                         </span>
                         <div class="booking-field">
-                            <span class="booking-label">신청 일시</span>
+                            <span class="booking-label">?좎껌 ?쇱떆</span>
                             <span class="booking-value">${dateStr}</span>
                         </div>
                         <div class="booking-field">
-                            <span class="booking-label">희망 병원</span>
+                            <span class="booking-label">?щ쭩 蹂묒썝</span>
                             <span class="booking-value">${b.hospital || '-'}</span>
                         </div>
                         <div class="booking-field">
-                            <span class="booking-label">희망 일자</span>
+                            <span class="booking-label">?щ쭩 ?쇱옄</span>
                             <span class="booking-value">${b.dateRange || '-'}</span>
                         </div>
                         <div class="booking-field">
-                            <span class="booking-label">추가 항목</span>
-                            <span class="booking-value">${b.extraItems === 'yes' ? '있음 (상담필요)' : '없음'}</span>
+                            <span class="booking-label">異붽? ??ぉ</span>
+                            <span class="booking-value">${b.extraItems === 'yes' ? '?덉쓬 (?곷떞?꾩슂)' : '?놁쓬'}</span>
                         </div>
                         <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #eee; font-size:0.8rem; color:#64748b; line-height:1.4;">
-                            <strong>희망 서류:</strong> ${b.documents || '없음'}
+                            <strong>?щ쭩 ?쒕쪟:</strong> ${b.documents || '?놁쓬'}
                         </div>
                     </div>
                 `;
@@ -1886,7 +1926,7 @@
             container.innerHTML = html;
         } catch (e) {
             console.error("Fetch history error:", e);
-            container.innerHTML = '<div style="padding: 40px; text-align:center; color: var(--danger);">내역을 불러오지 못했습니다.</div>';
+            container.innerHTML = '<div style="padding: 40px; text-align:center; color: var(--danger);">?댁뿭??遺덈윭?ㅼ? 紐삵뻽?듬땲??</div>';
         }
     };
 
@@ -1906,7 +1946,7 @@
             document.getElementById('statWorkerCount').innerText = workerSnap.size;
             document.getElementById('statChatCount').innerText = chatSnap.size;
 
-            // 오늘 검진 대상자 (dDay===0)
+            // ?ㅻ뒛 寃吏???곸옄 (dDay===0)
             const today = new Date(); today.setHours(0,0,0,0);
             let todayCount = 0;
             workerSnap.forEach(doc => {
@@ -1918,9 +1958,9 @@
             });
             document.getElementById('statTodayCount').innerText = todayCount;
 
-            // 공지 대상 드롭다운 채우기
+            // 怨듭? ????쒕∼?ㅼ슫 梨꾩슦湲?
             const sel = document.getElementById('noticeTarget');
-            sel.innerHTML = '<option value="all">전체 기업</option>';
+            sel.innerHTML = '<option value="all">?꾩껜 湲곗뾽</option>';
             compSnap.forEach(doc => {
                 const c = doc.data();
                 sel.innerHTML += `<option value="${doc.id}">${c.name}</option>`;
@@ -1943,7 +1983,7 @@
                 .limit(50)
                 .get();
             if (snap.empty) {
-                body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">기록된 로그가 없습니다.</td></tr>';
+                body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:30px;color:#94a3b8;">湲곕줉??濡쒓렇媛 ?놁뒿?덈떎.</td></tr>';
                 return;
             }
             body.innerHTML = snap.docs.map(doc => {
@@ -1959,14 +1999,14 @@
             }).join('');
         } catch(e) {
             console.error('Sys log error:', e);
-            body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--danger);">로그를 불러오지 못했습니다.</td></tr>';
+            body.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--danger);">濡쒓렇瑜?遺덈윭?ㅼ? 紐삵뻽?듬땲??</td></tr>';
         }
     };
 
     window.exportLogCSV = async () => {
         try {
             const snap = await db.collection('system_logs').orderBy('timestamp','desc').limit(500).get();
-            let csv = '시간,기업,이벤트,세부내용\n';
+            let csv = '?쒓컙,湲곗뾽,?대깽???몃??댁슜\n';
             snap.forEach(doc => {
                 const l = doc.data();
                 csv += `"${l.timestamp||''}","${l.company||''}","${l.event||''}","${l.detail||''}"\n`;
@@ -1976,15 +2016,15 @@
             link.href = URL.createObjectURL(blob);
             link.download = `system_log_${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
-            showToast('로그 CSV 내보내기 완료', 'success');
-        } catch(e) { showToast('내보내기 실패: ' + e.message, 'error'); }
+            showToast('濡쒓렇 CSV ?대낫?닿린 ?꾨즺', 'success');
+        } catch(e) { showToast('?대낫?닿린 ?ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.sendNotice = async () => {
         const target = document.getElementById('noticeTarget').value;
         const content = document.getElementById('noticeContent').value.trim();
-        if (!content) { showToast('공지 내용을 입력해주세요.', 'error'); return; }
-        if (!confirm(`공지를 ${target === 'all' ? '전체 기업' : '선택 기업'}에 발송하시겠습니까?`)) return;
+        if (!content) { showToast('怨듭? ?댁슜???낅젰?댁＜?몄슂.', 'error'); return; }
+        if (!confirm(`怨듭?瑜?${target === 'all' ? '?꾩껜 湲곗뾽' : '?좏깮 湲곗뾽'}??諛쒖넚?섏떆寃좎뒿?덇퉴?`)) return;
         try {
             await db.collection('notices').add({
                 target, content,
@@ -1996,8 +2036,8 @@
                 event: 'notice', detail: content.slice(0,50)
             });
             document.getElementById('noticeContent').value = '';
-            showToast('공지가 성공적으로 발송되었습니다.', 'success');
-        } catch(e) { showToast('발송 실패: ' + e.message, 'error'); }
+            showToast('怨듭?媛 ?깃났?곸쑝濡?諛쒖넚?섏뿀?듬땲??', 'success');
+        } catch(e) { showToast('諛쒖넚 ?ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.changeMasterKey = async () => {
@@ -2005,21 +2045,21 @@
         const newKey = document.getElementById('newMasterKey').value;
         const confirm2 = document.getElementById('confirmMasterKey').value;
         const VALID_KEYS = ['checkit03080!!', 'checkit082082!'];
-        if (!VALID_KEYS.includes(current)) { showToast('현재 키가 올바르지 않습니다.', 'error'); return; }
-        if (newKey.length < 8) { showToast('새 키는 8자 이상이어야 합니다.', 'error'); return; }
-        if (newKey !== confirm2) { showToast('새 키 확인이 일치하지 않습니다.', 'error'); return; }
-        if (!confirm(`로그인 키를 변경하시겠습니까? 변경 후 기존 키는 사용할 수 없습니다.`)) return;
+        if (!VALID_KEYS.includes(current)) { showToast('?꾩옱 ?ㅺ? ?щ컮瑜댁? ?딆뒿?덈떎.', 'error'); return; }
+        if (newKey.length < 8) { showToast('???ㅻ뒗 8???댁긽?댁뼱???⑸땲??', 'error'); return; }
+        if (newKey !== confirm2) { showToast('?????뺤씤???쇱튂?섏? ?딆뒿?덈떎.', 'error'); return; }
+        if (!confirm(`濡쒓렇???ㅻ? 蹂寃쏀븯?쒓쿋?듬땲源? 蹂寃???湲곗〈 ?ㅻ뒗 ?ъ슜?????놁뒿?덈떎.`)) return;
         try {
             await db.collection('master_config').doc('login').set({ masterKey: newKey, updatedAt: new Date().toISOString() }, { merge: true });
             document.getElementById('currentMasterKey').value = '';
             document.getElementById('newMasterKey').value = '';
             document.getElementById('confirmMasterKey').value = '';
-            showToast('마스터 키가 변경되었습니다. 다음 로그인 시 새 키를 사용하세요.', 'success');
-        } catch(e) { showToast('키 변경 실패: ' + e.message, 'error'); }
+            showToast('留덉뒪???ㅺ? 蹂寃쎈릺?덉뒿?덈떎. ?ㅼ쓬 濡쒓렇???????ㅻ? ?ъ슜?섏꽭??', 'success');
+        } catch(e) { showToast('??蹂寃??ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.clearExpiredBookings = async () => {
-        if (!confirm('검진일이 지난 모든 예약 날짜를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
+        if (!confirm('寃吏꾩씪??吏??紐⑤뱺 ?덉빟 ?좎쭨瑜?珥덇린?뷀븯?쒓쿋?듬땲源? ???묒뾽? ?섎룎由????놁뒿?덈떎.')) return;
         const today = new Date(); today.setHours(0,0,0,0);
         try {
             const snap = await db.collection('workers').where('reservedDate', '!=', null).get();
@@ -2033,26 +2073,26 @@
                 }
             });
             await batch.commit();
-            showToast(`만료된 예약 ${count}건 초기화 완료`, 'success');
-        } catch(e) { showToast('초기화 실패: ' + e.message, 'error'); }
+            showToast(`留뚮즺???덉빟 ${count}嫄?珥덇린???꾨즺`, 'success');
+        } catch(e) { showToast('珥덇린???ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.clearOldChats = async () => {
-        if (!confirm('90일 이상 된 채팅 메시지를 삭제하시겠습니까?')) return;
+        if (!confirm('90???댁긽 ??梨꾪똿 硫붿떆吏瑜???젣?섏떆寃좎뒿?덇퉴?')) return;
         const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 90);
         try {
             const snap = await db.collection('messages').where('timestamp', '<', cutoff).get();
             const batch = db.batch();
             snap.forEach(doc => batch.delete(doc.ref));
             await batch.commit();
-            showToast(`오래된 채팅 ${snap.size}건 삭제 완료`, 'success');
-        } catch(e) { showToast('삭제 실패: ' + e.message, 'error'); }
+            showToast(`?ㅻ옒??梨꾪똿 ${snap.size}嫄???젣 ?꾨즺`, 'success');
+        } catch(e) { showToast('??젣 ?ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.exportAllWorkers = async () => {
         try {
             const snap = await db.collection('workers').get();
-            let csv = '기업코드,이름,생년월일,현장,예약날짜,상태\n';
+            let csv = '湲곗뾽肄붾뱶,?대쫫,?앸뀈?붿씪,?꾩옣,?덉빟?좎쭨,?곹깭\n';
             snap.forEach(doc => {
                 const w = doc.data();
                 csv += `"${w.companyId||''}","${w.name||''}","${w.birthDate||''}","${w.site||''}","${w.reservedDate||''}","${w.status||''}"\n`;
@@ -2060,10 +2100,10 @@
             const blob = new Blob(['\uFEFF'+csv], { type:'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `전체근로자_${new Date().toISOString().slice(0,10)}.csv`;
+            link.download = `?꾩껜洹쇰줈??${new Date().toISOString().slice(0,10)}.csv`;
             link.click();
-            showToast('전체 근로자 CSV 내보내기 완료', 'success');
-        } catch(e) { showToast('내보내기 실패: ' + e.message, 'error'); }
+            showToast('?꾩껜 洹쇰줈??CSV ?대낫?닿린 ?꾨즺', 'success');
+        } catch(e) { showToast('?대낫?닿린 ?ㅽ뙣: ' + e.message, 'error'); }
     };
 
     window.logout = () => { auth.signOut().then(() => { window.location.href='index.html'; }); };
@@ -2085,23 +2125,23 @@
         const id = document.getElementById("loginId").value.trim();
         const pw = document.getElementById("loginPw").value.trim();
         
-        if(id === "comp_체킷" && (pw === "checkit03080!!" || pw === "checkit082082!")) {
+        if(id === "comp_泥댄궥" && (pw === "checkit03080!!" || pw === "checkit082082!")) {
             const loader = document.getElementById("pageLoader");
-            document.getElementById("loaderMessage").innerText = "인증 중...";
+            document.getElementById("loaderMessage").innerText = "?몄쬆 以?..";
             loader.style.display = "flex";
             
             try {
                 await auth.signInWithEmailAndPassword("master@checkit.com", "master1234!");
-                showToast("마스터 계정으로 로그인했습니다.", "success");
+                showToast("留덉뒪??怨꾩젙?쇰줈 濡쒓렇?명뻽?듬땲??", "success");
             } catch(e) {
                 try {
                     await auth.createUserWithEmailAndPassword("master@checkit.com", "master1234!");
                 } catch(err) {
-                    showToast("로그인 실패: " + err.message, "error"); loader.style.display = "none";
+                    showToast("濡쒓렇???ㅽ뙣: " + err.message, "error"); loader.style.display = "none";
                 }
             }
             loader.style.display = "none";
-        } else { showToast("정보가 일치하지 않습니다.", "error"); }
+        } else { showToast("?뺣낫媛 ?쇱튂?섏? ?딆뒿?덈떎.", "error"); }
     };
     
     document.getElementById("saveBtn").onclick = window.saveAndGenerate;
@@ -2115,7 +2155,7 @@
 <div id="memberModal" class="modal-overlay" onclick="if(event.target === this) closeModal()">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle" style="margin:0; font-size:1.1rem;">가입 근로자 명단</h3>
+            <h3 id="modalTitle" style="margin:0; font-size:1.1rem;">媛??洹쇰줈??紐낅떒</h3>
             <button class="btn-outline" style="padding: 5px 10px; border-radius: 50%; width: 32px; height: 32px; border: none; background: #eee;" onclick="closeModal()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -2124,10 +2164,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="text-align:left;">성함</th>
-                        <th style="text-align:center;">생년월일</th>
-                        <th style="text-align:center;">상태</th>
-                        <th style="text-align:center;">포털</th>
+                        <th style="text-align:left;">?깊븿</th>
+                        <th style="text-align:center;">?앸뀈?붿씪</th>
+                        <th style="text-align:center;">?곹깭</th>
+                        <th style="text-align:center;">?ы꽭</th>
                     </tr>
                 </thead>
                 <tbody id="memberListBody">
@@ -2136,7 +2176,7 @@
             </table>
         </div>
         <div style="padding: 15px 25px; border-top: 1px solid #eee; text-align: right; background: #fafafa;">
-            <button class="btn-dark" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closeModal()">닫기</button>
+            <button class="btn-dark" style="padding: 8px 20px; font-size: 0.9rem;" onclick="closeModal()">?リ린</button>
         </div>
     </div>
 </div>
@@ -2145,33 +2185,33 @@
 <div id="contractDetailModal" class="modal-overlay" onclick="if(event.target===this) this.style.display='none'">
     <div class="modal-content" style="max-width:650px;">
         <div class="modal-header">
-            <h3 style="margin:0; font-size:1.05rem;"><i class="fa-solid fa-file-contract" style="color:#8b5cf6;"></i> 계약서 상세 보기</h3>
+            <h3 style="margin:0; font-size:1.05rem;"><i class="fa-solid fa-file-contract" style="color:#8b5cf6;"></i> 怨꾩빟???곸꽭 蹂닿린</h3>
             <button onclick="document.getElementById('contractDetailModal').style.display='none'" style="background:none; border:none; font-size:1.2rem; color:#94a3b8; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
                 <div style="background:#f8fafc; border-radius:10px; padding:15px;">
-                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">기업 ID</div>
+                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">湲곗뾽 ID</div>
                     <div style="font-weight:700; font-size:0.95rem;" id="cdCompanyId">-</div>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:15px;">
-                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">서명자</div>
+                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">?쒕챸??/div>
                     <div style="font-weight:700; font-size:0.95rem;" id="cdSignerName">-</div>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:15px;">
-                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">체결일</div>
+                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">泥닿껐??/div>
                     <div style="font-weight:700; font-size:0.95rem;" id="cdSignDate">-</div>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:15px;">
-                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">서버 기록 시간</div>
+                    <div style="font-size:0.78rem; color:#64748b; margin-bottom:4px;">?쒕쾭 湲곕줉 ?쒓컙</div>
                     <div style="font-weight:700; font-size:0.95rem;" id="cdSignedAt">-</div>
                 </div>
             </div>
-            <h4 style="font-size:0.9rem; margin:20px 0 12px; color:#334155;"><i class="fa-solid fa-list-check" style="color:#8b5cf6;"></i> 동의 항목 현황</h4>
+            <h4 style="font-size:0.9rem; margin:20px 0 12px; color:#334155;"><i class="fa-solid fa-list-check" style="color:#8b5cf6;"></i> ?숈쓽 ??ぉ ?꾪솴</h4>
             <div id="cdConsentList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;"></div>
-            <h4 style="font-size:0.9rem; margin:20px 0 12px; color:#334155;"><i class="fa-solid fa-pen-nib" style="color:#8b5cf6;"></i> 전자 서명</h4>
+            <h4 style="font-size:0.9rem; margin:20px 0 12px; color:#334155;"><i class="fa-solid fa-pen-nib" style="color:#8b5cf6;"></i> ?꾩옄 ?쒕챸</h4>
             <div style="border:2px dashed #e2e8f0; border-radius:12px; padding:15px; text-align:center; background:#fafbfc;">
-                <img id="cdSignatureImg" src="" alt="서명" style="max-width:100%; max-height:180px;">
+                <img id="cdSignatureImg" src="" alt="?쒕챸" style="max-width:100%; max-height:180px;">
             </div>
         </div>
     </div>
@@ -2181,7 +2221,7 @@
 <div id="workerDetailModal" class="modal-overlay" onclick="if(event.target === this) closeIntegratedWorkerDetail()">
     <div class="modal-content integrated-modal">
         <div class="modal-header">
-            <h3 id="integratedTitle" style="margin:0; font-size:1.1rem;">근로자 통합 상세 관리</h3>
+            <h3 id="integratedTitle" style="margin:0; font-size:1.1rem;">洹쇰줈???듯빀 ?곸꽭 愿由?/h3>
             <button class="btn-outline" style="padding: 5px 10px; border-radius: 50%; width: 32px; height: 32px; border: none; background: #eee;" onclick="closeIntegratedWorkerDetail()">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -2195,7 +2235,7 @@
             <div class="history-side">
                 <div class="history-header">
                     <h4 style="margin:0; font-size:0.95rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> 예약 신청 내역
+                        <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> ?덉빟 ?좎껌 ?댁뿭
                     </h4>
                 </div>
                 <div id="bookingHistoryList" class="history-list">
@@ -2211,12 +2251,12 @@
     window.loadContracts = async () => {
         const tbody = document.getElementById('contractListBody');
         if (!tbody) return;
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> 遺덈윭?ㅻ뒗 以?..</td></tr>';
 
         try {
             const snap = await db.collection('contracts').get();
             if (snap.empty) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-file-circle-xmark" style="font-size:1.5rem; margin-bottom:10px;"></i><br>체결된 계약서가 없습니다.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#94a3b8;"><i class="fa-solid fa-file-circle-xmark" style="font-size:1.5rem; margin-bottom:10px;"></i><br>泥닿껐??怨꾩빟?쒓? ?놁뒿?덈떎.</td></tr>';
                 return;
             }
 
@@ -2241,14 +2281,14 @@
                     <td style="padding:15px 20px; font-weight:600;">${d.signerName || '-'}</td>
                     <td style="padding:15px 20px;">${d.signDate || '-'}</td>
                     <td style="padding:15px 20px; text-align:center;">
-                        <span style="background:#f0fdf4; color:#16a34a; padding:4px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> 체결완료</span>
+                        <span style="background:#f0fdf4; color:#16a34a; padding:4px 12px; border-radius:20px; font-size:0.78rem; font-weight:700; border:1px solid #bbf7d0;"><i class="fa-solid fa-circle-check"></i> 泥닿껐?꾨즺</span>
                     </td>
                     <td style="padding:15px 20px; text-align:center;">
                         <span style="background:#eef2ff; color:#4f46e5; padding:4px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">${consentCount}/4</span>
                     </td>
                     <td style="padding:15px 20px; text-align:center;">
                         <button class="btn-outline" style="padding:6px 14px; font-size:0.8rem;" onclick="window.viewContractDetail('${doc.id}')">
-                            <i class="fa-solid fa-eye"></i> 보기
+                            <i class="fa-solid fa-eye"></i> 蹂닿린
                         </button>
                     </td>
                 </tr>`;
@@ -2256,14 +2296,14 @@
             tbody.innerHTML = html;
         } catch (e) {
             console.error('Load contracts error:', e);
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#ef4444;">계약서 로드 실패: ' + e.message + '</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:40px; color:#ef4444;">怨꾩빟??濡쒕뱶 ?ㅽ뙣: ' + e.message + '</td></tr>';
         }
     };
 
     window.viewContractDetail = async (companyId) => {
         try {
             const doc = await db.collection('contracts').doc(companyId).get();
-            if (!doc.exists) return alert('계약서를 찾을 수 없습니다.');
+            if (!doc.exists) return alert('怨꾩빟?쒕? 李얠쓣 ???놁뒿?덈떎.');
             const d = doc.data();
 
             document.getElementById('cdCompanyId').textContent = companyId;
@@ -2273,10 +2313,10 @@
 
             // Consent items
             const consentLabels = {
-                serviceAgreement: '서비스 이용 계약서 확인 및 동의',
-                privacyCollection: '기업 담당자 개인정보 수집 및 이용 동의',
-                securityCommitment: '개인정보 위탁 및 보안 관리 확약',
-                liabilityAcknowledgement: '플랫폼 역할 및 책임 제한 확약'
+                serviceAgreement: '?쒕퉬???댁슜 怨꾩빟???뺤씤 諛??숈쓽',
+                privacyCollection: '湲곗뾽 ?대떦??媛쒖씤?뺣낫 ?섏쭛 諛??댁슜 ?숈쓽',
+                securityCommitment: '媛쒖씤?뺣낫 ?꾪긽 諛?蹂댁븞 愿由??뺤빟',
+                liabilityAcknowledgement: '?뚮옯????븷 諛?梨낆엫 ?쒗븳 ?뺤빟'
             };
             const consentDiv = document.getElementById('cdConsentList');
             let consentHtml = '';
@@ -2303,10 +2343,26 @@
             document.getElementById('contractDetailModal').style.display = 'flex';
         } catch (e) {
             console.error('View contract error:', e);
-            alert('계약서 조회 중 오류: ' + e.message);
+            alert('怨꾩빟??議고쉶 以??ㅻ쪟: ' + e.message);
         }
     };
 </script>
 
+
+<!-- 검진 가이드 편집 모달 -->
+<div id="guideEditorModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#fff; width:100%; max-width:500px; border-radius:16px; padding:24px; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 id="guideLangLabel" style="margin:0; font-size:1.2rem; color:#1d1d1f; font-weight:700;">검진 가이드 편집</h3>
+            <button onclick="closeGuideEditor()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#86868b;">&times;</button>
+        </div>
+        <p style="font-size:0.9rem; color:#6e6e73; margin-bottom:12px; line-height:1.4;">알림톡 <b>#{안내내용예시}</b> 영역에 들어갈 내용입니다. 근로자의 언어에 맞춰 수정하세요.</p>
+        <textarea id="guideEditorTextarea" style="width:100%; height:150px; padding:15px; border:1px solid #d2d2d7; border-radius:12px; font-size:1rem; line-height:1.5; resize:none; margin-bottom:20px; outline:none; font-family:inherit;"></textarea>
+        <div style="display:flex; gap:12px;">
+            <button onclick="closeGuideEditor()" style="flex:1; padding:14px; border:1px solid #d2d2d7; background:#fff; border-radius:12px; font-weight:600; cursor:pointer;">취소</button>
+            <button onclick="confirmSendBookingGuide()" style="flex:1; padding:14px; border:none; background:#27ae60; color:#fff; border-radius:12px; font-weight:600; cursor:pointer;">발송하기</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -56,7 +56,7 @@ exports.sendAlimtalk = functions.firestore
             variables: {
               "#{성함}": workerData.name || '고객',
               "#{디데이}": '가이드',
-              "#{안내내용예시}": '검진 예약 가이드 및 준비사항을 확인해 주세요.'
+              "#{안내내용예시}": data.customContent || '검진 예약 가이드 및 준비사항을 확인해 주세요.'
             }
           }
         };

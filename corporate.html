@@ -404,5 +404,54 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 
     <script src="script.js?v=4.1"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const processModal = document.getElementById('processModal');
+            const openBtn = document.getElementById('openProcessSlide');
+            const closeBtn = document.getElementById('closeProcess');
+            const overlay = processModal.querySelector('.modal-overlay');
+            const processImg = document.getElementById('processImage');
+            const indicator = document.getElementById('indicator');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            const slideImages = [];
+            for (let i = 1; i <= 27; i++) {
+                slideImages.push(`assets/intro_${i}.png`);
+            }
+
+            let currentIndex = 0;
+
+            function updateSlide() {
+                processImg.src = slideImages[currentIndex];
+                indicator.textContent = `${currentIndex + 1} / ${slideImages.length}`;
+            }
+
+            if (openBtn) {
+                openBtn.addEventListener('click', () => {
+                    processModal.style.display = 'flex';
+                    currentIndex = 0;
+                    updateSlide();
+                });
+            }
+
+            if (closeBtn) closeBtn.addEventListener('click', () => processModal.style.display = 'none');
+            if (overlay) overlay.addEventListener('click', () => processModal.style.display = 'none');
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex - 1 + slideImages.length) % slideImages.length;
+                    updateSlide();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    currentIndex = (currentIndex + 1) % slideImages.length;
+                    updateSlide();
+                });
+            }
+        });
+    </script>
 </body>
 </html>

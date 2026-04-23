@@ -1386,23 +1386,63 @@
         showToast('알림톡 템플릿이 입력되었습니다. 내용을 자유롭게 수정하세요.', 'info');
     };
 
+    // --- 다국어 검진 가이드 설정 ---
+    const guidePacks = {
+        ko: "검진 예약 가이드 및 준비사항을 확인해 주세요. (금식 시간 준수 및 신분증 지참 필수)",
+        en: "Please check the health check-up booking guide and preparation instructions. (Fast before check-up, bring ID card)",
+        zh: "请查看健康体检预约指南和准备注意事项。 (请遵守禁食时间，并携带身份证件)",
+        vi: "Vui lòng kiểm tra hướng dẫn đặt lịch khám sức khỏe và các lưu ý chuẩn bị. (Tuân thủ thời gian nhịn ăn, mang theo CCCD/Hộ chiếu)"
+    };
+
     window.sendBookingGuide = async () => {
         if (!activeChatWorkerId) {
             showToast("먼저 근로자를 선택해주세요.", "error");
             return;
         }
 
-        if (!confirm("해당 근로자에게 '검진 가이드' 알림톡을 발송하시겠습니까?")) return;
+        try {
+            // 근로자 정보에서 언어(lang/language/nationality) 가져오기
+            const workerDoc = await db.collection('workers').doc(activeChatWorkerId).get();
+            const workerData = workerDoc.data() || {};
+            const lang = (workerData.lang || workerData.language || 'ko').toLowerCase();
+            const workerName = workerData.name || '고객';
+
+            // 모달 열기 및 내용 채우기
+            const modal = document.getElementById('guideEditorModal');
+            const textarea = document.getElementById('guideEditorTextarea');
+            const langLabel = document.getElementById('guideLangLabel');
+            
+            langLabel.innerText = `[${lang.toUpperCase()}] ${workerName}님 가이드 편집`;
+            textarea.value = guidePacks[lang] || guidePacks['ko']; // 기본값은 한국어
+            
+            modal.style.display = 'flex';
+        } catch (e) {
+            showToast("데이터 로드 실패: " + e.message, "error");
+        }
+    };
+
+    window.closeGuideEditor = () => {
+        document.getElementById('guideEditorModal').style.display = 'none';
+    };
+
+    window.confirmSendBookingGuide = async () => {
+        const customText = document.getElementById('guideEditorTextarea').value;
+        if (!customText.trim()) {
+            alert("내용을 입력해주세요.");
+            return;
+        }
 
         try {
             await db.collection('messages').add({
                 workerDocId: activeChatWorkerId,
                 sender: 'admin',
-                text: '[체킷] 건강검진 가이드가 발송되었습니다.',
+                text: customText,
                 type: 'booking_guide',
+                customContent: customText, // 서버에서 #{안내내용예시}에 넣을 값
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            showToast("검진 가이드 알림톡 발송 요청을 완료했습니다.", "success");
+            showToast("가이드 발송 요청이 완료되었습니다.", "success");
+            closeGuideEditor();
         } catch (e) {
             showToast("발송 실패: " + e.message, "error");
         }
@@ -2307,6 +2347,22 @@
         }
     };
 </script>
+
+    <!-- 검진 가이드 편집 모달 -->
+    <div id="guideEditorModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:#fff; width:100%; max-width:500px; border-radius:16px; padding:24px; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 id="guideLangLabel" style="margin:0; font-size:1.2rem; color:#1d1d1f; font-weight:700;">검진 가이드 편집</h3>
+                <button onclick="closeGuideEditor()" style="background:none; border:none; font-size:1.5rem; cursor:pointer; color:#86868b;">&times;</button>
+            </div>
+            <p style="font-size:0.9rem; color:#6e6e73; margin-bottom:12px; line-height:1.4;">알림톡 <b>#{안내내용예시}</b> 영역에 들어갈 내용입니다. 근로자의 언어에 맞춰 수정하세요.</p>
+            <textarea id="guideEditorTextarea" style="width:100%; height:150px; padding:15px; border:1px solid #d2d2d7; border-radius:12px; font-size:1rem; line-height:1.5; resize:none; margin-bottom:20px; outline:none; font-family:inherit;"></textarea>
+            <div style="display:flex; gap:12px;">
+                <button onclick="closeGuideEditor()" style="flex:1; padding:14px; border:1px solid #d2d2d7; background:#fff; border-radius:12px; font-weight:600; cursor:pointer;">취소</button>
+                <button onclick="confirmSendBookingGuide()" style="flex:1; padding:14px; border:none; background:#27ae60; color:#fff; border-radius:12px; font-weight:600; cursor:pointer;">발송하기</button>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -53,7 +53,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Header */
-        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); gap: 10px; }
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: flex-start; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); gap: 15px; }
         .top-bar > div { flex-shrink: 0; }
         .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; flex-shrink: 0; white-space: nowrap; }
         .top-bar .logo i { color: var(--primary-light); }
@@ -342,7 +342,7 @@
             to { transform: translateY(20px); opacity: 0; }
         }
 
-        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 10px; flex-shrink: 0; }
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 10px 0 auto; flex-shrink: 0; }
         .lang-btn { 
             background: transparent; 
             border: none; 

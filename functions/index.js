@@ -35,7 +35,7 @@ exports.sendAlimtalk = functions.firestore
       }
 
       const workerData = workerDoc.data();
-      const phoneNumber = (workerData.phone || workerData.phoneNumber || '').replace(/-/g, '');
+      const phoneNumber = (workerData.phone || workerData.phoneNumber || workerData['연락처'] || workerData.phone_number || '').replace(/-/g, '');
       
       if (!phoneNumber || phoneNumber.length < 10) {
         console.log('Invalid phone number:', phoneNumber);
@@ -120,7 +120,7 @@ exports.scheduledAlimtalk = functions.pubsub
         const dDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (targetDays.includes(dDay)) {
-          const phoneNumber = (worker.phone || worker.phoneNumber || '').replace(/-/g, '');
+          const phoneNumber = (worker.phone || worker.phoneNumber || worker['연락처'] || worker.phone_number || '').replace(/-/g, '');
           if (phoneNumber.length < 10) return;
 
           const name = worker.name || '고객';

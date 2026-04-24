@@ -23,14 +23,23 @@ exports.sendAlimtalk = functions.firestore
     if (!workerDocId) return null;
 
     try {
+      console.log('STEP 1: Fetching worker doc for ID:', workerDocId);
       // 1. 근로자 정보 가져오기
       const workerDoc = await db.collection('workers').doc(workerDocId).get();
-      if (!workerDoc.exists) return null;
+      if (!workerDoc.exists) {
+        console.error('STEP 1 ERROR: Worker doc not found in workers collection');
+        return null;
+      }
       
       const workerData = workerDoc.data();
+      console.log('STEP 2: Worker data found:', JSON.stringify(workerData));
       const phoneNumber = (workerData.phone || workerData.phoneNumber || workerData['연락처'] || '').replace(/-/g, '');
+      console.log('STEP 3: Normalized phone number:', phoneNumber);
 
-      if (!phoneNumber) return null;
+      if (!phoneNumber) {
+        console.error('STEP 3 ERROR: Phone number is empty for worker');
+        return null;
+      }
 
       // 2. 메시지 데이터 구성 (v5 SDK 포맷)
       let message = {};

@@ -7,8 +7,8 @@ const db = admin.firestore();
 
 // 솔라피 서비스 초기화 (API Key, Secret 입력)
 const messageService = new SolapiMessageService(
-  'NCSYMKWMTF3OAY06', 
-  '7XWOKS9V3YJ5GYYZBSCPN93FSRQ8FCHL'
+  'NCS3LR13SE2MENQS', 
+  'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD'
 );
 
 /**

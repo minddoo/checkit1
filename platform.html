@@ -1394,59 +1394,8 @@
         vi: "Vui lòng kiểm tra hướng dẫn đặt lịch khám sức khỏe và các lưu ý chuẩn bị. (Tuân thủ thời gian nhịn ăn, mang theo CCCD/Hộ chiếu)"
     };
 
-    window.sendBookingGuide = async () => {
-        if (!activeChatWorkerId) {
-            showToast("먼저 근로자를 선택해주세요.", "error");
-            return;
-        }
+    // (Outdated guide functions removed. Using the new version at the bottom of the file.)
 
-        try {
-            // 근로자 정보에서 언어(lang/language/nationality) 가져오기
-            const workerDoc = await db.collection('workers').doc(activeChatWorkerId).get();
-            const workerData = workerDoc.data() || {};
-            const lang = (workerData.lang || workerData.language || 'ko').toLowerCase();
-            const workerName = workerData.name || '고객';
-
-            // 모달 열기 및 내용 채우기
-            const modal = document.getElementById('guideEditorModal');
-            const textarea = document.getElementById('guideEditorTextarea');
-            const langLabel = document.getElementById('guideLangLabel');
-            
-            langLabel.innerText = `[${lang.toUpperCase()}] ${workerName}님 가이드 편집`;
-            textarea.value = guidePacks[lang] || guidePacks['ko']; // 기본값은 한국어
-            
-            modal.style.display = 'flex';
-        } catch (e) {
-            showToast("데이터 로드 실패: " + e.message, "error");
-        }
-    };
-
-    window.closeGuideEditor = () => {
-        document.getElementById('guideEditorModal').style.display = 'none';
-    };
-
-    window.confirmSendBookingGuide = async () => {
-        const customText = document.getElementById('guideEditorTextarea').value;
-        if (!customText.trim()) {
-            alert("내용을 입력해주세요.");
-            return;
-        }
-
-        try {
-            await db.collection('messages').add({
-                workerDocId: activeChatWorkerId,
-                sender: 'admin',
-                text: customText,
-                type: 'booking_guide',
-                customContent: customText, // 서버에서 #{안내내용예시}에 넣을 값
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            showToast("가이드 발송 요청이 완료되었습니다.", "success");
-            closeGuideEditor();
-        } catch (e) {
-            showToast("발송 실패: " + e.message, "error");
-        }
-    };
     
     // Statistics Logic
     let charts = { company: null, worker: null, signup: null };
@@ -1635,10 +1584,15 @@
                                 ${dDayLabel}
                             </span>
                         </td>
-                        <td style="padding: 15px 20px; width: 10%; text-align: right; border-bottom: 1px solid #f1f5f9;">
-                            <button class="btn-outline" style="padding: 6px 12px; font-size: 0.75rem;" onclick="event.stopPropagation(); window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats');">
-                                <i class="fa-solid fa-comments"></i>
-                            </button>
+                        <td style="padding: 15px 20px; width: 25%; text-align: right; border-bottom: 1px solid #f1f5f9;">
+                            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                                <button class="btn-outline" style="padding: 6px 10px; font-size: 0.75rem; border-color: #27ae60; color: #27ae60;" onclick="event.stopPropagation(); window.sendBookingGuide('${b.id}')">
+                                    <i class="fa-solid fa-paper-plane"></i> 가이드
+                                </button>
+                                <button class="btn-outline" style="padding: 6px 10px; font-size: 0.75rem;" onclick="event.stopPropagation(); window.selectChat('${b.id}', '${b.name}', '${b.companyId}'); switchSection('Chats');">
+                                    <i class="fa-solid fa-comments"></i> 채팅
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;

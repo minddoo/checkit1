@@ -2418,12 +2418,14 @@
         if (!currentWorkerForGuide) return;
         
         const content = document.getElementById('guideEditorTextarea').value;
-        const btn = event.target;
-        const origText = btn.innerHTML;
+        const btn = document.querySelector('#guideEditorModal button[onclick*="confirmSendBookingGuide"]');
+        const origText = btn ? btn.innerHTML : '알림톡 발송하기';
         
         try {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 발송 중...';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 발송 중...';
+            }
 
             await db.collection('messages').add({
                 workerDocId: currentWorkerForGuide,

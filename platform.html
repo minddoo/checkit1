@@ -2400,18 +2400,55 @@
     </div>
 
     <script>
+    let currentWorkerForGuide = null;
+
+    window.sendBookingGuide = function(workerId) {
+        currentWorkerForGuide = workerId;
+        document.getElementById('guideEditorTextarea').value = '';
+        document.getElementById('guideEditorModal').style.display = 'flex';
+        updateGuidePreview();
+    };
+
+    window.closeGuideEditor = function() {
+        document.getElementById('guideEditorModal').style.display = 'none';
+        currentWorkerForGuide = null;
+    };
+
+    window.confirmSendBookingGuide = async function() {
+        if (!currentWorkerForGuide) return;
+        
+        const content = document.getElementById('guideEditorTextarea').value;
+        const btn = event.target;
+        const origText = btn.innerHTML;
+        
+        try {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 발송 중...';
+
+            await db.collection('messages').add({
+                workerDocId: currentWorkerForGuide,
+                type: 'booking_guide',
+                sender: 'admin',
+                customContent: content || '안전하고 정확한 검진을 위해 사전 안내사항을 꼭 확인해 주세요.',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            });
+
+            alert('알림톡 발송 요청이 완료되었습니다.');
+            closeGuideEditor();
+        } catch (e) {
+            console.error('Send guide error:', e);
+            alert('발송 요청 실패: ' + e.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = origText;
+        }
+    };
+
     function updateGuidePreview() {
         var c = document.getElementById('guideEditorTextarea').value || '(안내 내용을 입력해주세요)';
         var t = '[체킷(CHECKIT) 검진 가이드]\n\n안녕하세요, 홍길동님!\n고객님께서 예약하신 건강검진일이 D-3일 앞으로 다가왔습니다. 🚀\n\n안전하고 정확한 검진을 위해 아래 사전 안내사항을 꼭 확인해 주세요.\n\n▶ 검진 사전 안내\n' + c + '\n\n∨ 위 내용을 잘 숙지하여 검진 전 준비를 완료해 주세요!\n추가 문의사항은 \'체킷 근로자 포털\' 채팅방을 이용해 주시기 바랍니다.\n알림톡 외 추가 문의는 체킷 근로자 포털 채팅방을 이용해 주세요.';
         document.getElementById('kakaotalkPreview').innerText = t;
-    }
-    // 모달 오픈 시 미리보기 초기화
-    var _origOpen = window.sendBookingGuide;
-    if (_origOpen) {
-        window.sendBookingGuide = async function() {
-            await _origOpen();
-            setTimeout(updateGuidePreview, 150);
-        };
     }
     </script>
 

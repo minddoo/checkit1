@@ -2378,7 +2378,7 @@
                 </div>
                 <div style="display:flex; gap:10px; margin-top:18px;">
                     <button onclick="closeGuideEditor()" style="flex:1; padding:13px; border:1px solid #d2d2d7; background:#fff; border-radius:10px; font-weight:600; cursor:pointer;">취소</button>
-                    <button onclick="confirmSendBookingGuide()" style="flex:2; padding:13px; border:none; background:#27ae60; color:#fff; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.9rem;"><i class="fa-solid fa-paper-plane"></i> 알림톡 발송하기</button>
+                    <button onclick="confirmSendBookingGuide(this, event)" style="flex:2; padding:13px; border:none; background:#27ae60; color:#fff; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.9rem;"><i class="fa-solid fa-paper-plane"></i> 알림톡 발송하기</button>
                 </div>
             </div>
             <!-- 오른쪽: 카카오 알림톡 미리보기 -->
@@ -2414,11 +2414,14 @@
         currentWorkerForGuide = null;
     };
 
-    window.confirmSendBookingGuide = async function() {
-        if (!currentWorkerForGuide) return;
+    window.confirmSendBookingGuide = async function(btn, evt) {
+        if (evt) evt.preventDefault();
+        if (!currentWorkerForGuide) {
+            alert('대상 근로자 정보가 없습니다. 다시 시도해 주세요.');
+            return;
+        }
         
         const content = document.getElementById('guideEditorTextarea').value;
-        const btn = document.querySelector('#guideEditorModal button[onclick*="confirmSendBookingGuide"]');
         const origText = btn ? btn.innerHTML : '알림톡 발송하기';
         
         try {

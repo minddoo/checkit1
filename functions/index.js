@@ -72,8 +72,9 @@ exports.sendAlimtalk = functions.firestore
       }
 
       // 3. 메시지 발송
+      console.log('Sending message with data:', JSON.stringify(messageData, null, 2));
       const result = await messageService.sendOne(messageData);
-      console.log('Message sent successfully:', result);
+      console.log('Solapi Result:', JSON.stringify(result, null, 2));
       
       return snap.ref.update({
         status: 'sent',
@@ -82,10 +83,14 @@ exports.sendAlimtalk = functions.firestore
       });
 
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('CRITICAL ERROR sending message:', error);
+      if (error.response) {
+        console.error('Solapi Error Response Data:', JSON.stringify(error.response.data, null, 2));
+      }
       return snap.ref.update({
         status: 'error',
-        error: error.message
+        error: error.message,
+        errorDetail: error.response ? error.response.data : 'No additional data'
       });
     }
   });

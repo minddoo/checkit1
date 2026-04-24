@@ -1318,6 +1318,61 @@ function googleTranslateElementInit() {
         } catch (e) { console.error("Self-recheck guide error:", e); }
     }
 
+    async function submitReservationDate(btn) {
+        const container = btn.closest('div');
+        const dateInput = container.querySelector('.resv-date-input');
+        const dateValue = dateInput ? dateInput.value : null;
+
+        if (!dateValue) {
+            alert('예약 날짜를 선택해주세요.');
+            return;
+        }
+
+        const loader = document.getElementById('pageLoader');
+        if (loader) loader.style.display = 'flex';
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            if (!workerDocId) throw new Error('근로자 정보 연동 오류');
+
+            // 1. Update worker document with reserved date
+            await db.collection('workers').doc(workerDocId).update({
+                reservedDate: dateValue,
+                status: '예약완료',
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // 2. Add a message to trigger Alimtalk (if logic is based on message creation)
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'system',
+                text: `[예약 확정 안내]\n검진 예약이 ${dateValue}로 등록되었습니다. 일정에 맞춰 방문해 주세요.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            alert('예약 날짜가 등록되었습니다. 일정에 맞춰 안내 가이드를 보내드리겠습니다.');
+            
+            // UI Refresh
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+
+        } catch (e) {
+            console.error("Date submission error:", e);
+            alert('오류 발생: ' + e.message);
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    }
+
     async function tryToRelinkWorker(uid, name, compId) {
         try {
             // Find by name matching

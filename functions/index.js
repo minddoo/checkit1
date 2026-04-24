@@ -5,7 +5,7 @@ const { SolapiMessageService } = require('solapi');
 admin.initializeApp();
 const db = admin.firestore();
 
-// 솔라피 서비스 초기화 (API Key, Secret 입력)
+// 솔라피 서비스 초기화 (v5 기준)
 const messageService = new SolapiMessageService(
   'NCS3LR13SE2MENQS', 
   'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD'
@@ -13,7 +13,6 @@ const messageService = new SolapiMessageService(
 
 /**
  * 1:1 알림톡 발송용 (수동/트리거)
- * 'messages' 컬렉션에 새 문서가 생성되면 실행됩니다.
  */
 exports.sendAlimtalk = functions.firestore
   .document('messages/{messageId}')
@@ -21,50 +20,39 @@ exports.sendAlimtalk = functions.firestore
     const data = snap.data();
     const workerDocId = data.workerDocId;
 
-    if (!workerDocId) {
-      console.log('No workerDocId found');
-      return null;
-    }
+    if (!workerDocId) return null;
 
     try {
       // 1. 근로자 정보 가져오기
       const workerDoc = await db.collection('workers').doc(workerDocId).get();
-      if (!workerDoc.exists) {
-        console.log('Worker not found:', workerDocId);
-        return null;
-      }
-
-      const workerData = workerDoc.data();
-      const phoneNumber = (workerData.phone || workerData.phoneNumber || workerData['연락처'] || workerData.phone_number || '').replace(/-/g, '');
+      if (!workerDoc.exists) return null;
       
-      if (!phoneNumber || phoneNumber.length < 10) {
-        console.log('Invalid phone number:', phoneNumber);
-        return null;
-      }
+      const workerData = workerDoc.data();
+      const phoneNumber = (workerData.phone || workerData.phoneNumber || workerData['연락처'] || '').replace(/-/g, '');
 
-      // 2. 알림톡 메시지 데이터 구성 (템플릿 타입에 따라 분기)
-      let messageData = {};
+      if (!phoneNumber) return null;
+
+      // 2. 메시지 데이터 구성 (v5 SDK 포맷)
+      let message = {};
       
       if (data.type === 'booking_guide') {
-        // [검진 가이드] 알림톡 템플릿
-        messageData = {
+        message = {
           to: phoneNumber,
           from: '01022097951',
-          kakaoOptions: {
-            pfId: 'KA01PF260401123510015EukHvlIDzQP',
-            templateId: 'KA01TP260401123529786bxLeVETmEai',
-            variables: {
-              "#{성함}": workerData.name || '고객',
-              "#{디데이}": '가이드',
-              "#{안내내용예시}": data.customContent || '검진 예약 가이드 및 준비사항을 확인해 주세요.'
-            }
+          type: 'ATA',
+          templateId: 'KA01TP260401123529786bxLeVETmEai',
+          pfId: 'KA01PF260401123510015EukHvlIDzQP',
+          variables: {
+            "#{성함}": workerData.name || '고객',
+            "#{디데이}": '가이드',
+            "#{안내내용예시}": data.customContent || '검진 예약 가이드 및 준비사항을 확인해 주세요.'
           }
         };
       } else if (data.type === 'text') {
-        // 일반 문자 발송 (템플릿 미지정 시)
-        messageData = {
+        message = {
           to: phoneNumber,
           from: '01022097951',
+          type: 'SMS',
           text: data.text || '[체킷] 메시지가 도착했습니다.'
         };
       } else {
@@ -72,9 +60,9 @@ exports.sendAlimtalk = functions.firestore
       }
 
       // 3. 메시지 발송
-      console.log('Sending message with data:', JSON.stringify(messageData, null, 2));
-      const result = await messageService.sendOne(messageData);
-      console.log('Solapi Result:', JSON.stringify(result, null, 2));
+      console.log('Attempting v5 send with message:', JSON.stringify(message, null, 2));
+      const result = await messageService.sendOne(message);
+      console.log('Solapi v5 Result:', JSON.stringify(result, null, 2));
       
       return snap.ref.update({
         status: 'sent',
@@ -83,21 +71,17 @@ exports.sendAlimtalk = functions.firestore
       });
 
     } catch (error) {
-      console.error('CRITICAL ERROR sending message:', error);
-      if (error.response) {
-        console.error('Solapi Error Response Data:', JSON.stringify(error.response.data, null, 2));
-      }
+      console.error('Solapi v5 Error:', error);
       return snap.ref.update({
         status: 'error',
         error: error.message,
-        errorDetail: error.response ? error.response.data : 'No additional data'
+        errorDetail: error.data || error.response || 'No additional data'
       });
     }
   });
 
 /**
- * 매일 오전 7시에 실행되는 자동 예약 발송 스케줄러
- * 검진 7일전, 3일전, 1일전, 당일 대상자에게 자동으로 알림톡을 보냅니다.
+ * 매일 오전 7시 자동 예약 발송 스케줄러
  */
 exports.scheduledAlimtalk = functions.pubsub
   .schedule('0 7 * * *')
@@ -107,11 +91,9 @@ exports.scheduledAlimtalk = functions.pubsub
     today.setHours(0, 0, 0, 0);
 
     try {
-      // 1. 예약 정보가 있는 근로자 전체 조회
       const snap = await db.collection('workers').where('reservedDate', '!=', null).get();
-      
-      const targetDays = [7, 3, 1, 0]; // 알림을 보낼 D-Day 설정
-      const sendPromises = [];
+      const targetDays = [7, 3, 1, 0];
+      const messages = [];
 
       snap.forEach(doc => {
         const worker = doc.data();
@@ -119,45 +101,33 @@ exports.scheduledAlimtalk = functions.pubsub
         
         const reservedDate = new Date(worker.reservedDate);
         reservedDate.setHours(0, 0, 0, 0);
-
-        // D-Day 계산
-        const diffTime = reservedDate - today;
-        const dDay = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const dDay = Math.ceil((reservedDate - today) / (1000 * 60 * 60 * 24));
 
         if (targetDays.includes(dDay)) {
-          const phoneNumber = (worker.phone || worker.phoneNumber || worker['연락처'] || worker.phone_number || '').replace(/-/g, '');
+          const phoneNumber = (worker.phone || worker.phoneNumber || worker['연락처'] || '').replace(/-/g, '');
           if (phoneNumber.length < 10) return;
 
-          const name = worker.name || '고객';
-          const dDayText = dDay === 0 ? '당일' : `${dDay}`;
-          const guideContent = dDay === 0 
-            ? '오늘은 건강검진일입니다. 잊지 말고 방문해 주세요!' 
-            : `검진이 ${dDay}일 앞으로 다가왔습니다. 준비 사항을 확인해 주세요.`;
-
-          const messageData = {
+          messages.push({
             to: phoneNumber,
             from: '01022097951',
-            kakaoOptions: {
-              pfId: 'KA01PF260401123510015EukHvlIDzQP',
-              templateId: 'KA01TP260401123529786bxLeVETmEai',
-              variables: {
-                "#{성함}": name,
-                "#{디데이}": dDayText,
-                "#{안내내용예시}": guideContent
-              }
+            type: 'ATA',
+            templateId: 'KA01TP260401123529786bxLeVETmEai',
+            pfId: 'KA01PF260401123510015EukHvlIDzQP',
+            variables: {
+              "#{성함}": worker.name || '고객',
+              "#{디데이}": dDay === 0 ? '당일' : dDay.toString(),
+              "#{안내내용예시}": dDay === 0 
+                ? '오늘은 건강검진일입니다. 잊지 말고 방문해 주세요!' 
+                : `검진이 ${dDay}일 앞으로 다가왔습니다. 준비 사항을 확인해 주세요.`
             }
-          };
-
-          sendPromises.push(
-            messageService.sendOne(messageData)
-              .then(() => console.log(`Auto Send Success: ${name} (D-${dDay})`))
-              .catch(err => console.error(`Auto Send Fail: ${name}`, err))
-          );
+          });
         }
       });
 
-      await Promise.all(sendPromises);
-      console.log(`Scheduled Task Done. Sent: ${sendPromises.length} messages.`);
+      if (messages.length > 0) {
+        const result = await messageService.sendMany(messages);
+        console.log(`Auto Send Done. Total: ${messages.length}`, result);
+      }
       return null;
     } catch (error) {
       console.error('Scheduled Task Error:', error);

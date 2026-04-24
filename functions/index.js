@@ -49,7 +49,7 @@ exports.sendAlimtalk = functions.firestore
         // [검진 가이드] 알림톡 템플릿
         messageData = {
           to: phoneNumber,
-          from: '01053155850',
+          from: '01022097951',
           kakaoOptions: {
             pfId: 'KA01PF260401123510015EukHvlIDzQP',
             templateId: 'KA01TP260401123529786bxLeVETmEai',
@@ -64,7 +64,7 @@ exports.sendAlimtalk = functions.firestore
         // 일반 문자 발송 (템플릿 미지정 시)
         messageData = {
           to: phoneNumber,
-          from: '01053155850',
+          from: '01022097951',
           text: data.text || '[체킷] 메시지가 도착했습니다.'
         };
       } else {
@@ -131,7 +131,7 @@ exports.scheduledAlimtalk = functions.pubsub
 
           const messageData = {
             to: phoneNumber,
-            from: '01053155850',
+            from: '01022097951',
             kakaoOptions: {
               pfId: 'KA01PF260401123510015EukHvlIDzQP',
               templateId: 'KA01TP260401123529786bxLeVETmEai',

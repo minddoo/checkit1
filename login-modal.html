@@ -1,51 +1,76 @@
 <!-- Login Modal -->
-<div id="login-modal-overlay">
-    <div class="login-modal-box">
-        <span class="close-button" id="close-login-modal">&times;</span>
-        
-        <div class="login-tabs">
-            <button class="tab-link active" data-tab="individual-login" data-lang-key="individual_customer">개인 고객</button>
-            <button class="tab-link" data-tab="corporate-login" data-lang-key="corporate_admin">기업 관리자</button>
+<div id="login-modal-overlay" class="modal-overlay">
+    <div class="modal-box">
+        <span id="close-login-modal" class="close-button">&times;</span>
+        <div class="login-header">
+            <h2 data-lang-key="login_title">로그인</h2>
         </div>
 
-        <div id="individual-login" class="tab-content active">
-            <form id="individual-login-form">
+        <!-- Tab Buttons -->
+        <div class="modal-tabs">
+            <button id="tab-btn-corp" class="modal-tab-btn active" onclick="window.switchLoginTab('corp')" data-lang-key="login_tab_corp">기업용</button>
+            <button id="tab-btn-worker" class="modal-tab-btn" style="color:#64748b;" onclick="window.switchLoginTab('worker')" data-lang-key="login_tab_worker">근로자용</button>
+        </div>
+
+        <!-- Corporate Admin Form -->
+        <div id="login-corp-content" class="tab-content active">
+            <form id="login-form-corporate">
                 <div class="form-group">
-                    <label for="individual-email" data-lang-key="login_email_placeholder">이메일</label>
-                    <input type="text" id="individual-email" required>
+                    <label for="login-company-key" data-lang-key="login_company_key_label"></label>
+                    <input type="text" id="login-company-key" required>
                 </div>
                 <div class="form-group">
-                    <label for="individual-password" data-lang-key="login_pass_placeholder">비밀번호</label>
-                    <input type="password" id="individual-password" required>
+                    <label for="login-security-key" data-lang-key="login_security_key_label"></label>
+                    <input type="password" id="login-security-key" required>
                 </div>
                 <button type="submit" class="cta-button-primary" data-lang-key="login_btn">로그인</button>
             </form>
-            <div class="divider" data-lang-key="login_or">또는</div>
-            <button class="google-login-button" id="google-login-btn">
-                <img src="assets/google_logo.svg" alt="Google icon">
-                <span data-lang-key="login_google">Google 로그인</span>
-            </button>
-            <div class="login-links">
-                <a href="#" data-lang-key="find_credentials">이메일/비밀번호 찾기</a>
-                <a href="#" data-lang-key="register">회원가입</a>
+        </div>
+
+        <!-- Worker Login Form -->
+        <div id="login-worker-content" class="tab-content" style="display:none;">
+            <form id="login-form-worker-simplified">
+                <div class="form-group">
+                    <label for="login-worker-company-key" data-lang-key="login_worker_company_key_label">회사 입력키 (Company Input Key)</label>
+                    <input type="text" id="login-worker-company-key" placeholder="부여받은 회사 입력키 입력" data-lang-key="login_worker_company_key_placeholder" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-worker-security-key" data-lang-key="login_worker_security_key_label">암호키 (Security Key)</label>
+                    <input type="password" id="login-worker-security-key" placeholder="부여받은 암호키" data-lang-key="login_worker_security_key_placeholder" required>
+                </div>
+                <button type="submit" class="cta-button-primary" data-lang-key="login_worker_btn">기존 계정으로 로그인</button>
+            </form>
+            <div class="login-links" style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
+                <a href="#" id="find-worker-link" style="color: #64748b; font-size: 0.85rem; text-decoration: underline;" data-lang-key="find_worker_credentials_title">아이디/비밀번호 찾기</a>
+                <div style="margin-top: 5px;">
+                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 5px;" data-lang-key="login_no_account">계정이 아직 없으신가요?</p>
+                    <a href="#" id="signup-link-worker" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="signup_link_text">회원가입 하기</a>
+                </div>
             </div>
         </div>
 
-        <div id="corporate-login" class="tab-content">
-             <form id="corporate-login-form">
+        <!-- Credential Recovery Content -->
+        <div id="recovery-content" class="tab-content" style="display:none;">
+            <h3 style="margin-bottom: 20px;" data-lang-key="find_worker_credentials_title">아이디/비밀번호 찾기</h3>
+            <form id="recovery-form-worker">
                 <div class="form-group">
-                    <label for="corporate-email" data-lang-key="login_email_placeholder">이메일</label>
-                    <input type="text" id="corporate-email" required>
+                    <label data-lang-key="find_worker_name_label">성함 (Name)</label>
+                    <input type="text" id="recovery-worker-name" required>
                 </div>
                 <div class="form-group">
-                    <label for="corporate-password" data-lang-key="login_pass_placeholder">비밀번호</label>
-                    <input type="password" id="corporate-password" required>
+                    <label data-lang-key="find_worker_dob_label">생년월일 (DOB)</label>
+                    <input type="date" id="recovery-worker-birth" required>
                 </div>
-                <button type="submit" class="cta-button-primary" data-lang-key="login_btn">로그인</button>
+                <button type="submit" class="cta-button-primary" data-lang-key="find_worker_btn">정보 확인하기</button>
             </form>
-             <div class="login-links" style="justify-content: center; margin-top: 20px;">
-                 <a href="#" data-lang-key="find_credentials">이메일/비밀번호 찾기</a>
+            <div id="recovery-result" style="margin-top: 20px; padding: 15px; border-radius: 8px; display: none;"></div>
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="#" id="back-to-login-from-recovery" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="find_worker_back">로그인으로 돌아가기</a>
             </div>
+        </div>
+
+        <div class="login-links" id="login-footer-links" style="margin-top: 20px; text-align: center;">
+            <a href="#" id="back-to-login" style="color: var(--text-muted); font-size: 0.9rem;" data-lang-key="switch_to_login">이미 계정이 있으신가요? 로그인</a>
         </div>
 
     </div>

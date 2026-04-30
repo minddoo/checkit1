@@ -938,13 +938,36 @@
                     </div>
                     <button type="submit" class="cta-button-primary" data-lang-key="login_worker_btn">기존 계정으로 로그인</button>
                 </form>
-                <div class="login-links" style="margin-top: 20px; text-align: center;">
-                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 5px;" data-lang-key="login_no_account">계정이 아직 없으신가요?</p>
-                    <a href="#" id="signup-link-worker" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="signup_link_text">회원가입 하기</a>
+                <div class="login-links" style="margin-top: 15px; text-align: center; display: flex; flex-direction: column; gap: 8px;">
+                    <a href="#" id="find-worker-link" style="color: #64748b; font-size: 0.85rem; text-decoration: underline;" data-lang-key="find_worker_credentials_title">아이디/비밀번호 찾기</a>
+                    <div style="margin-top: 5px;">
+                        <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 5px;" data-lang-key="login_no_account">계정이 아직 없으신가요?</p>
+                        <a href="#" id="signup-link-worker" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="signup_link_text">회원가입 하기</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="login-links" style="margin-top: 20px; text-align: center;">
+            <!-- Credential Recovery Content -->
+            <div id="recovery-content" class="tab-content" style="display:none;">
+                <h3 style="margin-bottom: 20px;" data-lang-key="find_worker_credentials_title">아이디/비밀번호 찾기</h3>
+                <form id="recovery-form-worker">
+                    <div class="form-group">
+                        <label data-lang-key="find_worker_name_label">성함 (Name)</label>
+                        <input type="text" id="recovery-worker-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-lang-key="find_worker_dob_label">생년월일 (DOB)</label>
+                        <input type="date" id="recovery-worker-birth" required>
+                    </div>
+                    <button type="submit" class="cta-button-primary" data-lang-key="find_worker_btn">정보 확인하기</button>
+                </form>
+                <div id="recovery-result" style="margin-top: 20px; padding: 15px; border-radius: 8px; display: none;"></div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <a href="#" id="back-to-login-from-recovery" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="find_worker_back">로그인으로 돌아가기</a>
+                </div>
+            </div>
+
+            <div class="login-links" id="login-footer-links" style="margin-top: 20px; text-align: center;">
                 <a href="#" id="back-to-login" style="color: var(--text-muted); font-size: 0.9rem;" data-lang-key="switch_to_login">이미 계정이 있으신가요? 로그인</a>
             </div>
 

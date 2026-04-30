@@ -403,7 +403,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': '고객센터 정보',
             'footer_cs_phone': '상담 전화: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': '상담 이메일: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT)',
+                        'footer_copyright': '&copy; 2026 주식회사 체킷 (CHECKIT)',
+            'find_worker_credentials_title': '아이디/비밀번호 찾기',
+            'find_worker_name_label': '성함 (Name)',
+            'find_worker_dob_label': '생년월일 (DOB)',
+            'find_worker_btn': '정보 확인하기',
+            'find_worker_result_success': '회원님의 정보를 찾았습니다.',
+            'find_worker_result_id': '회사 입력키 (ID): ',
+            'find_worker_result_pw': '암호키 (PW): ',
+            'find_worker_result_error': '일치하는 정보가 없습니다. 관리자에게 문의해 주세요.',
+            'find_worker_back': '로그인으로 돌아가기',
             'mobile_hero_title': '체계적이고 지속가능한<br><span style="color: #27ae60;">보건관리 인프라</span>',
             'mobile_step1_title': '근로자 명단 & 병원 정보 <span style="color: #27ae60;">원스텝 등록</span>',
             'mobile_step1_desc': '기업 보건관리자가 엑셀로 근로자 명단과 병원 정보를 간편하게 등록하여 실시간 보건관리의 체계적인 기초 데이터를 구축합니다.',
@@ -760,7 +769,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'footer_cs_title': 'Customer Service Info',
             'footer_cs_phone': 'Consultation Phone: <strong>010-5109-3459 / 010-2209-7951</strong>',
             'footer_cs_email': 'Consultation Email: <strong>checkit082@gmail.com</strong>',
-            'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd.',
+                        'footer_copyright': '&copy; 2026 CHECKIT Co., Ltd.',
+            'find_worker_credentials_title': 'Find ID/Password',
+            'find_worker_name_label': 'Full Name',
+            'find_worker_dob_label': 'Date of Birth',
+            'find_worker_btn': 'Check Info',
+            'find_worker_result_success': 'Information found.',
+            'find_worker_result_id': 'Company Key (ID): ',
+            'find_worker_result_pw': 'Security Key (PW): ',
+            'find_worker_result_error': 'No matching information found. Please contact admin.',
+            'find_worker_back': 'Back to Login',
             'mobile_hero_title': 'Systematic and Sustainable<br><span style="color: #27ae60;">Health Management Infra</span>',
             'mobile_step1_title': 'One-Step Registration of <span style="color: #27ae60;">Worker List & Hospital Info</span>',
             'mobile_step1_desc': 'Health managers can easily register worker lists and hospital info via Excel, establishing a systematic foundation for real-time health management.',
@@ -2255,6 +2273,84 @@ document.addEventListener('DOMContentLoaded', () => {
         sliderCards.forEach(card => {
             sliderObserver.unobserve(card);
             sliderObserver.observe(card);
+        });
+    }
+
+    // --- Worker Credential Recovery Logic ---
+    const findWorkerLink = document.getElementById('find-worker-link');
+    const recoveryContent = document.getElementById('recovery-content');
+    const loginCorpContent = document.getElementById('login-corp-content');
+    const loginWorkerContent = document.getElementById('login-worker-content');
+    const modalTabs = document.querySelector('.modal-tabs');
+    const backToLoginFromRecovery = document.getElementById('back-to-login-from-recovery');
+    const recoveryFormWorker = document.getElementById('recovery-form-worker');
+    const recoveryResult = document.getElementById('recovery-result');
+
+    if (findWorkerLink) {
+        findWorkerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loginWorkerContent) loginWorkerContent.style.display = 'none';
+            if (modalTabs) modalTabs.style.display = 'none';
+            if (recoveryContent) recoveryContent.style.display = 'block';
+            if (recoveryResult) recoveryResult.style.display = 'none';
+        });
+    }
+
+    if (backToLoginFromRecovery) {
+        backToLoginFromRecovery.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (recoveryContent) recoveryContent.style.display = 'none';
+            if (modalTabs) modalTabs.style.display = 'flex';
+            if (loginWorkerContent) loginWorkerContent.style.display = 'block';
+        });
+    }
+
+    if (recoveryFormWorker) {
+        recoveryFormWorker.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('recovery-worker-name').value.trim();
+            const birthDate = document.getElementById('recovery-worker-birth').value;
+
+            if (!name || !birthDate) return;
+
+            const loader = document.getElementById('pageLoader') || { style: {} };
+            loader.style.display = 'flex';
+            recoveryResult.style.display = 'none';
+
+            try {
+                const workerSnap = await db.collection('workers')
+                    .where('name', '==', name)
+                    .where('birthDate', '==', birthDate)
+                    .get();
+
+                const data = translations[currentLang] || translations['ko'];
+
+                if (!workerSnap.empty) {
+                    const workerData = workerSnap.docs[0].data();
+                    const companyId = workerData.companyId;
+                    const passwordKey = workerData.passwordKey || '(정보 없음)';
+                    
+                    recoveryResult.innerHTML = `
+                        <div style="background: #e8f5e9; border: 1px solid #c8e6c9; padding: 15px; border-radius: 8px; text-align: left;">
+                            <p style="color: #2e7d32; font-weight: 700; margin-bottom: 10px;">${data['find_worker_result_success']}</p>
+                            <p style="font-size: 0.95rem; margin-bottom: 5px;"><strong>${data['find_worker_result_id']}</strong> comp_${companyId}</p>
+                            <p style="font-size: 0.95rem;"><strong>${data['find_worker_result_pw']}</strong> ${passwordKey}</p>
+                        </div>
+                    `;
+                } else {
+                    recoveryResult.innerHTML = `
+                        <div style="background: #ffebee; border: 1px solid #ffcdd2; padding: 15px; border-radius: 8px; color: #c62828;">
+                            ${data['find_worker_result_error']}
+                        </div>
+                    `;
+                }
+                recoveryResult.style.display = 'block';
+            } catch (err) {
+                console.error("Recovery error:", err);
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+            } finally {
+                loader.style.display = 'none';
+            }
         });
     }
 

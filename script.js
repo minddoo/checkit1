@@ -2330,19 +2330,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get companyId from companyKey (handles 'comp_' prefix if needed)
                 const companyId = companyKey.startsWith('comp_') ? companyKey.substring(5) : companyKey;
 
-                // Query by companyId and name (indexed and usually allowed)
+                // Search primarily by name (now allowed by the broadened rules)
+                // We'll filter by companyId and birthDate in the client to be more flexible
                 const workerSnap = await db.collection('workers')
-                    .where('companyId', '==', companyId)
                     .where('name', '==', name)
-                    .limit(5)
+                    .limit(20)
                     .get();
 
                 const data = translations[currentLang] || translations['ko'];
 
                 let matchedWorker = null;
+                const searchCompanyId = companyId.toLowerCase();
+
                 workerSnap.forEach(doc => {
-                    if (doc.data().birthDate === birthDate) {
-                        matchedWorker = { id: doc.id, ...doc.data() };
+                    const wData = doc.data();
+                    const dbCompanyId = (wData.companyId || '').toLowerCase();
+                    const dbBirthDate = wData.birthDate || '';
+                    
+                    // Match companyId (case-insensitive) and birthDate
+                    if (dbCompanyId === searchCompanyId && dbBirthDate === birthDate) {
+                        matchedWorker = { id: doc.id, ...wData };
                     }
                 });
 

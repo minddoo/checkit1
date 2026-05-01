@@ -413,6 +413,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'find_worker_result_pw': '암호키 (PW): ',
             'find_worker_result_error': '일치하는 정보가 없습니다. 관리자에게 문의해 주세요.',
             'find_worker_back': '로그인으로 돌아가기',
+            'find_worker_change_btn': '비밀번호(암호키) 변경하기',
+            'find_worker_new_pw_label': '새로운 암호키 (6자리 영문/숫자 권장)',
+            'find_worker_change_success': '정보가 변경되었습니다. 새로운 정보로 회원가입을 다시 진행해 주세요.',
+            'find_worker_change_confirm': '암호키를 변경하시겠습니까? 기존 가입 정보는 초기화되며 다시 회원가입을 해야 합니다.',
             'mobile_hero_title': '체계적이고 지속가능한<br><span style="color: #27ae60;">보건관리 인프라</span>',
             'mobile_step1_title': '근로자 명단 & 병원 정보 <span style="color: #27ae60;">원스텝 등록</span>',
             'mobile_step1_desc': '기업 보건관리자가 엑셀로 근로자 명단과 병원 정보를 간편하게 등록하여 실시간 보건관리의 체계적인 기초 데이터를 구축합니다.',
@@ -779,6 +783,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'find_worker_result_pw': 'Security Key (PW): ',
             'find_worker_result_error': 'No matching information found. Please contact admin.',
             'find_worker_back': 'Back to Login',
+            'find_worker_change_btn': 'Change Password (Security Key)',
+            'find_worker_new_pw_label': 'New Security Key (6 chars alphanumeric recommended)',
+            'find_worker_change_success': 'Information updated. Please sign up again with your new credentials.',
+            'find_worker_change_confirm': 'Are you sure you want to change the security key? Your existing account link will be reset.',
             'mobile_hero_title': 'Systematic and Sustainable<br><span style="color: #27ae60;">Health Management Infra</span>',
             'mobile_step1_title': 'One-Step Registration of <span style="color: #27ae60;">Worker List & Hospital Info</span>',
             'mobile_step1_desc': 'Health managers can easily register worker lists and hospital info via Excel, establishing a systematic foundation for real-time health management.',
@@ -2308,46 +2316,109 @@ document.addEventListener('DOMContentLoaded', () => {
     if (recoveryFormWorker) {
         recoveryFormWorker.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const companyKey = document.getElementById('recovery-worker-company-key').value.trim();
             const name = document.getElementById('recovery-worker-name').value.trim();
             const birthDate = document.getElementById('recovery-worker-birth').value;
 
-            if (!name || !birthDate) return;
+            if (!companyKey || !name || !birthDate) return;
 
             const loader = document.getElementById('pageLoader') || { style: {} };
             loader.style.display = 'flex';
             recoveryResult.style.display = 'none';
 
             try {
+                // Get companyId from companyKey (handles 'comp_' prefix if needed)
+                const companyId = companyKey.startsWith('comp_') ? companyKey.substring(5) : companyKey;
+
+                // Query by companyId and name (indexed and usually allowed)
                 const workerSnap = await db.collection('workers')
+                    .where('companyId', '==', companyId)
                     .where('name', '==', name)
-                    .where('birthDate', '==', birthDate)
+                    .limit(5)
                     .get();
 
                 const data = translations[currentLang] || translations['ko'];
 
-                if (!workerSnap.empty) {
-                    const workerData = workerSnap.docs[0].data();
-                    const companyId = workerData.companyId;
-                    const passwordKey = workerData.passwordKey || '(정보 없음)';
+                let matchedWorker = null;
+                workerSnap.forEach(doc => {
+                    if (doc.data().birthDate === birthDate) {
+                        matchedWorker = { id: doc.id, ...doc.data() };
+                    }
+                });
+
+                if (matchedWorker) {
+                    const companyId = matchedWorker.companyId;
+                    const passwordKey = matchedWorker.passwordKey || '(정보 없음)';
                     
                     recoveryResult.innerHTML = `
-                        <div style="background: #e8f5e9; border: 1px solid #c8e6c9; padding: 15px; border-radius: 8px; text-align: left;">
-                            <p style="color: #2e7d32; font-weight: 700; margin-bottom: 10px;">${data['find_worker_result_success']}</p>
-                            <p style="font-size: 0.95rem; margin-bottom: 5px;"><strong>${data['find_worker_result_id']}</strong> comp_${companyId}</p>
-                            <p style="font-size: 0.95rem;"><strong>${data['find_worker_result_pw']}</strong> ${passwordKey}</p>
+                        <div style="background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 12px; text-align: left; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                            <p style="color: #166534; font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-circle-check"></i> ${data['find_worker_result_success']}
+                            </p>
+                            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #dcfce7; margin-bottom: 15px;">
+                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> comp_${companyId}</p>
+                                <p style="font-size: 0.95rem; color: #374151;"><strong>${data['find_worker_result_pw']}</strong> <span id="display-password-key" style="color: var(--primary); font-weight: 700;">${passwordKey}</span></p>
+                            </div>
+                            
+                            <hr style="border: 0; border-top: 1px solid #dcfce7; margin: 15px 0;">
+                            
+                            <div id="password-change-section">
+                                <button type="button" id="show-change-pw-btn" class="cta-button-primary" style="background: #64748b; font-size: 0.85rem; padding: 8px 15px;">
+                                    ${data['find_worker_change_btn']}
+                                </button>
+                            </div>
+                            <div id="password-change-form" style="display: none; margin-top: 15px;">
+                                <label style="display: block; font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">${data['find_worker_new_pw_label']}</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="new-password-key" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Ex: ABC123">
+                                    <button type="button" id="confirm-change-pw-btn" class="cta-button-primary" style="width: auto; padding: 8px 15px; font-size: 0.85rem;">확인</button>
+                                </div>
+                            </div>
                         </div>
                     `;
+
+                    // Event Listeners for the new result UI
+                    document.getElementById('show-change-pw-btn').addEventListener('click', () => {
+                        document.getElementById('password-change-section').style.display = 'none';
+                        document.getElementById('password-change-form').style.display = 'block';
+                    });
+
+                    document.getElementById('confirm-change-pw-btn').addEventListener('click', async () => {
+                        const newKey = document.getElementById('new-password-key').value.trim();
+                        if (!newKey) return;
+
+                        if (!confirm(data['find_worker_change_confirm'])) return;
+
+                        loader.style.display = 'flex';
+                        try {
+                            // Update Firestore. Security rules will allow this because we match companyId, name, birthDate 
+                            // and only change passwordKey and uid.
+                            await db.collection('workers').doc(matchedWorker.id).update({
+                                passwordKey: newKey,
+                                uid: null // Clear UID so they can re-register with the new key
+                            });
+                            
+                            alert(data['find_worker_change_success']);
+                            window.location.reload(); // Refresh to clear state
+                        } catch (err) {
+                            console.error("Update error:", err);
+                            alert("오류가 발생했습니다: " + err.message);
+                        } finally {
+                            loader.style.display = 'none';
+                        }
+                    });
+
                 } else {
                     recoveryResult.innerHTML = `
-                        <div style="background: #ffebee; border: 1px solid #ffcdd2; padding: 15px; border-radius: 8px; color: #c62828;">
-                            ${data['find_worker_result_error']}
+                        <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; color: #991b1b; text-align: center; font-weight: 600;">
+                            <i class="fa-solid fa-circle-exclamation"></i> ${data['find_worker_result_error']}
                         </div>
                     `;
                 }
                 recoveryResult.style.display = 'block';
             } catch (err) {
                 console.error("Recovery error:", err);
-                alert("오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해 주세요. (" + err.message + ")");
             } finally {
                 loader.style.display = 'none';
             }

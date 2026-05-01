@@ -952,6 +952,10 @@
                 <h3 style="margin-bottom: 20px;" data-lang-key="find_worker_credentials_title">아이디/비밀번호 찾기</h3>
                 <form id="recovery-form-worker">
                     <div class="form-group">
+                        <label data-lang-key="login_worker_company_key_label">회사 입력키 (ID)</label>
+                        <input type="text" id="recovery-worker-company-key" required>
+                    </div>
+                    <div class="form-group">
                         <label data-lang-key="find_worker_name_label">성함 (Name)</label>
                         <input type="text" id="recovery-worker-name" required>
                     </div>
@@ -961,7 +965,7 @@
                     </div>
                     <button type="submit" class="cta-button-primary" data-lang-key="find_worker_btn">정보 확인하기</button>
                 </form>
-                <div id="recovery-result" style="margin-top: 20px; padding: 15px; border-radius: 8px; display: none;"></div>
+                <div id="recovery-result" style="margin-top: 20px; display: none;"></div>
                 <div style="margin-top: 20px; text-align: center;">
                     <a href="#" id="back-to-login-from-recovery" style="color: var(--primary); font-weight: 600; text-decoration: underline;" data-lang-key="find_worker_back">로그인으로 돌아가기</a>
                 </div>

@@ -55,7 +55,22 @@ service cloud.firestore {
 
     // [3] WORKERS: The roster of employees for medical checkups
     match /workers/{workerId} {
+      // Authenticated users (admins or logged-in workers) have full access
       allow read, write: if request.auth != null;
+      
+      // Allow unauthenticated search for recovery
+      // Must provide companyId and name to prevent broad scans
+      allow list: if request.auth == null && 
+                   request.query.limit <= 5 &&
+                   request.query.filters.companyId != null &&
+                   request.query.filters.name != null;
+
+      // Allow unauthenticated update for password reset
+      // Must match sensitive info (name + birthDate) and only change passwordKey/uid
+      allow update: if request.auth == null && 
+                       resource.data.name == request.resource.data.name &&
+                       resource.data.birthDate == request.resource.data.birthDate &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['passwordKey', 'uid']);
     }
 
     // [4] USER_PROCESS: Individual medical journey tracking

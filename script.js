@@ -2340,15 +2340,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = translations[currentLang] || translations['ko'];
 
                 let matchedWorker = null;
-                const searchCompanyId = companyId.toLowerCase();
+                const searchId = companyId.toLowerCase().replace('comp_', '');
+                const searchBirth = birthDate.replace(/[^0-9]/g, ''); // Remove dashes, dots, etc.
 
                 workerSnap.forEach(doc => {
                     const wData = doc.data();
-                    const dbCompanyId = (wData.companyId || '').toLowerCase();
-                    const dbBirthDate = wData.birthDate || '';
+                    const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
+                    const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
                     
-                    // Match companyId (case-insensitive) and birthDate
-                    if (dbCompanyId === searchCompanyId && dbBirthDate === birthDate) {
+                    // Ultra-flexible match
+                    if (dbCompanyId === searchId && dbBirthDate === searchBirth) {
                         matchedWorker = { id: doc.id, ...wData };
                     }
                 });
@@ -2416,9 +2417,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                 } else {
+                    const count = workerSnap.size;
+                    let errorMsg = data['find_worker_result_fail'] || '일치하는 정보가 없습니다.';
+                    
+                    if (count > 0) {
+                        errorMsg = `성함('${name}')이 일치하는 분을 ${count}명 찾았으나, 회사 ID나 생년월일이 다릅니다. 입력하신 정보를 다시 확인해 주세요.`;
+                    }
+
                     recoveryResult.innerHTML = `
                         <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; color: #991b1b; text-align: center; font-weight: 600;">
-                            <i class="fa-solid fa-circle-exclamation"></i> ${data['find_worker_result_error']}
+                            <i class="fa-solid fa-circle-exclamation"></i> ${errorMsg}
                         </div>
                     `;
                 }

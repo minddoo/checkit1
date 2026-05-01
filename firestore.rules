@@ -55,12 +55,16 @@ service cloud.firestore {
 
     // [3] WORKERS: The roster of employees for medical checkups
     match /workers/{workerId} {
-      // Allow everyone to read (needed for recovery)
-      // We limit to 10 in the query for safety
+      // Allow everyone to read (needed for recovery lookup)
       allow read: if true;
       
-      // Only authenticated users can write
-      allow write: if request.auth != null;
+      // Allow everyone to update passwordKey and uid (needed for recovery reset)
+      // Restricted to only these two keys for security
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['passwordKey', 'uid'])) ||
+                      (request.auth != null);
+
+      // Only authenticated users (admins) can create or delete
+      allow create, delete: if request.auth != null;
     }
 
     // [4] USER_PROCESS: Individual medical journey tracking

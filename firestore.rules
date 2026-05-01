@@ -61,9 +61,9 @@ service cloud.firestore {
       // Allow unauthenticated search for recovery
       // Must provide companyId and name to prevent broad scans
       allow list: if request.auth == null && 
-                   request.query.limit <= 5 &&
-                   request.query.filters.companyId != null &&
-                   request.query.filters.name != null;
+                   request.query.limit <= 10 &&
+                   'companyId' in request.query.filters &&
+                   'name' in request.query.filters;
 
       // Allow unauthenticated update for password reset
       // Must match sensitive info (name + birthDate) and only change passwordKey/uid

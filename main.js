@@ -3598,7 +3598,13 @@ function initDashboard() {
                 hospitalName: window.lastSelectedHospitalName || '미지정',
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then(() => console.log("Notification scheduled successfully")).catch(err => console.error("Error scheduling:", err));
+            }).then(() => {
+                console.log("Notification scheduled successfully");
+                window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>알림톡 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 알림톡이 도착합니다.</div>', 'system');
+            }).catch(err => {
+                console.error("Error scheduling:", err);
+                alert("등록 처리 중 오류가 발생했습니다: " + err.message);
+            });
         }
         
         const container1s = document.querySelectorAll('#alimtalk-input-container');
@@ -3691,7 +3697,13 @@ function initDashboard() {
                 hospitalName: window.lastSelectedHospitalName || '미지정',
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then(() => console.log(`Email notification scheduled successfully`)).catch(err => console.error("Error scheduling:", err));
+            }).then(() => {
+                console.log("Email notification scheduled successfully");
+                window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>이메일 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 메일이 도착합니다.</div>', 'system');
+            }).catch(err => {
+                console.error("Error scheduling:", err);
+                alert("등록 처리 중 오류가 발생했습니다: " + err.message);
+            });
         }
 
         setTimeout(() => {

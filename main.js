@@ -3778,14 +3778,14 @@ function initDashboard() {
                     <div class="block-icon" style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6;"><i class="fa-solid fa-box-open"></i></div>
                     <div class="block-content" style="width: 100%;">
                         <p style="margin-top: 5px;"><strong>준비물(분변키트, 대장약 등) 수령 확인</strong></p>
-                        <span style="color: #64748b; font-size: 0.85rem; display: block; line-height: 1.5; margin-bottom: 15px;">대장내시경이나 분변검사 등 사전 준비물이 필요한 검사 대상자이신가요?<br>아래 버튼 중 현재 상태에 맞는 것을 선택해 주세요.</span>
+                        <span style="color: #64748b; font-size: 0.85rem; display: block; line-height: 1.5; margin-bottom: 15px;">대장내시경이나 분변검사 등 사전 준비물 수령 대상자이신가요?<br><span style="color: #7c3aed; font-weight: 700;">* 검진 5일 전인데도 받지 못한 경우</span>에만 아래 버튼을 통해 상태를 알려주세요.</span>
                         
                         <div style="display: flex; flex-direction: column; gap: 8px;" id="supplies-action-container">
                             <button onclick="window.submitSuppliesStatus('received')" style="width: 100%; padding: 12px; background: #8b5cf6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">
-                                <i class="fa-solid fa-check-circle"></i> 정상적으로 받았다 (또는 비대상자임)
+                                <i class="fa-solid fa-check-circle"></i> 받았다 (비대상자이거나 아직 일정 여유 있음)
                             </button>
                             <button onclick="window.submitSuppliesStatus('missing')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
-                                <i class="fa-solid fa-triangle-exclamation"></i> 해당 대상자이나 아무것도 못 받았다
+                                <i class="fa-solid fa-triangle-exclamation"></i> 검진 5일 전인데도 못 받았다
                             </button>
                         </div>
                     </div>
@@ -3797,8 +3797,8 @@ function initDashboard() {
 
     window.submitSuppliesStatus = function(status) {
         const textMap = {
-            'received': '✅ 정상적으로 받았다 (또는 비대상자임)',
-            'missing': '❌ 해당 대상자이나 아무것도 못 받았다'
+            'received': '✅ 받았다 (비대상자이거나 아직 일정 여유 있음)',
+            'missing': '❌ 검진 5일 전인데도 못 받았다'
         };
         
         window.appendMessage('user', textMap[status] || status, 'user');

@@ -3565,6 +3565,9 @@ function initDashboard() {
                                 </button>
                             </div>
                         </div>
+                        <button onclick="window.showChatBlock('precautions')" style="margin-top: 15px; width: 100%; padding: 10px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='white'">
+                            <i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (의료기관 다시 선택)
+                        </button>
                     </div>
                 </div>
             `;
@@ -3589,8 +3592,21 @@ function initDashboard() {
         if (container2) container2.style.display = 'none';
 
         setTimeout(() => {
-            window.appendMessage('coord', '감사합니다! 입력해주신 번호로 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.');
+            const html = `감사합니다! 입력해주신 번호와 일정에 맞추어 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.<br><br>
+            <button onclick="window.restoreAlimtalkInput(this)" style="padding: 8px 12px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (연락처 다시 입력)</button>`;
+            window.appendMessage('coord', html);
         }, 500);
+    };
+
+    window.restoreAlimtalkInput = function(btn) {
+        if (btn) {
+            const msgBubble = btn.closest('.msg-bubble') || btn.closest('.system-block');
+            if (msgBubble) msgBubble.style.display = 'none';
+        }
+        const container1 = document.getElementById('alimtalk-input-container');
+        const container2 = document.getElementById('alimtalk-alt-container');
+        if (container1) container1.style.display = 'flex';
+        if (container2) container2.style.display = 'block';
     };
 
     window.showAlternativeContact = function(type) {
@@ -3614,6 +3630,7 @@ function initDashboard() {
                                     <input type="date" id="wa-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
                                 </div>
                                 <button onclick="window.submitAlternativeContact('whatsapp')" style="padding: 10px; background: #25D366; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 5px;">확인</button>
+                                <button onclick="window.restoreAlimtalkInput(this)" style="padding: 10px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 5px;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기</button>
                             </div>
                         </div>
                     </div>
@@ -3635,6 +3652,7 @@ function initDashboard() {
                                     <input type="date" id="email-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
                                 </div>
                                 <button onclick="window.submitAlternativeContact('email')" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 5px;">확인</button>
+                                <button onclick="window.restoreAlimtalkInput(this)" style="padding: 10px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 5px;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기</button>
                             </div>
                         </div>
                     </div>
@@ -3667,7 +3685,9 @@ function initDashboard() {
         if (container) container.style.display = 'none';
 
         setTimeout(() => {
-            window.appendMessage('coord', '감사합니다! 입력해주신 연락처로 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.');
+            const html = `감사합니다! 입력해주신 연락처와 일정에 맞추어 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.<br><br>
+            <button onclick="window.restoreAlimtalkInput(this)" style="padding: 8px 12px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (연락처 다시 입력)</button>`;
+            window.appendMessage('coord', html);
         }, 500);
     };
 

@@ -3547,7 +3547,18 @@ function initDashboard() {
                         <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">주의사항을 다 숙지하셨다면 검진 전 알림톡(카카오톡 미사용 시 일반 문자로 발송)을 받을 <b>휴대폰 번호</b>와 확정된 <b>검진 날짜</b>를 입력해 주세요.<br><br><span style="color: #059669; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
                         
                         <div style="display: flex; flex-direction: column; gap: 10px;" id="alimtalk-input-container">
-                            <input type="tel" id="kr-phone-input" placeholder="전화번호 입력 (예: 010-1234-5678)" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
+                                <select id="kr-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
+                                    <option value="">-- 의료기관 선택 --</option>
+                                    ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
+                                    <option value="기타">기타 (목록에 없음)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">휴대폰 번호</label>
+                                <input type="tel" id="kr-phone-input" placeholder="예: 010-1234-5678" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">검진 확정 날짜</label>
                                 <input type="date" id="kr-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
@@ -3574,14 +3585,23 @@ function initDashboard() {
     window.submitAlimtalkPhone = function() {
         const phoneInputs = document.querySelectorAll('#kr-phone-input');
         const dateInputs = document.querySelectorAll('#kr-date-input');
+        const hospSelects = document.querySelectorAll('#kr-hospital-select');
         const phoneInput = phoneInputs[phoneInputs.length - 1];
         const dateInput = dateInputs[dateInputs.length - 1];
+        const hospSelect = hospSelects[hospSelects.length - 1];
+        
+        const selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+
+        if (!selectedHospital) {
+            alert("예약하신 의료기관을 선택해주세요.");
+            return;
+        }
         if (!phoneInput || !phoneInput.value.trim() || !dateInput || !dateInput.value) {
             alert("전화번호와 검진 확정 날짜를 모두 입력해주세요.");
             return;
         }
         
-        const message = `전화번호: ${phoneInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
+        const message = `의료기관: ${selectedHospital}<br>전화번호: ${phoneInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
 
         // Real Action: Register Notification to Firestore
@@ -3595,7 +3615,7 @@ function initDashboard() {
                 contactType: 'alimtalk',
                 contactValue: phoneInput.value.trim(),
                 reservedDate: dateInput.value,
-                hospitalName: window.lastSelectedHospitalName || '미지정',
+                hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
             }).then(() => {
@@ -3650,7 +3670,18 @@ function initDashboard() {
                         <p><strong>이메일 주소 및 검진일 입력</strong></p>
                         <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">알림을 받으실 <b>이메일 주소</b>와 확정된 <b>검진 날짜</b>를 함께 입력해주세요.<br><br><span style="color: #2563eb; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
                         <div style="display: flex; flex-direction: column; gap: 10px;" id="email-input-container">
-                            <input type="email" id="email-addr-input" placeholder="이메일 입력 (예: example@email.com)" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
+                                <select id="email-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
+                                    <option value="">-- 의료기관 선택 --</option>
+                                    ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
+                                    <option value="기타">기타 (목록에 없음)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
+                                <input type="email" id="email-addr-input" placeholder="예: example@email.com" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">검진 확정 날짜</label>
                                 <input type="date" id="email-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
@@ -3668,18 +3699,26 @@ function initDashboard() {
     window.submitAlternativeContact = function(type) {
         const contactInputs = document.querySelectorAll('#email-addr-input');
         const dateInputs = document.querySelectorAll('#email-date-input');
+        const hospSelects = document.querySelectorAll('#email-hospital-select');
         const containers = document.querySelectorAll('#email-input-container');
         
         const contactInput = contactInputs[contactInputs.length - 1];
         const dateInput = dateInputs[dateInputs.length - 1];
+        const hospSelect = hospSelects[hospSelects.length - 1];
         const container = containers[containers.length - 1];
 
+        const selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+
+        if (!selectedHospital) {
+            alert("예약하신 의료기관을 선택해주세요.");
+            return;
+        }
         if (!contactInput || !contactInput.value.trim() || !dateInput || !dateInput.value) {
             alert("이메일과 검진 확정 날짜를 모두 입력해주세요.");
             return;
         }
 
-        const message = `이메일: ${contactInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
+        const message = `의료기관: ${selectedHospital}<br>이메일: ${contactInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
         if (container) container.style.display = 'none';
 
@@ -3694,7 +3733,7 @@ function initDashboard() {
                 contactType: 'email',
                 contactValue: contactInput.value.trim(),
                 reservedDate: dateInput.value,
-                hospitalName: window.lastSelectedHospitalName || '미지정',
+                hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
             }).then(() => {

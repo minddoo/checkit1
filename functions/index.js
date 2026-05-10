@@ -16,6 +16,23 @@ const messageService = new SolapiMessageService(
 // 리센드(이메일) 초기화
 const resend = new Resend('re_JHDg5G7V_9wGs34JsnsssSdP1y9ctiBMx');
 
+// 솔라피 템플릿 텍스트 자동 구성 헬퍼 (v5 필수 text 필드 누락 방지)
+function getAlimtalkTemplateText(name, dDayText, customNotice) {
+  return `[체킷(CHECKIT) 검진 가이드]
+
+안녕하세요, ${name}님!
+고객님께서 예약하신 건강검진일이 ${dDayText}일 앞으로 다가왔습니다. 🚀
+
+안전하고 정확한 검진을 위해 아래 사전 안내사항을 꼭 확인해 주세요.
+
+▶ 검진 사전 안내
+${customNotice}
+
+∨ 위 내용을 잘 숙지하여 검진 전 준비를 완료해 주세요!
+추가 문의사항은 '체킷 근로자 포털' 채팅방을 이용해 주시기 바랍니다.
+알림톡 외 추가 문의는 체킷 근로자 포털 채팅방을 이용해 주세요.`;
+}
+
 /**
  * 1:1 알림톡 발송용 (수동/트리거)
  */
@@ -50,16 +67,23 @@ exports.sendAlimtalk = functions.firestore
       let message = {};
       
       if (data.type === 'booking_guide') {
+        const customNotice = data.customContent || '검진 예약 가이드 및 준비사항을 확인해 주세요.';
+        const nameVal = workerData.name || '고객';
+        const dDayVal = '가이드';
+
         message = {
           to: phoneNumber,
           from: '01022097951',
           type: 'ATA',
-          templateId: 'KA01TP260401123529786bxLeVETmEai',
-          pfId: 'KA01PF260401123510015EukHvlIDzQP',
-          variables: {
-            "#{성함}": workerData.name || '고객',
-            "#{디데이}": '가이드',
-            "#{안내내용예시}": data.customContent || '검진 예약 가이드 및 준비사항을 확인해 주세요.'
+          text: getAlimtalkTemplateText(nameVal, dDayVal, customNotice),
+          kakaoOptions: {
+            templateId: 'KA01TP260401123529786bxLeVETmEai',
+            pfId: 'KA01PF260401123510015EukHvlIDzQP',
+            variables: {
+              "#{성함}": nameVal,
+              "#{디데이}": dDayVal,
+              "#{안내내용예시}": customNotice
+            }
           }
         };
       } else if (data.type === 'text') {
@@ -121,18 +145,25 @@ exports.scheduledAlimtalk = functions.pubsub
           const phoneNumber = (worker.phone || worker.phoneNumber || worker['연락처'] || '').replace(/-/g, '');
           if (phoneNumber.length < 10) return;
 
+          const dDayVal = dDay === 0 ? '당일' : dDay.toString();
+          const customNotice = dDay === 0 
+            ? '오늘은 건강검진일입니다. 잊지 말고 방문해 주세요!' 
+            : `검진이 ${dDay}일 앞으로 다가왔습니다. 준비 사항을 확인해 주세요.`;
+          const nameVal = worker.name || '고객';
+
           messages.push({
             to: phoneNumber,
             from: '01022097951',
             type: 'ATA',
-            templateId: 'KA01TP260401123529786bxLeVETmEai',
-            pfId: 'KA01PF260401123510015EukHvlIDzQP',
-            variables: {
-              "#{성함}": worker.name || '고객',
-              "#{디데이}": dDay === 0 ? '당일' : dDay.toString(),
-              "#{안내내용예시}": dDay === 0 
-                ? '오늘은 건강검진일입니다. 잊지 말고 방문해 주세요!' 
-                : `검진이 ${dDay}일 앞으로 다가왔습니다. 준비 사항을 확인해 주세요.`
+            text: getAlimtalkTemplateText(nameVal, dDayVal, customNotice),
+            kakaoOptions: {
+              templateId: 'KA01TP260401123529786bxLeVETmEai',
+              pfId: 'KA01PF260401123510015EukHvlIDzQP',
+              variables: {
+                "#{성함}": nameVal,
+                "#{디데이}": dDayVal,
+                "#{안내내용예시}": customNotice
+              }
             }
           });
         }
@@ -167,17 +198,23 @@ exports.sendImmediateNotificationConfirmation = functions.firestore
       const noticeContent = `귀하의 건강검진 사전 알림 예약이 정상 접수되었습니다.\n\n• 기관: ${hospitalName}\n• 예정일: ${checkupDate}\n\n지정된 일정(7, 3, 2, 1일 전)에 맞춰 주의사항 안내를 전달드리겠습니다.`;
 
       if (data.contactType === 'alimtalk') {
+        const immediateNotice = `검진 알림 예약이 접수되었습니다. 기관: ${hospitalName}, 예정일: ${checkupDate}`;
+        const dDayVal = '확인';
+        
         // 즉시 알림톡 발송
         await messageService.sendOne({
           to: contactValue,
           from: '01022097951',
           type: 'ATA',
-          templateId: 'KA01TP260401123529786bxLeVETmEai',
-          pfId: 'KA01PF260401123510015EukHvlIDzQP',
-          variables: {
-            "#{성함}": userName,
-            "#{디데이}": "확인",
-            "#{안내내용예시}": `검진 알림 예약이 접수되었습니다. 기관: ${hospitalName}, 예정일: ${checkupDate}`
+          text: getAlimtalkTemplateText(userName, dDayVal, immediateNotice),
+          kakaoOptions: {
+            templateId: 'KA01TP260401123529786bxLeVETmEai',
+            pfId: 'KA01PF260401123510015EukHvlIDzQP',
+            variables: {
+              "#{성함}": userName,
+              "#{디데이}": dDayVal,
+              "#{안내내용예시}": immediateNotice
+            }
           }
         });
         console.log('Immediate Alimtalk Sent');
@@ -232,7 +269,7 @@ exports.scheduledB2CNotifications = functions.pubsub
 
     try {
       const snap = await db.collection('scheduled_notifications').where('status', '==', 'pending').get();
-      const targetDays = [7, 3, 2, 1, 0];
+      const targetDays = [14, 7, 3, 2, 1, 0];
       const solapiMessages = [];
       const resendMessages = [];
 
@@ -246,32 +283,60 @@ exports.scheduledB2CNotifications = functions.pubsub
 
         if (targetDays.includes(dDay)) {
           const formattedContact = item.contactValue.replace(/-/g, '');
+          const isKMI = (item.hospitalName || '').includes('KMI') || (item.hospitalName || '').includes('한국의학연구소');
           
-          // Generate dynamic precautions guidance text
           let customNotice = '';
-          if (dDay === 7) {
-            customNotice = `[검진 7일 전] 복용 중인 약물(항응고제, 아스피린 등)이 있다면 주치의와 상담하여 중단 여부를 확인해주세요.`;
-          } else if (dDay === 3) {
-            customNotice = `[검진 3일 전] 정확한 검사를 위해 오늘부터 식사 조절(씨 있는 과일, 잡곡밥, 해조류 금지)을 시작해주세요.`;
-          } else if (dDay === 2) {
-            customNotice = `[검진 2일 전] 가벼운 식사를 하시고, 내시경이 예약되어 있다면 동봉된 안내문의 복용법을 다시 한 번 확인해주세요.`;
-          } else if (dDay === 1) {
-            customNotice = `[검진 1일 전 - 중요!] 오후 9시 이후부터는 반드시 금식(물 포함 모든 음식 금지)하셔야 합니다. 숙면을 취해주세요.`;
-          } else if (dDay === 0) {
-            customNotice = `[검진 당일] 오늘은 예약된 건강검진일입니다. 아침 식사는 거르시고, 예약 시간 15분 전까지 ${item.hospitalName}에 내원해주세요.`;
+          if (isKMI) {
+            // KMI Specific Instructions Verbatim
+            if (dDay === 14) {
+              customNotice = `[D-14] GLP-1 수용체 작용제(위고비, 마운자로, 오젬픽 등 비만/당뇨 치료제) 복용자는 검진일 2주 전부터 복용을 중단해야 합니다. 반드시 주치의와 상의하세요.`;
+            } else if (dDay === 7) {
+              customNotice = `[D-7] 아스피린, 와파린, 플라빅스 등 항혈소판제/항응고제를 복용 중인 분은 출혈 위험이 있으니 반드시 처방 의사와 상의하여 약 1주일 중단하시기 바랍니다.`;
+            } else if (dDay === 3) {
+              customNotice = `[D-3] 정확한 검사를 위해 식사 조절을 시작하세요. 잡곡밥, 현미밥, 김치, 해조류(김, 미역), 씨 있는 과일 등은 소화가 안 되어 내시경 방해가 되므로 금지합니다.`;
+            } else if (dDay === 2) {
+              customNotice = `[D-2] 가벼운 백색 위주 식사를 하세요. 대장내시경 예약자의 경우 받으신 복용 안내문에 따라 준비물(정결제) 및 복용법을 한 번 더 숙지해 주십시오.`;
+            } else if (dDay === 1) {
+              customNotice = `[D-1] 검사 전 8~12시간 금식 필수! 오전 예약자는 전날 밤 8시부터, 오후 예약자는 전날 밤 12시부터 물, 껌, 사탕, 담배 포함 절대 금식하시고 편안한 숙면 취하세요.`;
+            } else if (dDay === 0) {
+              customNotice = `[D-Day] 오늘은 건강검진일입니다. 사진과 주민번호가 기재된 '실물 신분증'을 반드시 지참하시고 예약 시간 15분 전까지 KMI 한국의학연구소에 내원해주십시오.`;
+            }
+          } else {
+            // Standard Guidelines
+            if (dDay === 14) {
+              return; // No notification for 14 days if standard
+            } else if (dDay === 7) {
+              customNotice = `[D-7] 복용 중인 약물(항응고제, 아스피린 등)이 있다면 주치의와 상담하여 중단 여부를 확인하시기 바랍니다.`;
+            } else if (dDay === 3) {
+              customNotice = `[D-3] 검사 전 식단 조절 시기입니다. 씨 있는 과일, 해조류, 잡곡 등 소화가 더딘 음식은 피해주시고 가급적 흰쌀밥이나 죽을 섭취해 주세요.`;
+            } else if (dDay === 2) {
+              customNotice = `[D-2] 대장내시경을 예약하신 경우, 받으신 안내문을 정독하여 정결제 복용 방법 및 주의사항을 미리 확인해주십시오.`;
+            } else if (dDay === 1) {
+              customNotice = `[D-1] 검진 전날은 오후 8시 이후 물을 포함하여 완벽한 금식이 필요합니다. 음주와 무리한 활동은 피하고 일찍 휴식하시기 바랍니다.`;
+            } else if (dDay === 0) {
+              customNotice = `[D-Day] 오늘은 예약된 건강검진일입니다. 아침 식사는 거르시고 '신분증'을 지참하여 예약 시간 전까지 ${item.hospitalName || '의료기관'}에 내원해 주십시오.`;
+            }
           }
+          
+          if (!customNotice) return; // Skip if somehow notice is empty (e.g., D-14 default)
 
           if (item.contactType === 'alimtalk') {
+            const dDayVal = dDay === 0 ? '당일' : `${dDay}일전`;
+            const nameVal = item.name || '고객';
+            
             solapiMessages.push({
               to: formattedContact,
               from: '01022097951',
               type: 'ATA',
-              templateId: 'KA01TP260401123529786bxLeVETmEai',
-              pfId: 'KA01PF260401123510015EukHvlIDzQP',
-              variables: {
-                "#{성함}": item.name || '고객',
-                "#{디데이}": dDay === 0 ? '당일' : `${dDay}일전`,
-                "#{안내내용예시}": customNotice
+              text: getAlimtalkTemplateText(nameVal, dDayVal, customNotice),
+              kakaoOptions: {
+                templateId: 'KA01TP260401123529786bxLeVETmEai',
+                pfId: 'KA01PF260401123510015EukHvlIDzQP',
+                variables: {
+                  "#{성함}": nameVal,
+                  "#{디데이}": dDayVal,
+                  "#{안내내용예시}": customNotice
+                }
               }
             });
           } else if (item.contactType === 'email') {

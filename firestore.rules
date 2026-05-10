@@ -85,5 +85,10 @@ service cloud.firestore {
       // Only Master can read/manage incoming leads
       allow read, write: if isMaster();
     }
+    // [6] SCHEDULED_NOTIFICATIONS: Automated reminders for B2C checkups
+    match /scheduled_notifications/{notifId} {
+      allow create: if true;
+      allow read, write: if isMaster();
+    }
   }
 }

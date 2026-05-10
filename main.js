@@ -3356,6 +3356,7 @@ function initDashboard() {
 
     window.showHospitalPrecautions = function(index) {
         const h = window.GLOBAL_HOSPITALS[index];
+        window.lastSelectedHospitalName = h.name;
         
         // Special Handling for KMI (Categorized as requested)
         if (h.name.includes("KMI")) {
@@ -3585,6 +3586,23 @@ function initDashboard() {
         
         const message = `전화번호: ${phoneInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
+
+        // Real Action: Register Notification to Firestore
+        if (typeof db !== 'undefined' && db) {
+            const consultationRaw = localStorage.getItem('consultationData');
+            let userName = '고객';
+            try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
+            
+            db.collection('scheduled_notifications').add({
+                name: userName,
+                contactType: 'alimtalk',
+                contactValue: phoneInput.value.trim(),
+                reservedDate: dateInput.value,
+                hospitalName: window.lastSelectedHospitalName || '미지정',
+                submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            }).then(() => console.log("Notification scheduled successfully")).catch(err => console.error("Error scheduling:", err));
+        }
         
         const container1 = document.getElementById('alimtalk-input-container');
         const container2 = document.getElementById('alimtalk-alt-container');
@@ -3683,6 +3701,23 @@ function initDashboard() {
         const message = `${typeLabel}: ${contactInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
         if (container) container.style.display = 'none';
+
+        // Real Action: Register Notification to Firestore
+        if (typeof db !== 'undefined' && db) {
+            const consultationRaw = localStorage.getItem('consultationData');
+            let userName = '고객';
+            try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
+
+            db.collection('scheduled_notifications').add({
+                name: userName,
+                contactType: type, // 'whatsapp' or 'email'
+                contactValue: contactInput.value.trim(),
+                reservedDate: dateInput.value,
+                hospitalName: window.lastSelectedHospitalName || '미지정',
+                submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            }).then(() => console.log(`${typeLabel} notification scheduled successfully`)).catch(err => console.error("Error scheduling:", err));
+        }
 
         setTimeout(() => {
             const html = `감사합니다! 입력해주신 연락처와 일정에 맞추어 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.<br><br>

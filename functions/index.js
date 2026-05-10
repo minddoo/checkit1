@@ -2,6 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { SolapiMessageService } = require('solapi');
 
+const { Resend } = require('resend');
+
 admin.initializeApp();
 const db = admin.firestore();
 
@@ -10,6 +12,9 @@ const messageService = new SolapiMessageService(
   'NCS3LR13SE2MENQS', 
   'HB0SBNAPBBULLWL3EXPTH6QPQYKKYPGD'
 );
+
+// 리센드(이메일) 초기화
+const resend = new Resend('re_JHDg5G7V_9wGs34JsnsssSdP1y9ctiBMx');
 
 /**
  * 1:1 알림톡 발송용 (수동/트리거)
@@ -159,6 +164,7 @@ exports.scheduledB2CNotifications = functions.pubsub
       const snap = await db.collection('scheduled_notifications').where('status', '==', 'pending').get();
       const targetDays = [7, 3, 2, 1, 0];
       const solapiMessages = [];
+      const resendMessages = [];
 
       snap.forEach(doc => {
         const item = doc.data();
@@ -199,8 +205,34 @@ exports.scheduledB2CNotifications = functions.pubsub
               }
             });
           } else if (item.contactType === 'email') {
-            // TO BE INTEGRATED: API call for Email Gateway (e.g., Nodemailer/SendGrid)
-            console.log(`[STUB] Sending Email to ${item.contactValue}: ${customNotice}`);
+            const subjectDay = dDay === 0 ? '당일' : `${dDay}일 전`;
+            resendMessages.push({
+              from: 'Checkit Notifications <onboarding@resend.dev>', // Domain setup recommended to change this later
+              to: item.contactValue,
+              subject: `[체킷] 건강검진 ${subjectDay} 안내 드립니다. (${item.name || '고객'}님)`,
+              html: `
+                <div style="max-width: 600px; margin: 0 auto; font-family: sans-serif; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #ffffff;">
+                  <div style="background: #10b981; color: white; padding: 24px; text-align: center;">
+                    <h2 style="margin: 0; font-size: 20px;">건강검진 준비 안내</h2>
+                  </div>
+                  <div style="padding: 30px; color: #334155; line-height: 1.6;">
+                    <p style="font-size: 16px;">안녕하세요, <strong>${item.name || '고객'}</strong>님!</p>
+                    <p>예약하신 건강검진 일정이 다가오고 있어 안내 내용을 전달드립니다.</p>
+                    <div style="background: #f8fafc; border-left: 4px solid #10b981; padding: 20px; border-radius: 6px; margin: 25px 0;">
+                      <p style="margin: 0 0 10px 0; font-weight: 700; color: #0f172a;">📅 검진 기관: ${item.hospitalName}</p>
+                      <p style="margin: 0; font-weight: 700; color: #0f172a;">⏰ 시점: 검진 ${subjectDay}</p>
+                    </div>
+                    <div style="background: #fffbeb; border: 1px solid #fef3c7; color: #92400e; padding: 20px; border-radius: 8px; font-size: 15px; font-weight: 600;">
+                      💡 필수 유의사항<br/>
+                      <span style="color: #1e293b; display: block; margin-top: 8px; font-weight: 500;">${customNotice}</span>
+                    </div>
+                    <p style="margin-top: 30px; font-size: 14px; color: #64748b; text-align: center;">
+                      본 메일은 체킷(Checkit) 스마트 알림 시스템에 의해 자동 발송되었습니다.<br>편안한 검진 되시길 바랍니다.
+                    </p>
+                  </div>
+                </div>
+              `
+            });
           }
         }
 
@@ -210,9 +242,16 @@ exports.scheduledB2CNotifications = functions.pubsub
         }
       });
 
+      // Send Alimtalk Batch
       if (solapiMessages.length > 0) {
         const result = await messageService.sendMany(solapiMessages);
         console.log(`B2C Auto Send Done. Total Alimtalks: ${solapiMessages.length}`, result);
+      }
+
+      // Send Email Batch
+      if (resendMessages.length > 0) {
+        const emailResult = await resend.batch.send(resendMessages);
+        console.log(`B2C Email Auto Send Done. Total Emails: ${resendMessages.length}`, emailResult);
       }
 
       return null;

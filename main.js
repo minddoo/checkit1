@@ -6196,10 +6196,48 @@ function initDashboard() {
             case 'procedure':
                 titleEl.textContent = '검진절차안내';
                 contentHtml = `
-                    <div style="padding: 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.5rem; margin-bottom: 15px; color: #94a3b8;"></i>
-                        <p style="font-weight: 700; font-size: 1.1rem; color: #334155; margin-bottom: 8px;">상세 안내 준비중</p>
-                        <p style="font-size: 0.85rem; color: #64748b;">세란병원의 검진절차 상세 안내 내용이 곧 업데이트 될 예정입니다.</p>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        
+                        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;">
+                            <p style="font-weight: 700; color: #2563eb; margin-bottom: 8px; font-size: 1.05rem;">검사전날</p>
+                            <ul style="font-size: 0.85rem; color: #475569; line-height: 1.6; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                <li>검진 전날 저녁은 7-8시 이전 가볍게 드시고 밤 9시 이후 금식입니다<br><span style="color: #64748b;">(대장 내시경을 선택하신 분들은 금식 시간이 다름으로 안내문 참조)</span></li>
+                                <li>심한 운동이나 과음 과식은 피해 주셔요</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;">
+                            <p style="font-weight: 700; color: #2563eb; margin-bottom: 8px; font-size: 1.05rem;">검사당일</p>
+                            <ul style="font-size: 0.85rem; color: #475569; line-height: 1.6; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                <li>아침식사는 물론 물, 껌 담배 등을 금해야 합니다.(단, 혈압약을 드시는 분은 가능한 최소량의 물과 함께 복용해 주십시오)</li>
+                                <li>임신중이거나 임신 가능성이 있을 시 반드시 사전에 말씀해 주세요</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;">
+                            <p style="font-weight: 700; color: #2563eb; margin-bottom: 8px; font-size: 1.05rem;">검진종료</p>
+                            <ul style="font-size: 0.85rem; color: #475569; line-height: 1.6; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                <li>검진은 3~4시간 정도 소요됩니다.(개인별 차이있음)</li>
+                                <li>검진비용은 검사당일 수납하시면 됩니다. 수납방법은 현금과 신용카드 모두 가능합니다.</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;">
+                            <p style="font-weight: 700; color: #2563eb; margin-bottom: 8px; font-size: 1.05rem;">귀가</p>
+                            <ul style="font-size: 0.85rem; color: #475569; line-height: 1.6; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                <li>수면내시경시에는 자가운전이 위험하므로 보호자와 동행하거나 대중교통을 이용해주세요</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 4px solid #3b82f6;">
+                            <p style="font-weight: 700; color: #2563eb; margin-bottom: 8px; font-size: 1.05rem;">검진결과</p>
+                            <ul style="font-size: 0.85rem; color: #475569; line-height: 1.6; padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                <li>검진결과는 14일 이내 우편 또는 이메일로 발송합니다</li>
+                                <li>2차 검진이나 이상소견시 전문의 진료와 연계해드립니다.</li>
+                                <li>결과지 수령 후 전문의와 결과 상담은 예약 후 내원하시면 가능합니다.</li>
+                            </ul>
+                        </div>
+
                     </div>
                 `;
                 break;

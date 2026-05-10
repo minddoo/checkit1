@@ -1552,6 +1552,58 @@ function handleGoogleSignIn(response) {
         authModal.classList.remove('show');
         document.body.style.overflow = '';
     }
+
+    // ─── 이전 등록 이력 복원 로직 ───────────────────────────────
+    // 로그인 후 Firestore에서 기존 알림 예약 데이터를 조회하여 단계 복원
+    if (typeof db !== 'undefined' && db && user.email) {
+        db.collection('scheduled_notifications')
+            .where('contactValue', '==', user.email)
+            .where('status', '==', 'pending')
+            .orderBy('submittedAt', 'desc')
+            .limit(1)
+            .get()
+            .then(snap => {
+                if (!snap.empty) {
+                    const doc = snap.docs[0];
+                    const data = doc.data();
+                    window.lastScheduledNotifId = doc.id;
+
+                    // 채팅 뷰가 열려있을 때 복원 배너 표시
+                    setTimeout(() => {
+                        if (typeof window.appendMessage === 'function') {
+                            const resumeHtml = `
+                                <div class="system-block" style="border-left: 4px solid #10b981; background: #ecfdf5; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
+                                    <div class="block-icon" style="background: rgba(16,185,129,0.2); color: #10b981;"><i class="fa-solid fa-rotate-right"></i></div>
+                                    <div class="block-content" style="width: 100%;">
+                                        <p style="margin-top: 5px;"><strong>✅ 이전 등록 이력이 확인되었습니다!</strong></p>
+                                        <div style="background: white; border-radius: 8px; padding: 12px; margin: 10px 0; border: 1px solid #a7f3d0; font-size: 0.85rem; color: #374151; line-height: 1.7;">
+                                            <p style="margin: 0;">🏥 <strong>기관:</strong> ${data.hospitalName || '미입력'}</p>
+                                            <p style="margin: 4px 0 0;">📅 <strong>검진 예정일:</strong> ${data.reservedDate || '미입력'}</p>
+                                            <p style="margin: 4px 0 0;">📬 <strong>연락처:</strong> ${data.contactValue || '미입력'} (${data.contactType === 'email' ? '이메일' : '알림톡'})</p>
+                                            <p style="margin: 4px 0 0;">📦 <strong>준비물 수령:</strong> ${data.suppliesStatus === 'received' ? '✅ 수령 완료' : data.suppliesStatus === 'missing' ? '❌ 미수령' : '미확인'}</p>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                            <button onclick="window.askSuppliesStatus()" style="padding: 10px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                                <i class="fa-solid fa-forward-step"></i> 마지막 단계(준비물 확인)부터 이어서 진행
+                                            </button>
+                                            <button onclick="window.showChatBlock('alimtalk')" style="padding: 10px; background: white; border: 1px solid #10b981; color: #10b981; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                                <i class="fa-solid fa-pen"></i> 연락처 / 검진일 정보 수정하기
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            window.appendMessage('coord', `어서오세요, <b>${user.name}</b>님! 이전에 진행하시던 등록 내역을 불러왔습니다.`);
+                            setTimeout(() => window.appendMessage('system', resumeHtml, 'system'), 600);
+                        }
+                    }, 1200);
+                }
+            })
+            .catch(err => {
+                console.log('No previous record or lookup error:', err.message);
+            });
+    }
+    // ────────────────────────────────────────────────────────────
 }
 
 if (authModal && loginBtn) {

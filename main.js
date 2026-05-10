@@ -3610,7 +3610,7 @@ function initDashboard() {
             let userName = '고객';
             try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
             
-            db.collection('scheduled_notifications').add({
+            const dataObj = {
                 name: userName,
                 contactType: 'alimtalk',
                 contactValue: phoneInput.value.trim(),
@@ -3618,8 +3618,18 @@ function initDashboard() {
                 hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then((docRef) => {
-                console.log("Notification scheduled successfully");
+            };
+
+            let promise;
+            if (window.lastScheduledNotifId) {
+                promise = db.collection('scheduled_notifications').doc(window.lastScheduledNotifId).set(dataObj, { merge: true }).then(() => ({ id: window.lastScheduledNotifId }));
+            } else {
+                promise = db.collection('scheduled_notifications').add(dataObj);
+            }
+
+            promise.then((docRef) => {
+                console.log("Notification scheduled/updated successfully");
+                window.lastScheduledNotifId = docRef.id; // Store or maintain for subsequent steps
                 window.lastScheduledNotifId = docRef.id; // Store for subsequent steps
                 window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>알림톡 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 알림톡이 도착합니다.</div>', 'system');
             }).catch(err => {
@@ -3727,7 +3737,7 @@ function initDashboard() {
             let userName = '고객';
             try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
 
-            db.collection('scheduled_notifications').add({
+            const dataObj = {
                 name: userName,
                 contactType: 'email',
                 contactValue: contactInput.value.trim(),
@@ -3735,8 +3745,17 @@ function initDashboard() {
                 hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then((docRef) => {
-                console.log("Email notification scheduled successfully");
+            };
+
+            let promise;
+            if (window.lastScheduledNotifId) {
+                promise = db.collection('scheduled_notifications').doc(window.lastScheduledNotifId).set(dataObj, { merge: true }).then(() => ({ id: window.lastScheduledNotifId }));
+            } else {
+                promise = db.collection('scheduled_notifications').add(dataObj);
+            }
+
+            promise.then((docRef) => {
+                console.log("Email notification scheduled/updated successfully");
                 window.lastScheduledNotifId = docRef.id; // Store for subsequent steps
                 window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>이메일 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 메일이 도착합니다.</div>', 'system');
             }).catch(err => {

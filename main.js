@@ -3485,6 +3485,40 @@ function initDashboard() {
                 </div>
             `;
             window.appendMessage('system', html, 'system');
+        } else if (h.name.includes("세란")) {
+            const html = `
+                <div class="system-block" style="border-left: 4px solid var(--primary); background: #f8fafc; padding-right: 20px;">
+                    <div class="block-icon" style="background: rgba(46, 204, 113, 0.2); color: var(--primary);"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="block-content" style="width: 100%;">
+                        <p style="margin-top: 5px;"><strong>${h.name} 주의사항 카테고리</strong></p>
+                        <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 12px; display: block;">확인하실 주의사항 유형을 선택해 주세요.</span>
+                        
+                        <div style="margin-bottom: 12px; padding: 10px; background: #f0f9ff; border-radius: 8px; border-left: 3px solid #7dd3fc;">
+                            <p style="margin: 0; font-size: 0.72rem; color: #0369a1; line-height: 1.5; font-weight: 600;">
+                                <i class="fa-solid fa-circle-info" style="margin-right: 4px;"></i> CHECKIT의 안내는 의료기관의 원문을 준수하지만, 최신 정보 변경이 있을 수 있습니다. 보다 정확한 확인을 위해 아래 홈페이지 안내도 함께 참고해 주세요.
+                            </p>
+                        </div>
+                        
+                        <a href="https://www.seran.co.kr/m/health/reserve/guide.html" target="_blank" style="text-decoration: none; display: block; margin-bottom: 15px;">
+                            <button style="width: 100%; padding: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; color: #475569; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> 홈페이지 주의사항 직접 확인하기
+                            </button>
+                        </a>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <button class="precaution-type-btn" onclick="window.showSeranDetail('procedure')" style="padding: 12px 15px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; text-align: left; font-weight: 700; color: #1e293b; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='#f0fdf4';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='white';">
+                                <span>검진절차안내</span>
+                                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94a3b8;"></i>
+                            </button>
+                            <button class="precaution-type-btn" onclick="window.showSeranDetail('precautions')" style="padding: 12px 15px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; text-align: left; font-weight: 700; color: #1e293b; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'; this.style.background='#f0fdf4';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='white';">
+                                <span>검진 유의사항</span>
+                                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #94a3b8;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            window.appendMessage('system', html, 'system');
         } else {
             // Default placeholder for other hospitals
             const html = `
@@ -6144,6 +6178,48 @@ function initDashboard() {
                 </div>
             `;
         }
+    };
+
+    window.showSeranDetail = function(type) {
+        const modal = document.getElementById('precaution-modal');
+        const titleEl = document.getElementById('precaution-modal-title');
+        const bodyEl = document.getElementById('precaution-modal-body');
+
+        if (!modal || !titleEl || !bodyEl) return;
+
+        const backBtn = document.getElementById('precaution-back-btn');
+        if (backBtn) backBtn.style.display = 'none';
+
+        let contentHtml = '';
+        
+        switch(type) {
+            case 'procedure':
+                titleEl.textContent = '검진절차안내';
+                contentHtml = `
+                    <div style="padding: 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.5rem; margin-bottom: 15px; color: #94a3b8;"></i>
+                        <p style="font-weight: 700; font-size: 1.1rem; color: #334155; margin-bottom: 8px;">상세 안내 준비중</p>
+                        <p style="font-size: 0.85rem; color: #64748b;">세란병원의 검진절차 상세 안내 내용이 곧 업데이트 될 예정입니다.</p>
+                    </div>
+                `;
+                break;
+            case 'precautions':
+                titleEl.textContent = '검진 유의사항';
+                contentHtml = `
+                    <div style="padding: 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 2.5rem; margin-bottom: 15px; color: #94a3b8;"></i>
+                        <p style="font-weight: 700; font-size: 1.1rem; color: #334155; margin-bottom: 8px;">상세 안내 준비중</p>
+                        <p style="font-size: 0.85rem; color: #64748b;">세란병원의 검진 유의사항 상세 안내 내용이 곧 업데이트 될 예정입니다.</p>
+                    </div>
+                `;
+                break;
+        }
+
+        bodyEl.style.padding = "20px";
+        bodyEl.innerHTML = contentHtml;
+
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
     };
 
 

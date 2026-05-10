@@ -3618,8 +3618,9 @@ function initDashboard() {
                 hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then(() => {
+            }).then((docRef) => {
                 console.log("Notification scheduled successfully");
+                window.lastScheduledNotifId = docRef.id; // Store for subsequent steps
                 window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>알림톡 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 알림톡이 도착합니다.</div>', 'system');
             }).catch(err => {
                 console.error("Error scheduling:", err);
@@ -3635,10 +3636,8 @@ function initDashboard() {
         if (container2) container2.style.display = 'none';
 
         setTimeout(() => {
-            const html = `감사합니다! 입력해주신 번호와 일정에 맞추어 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.<br><br>
-            <button onclick="window.restoreAlimtalkInput(this)" style="padding: 8px 12px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (연락처 다시 입력)</button>`;
-            window.appendMessage('coord', html);
-        }, 500);
+            window.askSuppliesStatus();
+        }, 1500);
     };
 
     window.restoreAlimtalkInput = function(btn) {
@@ -3736,8 +3735,9 @@ function initDashboard() {
                 hospitalName: selectedHospital,
                 submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 status: 'pending'
-            }).then(() => {
+            }).then((docRef) => {
                 console.log("Email notification scheduled successfully");
+                window.lastScheduledNotifId = docRef.id; // Store for subsequent steps
                 window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>이메일 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 메일이 도착합니다.</div>', 'system');
             }).catch(err => {
                 console.error("Error scheduling:", err);
@@ -3746,10 +3746,69 @@ function initDashboard() {
         }
 
         setTimeout(() => {
-            const html = `감사합니다! 입력해주신 연락처와 일정에 맞추어 검진 전 안내 사항을 보내드릴 예정입니다. 편안한 검진 되시길 바랍니다.<br><br>
-            <button onclick="window.restoreAlimtalkInput(this)" style="padding: 8px 12px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (연락처 다시 입력)</button>`;
-            window.appendMessage('coord', html);
-        }, 500);
+            window.askSuppliesStatus();
+        }, 1500);
+    };
+
+    window.askSuppliesStatus = function() {
+        window.appendMessage('coord', "마지막으로, 검진 전 필수 준비물 수령 여부를 확인해 주세요.");
+        
+        setTimeout(() => {
+            const html = `
+                <div class="system-block" style="border-left: 4px solid #8b5cf6; background: #f5f3ff;">
+                    <div class="block-icon" style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6;"><i class="fa-solid fa-box-open"></i></div>
+                    <div class="block-content" style="width: 100%;">
+                        <p style="margin-top: 5px;"><strong>준비물(분변키트, 대장약 등) 수령 확인</strong></p>
+                        <span style="color: #64748b; font-size: 0.85rem; display: block; line-height: 1.5; margin-bottom: 15px;">대장내시경이나 분변검사 등 사전 준비물이 필요한 검사 대상자이신가요?<br>아래 버튼 중 현재 상태에 맞는 것을 선택해 주세요.</span>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 8px;" id="supplies-action-container">
+                            <button onclick="window.submitSuppliesStatus('received')" style="width: 100%; padding: 12px; background: #8b5cf6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.background='#7c3aed'" onmouseout="this.style.background='#8b5cf6'">
+                                <i class="fa-solid fa-check-circle"></i> 정상적으로 받았다 (또는 비대상자임)
+                            </button>
+                            <button onclick="window.submitSuppliesStatus('missing')" style="width: 100%; padding: 12px; background: white; border: 1px solid #ef4444; color: #ef4444; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='white'">
+                                <i class="fa-solid fa-triangle-exclamation"></i> 해당 대상자이나 아무것도 못 받았다
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            window.appendMessage('system', html, 'system');
+        }, 800);
+    };
+
+    window.submitSuppliesStatus = function(status) {
+        const textMap = {
+            'received': '✅ 정상적으로 받았다 (또는 비대상자임)',
+            'missing': '❌ 해당 대상자이나 아무것도 못 받았다'
+        };
+        
+        window.appendMessage('user', textMap[status] || status, 'user');
+
+        // Try updating Firestore if we have the ID
+        if (typeof db !== 'undefined' && window.lastScheduledNotifId) {
+            db.collection('scheduled_notifications').doc(window.lastScheduledNotifId).update({
+                suppliesStatus: status,
+                suppliesCheckedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(console.error);
+        }
+
+        const actionContainers = document.querySelectorAll('#supplies-action-container');
+        if (actionContainers.length > 0) {
+            actionContainers[actionContainers.length - 1].style.display = 'none';
+        }
+
+        setTimeout(() => {
+            let finalMsg = "";
+            if (status === 'received') {
+                finalMsg = `확인해 주셔서 감사합니다! 예약 등록 절차가 모두 마무리되었습니다. 입력하신 정보에 맞춰 검진 전 단계별 안내를 성심껏 전달드리겠습니다. 편안한 검진 되시길 바랍니다.<br><br>
+                <button onclick="window.restoreAlimtalkInput(this)" style="padding: 8px 12px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.8rem;"><i class="fa-solid fa-arrow-left"></i> 연락처 수정하기</button>`;
+            } else {
+                finalMsg = `<span style="color: #dc2626; font-weight: 700;">🚨 준비물 미수령 접수 완료</span><br><br>
+                해당 내용을 담당 코디네이터에게 즉시 전달했습니다. 의료기관에 확인 후 재발송 절차를 안내드리거나, 신속한 조치를 취할 수 있도록 돕겠습니다.<br><br>
+                감사합니다! 추가 궁금하신 사항이 있다면 언제든 문의해 주십시오.`;
+            }
+            window.appendMessage('coord', finalMsg);
+        }, 800);
     };
 
     window.showKmiDetail = function(type) {

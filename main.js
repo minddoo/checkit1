@@ -1788,15 +1788,14 @@ if (authModal && loginBtn) {
                         if (loginTab) loginTab.click();
                         
                         // Re-enable submit button for next use
-    setTimeout(() => {
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
-        signupForm.style.display = '';
-    }, 2500);
-    }
-}, 1000);
-});
-});
+                        submitBtn.innerText = originalText;
+                        submitBtn.disabled = false;
+                        signupForm.style.display = '';
+                    }, 2500);
+                }
+            }, 1000);
+        });
+    });
 }
 
 // ─── 페이지 새로고침 / 이미 로그인된 상태 복원 ─────────────────

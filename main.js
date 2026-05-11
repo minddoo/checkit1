@@ -13,6 +13,179 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
 }
 const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
 
+/**
+ * D-Day Support Logic (STRICT KOREAN - NEVER TRANSLATE)
+ */
+const DDAY_KOREAN_CARDS = {
+    "접수시": "안녕하세요, 오늘 건강검진 예약했습니다. 접수 부탁드립니다.",
+    "검진시 길 모를때": "실례합니다. 건강검진센터가 어디에 있나요?",
+    "진행상황 물어보기": "다음은 어떤 검사를 받아야 하나요? 진행 상황 확인 부탁드립니다.",
+    "검사 다 끝났는지": "모든 검사가 끝난 건가요? 이제 옷을 갈아입어도 될까요?",
+    "결과 언제 나오는지": "검사 결과는 언제쯤 나오나요? 대략적인 기간이 궁금합니다.",
+    "결과 어떻게 받는지": "결과지는 어떤 방법으로 받게 되나요? (이메일/우편 등)",
+    "비용": "오늘 검진 비용은 얼마인가요? 결제 도와주세요.",
+    "검진종료": "모든 검사를 무사히 마쳤습니다. 친절하게 안내해 주셔서 감사합니다!"
+};
+
+window.confirmDdayFinish = function() {
+    console.log("CHECKIT: confirmDdayFinish called");
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) {
+        console.error("CHECKIT: dday-chat-messages not found");
+        return;
+    }
+
+    const row = document.createElement('div');
+    row.className = 'message-row coord';
+    row.innerHTML = `
+        <div class="msg-bubble">
+            <span>누락 없이 모든 검사를 다 진행하셨나요?</span>
+            <div style="display: flex; gap: 8px; margin-top: 10px;" id="dday-finish-confirm-btns">
+                <button onclick="window.handleDdayFinish(true)" style="flex: 1; padding: 8px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">예</button>
+                <button onclick="window.handleDdayFinish(false)" style="flex: 1; padding: 8px; background: #f8fafc; border: 1px solid #cbd5e1; color: #64748b; border-radius: 6px; font-weight: 700; cursor: pointer;">아니오</button>
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.handleDdayFinish = function(isComplete) {
+    console.log("CHECKIT: handleDdayFinish", isComplete);
+    const btnContainer = document.getElementById('dday-finish-confirm-btns');
+    if (btnContainer) btnContainer.style.display = 'none';
+
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) return;
+
+    if (isComplete) {
+        const userRow = document.createElement('div');
+        userRow.className = 'message-row user';
+        userRow.innerHTML = `<div class="msg-bubble"><span>예, 모두 완료했습니다.</span></div>`;
+        chatMessages.appendChild(userRow);
+
+        setTimeout(() => {
+            if (typeof window.appendDdayCard === 'function') {
+                window.appendDdayCard(DDAY_KOREAN_CARDS["검진종료"]);
+            }
+            
+            setTimeout(() => {
+                const coordRow = document.createElement('div');
+                coordRow.className = 'message-row coord';
+                coordRow.innerHTML = `
+                    <div class="msg-bubble">
+                        <span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span>
+                    </div>
+                `;
+                chatMessages.appendChild(coordRow);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
+        }, 600);
+    } else {
+        const userRow = document.createElement('div');
+        userRow.className = 'message-row user';
+        userRow.innerHTML = `<div class="msg-bubble"><span>아니오, 누락된 검사가 있습니다.</span></div>`;
+        chatMessages.appendChild(userRow);
+
+        setTimeout(() => {
+            const coordRow = document.createElement('div');
+            coordRow.className = 'message-row coord';
+            coordRow.innerHTML = `
+                <div class="msg-bubble">
+                    <span>누락된 검사가 있으신가요? 어떤 검사를 못 하셨는지 알려주시면 병원 측과 확인하여 도움을 드리겠습니다. 🏥</span>
+                </div>
+            `;
+            chatMessages.appendChild(coordRow);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 600);
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.appendDdayCard = function(text) {
+    console.log("CHECKIT: appendDdayCard", text);
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) return;
+
+    const row = document.createElement('div');
+    row.className = 'message-row system notranslate';
+    row.style.width = '100%';
+    row.innerHTML = `
+        <div class="dday-text-card notranslate" translate="no" style="
+            background: #ffffff;
+            border: 3px solid #10b981;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+            width: 100%;
+            animation: fadeInUp 0.4s ease-out;
+        ">
+            <div class="notranslate" style="font-size: 0.8rem; color: #10b981; font-weight: 800; margin-bottom: 12px; display:flex; align-items:center; gap:8px; text-transform: uppercase; letter-spacing: 0.05em;">
+                <i class="fa-solid fa-id-card"></i> SHOW THIS TO HOSPITAL STAFF (KOREAN)
+            </div>
+            <p class="notranslate" translate="no" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.4; margin: 0; word-break: keep-all;">
+                "${text}"
+            </p>
+            <div class="notranslate" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #64748b; font-weight: 500;">
+                <i class="fa-solid fa-circle-info"></i> 이 화면을 한국인 병원 직원에게 보여주세요.
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.initDdayButtons = function() {
+    const container = document.querySelector('.dday-buttons');
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        const btn = e.target.closest('.dday-btn');
+        if (!btn) return;
+
+        const key = btn.dataset.key;
+        if (!key) return;
+        
+        const text = DDAY_KOREAN_CARDS[key];
+        if (text) {
+            window.appendDdayCard(text);
+            
+            if (key === '검진종료') {
+                setTimeout(() => {
+                    const messages = document.getElementById('dday-chat-messages');
+                    const row = document.createElement('div');
+                    row.className = 'message-row coord';
+                    row.innerHTML = `
+                        <div class="msg-bubble">
+                            <span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span>
+                        </div>
+                    `;
+                    messages.appendChild(row);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 800);
+            }
+        }
+    });
+
+    const backBtn = document.getElementById('dday-back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            const mainChatView = document.querySelector('.dash-main-content.dash-chat-view:not(#dday-view)');
+            const ddayView = document.getElementById('dday-view');
+            
+            if (mainChatView && ddayView) {
+                ddayView.classList.add('hidden-view');
+                ddayView.style.display = 'none';
+                mainChatView.classList.remove('hidden-view');
+                mainChatView.style.display = 'block';
+                const chatMessages = document.getElementById('chat-messages');
+                if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+    }
+};
+
 // Global Hospital Data (Moved to top level for reliability)
 window.GLOBAL_HOSPITALS = [
     { 
@@ -1565,66 +1738,6 @@ function handleGoogleSignIn(response) {
 window.checkAndRestoreSession = function(email, displayName) {
     if (typeof db === 'undefined' || !db || !email) return;
     const userName = displayName || localStorage.getItem('userName') || '고객';
-
-    window.showChatBlock = function(viewName) {
-    console.log("Showing view:", viewName);
-
-    // D-Day Support Functions (Moved here for priority loading)
-    window.confirmDdayFinish = function() {
-        const chatMessages = document.getElementById('dday-chat-messages');
-        if (!chatMessages) return;
-        const row = document.createElement('div');
-        row.className = 'message-row coord';
-        row.innerHTML = `
-            <div class="msg-bubble">
-                <span>누락 없이 모든 검사를 다 진행하셨나요?</span>
-                <div style="display: flex; gap: 8px; margin-top: 10px;" id="dday-finish-confirm-btns">
-                    <button onclick="window.handleDdayFinish(true)" style="flex: 1; padding: 8px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;">예</button>
-                    <button onclick="window.handleDdayFinish(false)" style="flex: 1; padding: 8px; background: #f8fafc; border: 1px solid #cbd5e1; color: #64748b; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;">아니오</button>
-                </div>
-            </div>
-        `;
-        chatMessages.appendChild(row);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    };
-
-    window.handleDdayFinish = function(isComplete) {
-        const btnContainer = document.getElementById('dday-finish-confirm-btns');
-        if (btnContainer) btnContainer.style.display = 'none';
-        const chatMessages = document.getElementById('dday-chat-messages');
-        if (!chatMessages) return;
-        if (isComplete) {
-            const userRow = document.createElement('div');
-            userRow.className = 'message-row user';
-            userRow.innerHTML = `<div class="msg-bubble"><span>예, 모두 완료했습니다.</span></div>`;
-            chatMessages.appendChild(userRow);
-            setTimeout(() => {
-                appendDdayCard(DDAY_KOREAN_CARDS["검진종료"]);
-                setTimeout(() => {
-                    const coordRow = document.createElement('div');
-                    coordRow.className = 'message-row coord';
-                    coordRow.innerHTML = `<div class="msg-bubble"><span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span></div>`;
-                    chatMessages.appendChild(coordRow);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 800);
-            }, 600);
-        } else {
-            const userRow = document.createElement('div');
-            userRow.className = 'message-row user';
-            userRow.innerHTML = `<div class="msg-bubble"><span>아니오, 누락된 검사가 있습니다.</span></div>`;
-            chatMessages.appendChild(userRow);
-            setTimeout(() => {
-                const coordRow = document.createElement('div');
-                coordRow.className = 'message-row coord';
-                coordRow.innerHTML = `<div class="msg-bubble"><span>누락된 검사가 있으신가요? 어떤 검사를 못 하셨는지 알려주시면 병원 측과 확인하여 도움을 드리겠습니다. 🏥</span></div>`;
-                chatMessages.appendChild(coordRow);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 600);
-        }
-    };
-
-    const mainChatView = document.querySelector('.dash-main-content.dash-chat-view:not(#dday-view)');
-    };
 
     db.collection('scheduled_notifications')
         .where('userGoogleEmail', '==', email)
@@ -8004,111 +8117,6 @@ window.payForUnlimitedChanges = function() {
     }
 };
 
-/**
- * D-Day Support Logic (STRICT KOREAN - NEVER TRANSLATE)
- */
-const DDAY_KOREAN_CARDS = {
-    "접수시": "안녕하세요, 오늘 건강검진 예약했습니다. 접수 부탁드립니다.",
-    "검진시 길 모를때": "실례합니다. 건강검진센터가 어디에 있나요?",
-    "진행상황 물어보기": "다음은 어떤 검사를 받아야 하나요? 진행 상황 확인 부탁드립니다.",
-    "검사 다 끝났는지": "모든 검사가 끝난 건가요? 이제 옷을 갈아입어도 될까요?",
-    "결과 언제 나오는지": "검사 결과는 언제쯤 나오나요? 대략적인 기간이 궁금합니다.",
-    "결과 어떻게 받는지": "결과지는 어떤 방법으로 받게 되나요? (이메일/우편 등)",
-    "비용": "오늘 검진 비용은 얼마인가요? 결제 도와주세요.",
-    "검진종료": "모든 검사를 무사히 마쳤습니다. 친절하게 안내해 주셔서 감사합니다!"
-};
-
-function initDdayButtons() {
-    const container = document.querySelector('.dday-buttons');
-    if (!container) return;
-
-    container.addEventListener('click', (e) => {
-        const btn = e.target.closest('.dday-btn');
-        if (!btn) return;
-
-        const key = btn.dataset.key;
-        const text = DDAY_KOREAN_CARDS[key];
-        
-        if (text) {
-            appendDdayCard(text);
-            
-            // If it's the 'Finished' button, show a nice coordinator message
-            if (key === '검진종료') {
-                setTimeout(() => {
-                    const messages = document.getElementById('dday-chat-messages');
-                    const row = document.createElement('div');
-                    row.className = 'message-row coord';
-                    row.innerHTML = `
-                        <div class="msg-bubble">
-                            <span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span>
-                        </div>
-                    `;
-                    messages.appendChild(row);
-                    messages.scrollTop = messages.scrollHeight;
-                }, 800);
-            }
-        }
-    });
-
-    const backBtn = document.getElementById('dday-back-btn');
-    if (backBtn) {
-        backBtn.addEventListener('click', () => {
-            const mainChatView = document.querySelector('.dash-main-content.dash-chat-view:not(#dday-view)');
-            const ddayView = document.getElementById('dday-view');
-            
-            if (mainChatView && ddayView) {
-                // Hide D-Day view
-                ddayView.classList.add('hidden-view');
-                ddayView.style.display = 'none';
-                
-                // Show Main Chat view (concierge)
-                mainChatView.classList.remove('hidden-view');
-                mainChatView.style.display = 'block';
-                
-                // Scroll to bottom
-                const chatMessages = document.getElementById('chat-messages');
-                if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        });
-    }
-}
-
-// End of D-Day functions moved up
-
-function appendDdayCard(text) {
-    const chatMessages = document.getElementById('dday-chat-messages');
-    if (!chatMessages) return;
-
-    const row = document.createElement('div');
-    row.className = 'message-row system notranslate';
-    row.style.width = '100%';
-    row.innerHTML = `
-        <div class="dday-text-card notranslate" translate="no" style="
-            background: #ffffff;
-            border: 3px solid #10b981;
-            border-radius: 20px;
-            padding: 25px;
-            margin: 15px 0;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
-            width: 100%;
-            animation: fadeInUp 0.4s ease-out;
-        ">
-            <div class="notranslate" style="font-size: 0.8rem; color: #10b981; font-weight: 800; margin-bottom: 12px; display:flex; align-items:center; gap:8px; text-transform: uppercase; letter-spacing: 0.05em;">
-                <i class="fa-solid fa-id-card"></i> SHOW THIS TO HOSPITAL STAFF (KOREAN)
-            </div>
-            <p class="notranslate" translate="no" style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.4; margin: 0; word-break: keep-all;">
-                "${text}"
-            </p>
-            <div class="notranslate" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #64748b; font-weight: 500;">
-                <i class="fa-solid fa-circle-info"></i> 이 화면을 한국인 병원 직원에게 보여주세요.
-            </div>
-        </div>
-    `;
-    chatMessages.appendChild(row);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Initialize on load
 window.addEventListener('load', () => {
     initDdayButtons();
 });

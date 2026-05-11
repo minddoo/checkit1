@@ -151,12 +151,8 @@ window.showResultsGuidance = function() {
 };
 
 window.handleUploadResults = function() {
-    const chatMessages = document.getElementById('chat-messages');
-    const row = document.createElement('div');
-    row.className = 'message-row coord';
-    row.innerHTML = `<div class="msg-bubble"><span>준비되셨군요! 결과지 파일을 이 채팅창에 <b>드래그 앤 드롭</b>하거나 <b>파일 첨부</b> 아이콘을 눌러 전송해 주세요. 전송 즉시 코디네이터가 확인하여 번역 및 분석 절차를 진행하겠습니다. 🚀</span></div>`;
-    chatMessages.appendChild(row);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    const fileInput = document.getElementById('chat-file-input');
+    if (fileInput) fileInput.click();
 };
 
 window.handleNoResultsYet = function() {
@@ -167,6 +163,48 @@ window.handleNoResultsYet = function() {
     chatMessages.appendChild(row);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 };
+
+// Handle File Selection
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('chat-file-input');
+    const attachBtn = document.getElementById('chat-attach-btn');
+
+    if (attachBtn && fileInput) {
+        attachBtn.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const chatMessages = document.getElementById('chat-messages');
+            
+            // Show Uploading Status
+            const statusRow = document.createElement('div');
+            statusRow.className = 'message-row system';
+            statusRow.innerHTML = `<div class="system-bubble" style="background: #f8fafc; color: #64748b; font-size: 0.85rem; padding: 10px; border-radius: 12px; text-align: center; width: 100%;"><i class="fa-solid fa-spinner fa-spin"></i> ${file.name} 업로드 중...</div>`;
+            chatMessages.appendChild(statusRow);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulate Upload
+            setTimeout(() => {
+                statusRow.remove();
+                const successRow = document.createElement('div');
+                successRow.className = 'message-row coord';
+                successRow.innerHTML = `
+                    <div class="msg-bubble">
+                        <p style="margin: 0 0 5px;"><b>✅ 파일 업로드 완료!</b></p>
+                        <span>${file.name} 결과지가 정상적으로 접수되었습니다. <br>코디네이터가 즉시 번역 및 질병코드(KCD/ICD) 분석을 시작합니다. 완료되는 대로 다시 안내해 드리겠습니다. 🚀</span>
+                    </div>
+                `;
+                chatMessages.appendChild(successRow);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Reset file input
+                fileInput.value = '';
+            }, 2000);
+        });
+    }
+});
 
 window.appendDdayCard = function(text) {
     console.log("CHECKIT: appendDdayCard", text);

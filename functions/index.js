@@ -185,8 +185,27 @@ exports.scheduledAlimtalk = functions.pubsub
  */
 exports.sendImmediateNotificationConfirmation = functions.firestore
   .document('scheduled_notifications/{notifId}')
-  .onCreate(async (snap, context) => {
-    const data = snap.data();
+  .onWrite(async (change, context) => {
+    // Handle deletions
+    if (!change.after.exists) return null;
+
+    const beforeData = change.before.exists ? change.before.data() : null;
+    const data = change.after.data();
+
+    // Optimization: If this was an update, only proceed if contact details or dates changed
+    if (beforeData) {
+      const isSameContact = beforeData.contactValue === data.contactValue;
+      const isSameType = beforeData.contactType === data.contactType;
+      const isSameDate = beforeData.reservedDate === data.reservedDate;
+      const isSameHospital = beforeData.hospitalName === data.hospitalName;
+
+      // If only something trivial (like 'suppliesStatus') changed, do NOT re-fire confirmation spam
+      if (isSameContact && isSameType && isSameDate && isSameHospital) {
+        console.log('Immediate confirmation skipped: core fields unchanged');
+        return null;
+      }
+    }
+
     if (!data.contactValue || !data.contactType) return null;
 
     try {
@@ -220,8 +239,8 @@ exports.sendImmediateNotificationConfirmation = functions.firestore
         console.log('Immediate Alimtalk Sent');
       } else if (data.contactType === 'email') {
         // 즉시 이메일 발송
-        await resend.emails.send({
-          from: 'Checkit Notifications <onboarding@resend.dev>',
+        const emailResponse = await resend.emails.send({
+          from: '체킷(Checkit) <no-reply@checkit082.kr>',
           to: data.contactValue,
           subject: `[체킷] 건강검진 안내 예약이 접수되었습니다.`,
           html: `
@@ -246,7 +265,8 @@ exports.sendImmediateNotificationConfirmation = functions.firestore
             </div>
           `
         });
-        console.log('Immediate Email Sent');
+        console.log('Immediate Email Attempt Complete. Recipient:', data.contactValue);
+        console.log('Resend API Response:', JSON.stringify(emailResponse));
       }
 
       return null;
@@ -276,6 +296,9 @@ exports.scheduledB2CNotifications = functions.pubsub
       snap.forEach(doc => {
         const item = doc.data();
         if (!item.reservedDate || !item.contactValue) return;
+        
+        // [USER REQUEST] '기타' 병원은 자동 발송에서 제외 (마스터 페이지 수기 발송용)
+        if (item.hospitalName === '기타') return;
 
         const reservedDate = new Date(item.reservedDate);
         reservedDate.setHours(0, 0, 0, 0);
@@ -342,7 +365,7 @@ exports.scheduledB2CNotifications = functions.pubsub
           } else if (item.contactType === 'email') {
             const subjectDay = dDay === 0 ? '당일' : `${dDay}일 전`;
             resendMessages.push({
-              from: 'Checkit Notifications <onboarding@resend.dev>', // Domain setup recommended to change this later
+              from: '체킷(Checkit) <no-reply@checkit082.kr>',
               to: item.contactValue,
               subject: `[체킷] 건강검진 ${subjectDay} 안내 드립니다. (${item.name || '고객'}님)`,
               html: `

@@ -87,7 +87,7 @@ service cloud.firestore {
     }
     // [6] SCHEDULED_NOTIFICATIONS: Automated reminders for B2C checkups
     match /scheduled_notifications/{notifId} {
-      allow create: if true;
+      allow create, update: if true;
       allow read, write: if isMaster();
     }
   }

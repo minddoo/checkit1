@@ -7933,16 +7933,16 @@ window.payForUnlimitedChanges = function() {
 };
 
 /**
- * D-Day Support Logic
+ * D-Day Support Logic (Show-to-Staff Text Cards)
  */
 const DDAY_RESPONSES = {
-    "접수시": "접수 창구에 여권을 제시하고 '체킷(CHECKIT) 예약자'라고 말씀해 주세요. 이미 병원 측에 사전 정보를 전달해 두었으므로 원활하게 접수됩니다.",
-    "검진시 길 모를때": "현재 위치에서 가장 가까운 안내 데스크에 도움을 요청하시거나, 층별 안내도의 '종합검진센터' 표시를 따라가 주세요. 이동이 어려우시면 즉시 말씀해 주세요.",
-    "진행상황 물어보기": "현재 고객님의 예약 정보에 따라 순조롭게 진행 중입니다. 보통 대기 시간을 포함해 총 3~4시간 정도 소요됩니다.",
-    "검사 다 끝났는지": "모든 검사 항목이 완료되면 간호사 분이 마지막 안내를 해드립니다. 탈의실로 가시기 전 센터 입구 데스크에서 최종 확인을 받으시면 됩니다.",
-    "결과 언제 나오는지": "일반적으로 검진 결과는 영업일 기준 7~10일 후에 나옵니다. 결과가 나오는 대로 모국어로 번역하여 안내해 드리겠습니다.",
-    "결과 어떻게 받는지": "결과지는 PDF 형태로 이메일로 발송해 드리며, 필요한 경우 종이 결과지를 우편으로 받으실 수도 있습니다. (예약 시 선택 사항)",
-    "비용": "검진 비용은 병원 원무과에서 직접 결제하시면 됩니다. 체킷 서비스 이용료는 이미 결제가 완료되었으므로 추가 비용은 발생하지 않습니다."
+    "접수시": "안녕하세요, 오늘 건강검진 예약했습니다. 접수 부탁드립니다.",
+    "검진시 길 모를때": "실례합니다. 건강검진센터가 어디에 있나요?",
+    "진행상황 물어보기": "다음은 어떤 검사를 받아야 하나요? 진행 상황 확인 부탁드립니다.",
+    "검사 다 끝났는지": "모든 검사가 끝난 건가요? 이제 옷을 갈아입어도 될까요?",
+    "결과 언제 나오는지": "검사 결과는 언제쯤 나오나요? 대략적인 기간이 궁금합니다.",
+    "결과 어떻게 받는지": "결과지는 어떤 방법으로 받게 되나요? (이메일/우편 등)",
+    "비용": "오늘 검진 비용은 얼마인가요? 결제 도와주세요."
 };
 
 function initDdayButtons() {
@@ -7954,16 +7954,10 @@ function initDdayButtons() {
         if (!btn) return;
 
         const key = btn.dataset.key;
-        const response = DDAY_RESPONSES[key];
+        const text = DDAY_RESPONSES[key];
         
-        if (response) {
-            // Add user bubble (the question)
-            appendDdayMessage('user', key);
-            
-            // Add coordinator response
-            setTimeout(() => {
-                appendDdayMessage('coord', response);
-            }, 600);
+        if (text) {
+            appendDdayCard(text);
         }
     });
 
@@ -7990,15 +7984,33 @@ function initDdayButtons() {
     }
 }
 
-function appendDdayMessage(sender, text) {
+function appendDdayCard(text) {
     const chatMessages = document.getElementById('dday-chat-messages');
     if (!chatMessages) return;
 
     const row = document.createElement('div');
-    row.className = `message-row ${sender}`;
+    row.className = 'message-row system';
+    row.style.width = '100%';
     row.innerHTML = `
-        <div class="msg-bubble">
-            <span>${text}</span>
+        <div class="dday-text-card" style="
+            background: #ffffff;
+            border: 3px solid #10b981;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+            width: 100%;
+            animation: fadeInUp 0.4s ease-out;
+        ">
+            <div style="font-size: 0.8rem; color: #10b981; font-weight: 800; margin-bottom: 12px; display:flex; align-items:center; gap:8px; text-transform: uppercase; letter-spacing: 0.05em;">
+                <i class="fa-solid fa-id-card"></i> Show this to hospital staff
+            </div>
+            <p style="font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1.4; margin: 0; word-break: keep-all;">
+                "${text}"
+            </p>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #64748b; font-weight: 500;">
+                <i class="fa-solid fa-circle-info"></i> 이 화면을 병원 직원에게 보여주세요.
+            </div>
         </div>
     `;
     chatMessages.appendChild(row);

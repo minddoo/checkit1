@@ -1052,6 +1052,46 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 검진 당일 (D-Day) View -->
+                <div id="dday-view" class="dash-main-content dash-chat-view hidden-view">
+                    <div class="dash-chat-container">
+                        <div class="chat-header">
+                            <div class="coordinator-profile">
+                                <div class="coord-avatar">
+                                    <img src="assets/avatar_coord.png" alt="Coordinator" onerror="this.src='https://ui-avatars.com/api/?name=C&background=00d084&color=fff'">
+                                    <div class="status-dot"></div>
+                                </div>
+                                <div class="coord-info">
+                                    <h4>🩺 검진 당일 서포트</h4>
+                                </div>
+                            </div>
+                            <button id="dday-back-btn" class="btn-back-minimal" style="margin-left:auto; background:none; border:none; cursor:pointer; color: #64748b;">
+                                <i class="fa-solid fa-arrow-left"></i> 뒤로
+                            </button>
+                        </div>
+
+                        <div class="chat-messages" id="dday-chat-messages">
+                            <!-- Welcome Message for D-Day -->
+                            <div class="message-row coord">
+                                <div class="msg-bubble">
+                                    <span>검진 당일입니다! 원활한 검진을 위해 필요한 도움말 버튼을 눌러주세요.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 자동응답 버튼 묶음 -->
+                        <div class="dday-buttons" style="padding: 15px; display:flex; flex-wrap:wrap; gap:8px; border-top: 1px solid #f1f5f9; background: #fafafa;">
+                            <button class="dday-btn" data-key="접수시">접수시</button>
+                            <button class="dday-btn" data-key="검진시 길 모를때">검진시 길 모를때</button>
+                            <button class="dday-btn" data-key="진행상황 물어보기">진행상황 물어보기</button>
+                            <button class="dday-btn" data-key="검사 다 끝났는지">검사 다 끝났는지</button>
+                            <button class="dday-btn" data-key="결과 언제 나오는지">결과 언제 나오는지</button>
+                            <button class="dday-btn" data-key="결과 어떻게 받는지">결과 어떻게 받는지</button>
+                            <button class="dday-btn" data-key="비용">비용</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

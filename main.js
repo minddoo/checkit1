@@ -1577,6 +1577,20 @@ window.checkAndRestoreSession = function(email, displayName) {
             const doc = snap.docs[0];
             const data = doc.data();
             window.lastScheduledNotifId = doc.id;
+
+            // Check if it's D-Day (today is reservedDate) or if user manually advanced
+            const today = new Date().toISOString().split('T')[0];
+            const isDday = data.reservedDate === today;
+            
+            if (isDday || data.suppliesStatus === 'received') {
+                console.log("D-Day or Process complete detected. Switching to D-Day view.");
+                setTimeout(() => {
+                    if (typeof window.showChatBlock === 'function') {
+                        window.showChatBlock('dday');
+                    }
+                }, 800);
+                // We still let the restore banner show in the background or we can return early
+            }
             
             // Reconstruct local consultationData if missing to prevent showing the start form again
             const userEmail = localStorage.getItem('userEmail') || '';
@@ -2102,6 +2116,35 @@ function initDashboard() {
         const lang = localStorage.getItem('preferred-lang') || 'en';
         const consultationData = JSON.parse(localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`) || '{}');
         const checkupType = consultationData.type || 'General';
+
+        // View Switching for D-Day
+        if (blockType === 'dday') {
+            const mainChatView = document.querySelector('.dash-main-content.dash-chat-view:not(#dday-view)');
+            const ddayView = document.getElementById('dday-view');
+            if (mainChatView && ddayView) {
+                mainChatView.classList.add('hidden-view');
+                mainChatView.style.display = 'none';
+                ddayView.classList.remove('hidden-view');
+                ddayView.style.display = 'block';
+                
+                // Add a small delay for premium feel
+                setTimeout(() => {
+                    const chatMessages = document.getElementById('dday-chat-messages');
+                    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 100);
+                return;
+            }
+        } else if (blockType === 'booking' || blockType === 'alimtalk') {
+            // Restore main chat view if we were in dday
+            const mainChatView = document.querySelector('.dash-main-content.dash-chat-view:not(#dday-view)');
+            const ddayView = document.getElementById('dday-view');
+            if (mainChatView && ddayView && ddayView.style.display !== 'none') {
+                ddayView.classList.add('hidden-view');
+                ddayView.style.display = 'none';
+                mainChatView.classList.remove('hidden-view');
+                mainChatView.style.display = 'block';
+            }
+        }
 
         switch(blockType) {
             case 'booking':
@@ -7879,3 +7922,66 @@ window.payForUnlimitedChanges = function() {
         }, 1500);
     }
 };
+
+/**
+ * D-Day Support Logic
+ */
+const DDAY_RESPONSES = {
+    "접수시": "접수 창구에 여권을 제시하고 '체킷(CHECKIT) 예약자'라고 말씀해 주세요. 이미 병원 측에 사전 정보를 전달해 두었으므로 원활하게 접수됩니다.",
+    "검진시 길 모를때": "현재 위치에서 가장 가까운 안내 데스크에 도움을 요청하시거나, 층별 안내도의 '종합검진센터' 표시를 따라가 주세요. 이동이 어려우시면 즉시 말씀해 주세요.",
+    "진행상황 물어보기": "현재 고객님의 예약 정보에 따라 순조롭게 진행 중입니다. 보통 대기 시간을 포함해 총 3~4시간 정도 소요됩니다.",
+    "검사 다 끝났는지": "모든 검사 항목이 완료되면 간호사 분이 마지막 안내를 해드립니다. 탈의실로 가시기 전 센터 입구 데스크에서 최종 확인을 받으시면 됩니다.",
+    "결과 언제 나오는지": "일반적으로 검진 결과는 영업일 기준 7~10일 후에 나옵니다. 결과가 나오는 대로 모국어로 번역하여 안내해 드리겠습니다.",
+    "결과 어떻게 받는지": "결과지는 PDF 형태로 이메일로 발송해 드리며, 필요한 경우 종이 결과지를 우편으로 받으실 수도 있습니다. (예약 시 선택 사항)",
+    "비용": "검진 비용은 병원 원무과에서 직접 결제하시면 됩니다. 체킷 서비스 이용료는 이미 결제가 완료되었으므로 추가 비용은 발생하지 않습니다."
+};
+
+function initDdayButtons() {
+    const container = document.querySelector('.dday-buttons');
+    if (!container) return;
+
+    container.addEventListener('click', (e) => {
+        const btn = e.target.closest('.dday-btn');
+        if (!btn) return;
+
+        const key = btn.dataset.key;
+        const response = DDAY_RESPONSES[key];
+        
+        if (response) {
+            // Add user bubble (the question)
+            appendDdayMessage('user', key);
+            
+            // Add coordinator response
+            setTimeout(() => {
+                appendDdayMessage('coord', response);
+            }, 600);
+        }
+    });
+
+    const backBtn = document.getElementById('dday-back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.showChatBlock('booking');
+        });
+    }
+}
+
+function appendDdayMessage(sender, text) {
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) return;
+
+    const row = document.createElement('div');
+    row.className = `message-row ${sender}`;
+    row.innerHTML = `
+        <div class="msg-bubble">
+            <span>${text}</span>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Initialize on load
+window.addEventListener('load', () => {
+    initDdayButtons();
+});

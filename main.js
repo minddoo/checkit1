@@ -8013,6 +8013,76 @@ function initDdayButtons() {
     }
 }
 
+window.confirmDdayFinish = function() {
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) return;
+
+    const row = document.createElement('div');
+    row.className = 'message-row coord';
+    row.innerHTML = `
+        <div class="msg-bubble">
+            <span>누락 없이 모든 검사를 다 진행하셨나요?</span>
+            <div style="display: flex; gap: 8px; margin-top: 10px;" id="dday-finish-confirm-btns">
+                <button onclick="window.handleDdayFinish(true)" style="flex: 1; padding: 8px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">예</button>
+                <button onclick="window.handleDdayFinish(false)" style="flex: 1; padding: 8px; background: #f8fafc; border: 1px solid #cbd5e1; color: #64748b; border-radius: 6px; font-weight: 700; cursor: pointer;">아니오</button>
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(row);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+window.handleDdayFinish = function(isComplete) {
+    const btnContainer = document.getElementById('dday-finish-confirm-btns');
+    if (btnContainer) btnContainer.style.display = 'none';
+
+    const chatMessages = document.getElementById('dday-chat-messages');
+    if (!chatMessages) return;
+
+    if (isComplete) {
+        // User said Yes
+        const userRow = document.createElement('div');
+        userRow.className = 'message-row user';
+        userRow.innerHTML = `<div class="msg-bubble"><span>예, 모두 완료했습니다.</span></div>`;
+        chatMessages.appendChild(userRow);
+
+        setTimeout(() => {
+            appendDdayCard(DDAY_KOREAN_CARDS["검진종료"]);
+            
+            setTimeout(() => {
+                const coordRow = document.createElement('div');
+                coordRow.className = 'message-row coord';
+                coordRow.innerHTML = `
+                    <div class="msg-bubble">
+                        <span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span>
+                    </div>
+                `;
+                chatMessages.appendChild(coordRow);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
+        }, 600);
+    } else {
+        // User said No
+        const userRow = document.createElement('div');
+        userRow.className = 'message-row user';
+        userRow.innerHTML = `<div class="msg-bubble"><span>아니오, 누락된 검사가 있습니다.</span></div>`;
+        chatMessages.appendChild(userRow);
+
+        setTimeout(() => {
+            const coordRow = document.createElement('div');
+            coordRow.className = 'message-row coord';
+            coordRow.innerHTML = `
+                <div class="msg-bubble">
+                    <span>누락된 검사가 있으신가요? 어떤 검사를 못 하셨는지 알려주시면 병원 측과 확인하여 도움을 드리겠습니다. 🏥</span>
+                </div>
+            `;
+            chatMessages.appendChild(coordRow);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 600);
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
 function appendDdayCard(text) {
     const chatMessages = document.getElementById('dday-chat-messages');
     if (!chatMessages) return;

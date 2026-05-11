@@ -1577,6 +1577,31 @@ window.checkAndRestoreSession = function(email, displayName) {
             const doc = snap.docs[0];
             const data = doc.data();
             window.lastScheduledNotifId = doc.id;
+            
+            // Reconstruct local consultationData if missing to prevent showing the start form again
+            const userEmail = localStorage.getItem('userEmail') || '';
+            const cKey = `consultationData_${userEmail}`;
+            if (!localStorage.getItem(cKey)) {
+                localStorage.setItem(cKey, JSON.stringify({
+                    type: 'General',
+                    hospital: data.hospitalName || '',
+                    date: data.reservedDate || '',
+                    name: userName
+                }));
+                const stepConsultation = document.getElementById('step-consultation');
+                if (stepConsultation) stepConsultation.style.display = 'none';
+            }
+            
+            // Hotfix: Migrate trapped old un-namespaced chat history for xhrlalswjd7989
+            if (userEmail === 'xhrlalswjd7989@gmail.com') {
+                const oldChat = localStorage.getItem('chat_history');
+                const newChatKey = `chat_history_${userEmail}`;
+                if (oldChat && !localStorage.getItem(newChatKey)) {
+                    localStorage.setItem(newChatKey, oldChat);
+                    localStorage.removeItem('chat_history'); // Clean up to prevent leaks
+                    if (typeof window.loadChatHistory === 'function') window.loadChatHistory();
+                }
+            }
 
             // 채팅 뷰가 준비될 때까지 약간 대기 후 복원 배너 표시
             const showResumeBanner = () => {

@@ -1642,6 +1642,7 @@ window.checkAndRestoreSession = function(email, displayName) {
                             </div>
 
                             <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <p style="margin: 0 0 4px; font-size: 0.8rem; color: #059669; font-weight: 700; text-align: center;">👇 검진 당일(D-Day)이라면 눌러주세요!</p>
                                 <button onclick="window.showChatBlock('dday')" style="padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                     <i class="fa-solid fa-stethoscope"></i> 검진 당일 실시간 안내 확인하기
                                 </button>
@@ -3993,7 +3994,7 @@ function initDashboard() {
             if (status === 'received') {
                 finalMsg = `확인해 주셔서 감사합니다! 예약 등록 절차가 모두 마무리되었습니다. 입력하신 정보에 맞춰 검진 전 단계별 안내를 성심껏 전달드리겠습니다. 편안한 검진 되시길 바랍니다.<br><br>
                 <div style="margin-top: 5px; padding: 15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; text-align: center;">
-                    <p style="margin: 0 0 10px; font-size: 0.85rem; color: #166534; font-weight: 600;">실시간 검진 당일 서포트가 필요하신가요?</p>
+                    <p style="margin: 0 0 10px; font-size: 0.85rem; color: #166534; font-weight: 700;">👇 오늘이 검진 당일(D-Day)이신가요?</p>
                     <button onclick="window.showChatBlock('dday')" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <i class="fa-solid fa-stethoscope"></i> 검진 당일 안내받기
                     </button>
@@ -4001,7 +4002,7 @@ function initDashboard() {
             } else if (status === 'hospital_pickup') {
                 finalMsg = `알겠습니다! <strong>내원 수령</strong>으로 접수해 드렸습니다. 병원에 미리 연락하여 대장정결제 등 준비물을 바로 받으실 수 있도록 조치하겠습니다. 내원 시 접수처에 성함을 말씀해 주세요.<br><br>
                 <div style="margin-top: 5px; padding: 15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; text-align: center;">
-                    <p style="margin: 0 0 10px; font-size: 0.85rem; color: #166534; font-weight: 600;">실시간 검진 당일 서포트가 필요하신가요?</p>
+                    <p style="margin: 0 0 10px; font-size: 0.85rem; color: #166534; font-weight: 700;">👇 오늘이 검진 당일(D-Day)이신가요?</p>
                     <button onclick="window.showChatBlock('dday')" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <i class="fa-solid fa-stethoscope"></i> 검진 당일 안내받기
                     </button>
@@ -7953,7 +7954,8 @@ const DDAY_KOREAN_CARDS = {
     "검사 다 끝났는지": "모든 검사가 끝난 건가요? 이제 옷을 갈아입어도 될까요?",
     "결과 언제 나오는지": "검사 결과는 언제쯤 나오나요? 대략적인 기간이 궁금합니다.",
     "결과 어떻게 받는지": "결과지는 어떤 방법으로 받게 되나요? (이메일/우편 등)",
-    "비용": "오늘 검진 비용은 얼마인가요? 결제 도와주세요."
+    "비용": "오늘 검진 비용은 얼마인가요? 결제 도와주세요.",
+    "검진종료": "모든 검사를 무사히 마쳤습니다. 친절하게 안내해 주셔서 감사합니다!"
 };
 
 function initDdayButtons() {
@@ -7969,6 +7971,22 @@ function initDdayButtons() {
         
         if (text) {
             appendDdayCard(text);
+            
+            // If it's the 'Finished' button, show a nice coordinator message
+            if (key === '검진종료') {
+                setTimeout(() => {
+                    const messages = document.getElementById('dday-chat-messages');
+                    const row = document.createElement('div');
+                    row.className = 'message-row coord';
+                    row.innerHTML = `
+                        <div class="msg-bubble">
+                            <span>수고 많으셨습니다! 오늘 검진 결과는 정리되는 대로 다시 안내해 드리겠습니다. 편안한 하루 보내세요. ✨</span>
+                        </div>
+                    `;
+                    messages.appendChild(row);
+                    messages.scrollTop = messages.scrollHeight;
+                }, 800);
+            }
         }
     });
 

@@ -1951,9 +1951,9 @@ function initDashboard() {
         const index = allRows.indexOf(row);
         
         if (index !== -1) {
-            const history = JSON.parse(localStorage.getItem('chat_history') || '[]');
+            const history = JSON.parse(localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`) || '[]');
             history.splice(index, 1);
-            localStorage.setItem('chat_history', JSON.stringify(history));
+            localStorage.setItem(`chat_history_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(history));
             
             row.style.opacity = '0';
             row.style.transform = 'translateX(-20px)';
@@ -1998,14 +1998,14 @@ function initDashboard() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         if (!skipSave) {
-            const history = JSON.parse(localStorage.getItem('chat_history') || '[]');
+            const history = JSON.parse(localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`) || '[]');
             history.push({ sender, content, type, timeStr });
-            localStorage.setItem('chat_history', JSON.stringify(history));
+            localStorage.setItem(`chat_history_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(history));
         }
     };
 
     window.loadChatHistory = function() {
-        const history = JSON.parse(localStorage.getItem('chat_history') || '[]');
+        const history = JSON.parse(localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`) || '[]');
         if (history.length > 0) {
             chatMessages.innerHTML = '';
             history.forEach(msg => {
@@ -2075,7 +2075,7 @@ function initDashboard() {
         let blockHtml = '';
         let welcomeText = '';
         const lang = localStorage.getItem('preferred-lang') || 'en';
-        const consultationData = JSON.parse(localStorage.getItem('consultationData') || '{}');
+        const consultationData = JSON.parse(localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`) || '{}');
         const checkupType = consultationData.type || 'General';
 
         switch(blockType) {
@@ -3370,8 +3370,8 @@ function initDashboard() {
                 `;
                 break;
             case 'change-request':
-                const changeCount = parseInt(localStorage.getItem('changeCount') || '0');
-                const isUnlimited = localStorage.getItem('isUnlimited') === 'true';
+                const changeCount = parseInt(localStorage.getItem(`changeCount_${localStorage.getItem('userEmail') || ''}`) || '0');
+                const isUnlimited = localStorage.getItem(`isUnlimited_${localStorage.getItem('userEmail') || ''}`) === 'true';
                 const isOptedIn = localStorage.getItem('unlimited_opt_in') === 'true';
                 
                 welcomeText = "일정 변경 및 추가 항목 요청 서비스입니다. 원하시는 변경 사항을 말씀해 주세요.";
@@ -3698,7 +3698,7 @@ function initDashboard() {
 
         // Real Action: Register Notification to Firestore
         if (typeof db !== 'undefined' && db) {
-            const consultationRaw = localStorage.getItem('consultationData');
+            const consultationRaw = localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`);
             let userName = '고객';
             try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
             
@@ -3827,7 +3827,7 @@ function initDashboard() {
 
         // Real Action: Register Notification to Firestore
         if (typeof db !== 'undefined' && db) {
-            const consultationRaw = localStorage.getItem('consultationData');
+            const consultationRaw = localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`);
             let userName = '고객';
             try { if(consultationRaw) userName = JSON.parse(consultationRaw).name || userName; } catch(e){}
 
@@ -7414,8 +7414,8 @@ function initDashboard() {
     dashboardInitialized = true;
     
     // Auto-render or Restore Chat State
-    const savedData = localStorage.getItem('consultationData');
-    const chatHistory = localStorage.getItem('chat_history');
+    const savedData = localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`);
+    const chatHistory = localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`);
     
     if (savedData) {
         // If we have history, loadChatHistory (called above) handles it.
@@ -7441,18 +7441,11 @@ function initDashboard() {
     if (dashLogoutBtn) {
         dashLogoutBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to sign out?')) {
-                // Keep consultationData and change info for session continuity
-                const consultationData = localStorage.getItem('consultationData');
-                const changeCount = localStorage.getItem('changeCount');
-                const isUnlimited = localStorage.getItem('isUnlimited');
-                const chatHistory = localStorage.getItem('chat_history');
-                
-                localStorage.clear();
-                
-                if (consultationData) localStorage.setItem('consultationData', consultationData);
-                if (changeCount) localStorage.setItem('changeCount', changeCount);
-                if (isUnlimited) localStorage.setItem('isUnlimited', isUnlimited);
-                if (chatHistory) localStorage.setItem('chat_history', chatHistory);
+                // Clear only session tokens to preserve namespaced user data
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPicture');
                 
                 location.reload();
             }
@@ -7704,7 +7697,7 @@ window.handleInlineFormSubmit = function() {
     }, 1200);
 
     // Save locally
-    localStorage.setItem('consultationData', JSON.stringify(data));
+    localStorage.setItem(`consultationData_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(data));
 };
 
 // Language Selection Logic
@@ -7817,8 +7810,8 @@ if (document.getElementById('paypal-button-container')) {
 
 // --- Schedule Change & Unlimited Logic ---
 window.processChangeRequest = function() {
-    let changeCount = parseInt(localStorage.getItem('changeCount') || '0');
-    const isUnlimited = localStorage.getItem('isUnlimited') === 'true';
+    let changeCount = parseInt(localStorage.getItem(`changeCount_${localStorage.getItem('userEmail') || ''}`) || '0');
+    const isUnlimited = localStorage.getItem(`isUnlimited_${localStorage.getItem('userEmail') || ''}`) === 'true';
 
     if (!isUnlimited && changeCount >= 3) {
         window.showChatBlock('change-request');
@@ -7829,7 +7822,7 @@ window.processChangeRequest = function() {
     if (request) {
         if (!isUnlimited) {
             changeCount++;
-            localStorage.setItem('changeCount', changeCount.toString());
+            localStorage.setItem(`changeCount_${localStorage.getItem('userEmail') || ''}`, changeCount.toString());
         }
         
         window.appendMessage('user', `변경 요청: ${request}`);
@@ -7853,7 +7846,7 @@ window.payForUnlimitedChanges = function() {
         `;
         window.appendMessage('system', paymentMsg, 'system');
         
-        localStorage.setItem('isUnlimited', 'true');
+        localStorage.setItem(`isUnlimited_${localStorage.getItem('userEmail') || ''}`, 'true');
         
         setTimeout(() => {
             window.appendMessage('coord', "결제가 완료되었습니다! 이제부터 횟수 제한 없이 자유롭게 일정 변경 및 항목 추가 요청이 가능합니다.");

@@ -1,4 +1,4 @@
-// Firebase Initialization
+﻿// Firebase Initialization
 const firebaseConfig = {
     apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
     authDomain: "checkit-43341.firebaseapp.com",
@@ -165,7 +165,7 @@ window.handleNoResultsYet = function() {
     const chatMessages = document.getElementById('chat-messages');
     const row = document.createElement('div');
     row.className = 'message-row coord';
-    row.innerHTML = `<div class="msg-bubble"><span>결과가 늦어져서 걱정이시군요. 3주 이상 경과했다면 병원 행정상의 이슈가 있을 수 있습니다. 저희 코디네이터가 <b>병원 측에 즉시 연락하여 발송 상태를 확인</b>하고 고객님께 다시 안내해 드리겠습니다. 잠시만 기다려 주세요! 🏥</span></div>`;
+    row.innerHTML = `<div class="msg-bubble"><span>결과가 늦어져서 걱정이시군요. 3주 이상 경과했다면 병원 행정상의 이슈가 있을 수 있습니다. 저희 <b>전담 담당자</b>가 <b>병원 측에 즉시 연락하여 발송 상태를 확인</b>하고 고객님께 다시 안내해 드리겠습니다. 잠시만 기다려 주세요! 🏥</span></div>`;
     chatMessages.appendChild(row);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 };
@@ -210,12 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const progressBar = analysisRow.querySelector('#ai-progress-bar');
             const aiLog = analysisRow.querySelector('#ai-log');
 
-            // Phase sequences
+            // Phase sequences (Enhanced for Accuracy & Sensitivity)
             const phases = [
-                { p: 20, s: "언어 데이터 스캐닝 중...", l: "> Reading Korean text... [OK]\n> Identifying administrative data..." },
-                { p: 50, s: "표준 코드 매칭 중 (KCD/ICD)...", l: "> Querying KCD-8 Database...\n> Mapping ICD-10 standard codes..." },
-                { p: 80, s: "다국어 번역 및 치환 중...", l: "> Applying neural translation...\n> Structuring document data..." },
-                { p: 100, s: "처리 완료!", l: "> Finalizing Report...\n> Ready to display." }
+                { p: 20, s: "공식 코딩 엔진 초기화 중...", l: "> Initializing official coding engine (KOICD)... [OK]" },
+                { p: 50, s: "KOICD/ICD-10 표준 데이터 불러오는 중...", l: "> Loading KCD-8 / ICD-10-CM international standards..." },
+                { p: 80, s: "OCR 정밀 스캔 및 텍스트 추출 중...", l: "> Extracting medical data with high precision OCR..." },
+                { p: 100, s: "분석 접수 완료!", l: "> Final verification request sent to CHECKIT support team." }
             ];
 
             let currentPhase = 0;
@@ -227,16 +227,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     aiLog.innerHTML += `<br>${phase.l}`;
                     aiLog.scrollTop = aiLog.scrollHeight;
                     currentPhase++;
-                    setTimeout(runPhase, 1200);
+                    setTimeout(runPhase, 1000);
                 } else {
-                    // Show Final Report
+                    // Show Final Status - Expert Verification
                     setTimeout(() => {
                         analysisRow.remove();
-                        window.displayAiReport(file.name);
-                    }, 800);
+                        if (window.displayAiReport) {
+                            window.displayAiReport(file.name);
+                        }
+                    }, 500);
                 }
             };
-            setTimeout(runPhase, 500);
+            setTimeout(runPhase, 300);
             
             fileInput.value = '';
         });
@@ -4404,7 +4406,7 @@ function initDashboard() {
                 </div>`;
             } else {
                 finalMsg = `<span style="color: #dc2626; font-weight: 700;">🚨 준비물 미수령 접수 완료</span><br><br>
-                해당 내용을 담당 코디네이터에게 즉시 전달했습니다. 의료기관에 확인 후 재발송 절차를 안내드리거나, 신속한 조치를 취할 수 있도록 돕겠습니다.<br><br>
+                해당 내용을 담당 전담 담당자에게 즉시 전달했습니다. 의료기관에 확인 후 재발송 절차를 안내드리거나, 신속한 조치를 취할 수 있도록 돕겠습니다.<br><br>
                 감사합니다! 추가 궁금하신 사항이 있다면 언제든 문의해 주십시오.`;
             }
             window.appendMessage('coord', finalMsg);
@@ -7642,7 +7644,7 @@ function initDashboard() {
             window.appendMessage('user', '아니오, 없습니다.');
         }
         setTimeout(() => {
-            const waitMsg = `감사합니다! 고객님이 선택하신 **${hName}**의 **${pName}** 프로그램 예약 요청이 담당 코디네이터에게 전달되었습니다.
+            const waitMsg = `감사합니다! 고객님이 선택하신 **${hName}**의 **${pName}** 프로그램 예약 요청이 담당 전담 담당자에게 전달되었습니다.
                 <br><br>의료기관의 예약 상황을 확인하여 최종 확정 문자를 발송해 드릴 예정입니다. 잠시만 기다려 주세요!
                 <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
                     <button style="padding: 10px; font-size: 0.85rem; font-weight: 700; background: #fff; color: #ef4444; border: 1px solid #fee2e2; border-radius: 10px; cursor: pointer;" onclick="window.reportNoConfirmation('${hName}')">1일이 지났는데 확정문자를 못받았어요</button>

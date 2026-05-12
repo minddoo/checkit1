@@ -2430,38 +2430,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         loader.style.display = 'flex';
                         try {
-                            // 1. Create a new Auth account with the new key
-                            // 로그인 로직과 동일한 email, password 규칙 적용 (입력된 그대로 소문자화)
                             const loginCompanyKey = companyKey.toLowerCase();
                             const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
                             const email = `${stringToHex(newKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
                             const password = `${loginCompanyKey}_${newKey}!2026`;
-                            
+
+                            // [핵심 수정] 1. 기존 Auth 계정 삭제를 먼저 수행 (새 계정 생성 전)
+                            if (matchedWorker.passwordKey) {
+                                try {
+                                    const oldEmail = `${stringToHex(matchedWorker.passwordKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
+                                    const oldPassword = `${loginCompanyKey}_${matchedWorker.passwordKey}!2026`;
+                                    const oldCred = await auth.signInWithEmailAndPassword(oldEmail, oldPassword);
+                                    await oldCred.user.delete();
+                                    console.log('Old auth account removed successfully');
+                                } catch (e) {
+                                    console.warn('Failed to delete old auth account (it might not exist):', e);
+                                }
+                            }
+
+                            // 2. 새 Auth 계정 생성
                             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                             const user = userCredential.user;
 
-                            // 기존 계정 무효화 처리 (이전 암호키로 로그인 시 껍데기만 남겨 마이페이지 접근 차단)
+                            // 3. 기존 users 문서 무효화
                             if (matchedWorker.uid) {
                                 try {
                                     await db.collection('users').doc(matchedWorker.uid).update({
                                         workerDocId: null,
                                         securityKey: 'REVOKED'
                                     });
-                                } catch (e) { console.warn("Old user disable skip:", e); }
-                            }
-
-                            // ----- Delete old auth account (if exists) -----
-                            if (matchedWorker.passwordKey) {
-                                try {
-                                    const oldEmail = `${stringToHex(matchedWorker.passwordKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
-                                    const oldPassword = `${loginCompanyKey}_${matchedWorker.passwordKey}!2026`;
-                                    // Sign in with old credentials to obtain user object
-                                    const oldCred = await auth.signInWithEmailAndPassword(oldEmail, oldPassword);
-                                    await oldCred.user.delete();
-                                    console.log('Old auth account removed');
-                                } catch (e) {
-                                    console.warn('Failed to delete old auth account:', e);
-                                }
+                                } catch (e) { console.warn("Old user doc disable skip:", e); }
                             }
                             const safeCompanyId = companyKey.toLowerCase().replace('comp_', '');
                             const batch = db.batch();

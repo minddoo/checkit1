@@ -2353,21 +2353,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const searchId = companyId.toLowerCase().replace('comp_', '');
                 const searchBirth = birthDate.replace(/[^0-9]/g, ''); 
                 const cleanName = name.replace(/\s/g, '');
-
                 const data = translations[currentLang] || translations['ko'];
                 let matchedWorker = null;
 
-                // 1. 먼저 직원 명단(workers)에서 검색
+                // 1. 먼저 직원 명단(workers)에서 성함으로 검색
                 const workerSnap = await db.collection('workers')
                     .where('name', '==', cleanName)
+                    .limit(20)
                     .get();
 
                 workerSnap.forEach(doc => {
                     const wData = doc.data();
                     const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
                     const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
-                    
-                    // 생년월일 8자리/6자리 유연한 매칭
                     const isBirthMatch = (dbBirthDate === searchBirth) || 
                                        (searchBirth.length === 8 && dbBirthDate === searchBirth.substring(2)) ||
                                        (dbBirthDate.length === 8 && searchBirth === dbBirthDate.substring(2));
@@ -2377,20 +2375,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // 2. 만약 명단에서 못 찾았다면, 이름으로 한 번 더 시도 (성함에 공백이 있을 경우 등 대비)
+                // 2. 만약 성함으로 매칭이 안 되면, 생년월일로 한 번 더 시도 (성함 공백/오타 대비)
                 if (!matchedWorker) {
-                    const allWorkers = await db.collection('workers').get(); // 소규모 리포지토리라면 가능, 아니면 주의
-                    allWorkers.forEach(doc => {
+                    const birthSnap = await db.collection('workers')
+                        .where('birthDate', 'in', [searchBirth, searchBirth.length === 8 ? searchBirth.substring(2) : '19' + searchBirth])
+                        .limit(20)
+                        .get();
+                    
+                    birthSnap.forEach(doc => {
                         const wData = doc.data();
                         const dbName = (wData.name || '').replace(/\s/g, '');
                         const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
-                        const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
                         
-                        const isBirthMatch = (dbBirthDate === searchBirth) || 
-                                           (searchBirth.length === 8 && dbBirthDate === searchBirth.substring(2)) ||
-                                           (dbBirthDate.length === 8 && searchBirth === dbBirthDate.substring(2));
-
-                        if (dbName === cleanName && dbCompanyId === searchId && isBirthMatch) {
+                        if (dbName === cleanName && dbCompanyId === searchId) {
                             matchedWorker = { id: doc.id, ...wData };
                         }
                     });

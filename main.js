@@ -253,9 +253,9 @@ window.displayAiReport = function(fileName) {
     const currentLang = document.documentElement.lang || 'en';
     
     const reportData = {
-        title: { ko: "결과지 번역 및 질병 코드 정보", en: "Medical Translation & Coding Data", ja: "結果翻訳および疾病コード情報" },
+        title: { ko: "CHECKIT 시스템 분석 리포트", en: "Medical Translation & Coding Data", ja: "結果翻訳および疾病コード情報" },
         summary: { 
-            ko: "본 리포트는 원본 결과지의 한국어 내용을 단순 번역한 데이터입니다. CHECKIT은 의료 기관이 아니며 직접적인 진단이나 상담을 제공하지 않습니다. 상세 결과에 대한 전문적인 해석 및 향후 치료 계획은 반드시 검진을 받으신 해당 병원의 전문의와 상담하시기 바랍니다.",
+            ko: "본 리포트는 원본 결과지의 한국어 내용을 단순 번역한 데이터입니다. 정밀 분석을 위해 CHECKIT 시스템의 표준 대조 및 전담 담당자의 최종 확인을 진행합니다. 상세 결과는 잠시 후 전송해 드리겠습니다.",
             en: "This report is a simple translation of the Korean content in the original test results. CHECKIT is not a medical institution and does not provide direct diagnosis or consultation. For professional interpretation of detailed results and future treatment plans, please consult with a specialist at the hospital where you received the examination.",
             ja: "本レポートは、オリジナル結果の韓国語内容を単純に翻訳したデータです。 CHECKITは医療機関ではなく、直接的な診断や相談を提供しません。詳細な結果の専門的な解釈および今後の治療計画は、必ず検診を受けた当該病院の専門医にご相談ください。"
         }

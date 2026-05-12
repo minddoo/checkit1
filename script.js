@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'process_step3_desc_new': 'We translate and summarize the results you provide into your language and deliver them via email or messenger.',
             'testimonials_title': 'Corporate Client Testimonials',
             'testimonials_subtitle': 'Many companies are already innovating their foreign worker health management with CHECKIT.',
-            'testimonial1_text': '"Booking regular check-ups for 300 foreign employees was a huge burden every year, but after adopting CHECKIT, the entire process was automated. Employee satisfaction with the result summary service is particularly high."',
+            'testimonial1_text': '"Booking foreign employees was a huge burden every year, but after adopting CHECKIT, the entire process was automated. Employee satisfaction with the result summary service is particularly high."',
             'testimonial1_author': 'Director Kim', 'testimonial1_type': 'Construction HR Team',
             'testimonial2_text': '"Field managers struggled with different booking methods and language barriers at each hospital. With CHECKIT, all communication is possible through one channel, increasing staff efficiency by more than double."',
             'testimonial2_author': 'Manager Lee', 'testimonial2_type': 'Manufacturing Health Manager',
@@ -2043,76 +2043,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const safeCompanyKey = companyKey.toLowerCase();
             const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
-            
-            const tryLogin = async (compKey) => {
-                const email = `${stringToHex(securityKey)}@${stringToHex(compKey)}.checkit.com`;
-                const password = `${compKey}_${securityKey}!2026`;
-                return auth.signInWithEmailAndPassword(email, password);
-            };
+            const email = `${stringToHex(securityKey)}@${stringToHex(safeCompanyKey)}.checkit.com`;
+            const password = `${safeCompanyKey}_${securityKey}!2026`;
 
-            try {
-                let cred;
-                try {
-                    cred = await tryLogin(safeCompanyKey);
-                } catch (firstErr) {
-                    // 첫 시도 실패 시 comp_ 여부를 반전시켜서 재시도
-                    if (safeCompanyKey.startsWith('comp_')) {
-                        cred = await tryLogin(safeCompanyKey.replace('comp_', ''));
-                    } else {
-                        cred = await tryLogin('comp_' + safeCompanyKey);
-                    }
-                }
-
-                const userDoc = await db.collection('users').doc(cred.user.uid).get();
-                if (userDoc.exists && userDoc.data().role === 'worker') {
-                    const userData = userDoc.data();
-                    const companyId = safeCompanyKey.replace('comp_', '');
-                    
-                    // [데이터 연동] workerDocId가 없거나 새로 로그인한 경우 연동 시도
-                    if (!userData.workerDocId) {
-                        try {
-                            const workerSnap = await db.collection('workers')
-                                .where('companyId', '==', companyId)
-                                .where('passwordKey', '==', securityKey)
-                                .limit(1)
-                                .get();
-                            
-                            if (!workerSnap.empty) {
-                                await db.collection('users').doc(cred.user.uid).update({
-                                    workerDocId: workerSnap.docs[0].id,
-                                    companyId: companyId
-                                });
+            auth.signInWithEmailAndPassword(email, password)
+                .then(async (cred) => {
+                    const userDoc = await db.collection('users').doc(cred.user.uid).get();
+                    if (userDoc.exists && userDoc.data().role === 'worker') {
+                        const userData = userDoc.data();
+                        const companyId = companyKey.replace('comp_', '');
+                        
+                        // [데이터 연동] workerDocId가 없거나 새로 로그인한 경우 연동 시도
+                        if (!userData.workerDocId) {
+                            try {
+                                const workerSnap = await db.collection('workers')
+                                    .where('companyId', '==', companyId)
+                                    .where('passwordKey', '==', securityKey)
+                                    .limit(1)
+                                    .get();
+                                
+                                if (!workerSnap.empty) {
+                                    await db.collection('users').doc(cred.user.uid).update({
+                                        workerDocId: workerSnap.docs[0].id,
+                                        companyId: companyId
+                                    });
+                                    console.log("Worker document linked on direct login:", workerSnap.docs[0].id);
+                                }
+                            } catch (err) {
+                                console.warn("Worker link search failed on direct login:", err);
                             }
-                        } catch (err) {
-                            console.warn("Worker link search failed on direct login:", err);
                         }
-                    }
 
-                    const freshUserDoc = await db.collection('users').doc(cred.user.uid).get();
-                    const workerId = freshUserDoc.data()?.workerDocId || '';
+                        // [핵심 수정] 업데이트 이후 최신 문서를 재조회하여 workerDocId를 정확히 가져옴
+                        const freshUserDoc = await db.collection('users').doc(cred.user.uid).get();
+                        const workerId = freshUserDoc.data()?.workerDocId || '';
 
-                    if (!workerId) {
-                        alert('유효하지 않은 계정이거나, 암호키가 변경되어 폐기된 계정입니다.');
+                        const data = translations[currentLang] || translations['ko'];
+                        alert(data['login_success_msg'] || '로그인에 성공했습니다!');
+                        if (loginModalOverlay) loginModalOverlay.style.display = 'none';
+                        if (loader) loader.style.display = 'none';
+                        // window.location.href = 'worker_portal.html'; // REMOVED: Stay on home page after login
+                    } else {
+                        alert('근로자 계정이 아닙니다. 관리자 계정으로 로그인하시려면 기업용 탭을 이용해주세요.');
                         auth.signOut();
                         loader.style.display = 'none';
-                        return;
                     }
-
-                    const data = translations[currentLang] || translations['ko'];
-                    alert(data['login_success_msg'] || '로그인에 성공했습니다!');
-                    if (loginModalOverlay) loginModalOverlay.style.display = 'none';
-                    if (loader) loader.style.display = 'none';
-                    // 자동 새로고침을 통해 헤더 상태 업데이트
-                    window.location.reload(); 
-                } else {
-                    alert('유효하지 않은 계정이거나, 암호키가 변경되어 폐기된 계정입니다.');
-                    auth.signOut();
+                })
+                .catch(err => {
+                    alert('정보가 올바르지 않거나 가입되지 않은 계정입니다. 회원가입을 먼저 진행해 주세요.');
                     loader.style.display = 'none';
-                }
-            } catch (err) {
-                alert('정보가 올바르지 않거나 가입되지 않은 계정입니다. 회사 입력키와 암호키를 확인해주세요.');
-                loader.style.display = 'none';
-            }
+                });
         });
     }
 
@@ -2457,13 +2437,24 @@ document.addEventListener('DOMContentLoaded', () => {
                                 try {
                                     await db.collection('users').doc(matchedWorker.uid).update({
                                         workerDocId: null,
-                                        securityKey: 'REVOKED',
-                                        role: 'revoked'
+                                        securityKey: 'REVOKED'
                                     });
                                 } catch (e) { console.warn("Old user disable skip:", e); }
                             }
 
-                            // 2. Link user and save metadata
+                            // ----- Delete old auth account (if exists) -----
+                            if (matchedWorker.passwordKey) {
+                                try {
+                                    const oldEmail = `${stringToHex(matchedWorker.passwordKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
+                                    const oldPassword = `${loginCompanyKey}_${matchedWorker.passwordKey}!2026`;
+                                    // Sign in with old credentials to obtain user object
+                                    const oldCred = await auth.signInWithEmailAndPassword(oldEmail, oldPassword);
+                                    await oldCred.user.delete();
+                                    console.log('Old auth account removed');
+                                } catch (e) {
+                                    console.warn('Failed to delete old auth account:', e);
+                                }
+                            }
                             const safeCompanyId = companyKey.toLowerCase().replace('comp_', '');
                             const batch = db.batch();
                             batch.set(db.collection('users').doc(user.uid), {

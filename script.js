@@ -2379,14 +2379,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     const displayCompanyId = matchedWorker.companyId;
                     let passwordKey = matchedWorker.passwordKey;
                     
-                    // 만약 workers 컬렉션에 암호키가 없다면, 연결된 users 컬렉션에서 찾아옴
+                    // 1. 만약 workers 컬렉션에 암호키가 없다면, 연결된 uid로 users 컬렉션 확인
                     if (!passwordKey && matchedWorker.uid) {
                         try {
                             const userDoc = await db.collection('users').doc(matchedWorker.uid).get();
                             if (userDoc.exists) {
                                 passwordKey = userDoc.data().securityKey;
                             }
-                        } catch (e) { console.warn("Failed to fetch securityKey from users:", e); }
+                        } catch (e) { console.warn("UID lookup failed:", e); }
+                    }
+                    
+                    // 2. 여전히 암호키가 없다면(uid가 없거나 유저 문서에 키가 없는 경우), 이름과 회사ID로 직접 검색
+                    if (!passwordKey) {
+                        try {
+                            const usersSnap = await db.collection('users')
+                                .where('name', '==', name)
+                                .where('companyId', '==', displayCompanyId.replace('comp_', ''))
+                                .get();
+                            if (!usersSnap.empty) {
+                                // 가장 최근에 가입한 유저의 키를 가져옴
+                                passwordKey = usersSnap.docs[0].data().securityKey;
+                            }
+                        } catch (e) { console.warn("Name/CompanyId lookup failed:", e); }
                     }
                     
                     passwordKey = passwordKey || '(정보 없음)';

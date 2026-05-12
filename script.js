@@ -2377,7 +2377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fa-solid fa-circle-check"></i> ${data['find_worker_result_success']}
                             </p>
                             <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #dcfce7; margin-bottom: 15px;">
-                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> comp_${companyId}</p>
+                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> ${companyId}</p>
                                 <p style="font-size: 0.95rem; color: #374151;"><strong>${data['find_worker_result_pw']}</strong> <span id="display-password-key" style="color: var(--primary); font-weight: 700;">${passwordKey}</span></p>
                             </div>
                             
@@ -2389,9 +2389,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </button>
                             </div>
                             <div id="password-change-form" style="display: none; margin-top: 15px;">
-                                <label style="display: block; font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">${data['find_worker_new_pw_label']}</label>
+                                <label style="display: block; font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">새로운 암호키 (worker 포함 숫자+특수문자 8자리 이상)</label>
                                 <div style="display: flex; gap: 8px;">
-                                    <input type="text" id="new-password-key" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Ex: ABC123">
+                                    <input type="text" id="new-password-key" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Ex: worker123!">
                                     <button type="button" id="confirm-change-pw-btn" class="cta-button-primary" style="width: auto; padding: 8px 15px; font-size: 0.85rem;">확인</button>
                                 </div>
                             </div>
@@ -2407,23 +2407,68 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('confirm-change-pw-btn').addEventListener('click', async () => {
                         const newKey = document.getElementById('new-password-key').value.trim();
                         if (!newKey) return;
+                        
+                        if (!newKey.startsWith('worker')) {
+                            return alert("암호키는 반드시 'worker'로 시작해야 합니다.");
+                        }
+                        
+                        const hasNumber = /[0-9]/.test(newKey);
+                        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(newKey);
+                        if (newKey.length < 8 || !hasNumber || !hasSpecial) {
+                            return alert("암호키는 'worker'를 포함하여 숫자와 특수문자를 모두 포함한 8자리 이상이어야 합니다.");
+                        }
 
-                        if (!confirm(data['find_worker_change_confirm'])) return;
+                        if (!confirm("입력하신 암호키로 변경하고 바로 로그인하시겠습니까?")) return;
 
                         loader.style.display = 'flex';
                         try {
-                            // Update Firestore. Security rules will allow this because we match companyId, name, birthDate 
-                            // and only change passwordKey and uid.
-                            await db.collection('workers').doc(matchedWorker.id).update({
-                                passwordKey: newKey,
-                                uid: null // Clear UID so they can re-register with the new key
-                            });
+                            // 1. Create a new Auth account with the new key
+                            const safeCompanyKey = companyKey.toLowerCase().replace('comp_', '');
+                            const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+                            const email = `${stringToHex(newKey)}@${stringToHex('comp_' + safeCompanyKey)}.checkit.com`;
+                            const password = `comp_${safeCompanyKey}_${newKey}!2026`;
                             
-                            alert(data['find_worker_change_success']);
-                            window.location.reload(); // Refresh to clear state
+                            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                            const user = userCredential.user;
+
+                            // 2. Link user and save metadata
+                            const batch = db.batch();
+                            batch.set(db.collection('users').doc(user.uid), {
+                                role: 'worker',
+                                companyId: safeCompanyKey,
+                                name: name,
+                                securityKey: newKey,
+                                workerDocId: matchedWorker.id,
+                                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                            }, { merge: true });
+
+                            batch.update(db.collection('workers').doc(matchedWorker.id), {
+                                uid: user.uid,
+                                passwordKey: newKey,
+                                linkedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+
+                            await batch.commit();
+                            
+                            alert("암호키가 성공적으로 변경되었습니다. 마이페이지로 이동합니다.");
+                            window.location.href = `worker_portal.html?workerDocId=${matchedWorker.id}`;
                         } catch (err) {
                             console.error("Update error:", err);
-                            alert("오류가 발생했습니다: " + err.message);
+                            if (err.code === 'auth/email-already-in-use') {
+                                // If account already exists with this new key, try to just login
+                                alert("이미 해당 암호키로 생성된 계정 정보가 있습니다. 기존 계정으로 로그인을 시도합니다.");
+                                const safeCompanyKey = companyKey.toLowerCase().replace('comp_', '');
+                                const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+                                const email = `${stringToHex(newKey)}@${stringToHex('comp_' + safeCompanyKey)}.checkit.com`;
+                                const password = `comp_${safeCompanyKey}_${newKey}!2026`;
+                                auth.signInWithEmailAndPassword(email, password).then(() => {
+                                    window.location.href = `worker_portal.html?workerDocId=${matchedWorker.id}`;
+                                }).catch(e => {
+                                    alert("로그인에 실패했습니다: " + e.message);
+                                });
+                            } else {
+                                alert("오류가 발생했습니다: " + err.message);
+                            }
                         } finally {
                             loader.style.display = 'none';
                         }

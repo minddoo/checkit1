@@ -2407,17 +2407,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         } catch (e) { console.warn("UID lookup failed:", e); }
                     }
                     
-                    // 2. 여전히 암호키가 없다면, 이름과 회사ID로 직접 검색 (users 컬렉션)
+                    // 2. 여전히 암호키가 없다면, 회사ID로 해당 기업 사용자들을 가져와 이름으로 직접 매칭 (users 컬렉션)
                     if (!passwordKey) {
                         try {
                             const usersSnap = await db.collection('users')
-                                .where('name', '==', cleanName)
                                 .where('companyId', '==', searchId)
+                                .limit(20)
                                 .get();
-                            if (!usersSnap.empty) {
-                                passwordKey = usersSnap.docs[0].data().securityKey;
-                            }
-                        } catch (e) { console.warn("Name/CompanyId lookup failed:", e); }
+                            
+                            usersSnap.forEach(uDoc => {
+                                const uData = uDoc.data();
+                                const dbUserName = (uData.name || '').replace(/\s/g, '');
+                                if (dbUserName === cleanName) {
+                                    passwordKey = uData.securityKey;
+                                }
+                            });
+                        } catch (e) { console.warn("Company user list lookup failed:", e); }
                     }
                     
                     passwordKey = passwordKey || '(정보 없음)';

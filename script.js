@@ -2350,30 +2350,51 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Get companyId from companyKey (handles 'comp_' prefix if needed)
                 const companyId = companyKey.startsWith('comp_') ? companyKey.substring(5) : companyKey;
-
-                // Search primarily by name (now allowed by the broadened rules)
-                // We'll filter by companyId and birthDate in the client to be more flexible
-                const workerSnap = await db.collection('workers')
-                    .where('name', '==', name)
-                    .limit(20)
-                    .get();
+                const searchId = companyId.toLowerCase().replace('comp_', '');
+                const searchBirth = birthDate.replace(/[^0-9]/g, ''); 
+                const cleanName = name.replace(/\s/g, '');
 
                 const data = translations[currentLang] || translations['ko'];
-
                 let matchedWorker = null;
-                const searchId = companyId.toLowerCase().replace('comp_', '');
-                const searchBirth = birthDate.replace(/[^0-9]/g, ''); // Remove dashes, dots, etc.
+
+                // 1. 먼저 직원 명단(workers)에서 검색
+                const workerSnap = await db.collection('workers')
+                    .where('name', '==', cleanName)
+                    .get();
 
                 workerSnap.forEach(doc => {
                     const wData = doc.data();
                     const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
                     const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
                     
-                    // Ultra-flexible match
-                    if (dbCompanyId === searchId && dbBirthDate === searchBirth) {
+                    // 생년월일 8자리/6자리 유연한 매칭
+                    const isBirthMatch = (dbBirthDate === searchBirth) || 
+                                       (searchBirth.length === 8 && dbBirthDate === searchBirth.substring(2)) ||
+                                       (dbBirthDate.length === 8 && searchBirth === dbBirthDate.substring(2));
+
+                    if (dbCompanyId === searchId && isBirthMatch) {
                         matchedWorker = { id: doc.id, ...wData };
                     }
                 });
+
+                // 2. 만약 명단에서 못 찾았다면, 이름으로 한 번 더 시도 (성함에 공백이 있을 경우 등 대비)
+                if (!matchedWorker) {
+                    const allWorkers = await db.collection('workers').get(); // 소규모 리포지토리라면 가능, 아니면 주의
+                    allWorkers.forEach(doc => {
+                        const wData = doc.data();
+                        const dbName = (wData.name || '').replace(/\s/g, '');
+                        const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
+                        const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
+                        
+                        const isBirthMatch = (dbBirthDate === searchBirth) || 
+                                           (searchBirth.length === 8 && dbBirthDate === searchBirth.substring(2)) ||
+                                           (dbBirthDate.length === 8 && searchBirth === dbBirthDate.substring(2));
+
+                        if (dbName === cleanName && dbCompanyId === searchId && isBirthMatch) {
+                            matchedWorker = { id: doc.id, ...wData };
+                        }
+                    });
+                }
 
                 if (matchedWorker) {
                     const displayCompanyId = matchedWorker.companyId;
@@ -2389,15 +2410,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         } catch (e) { console.warn("UID lookup failed:", e); }
                     }
                     
-                    // 2. 여전히 암호키가 없다면(uid가 없거나 유저 문서에 키가 없는 경우), 이름과 회사ID로 직접 검색
+                    // 2. 여전히 암호키가 없다면, 이름과 회사ID로 직접 검색 (users 컬렉션)
                     if (!passwordKey) {
                         try {
                             const usersSnap = await db.collection('users')
-                                .where('name', '==', name)
-                                .where('companyId', '==', displayCompanyId.replace('comp_', ''))
+                                .where('name', '==', cleanName)
+                                .where('companyId', '==', searchId)
                                 .get();
                             if (!usersSnap.empty) {
-                                // 가장 최근에 가입한 유저의 키를 가져옴
                                 passwordKey = usersSnap.docs[0].data().securityKey;
                             }
                         } catch (e) { console.warn("Name/CompanyId lookup failed:", e); }
@@ -2418,13 +2438,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     `;
                 } else {
-                    const count = workerSnap.size;
-                    let errorMsg = data['find_worker_result_fail'] || '일치하는 정보가 없습니다.';
-                    
-                    if (count > 0) {
-                        errorMsg = `성함('${name}')이 일치하는 분을 ${count}명 찾았으나, 회사 ID나 생년월일이 다릅니다. 입력하신 정보를 다시 확인해 주세요.`;
-                    }
-
+                    let errorMsg = data['find_worker_result_fail'] || '일치하는 정보가 없습니다. 입력하신 정보를 다시 확인해 주세요.';
                     recoveryResult.innerHTML = `
                         <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; color: #991b1b; text-align: center; font-weight: 600;">
                             <i class="fa-solid fa-circle-exclamation"></i> ${errorMsg}

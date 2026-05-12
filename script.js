@@ -2297,6 +2297,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (findWorkerLink) {
         findWorkerLink.addEventListener('click', (e) => {
             e.preventDefault();
+            if (loginCorpContent) loginCorpContent.style.display = 'none';
+            if (loginWorkerContent) loginWorkerContent.style.display = 'none';
+            if (modalTabs) modalTabs.style.display = 'none';
+            if (recoveryContent) recoveryContent.style.display = 'block';
+            if (recoveryResult) recoveryResult.style.display = 'none';
+        });
+    }
+
+    const findWorkerLinkFooter = document.getElementById('find-worker-link-footer');
+    if (findWorkerLinkFooter) {
+        findWorkerLinkFooter.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loginCorpContent) loginCorpContent.style.display = 'none';
             if (loginWorkerContent) loginWorkerContent.style.display = 'none';
             if (modalTabs) modalTabs.style.display = 'none';
             if (recoveryContent) recoveryContent.style.display = 'block';

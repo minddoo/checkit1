@@ -1838,6 +1838,101 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Find Credentials Modal Logic ---
+    const findModalOverlay = document.getElementById('find-modal-overlay');
+    const closeFindModal = document.getElementById('close-find-modal');
+    const findForm = document.getElementById('find-credentials-form');
+    
+    // 이메일/비밀번호 찾기 링크 클릭 (이벤트 위임)
+    document.addEventListener('click', (e) => {
+        if (e.target && e.target.getAttribute('data-lang-key') === 'find_credentials') {
+            e.preventDefault();
+            if (loginModalOverlay) loginModalOverlay.style.display = 'none';
+            if (findModalOverlay) findModalOverlay.style.display = 'flex';
+        }
+    });
+
+    if (closeFindModal) {
+        closeFindModal.addEventListener('click', () => {
+            findModalOverlay.style.display = 'none';
+        });
+    }
+
+    if (findModalOverlay) {
+        findModalOverlay.addEventListener('click', (e) => {
+            if (e.target === findModalOverlay) {
+                findModalOverlay.style.display = 'none';
+            }
+        });
+    }
+
+    if (findForm) {
+        findForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('find-name').value.trim();
+            const dob = document.getElementById('find-dob').value;
+            const companyKey = document.getElementById('find-company-key').value.trim().toLowerCase();
+            const resultBox = document.getElementById('find-result');
+            const resultText = document.getElementById('find-result-text');
+
+            if (!name || !dob || !companyKey) return alert("모든 항목을 입력해주세요.");
+
+            const loader = document.getElementById('pageLoader') || { style: {} };
+            loader.style.display = 'flex';
+            resultBox.style.display = 'none';
+            
+            try {
+                const companyId = companyKey.replace('comp_', '');
+                
+                // 1. workers 컬렉션에서 정보 찾기
+                const workerSnap = await db.collection('workers')
+                    .where('companyId', '==', companyId)
+                    .where('name', '==', name)
+                    .get();
+
+                if (workerSnap.empty) {
+                    throw new Error('입력하신 정보와 일치하는 가입 이력을 찾을 수 없습니다.');
+                }
+                
+                // 해당 이름의 워커 문서 순회 (동명이인 처리 포함)
+                let matchedUser = null;
+                const inputDobCompact = dob.replace(/-/g, ''); // 19900101
+                const inputDobShort = inputDobCompact.substring(2); // 900101
+                
+                for (let doc of workerSnap.docs) {
+                    let wData = doc.data();
+                    let workerBirth = wData.birth || wData.jumin1 || wData.dob || "";
+                    
+                    // 생년월일이 일치하는지 확인 (DB에 생년월일이 없는 경우도 일단 통과시켜줌)
+                    if (!workerBirth || workerBirth.includes(inputDobCompact) || workerBirth.includes(inputDobShort)) {
+                        if (wData.uid) {
+                            matchedUser = wData.uid;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!matchedUser) {
+                    throw new Error('생년월일이 일치하지 않거나, 아직 회원가입을 완료하지 않은 계정입니다.');
+                }
+                
+                // 2. users 컬렉션에서 암호키 찾기
+                const userDoc = await db.collection('users').doc(matchedUser).get();
+                if (!userDoc.exists || !userDoc.data().securityKey) {
+                    throw new Error('계정의 암호키 정보를 찾을 수 없습니다.');
+                }
+                
+                resultText.innerHTML = `<strong>${name}</strong>님의 암호키는 <strong style="color:#b91c1c; font-size:1.1rem;">${userDoc.data().securityKey}</strong> 입니다.<br><br>해당 암호키로 로그인을 진행해 주세요.`;
+                resultBox.style.display = 'block';
+                
+            } catch (err) {
+                alert(err.message || '오류가 발생했습니다.');
+            } finally {
+                loader.style.display = 'none';
+            }
+        });
+    }
+
     // --- [유도리] 회사 이름 정규화 함수 ---
     const normalizeName = (name) => {
         if (!name) return "";

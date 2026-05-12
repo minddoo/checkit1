@@ -2049,9 +2049,17 @@ document.addEventListener('DOMContentLoaded', () => {
             auth.signInWithEmailAndPassword(email, password)
                 .then(async (cred) => {
                     const userDoc = await db.collection('users').doc(cred.user.uid).get();
-                    if (userDoc.exists && userDoc.data().role === 'worker') {
-                        const userData = userDoc.data();
+                    const userData = userDoc.data();
+                    // 암호키가 worker로 시작하면 무조건 근로자로 간주 (유저 요청 사항)
+                    const isWorker = (userDoc.exists && userData.role === 'worker') || securityKey.startsWith('worker');
+
+                    if (userDoc.exists && isWorker) {
                         const companyId = companyKey.replace('comp_', '');
+                        
+                        // 역할이 근로자로 되어 있지 않으면 업데이트
+                        if (userData.role !== 'worker') {
+                            await db.collection('users').doc(cred.user.uid).update({ role: 'worker' });
+                        }
                         
                         // [데이터 연동] workerDocId가 없거나 새로 로그인한 경우 연동 시도
                         if (!userData.workerDocId) {

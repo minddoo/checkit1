@@ -2423,19 +2423,31 @@ document.addEventListener('DOMContentLoaded', () => {
                         loader.style.display = 'flex';
                         try {
                             // 1. Create a new Auth account with the new key
-                            const safeCompanyKey = companyKey.toLowerCase().replace('comp_', '');
+                            // 로그인 로직과 동일한 email, password 규칙 적용 (입력된 그대로 소문자화)
+                            const loginCompanyKey = companyKey.toLowerCase();
                             const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
-                            const email = `${stringToHex(newKey)}@${stringToHex('comp_' + safeCompanyKey)}.checkit.com`;
-                            const password = `comp_${safeCompanyKey}_${newKey}!2026`;
+                            const email = `${stringToHex(newKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
+                            const password = `${loginCompanyKey}_${newKey}!2026`;
                             
                             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                             const user = userCredential.user;
 
+                            // 기존 계정 무효화 처리 (이전 암호키로 로그인 시 껍데기만 남겨 마이페이지 접근 차단)
+                            if (matchedWorker.uid) {
+                                try {
+                                    await db.collection('users').doc(matchedWorker.uid).update({
+                                        workerDocId: null,
+                                        securityKey: 'REVOKED'
+                                    });
+                                } catch (e) { console.warn("Old user disable skip:", e); }
+                            }
+
                             // 2. Link user and save metadata
+                            const safeCompanyId = companyKey.toLowerCase().replace('comp_', '');
                             const batch = db.batch();
                             batch.set(db.collection('users').doc(user.uid), {
                                 role: 'worker',
-                                companyId: safeCompanyKey,
+                                companyId: safeCompanyId,
                                 name: name,
                                 securityKey: newKey,
                                 workerDocId: matchedWorker.id,
@@ -2457,10 +2469,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (err.code === 'auth/email-already-in-use') {
                                 // If account already exists with this new key, try to just login
                                 alert("이미 해당 암호키로 생성된 계정 정보가 있습니다. 기존 계정으로 로그인을 시도합니다.");
-                                const safeCompanyKey = companyKey.toLowerCase().replace('comp_', '');
+                                const loginCompanyKey = companyKey.toLowerCase();
                                 const stringToHex = (str) => Array.from(str).map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
-                                const email = `${stringToHex(newKey)}@${stringToHex('comp_' + safeCompanyKey)}.checkit.com`;
-                                const password = `comp_${safeCompanyKey}_${newKey}!2026`;
+                                const email = `${stringToHex(newKey)}@${stringToHex(loginCompanyKey)}.checkit.com`;
+                                const password = `${loginCompanyKey}_${newKey}!2026`;
                                 auth.signInWithEmailAndPassword(email, password).then(() => {
                                     window.location.href = `worker_portal.html?workerDocId=${matchedWorker.id}`;
                                 }).catch(e => {

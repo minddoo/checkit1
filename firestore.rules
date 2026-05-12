@@ -34,8 +34,11 @@ service cloud.firestore {
 
     // [1] USERS: Core account metadata
     match /users/{userId} {
-      // Users can only read/write their own profile
-      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
+      // allow 'get' and 'list' (with limit) for recovery lookup
+      allow get: if true;
+      allow list: if request.query.limit <= 20;
+      // Writing restricted to owner or Master
+      allow write: if request.auth != null && (request.auth.uid == userId || isMaster());
     }
 
     // [2] COMPANY_INFO: Corporate settings and admin keys

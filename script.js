@@ -2376,8 +2376,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (matchedWorker) {
-                    const companyId = matchedWorker.companyId;
-                    const passwordKey = matchedWorker.passwordKey || '(정보 없음)';
+                    const displayCompanyId = matchedWorker.companyId;
+                    let passwordKey = matchedWorker.passwordKey;
+                    
+                    // 만약 workers 컬렉션에 암호키가 없다면, 연결된 users 컬렉션에서 찾아옴
+                    if (!passwordKey && matchedWorker.uid) {
+                        try {
+                            const userDoc = await db.collection('users').doc(matchedWorker.uid).get();
+                            if (userDoc.exists) {
+                                passwordKey = userDoc.data().securityKey;
+                            }
+                        } catch (e) { console.warn("Failed to fetch securityKey from users:", e); }
+                    }
+                    
+                    passwordKey = passwordKey || '(정보 없음)';
                     
                     recoveryResult.innerHTML = `
                         <div style="background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 12px; text-align: left; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
@@ -2385,7 +2397,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i class="fa-solid fa-circle-check"></i> ${data['find_worker_result_success']}
                             </p>
                             <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #dcfce7; margin-bottom: 5px;">
-                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> ${companyId}</p>
+                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> ${displayCompanyId}</p>
                                 <p style="font-size: 0.95rem; color: #374151;"><strong>${data['find_worker_result_pw']}</strong> <span style="color: var(--primary); font-weight: 700;">${passwordKey}</span></p>
                             </div>
                             <p style="font-size: 0.8rem; color: #6b7280; text-align: center; margin-top: 10px;">위 정보로 로그인을 진행해 주세요.</p>

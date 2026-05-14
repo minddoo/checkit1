@@ -199,8 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div id="ai-progress-bar" style="width: 0%; height: 100%; background: #0ea5e9; transition: width 0.5s ease;"></div>
                     </div>
                     <div id="ai-log" style="font-size: 0.75rem; margin-top: 12px; color: #64748b; font-family: monospace; height: 40px; overflow: hidden;">
-                        > Initializing AI engine...<br>
-                        > Requesting analysis from OpenAI (GPT-4o)...
+                        > 분석 엔진 초기화 중...<br>
+                        > 무료 고성능 AI 분석 요청 중...
                     </div>
                 </div>
             `;

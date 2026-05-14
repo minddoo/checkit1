@@ -448,7 +448,7 @@ ul {
 .img-slide img {
     width: 500px;
     height: 500px; /* Force same height as Phase 1 (1:1 aspect ratio) */
-    object-fit: contain; /* Contain the image within the square box */
+    object-fit: cover; /* Fill the entire square box to remove whitespace/margins */
     max-width: 95%;
     display: block;
     border-radius: 24px;

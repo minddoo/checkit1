@@ -135,6 +135,10 @@ window.handleDdayFinish = function(isComplete) {
 };
 
 window.showResultsGuidance = function() {
+    // Session Persistence: Mark that user is now in Results Translation phase
+    const userEmail = localStorage.getItem('userEmail') || '';
+    localStorage.setItem(`serviceStep_${userEmail}`, 'results-translation');
+
     const chatMessages = document.getElementById('chat-messages');
     if (!chatMessages) return;
 
@@ -143,9 +147,15 @@ window.showResultsGuidance = function() {
     row.innerHTML = `
         <div class="msg-bubble">
             <p style="margin: 0 0 10px;"><b>✨ 검진 완료를 축하드립니다!</b></p>
-            <p style="margin: 0 0 10px;">이제 가장 중요한 <b>검진 결과 확인</b> 단계가 남았습니다. 결과 수령은 병원 및 의료기관에 따라 상이하지만 보통 <b>1주에서 3주</b> 정도 소요됩니다.</p>
-            <p style="margin: 0 0 10px;">기간 내에 결과를 받으셨다면, <b>한국어 결과 파일(PDF/이미지)</b>을 이곳에 올려주세요! 고객이 올린 파일 원본 그대로 단순 번역 기능과 실제 공시 질병코드 사이트에서 제공하는 질병코드를 고객이 올린 파일에서 질병 및 코드를 정확히 분석하여 제공해 드립니다. 📄</p>
-            <p style="margin: 0 0 12px; font-size: 0.85rem; color: #64748b;">만약 3주가 지났는데도 결과를 못 받으셨거나, 필요한 날짜 안에 결과가 도착하지 않고 있다면 아래 버튼을 눌러주세요.</p>
+            <p style="margin: 0 0 10px;">이제 가장 중요한 <b>검진 결과 확인</b> 단계가 남았습니다. 결과 수령은 보통 <b>1주에서 3주</b> 정도 소요됩니다.</p>
+            <p style="margin: 0 0 12px; line-height: 1.6;">
+                기간 내에 결과를 받으셨다면, <b>한국어 결과 파일(PDF/이미지)</b>을 이곳에 올려주세요! <br>
+                <span style="font-size: 0.85rem; color: #475569; background: #f1f5f9; padding: 10px; border-radius: 8px; display: block; margin-top: 8px; border-left: 3px solid #10b981;">
+                    <b>💡 서비스 안내 및 유의사항</b><br>
+                    체킷의 서비스는 비의료 행정적 이해를 돕기 위해 원본 결과지를 <b>있는 그대로 단순 번역</b>하고, 기재된 단어를 기반으로 <b>표준 질병코드를 매칭</b>하여 제공합니다. <br><br>
+                    본 서비스는 전문 의료적 소견이나 상담을 절대 포함하지 않으며, 모든 의료적 판단은 반드시 <b>병원의 전문의</b>를 통해 받으셔야 합니다. 제공된 결과는 참고용이며, 공식 서류 제출이나 의료기관 문의용으로는 병원에서 발급한 <b>원본 결과지</b>를 사용해 주시기 바랍니다.
+                </span>
+            </p>
             
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button onclick="window.handleUploadResults()" style="padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem;">📄 결과지 업로드하고 번역 받기</button>
@@ -265,6 +275,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.displayAiReport = function(fileName, data, fileBase64, fileMimeType) {
+    // Session Persistence: Ensure we are marked in results phase
+    const userEmail = localStorage.getItem('userEmail') || '';
+    localStorage.setItem(`serviceStep_${userEmail}`, 'results-translation');
+
     const chatMessages = document.getElementById('chat-messages');
     if (!chatMessages) return;
 
@@ -1940,6 +1954,23 @@ if (stepItems.length > 0) {
         imgSlides.forEach(slide => slide.classList.remove('active'));
         if (imgSlides[index]) imgSlides[index].classList.add('active');
         
+        // Update Phase Label, Title and Background
+        const heroSection = document.getElementById('home');
+        const phaseLabel = document.querySelector('.phase-label');
+        const phaseTitle = document.querySelector('.phase-title');
+        
+        if (index >= 6) {
+            // PHASE 02
+            if (heroSection) heroSection.classList.add('phase-2');
+            if (phaseLabel) phaseLabel.innerText = 'PHASE 02';
+            if (phaseTitle) phaseTitle.innerText = '병원 예약 및 주의사항';
+        } else {
+            // PHASE 01
+            if (heroSection) heroSection.classList.remove('phase-2');
+            if (phaseLabel) phaseLabel.innerText = 'PHASE 01';
+            if (phaseTitle) phaseTitle.innerText = '병원 및 프로그램 선정';
+        }
+        
         currentHeroStep = index;
     }
 
@@ -2058,14 +2089,24 @@ window.checkAndRestoreSession = function(email, displayName) {
             const today = new Date().toISOString().split('T')[0];
             const isDday = data.reservedDate === today;
             
-            if (isDday || data.suppliesStatus === 'received') {
+            // Session Persistence Check: If user is already in Results Translation, DON'T switch to D-Day
+            const serviceStep = localStorage.getItem(`serviceStep_${email}`);
+            
+            if ((isDday || data.suppliesStatus === 'received') && serviceStep !== 'results-translation') {
                 console.log("D-Day or Process complete detected. Switching to D-Day view.");
                 setTimeout(() => {
                     if (typeof window.showChatBlock === 'function') {
                         window.showChatBlock('dday');
                     }
                 }, 800);
-                // We still let the restore banner show in the background or we can return early
+            } else if (serviceStep === 'results-translation') {
+                console.log("User is in Results Translation phase. Staying in main chat.");
+                // Ensure main chat view is visible just in case
+                setTimeout(() => {
+                    if (typeof window.showChatBlock === 'function') {
+                        window.showChatBlock('alimtalk'); // alimtalk restores main chat view
+                    }
+                }, 800);
             }
             
             // Reconstruct local consultationData if missing to prevent showing the start form again

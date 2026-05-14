@@ -249,11 +249,16 @@ ul {
 .hero-workflow {
     min-height: 90vh;
     padding: 140px 0 80px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); /* Phase 1: Light Green */
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
+    transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-workflow.phase-2 {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); /* Phase 2: Light Pink */
 }
 
 .container-hero {
@@ -309,9 +314,23 @@ ul {
     background: var(--primary);
     color: white;
     font-weight: 800;
-    border-radius: 50%; /* Circular numeric badge */
+    border-radius: 50%;
     font-size: 1.1rem;
     box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    transition: background 0.5s ease;
+}
+
+.hero-workflow.phase-2 .step-badge {
+    background: #f43f5e; /* Pink-ish Red for Phase 2 badges */
+    box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
+}
+
+.hero-workflow.phase-2 .highlight {
+    color: #f43f5e;
+}
+
+.hero-workflow.phase-2 .hero-dot.active {
+    background: #f43f5e;
 }
 
 .hero-text-side h2 {

@@ -468,8 +468,8 @@ exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   }
 
   try {
-    // Using Gemini 1.5 Flash - The most balanced model for speed and accuracy
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Using gemini-flash-latest - The most current stable model available
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
     const prompt = `Analyze this medical report (provided as an image).
 1. Verbatim Translation: Translate the entire document into ${lang || 'English'}.

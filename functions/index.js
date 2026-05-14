@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { SolapiMessageService } = require('solapi');
 const { OpenAI } = require('openai');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -455,12 +456,10 @@ exports.analyzeDiseaseCodes = functions.https.onCall(async (data, context) => {
 });
 
 /**
- * Medical Report Analysis using OpenAI (GPT-4o Vision)
+ * Medical Report Analysis using Google Gemini (FREE TIER)
  * Extracts disease codes (KCD-8, ICD-10) and translates findings.
  */
-const openai = new OpenAI({
-  apiKey: 'sk-proj-XXXXXXXXXXXXXXXXXXXXXXXXXXXX' // USER: Replace with your actual OpenAI API Key
-});
+const genAI = new GoogleGenerativeAI('AIzaSyCLF8UtCqBm-dduMVUM37EfLAatFoz2ILk'); // Gemini FREE API KEY
 
 exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   const { fileBase64, fileName, lang } = data;
@@ -469,12 +468,15 @@ exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   }
 
   try {
-    const prompt = `Analyze this medical report (Image/PDF content).
+    // Using Gemini 1.5 Flash - Optimized for speed and free tier
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const prompt = `Analyze this medical report (provided as an image).
 1. Verbatim Translation: Translate the entire document into ${lang || 'English'}.
 2. Disease Coding: Identify every diagnosis and map it to KCD-8 and ICD-10 official codes.
 3. Language Support: Provide diagnosis names in both Korean and ${lang || 'English'}.
 
-Format your response as a JSON object:
+Format your response as a strict JSON object:
 {
   "fullTranslation": "Verbatim translated text here...",
   "diseaseCodes": [
@@ -487,32 +489,26 @@ Format your response as a JSON object:
   ]
 }`;
 
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert medical coder and translator. You analyze Korean medical reports and map them to KCD-8 and ICD-10 systems. Always return output as JSON."
-        },
-        {
-          role: "user",
-          content: [
-            { type: "text", text: prompt },
-            {
-              type: "image_url",
-              image_url: {
-                url: `data:image/jpeg;base64,${fileBase64}`
-              }
-            }
-          ]
+    // Prepare image for Gemini
+    const imageParts = [
+      {
+        inlineData: {
+          data: fileBase64,
+          mimeType: "image/jpeg" // Adjust if needed, jpeg works for most scans
         }
-      ],
-      response_format: { type: "json_object" }
-    });
+      }
+    ];
 
-    return JSON.parse(response.choices[0].message.content);
+    const result = await model.generateContent([prompt, ...imageParts]);
+    const response = await result.response;
+    let text = response.text();
+
+    // Clean JSON if Gemini wraps it in code blocks
+    const jsonStr = text.replace(/```json\n?|```/g, "").trim();
+    return JSON.parse(jsonStr);
+
   } catch (error) {
-    console.error('OpenAI Analysis Error:', error);
-    throw new functions.https.HttpsError('internal', `Medical Analysis failed: ${error.message}`);
+    console.error('Gemini Analysis Error:', error);
+    throw new functions.https.HttpsError('internal', `Medical Analysis failed (Gemini): ${error.message}`);
   }
 });

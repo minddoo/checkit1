@@ -459,7 +459,7 @@ exports.analyzeDiseaseCodes = functions.https.onCall(async (data, context) => {
  * Medical Report Analysis using Google Gemini (FREE TIER)
  * Extracts disease codes (KCD-8, ICD-10) and translates findings.
  */
-const genAI = new GoogleGenerativeAI('AIzaSyCLF8UtCqBm-dduMVUM37EfLAatFoz2ILk'); // Gemini FREE API KEY
+const GEMINI_API_KEY = 'AIzaSyCLF8UtCqBm-dduMVUM37EfLAatFoz2ILk';
 
 exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   const { fileBase64, fileName, lang } = data;
@@ -468,8 +468,8 @@ exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   }
 
   try {
-    // Using Gemini 1.5 Flash - Latest version for better compatibility
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    // Using Direct REST API call (v1) for better compatibility
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const prompt = `Analyze this medical report (provided as an image).
 1. Verbatim Translation: Translate the entire document into ${lang || 'English'}.
@@ -489,26 +489,39 @@ Format your response as a strict JSON object:
   ]
 }`;
 
-    // Prepare image for Gemini
-    const imageParts = [
-      {
-        inlineData: {
-          data: fileBase64,
-          mimeType: "image/jpeg" // Adjust if needed, jpeg works for most scans
+    const payload = {
+      contents: [
+        {
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: fileBase64
+              }
+            }
+          ]
         }
+      ],
+      generationConfig: {
+        // Removed responseMimeType to ensure compatibility across all API versions
       }
-    ];
+    };
 
-    const result = await model.generateContent([prompt, ...imageParts]);
-    const response = await result.response;
-    let text = response.text();
+    const response = await axios.post(url, payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-    // Clean JSON if Gemini wraps it in code blocks
-    const jsonStr = text.replace(/```json\n?|```/g, "").trim();
-    return JSON.parse(jsonStr);
+    if (response.data && response.data.candidates && response.data.candidates[0].content) {
+      const resultText = response.data.candidates[0].content.parts[0].text;
+      return JSON.parse(resultText);
+    } else {
+      throw new Error('Invalid response from Gemini API');
+    }
 
   } catch (error) {
-    console.error('Gemini Analysis Error:', error);
-    throw new functions.https.HttpsError('internal', `Medical Analysis failed (Gemini): ${error.message}`);
+    console.error('Gemini REST API Error:', error.response ? error.response.data : error.message);
+    const detail = error.response && error.response.data && error.response.data.error ? error.response.data.error.message : error.message;
+    throw new functions.https.HttpsError('internal', `Medical Analysis failed (Gemini REST): ${detail}`);
   }
 });

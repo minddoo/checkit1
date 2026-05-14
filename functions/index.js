@@ -468,8 +468,8 @@ exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   }
 
   try {
-    // Using Direct REST API call (v1) for better compatibility
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Using gemini-pro-vision (v1.0) - The most stable legacy vision model
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${GEMINI_API_KEY}`;
 
     const prompt = `Analyze this medical report (provided as an image).
 1. Verbatim Translation: Translate the entire document into ${lang || 'English'}.

@@ -446,12 +446,13 @@ ul {
 }
 
 .img-slide img {
-    width: 500px; /* FIXED WIDTH: Ensures large, uniform presence for all original photos */
-    height: auto; /* Preserves 100% original aspect ratio */
-    max-width: 95%; /* Responsive safety */
+    width: 500px;
+    height: 500px; /* Force same height as Phase 1 (1:1 aspect ratio) */
+    object-fit: contain; /* Contain the image within the square box */
+    max-width: 95%;
     display: block;
-    border-radius: 24px; /* USER REQUEST: Rounded corners */
-    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18); 
+    border-radius: 24px;
+    box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);
     image-rendering: -webkit-optimize-contrast;
 }
 

@@ -493,16 +493,27 @@ Format your response as a strict JSON object:
   ]
 }`;
 
-    const imageParts = [
-      {
-        inlineData: {
-          data: cleanBase64,
-          mimeType: fileMimeType || "image/jpeg"
+    const isTextFile = fileMimeType === 'text/plain' || fileName.toLowerCase().endsWith('.txt');
+    
+    let result;
+    if (isTextFile) {
+      // Handle as text input
+      const textContent = Buffer.from(cleanBase64, 'base64').toString('utf8');
+      const textPrompt = `${prompt}\n\n[Medical Report Content]:\n${textContent}`;
+      result = await model.generateContent(textPrompt);
+    } else {
+      // Handle as image input
+      const imageParts = [
+        {
+          inlineData: {
+            data: cleanBase64,
+            mimeType: fileMimeType || "image/jpeg"
+          }
         }
-      }
-    ];
+      ];
+      result = await model.generateContent([prompt, ...imageParts]);
+    }
 
-    const result = await model.generateContent([prompt, ...imageParts]);
     const response = await result.response;
     const text = response.text();
 

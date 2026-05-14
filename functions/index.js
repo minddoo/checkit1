@@ -468,6 +468,9 @@ exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
   }
 
   try {
+    const cleanBase64 = fileBase64.replace(/\s/g, ''); // Remove any potential whitespace/newlines
+    console.log(`Analyzing file: ${fileName}, Mime: ${fileMimeType}, Base64 Length: ${cleanBase64.length}`);
+
     // Revert to official SDK for stable payload handling, using the verified latest flash model
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
@@ -493,7 +496,7 @@ Format your response as a strict JSON object:
     const imageParts = [
       {
         inlineData: {
-          data: fileBase64,
+          data: cleanBase64,
           mimeType: fileMimeType || "image/jpeg"
         }
       }

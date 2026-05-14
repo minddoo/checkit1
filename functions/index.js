@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { SolapiMessageService } = require('solapi');
+const { OpenAI } = require('openai');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 const { Resend } = require('resend');
 
@@ -423,9 +426,6 @@ exports.scheduledB2CNotifications = functions.pubsub
  * Disease Code Lookup via KOICD (Korean Classification of Diseases)
  * Bypasses CORS issues by running on the server side.
  */
-const axios = require('axios');
-const cheerio = require('cheerio');
-
 exports.analyzeDiseaseCodes = functions.https.onCall(async (data, context) => {
   const query = data.query;
   if (!query) throw new functions.https.HttpsError('invalid-argument', 'Query is required');
@@ -454,4 +454,65 @@ exports.analyzeDiseaseCodes = functions.https.onCall(async (data, context) => {
   }
 });
 
+/**
+ * Medical Report Analysis using OpenAI (GPT-4o Vision)
+ * Extracts disease codes (KCD-8, ICD-10) and translates findings.
+ */
+const openai = new OpenAI({
+  apiKey: 'sk-proj-XXXXXXXXXXXXXXXXXXXXXXXXXXXX' // USER: Replace with your actual OpenAI API Key
+});
 
+exports.analyzeMedicalReport = functions.https.onCall(async (data, context) => {
+  const { fileBase64, fileName, lang } = data;
+  if (!fileBase64) {
+    throw new functions.https.HttpsError('invalid-argument', 'File content (base64) is required.');
+  }
+
+  try {
+    const prompt = `Analyze this medical report (Image/PDF content).
+1. Verbatim Translation: Translate the entire document into ${lang || 'English'}.
+2. Disease Coding: Identify every diagnosis and map it to KCD-8 and ICD-10 official codes.
+3. Language Support: Provide diagnosis names in both Korean and ${lang || 'English'}.
+
+Format your response as a JSON object:
+{
+  "fullTranslation": "Verbatim translated text here...",
+  "diseaseCodes": [
+    {
+      "kcd8": "Disease Code (e.g. K29.7)",
+      "icd10": "International Code (e.g. K29.7)",
+      "nameKr": "Diagnosis in Korean",
+      "nameTranslated": "Diagnosis in ${lang || 'English'}"
+    }
+  ]
+}`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert medical coder and translator. You analyze Korean medical reports and map them to KCD-8 and ICD-10 systems. Always return output as JSON."
+        },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/jpeg;base64,${fileBase64}`
+              }
+            }
+          ]
+        }
+      ],
+      response_format: { type: "json_object" }
+    });
+
+    return JSON.parse(response.choices[0].message.content);
+  } catch (error) {
+    console.error('OpenAI Analysis Error:', error);
+    throw new functions.https.HttpsError('internal', `Medical Analysis failed: ${error.message}`);
+  }
+});

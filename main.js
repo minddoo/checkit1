@@ -1,4 +1,4 @@
-﻿// Firebase Initialization
+// Firebase Initialization
 const firebaseConfig = {
     apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
     authDomain: "checkit-43341.firebaseapp.com",
@@ -12,6 +12,7 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = typeof firebase !== 'undefined' ? firebase.firestore() : null;
+const functions = typeof firebase !== 'undefined' ? firebase.functions() : null;
 
 /**
  * D-Day Support Logic (STRICT KOREAN - NEVER TRANSLATE)
@@ -143,7 +144,7 @@ window.showResultsGuidance = function() {
         <div class="msg-bubble">
             <p style="margin: 0 0 10px;"><b>✨ 검진 완료를 축하드립니다!</b></p>
             <p style="margin: 0 0 10px;">이제 가장 중요한 <b>검진 결과 확인</b> 단계가 남았습니다. 결과 수령은 병원 및 의료기관에 따라 상이하지만 보통 <b>1주에서 3주</b> 정도 소요됩니다.</p>
-            <p style="margin: 0 0 10px;">기간 내에 결과를 받으셨다면, <b>한국어 결과 파일(PDF/이미지)</b>을 이곳에 올려주세요! 고객님의 언어로 완벽하게 번역해 드리는 것은 물론, <b>KCD, ICD 질병코드 분석</b>을 포함한 원본과 번역본을 모두 제공해 드립니다. 📄</p>
+            <p style="margin: 0 0 10px;">기간 내에 결과를 받으셨다면, <b>한국어 결과 파일(PDF/이미지)</b>을 이곳에 올려주세요! 고객이 올린 파일 원본 그대로 단순 번역 기능과 실제 공시 질병코드 사이트에서 제공하는 질병코드를 고객이 올린 파일에서 질병 및 코드를 정확히 분석하여 제공해 드립니다. 📄</p>
             <p style="margin: 0 0 12px; font-size: 0.85rem; color: #64748b;">만약 3주가 지났는데도 결과를 못 받으셨거나, 필요한 날짜 안에 결과가 도착하지 않고 있다면 아래 버튼을 눌러주세요.</p>
             
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -178,13 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (attachBtn && fileInput) {
         attachBtn.addEventListener('click', () => fileInput.click());
         
-        fileInput.addEventListener('change', (e) => {
+        fileInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
 
             const chatMessages = document.getElementById('chat-messages');
             
-            // 1. AI Analysis Phase - Scanning
+            // 1. AI Analysis Phase - Scanning UI
             const analysisRow = document.createElement('div');
             analysisRow.className = 'message-row system';
             analysisRow.innerHTML = `
@@ -193,59 +194,76 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="fa-solid fa-robot fa-bounce" style="font-size: 1.5rem; color: #0ea5e9;"></i>
                         <strong style="font-size: 1rem;">AI Medical Document Analyzer</strong>
                     </div>
-                    <div id="ai-status-text" style="font-size: 0.9rem; margin-bottom: 10px; font-weight: 600;">📁 ${file.name} 읽는 중...</div>
+                    <div id="ai-status-text" style="font-size: 0.9rem; margin-bottom: 10px; font-weight: 600;">📁 ${file.name} 분석 중...</div>
                     <div style="width: 100%; height: 6px; background: #e0f2fe; border-radius: 3px; overflow: hidden; position: relative;">
                         <div id="ai-progress-bar" style="width: 0%; height: 100%; background: #0ea5e9; transition: width 0.5s ease;"></div>
                     </div>
                     <div id="ai-log" style="font-size: 0.75rem; margin-top: 12px; color: #64748b; font-family: monospace; height: 40px; overflow: hidden;">
-                        > Initializing OCR engine...<br>
-                        > Extracting text layers...
+                        > Initializing AI engine...<br>
+                        > Requesting analysis from OpenAI (GPT-4o)...
                     </div>
                 </div>
             `;
             chatMessages.appendChild(analysisRow);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const statusText = analysisRow.querySelector('#ai-status-text');
             const progressBar = analysisRow.querySelector('#ai-progress-bar');
             const aiLog = analysisRow.querySelector('#ai-log');
 
-            // Phase sequences (Enhanced for Accuracy & Sensitivity)
-            const phases = [
-                { p: 20, s: "공식 코딩 엔진 초기화 중...", l: "> Initializing official coding engine (KOICD)... [OK]" },
-                { p: 50, s: "KOICD/ICD-10 표준 데이터 불러오는 중...", l: "> Loading KCD-8 / ICD-10-CM international standards..." },
-                { p: 80, s: "OCR 정밀 스캔 및 텍스트 추출 중...", l: "> Extracting medical data with high precision OCR..." },
-                { p: 100, s: "분석 접수 완료!", l: "> Final verification request sent to CHECKIT support team." }
-            ];
+            try {
+                progressBar.style.width = "20%";
+                
+                // Read file as base64
+                const reader = new FileReader();
+                const base64Promise = new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                });
+                reader.readAsDataURL(file);
+                const fileBase64 = await base64Promise;
+                
+                progressBar.style.width = "40%";
+                aiLog.innerHTML += `<br>> File read complete. Uploading to secure server...`;
 
-            let currentPhase = 0;
-            const runPhase = () => {
-                if (currentPhase < phases.length) {
-                    const phase = phases[currentPhase];
-                    progressBar.style.width = phase.p + "%";
-                    statusText.innerText = phase.s;
-                    aiLog.innerHTML += `<br>${phase.l}`;
-                    aiLog.scrollTop = aiLog.scrollHeight;
-                    currentPhase++;
-                    setTimeout(runPhase, 1000);
-                } else {
-                    // Show Final Status - Expert Verification
-                    setTimeout(() => {
-                        analysisRow.remove();
-                        if (window.displayAiReport) {
-                            window.displayAiReport(file.name);
-                        }
-                    }, 500);
-                }
-            };
-            setTimeout(runPhase, 300);
+                // Call Firebase Function
+                const analyzeMedicalReport = firebase.functions().httpsCallable('analyzeMedicalReport');
+                const currentLang = document.getElementById('current-lang')?.innerText || 'English';
+                
+                const result = await analyzeMedicalReport({
+                    fileBase64: fileBase64,
+                    fileName: file.name,
+                    lang: currentLang
+                });
+
+                progressBar.style.width = "100%";
+                aiLog.innerHTML += `<br>> Analysis complete. Generating report...`;
+                
+                setTimeout(() => {
+                    analysisRow.remove();
+                    if (window.displayAiReport) {
+                        window.displayAiReport(file.name, result.data);
+                    }
+                }, 800);
+
+            } catch (err) {
+                console.error("AI Analysis Error:", err);
+                progressBar.style.background = "#ef4444";
+                aiLog.innerHTML += `<br><span style="color:#ef4444">> ERROR: ${err.message}</span>`;
+                setTimeout(() => {
+                    analysisRow.remove();
+                    const errorRow = document.createElement('div');
+                    errorRow.className = 'message-row coord';
+                    errorRow.innerHTML = `<div class="msg-bubble" style="background: #fee2e2; color: #dc2626;">죄송합니다. 파일 분석 중 오류가 발생했습니다. 담당자에게 문의해 주세요. (${err.message})</div>`;
+                    chatMessages.appendChild(errorRow);
+                }, 3000);
+            }
             
             fileInput.value = '';
         });
     }
 });
 
-window.displayAiReport = function(fileName) {
+window.displayAiReport = function(fileName, aiResult) {
     const chatMessages = document.getElementById('chat-messages');
     if (!chatMessages) return;
 
@@ -255,11 +273,30 @@ window.displayAiReport = function(fileName) {
     const reportData = {
         title: { ko: "CHECKIT 시스템 분석 리포트", en: "Medical Translation & Coding Data", ja: "結果翻訳および疾病コード情報" },
         summary: { 
-            ko: "본 리포트는 원본 결과지의 한국어 내용을 단순 번역한 데이터입니다. 정밀 분석을 위해 CHECKIT 시스템의 표준 대조 및 전담 담당자의 최종 확인을 진행합니다. 상세 결과는 잠시 후 전송해 드리겠습니다.",
-            en: "This report is a simple translation of the Korean content in the original test results. CHECKIT is not a medical institution and does not provide direct diagnosis or consultation. For professional interpretation of detailed results and future treatment plans, please consult with a specialist at the hospital where you received the examination.",
-            ja: "本レポートは、オリジナル結果の韓国語内容を単純に翻訳したデータです。 CHECKITは医療機関ではなく、直接的な診断や相談を提供しません。詳細な結果の専門的な解釈および今後の治療計画は、必ず検診を受けた当該病院の専門医にご相談ください。"
+            ko: "본 리포트는 원본 결과지의 한국어 내용을 정밀 분석한 데이터입니다. 실제 공시 질병코드를 기반으로 분석되었으며, 상세 내용은 아래와 같습니다.",
+            en: "This report is a precise analysis of the Korean medical content. It was analyzed based on official disease codes (KCD/ICD).",
+            ja: "本レポートは、韓国語の医療内容を精密に分析したデータです。公式な疾病コード（KCD/ICD）に基づいて分析されました。"
         }
     };
+
+    const translationText = aiResult?.fullTranslation || "Translation not available.";
+    const diseaseCodes = aiResult?.diseaseCodes || [];
+
+    let tableRows = '';
+    if (diseaseCodes.length > 0) {
+        diseaseCodes.forEach(item => {
+            tableRows += `
+                <tr style="border-bottom: 1px solid #f1f5f9;">
+                    <td style="padding: 12px; font-weight: 700; color: #0ea5e9;">${item.kcd8 || 'N/A'}</td>
+                    <td style="padding: 12px; color: #64748b;">${item.icd10 || 'N/A'}</td>
+                    <td style="padding: 12px; color: #1e293b; font-weight: 500;">${item.nameKr || 'N/A'}</td>
+                    <td style="padding: 12px; color: #0ea5e9; font-weight: 600;">${item.nameTranslated || 'N/A'}</td>
+                </tr>
+            `;
+        });
+    } else {
+        tableRows = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: #94a3b8;">No disease codes identified.</td></tr>';
+    }
 
     const row = document.createElement('div');
     row.className = 'message-row coord';
@@ -271,54 +308,61 @@ window.displayAiReport = function(fileName) {
                     <i class="fa-solid fa-language" style="font-size: 1.2rem;"></i>
                     <strong style="font-size: 1rem;">${reportData.title[currentLang] || reportData.title.en}</strong>
                 </div>
-                <span style="font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 20px;">Translation Only</span>
+                <span style="font-size: 0.75rem; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 20px;">AI Analysis Complete</span>
             </div>
             
             <div style="padding: 20px;">
-                <div style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                    <h5 style="margin: 0 0 8px; font-size: 0.9rem; color: #475569;"><i class="fa-solid fa-circle-exclamation"></i> Medical Disclaimer</h5>
+                <div style="margin-bottom: 20px; padding: 15px; background: #f0f9ff; border-radius: 12px; border: 1px solid #bae6fd;">
+                    <h5 style="margin: 0 0 8px; font-size: 0.9rem; color: #0369a1;"><i class="fa-solid fa-circle-info"></i> 분석 결과 안내</h5>
                     <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: #1e293b; font-weight: 500;">${reportData.summary[currentLang] || reportData.summary.en}</p>
                 </div>
 
-                <h5 style="margin: 0 0 10px; font-size: 0.9rem; color: #475569;"><i class="fa-solid fa-barcode"></i> Matched Disease Codes (KCD/ICD-10)</h5>
-                <div style="overflow-x: auto; margin-bottom: 20px;">
+                <div style="margin-bottom: 25px;">
+                    <h5 style="margin: 0 0 12px; font-size: 0.95rem; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-file-invoice" style="color: #64748b;"></i> 
+                        원본 파일 번역 (Full Translation)
+                    </h5>
+                    <div style="background: #fafafa; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; font-size: 0.85rem; color: #475569; line-height: 1.7; max-height: 200px; overflow-y: auto;">
+                        ${translationText.replace(/\n/g, '<br>')}
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h5 style="margin: 0; font-size: 0.95rem; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-microscope" style="color: #6366f1;"></i> 
+                        질병코드 정밀 분석 결과
+                    </h5>
+                    <a href="https://koicd.kr/kcd/kcd.do" target="_blank" style="font-size: 0.7rem; color: #6366f1; text-decoration: none; font-weight: 600;">
+                        실제 공시 사이트 확인 <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                </div>
+                <div style="overflow-x: auto; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
                         <thead>
-                            <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-                                <th style="padding: 10px; color: #64748b;">KCD-8</th>
-                                <th style="padding: 10px; color: #64748b;">ICD-10</th>
-                                <th style="padding: 10px; color: #64748b;">Diagnosis (KR)</th>
-                                <th style="padding: 10px; color: #64748b;">Translation</th>
+                            <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                                <th style="padding: 12px; color: #64748b; font-weight: 700;">KCD-8 코드</th>
+                                <th style="padding: 12px; color: #64748b; font-weight: 700;">ICD-10 (참조)</th>
+                                <th style="padding: 12px; color: #64748b; font-weight: 700;">분석 질병명 (KR)</th>
+                                <th style="padding: 12px; color: #64748b; font-weight: 700;">분석 번역명</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="border-bottom: 1px solid #f1f5f9;">
-                                <td style="padding: 10px; font-weight: 700; color: #0ea5e9;">K29.7</td>
-                                <td style="padding: 10px; font-weight: 700; color: #6366f1;">K29.70</td>
-                                <td style="padding: 10px; color: #1e293b;">상세불명의 위염</td>
-                                <td style="padding: 10px; color: #0ea5e9; font-weight: 600;">Gastritis, unspecified</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #f1f5f9;">
-                                <td style="padding: 10px; font-weight: 700; color: #0ea5e9;">E78.5</td>
-                                <td style="padding: 10px; font-weight: 700; color: #6366f1;">E78.5</td>
-                                <td style="padding: 10px; color: #1e293b;">상세불명의 고지혈증</td>
-                                <td style="padding: 10px; color: #0ea5e9; font-weight: 600;">Hyperlipidemia, unspecified</td>
-                            </tr>
+                            ${tableRows}
                         </tbody>
                     </table>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <a href="#" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #475569; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fa-solid fa-file-pdf"></i> Original PDF
+                    <a href="#" onclick="return false;" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: #475569; font-size: 0.85rem; font-weight: 600;">
+                        <i class="fa-solid fa-file-pdf"></i> 원본 파일 확인
                     </a>
-                    <a href="#" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #0ea5e9; color: white; border-radius: 10px; font-size: 0.85rem; font-weight: 700;">
-                        <i class="fa-solid fa-download"></i> Translated Report
+                    <a href="#" onclick="return false;" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: #10b981; color: white; border-radius: 10px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);">
+                        <i class="fa-solid fa-download"></i> 전체 번역본 다운로드
                     </a>
                 </div>
             </div>
-            <div style="background: #f8fafc; padding: 10px 20px; font-size: 0.7rem; color: #94a3b8; text-align: center;">
-                <i class="fa-solid fa-shield-halved"></i> All medical data is encrypted and handled according to privacy standards.
+            <div style="background: #f8fafc; padding: 10px 20px; font-size: 0.7rem; color: #94a3b8; text-align: center; border-top: 1px solid #f1f5f9;">
+                <i class="fa-solid fa-shield-halved"></i> 실제 공시 질병코드 사이트 정보를 기반으로 정확하게 분석되었습니다.
             </div>
         </div>
     `;

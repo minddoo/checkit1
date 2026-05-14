@@ -271,7 +271,7 @@ window.displayAiReport = function(fileName, data, fileBase64, fileMimeType) {
     const currentLang = document.getElementById('current-lang')?.innerText || 'English';
     const translationText = data.fullTranslation || "No translation available.";
     
-    // Helper: View Original File
+    // Helper: View Original File (Encoding Fix for Korean)
     window.viewOriginalFile = function(base64, mime) {
         try {
             const byteCharacters = atob(base64);
@@ -280,9 +280,29 @@ window.displayAiReport = function(fileName, data, fileBase64, fileMimeType) {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
             const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], {type: mime});
-            const fileURL = URL.createObjectURL(blob);
-            window.open(fileURL, '_blank');
+            
+            // If it's a text file, handle encoding carefully
+            if (mime === 'text/plain' || fileName.toLowerCase().endsWith('.txt')) {
+                const decoderUtf8 = new TextDecoder('utf-8');
+                const decodedUtf8 = decoderUtf8.decode(byteArray);
+                
+                // If it contains replacement characters (), it might be EUC-KR
+                let finalContent = decodedUtf8;
+                if (decodedUtf8.includes('')) {
+                    try {
+                        const decoderEucKr = new TextDecoder('euc-kr');
+                        finalContent = decoderEucKr.decode(byteArray);
+                    } catch(e) {}
+                }
+                
+                const newWin = window.open('', '_blank');
+                newWin.document.write(`<pre style="word-wrap: break-word; white-space: pre-wrap; font-family: sans-serif; padding: 20px;">${finalContent}</pre>`);
+                newWin.document.close();
+            } else {
+                const blob = new Blob([byteArray], {type: mime});
+                const fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, '_blank');
+            }
         } catch (e) {
             console.error("Error viewing file:", e);
             alert("파일을 여는 중 오류가 발생했습니다.");

@@ -93,14 +93,15 @@ ul {
     z-index: 1000;
     padding: 20px 0;
     transition: var(--transition);
+    background: var(--white); /* Always maintain white background */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .glass-nav.scrolled {
     padding: 12px 0;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border-bottom: 1px solid var(--glass-border);
+    background: var(--white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
 }
 

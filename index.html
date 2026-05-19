@@ -1624,15 +1624,17 @@
 
     <!-- Domestic Payment Modal -->
     <div id="domestic-pay-modal" class="payment-success-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center;">
-        <div class="payment-success-card" style="background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+        <div class="payment-success-card" style="background: white; padding: 40px; border-radius: 12px; text-align: center; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
             <div class="success-icon" style="color: #4a5568; font-size: 3rem; margin-bottom: 20px;"><i class="fa-solid fa-building-columns"></i></div>
             <h2 style="color: #2d3748; margin-bottom: 15px; font-size: 1.5rem; font-family: 'Montserrat', sans-serif;">국내 결제 안내</h2>
-            <p style="font-size:0.95rem; line-height:1.6; margin-bottom: 25px; color: #4a5568;">
+            <p style="font-size:0.95rem; line-height:1.6; margin-bottom: 25px; color: #4a5568; word-break: keep-all;">
                 현재 원화(KRW) 전용 카드 결제 시스템(PG) 연동이 진행 중입니다.<br><br>
                 <strong style="color: #2d3748;">무통장 입금 계좌</strong><br>
-                <span style="font-size: 1.1rem; color: #3182ce; font-weight: bold;">국민은행 123456-00-123456</span><br>
-                예금주: 체킷글로벌(주)<br><br>
-                입금 후 고객센터 우측 하단 챗봇에 성함을 남겨주시면 즉시 예약이 확정됩니다.
+                <span style="font-size: 1.1rem; color: #3182ce; font-weight: bold;">농협 3561443326933</span><br>
+                예금주: 김선홍<br><br>
+                <span style="font-size: 0.9rem; background: #edf2f7; padding: 10px; border-radius: 8px; display: block; margin-top: 15px; text-align: left;">
+                    <i class="fa-solid fa-circle-info"></i> <strong>진행 안내:</strong> 입금 확인 후 관리자가 승인하면 <strong>마이페이지에서 예약 진행 단계가 활성화</strong>됩니다. 입금 전에는 마이페이지 접속은 가능하나 진행 단계가 시작되지 않습니다.
+                </span>
             </p>
             <button class="btn-success-close" onclick="document.getElementById('domestic-pay-modal').style.display='none'" style="background:#2d3748; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;">확인</button>
         </div>

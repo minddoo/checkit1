@@ -1707,7 +1707,14 @@ const workflowTranslations = {
             '니즈에 적합한 병원 리스트와<br><span class="highlight">의료기관 즉시 확인 기능</span>',
             '병원별 프로그램 항목 비교와<br><span class="highlight">본인 맞춤형 검진 자동 매칭</span>',
             '최종 병원 및 프로그램 결정 후<br><span class="highlight">본격적인 예약 절차 진행</span>',
-            '희망 항목이 있는 병원 검색 기능 및<br><span class="highlight">위치, 정보 구글/네이버 실시간 확인</span>',\n            '검진 결과 원본 번역 및<br><span class="highlight">AI 기반 질병 코드 분석</span>',\n            'Original Document Translation &<br><span class="highlight">AI Disease Code Analysis</span>',\n            '健診結果の原本翻訳および<br><span class="highlight">AIベースの疾患コード分析</span>',\n            '体检结果原件翻译及<br><span class="highlight">基于AI的疾病代码分析</span>',\n            'Dịch Bản gốc Kết quả &<br><span class="highlight">Phân tích Mã Bệnh bằng AI</span>',\n            'แปลต้นฉบับผลการตรวจและ<br><span class="highlight">วิเคราะห์รหัสโรคด้วย AI</span>',\n            'Перевод оригинала результатов и<br><span class="highlight">ИИ-анализ кодов заболеваний</span>'\n        ]
+            '희망 항목이 있는 병원 검색 기능 및<br><span class="highlight">위치, 정보 구글/네이버 실시간 확인</span>',
+            '선택한 검진 프로그램과<br><span class="highlight">추가 검사 항목 확인</span>',
+            '선택 항목에 대한<br><span class="highlight">최종 예약 확정 의사 타진</span>',
+            '희망 병원 예약 접수 후<br><span class="highlight">담당 코디네이터 배정 완료</span>',
+            '예약 병원 방문 전<br><span class="highlight">유의사항 및 세부 항목 안내</span>',
+            '검진 전 주의사항 및<br><span class="highlight">복용약 등 사전 안내</span>',
+            '검진 결과 원본 번역 및<br><span class="highlight">AI 기반 질병 코드 분석</span>'
+        ]
     },
     'en': {
         phase: 'Hospital & Program Selection',
@@ -1718,7 +1725,13 @@ const workflowTranslations = {
             'Tailored Hospital & Program List<br><span class="highlight">Real-Time Availability Check</span>',
             'Comparing Specialized Programs<br><span class="highlight">Auto-Matching Your Best Fit</span>',
             'Finalize Selection & Decision<br><span class="highlight">Starting the Booking Support</span>',
-            'Search for Hospitals with Desired Items<br><span class="highlight">& Real-Time Google/Naver Location Check</span>'
+            'Search for Hospitals with Desired Items<br><span class="highlight">& Real-Time Google/Naver Location Check</span>',
+            'Check Selected Programs<br><span class="highlight">& Additional Test Items</span>',
+            'Confirm Final Booking<br><span class="highlight">For Selected Options</span>',
+            'Booking Request Submitted<br><span class="highlight">Coordinator Assigned</span>',
+            'Precautions & Details<br><span class="highlight">Before Hospital Visit</span>',
+            'Pre-Checkup Precautions<br><span class="highlight">& Medication Guide</span>',
+            'Original Document Translation &<br><span class="highlight">AI Disease Code Analysis</span>'
         ]
     },
     'ja': {
@@ -1730,7 +1743,13 @@ const workflowTranslations = {
             'ニーズに合った病院リストと<br><span class="highlight">医療機関の即時確認機能</span>',
             '病院別プログラムの比較と<br><span class="highlight">本人に合わせた検診マッチング</span>',
             '最終的な病院およびプログラムの選択<br><span class="highlight">本格的な予約手続きの開始</span>',
-            '希望項目がある病院の検索機能および<br><span class="highlight">位置・情報をGoogle/Naverでリアルタイム確認</span>'
+            '希望項目がある病院の検索機能および<br><span class="highlight">位置・情報をGoogle/Naverでリアルタイム確認</span>',
+            '選択した検診プログラムと<br><span class="highlight">追加検査項目の確認</span>',
+            '選択項目に対する<br><span class="highlight">最終予約確定の意思確認</span>',
+            '希望病院の予約受付後<br><span class="highlight">担当コーディネーターの配属完了</span>',
+            '予約病院訪問前の<br><span class="highlight">注意事項および詳細項目の案内</span>',
+            '検診前の注意事項および<br><span class="highlight">服用薬などの事前案内</span>',
+            '健診結果の原本翻訳および<br><span class="highlight">AIベースの疾患コード分析</span>'
         ]
     },
     'zh-CN': {
@@ -1742,7 +1761,13 @@ const workflowTranslations = {
             '定制化医院及项目清单<br><span class="highlight">实时资源确认与对接</span>',
             '对比各院特色检查项目<br><span class="highlight">自动匹配最佳健康方案</span>',
             '敲定最终医院及项目<br><span class="highlight">启动正式预约行政支持</span>',
-            '基于需求项目的医院搜索功能及<br><span class="highlight">Google/Naver地图实时位置确认</span>'
+            '基于需求项目的医院搜索功能及<br><span class="highlight">Google/Naver地图实时位置确认</span>',
+            '确认已选体检项目与<br><span class="highlight">附加检查项目</span>',
+            '针对已选项目进行<br><span class="highlight">最终预约意向确认</span>',
+            '意向医院预约受理后<br><span class="highlight">专属协调员分配完毕</span>',
+            '预约医院就诊前<br><span class="highlight">注意事项及详细信息指南</span>',
+            '体检前注意事项及<br><span class="highlight">服药等事前指南</span>',
+            '体检结果原件翻译及<br><span class="highlight">基于AI的疾病代码分析</span>'
         ]
     },
     'vi': {
@@ -1754,7 +1779,13 @@ const workflowTranslations = {
             'Danh sách Bệnh viện Phù hợp<br><span class="highlight">Kiểm tra Trạng thái Thời gian Thực</span>',
             'So sánh Các Chương trình Khám<br><span class="highlight">Tự động Khớp với Nhu cầu</span>',
             'Chốt Bệnh viện & Chương trình<br><span class="highlight">Bắt đầu Quy trình Đặt lịch</span>',
-            'Tính năng tìm kiếm bệnh viện theo nhu cầu và<br><span class="highlight">Kiểm tra vị trí thực tế qua Google/Naver</span>'
+            'Tính năng tìm kiếm bệnh viện theo nhu cầu và<br><span class="highlight">Kiểm tra vị trí thực tế qua Google/Naver</span>',
+            'Kiểm tra chương trình đã chọn &<br><span class="highlight">Hạng mục khám bổ sung</span>',
+            'Xác nhận ý định đặt lịch<br><span class="highlight">cho các hạng mục đã chọn</span>',
+            'Yêu cầu đặt lịch đã được gửi<br><span class="highlight">Đã chỉ định Điều phối viên</span>',
+            'Lưu ý & Chi tiết<br><span class="highlight">Trước khi đến Bệnh viện</span>',
+            'Lưu ý trước khi khám &<br><span class="highlight">Hướng dẫn sử dụng thuốc</span>',
+            'Dịch Bản gốc Kết quả &<br><span class="highlight">Phân tích Mã Bệnh bằng AI</span>'
         ]
     },
     'th': {
@@ -1766,7 +1797,13 @@ const workflowTranslations = {
             'รายการโรงพยาบาลที่เหมาะสม<br><span class="highlight">ตรวจสอบพิกัดได้แบบเรียลไทม์</span>',
             'เปรียบเทียบรายการโปรแกรมตรวจ<br><span class="highlight">จับคู่สิ่งที่เหมาะสมกับคุณที่สุด</span>',
             'ยืนยันโรงพยาบาลและโปรแกรม<br><span class="highlight">เริ่มขั้นตอนการจองอย่างเป็นทางการ</span>',
-            'ฟีเจอร์ค้นหาโรงพยาบาลตามหัวข้อที่ต้องการและ<br><span class="highlight">ตรวจสอบตำแหน่งเรียลไทม์ผ่าน Google/Naver</span>'
+            'ฟีเจอร์ค้นหาโรงพยาบาลตามหัวข้อที่ต้องการและ<br><span class="highlight">ตรวจสอบตำแหน่งเรียลไทม์ผ่าน Google/Naver</span>',
+            'ตรวจสอบโปรแกรมที่เลือกและ<br><span class="highlight">รายการตรวจเพิ่มเติม</span>',
+            'ยืนยันความประสงค์การจอง<br><span class="highlight">สำหรับรายการที่เลือก</span>',
+            'ส่งคำขอจองโรงพยาบาลแล้ว<br><span class="highlight">จัดสรรผู้ประสานงานเรียบร้อย</span>',
+            'ข้อควรระวังและรายละเอียด<br><span class="highlight">ก่อนเข้าใช้บริการโรงพยาบาล</span>',
+            'ข้อควรระวังก่อนการตรวจและ<br><span class="highlight">คำแนะนำเรื่องยา</span>',
+            'แปลต้นฉบับผลการตรวจและ<br><span class="highlight">วิเคราะห์รหัสโรคด้วย AI</span>'
         ]
     },
     'ru': {
@@ -1778,7 +1815,13 @@ const workflowTranslations = {
             'Список подходящих клиник<br><span class="highlight">Мгновенная проверка доступности</span>',
             'Сравнение медицинских программ<br><span class="highlight">Авто-подбор под ваши нужды</span>',
             'Финальный выбор клиники<br><span class="highlight">Запуск процедуры бронирования</span>',
-            'Поиск клиник по нужным параметрам и<br><span class="highlight">проверка местоположения в Google/Naver</span>'
+            'Поиск клиник по нужным параметрам и<br><span class="highlight">проверка местоположения в Google/Naver</span>',
+            'Проверка выбранных программ и<br><span class="highlight">дополнительных анализов</span>',
+            'Подтверждение бронирования<br><span class="highlight">выбранных опций</span>',
+            'Заявка на бронирование отправлена<br><span class="highlight">Координатор назначен</span>',
+            'Меры предосторожности и детали<br><span class="highlight">перед посещением клиники</span>',
+            'Подготовка к обследованию и<br><span class="highlight">инструкции по приему лекарств</span>',
+            'Перевод оригинала результатов и<br><span class="highlight">ИИ-анализ кодов заболеваний</span>'
         ]
     }
 };

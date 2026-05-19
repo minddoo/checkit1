@@ -1701,19 +1701,19 @@ const workflowTranslations = {
     'ko': {
         phase: '병원 및 프로그램 선정',
         steps: [
-            '개인 맞춤형 프로필 생성 후<br><span class="highlight">전담 1:1 관리의 시작</span>',
-            '24시간 채팅 상담 서비스 및<br><span class="highlight">전문 다국어 지원 모듈 기능</span>',
-            '고객의 입출국 일자와<br><span class="highlight">희망 기간 및 상세 요구 파악</span>',
-            '니즈에 적합한 병원 리스트와<br><span class="highlight">의료기관 즉시 확인 기능</span>',
-            '병원별 프로그램 항목 비교와<br><span class="highlight">본인 맞춤형 검진 자동 매칭</span>',
-            '최종 병원 및 프로그램 결정 후<br><span class="highlight">본격적인 예약 절차 진행</span>',
-            '희망 항목이 있는 병원 검색 기능 및<br><span class="highlight">위치, 정보 구글/네이버 실시간 확인</span>',
-            '선택한 검진 프로그램과<br><span class="highlight">추가 검사 항목 확인</span>',
-            '선택 항목에 대한<br><span class="highlight">최종 예약 확정 의사 타진</span>',
-            '희망 병원 예약 접수 후<br><span class="highlight">담당 코디네이터 배정 완료</span>',
-            '예약 병원 방문 전<br><span class="highlight">유의사항 및 세부 항목 안내</span>',
-            '검진 전 주의사항 및<br><span class="highlight">복용약 등 사전 안내</span>',
-            '검진 결과 원본 번역 및<br><span class="highlight">AI 기반 질병 코드 분석</span>'
+            '개인 맞춤형 프로필 생성<br><span class="highlight">전담 1:1 밀착 관리 시작</span>',
+            '24시간 실시간 채팅 상담<br><span class="highlight">전문 다국어 통번역 지원</span>',
+            '입출국 일자 및 일정 파악<br><span class="highlight">고객별 상세 요구사항 수렴</span>',
+            '맞춤형 병원 리스트 제공<br><span class="highlight">적합 의료기관 실시간 매칭</span>',
+            '검진 프로그램 항목 비교<br><span class="highlight">개인 맞춤형 프로그램 추천</span>',
+            '최종 병원 및 프로그램 결정<br><span class="highlight">신속한 공식 예약 절차 진행</span>',
+            '희망 검진 병원 검색<br><span class="highlight">실시간 위치 및 정보 조회</span>',
+            '선택 검진 프로그램 및<br><span class="highlight">추가 검사 세부 항목 확인</span>',
+            '선택 항목 기반의<br><span class="highlight">최종 예약 확정 의사 결정</span>',
+            '희망 병원 예약 공식 접수<br><span class="highlight">전담 코디네이터 배정 완료</span>',
+            '예약 병원 방문 전<br><span class="highlight">필수 유의사항 정밀 정독</span>',
+            '검진 전 사전 주의사항<br><span class="highlight">검진 의약품 복용 사전 안내</span>',
+            '검진 결과 원본 실시간 번역<br><span class="highlight">AI 기반 질병 코드 분석 리포트</span>'
         ]
     },
     'en': {

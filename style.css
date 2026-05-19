@@ -479,14 +479,14 @@ ul {
 
 .img-slide img {
     width: 540px;
-    height: 720px; /* Rectangular aspect ratio like a mobile card/phone frame */
+    height: auto; /* Dynamically wraps original aspect ratio, eliminating extra vertical whitespace */
     object-fit: contain;
-    background: #ffffff; /* Unified premium white frame */
-    padding: 16px;
+    background: #ffffff; /* Premium thin frame */
+    padding: 12px; /* Minimal padding for a clean border effect */
     border: 1px solid #e2e8f0;
     max-width: 95%;
     display: block;
-    border-radius: 28px;
+    border-radius: 24px;
     box-shadow: 0 30px 60px -15px rgba(0,0,0,0.18);
     image-rendering: -webkit-optimize-contrast;
 }
@@ -494,14 +494,14 @@ ul {
 @media (max-width: 992px) {
     .img-slide img {
         width: 420px;
-        height: 560px;
+        height: auto;
     }
 }
 
 @media (max-width: 600px) {
     .img-slide img {
         width: 320px;
-        height: 430px;
+        height: auto;
     }
 }
 

@@ -140,7 +140,7 @@ ul {
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 12px; /* Reduced gap to keep My Page and Language Selector close to each other */
 }
 
 .nav-links a {

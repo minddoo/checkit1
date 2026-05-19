@@ -108,8 +108,8 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 24px;
+    padding-right: 24px;
     gap: 15px;
     position: relative;
 }
@@ -2647,7 +2647,8 @@ ul {
     background: var(--white);
     color: var(--primary) !important;
     border: 2px solid var(--primary-light);
-    padding: 10px 24px;
+    padding: 6px 14px; /* Reduced padding to make it smaller and cleaner */
+    font-size: 0.75rem; /* Slightly smaller font-size */
 }
 
 .nav-btn.logged-in:hover {

@@ -1740,9 +1740,7 @@ const welcomeMessages = {
 function updateWelcomeMessage(langCode) {
     const welcomeText = document.getElementById('welcome-text');
     if (welcomeText) {
-        welcomeText.innerText = welcomeMessages[lan,
-            '希望項目がある病院の検索機能および<br><span class="highlight">位置・情報をGoogle/Naverでリアルタイム確認</span>'
-        ] || welcomeMessages['en'];
+        welcomeText.innerText = welcomeMessages[langCode] || welcomeMessages['en'];
     }
 }
 

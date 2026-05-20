@@ -2165,6 +2165,17 @@ function handleGoogleSignIn(response) {
     localStorage.setItem('userName', user.name);
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userPicture', user.picture);
+
+    // Sync Google user profile to Firestore
+    if (typeof firebase !== 'undefined' && firebase.firestore && user.sub) {
+        firebase.firestore().collection('users').doc(user.sub).set({
+            uid: user.sub,
+            email: user.email,
+            displayName: user.name,
+            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+            role: 'user'
+        }, { merge: true }).catch(err => console.error("Firestore sync error for Google user:", err));
+    }
     
     // Send Confirmation Email via Google Apps Script for Google Users
     if (user.email) {

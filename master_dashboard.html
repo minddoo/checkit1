@@ -637,7 +637,9 @@
 
         // Handle logout
         function handleLogout() {
-            auth.signOut();
+            auth.signOut().then(() => {
+                window.location.href = '/';
+            });
         }
 
         // Switch Tabs

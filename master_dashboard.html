@@ -725,8 +725,8 @@
             // Verify master role manually for the custom user if they aren't created yet
             if (email === 'checkit082@gmail.com' && password === 'shmjch3080@@@') {
                 auth.signInWithEmailAndPassword(email, password).catch(err => {
-                    if (err.code === 'auth/user-not-found') {
-                        // User does not exist, automatically sign up
+                    if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+                        // User does not exist or credentials issue (auto-fallback to create)
                         return auth.createUserWithEmailAndPassword(email, password);
                     }
                     throw err;

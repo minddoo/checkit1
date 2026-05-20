@@ -2443,7 +2443,7 @@ if (authModal && loginBtn) {
                     
                     if (isCorrectPassword) {
                         firebase.auth().signInWithEmailAndPassword(email, password).catch(err => {
-                            if (err.code === 'auth/user-not-found') {
+                            if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
                                 return firebase.auth().createUserWithEmailAndPassword(email, password);
                             }
                             throw err;

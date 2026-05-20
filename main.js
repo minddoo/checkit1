@@ -1,68 +1,53 @@
-// Hook localStorage.getItem to support impersonation for Master viewing customer My Page (Iframe & Redirect friendly)
+// Hook localStorage.getItem to support impersonation for Master viewing customer My Page
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const impEmail = urlParams.get('impersonate_email');
-    const impName = urlParams.get('impersonate_name');
+    const impName  = urlParams.get('impersonate_name');
+    const viewMode = urlParams.get('view');
 
     if (impEmail) {
         window.impersonatedUserEmail = impEmail;
-        window.impersonatedUserName = impName || 'Customer';
-    } else {
-        // Fallback to localStorage (for backward compatibility if redirecting)
-        window.impersonatedUserEmail = localStorage.getItem('impersonate_email');
-        window.impersonatedUserName = localStorage.getItem('impersonate_name');
+        window.impersonatedUserName  = impName || 'Customer';
     }
 
     const originalGetItem = localStorage.getItem;
     localStorage.getItem = function(key) {
-        if (key === 'userEmail' && window.impersonatedUserEmail) {
-            return window.impersonatedUserEmail;
-        }
-        if (key === 'userName' && window.impersonatedUserName) {
-            return window.impersonatedUserName;
-        }
-        if (key === 'isLoggedIn' && window.impersonatedUserEmail) {
-            return 'true';
-        }
+        if (key === 'userEmail'   && window.impersonatedUserEmail) return window.impersonatedUserEmail;
+        if (key === 'userName'    && window.impersonatedUserName)  return window.impersonatedUserName;
+        if (key === 'isLoggedIn'  && window.impersonatedUserEmail) return 'true';
         return originalGetItem.call(localStorage, key);
     };
 
-    // Impersonation exit listener & banner rendering
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.impersonatedUserEmail) {
-            const isIframe = window.self !== window.top;
-            const banner = document.createElement('div');
-            banner.id = 'master-impersonate-banner';
-            banner.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; background: #10b981; color: white; text-align: center; padding: 10px; z-index: 100000; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-family: 'Pretendard', sans-serif; font-size: 0.9rem;";
-            
-            if (isIframe) {
-                // If running in an iframe inside the master dashboard
-                banner.innerHTML = `<span>🔧 [실시간 모니터링] <strong>${window.impersonatedUserName} (${window.impersonatedUserEmail})</strong> 고객의 마이페이지 실시간 화면입니다.</span>`;
-            } else {
-                // If running as a standalone redirect page
-                banner.innerHTML = `
-                    <span>🔧 [마스터 모드] <strong>${window.impersonatedUserName} (${window.impersonatedUserEmail})</strong> 고객의 마이페이지를 조회 중입니다.</span>
-                    <button onclick="exitImpersonate()" style="background: white; color: #10b981; border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">대시보드로 돌아가기</button>
-                `;
-            }
-            
-            document.body.appendChild(banner);
-            document.body.style.paddingTop = '40px'; // Push content down
+    if (!window.impersonatedUserEmail && viewMode !== 'mypage') return;
 
-            // Expose exitImpersonate function globally
+    document.addEventListener('DOMContentLoaded', () => {
+        const isIframe = window.self !== window.top;
+
+        // ── 배너 표시 (아이프레임 안일 때는 최소화)
+        if (window.impersonatedUserEmail) {
+            const banner = document.createElement('div');
+            banner.style.cssText = "position:fixed; top:0; left:0; width:100%; background:#10b981; color:white; text-align:center; padding:8px; z-index:100000; font-weight:700; font-size:0.8rem; font-family:'Pretendard',sans-serif; box-shadow:0 2px 8px rgba(0,0,0,0.15);";
+            banner.innerHTML = isIframe
+                ? `🔧 <strong>${window.impersonatedUserName}</strong> (${window.impersonatedUserEmail}) 고객의 마이페이지 조회 중`
+                : `🔧 [마스터 모드] <strong>${window.impersonatedUserName}</strong> 고객 마이페이지 &nbsp;<button onclick="exitImpersonate()" style="background:white;color:#10b981;border:none;padding:4px 12px;border-radius:6px;font-weight:700;cursor:pointer;font-size:0.8rem;">← 대시보드로</button>`;
+            document.body.appendChild(banner);
+            document.body.style.paddingTop = '34px';
+
             window.exitImpersonate = function() {
-                localStorage.removeItem('impersonate_email');
-                localStorage.removeItem('impersonate_name');
                 window.location.href = 'master_dashboard.html';
             };
-
-            // Auto-show My Page view directly
-            setTimeout(() => {
-                if (typeof window.showView === 'function') {
-                    window.showView('mypage');
-                }
-            }, 300);
         }
+
+        // ── 마이페이지 뷰 자동 전환 (재시도 포함)
+        function tryShowMypage(attempts) {
+            if (attempts <= 0) return;
+            if (typeof window.showView === 'function') {
+                window.showView('mypage');
+            } else {
+                setTimeout(() => tryShowMypage(attempts - 1), 500);
+            }
+        }
+        setTimeout(() => tryShowMypage(10), 800);
     });
 })();
 

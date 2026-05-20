@@ -8715,13 +8715,25 @@ document.addEventListener('DOMContentLoaded', () => {
 window.requireLoginForPayment = function(actionName) {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     if (!isLoggedIn) {
-        alert("회원가입 및 로그인 후 " + actionName + " 진행이 가능합니다.");
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-            if (typeof initGoogleLogin === 'function') initGoogleLogin();
-        }
+        const msgDiv = document.createElement('div');
+        msgDiv.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#e11d48; color:white; padding:15px 25px; border-radius:12px; font-weight:700; z-index:999999; box-shadow:0 10px 25px rgba(225,29,72,0.3); transition: all 0.3s ease;";
+        msgDiv.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> 회원가입 및 로그인 후 ${actionName} 진행이 가능합니다.`;
+        document.body.appendChild(msgDiv);
+        
+        setTimeout(() => {
+            msgDiv.style.opacity = '0';
+            setTimeout(() => msgDiv.remove(), 300);
+        }, 3500);
+
+        setTimeout(() => {
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                if (typeof initGoogleLogin === 'function') initGoogleLogin();
+            }
+        }, 600);
+        
         return false;
     }
     return true;

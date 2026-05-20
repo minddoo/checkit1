@@ -8625,3 +8625,209 @@ window.payForUnlimitedChanges = function() {
 window.addEventListener('load', () => {
     initDdayButtons();
 });
+
+// ===== BLOG SYSTEM =====
+const BLOG_POSTS_PER_PAGE = 9;
+let blogCurrentPage = 1;
+let blogCurrentCategory = 'all';
+let blogAllPosts = [];
+
+// Seed data (migrated from existing hardcoded blog posts)
+const BLOG_SEED_DATA = [
+    {
+        id: 'post-1',
+        title: '불투명한 수수료를 없앤 CHECKIT의 투명한 결제 구조',
+        category: '체킷소식',
+        thumbnail: 'assets/blog/blog_transparent_payment.png',
+        summary: '병원 결제와 CHECKIT 서비스 이용료를 처음부터 100% 분리합니다. 어떠한 경우에도 병원 비용 안에 수수료가 끼어드는 일은 없습니다.',
+        content: `<p>과거 다른 에이전시를 통해 한국 건강검진을 예약했을 때의 일입니다. 검진이 끝나고 나서야 병원 공식 가격 위에 에이전시가 부과한 막대한 수수료가 숨겨져 있었다는 사실을 알게 되었습니다. 지불한 금액은 병원 영수증에 나온 금액보다 훨씬 높았고, 차이를 묻자 '에이전시 관리비'라는 모호한 항목으로만 설명을 받았습니다.</p><p>CHECKIT은 이 구조를 완전히 다르게 설계했습니다. 병원 결제와 CHECKIT 서비스 이용료를 처음부터 100% 분리합니다. 고객은 병원에 한국인과 동일한 공식 정찰제 가격만 직접 지불하고, CHECKIT에는 예약, 행정 처리, 다국어 번역 등 인프라 서비스에 대한 이용료만 별도로 지불합니다.</p><p>처음엔 반신반의했지만, 병원 영수증과 CHECKIT 영수증이 완전히 분리된 것을 직접 확인했을 때 비로소 진정한 신뢰가 생겼습니다. 한국 의료 시스템을 이용하는 외국인으로서, 이 투명성은 그 어떤 서비스 기능보다도 훨씬 중요한 차별점이었습니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.05.10'
+    },
+    {
+        id: 'post-2',
+        title: '단순 통역이 아닌, 검진 전 과정을 관리하는 비의료 행정 지원',
+        category: '체킷소식',
+        thumbnail: 'assets/blog/blog_premium_support.png',
+        summary: '예약 확정부터 검진 당일까지, 복용 시간표, 식단 제한, 제출 서류, 이동 동선까지 모국어로 정리한 문서를 제공합니다.',
+        content: `<p>한국 건강검진을 처음 예약했을 때, 대장내시경 전 준비 약품의 복용법과 전날 식이 제한 지침이 한국어로만 제공되어 완전히 막막했습니다. 번역 앱을 사용해봤지만 '용량에 맞게 물에 희석하여 천천히 복용'처럼 모호하게 번역된 문장은 실질적인 도움이 전혀 되지 않았습니다.</p><p>CHECKIT의 비의료 행정 전담 지원은 달랐습니다. 예약이 확정된 순간부터 검진 당일까지, 복용 시간표, 식단 제한 항목, 병원 도착 시 제출해야 할 서류, 검사 당일 이동 동선까지 — 모든 내용을 제 모국어로 정리한 문서로 받았습니다.</p><p>검진 당일 병원에 도착했을 때, 저는 이미 무엇을 어떻게 해야 하는지 완벽히 파악하고 있었습니다. 언어가 통하는 것을 넘어, 완전히 준비된 상태로 검진에 임할 수 있었다는 것 — 그것이 CHECKIT 서비스의 진짜 가치였습니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.05.08'
+    },
+    {
+        id: 'post-3',
+        title: '한국어 결과지, 이제 모국어로 그대로 읽는다',
+        category: '건강정보',
+        thumbnail: 'assets/blog/blog_medical_translation.png',
+        summary: '원본 결과지의 내용을 모국어로 번역한 문서와 국제 표준 질병 코드(ICD-10/KCD)를 함께 제공합니다.',
+        content: `<p>건강검진이 끝나고 두꺼운 한국어 결과지를 받았을 때의 막막함은 이루 말할 수 없었습니다. 빼곡히 적힌 한국어 항목들 — 번역 앱으로 돌려봐도 의학 용어가 그대로 남아 있어, 결국 원본 문서 자체를 이해할 수 없었습니다.</p><p>CHECKIT은 병원이 발행한 원본 결과지의 내용을 제 모국어로 단순 번역한 문서와, 각 항목에 해당하는 국제 표준 질병 코드(ICD-10/KCD)를 함께 제공해주었습니다. 결과를 해석하거나 의료적 판단을 내리는 것은 CHECKIT의 역할이 아닙니다. CHECKIT은 오직 원문을 그대로 읽을 수 있도록, 언어의 장벽만 제거해주는 것입니다.</p><p>덕분에 본국의 주치의와 상담할 때 원본 결과지를 직접 들고 가도, 어떤 항목이 어떤 이름의 검사인지 정확히 설명할 수 있었습니다. 의료적 판단은 전문의에게 — CHECKIT은 그 과정에 필요한 언어 지원만을 제공합니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.05.05'
+    },
+    {
+        id: 'post-4',
+        title: '입출국 일정에 맞춰 예약을 잡는다는 것의 현실',
+        category: '고객후기',
+        thumbnail: 'assets/blog/card3.png',
+        summary: '항공편, 금식 일정, 사전 준비 기간 — 모든 조건을 동시에 고려한 예약 조율을 행정 지원으로 처리합니다.',
+        content: `<p>짧은 방한 일정 안에 건강검진 예약을 맞추는 일은 생각보다 훨씬 복잡합니다. 항공편 도착 다음 날 검진이 가능한지, 검진 전날 금식이 필요한 항목은 어떤 것인지, 검진 후 당일 비행기 탑승이 가능한지 — 이 모든 조건을 동시에 고려하면서 예약 날짜를 잡는 것은 한국어 능통자에게도 쉽지 않은 일입니다.</p><p>CHECKIT은 고객이 제공하는 입출국 일정을 바탕으로, 일정 내 실제로 예약 가능한 날짜를 확인하고 예약 절차를 진행합니다. 어떤 검진 항목이 포함되어 있는지에 따라 금식 일정이나 사전 준비 기간이 달라지기 때문에, 이를 고려한 일정 조율 또한 행정 지원의 일환으로 처리됩니다.</p><p>한국에 머무는 시간이 짧을수록 하루의 낭비도 치명적입니다. CHECKIT을 통해 일정 조율과 예약 행정을 위임하고, 방한 기간 동안 정작 중요한 것에 집중하시기 바랍니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.05.02'
+    },
+    {
+        id: 'post-5',
+        title: '영문 영수증과 CD, 검진확인서 — 서류 발급도 사전에 챙긴다',
+        category: '건강정보',
+        thumbnail: 'assets/blog/blog_transparent_payment.png',
+        summary: '검진 당일 현장에서 미리 요청하지 않으면 발급이 불가능한 서류들을 사전에 확인하고 병원에 전달합니다.',
+        content: `<p>건강검진을 마친 뒤 영문 영수증이나 검진 결과 CD, 혹은 검진확인서가 필요해지는 경우는 생각보다 많습니다. 본국의 보험사에 제출해야 하거나, 직장 제출용으로 필요하거나, 해외 의료기관 방문 시 지참해야 하는 경우가 대표적입니다.</p><p>문제는 이러한 서류들이 검진 당일 현장에서 미리 요청하지 않으면 발급이 불가능하거나, 이후 별도의 절차를 다시 밟아야 한다는 점입니다. CHECKIT은 예약 단계에서 고객이 필요한 서류를 사전에 확인하고, 검진 당일 발급 요청이 이루어질 수 있도록 병원 측에 미리 전달합니다.</p><p>검진이 끝난 후에야 뒤늦게 서류가 필요함을 깨닫고 난감해하는 일이 없도록 — CHECKIT은 마지막 단계까지 놓치는 행정 항목이 없도록 지원합니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.04.28'
+    },
+    {
+        id: 'post-6',
+        title: '예약 확정 알림부터 당일 D-day 안내까지, 모국어로 받는다',
+        category: '체킷소식',
+        thumbnail: 'assets/blog/blog_premium_support.png',
+        summary: '예약 확정 후 모국어 알림 발송, D-day 준비사항 안내를 카카오톡 또는 SMS로 제공합니다.',
+        content: `<p>검진 예약이 완료된 뒤 가장 불안한 것은, 예약이 정말 잡힌 것인지 확인이 되지 않는다는 점입니다. 한국어로 된 확인 문자를 받아도 내용을 정확히 이해하기 어렵고, 변경 사항이 생겼을 때 제대로 전달받고 있는지조차 알기 힘든 경우가 많습니다.</p><p>CHECKIT은 예약 확정 후 고객의 언어로 된 확인 알림을 발송합니다. 또한 검진 전날과 당일, 준비사항과 일정을 다시 한번 정리한 D-day 안내를 카카오톡 또는 SMS를 통해 모국어로 제공합니다. 별도로 연락하거나 확인하지 않아도, 필요한 정보가 적시에 전달됩니다.</p><p>검진 자체에 대한 긴장감으로도 충분한데, 행정 커뮤니케이션까지 챙겨야 하는 부담까지 더해지지 않도록 — 그것이 CHECKIT이 제공하는 다국어 알림 서비스의 핵심입니다.</p>`,
+        author: 'CHECKIT',
+        createdAt: '2025.04.25'
+    }
+];
+
+// Initialize blog data
+blogAllPosts = [...BLOG_SEED_DATA];
+
+// Category color map
+const BLOG_CAT_COLORS = {
+    '건강정보': '#2e86ab',
+    '체킷소식': '#4b6b8e',
+    '고객후기': '#e07a5f',
+    '한국생활': '#81b29a'
+};
+
+// Render blog grid
+function renderBlogGrid() {
+    const grid = document.getElementById('blog-grid');
+    const pagination = document.getElementById('blog-pagination');
+    const emptyState = document.getElementById('blog-empty');
+    if (!grid) return;
+
+    // Filter by category
+    const filtered = blogCurrentCategory === 'all'
+        ? blogAllPosts
+        : blogAllPosts.filter(p => p.category === blogCurrentCategory);
+
+    // Pagination calc
+    const totalPages = Math.max(1, Math.ceil(filtered.length / BLOG_POSTS_PER_PAGE));
+    if (blogCurrentPage > totalPages) blogCurrentPage = totalPages;
+    const start = (blogCurrentPage - 1) * BLOG_POSTS_PER_PAGE;
+    const pageItems = filtered.slice(start, start + BLOG_POSTS_PER_PAGE);
+
+    // Empty state
+    if (filtered.length === 0) {
+        grid.style.display = 'none';
+        emptyState.style.display = 'block';
+        pagination.innerHTML = '';
+        return;
+    } else {
+        grid.style.display = 'grid';
+        emptyState.style.display = 'none';
+    }
+
+    // Render cards
+    grid.innerHTML = pageItems.map(post => `
+        <div class="blog-card-new" onclick="openBlogDetail('${post.id}')">
+            <div class="blog-card-thumb">
+                <img src="${post.thumbnail}" alt="${post.title}" loading="lazy">
+            </div>
+            <span class="blog-card-tag" style="background: ${BLOG_CAT_COLORS[post.category] || '#4b6b8e'}">${post.category}</span>
+            <h3 class="blog-card-title">${post.title}</h3>
+            <div class="blog-card-date">${post.createdAt}</div>
+            <p class="blog-card-summary">${post.summary}</p>
+        </div>
+    `).join('');
+
+    // Render pagination
+    let pagHTML = '';
+    pagHTML += `<button class="blog-page-btn" onclick="goToBlogPage(${blogCurrentPage - 1})" ${blogCurrentPage <= 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
+    for (let i = 1; i <= totalPages; i++) {
+        pagHTML += `<button class="blog-page-btn ${i === blogCurrentPage ? 'active' : ''}" onclick="goToBlogPage(${i})">${i}</button>`;
+    }
+    pagHTML += `<button class="blog-page-btn" onclick="goToBlogPage(${blogCurrentPage + 1})" ${blogCurrentPage >= totalPages ? 'disabled' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
+    pagination.innerHTML = pagHTML;
+}
+
+// Go to page
+window.goToBlogPage = function(page) {
+    const filtered = blogCurrentCategory === 'all'
+        ? blogAllPosts
+        : blogAllPosts.filter(p => p.category === blogCurrentCategory);
+    const totalPages = Math.max(1, Math.ceil(filtered.length / BLOG_POSTS_PER_PAGE));
+    if (page < 1 || page > totalPages) return;
+    blogCurrentPage = page;
+    renderBlogGrid();
+    // Scroll to top of blog
+    const blogView = document.getElementById('blog-view');
+    if (blogView) blogView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// Filter by category
+window.filterBlogCategory = function(category) {
+    blogCurrentCategory = category;
+    blogCurrentPage = 1;
+    // Update button states
+    document.querySelectorAll('.blog-cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+    });
+    renderBlogGrid();
+};
+
+// Open blog detail
+window.openBlogDetail = function(postId) {
+    const post = blogAllPosts.find(p => p.id === postId);
+    if (!post) return;
+
+    document.getElementById('blog-detail-category').textContent = post.category;
+    document.getElementById('blog-detail-category').style.background = BLOG_CAT_COLORS[post.category] || '#4b6b8e';
+    document.getElementById('blog-detail-title').textContent = post.title;
+    document.getElementById('blog-detail-date').textContent = post.createdAt;
+    document.getElementById('blog-detail-author').textContent = post.author;
+    document.getElementById('blog-detail-thumbnail').src = post.thumbnail;
+    document.getElementById('blog-detail-content').innerHTML = post.content;
+
+    document.getElementById('blog-list-view').style.display = 'none';
+    document.getElementById('blog-detail-view').style.display = 'block';
+
+    // Scroll to top
+    const blogView = document.getElementById('blog-view');
+    if (blogView) blogView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// Close blog detail
+window.closeBlogDetail = function() {
+    document.getElementById('blog-detail-view').style.display = 'none';
+    document.getElementById('blog-list-view').style.display = 'block';
+};
+
+// Auto-render when blog view becomes visible
+const blogObserver = new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+        if (m.type === 'attributes' && m.attributeName === 'style') {
+            const blogView = document.getElementById('blog-view');
+            if (blogView && blogView.style.display !== 'none') {
+                renderBlogGrid();
+            }
+        }
+    });
+});
+const blogViewEl = document.getElementById('blog-view');
+if (blogViewEl) {
+    blogObserver.observe(blogViewEl, { attributes: true });
+}
+
+// Initial render if already visible
+if (blogViewEl && blogViewEl.style.display !== 'none') {
+    renderBlogGrid();
+}

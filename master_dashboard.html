@@ -452,6 +452,7 @@
                 <div class="header-actions">
                     <span id="admin-badge-email" class="admin-badge">Admin</span>
                     <button onclick="handleLogout()" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                    <button onclick="location.href='index.html'" class="close-dashboard-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;"><i class="fa-solid fa-xmark"></i> 닫기</button>
                 </div>
             </header>
 
@@ -480,11 +481,12 @@
                     </div>
                 </div>
 
-                <div class="section-header">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <h2>고객 회원가입 리스트</h2>
+                    <button onclick="toggleSection('users-list-card')" class="toggle-section-btn" style="background: rgba(75, 107, 142, 0.08); border: 1px solid rgba(75, 107, 142, 0.15); color: var(--master-accent); font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;"><i class="fa-solid fa-chevron-up" id="users-list-card-icon"></i> 리스트 접기</button>
                 </div>
 
-                <div class="data-card">
+                <div class="data-card" id="users-list-card">
                     <table>
                         <thead>
                             <tr>
@@ -641,6 +643,22 @@
             });
         }
 
+        // Toggle Section open/close (collapse/expand)
+        function toggleSection(cardId) {
+            const card = document.getElementById(cardId);
+            const icon = document.getElementById(cardId + '-icon');
+            const btn = event.currentTarget;
+            if (card.style.display === 'none') {
+                card.style.display = '';
+                icon.className = 'fa-solid fa-chevron-up';
+                btn.innerHTML = `<i class="fa-solid fa-chevron-up" id="${cardId}-icon"></i> 리스트 접기`;
+            } else {
+                card.style.display = 'none';
+                icon.className = 'fa-solid fa-chevron-down';
+                btn.innerHTML = `<i class="fa-solid fa-chevron-down" id="${cardId}-icon"></i> 리스트 열기`;
+            }
+        }
+
         // Dashboard Initializer
         function initializeDashboard() {
             loadUsersData();
@@ -695,6 +713,8 @@
                 const now = new Date();
                 const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
 
+                const filteredUsers = [];
+
                 snapshot.forEach(doc => {
                     const user = doc.data();
                     const id = doc.id;
@@ -706,23 +726,43 @@
 
                     totalUsers++;
 
-                    // Parse dates
-                    let createdStr = 'N/A';
-                    let loginStr = 'N/A';
-                    
+                    // Parse dates and stats
+                    let dateObj = null;
                     if (user.createdAt) {
-                        const dateObj = user.createdAt.toDate();
-                        createdStr = dateObj.toLocaleString('ko-KR');
+                        dateObj = user.createdAt.toDate();
                         if (dateObj >= sevenDaysAgo) recentUsers++;
-                    }
-                    
-                    if (user.lastLoginAt) {
-                        loginStr = user.lastLoginAt.toDate().toLocaleString('ko-KR');
                     }
 
                     // Count stats
                     if (user.myPageActive) activeMypage++;
                     if (user.paymentStatus === 'paid') paidUsers++;
+
+                    filteredUsers.push({
+                        id: id,
+                        data: user,
+                        dateObj: dateObj
+                    });
+                });
+
+                // Sort: Recent signups first (descending by dateObj)
+                filteredUsers.sort((a, b) => {
+                    const timeA = a.dateObj ? a.dateObj.getTime() : 0;
+                    const timeB = b.dateObj ? b.dateObj.getTime() : 0;
+                    return timeB - timeA;
+                });
+
+                // Now loop through sorted users to build HTML
+                filteredUsers.forEach(item => {
+                    const user = item.data;
+                    const id = item.id;
+                    const dateObj = item.dateObj;
+
+                    let createdStr = dateObj ? dateObj.toLocaleString('ko-KR') : 'N/A';
+                    let loginStr = 'N/A';
+                    
+                    if (user.lastLoginAt) {
+                        loginStr = user.lastLoginAt.toDate().toLocaleString('ko-KR');
+                    }
 
                     // Determine User Type Badge
                     let typeBadge = '';

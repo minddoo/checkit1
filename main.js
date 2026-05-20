@@ -8512,10 +8512,11 @@ document.addEventListener('DOMContentLoaded', () => {
 if (document.getElementById('paypal-button-container')) {
     paypal.Buttons({
         style: {
-            layout: 'vertical',
+            layout: 'horizontal',
             color:  'gold',
             shape:  'rect',
-            label:  'paypal'
+            label:  'paypal',
+            height: 45
         },
         createOrder: function(data, actions) {
             let totalText = document.getElementById('total-price-amount').innerText || '300';

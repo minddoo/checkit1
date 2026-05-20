@@ -697,6 +697,12 @@
                 snapshot.forEach(doc => {
                     const user = doc.data();
                     const id = doc.id;
+
+                    // Skip B2B users entirely on B2C-only Master Dashboard
+                    if (user.email && user.email.endsWith('.checkit.com')) {
+                        return;
+                    }
+
                     totalUsers++;
 
                     // Parse dates

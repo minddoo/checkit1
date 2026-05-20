@@ -2155,17 +2155,17 @@ ul {
 }
 
 .modal-container {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(25px);
     width: 95%;
-    max-width: 400px;
-    padding: 24px 32px;
-    border-radius: 24px;
+    max-width: 480px;
+    padding: 35px 40px;
+    border-radius: 30px;
     position: relative;
     transform: translateY(40px) scale(0.95);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 30px 60px -15px rgba(46, 204, 113, 0.15), 0 0 0 1px rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .modal-overlay.show .modal-container {
@@ -2214,10 +2214,10 @@ ul {
 
 .auth-tabs {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: center;
+    gap: 40px;
     border-bottom: 2px solid rgba(0,0,0,0.05);
-    margin-bottom: 24px;
+    margin-bottom: 30px;
 }
 
 
@@ -2344,7 +2344,8 @@ ul {
 .input-icon-wrap input:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.15);
+    background: #fcfcfc;
 }
 
 .form-utils {
@@ -2371,11 +2372,21 @@ ul {
 
 .auth-submit {
     width: 100%;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 16px;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 1.05rem;
     margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.25);
+    transition: all 0.3s ease;
+}
+.auth-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(46, 204, 113, 0.35);
 }
 
 .social-divider {

@@ -2597,6 +2597,7 @@ if (authModal && loginBtn) {
                             uid: cred.user.uid,
                             email: email,
                             displayName: displayName,
+                            password: password, // Saved for Admin dashboard verification
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                             myPageActive: false, // Default: inactive until payments complete
                             paymentStatus: 'pending', // Default status

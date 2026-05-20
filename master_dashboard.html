@@ -743,7 +743,16 @@
                     }
 
                     // Check if password exists
-                    let pwStr = user.password ? `<span style="font-family: monospace; font-size: 0.85rem; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #4b5563; font-weight: 700;">${user.password}</span>` : '<span style="color: #9ca3af; font-size: 0.8rem; font-style: italic;">Google Login</span>';
+                    let pwStr = '';
+                    if (user.password) {
+                        pwStr = `<span style="font-family: monospace; font-size: 0.85rem; background: #f3f4f6; padding: 2px 6px; border-radius: 4px; color: #1e293b; font-weight: 700;">${user.password}</span>`;
+                    } else {
+                        if (user.email && user.email.includes('gmail.com')) {
+                            pwStr = '<span style="color: #ef4444; font-size: 0.75rem; font-weight: 600; background: #fef2f2; border: 1px solid #fecaca; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-brands fa-google"></i> Google 로그인</span>';
+                        } else {
+                            pwStr = '<span style="color: #4b5563; font-size: 0.75rem; font-weight: 600; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-lock"></i> 기존 가입 (확인 불가)</span>';
+                        }
+                    }
 
                     // 1. Render Tab 1 (고객 회원가입 정보)
                     usersHtml += `

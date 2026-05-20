@@ -8418,7 +8418,11 @@ function initDashboard() {
             if (stepConsultation) stepConsultation.style.display = 'none';
         }
     } else {
-        renderInlineConsultationForm();
+        if (typeof window.subscribeToUserActiveState === 'function') {
+            window.subscribeToUserActiveState(localStorage.getItem('userEmail') || '');
+        } else {
+            renderInlineConsultationForm();
+        }
     }
 
     // Dashboard Logout
@@ -9346,3 +9350,95 @@ if (blogViewEl) {
 if (blogViewEl && blogViewEl.style.display !== 'none') {
     renderBlogGrid();
 }
+
+// ==========================================
+// Checkit Psychology/Self-Test Module
+// ==========================================
+let userActiveListener = null;
+
+window.subscribeToUserActiveState = function(email) {
+    if (userActiveListener) {
+        userActiveListener(); // unsubscribe previous
+        userActiveListener = null;
+    }
+    if (!email || typeof db === 'undefined' || !db) {
+        const stepConsultation = document.getElementById('step-consultation');
+        const stepSelfTest = document.getElementById('step-self-test');
+        if (stepConsultation) stepConsultation.style.display = 'none';
+        if (stepSelfTest) stepSelfTest.style.display = 'block';
+        return;
+    }
+
+    userActiveListener = db.collection('users').where('email', '==', email).onSnapshot(snapshot => {
+        let myPageActive = false;
+        if (!snapshot.empty) {
+            const data = snapshot.docs[0].data();
+            myPageActive = data.myPageActive === true;
+        }
+
+        const stepConsultation = document.getElementById('step-consultation');
+        const stepSelfTest = document.getElementById('step-self-test');
+        const savedData = localStorage.getItem(`consultationData_${email}`);
+
+        if (savedData) {
+            // Already submitted Step 1 Form, hide both survey & step 1 form
+            if (stepSelfTest) stepSelfTest.style.display = 'none';
+            if (stepConsultation) stepConsultation.style.display = 'none';
+        } else {
+            if (myPageActive) {
+                // Activated by Master dashboard -> Show Step 1 form, hide self-test
+                if (stepSelfTest) stepSelfTest.style.display = 'none';
+                if (stepConsultation) stepConsultation.style.display = 'block';
+                renderInlineConsultationForm();
+            } else {
+                // Inactive / Pre-payment -> Show self-test, hide Step 1 form
+                if (stepConsultation) stepConsultation.style.display = 'none';
+                if (stepSelfTest) stepSelfTest.style.display = 'block';
+            }
+        }
+    }, err => {
+        console.error("Firestore user active listener error:", err);
+    });
+};
+
+window.submitSelfTest = function() {
+    const form = document.getElementById('self-test-form');
+    if (!form.checkValidity()) {
+        alert('모든 문항에 답변해 주세요.');
+        return;
+    }
+    
+    const formData = new FormData(form);
+    let yesCount = 0;
+    for (let [key, value] of formData.entries()) {
+        if (value === 'yes') yesCount++;
+    }
+    
+    // Calculate success score: Base 10%, each YES adds score (Max 35% total)
+    let score = 10;
+    const addValues = [4, 4, 4, 4, 3, 3, 3];
+    for (let i = 0; i < yesCount; i++) {
+        score += addValues[i] || 0;
+    }
+    
+    const scoreEl = document.getElementById('self-test-score');
+    const resultDiv = document.getElementById('self-test-result');
+    
+    if (scoreEl && resultDiv) {
+        scoreEl.innerText = score + '%';
+        resultDiv.style.display = 'block';
+        form.style.display = 'none';
+    }
+};
+
+window.proceedToConsultationForm = function() {
+    localStorage.setItem(`selfTestDone_${localStorage.getItem('userEmail') || ''}`, 'true');
+    // Hide self-test, switch to home page and scroll to payment section
+    window.showView('home');
+    setTimeout(() => {
+        const paymentSection = document.getElementById('payment');
+        if (paymentSection) {
+            paymentSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 300);
+};

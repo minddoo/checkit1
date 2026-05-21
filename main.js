@@ -9328,7 +9328,7 @@ let userActiveListener = null;
 
 window.subscribeToUserActiveState = function(email) {
     if (userActiveListener) {
-        userActiveListener(); // unsubscribe previous
+        userActiveListener();
         userActiveListener = null;
     }
     if (!email || typeof db === 'undefined' || !db) {
@@ -9339,10 +9339,19 @@ window.subscribeToUserActiveState = function(email) {
         return;
     }
 
-    userActiveListener = db.collection('users').where('email', '==', email).onSnapshot(snapshot => {
+    let queryOrDoc;
+    if (window.impersonatedUserEmail) {
+        queryOrDoc = db.collection('users').where('email', '==', email);
+    } else {
+        const currentUser = firebase.auth().currentUser;
+        if (!currentUser) return;
+        queryOrDoc = db.collection('users').doc(currentUser.uid);
+    }
+
+    userActiveListener = queryOrDoc.onSnapshot(snapshot => {
         let myPageActive = false;
-        if (!snapshot.empty) {
-            const data = snapshot.docs[0].data();
+        if ((snapshot.empty === false) || snapshot.exists) {
+            const data = snapshot.data ? snapshot.data() : snapshot.docs[0].data();
             myPageActive = data.myPageActive === true;
         }
 
@@ -9351,17 +9360,14 @@ window.subscribeToUserActiveState = function(email) {
         const savedData = localStorage.getItem(`consultationData_${email}`);
 
         if (savedData) {
-            // Already submitted Step 1 Form, hide both survey & step 1 form
             if (stepSelfTest) stepSelfTest.style.display = 'none';
             if (stepConsultation) stepConsultation.style.display = 'none';
         } else {
             if (myPageActive) {
-                // Activated by Master dashboard -> Show Step 1 form, hide self-test
                 if (stepSelfTest) stepSelfTest.style.display = 'none';
                 if (stepConsultation) stepConsultation.style.display = 'block';
                 renderInlineConsultationForm();
             } else {
-                // Inactive / Pre-payment -> Show self-test, hide Step 1 form
                 if (stepConsultation) stepConsultation.style.display = 'none';
                 if (stepSelfTest) stepSelfTest.style.display = 'block';
             }

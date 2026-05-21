@@ -1723,12 +1723,6 @@ if (langSelector) {
     langSelector.addEventListener('click', (e) => {
         e.stopPropagation();
         langDropdown.classList.toggle('show');
-        
-        // If user clicks the main button, also trigger translation for the current selection
-        const savedLang = localStorage.getItem('preferred-lang') || 'en';
-        if (savedLang !== 'en') {
-            changeLanguage(savedLang);
-        }
     });
 
     document.addEventListener('click', () => {
@@ -1741,10 +1735,10 @@ if (langSelector) {
             const langName = this.innerText;
             
             if (currentLangText) currentLangText.innerText = langName;
-            changeLanguage(langCode);
-            
             localStorage.setItem('preferred-lang', langCode);
             localStorage.setItem('preferred-lang-name', langName);
+            
+            changeLanguage(langCode);
         });
     });
 }

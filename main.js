@@ -1970,7 +1970,7 @@ function updateWorkflowContent(langCode) {
 
 function changeLanguage(langCode) {
     // 1. Set the Google Translate Cookie
-    const cookieValue = (langCode === 'en') ? '/en/en' : `/en/${langCode}`;
+    const cookieValue = `/auto/${langCode}`;
     setCookie('googtrans', cookieValue, 1);
 
     // 2. Update Document Lang Attribute
@@ -1985,7 +1985,7 @@ function changeLanguage(langCode) {
     const triggerGoogle = () => {
         const googleSelect = document.querySelector('select.goog-te-combo');
         if (googleSelect) {
-            const targetValue = (langCode === 'en') ? '' : langCode;
+            const targetValue = (langCode === 'ko') ? '' : langCode;
             if (googleSelect.value !== targetValue) {
                 googleSelect.value = targetValue;
                 googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
@@ -2043,8 +2043,8 @@ window.addEventListener('load', () => {
     updateWelcomeMessage(savedLang);
     updateWorkflowContent(savedLang);
 
-    if (savedLang !== 'en') {
-        const cookieValue = `/en/${savedLang}`;
+    if (savedLang !== 'ko') {
+        const cookieValue = `/auto/${savedLang}`;
         setCookie('googtrans', cookieValue, 1);
         setTimeout(() => changeLanguage(savedLang), 1000);
     }

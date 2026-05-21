@@ -1969,6 +1969,27 @@ function updateWorkflowContent(langCode) {
 }
 
 function changeLanguage(langCode) {
+if (langCode === 'ko') {
+    // Delete Google Translate cookies completely
+    setCookie('googtrans', '', -1);
+    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    const domainParts = location.hostname.split('.');
+    while (domainParts.length > 0) {
+            const domain = domainParts.join('.');
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=" + domain + "; path=/;";
+            document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=." + domain + "; path=/;";
+            domainParts.shift();
+    }
+
+    localStorage.setItem('preferred-lang', 'ko');
+    localStorage.setItem('preferred-lang-name', '\ud55c\uad6d\uc5b4')
+       
+        
+        
+    location.reload();
+    return;
+}
     // 1. Set the Google Translate Cookie
     const cookieValue = `/auto/${langCode}`;
     setCookie('googtrans', cookieValue, 1);

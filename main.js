@@ -1723,12 +1723,6 @@ if (langSelector) {
     langSelector.addEventListener('click', (e) => {
         e.stopPropagation();
         langDropdown.classList.toggle('show');
-        
-        // If user clicks the main button, also trigger translation for the current selection
-        const savedLang = localStorage.getItem('preferred-lang') || 'en';
-        if (savedLang !== 'en') {
-            changeLanguage(savedLang);
-        }
     });
 
     document.addEventListener('click', () => {
@@ -1740,11 +1734,12 @@ if (langSelector) {
             const langCode = this.getAttribute('data-lang');
             const langName = this.innerText;
             
-            if (currentLangText) currentLangText.innerText = langName;
-            changeLanguage(langCode);
-            
+            // Save state first before executing changeLanguage (which may trigger page reload)
             localStorage.setItem('preferred-lang', langCode);
             localStorage.setItem('preferred-lang-name', langName);
+            if (currentLangText) currentLangText.innerText = langName;
+            
+            changeLanguage(langCode);
         });
     });
 }
@@ -1969,84 +1964,45 @@ function updateWorkflowContent(langCode) {
 }
 
 function changeLanguage(langCode) {
-    // 1. Set the Google Translate Cookie
-    const cookieValue = (langCode === 'en') ? '/en/en' : `/en/${langCode}`;
-    setCookie('googtrans', cookieValue, 1);
+    // 구글 번역 콤보박스로 모든 언어 전환 (한국어 = 빈값으로 원본 복원)
+    const targetValue = (langCode === 'ko') ? '' : langCode;
 
-    // 2. Update Document Lang Attribute
-    document.documentElement.lang = langCode;
-
-    // 3. Update Native Content instantly
-    updateLegalContent(langCode);
-    updateWelcomeMessage(langCode);
-    updateWorkflowContent(langCode); // Manual high-quality Hero translation
-
-    // 4. Trigger Google Translate Engine for the rest of the page
-    const triggerGoogle = () => {
+    // 구글 번역 위젯 콤보박스 트리거
+    const triggerGoogle = (retries) => {
         const googleSelect = document.querySelector('select.goog-te-combo');
         if (googleSelect) {
-            const targetValue = (langCode === 'en') ? '' : langCode;
-            if (googleSelect.value !== targetValue) {
-                googleSelect.value = targetValue;
-                googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-            
-            const nukeGoogleBar = () => {
-                const frames = document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate');
-                frames.forEach(f => f.remove());
+            googleSelect.value = targetValue;
+            googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+            // 구글 번역 상단 배너 제거
+            const nukeBar = () => {
+                document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate')
+                    .forEach(f => f.remove());
                 document.body.style.top = '0px';
                 document.documentElement.style.top = '0px';
             };
-            
-            nukeGoogleBar();
-            setTimeout(nukeGoogleBar, 500);
-            setTimeout(nukeGoogleBar, 1500);
-            setTimeout(nukeGoogleBar, 3000);
-            
-            // Aggressive MutationObserver to catch it immediately
-            if (!window.nukeObserver) {
-                window.nukeObserver = new MutationObserver((mutations) => {
-                    let shouldNuke = false;
-                    mutations.forEach((mutation) => {
-                        if (mutation.addedNodes.length) {
-                            shouldNuke = true;
-                        }
-                    });
-                    if (shouldNuke) nukeGoogleBar();
-                });
-                window.nukeObserver.observe(document.body, { childList: true });
-            }
-
-        } else {
-            if (!window.googleTranslateRetryCount) window.googleTranslateRetryCount = 0;
-            if (window.googleTranslateRetryCount < 10) {
-                window.googleTranslateRetryCount++;
-                setTimeout(triggerGoogle, 500);
-            }
+            nukeBar();
+            setTimeout(nukeBar, 500);
+            setTimeout(nukeBar, 1500);
+        } else if (retries > 0) {
+            setTimeout(() => triggerGoogle(retries - 1), 300);
         }
     };
-    triggerGoogle();
+    triggerGoogle(15);
 }
 
-// Check for saved language preference on load
+// 페이지 로드 시 저장된 언어 적용
 window.addEventListener('load', () => {
-    const savedLang = localStorage.getItem('preferred-lang') || 'en';
+    const savedLang = localStorage.getItem('preferred-lang') || 'ko';
     const savedLangName = localStorage.getItem('preferred-lang-name');
-    
-    // Initialize UI text
+
     if (savedLangName && currentLangText) {
         currentLangText.innerText = savedLangName;
     }
-    
-    // Update native translation fields immediately
-    updateLegalContent(savedLang);
-    updateWelcomeMessage(savedLang);
-    updateWorkflowContent(savedLang);
 
-    if (savedLang !== 'en') {
-        const cookieValue = `/en/${savedLang}`;
-        setCookie('googtrans', cookieValue, 1);
-        setTimeout(() => changeLanguage(savedLang), 1000);
+    // 한국어가 아닐 때만 구글 번역 트리거 (한국어는 원본이므로 불필요)
+    if (savedLang !== 'ko') {
+        setTimeout(() => changeLanguage(savedLang), 1200);
     }
 });
 
@@ -4618,11 +4574,11 @@ function initDashboard() {
 
         setTimeout(() => {
             const alimtalkHtml = `
-                <div class="system-block" style="border-left: 4px solid #10b981; background: #f0fdf4; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
-                    <div class="block-icon" style="background: rgba(16, 185, 129, 0.2); color: #10b981;"><i class="fa-solid fa-bell"></i></div>
+                <div class="system-block" style="border-left: 4px solid #3b82f6; background: #eff6ff; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
+                    <div class="block-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;"><i class="fa-solid fa-envelope"></i></div>
                     <div class="block-content" style="width: 100%;">
-                        <p style="margin-top: 5px;"><strong>카카오톡(알림톡) / 문자 수신 및 검진일 입력</strong></p>
-                        <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">주의사항을 다 숙지하셨다면 검진 전 알림톡(카카오톡 미사용 시 일반 문자로 발송)을 받을 <b>휴대폰 번호</b>와 확정된 <b>검진 날짜</b>를 입력해 주세요.<br><br><span style="color: #059669; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
+                        <p style="margin-top: 5px;"><strong>이메일 알림 수신 및 검진일 입력</strong></p>
+                        <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">주의사항을 다 숙지하셨다면 검진 전 안내 이메일을 받으실 <b>이메일 주소</b>와 확정된 <b>검진 날짜</b>를 입력해 주세요.<br><br><span style="color: #2563eb; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
                         
                         <div style="display: flex; flex-direction: column; gap: 10px;" id="alimtalk-input-container">
                             <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -4634,22 +4590,16 @@ function initDashboard() {
                                 </select>
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">휴대폰 번호</label>
-                                <input type="tel" id="kr-phone-input" placeholder="예: 010-1234-5678" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
+                                <input type="email" id="kr-email-input" placeholder="예: example@email.com" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">검진 확정 날짜</label>
                                 <input type="date" id="kr-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
                             </div>
-                            <button onclick="window.submitAlimtalkPhone()" style="padding: 10px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 5px;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">확인</button>
+                            <button onclick="window.submitAlimtalkPhone()" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 5px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'"><i class="fa-solid fa-paper-plane"></i> 이메일 알림 등록</button>
                         </div>
                         
-                        <div style="margin-top: 15px; border-top: 1px dashed #a7f3d0; padding-top: 10px;" id="alimtalk-alt-container">
-                            <span style="color: #64748b; font-size: 0.8rem; display: block; margin-bottom: 8px;">휴대폰 번호 외에 이메일로 받으시겠습니까?</span>
-                            <button onclick="window.showAlternativeContact('email')" style="width: 100%; padding: 10px; background: white; border: 1px solid #3b82f6; color: #3b82f6; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='white'">
-                                <i class="fa-solid fa-envelope"></i> 이메일로 받기
-                            </button>
-                        </div>
                         <button onclick="window.showChatBlock('precautions')" style="margin-top: 15px; width: 100%; padding: 10px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='white'">
                             <i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (의료기관 다시 선택)
                         </button>
@@ -4661,10 +4611,10 @@ function initDashboard() {
     };
 
     window.submitAlimtalkPhone = function() {
-        const phoneInputs = document.querySelectorAll('#kr-phone-input');
+        const emailInputs = document.querySelectorAll('#kr-email-input');
         const dateInputs = document.querySelectorAll('#kr-date-input');
         const hospSelects = document.querySelectorAll('#kr-hospital-select');
-        const phoneInput = phoneInputs[phoneInputs.length - 1];
+        const emailInput = emailInputs[emailInputs.length - 1];
         const dateInput = dateInputs[dateInputs.length - 1];
         const hospSelect = hospSelects[hospSelects.length - 1];
         
@@ -4674,15 +4624,15 @@ function initDashboard() {
             alert("예약하신 의료기관을 선택해주세요.");
             return;
         }
-        if (!phoneInput || !phoneInput.value.trim() || !dateInput || !dateInput.value) {
-            alert("전화번호와 검진 확정 날짜를 모두 입력해주세요.");
+        if (!emailInput || !emailInput.value.trim() || !dateInput || !dateInput.value) {
+            alert("이메일 주소와 검진 확정 날짜를 모두 입력해주세요.");
             return;
         }
         
-        const message = `의료기관: ${selectedHospital}<br>전화번호: ${phoneInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
+        const message = `의료기관: ${selectedHospital}<br>이메일: ${emailInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
 
-        // Real Action: Register Notification to Firestore
+        // Real Action: Register Email Notification to Firestore
         if (typeof db !== 'undefined' && db) {
             const consultationRaw = localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`);
             let userName = '고객';
@@ -4691,8 +4641,8 @@ function initDashboard() {
             const userGoogleEmail = localStorage.getItem('userEmail') || '';
             const dataObj = {
                 name: userName,
-                contactType: 'alimtalk',
-                contactValue: phoneInput.value.trim(),
+                contactType: 'email',
+                contactValue: emailInput.value.trim(),
                 reservedDate: dateInput.value,
                 hospitalName: selectedHospital,
                 userGoogleEmail: userGoogleEmail,
@@ -4708,10 +4658,9 @@ function initDashboard() {
             }
 
             promise.then((docRef) => {
-                console.log("Notification scheduled/updated successfully");
-                window.lastScheduledNotifId = docRef.id; // Store or maintain for subsequent steps
-                window.lastScheduledNotifId = docRef.id; // Store for subsequent steps
-                window.appendMessage('system', '<div class="success-bubble" style="background: #ecfdf5; color: #065f46; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 8px;"></i>알림톡 알림 예약이 정상적으로 등록되었습니다! 잠시 후 확인 알림톡이 도착합니다.</div>', 'system');
+                console.log("Email notification scheduled/updated successfully");
+                window.lastScheduledNotifId = docRef.id;
+                window.appendMessage('system', '<div class="success-bubble" style="background: #eff6ff; color: #1e40af; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 0.9rem;"><i class="fa-solid fa-circle-check" style="color: #3b82f6; margin-right: 8px;"></i>이메일 알림이 정상적으로 등록되었습니다! 검진 일정에 맞춰 이메일로 안내를 보내드립니다.</div>', 'system');
             }).catch(err => {
                 console.error("Error scheduling:", err);
                 alert("등록 처리 중 오류가 발생했습니다: " + err.message);
@@ -4719,11 +4668,8 @@ function initDashboard() {
         }
         
         const container1s = document.querySelectorAll('#alimtalk-input-container');
-        const container2s = document.querySelectorAll('#alimtalk-alt-container');
         const container1 = container1s[container1s.length - 1];
-        const container2 = container2s[container2s.length - 1];
         if (container1) container1.style.display = 'none';
-        if (container2) container2.style.display = 'none';
 
         setTimeout(() => {
             window.askSuppliesStatus();

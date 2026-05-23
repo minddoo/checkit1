@@ -8570,10 +8570,20 @@ window.handleInlineFormSubmit = function() {
             if (data.hospitalOpt === 'Yes' && data.prefHospital && data.prefHospital.trim() !== '') {
                 coordMessage = `고객님이 입력하신 병원의 일정 및 프로그램을 체킷 담당자가 확인 후 메일로 안내드리겠습니다.`;
                 if (data.seeDefaultOpt === 'Yes') {
-                    coordMessage += `<br><br>추가로 CHECKIT에서 기본으로 제공하는 추천 병원 및 프로그램도 함께 안내해 드립니다.`;
+                    coordMessage = `원래 희망병원에서의 예약을 취소하고 CHECKIT 기본 제공 병원에서 진행하고 싶으시면 아래 창의 목록을 보시고 원하시는 병원의 <b>[병원 선택]</b> 버튼을 눌러주시고,<br><br>기존에 적어주신 희망병원에서 그대로 진행을 원하시면 아래의 <b>[희망병원 진행]</b> 버튼을 눌러주세요.`;
                 }
             }
             window.appendMessage('coord', coordMessage);
+            
+            // Add the "희망병원 진행" button if applicable
+            if (data.hospitalOpt === 'Yes' && data.seeDefaultOpt === 'Yes') {
+                const btnHtml = `
+                    <div style="margin-top: 5px;">
+                        <button type="button" onclick="window.proceedWithPrefHospital(this)" style="width:100%; background:#2563eb; color:white; border:none; padding:14px; border-radius:10px; font-weight:800; cursor:pointer; font-size:1rem; box-shadow:0 4px 6px rgba(37, 99, 235, 0.2); transition: all 0.2s;">🏥 기존 희망병원 진행 (Proceed)</button>
+                    </div>
+                `;
+                setTimeout(() => window.appendMessage('system', btnHtml), 500);
+            }
         }
 
         // Trigger existing booking step ONLY if they don't have a preferred hospital, OR if they want to see the defaults anyway
@@ -8586,6 +8596,25 @@ window.handleInlineFormSubmit = function() {
 
     // Save locally
     localStorage.setItem(`consultationData_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(data));
+};
+
+window.proceedWithPrefHospital = function(btnEl) {
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerText = "✓ 희망병원 진행 선택완료";
+        btnEl.style.background = "#94a3b8";
+        btnEl.style.boxShadow = "none";
+    }
+    
+    // User message
+    if (window.appendMessage) {
+        window.appendMessage('user', '기존 희망병원으로 진행하겠습니다.');
+        
+        // Bot response
+        setTimeout(() => {
+            window.appendMessage('coord', '알겠습니다. 입력해주신 희망병원 기준으로 예약을 계속 진행하며, 일정 및 프로그램 안내를 메일로 보내드리겠습니다. 감사합니다.');
+        }, 1000);
+    }
 };
 
 

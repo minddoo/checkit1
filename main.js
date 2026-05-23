@@ -9195,38 +9195,47 @@ window.subscribeToUserActiveState = function(email) {
 
     if (!email || typeof db === 'undefined' || !db) return;
 
-    // If user already submitted Step 1, hide everything (consultation already in history)
-    const savedData = localStorage.getItem('consultationData_' + email);
-    if (savedData) {
-        if (stepSelfTest) stepSelfTest.style.display = 'none';
-        if (stepConsultation) stepConsultation.style.display = 'none';
-        return;
-    }
+
 
     // Listen to user_activations collection (allow read: if true - no Firebase Auth needed)
     // Master dashboard writes here when activating/deactivating a customer
     userActiveListener = db.collection('user_activations').doc(email).onSnapshot(function(snapshot) {
+        const myPageActive = snapshot.exists && snapshot.data().myPageActive === true;
+        const savedData = localStorage.getItem('consultationData_' + email);
+
         const stepC = document.getElementById('step-consultation');
         const stepS = document.getElementById('step-self-test');
-        const saved = localStorage.getItem('consultationData_' + email);
-
-        if (saved) {
-            if (stepS) stepS.style.display = 'none';
-            if (stepC) stepC.style.display = 'none';
-            return;
-        }
-
-        const myPageActive = snapshot.exists && snapshot.data().myPageActive === true;
+        const stepB = document.getElementById('step-booking');
+        const stepD = document.getElementById('step-dday');
 
         if (myPageActive) {
-            // ACTIVATED by Master: self-test stays visible + show consultation form below
-            if (stepS) stepS.style.display = 'block';
-            if (stepC) stepC.style.display = 'block';
-            renderInlineConsultationForm();
+            // ACTIVATED
+            if (savedData) {
+                if (stepS) stepS.style.display = 'none';
+                if (stepC) stepC.style.display = 'none';
+            } else {
+                if (stepS) stepS.style.display = 'block';
+                if (stepC) stepC.style.display = 'block';
+                renderInlineConsultationForm();
+            }
         } else {
-            // NOT YET ACTIVATED (pre-payment): only self-test visible
-            if (stepC) stepC.style.display = 'none';
+            // DEACTIVATED: Force back to test section ONLY
             if (stepS) stepS.style.display = 'block';
+            if (stepC) stepC.style.display = 'none';
+            if (stepB) stepB.style.display = 'none';
+            if (stepD) stepD.style.display = 'none';
+
+            // Remove dynamically added user/coord bubbles (keep welcome & self-test)
+            const chatMessages = document.getElementById('chat-messages');
+            if (chatMessages) {
+                const rows = chatMessages.querySelectorAll('.message-row');
+                rows.forEach(row => {
+                    // Do not remove welcome message or predefined steps
+                    if (!row.id && !row.querySelector('.chat-inline-logo')) {
+                        row.remove();
+                    }
+                });
+            }
         }
     }, function(err) {
         console.error('Activation listener error:', err);

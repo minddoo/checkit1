@@ -1775,11 +1775,6 @@ function changeLanguage(langCode) {
             setTimeout(nukeBar, 1500);
         } else if (retries > 0) {
             setTimeout(() => triggerGoogle(retries - 1), 300);
-        } else {
-            // 최후의 수단: DOM 조작 실패 시 쿠키 직접 세팅 후 강제 새로고침
-            document.cookie = `googtrans=/ko/${langCode}; path=/;`;
-            document.cookie = `googtrans=/ko/${langCode}; domain=${window.location.hostname}; path=/;`;
-            window.location.reload();
         }
     };
     triggerGoogle(15);
@@ -1954,90 +1949,73 @@ function initGoogleLogin() {
 }
 
 function handleGoogleSignIn(response) {
-    // Decode JWT token (simple client-side decode)
-    const base64Url = response.credential.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+        console.error("Firebase not initialized");
+        return;
+    }
 
-    const user = JSON.parse(jsonPayload);
-    
-    // Save session
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userName', user.name);
-    localStorage.setItem('userEmail', user.email);
-    localStorage.setItem('userPicture', user.picture);
+    const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
 
-    // 1. Convert Google JWT to Firebase Credential
-    if (typeof firebase !== 'undefined' && firebase.auth) {
-        const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
-        
-        firebase.auth().signInWithCredential(credential).then((result) => {
-            const fbUser = result.user;
+    firebase.auth().signInWithCredential(credential)
+        .then((result) => {
+            const user = result.user; // Firebase user
             
+            // Save session
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', user.displayName || 'Google User');
+            localStorage.setItem('userEmail', user.email);
+            localStorage.setItem('userPicture', user.photoURL);
+
             // Sync Google user profile to Firestore properly
-            const userRef = firebase.firestore().collection('users').doc(fbUser.uid);
-            userRef.get().then(docSnap => {
-                if (!docSnap.exists) {
-                    // Treat as new sign-up
-                    userRef.set({
-                        uid: fbUser.uid,
-                        email: fbUser.email || user.email,
-                        displayName: fbUser.displayName || user.name,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        myPageActive: false,
-                        paymentStatus: 'pending',
-                        role: 'user',
-                        authProvider: 'google'
-                    }).then(() => {
-                        console.log("New Google user registered successfully.");
-                        // Force page reload or close modal if needed
-                    }).catch(err => console.error("Firestore sync error for new Google user:", err));
-                } else {
-                    // Existing user login
-                    userRef.update({
-                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        console.log("Existing Google user logged in.");
-                    }).catch(err => console.error("Firestore sync error for existing Google user:", err));
-                }
-            }).catch(err => console.error("Error checking Google user:", err));
+            if (firebase.firestore) {
+                const userRef = firebase.firestore().collection('users').doc(user.uid);
+                userRef.get().then(docSnap => {
+                    if (!docSnap.exists) {
+                        // Treat as new sign-up
+                        userRef.set({
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName || 'Google User',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            myPageActive: false,
+                            paymentStatus: 'pending',
+                            role: 'user',
+                            authProvider: 'google'
+                        }).catch(err => console.error("Firestore sync error for new Google user:", err));
+
+                        // Send Confirmation Email
+                        fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: user.email, name: user.displayName })
+                        }).catch(err => console.error('Social Login Email error:', err));
+                    } else {
+                        // Existing user login
+                        userRef.update({
+                            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).catch(err => console.error("Firestore sync error for existing Google user:", err));
+                    }
+                }).catch(err => console.error("Error checking Google user:", err));
+            }
+
+            updateAuthUI();
             
-        }).catch((error) => {
-            console.error("Firebase Auth error with Google credential:", error);
-            alert("Google Login failed. Please try again.");
+            // Close modal if open
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            // 이전 등록 이력 복원
+            window.checkAndRestoreSession(user.email, user.displayName);
+        })
+        .catch((error) => {
+            console.error("Google Sign-In error:", error);
+            alert("Google login failed. Please try again.");
         });
-    } else {
-        console.error("Firebase not initialized.");
-    }
-    
-    // Send Confirmation Email via Google Apps Script for Google Users
-    if (user.email) {
-        // Master emails will be handled dynamically when clicking Go to My Page.
-
-        fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
-
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: user.email, name: user.name })
-        }).catch(err => console.error('Social Login Email error:', err));
-    }
-    
-    updateAuthUI();
-    
-    // Close modal if open
-    const authModal = document.getElementById('auth-modal');
-    if (authModal) {
-        authModal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-
-    // ─── 이전 등록 이력 복원 (범용 함수 호출) ───────────────────
-    window.checkAndRestoreSession(user.email, user.name);
-    // ────────────────────────────────────────────────────────────
 }
 
 /**
@@ -2048,7 +2026,14 @@ window.checkAndRestoreSession = function(email, displayName) {
     if (typeof db === 'undefined' || !db || !email) return;
     const userName = displayName || localStorage.getItem('userName') || '고객';
 
-    db.collection('scheduled_notifications')
+    // FIRST: Check if active before restoring session to prevent resurrecting disabled UI
+    db.collection('user_activations').doc(email).get().then(actSnap => {
+        if (!actSnap.exists || actSnap.data().myPageActive !== true) {
+            console.log("User is deactivated. Skipping session restore.");
+            return;
+        }
+
+        db.collection('scheduled_notifications')
         .where('userGoogleEmail', '==', email)
         .where('status', '==', 'pending')
         .orderBy('submittedAt', 'desc')
@@ -2162,6 +2147,7 @@ window.checkAndRestoreSession = function(email, displayName) {
             }, 200);
         })
         .catch(err => console.log('Session restore lookup:', err.message));
+    }).catch(err => console.log('Active status check failed:', err.message));
 };
 
 if (authModal && loginBtn) {

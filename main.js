@@ -8646,6 +8646,20 @@ window.handleInlineFormSubmit = function() {
                 }
             }
             window.appendMessage('coord', coordMessage);
+            
+            // IF the user chose Yes for hospital but No for default list, show the Alimtalk check immediately!
+            if (data.hospitalOpt === 'Yes' && data.prefHospital && data.prefHospital.trim() !== '' && data.seeDefaultOpt === 'No') {
+                setTimeout(() => {
+                    const nextMsg = `
+                        checkit을 통해서 메일 안내를 받으신 후 예약까지 진행하셨다면 병원에서 알림톡이 추후 발송될겁니다. 알림톡을 받으셨을까요?
+                        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                            <button style="padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="window.reportConfirmed('기존 선택', '')" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">알림톡을 받았습니다</button>
+                            <button style="padding: 12px; font-size: 0.9rem; font-weight: 800; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="window.notReceivedAlimtalkPrefHospital(this)" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">1일이 지나도 알림톡을 받지 못하였습니다</button>
+                        </div>
+                    `;
+                    window.appendMessage('coord', nextMsg);
+                }, 1500);
+            }
         }
 
         // Trigger existing booking step ONLY if they don't have a preferred hospital, OR if they want to see the defaults anyway

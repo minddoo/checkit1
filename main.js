@@ -1748,39 +1748,26 @@ if (langSelector) {
 // Removed manual translation dictionaries and update functions. Relying on Google Translate.
 
 function changeLanguage(langCode) {
+    // Save to local storage for our custom UI
+    localStorage.setItem('preferred-lang', langCode);
+
     if (langCode === 'ko') {
-        // 한국어 선택 시 구글 번역 쿠키를 삭제하고 원본으로 복원하기 위해 새로고침
+        // 한국어 선택 시 구글 번역 쿠키를 삭제하고 원본으로 복원
         document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.' + window.location.hostname + '; path=/;';
         document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=' + window.location.hostname + '; path=/;';
-        window.location.reload();
-        return;
+    } else {
+        // 구글 번역 쿠키 강제 설정 (항상 한국어 원본 기준)
+        document.cookie = `googtrans=/ko/${langCode}; path=/;`;
+        document.cookie = `googtrans=/ko/${langCode}; domain=.${window.location.hostname}; path=/;`;
+        document.cookie = `googtrans=/ko/${langCode}; domain=${window.location.hostname}; path=/;`;
     }
-
-    // 구글 번역 위젯 콤보박스 트리거
-    const triggerGoogle = (retries) => {
-        const googleSelect = document.querySelector('select.goog-te-combo');
-        if (googleSelect) {
-            googleSelect.value = langCode;
-            googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
-
-            // 구글 번역 상단 배너 제거
-            const nukeBar = () => {
-                document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate')
-                    .forEach(f => f.remove());
-                document.body.style.top = '0px';
-                document.documentElement.style.top = '0px';
-            };
-            nukeBar();
-            setTimeout(nukeBar, 500);
-            setTimeout(nukeBar, 1500);
-        } else if (retries > 0) {
-            setTimeout(() => triggerGoogle(retries - 1), 300);
-        }
-    };
-    triggerGoogle(15);
+    
+    // 강제로 페이지를 새로고침하여 구글 위젯이 쿠키를 읽고 즉시 번역하도록 처리
+    window.location.reload();
 }
 
-// 페이지 로드 시 저장된 언어 적용
+// 페이지 로드 시 저장된 언어 UI 적용 (실제 번역은 쿠키에 의해 자동 수행됨)
 window.addEventListener('load', () => {
     const savedLang = localStorage.getItem('preferred-lang') || 'ko';
     const savedLangName = localStorage.getItem('preferred-lang-name');
@@ -1788,11 +1775,16 @@ window.addEventListener('load', () => {
     if (savedLangName && currentLangText) {
         currentLangText.innerText = savedLangName;
     }
-
-    // 한국어가 아닐 때만 구글 번역 트리거 (한국어는 원본이므로 불필요)
-    if (savedLang !== 'ko') {
-        setTimeout(() => changeLanguage(savedLang), 1200);
-    }
+    
+    // 상단 구글 배너 숨기기 강제
+    const nukeBar = () => {
+        document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate').forEach(f => f.remove());
+        document.body.style.top = '0px';
+        document.documentElement.style.top = '0px';
+    };
+    nukeBar();
+    setTimeout(nukeBar, 500);
+    setTimeout(nukeBar, 1500);
 });
 
 

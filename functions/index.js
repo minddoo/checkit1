@@ -534,13 +534,13 @@ exports.translateText = functions.https.onCall(async (data, context) => {
   if (!data.text) throw new functions.https.HttpsError('invalid-argument', 'Text is required.');
   try {
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     const result = await model.generateContent(
       "Translate the following Korean hospital notification text into " + (data.targetLang || 'English') + 
       " verbatim, maintaining the exact original meaning without summarizing.\n\nText:\n" + data.text
     );
     return { translatedText: (await result.response).text().trim() };
   } catch (error) {
-    throw new functions.https.HttpsError('internal', "Translation failed: " + error.message);
+    throw new functions.https.HttpsError('unknown', "Translation failed: " + error.message);
   }
 });

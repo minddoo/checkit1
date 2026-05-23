@@ -8226,10 +8226,13 @@ function initDashboard() {
                     }
                     
                     if (isPref) {
-                        window.appendMessage('coord', '💡 **희망병원 예약 안내**<br>고객님의 희망병원(예약병원)에 대한 상세한 검진 전 준비사항 및 주의사항은 담당자가 일정을 확인한 후 메일로 별도 안내해 드릴 예정입니다. 추후 안내 메일을 꼭 확인해 주세요!');
-                        setTimeout(() => {
-                            window.showChatBlock('precautions');
-                        }, 800);
+                        const emailMsg = `
+                            💡 **희망병원 예약 안내**<br>고객님의 희망병원(예약병원)에 대한 상세한 검진 전 준비사항 및 주의사항은 담당자가 일정을 확인한 후 메일로 별도 안내해 드릴 예정입니다. 추후 안내 메일을 꼭 확인해 주세요!
+                            <div style="margin-top: 15px;">
+                                <button style="width: 100%; padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="this.disabled=true; this.style.opacity='0.6'; this.innerText='✓ 확인 완료'; window.appendMessage('user', '주의사항 확인했어요'); setTimeout(() => window.showChatBlock('booking'), 800);" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">주의사항 확인했어요</button>
+                            </div>
+                        `;
+                        window.appendMessage('coord', emailMsg);
                     } else {
                         window.showChatBlock('precautions');
                     }

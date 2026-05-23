@@ -8689,6 +8689,12 @@ window.notReceivedAlimtalkPrefHospital = function(btnEl) {
             불편을 드려 대단히 죄송합니다. 간혹 병원 시스템 지연이나 연락처 오류로 인해 알림톡 발송이 누락되는 경우가 있습니다.
             <br><br>
             담당자가 해당 병원에 직접 연락하여 신속하게 예약 확정 여부를 파악한 뒤, 이메일로 다시 상세히 안내해 드리겠습니다. 조금만 기다려 주시기 바랍니다!
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
+                <p style="font-size: 0.85rem; font-weight: 700; color: #0369a1; margin-bottom: 8px;">
+                    <i class="fa-solid fa-bell" style="margin-right: 4px;"></i>만약 추후 1일 이내에 알림톡을 정상적으로 수신하셨다면, 아래 버튼을 눌러 다음 단계를 진행해 주세요.
+                </p>
+                <button style="width: 100%; padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="window.reportConfirmed('기존 선택', '')" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">알림톡을 받았습니다</button>
+            </div>
         `;
         window.appendMessage('coord', msg);
     }, 1000);

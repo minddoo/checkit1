@@ -2692,7 +2692,17 @@ function initDashboard() {
             `;
         }
 
-        chatMessages.appendChild(row);
+        if (content && typeof content === 'string' && (content.includes('결제 확인 요청합니다') || content.includes('결제 정보가 접수되었습니다') || content.includes('입금 확인 요청 접수됨'))) {
+            const stepC = document.getElementById('step-consultation');
+            if (stepC) {
+                chatMessages.insertBefore(row, stepC);
+            } else {
+                chatMessages.appendChild(row);
+            }
+        } else {
+            chatMessages.appendChild(row);
+        }
+
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         if (!skipSave) {
@@ -2760,7 +2770,16 @@ function initDashboard() {
                     }
                     row.innerHTML = content;
                 }
-                chatMessages.appendChild(row);
+
+                if (msg.content && typeof msg.content === 'string' && (msg.content.includes('결제 확인 요청합니다') || msg.content.includes('결제 정보가 접수되었습니다') || msg.content.includes('입금 확인 요청 접수됨'))) {
+                    if (stepConsultationClone) {
+                        chatMessages.insertBefore(row, stepConsultationClone);
+                    } else {
+                        chatMessages.appendChild(row);
+                    }
+                } else {
+                    chatMessages.appendChild(row);
+                }
             });
             
             chatMessages.scrollTop = chatMessages.scrollHeight;

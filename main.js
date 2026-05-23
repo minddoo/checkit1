@@ -8547,7 +8547,11 @@ window.handleInlineFormSubmit = function() {
     // 3. System Response & Trigger Next Step
     setTimeout(() => {
         if (window.appendMessage) {
-            window.appendMessage('coord', `Thank you, <b>${data.name}</b>! I've received your request. I am now searching for hospitals that match your desired type (<b>${data.type}</b>).`);
+            let coordMessage = `Thank you, <b>${data.name}</b>! I've received your request. I am now searching for hospitals that match your desired type (<b>${data.type}</b>).`;
+            if (data.hospitalOpt === 'Yes' && data.prefHospital && data.prefHospital.trim() !== '') {
+                coordMessage = `고객님이 입력하신 병원의 일정 및 프로그램을 체킷 담당자가 확인 후 메일로 안내드리겠습니다.`;
+            }
+            window.appendMessage('coord', coordMessage);
         }
 
         // Trigger existing booking step

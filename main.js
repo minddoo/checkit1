@@ -4388,41 +4388,43 @@ function initDashboard() {
         }
 
         setTimeout(() => {
-            const alimtalkHtml = `
-                <div class="system-block" style="border-left: 4px solid #3b82f6; background: #eff6ff; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
-                    <div class="block-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;"><i class="fa-solid fa-envelope"></i></div>
-                    <div class="block-content" style="width: 100%;">
-                        <p style="margin-top: 5px;"><strong>이메일 알림 수신 및 검진일 입력</strong></p>
-                        <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">주의사항을 다 숙지하셨다면 검진 전 안내 이메일을 받으실 <b>이메일 주소</b>와 확정된 <b>검진 날짜</b>를 입력해 주세요.<br><br><span style="color: #2563eb; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 10px;" id="alimtalk-input-container">
-                            <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
-                                <select id="kr-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
-                                    <option value="">-- 의료기관 선택 --</option>
-                                    ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
-                                    <option value="기타">기타 (목록에 없음)</option>
-                                </select>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
-                                <input type="email" id="kr-email-input" placeholder="예: example@email.com" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 4px;">
-                                <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">검진 확정 날짜</label>
-                                <input type="date" id="kr-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
-                            </div>
-                            <button onclick="window.submitAlimtalkPhone()" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 5px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'"><i class="fa-solid fa-paper-plane"></i> 이메일 알림 등록</button>
+            if (typeof window.showEmailNotificationForm === 'function') {
+                window.showEmailNotificationForm();
+            }
+        }, 1500);
+    };
+
+    window.showEmailNotificationForm = function() {
+        const alimtalkHtml = `
+            <div class="system-block" style="border-left: 4px solid #3b82f6; background: #eff6ff; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
+                <div class="block-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;"><i class="fa-solid fa-envelope"></i></div>
+                <div class="block-content" style="width: 100%;">
+                    <p style="margin-top: 5px;"><strong>이메일 알림 수신 및 검진일 입력</strong></p>
+                    <span style="color: #64748b; font-size: 0.85rem; margin-bottom: 15px; display: block; line-height: 1.5;">주의사항을 다 숙지하셨다면 검진 전 안내 이메일을 받으실 <b>이메일 주소</b>와 확정된 <b>검진 날짜</b>를 입력해 주세요.<br><br><span style="color: #2563eb; font-weight: 600;">(의료기관에서 안내받으신 확정 날짜를 적어주시면, 해당 일정에 맞춰 정확하게 안내를 보내드립니다.)</span></span>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;" id="alimtalk-input-container">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
+                            <select id="kr-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
+                                <option value="">-- 의료기관 선택 --</option>
+                                ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
+                                <option value="기타">기타 (목록에 없음)</option>
+                            </select>
                         </div>
-                        
-                        <button onclick="window.showChatBlock('precautions')" style="margin-top: 15px; width: 100%; padding: 10px; background: white; border: 1px solid #cbd5e1; color: #475569; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='white'">
-                            <i class="fa-solid fa-arrow-left"></i> 이전 단계로 돌아가기 (의료기관 다시 선택)
-                        </button>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
+                            <input type="email" id="kr-email-input" placeholder="예: example@email.com" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">검진 확정 날짜</label>
+                            <input type="date" id="kr-date-input" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; font-family: inherit; color: #334155;">
+                        </div>
+                        <button onclick="window.submitAlimtalkPhone()" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; margin-top: 5px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'"><i class="fa-solid fa-paper-plane"></i> 이메일 알림 등록</button>
                     </div>
                 </div>
-            `;
-            window.appendMessage('system', alimtalkHtml, 'system');
-        }, 1500);
+            </div>
+        `;
+        window.appendMessage('system', alimtalkHtml, 'system');
     };
 
     window.submitAlimtalkPhone = function() {
@@ -8229,7 +8231,7 @@ function initDashboard() {
                         const emailMsg = `
                             💡 **희망병원 예약 안내**<br>고객님의 희망병원(예약병원)에 대한 상세한 검진 전 준비사항 및 주의사항은 담당자가 일정을 확인한 후 메일로 별도 안내해 드릴 예정입니다. 추후 안내 메일을 꼭 확인해 주세요!
                             <div style="margin-top: 15px;">
-                                <button style="width: 100%; padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="this.disabled=true; this.style.opacity='0.6'; this.innerText='✓ 확인 완료'; window.appendMessage('user', '주의사항 확인했어요'); setTimeout(() => window.showChatBlock('booking'), 800);" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">주의사항 확인했어요</button>
+                                <button style="width: 100%; padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="this.disabled=true; this.style.opacity='0.6'; this.innerText='✓ 확인 완료'; window.appendMessage('user', '주의사항 확인했어요'); setTimeout(() => { if(typeof window.showEmailNotificationForm === 'function') window.showEmailNotificationForm(); }, 800);" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">주의사항 확인했어요</button>
                             </div>
                         `;
                         window.appendMessage('coord', emailMsg);

@@ -8294,28 +8294,47 @@ function initDashboard() {
 
     dashboardInitialized = true;
     
-    // Auto-render or Restore Chat State
-    const savedData = localStorage.getItem(`consultationData_${localStorage.getItem('userEmail') || ''}`);
-    const chatHistory = localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`);
+    // --- State Hydration (Save/Restore) Logic ---
+    const userEmail = localStorage.getItem('userEmail') || '';
+    const chatMessagesContainer = document.getElementById('chat-messages');
     
-    if (savedData) {
-        // If we have history, loadChatHistory (called above) handles it.
-        // If we ONLY have savedData but NO history, then we show the summary and trigger booking.
-        if (!chatHistory || JSON.parse(chatHistory).length === 0) {
-            const stepConsultation = document.getElementById('step-consultation');
-            if (stepConsultation) stepConsultation.style.display = 'none';
-            
+    if (chatMessagesContainer && userEmail) {
+        // 1. Setup MutationObserver to automatically save the chat state whenever it changes
+        const observer = new MutationObserver(() => {
+            localStorage.setItem(`chat_history_html_${userEmail}`, chatMessagesContainer.innerHTML);
+        });
+        observer.observe(chatMessagesContainer, { childList: true, subtree: true, characterData: true });
+    }
+
+    const savedData = localStorage.getItem(`consultationData_${userEmail}`);
+    const chatHistoryHtml = localStorage.getItem(`chat_history_html_${userEmail}`);
+    const oldChatHistoryJson = localStorage.getItem(`chat_history_${userEmail}`);
+    
+    if (chatHistoryHtml && chatHistoryHtml.trim().length > 50) {
+        // 2. Restore from HTML state (New Method - preserves exact step and buttons)
+        const stepConsultation = document.getElementById('step-consultation');
+        if (stepConsultation) stepConsultation.style.display = 'none';
+        
+        if (chatMessagesContainer) {
+            chatMessagesContainer.innerHTML = chatHistoryHtml;
+            setTimeout(() => {
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            }, 100);
+        }
+    } else if (savedData) {
+        // 3. Legacy fallback or initial completion state
+        const stepConsultation = document.getElementById('step-consultation');
+        if (stepConsultation) stepConsultation.style.display = 'none';
+        
+        if (!oldChatHistoryJson || oldChatHistoryJson === '[]') {
             const data = JSON.parse(savedData);
             window.appendMessage('user', generateConsultationSummaryHtml(data));
             setTimeout(() => window.showChatBlock('booking'), 600);
-        } else {
-            // Already loaded by loadChatHistory()
-            const stepConsultation = document.getElementById('step-consultation');
-            if (stepConsultation) stepConsultation.style.display = 'none';
         }
     } else {
+        // 4. Brand new session
         if (typeof window.subscribeToUserActiveState === 'function') {
-            window.subscribeToUserActiveState(localStorage.getItem('userEmail') || '');
+            window.subscribeToUserActiveState(userEmail);
         } else {
             renderInlineConsultationForm();
         }

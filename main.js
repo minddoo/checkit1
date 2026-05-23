@@ -8030,24 +8030,140 @@ function initDashboard() {
         window.closeSelectionModal();
         window.closeProgramModal();
         
-        // Feedback message with buttons
-        setTimeout(() => {
-            const confirmMsg = `
-                확인되었습니다! **${selectedRegion}** 지점의 **${program.title}** 프로그램을 선택하셨습니다. 
-                <br><br>예약 및 추가 상담을 이어가시겠습니까?
-                <div style="margin-top: 15px; display: flex; gap: 8px;">
-                    <button style="padding: 10px 28px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s;" onclick="window.proceedToBooking('${selectedRegion}', '${program.title}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">예</button>
-                    <button style="padding: 10px 20px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s;" onclick="window.openSelectionModal(${hIdx})" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">다시 고르기</button>
+        // Check if program has optional test groups (keys containing "선택검사")
+        const optionalGroups = [];
+        if (program.details) {
+            for (const [key, items] of Object.entries(program.details)) {
+                if (key.includes('선택검사') || key.includes('선택 검사')) {
+                    optionalGroups.push({ groupName: key, items });
+                }
+            }
+        }
+        
+        if (optionalGroups.length > 0) {
+            // Has optional tests → show picker first
+            setTimeout(() => {
+                window.showOptionalTestPicker(hIdx, catIdx, pIdx, selectedRegion, optionalGroups);
+            }, 300);
+        } else {
+            // No optional tests → proceed directly to confirmation
+            setTimeout(() => {
+                window.confirmProgramSelection(selectedRegion, program.title, hIdx, []);
+            }, 300);
+        }
+    };
+
+    window.showOptionalTestPicker = function(hIdx, catIdx, pIdx, selectedRegion, optionalGroups) {
+        const hospitals = window.GLOBAL_HOSPITALS;
+        const hospital = hospitals[hIdx];
+        const program = hospital.categories[catIdx].programs[pIdx];
+
+        const groupsHtml = optionalGroups.map((group, gIdx) => {
+            const itemsHtml = group.items.map((item) => `
+                <label style="display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; background: white;"
+                       class="optional-test-label-${gIdx}"
+                       onmouseover="if(!this.querySelector('input').checked){this.style.borderColor='#10b981'; this.style.background='#f0fdf4';}"
+                       onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#e2e8f0'; this.style.background='white';}">
+                    <input type="radio" name="optional-group-${hIdx}-${gIdx}" value="${item.replace(/'/g, '&#39;')}"
+                           style="margin-top: 3px; accent-color: #10b981; flex-shrink: 0;"
+                           onchange="
+                               document.querySelectorAll('.optional-test-label-${gIdx}').forEach(function(l){
+                                   l.style.borderColor='#e2e8f0'; l.style.background='white';
+                               });
+                               this.closest('label').style.borderColor='#10b981';
+                               this.closest('label').style.background='#f0fdf4';
+                           ">
+                    <span style="font-size: 0.82rem; color: #374151; line-height: 1.5; font-weight: 500;">${item}</span>
+                </label>
+            `).join('');
+
+            return `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: #ecfdf5; border-radius: 8px; border-left: 3px solid #10b981;">
+                        <i class="fa-solid fa-plus-circle" style="color: #10b981; font-size: 0.9rem;"></i>
+                        <span style="font-size: 0.88rem; font-weight: 800; color: #065f46;">${group.groupName}</span>
+                        <span style="font-size: 0.72rem; color: #6b7280; margin-left: auto; font-weight: 600;">1개 선택 필수</span>
+                    </div>
+                    ${itemsHtml}
                 </div>
             `;
-            window.appendMessage('coord', confirmMsg);
-            
-            // Highlight the hospital card
-            document.querySelectorAll('.hospital-list-item').forEach(item => item.classList.remove('selected'));
-            const li = document.getElementById(`li-hospital-${hIdx}`);
-            if (li) li.classList.add('selected');
-        }, 300);
+        }).join('');
+
+        const html = `
+            <div class="system-block" style="border-left: 4px solid #10b981; background: #f0fdf4; padding-right: 20px; animation: fadeInUp 0.4s ease-out;">
+                <div class="block-icon" style="background: rgba(16, 185, 129, 0.2); color: #10b981;"><i class="fa-solid fa-list-check"></i></div>
+                <div class="block-content" style="width: 100%;">
+                    <p style="margin-top: 5px;"><strong>${selectedRegion} — ${program.title}</strong></p>
+                    <p style="font-size: 0.85rem; color: #064e3b; margin-bottom: 18px; line-height: 1.5; background: #d1fae5; padding: 10px 12px; border-radius: 8px; font-weight: 600;">
+                        <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i>
+                        선택하신 프로그램에 <b>선택 검사</b> 항목이 있습니다.<br>각 그룹에서 원하시는 검사를 <b>1가지씩</b> 선택해 주세요.
+                    </p>
+                    <div id="optional-test-groups-${hIdx}-${pIdx}">
+                        ${groupsHtml}
+                    </div>
+                    <button onclick="window.submitOptionalTests(${hIdx}, ${catIdx}, ${pIdx}, '${selectedRegion.replace(/'/g, "\\'")}', ${optionalGroups.length})"
+                            style="width: 100%; padding: 13px; background: #10b981; color: white; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.95rem; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;"
+                            onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                        <i class="fa-solid fa-check-circle"></i> 선택 완료
+                    </button>
+                </div>
+            </div>
+        `;
+        window.appendMessage('system', html, 'system');
     };
+
+    window.submitOptionalTests = function(hIdx, catIdx, pIdx, selectedRegion, groupCount) {
+        const hospitals = window.GLOBAL_HOSPITALS;
+        const hospital = hospitals[hIdx];
+        const program = hospital.categories[catIdx].programs[pIdx];
+
+        const selections = [];
+        let allSelected = true;
+
+        for (let gIdx = 0; gIdx < groupCount; gIdx++) {
+            const selected = document.querySelector(`input[name="optional-group-${hIdx}-${gIdx}"]:checked`);
+            if (!selected) {
+                allSelected = false;
+                break;
+            }
+            selections.push(selected.value);
+        }
+
+        if (!allSelected) {
+            alert('각 그룹에서 1가지씩 모두 선택해 주세요.');
+            return;
+        }
+
+        // Show user's choice as a message
+        const selectionSummary = selections.map((s, i) => `선택검사 ${i + 1}: ${s.split('(')[0].trim()}`).join('<br>');
+        window.appendMessage('user', selectionSummary, 'user');
+
+        setTimeout(() => {
+            window.confirmProgramSelection(selectedRegion, program.title, hIdx, selections);
+        }, 500);
+    };
+
+    window.confirmProgramSelection = function(selectedRegion, programTitle, hIdx, optionalSelections) {
+        const optSummary = optionalSelections.length > 0
+            ? `<br><br><b>선택 검사:</b> ${optionalSelections.map((s, i) => `<span style="display:inline-block; background:#ecfdf5; color:#065f46; border-radius:6px; padding:2px 8px; font-size:0.8rem; margin:2px; font-weight:700;">[선택${i + 1}] ${s.split('(')[0].trim()}</span>`).join(' ')}`
+            : '';
+
+        const confirmMsg = `
+            확인되었습니다! <b>${selectedRegion}</b> 지점의 <b>${programTitle}</b> 프로그램을 선택하셨습니다.${optSummary}
+            <br><br>예약 및 추가 상담을 이어가시겠습니까?
+            <div style="margin-top: 15px; display: flex; gap: 8px;">
+                <button style="padding: 10px 28px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s;" onclick="window.proceedToBooking('${selectedRegion}', '${programTitle}')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">예</button>
+                <button style="padding: 10px 20px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s;" onclick="window.openSelectionModal(${hIdx})" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">다시 고르기</button>
+            </div>
+        `;
+        window.appendMessage('coord', confirmMsg);
+
+        // Highlight the hospital card
+        document.querySelectorAll('.hospital-list-item').forEach(item => item.classList.remove('selected'));
+        const li = document.getElementById(`li-hospital-${hIdx}`);
+        if (li) li.classList.add('selected');
+    };
+
 
     window.proceedToBooking = function(hName, pName) {
         window.appendMessage('user', '예, 진행해 주세요.');

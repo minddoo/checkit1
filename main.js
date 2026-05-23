@@ -4405,11 +4405,12 @@ function initDashboard() {
                     <div style="display: flex; flex-direction: column; gap: 10px;" id="alimtalk-input-container">
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
-                            <select id="kr-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
+                            <select id="kr-hospital-select" onchange="this.nextElementSibling.style.display = this.value === '기타' ? 'block' : 'none'" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
                                 <option value="">-- 의료기관 선택 --</option>
                                 ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
                                 <option value="기타">기타 (목록에 없음)</option>
                             </select>
+                            <input type="text" id="kr-hospital-custom" placeholder="병원명을 직접 입력해주세요" style="display: none; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
@@ -4431,11 +4432,22 @@ function initDashboard() {
         const emailInputs = document.querySelectorAll('#kr-email-input');
         const dateInputs = document.querySelectorAll('#kr-date-input');
         const hospSelects = document.querySelectorAll('#kr-hospital-select');
+        const customInputs = document.querySelectorAll('#kr-hospital-custom');
         const emailInput = emailInputs[emailInputs.length - 1];
         const dateInput = dateInputs[dateInputs.length - 1];
         const hospSelect = hospSelects[hospSelects.length - 1];
+        const customInput = customInputs[customInputs.length - 1];
         
-        const selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+        let selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+
+        if (selectedHospital === '기타') {
+            if (customInput && customInput.value.trim()) {
+                selectedHospital = customInput.value.trim();
+            } else {
+                alert("병원명을 직접 입력해주세요.");
+                return;
+            }
+        }
 
         if (!selectedHospital) {
             alert("예약하신 의료기관을 선택해주세요.");
@@ -4524,11 +4536,12 @@ function initDashboard() {
                         <div style="display: flex; flex-direction: column; gap: 10px;" id="email-input-container">
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">예약하신 의료기관</label>
-                                <select id="email-hospital-select" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
+                                <select id="email-hospital-select" onchange="this.nextElementSibling.style.display = this.value === '기타' ? 'block' : 'none'" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
                                     <option value="">-- 의료기관 선택 --</option>
                                     ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
                                     <option value="기타">기타 (목록에 없음)</option>
                                 </select>
+                                <input type="text" id="email-hospital-custom" placeholder="병원명을 직접 입력해주세요" style="display: none; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
@@ -4552,14 +4565,25 @@ function initDashboard() {
         const contactInputs = document.querySelectorAll('#email-addr-input');
         const dateInputs = document.querySelectorAll('#email-date-input');
         const hospSelects = document.querySelectorAll('#email-hospital-select');
+        const customInputs = document.querySelectorAll('#email-hospital-custom');
         const containers = document.querySelectorAll('#email-input-container');
         
         const contactInput = contactInputs[contactInputs.length - 1];
         const dateInput = dateInputs[dateInputs.length - 1];
         const hospSelect = hospSelects[hospSelects.length - 1];
+        const customInput = customInputs[customInputs.length - 1];
         const container = containers[containers.length - 1];
 
-        const selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+        let selectedHospital = hospSelect ? hospSelect.value : (window.lastSelectedHospitalName || '');
+
+        if (selectedHospital === '기타') {
+            if (customInput && customInput.value.trim()) {
+                selectedHospital = customInput.value.trim();
+            } else {
+                alert("병원명을 직접 입력해주세요.");
+                return;
+            }
+        }
 
         if (!selectedHospital) {
             alert("예약하신 의료기관을 선택해주세요.");

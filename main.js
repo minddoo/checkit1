@@ -8540,9 +8540,9 @@ window.handleInlineFormSubmit = function() {
         window.appendMessage('user', generateConsultationSummaryHtml(data));
     }
 
-    // 2. Hide Form Block
-    const consultationBlock = document.getElementById('step-consultation');
-    if (consultationBlock) consultationBlock.style.display = 'none';
+    // 2. Form Block visibility (Keep visible per user request)
+    // const consultationBlock = document.getElementById('step-consultation');
+    // if (consultationBlock) consultationBlock.style.display = 'none';
 
     // 3. System Response & Trigger Next Step
     setTimeout(() => {

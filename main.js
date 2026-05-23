@@ -8195,7 +8195,6 @@ function initDashboard() {
                 const btnHtml = `
                     <div style="margin-top: 12px; display: flex; gap: 8px;">
                         <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(true)">예</button>
-                        <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(false)">아니오</button>
                     </div>
                 `;
                 window.appendMessage('coord', `${confirmText}${btnHtml}`);

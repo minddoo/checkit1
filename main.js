@@ -1751,17 +1751,10 @@ function changeLanguage(langCode) {
     // Save to local storage for our custom UI
     localStorage.setItem('preferred-lang', langCode);
 
-    if (langCode === 'ko') {
-        // 한국어 선택 시 구글 번역 쿠키를 삭제하고 원본으로 복원
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=.' + window.location.hostname + '; path=/;';
-        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=' + window.location.hostname + '; path=/;';
-    } else {
-        // 구글 번역 쿠키 강제 설정 (항상 한국어 원본 기준)
-        document.cookie = `googtrans=/ko/${langCode}; path=/;`;
-        document.cookie = `googtrans=/ko/${langCode}; domain=.${window.location.hostname}; path=/;`;
-        document.cookie = `googtrans=/ko/${langCode}; domain=${window.location.hostname}; path=/;`;
-    }
+    // 구글 번역 쿠키 강제 설정 (항상 auto에서 타겟 언어로 번역)
+    document.cookie = `googtrans=/auto/${langCode}; path=/;`;
+    document.cookie = `googtrans=/auto/${langCode}; domain=.${window.location.hostname}; path=/;`;
+    document.cookie = `googtrans=/auto/${langCode}; domain=${window.location.hostname}; path=/;`;
     
     // 강제로 페이지를 새로고침하여 구글 위젯이 쿠키를 읽고 즉시 번역하도록 처리
     window.location.reload();

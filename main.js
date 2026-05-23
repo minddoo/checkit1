@@ -8155,7 +8155,7 @@ function initDashboard() {
         let googleLang = lang;
         if (lang === 'zh') googleLang = 'zh-CN';
         
-        const url = \`https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=\${googleLang}&dt=t&q=\${encodeURIComponent(text)}\`;
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${googleLang}&dt=t&q=${encodeURIComponent(text)}`;
         
         fetch(url)
         .then(response => {
@@ -8172,17 +8172,17 @@ function initDashboard() {
                 translated = 'Translation failed.';
             }
             
-            const resultHtml = \`
+            const resultHtml = `
                 <div class="notranslate" style="background: #ffffff; padding: 18px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left; width: 100%;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
                         <i class="fa-solid fa-language" style="color: var(--primary); font-size: 0.9rem;"></i>
                         <span style="font-weight: 800; color: var(--primary); font-size: 0.85rem; letter-spacing: 0.05em;">자동 번역</span>
                     </div>
                     <div style="font-size: 0.95rem; color: #334155; line-height: 1.6; white-space: pre-wrap; font-weight: 500; text-align: left; width: 100%;">
-                        \${translated}
+                        ${translated}
                     </div>
                 </div>
-            \`;
+            `;
             window.appendMessage('coord', resultHtml);
             
             setTimeout(() => {
@@ -8190,18 +8190,18 @@ function initDashboard() {
                                    (lang === 'vi' ? 'Bạn đã kiểm tra kỹ nội dung được dịch chưa?' : 
                                    'Did you check the translated notification content?');
                 
-                const btnHtml = \`
+                const btnHtml = `
                     <div style="margin-top: 12px; display: flex; gap: 8px;">
                         <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(true)">예</button>
                         <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(false)">아니오</button>
                     </div>
-                \`;
-                window.appendMessage('coord', \`\${confirmText}\${btnHtml}\`);
+                `;
+                window.appendMessage('coord', `${confirmText}${btnHtml}`);
             }, 1000);
             
         }).catch(error => {
             console.error('Translation failed:', error);
-            window.appendMessage('coord', \`번역 중 오류가 발생했습니다. (\${error.message}) 잠시 후 다시 시도해 주세요.\`);
+            window.appendMessage('coord', `번역 중 오류가 발생했습니다. (${error.message}) 잠시 후 다시 시도해 주세요.`);
             input.disabled = false;
             if (btn) btn.disabled = false;
         });

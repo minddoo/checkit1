@@ -8467,8 +8467,17 @@ function renderInlineConsultationForm() {
                     <label style="flex:1; border:1px solid #ddd; padding:10px; text-align:center; border-radius:8px; cursor:pointer;" onclick="document.getElementById('c-hospital-input-area').style.display='none'; document.getElementById('c-hospital-list-area').style.display='block';"><input type="radio" name="c-hospital-opt" value="No" checked> No</label>
                 </div>
                 
-                <div id="c-hospital-input-area" style="display:none;">
-                    <input type="text" id="c-pref-hospital" placeholder="Enter preferred hospital name" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+                <div id="c-hospital-input-area" style="display:none; background:#f8fafc; padding:15px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:10px;">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:5px;">입력 (Enter Name)</label>
+                    <input type="text" id="c-pref-hospital" placeholder="희망 병원 이름을 입력해주세요" style="width:100%; padding:10px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:15px;">
+                    
+                    <p style="font-size:0.8rem; color:#475569; margin-bottom:10px; line-height:1.4; font-weight:600;">
+                        checkit에서 기본으로 제공하는 병원&프로그램도 추가로 보고 싶으시다면 예를 눌러주시고 아니면 아니오를 눌러주세요.
+                    </p>
+                    <div style="display:flex; gap:10px;">
+                        <label style="flex:1; border:1px solid #cbd5e1; padding:10px; text-align:center; border-radius:8px; cursor:pointer; background:white;"><input type="radio" name="c-see-default" value="Yes" checked style="margin-right:5px;"> 예</label>
+                        <label style="flex:1; border:1px solid #cbd5e1; padding:10px; text-align:center; border-radius:8px; cursor:pointer; background:white;"><input type="radio" name="c-see-default" value="No" style="margin-right:5px;"> 아니오</label>
+                    </div>
                 </div>
                 
                 <div id="c-hospital-list-area" style="display:block; background:#fff9db; padding:12px; border-radius:12px; border:1px solid #ffec99;">
@@ -8521,6 +8530,7 @@ window.handleInlineFormSubmit = function() {
         docsOther: document.getElementById('c-docs-other').value,
         hospitalOpt: document.querySelector('input[name="c-hospital-opt"]:checked').value,
         prefHospital: document.getElementById('c-pref-hospital').value,
+        seeDefaultOpt: document.querySelector('input[name="c-see-default"]:checked') ? document.querySelector('input[name="c-see-default"]:checked').value : 'No',
         requestList: document.getElementById('c-hospital-list-area').style.display === 'block'
     };
 
@@ -8559,13 +8569,18 @@ window.handleInlineFormSubmit = function() {
             let coordMessage = `Thank you, <b>${data.name}</b>! I've received your request. I am now searching for hospitals that match your desired type (<b>${data.type}</b>).`;
             if (data.hospitalOpt === 'Yes' && data.prefHospital && data.prefHospital.trim() !== '') {
                 coordMessage = `고객님이 입력하신 병원의 일정 및 프로그램을 체킷 담당자가 확인 후 메일로 안내드리겠습니다.`;
+                if (data.seeDefaultOpt === 'Yes') {
+                    coordMessage += `<br><br>추가로 CHECKIT에서 기본으로 제공하는 추천 병원 및 프로그램도 함께 안내해 드립니다.`;
+                }
             }
             window.appendMessage('coord', coordMessage);
         }
 
-        // Trigger existing booking step
-        if (typeof window.showChatBlock === 'function') {
-            setTimeout(() => window.showChatBlock('booking'), 1500);
+        // Trigger existing booking step ONLY if they don't have a preferred hospital, OR if they want to see the defaults anyway
+        if (data.hospitalOpt === 'No' || (data.hospitalOpt === 'Yes' && data.seeDefaultOpt === 'Yes')) {
+            if (typeof window.showChatBlock === 'function') {
+                setTimeout(() => window.showChatBlock('booking'), 1500);
+            }
         }
     }, 1200);
 

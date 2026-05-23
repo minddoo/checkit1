@@ -8387,7 +8387,7 @@ function generateConsultationSummaryHtml(data) {
     `;
 }
 
-function renderInlineConsultationForm() {
+function renderInlineConsultationForm(isActive) {
     const container = document.getElementById('inline-consultation-form-container');
     if (!container) return;
     
@@ -8509,9 +8509,19 @@ function renderInlineConsultationForm() {
                 <input type="text" id="c-docs-other" placeholder="Other specific requests..." style="width:100%; padding:8px; margin-top:8px; border-radius:8px; border:1px solid #ddd; font-size:0.85rem;">
             </div>
 
-            <button type="button" class="btn-block-primary" style="width:100%; margin-top:15px; background:var(--primary); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="handleInlineFormSubmit()">Complete Registration</button>
+            <button type="button" class="btn-block-primary" id="c-submit-btn" style="width:100%; margin-top:15px; background:var(--primary); color:white; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;" onclick="handleInlineFormSubmit()">Complete Registration</button>
         </div>
     `;
+
+    // Disable if inactive
+    if (isActive === false) {
+        const submitBtn = document.getElementById('c-submit-btn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.background = '#cbd5e1';
+            submitBtn.innerText = '계정 활성화 대기 중 (Waiting for Activation)';
+        }
+    }
 }
 
 window.handleInlineFormSubmit = function() {
@@ -9242,8 +9252,8 @@ window.subscribeToUserActiveState = function(email) {
     const stepConsultation = document.getElementById('step-consultation');
     const stepSelfTest = document.getElementById('step-self-test');
 
-    // DEFAULT STATE: show self-test, hide consultation form
-    if (stepConsultation) stepConsultation.style.display = 'none';
+    // DEFAULT STATE: show self-test and consultation form
+    if (stepConsultation) stepConsultation.style.display = 'block';
     if (stepSelfTest) stepSelfTest.style.display = 'block';
 
     if (!email || typeof db === 'undefined' || !db) return;
@@ -9265,7 +9275,7 @@ window.subscribeToUserActiveState = function(email) {
             // ACTIVATED - Always show previous stages
             if (stepS) stepS.style.display = 'block';
             if (stepC) stepC.style.display = 'block';
-            renderInlineConsultationForm();
+            renderInlineConsultationForm(true);
             
             if (savedData) {
                 // If already submitted, indicate completion
@@ -9299,7 +9309,8 @@ window.subscribeToUserActiveState = function(email) {
                 window.showChatBlock('alimtalk'); // Force back to main chat view in case they were in dday
             }
             if (stepS) stepS.style.display = 'block';
-            if (stepC) stepC.style.display = 'none';
+            if (stepC) stepC.style.display = 'block';
+            renderInlineConsultationForm(false);
             if (stepB) stepB.style.display = 'none';
             if (stepD) stepD.style.display = 'none';
 

@@ -2065,7 +2065,7 @@ window.checkAndRestoreSession = function(email, displayName) {
                     name: displayName
                 }));
                 const stepConsultation = document.getElementById('step-consultation');
-                if (stepConsultation) stepConsultation.style.display = 'none';
+                if (stepConsultation) stepConsultation.style.display = 'block';
             }
             
             // Hotfix: Migrate trapped old un-namespaced chat history for xhrlalswjd7989
@@ -2715,6 +2715,9 @@ function initDashboard() {
             chatMessages.innerHTML = '';
             
             if (welcomeClone) chatMessages.appendChild(welcomeClone);
+            if (selfTestClone) chatMessages.appendChild(selfTestClone);
+            if (stepConsultationClone) chatMessages.appendChild(stepConsultationClone);
+            
             history.forEach(msg => {
                 const row = document.createElement('div');
                 row.className = `message-row ${msg.sender}`;
@@ -2759,9 +2762,6 @@ function initDashboard() {
                 }
                 chatMessages.appendChild(row);
             });
-            
-            if (selfTestClone) chatMessages.appendChild(selfTestClone);
-            if (stepConsultationClone) chatMessages.appendChild(stepConsultationClone);
             
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -9233,14 +9233,27 @@ window.subscribeToUserActiveState = function(email) {
         const stepD = document.getElementById('step-dday');
 
         if (myPageActive) {
-            // ACTIVATED
+            // ACTIVATED - Always show previous stages
+            if (stepS) stepS.style.display = 'block';
+            if (stepC) stepC.style.display = 'block';
+            renderInlineConsultationForm();
+            
             if (savedData) {
-                if (stepS) stepS.style.display = 'none';
-                if (stepC) stepC.style.display = 'none';
-            } else {
-                if (stepS) stepS.style.display = 'block';
-                if (stepC) stepC.style.display = 'block';
-                renderInlineConsultationForm();
+                // If already submitted, indicate completion
+                setTimeout(() => {
+                    const cBtn = document.querySelector('#step-consultation .btn-block-primary');
+                    if (cBtn) {
+                        cBtn.innerText = '✓ Completed (제출 완료)';
+                        cBtn.disabled = true;
+                        cBtn.style.background = '#94a3b8';
+                    }
+                    const sBtn = document.querySelector('#step-self-test .btn-block-primary');
+                    if (sBtn) {
+                        sBtn.innerText = '✓ Completed (테스트 완료)';
+                        sBtn.disabled = true;
+                        sBtn.style.background = '#94a3b8';
+                    }
+                }, 100);
             }
             
             const chatInput = document.getElementById('chat-input');

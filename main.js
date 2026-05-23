@@ -1964,15 +1964,30 @@ function handleGoogleSignIn(response) {
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userPicture', user.picture);
 
-    // Sync Google user profile to Firestore
+    // Sync Google user profile to Firestore properly
     if (typeof firebase !== 'undefined' && firebase.firestore && user.sub) {
-        firebase.firestore().collection('users').doc(user.sub).set({
-            uid: user.sub,
-            email: user.email,
-            displayName: user.name,
-            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-            role: 'user'
-        }, { merge: true }).catch(err => console.error("Firestore sync error for Google user:", err));
+        const userRef = firebase.firestore().collection('users').doc(user.sub);
+        userRef.get().then(docSnap => {
+            if (!docSnap.exists) {
+                // Treat as new sign-up
+                userRef.set({
+                    uid: user.sub,
+                    email: user.email,
+                    displayName: user.name,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    myPageActive: false,
+                    paymentStatus: 'pending',
+                    role: 'user',
+                    authProvider: 'google'
+                }).catch(err => console.error("Firestore sync error for new Google user:", err));
+            } else {
+                // Existing user login
+                userRef.update({
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(err => console.error("Firestore sync error for existing Google user:", err));
+            }
+        }).catch(err => console.error("Error checking Google user:", err));
     }
     
     // Send Confirmation Email via Google Apps Script for Google Users

@@ -8186,7 +8186,7 @@ function initDashboard() {
             
         }).catch(error => {
             console.error('Translation failed:', error);
-            window.appendMessage('coord', '번역 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            window.appendMessage('coord', `번역 중 오류가 발생했습니다. (${error.message}) 잠시 후 다시 시도해 주세요.`);
             input.disabled = false;
             if (btn) btn.disabled = false;
         });

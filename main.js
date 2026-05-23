@@ -1775,6 +1775,11 @@ function changeLanguage(langCode) {
             setTimeout(nukeBar, 1500);
         } else if (retries > 0) {
             setTimeout(() => triggerGoogle(retries - 1), 300);
+        } else {
+            // 최후의 수단: DOM 조작 실패 시 쿠키 직접 세팅 후 강제 새로고침
+            document.cookie = `googtrans=/ko/${langCode}; path=/;`;
+            document.cookie = `googtrans=/ko/${langCode}; domain=${window.location.hostname}; path=/;`;
+            window.location.reload();
         }
     };
     triggerGoogle(15);
@@ -1964,30 +1969,48 @@ function handleGoogleSignIn(response) {
     localStorage.setItem('userEmail', user.email);
     localStorage.setItem('userPicture', user.picture);
 
-    // Sync Google user profile to Firestore properly
-    if (typeof firebase !== 'undefined' && firebase.firestore && user.sub) {
-        const userRef = firebase.firestore().collection('users').doc(user.sub);
-        userRef.get().then(docSnap => {
-            if (!docSnap.exists) {
-                // Treat as new sign-up
-                userRef.set({
-                    uid: user.sub,
-                    email: user.email,
-                    displayName: user.name,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    myPageActive: false,
-                    paymentStatus: 'pending',
-                    role: 'user',
-                    authProvider: 'google'
-                }).catch(err => console.error("Firestore sync error for new Google user:", err));
-            } else {
-                // Existing user login
-                userRef.update({
-                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).catch(err => console.error("Firestore sync error for existing Google user:", err));
-            }
-        }).catch(err => console.error("Error checking Google user:", err));
+    // 1. Convert Google JWT to Firebase Credential
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+        
+        firebase.auth().signInWithCredential(credential).then((result) => {
+            const fbUser = result.user;
+            
+            // Sync Google user profile to Firestore properly
+            const userRef = firebase.firestore().collection('users').doc(fbUser.uid);
+            userRef.get().then(docSnap => {
+                if (!docSnap.exists) {
+                    // Treat as new sign-up
+                    userRef.set({
+                        uid: fbUser.uid,
+                        email: fbUser.email || user.email,
+                        displayName: fbUser.displayName || user.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        myPageActive: false,
+                        paymentStatus: 'pending',
+                        role: 'user',
+                        authProvider: 'google'
+                    }).then(() => {
+                        console.log("New Google user registered successfully.");
+                        // Force page reload or close modal if needed
+                    }).catch(err => console.error("Firestore sync error for new Google user:", err));
+                } else {
+                    // Existing user login
+                    userRef.update({
+                        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        console.log("Existing Google user logged in.");
+                    }).catch(err => console.error("Firestore sync error for existing Google user:", err));
+                }
+            }).catch(err => console.error("Error checking Google user:", err));
+            
+        }).catch((error) => {
+            console.error("Firebase Auth error with Google credential:", error);
+            alert("Google Login failed. Please try again.");
+        });
+    } else {
+        console.error("Firebase not initialized.");
     }
     
     // Send Confirmation Email via Google Apps Script for Google Users

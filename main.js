@@ -8366,7 +8366,26 @@ function updateAuthUI() {
 }
 
 // Initial UI Update Check
-window.addEventListener('DOMContentLoaded', updateAuthUI);
+window.addEventListener('DOMContentLoaded', () => {
+    updateAuthUI();
+    
+    // Inject Legal Terms
+    const pipaContent = document.getElementById('pipa-content');
+    if (pipaContent) {
+        pipaContent.innerHTML = `
+            <div style="font-size: 0.8rem; line-height: 1.5; color: #475569;">
+                <strong>1. Purpose of Collection / 수집 목적:</strong><br>
+                Identity verification, health checkup coordination, and customer support. (본인 확인, 건강검진 예약 대행, 고객 상담)<br><br>
+                <strong>2. Items Collected / 수집 항목:</strong><br>
+                Name, Email, Date of Birth, Gender, Nationality, Phone Number (if provided). (이름, 이메일, 생년월일, 성별, 국적, 전화번호)<br><br>
+                <strong>3. Retention Period / 보유 기간:</strong><br>
+                Until account deletion or as required by law. (회원 탈퇴 시 또는 관계 법령에 따름)<br><br>
+                <strong>4. Right to Refuse / 동의 거부권:</strong><br>
+                You may refuse, but account creation will be restricted. (동의를 거부할 수 있으나 가입이 제한됩니다.)
+            </div>
+        `;
+    }
+});
 
 // --- Consultation Form Integration Functions ---
 function generateConsultationSummaryHtml(data) {

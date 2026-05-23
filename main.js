@@ -1748,14 +1748,19 @@ if (langSelector) {
 // Removed manual translation dictionaries and update functions. Relying on Google Translate.
 
 function changeLanguage(langCode) {
-    // 구글 번역 콤보박스로 모든 언어 전환 (한국어 = 빈값으로 원본 복원)
-    const targetValue = (langCode === 'ko') ? '' : langCode;
+    if (langCode === 'ko') {
+        // 한국어 선택 시 구글 번역 쿠키를 삭제하고 원본으로 복원하기 위해 새로고침
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=' + window.location.hostname + '; path=/;';
+        window.location.reload();
+        return;
+    }
 
     // 구글 번역 위젯 콤보박스 트리거
     const triggerGoogle = (retries) => {
         const googleSelect = document.querySelector('select.goog-te-combo');
         if (googleSelect) {
-            googleSelect.value = targetValue;
+            googleSelect.value = langCode;
             googleSelect.dispatchEvent(new Event('change', { bubbles: true }));
 
             // 구글 번역 상단 배너 제거

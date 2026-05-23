@@ -9433,6 +9433,16 @@ window.submitPaymentInfo = function(btnEl) {
     if (pVal) msg += "페이팔 이메일: " + pVal + "\n";
     if (bVal) msg += "입금자명: " + bVal;
 
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+        db.collection('users').doc(currentUser.uid).update({
+            paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
+            paymentDetails: pVal || bVal,
+            paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            paymentStatus: 'pending_verification'
+        }).catch(err => console.error('Payment info save error:', err));
+    }
+
     if (typeof window.appendMessage === 'function') {
         window.appendMessage('user', msg);
         

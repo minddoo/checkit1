@@ -95,7 +95,9 @@ service cloud.firestore {
     // [8] USER_ACTIVATIONS: Publicly readable activation flag (customers read without Firebase Auth)
     match /user_activations/{userEmail} {
       allow read: if true;
-      allow write: if isMaster();
+      allow create: if isMaster() || (request.auth != null && request.auth.token.email == userEmail);
+      allow update: if isMaster() || (request.auth != null && request.auth.token.email == userEmail && request.resource.data.myPageActive == resource.data.myPageActive);
+      allow delete: if isMaster();
     }
 
     // [7] BLOG_POSTS: Public read, admin/master write

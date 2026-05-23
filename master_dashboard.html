@@ -844,10 +844,11 @@
                                 ${tryDecodeHexEmail(user.email)}
                             </td>
                             <td>
-                                <span class="status-badge ${pStatus === 'paid' ? 'status-paid' : 'status-pending'}">
+                                <span class="status-badge ${pStatus === 'paid' ? 'status-paid' : (pStatus === 'pending_verification' ? 'status-pending' : 'status-inactive')}">
                                     <i class="fa-solid ${pStatus === 'paid' ? 'fa-circle-check' : 'fa-clock'}"></i>
                                     ${pStatus.toUpperCase()}
                                 </span>
+                                ${user.paymentMethod ? `<div style="font-size: 0.75rem; color: #d97706; margin-top: 4px; font-weight: 700;">[요청됨] ${user.paymentMethod}: ${user.paymentDetails}</div>` : ''}
                             </td>
                             <td>
                                 <button class="btn-payment-action pay" onclick="updatePaymentStatus('${id}', 'paid')">Mark as Paid</button>

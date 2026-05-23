@@ -8138,61 +8138,58 @@ function initDashboard() {
         const btn = input.nextElementSibling;
         if (btn) btn.disabled = true;
 
-        setTimeout(() => {
-            window.appendMessage('coord', '텍스트 전체를 원문 그대로 분석 및 번역 중입니다... 🔍');
+        window.appendMessage('coord', '텍스트 전체를 원문 그대로 분석 및 번역 중입니다... 🔍');
+        
+        const lang = localStorage.getItem('preferred-lang') || 'en';
+        let langLabel = "ENGLISH";
+        let targetLangName = "English";
+        
+        if (lang === 'zh') {
+            langLabel = "CHINESE (中文)";
+            targetLangName = "Chinese";
+        } else if (lang === 'vi') {
+            langLabel = "VIETNAMESE (Tiếng Việt)";
+            targetLangName = "Vietnamese";
+        }
+
+        const translateTextCall = firebase.functions().httpsCallable('translateText');
+        
+        translateTextCall({ text: text, targetLang: targetLangName }).then(result => {
+            const translated = result.data.translatedText || 'Translation failed.';
+            
+            const resultHtml = `
+                <div style="background: #ffffff; padding: 18px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                        <i class="fa-solid fa-language" style="color: var(--primary); font-size: 0.9rem;"></i>
+                        <span style="font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Translation (${langLabel})</span>
+                    </div>
+                    <div style="font-size: 0.95rem; color: #334155; line-height: 1.6; white-space: pre-wrap; font-weight: 500;">
+                        ${translated}
+                    </div>
+                </div>
+            `;
+            window.appendMessage('coord', resultHtml);
             
             setTimeout(() => {
-                const lang = localStorage.getItem('preferred-lang') || 'en';
-                let translated = "";
-                let langLabel = "";
-
-                // Simulation: Provide a direct translation style response that doesn't feel like a summary
-                if (lang === 'zh') {
-                    langLabel = "CHINESE (中文)";
-                    if (text.includes('안녕')) translated = "您好。";
-                    else if (text.includes('예약')) translated = "预约确认。";
-                    else translated = `${text} (中文翻译结果)`; 
-                } else if (lang === 'vi') {
-                    langLabel = "VIETNAMESE (Tiếng Việt)";
-                    if (text.includes('안녕')) translated = "Xin chào.";
-                    else if (text.includes('예약')) translated = "Xác nhận đặt chỗ.";
-                    else translated = `${text} (Kết quả dịch tiếng Việt)`;
-
-                } else {
-                    langLabel = "ENGLISH";
-                    if (text.includes('안녕')) translated = "Hello.";
-                    else if (text.includes('예약')) translated = "Reservation confirmed.";
-                    else translated = `${text} (English translation result)`;
-                }
-
-                const resultHtml = `
-                    <div style="background: #ffffff; padding: 18px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left; width: 100%;">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                            <i class="fa-solid fa-language" style="color: var(--primary); font-size: 0.9rem;"></i>
-                            <span style="font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Translation (${langLabel})</span>
-                        </div>
-                        <div style="font-size: 0.95rem; color: #334155; line-height: 1.6; white-space: pre-wrap; font-weight: 500;">
-                            ${translated}
-                        </div>
+                const confirmText = lang === 'zh' ? '您确认好翻译好的内容了吗？' : 
+                                   (lang === 'vi' ? 'Bạn đã kiểm tra kỹ nội dung được dịch chưa?' : 
+                                   'Did you check the translated notification content?');
+                
+                const btnHtml = `
+                    <div style="margin-top: 12px; display: flex; gap: 8px;">
+                        <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(true)">예</button>
+                        <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(false)">아니오</button>
                     </div>
                 `;
-                window.appendMessage('coord', resultHtml);
-                
-                setTimeout(() => {
-                    const confirmText = lang === 'zh' ? '您确认好翻译好的内容了吗？' : 
-                                       (lang === 'vi' ? 'Bạn đã kiểm tra kỹ nội dung được dịch chưa?' : 
-                                       'Did you check the translated notification content?');
-                    
-                    const btnHtml = `
-                        <div style="margin-top: 12px; display: flex; gap: 8px;">
-                            <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #FFD700; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(true)">예</button>
-                            <button style="padding: 8px 24px; font-size: 0.85rem; font-weight: 800; background: #90EE90; color: #000; border: none; border-radius: 10px; cursor: pointer;" onclick="window.confirmTranslation(false)">아니오</button>
-                        </div>
-                    `;
-                    window.appendMessage('coord', `${confirmText}${btnHtml}`);
-                }, 1000);
-            }, 1500);
-        }, 600);
+                window.appendMessage('coord', `${confirmText}${btnHtml}`);
+            }, 1000);
+            
+        }).catch(error => {
+            console.error('Translation failed:', error);
+            window.appendMessage('coord', '번역 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+            input.disabled = false;
+            if (btn) btn.disabled = false;
+        });
     };
 
     window.confirmTranslation = function(isConfirmed) {

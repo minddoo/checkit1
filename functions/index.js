@@ -525,3 +525,32 @@ Format your response as a strict JSON object:
     throw new functions.https.HttpsError('internal', `Medical Analysis failed (Gemini SDK): ${error.message}`);
   }
 });
+
+/**
+ * Text Translation using Google Gemini
+ * Translates Korean text into the requested target language verbatim.
+ */
+exports.translateText = functions.https.onCall(async (data, context) => {
+  const { text, targetLang } = data;
+  if (!text) {
+    throw new functions.https.HttpsError('invalid-argument', 'Text is required.');
+  }
+
+  try {
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+
+    const prompt = `Translate the following Korean hospital notification text into ${targetLang || 'English'} verbatim, maintaining the exact original meaning and format without summarizing.
+    
+Text to translate:
+${text}`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return { translatedText: response.text().trim() };
+
+  } catch (error) {
+    console.error('Translation Error:', error);
+    throw new functions.https.HttpsError('internal', \`Translation failed: \${error.message}\`);
+  }
+});

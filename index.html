@@ -1177,6 +1177,23 @@
                                             <button onclick="window.proceedToConsultationForm()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 16px 20px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(16,185,129,0.35); font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                                                 체킷 서비스 결제하러 가기
                                             </button>
+
+                                            <!-- Payment Verification Area -->
+                                            <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; text-align: left;">
+                                                <p style="margin: 0 0 12px 0; font-size: 0.85rem; font-weight: 700; color: #334155;">결제를 완료하셨나요? (Payment Completed?)</p>
+                                                
+                                                <div style="margin-bottom: 12px;">
+                                                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; margin-bottom: 5px;">페이팔 (PayPal) 결제 시</label>
+                                                    <input type="email" id="payment-paypal-email" placeholder="결제하신 페이팔 이메일 주소" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
+                                                </div>
+                                                
+                                                <div style="margin-bottom: 15px;">
+                                                    <label style="display: block; font-size: 0.75rem; font-weight: 600; color: #64748b; margin-bottom: 5px;">국내결제 (계좌이체) 시</label>
+                                                    <input type="text" id="payment-bank-name" placeholder="입금자명 (Depositor Name)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem;">
+                                                </div>
+                                                
+                                                <button onclick="window.submitPaymentInfo(this)" style="background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.9rem;">입금 확인 요청 (Request Verification)</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

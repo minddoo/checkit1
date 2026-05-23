@@ -9410,6 +9410,48 @@ window.proceedToConsultationForm = function() {
         const paymentSection = document.getElementById('payment');
         if (paymentSection) {
             paymentSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // fallback if there's no payment section, scroll to top or alert
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
     }, 300);
+};
+
+window.submitPaymentInfo = function(btnEl) {
+    const paypalEmail = document.getElementById('payment-paypal-email');
+    const bankName = document.getElementById('payment-bank-name');
+    
+    const pVal = paypalEmail ? paypalEmail.value.trim() : '';
+    const bVal = bankName ? bankName.value.trim() : '';
+
+    if (!pVal && !bVal) {
+        alert("결제하신 페이팔 이메일 주소 또는 입금자명을 입력해주세요.\n(Please enter your PayPal email or Depositor name.)");
+        return;
+    }
+
+    let msg = "결제 확인 요청합니다.\n";
+    if (pVal) msg += "페이팔 이메일: " + pVal + "\n";
+    if (bVal) msg += "입금자명: " + bVal;
+
+    if (typeof window.appendMessage === 'function') {
+        window.appendMessage('user', msg);
+        
+        // Disable button
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerText = "✓ 입금 확인 요청 접수됨 (Request Submitted)";
+            btnEl.style.background = "#94a3b8";
+        }
+
+        setTimeout(() => {
+            window.appendMessage('coord', '결제 정보가 접수되었습니다. 담당자가 확인 후 계정을 활성화해 드립니다.\n(Your payment verification request has been received. We will activate your account after checking.)');
+            
+            const chatMessages = document.getElementById('chat-messages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }, 1000);
+    } else {
+        alert("접수되었습니다. (Submitted.)");
+    }
 };

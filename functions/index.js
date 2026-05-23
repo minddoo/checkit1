@@ -551,6 +551,6 @@ ${text}`;
 
   } catch (error) {
     console.error('Translation Error:', error);
-    throw new functions.https.HttpsError('internal', \`Translation failed: \${error.message}\`);
+    throw new functions.https.HttpsError('internal', `Translation failed: ${error.message}`);
   }
 });

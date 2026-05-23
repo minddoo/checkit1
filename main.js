@@ -9242,8 +9242,20 @@ window.subscribeToUserActiveState = function(email) {
                 if (stepC) stepC.style.display = 'block';
                 renderInlineConsultationForm();
             }
+            
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+            if (chatInput) {
+                chatInput.disabled = false;
+                chatInput.placeholder = "메시지를 입력하세요 (Type your message)...";
+            }
+            if (chatSend) chatSend.disabled = false;
+
         } else {
             // DEACTIVATED: Force back to test section ONLY
+            if (typeof window.showChatBlock === 'function') {
+                window.showChatBlock('alimtalk'); // Force back to main chat view in case they were in dday
+            }
             if (stepS) stepS.style.display = 'block';
             if (stepC) stepC.style.display = 'none';
             if (stepB) stepB.style.display = 'none';
@@ -9260,6 +9272,14 @@ window.subscribeToUserActiveState = function(email) {
                     }
                 });
             }
+
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+            if (chatInput) {
+                chatInput.disabled = true;
+                chatInput.placeholder = "결제 완료 및 활성화 후 채팅이 가능합니다.";
+            }
+            if (chatSend) chatSend.disabled = true;
         }
     }, function(err) {
         console.error('Activation listener error:', err);

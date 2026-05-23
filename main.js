@@ -8213,7 +8213,26 @@ function initDashboard() {
             setTimeout(() => {
                 window.appendMessage('coord', '좋습니다! 그럼 이제 가장 중요한 **검진 전 준비사항 및 주의사항**에 대해 안내해 드리겠습니다. 잠시만 기다려 주세요.');
                 setTimeout(() => {
-                    window.showChatBlock('precautions');
+                    const userEmail = localStorage.getItem('userEmail') || '';
+                    const savedData = localStorage.getItem(`consultationData_${userEmail}`);
+                    let isPref = false;
+                    if (savedData) {
+                        try {
+                            const data = JSON.parse(savedData);
+                            if (data.hospitalOpt === 'Yes' && data.prefHospital && data.prefHospital.trim() !== '') {
+                                isPref = true;
+                            }
+                        } catch(e) {}
+                    }
+                    
+                    if (isPref) {
+                        window.appendMessage('coord', '💡 **희망병원 예약 안내**<br>고객님의 희망병원(예약병원)에 대한 상세한 검진 전 준비사항 및 주의사항은 담당자가 일정을 확인한 후 메일로 별도 안내해 드릴 예정입니다. 추후 안내 메일을 꼭 확인해 주세요!');
+                        setTimeout(() => {
+                            window.showChatBlock('precautions');
+                        }, 800);
+                    } else {
+                        window.showChatBlock('precautions');
+                    }
                 }, 600);
             }, 600);
         } else {

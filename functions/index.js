@@ -536,8 +536,13 @@ exports.translateText = functions.https.onCall(async (data, context) => {
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
     const result = await model.generateContent(
-      "Translate the following Korean hospital notification text into " + (data.targetLang || 'English') + 
-      " verbatim, maintaining the exact original meaning without summarizing.\n\nText:\n" + data.text
+      `You are a professional medical translator. Translate the following Korean text into ${data.targetLang || 'English'}.
+IMPORTANT:
+- Output ONLY the translated text in ${data.targetLang || 'English'}. Do NOT include the original Korean text.
+- Translate verbatim, keeping the exact original meaning and formatting.
+
+Korean Text:
+${data.text}`
     );
     return { translatedText: (await result.response).text().trim() };
   } catch (error) {

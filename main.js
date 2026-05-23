@@ -8659,8 +8659,39 @@ window.proceedWithPrefHospital = function(btnEl) {
         // Bot response
         setTimeout(() => {
             window.appendMessage('coord', '알겠습니다. 입력해주신 희망병원 기준으로 예약을 계속 진행하며, 일정 및 프로그램 안내를 메일로 보내드리겠습니다. 감사합니다.');
+            
+            // Next Step: Checking Alimtalk Reception
+            setTimeout(() => {
+                const nextMsg = `
+                    checkit을 통해서 메일 안내를 받으신 후 예약까지 진행하셨다면 병원에서 알림톡이 추후 발송될겁니다. 알림톡을 받으셨을까요?
+                    <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                        <button style="padding: 12px; font-size: 0.9rem; font-weight: 800; background: #3b82f6; color: white; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="window.reportConfirmed('기존 선택', '')" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">알림톡을 받았습니다</button>
+                        <button style="padding: 12px; font-size: 0.9rem; font-weight: 800; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1; border-radius: 10px; cursor: pointer; transition: background 0.2s;" onclick="window.notReceivedAlimtalkPrefHospital(this)" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'">1일이 지나도 알림톡을 받지 못하였습니다</button>
+                    </div>
+                `;
+                window.appendMessage('coord', nextMsg);
+            }, 1500);
         }, 1000);
     }
+};
+
+window.notReceivedAlimtalkPrefHospital = function(btnEl) {
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerText = "✓ 확인 완료";
+        btnEl.style.opacity = '0.6';
+    }
+    
+    window.appendMessage('user', '1일이 지나도 알림톡을 받지 못하였습니다.');
+    
+    setTimeout(() => {
+        const msg = `
+            불편을 드려 대단히 죄송합니다. 간혹 병원 시스템 지연이나 연락처 오류로 인해 알림톡 발송이 누락되는 경우가 있습니다.
+            <br><br>
+            담당 코디네이터가 해당 병원에 직접 연락하여 신속하게 예약 확정 여부를 파악한 뒤, 이메일로 다시 상세히 안내해 드리겠습니다. 조금만 기다려 주시기 바랍니다!
+        `;
+        window.appendMessage('coord', msg);
+    }, 1000);
 };
 
 

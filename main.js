@@ -8416,11 +8416,11 @@ function renderInlineConsultationForm() {
 
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
                 <div class="c-form-group">
-                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Arrival Date</label>
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Arrival Date (Korea)</label>
                     <input type="date" id="c-arrival" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                 </div>
                 <div class="c-form-group">
-                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Departure Date</label>
+                    <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Departure Date (Korea)</label>
                     <input type="date" id="c-departure" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                 </div>
             </div>

@@ -1949,7 +1949,7 @@ function initGoogleLogin() {
 }
 
 function handleGoogleSignIn(response) {
-    // Decode JWT token (simple client-side decode)
+    // Decode JWT token
     const base64Url = response.credential.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
@@ -1957,30 +1957,51 @@ function handleGoogleSignIn(response) {
     }).join(''));
 
     const user = JSON.parse(jsonPayload);
-    
+
+    if (typeof firebase !== 'undefined' && firebase.firestore && user.email) {
+        const usersRef = firebase.firestore().collection('users');
+        usersRef.where('email', '==', user.email).get().then(snap => {
+            if (snap.empty) {
+                // First time Google Login -> Register as new user (Signup)
+                return usersRef.doc(user.sub).set({
+                    uid: user.sub,
+                    email: user.email,
+                    displayName: user.name,
+                    password: 'google_oauth', // For master dashboard visibility
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    myPageActive: false,
+                    role: 'user'
+                }).then(() => user.sub);
+            } else {
+                // Existing user
+                const docId = snap.docs[0].id;
+                return usersRef.doc(docId).update({
+                    lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => docId);
+            }
+        }).then((docId) => {
+            completeGoogleLogin(user);
+        }).catch(err => {
+            console.error("Firestore sync error for Google user:", err);
+            // Even if sync fails, let them in
+            completeGoogleLogin(user);
+        });
+    } else {
+        completeGoogleLogin(user);
+    }
+}
+
+function completeGoogleLogin(user) {
     // Save session
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('userName', user.name);
     localStorage.setItem('userEmail', user.email);
-    localStorage.setItem('userPicture', user.picture);
+    if (user.picture) localStorage.setItem('userPicture', user.picture);
 
-    // Sync Google user profile to Firestore
-    if (typeof firebase !== 'undefined' && firebase.firestore && user.sub) {
-        firebase.firestore().collection('users').doc(user.sub).set({
-            uid: user.sub,
-            email: user.email,
-            displayName: user.name,
-            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-            role: 'user'
-        }, { merge: true }).catch(err => console.error("Firestore sync error for Google user:", err));
-    }
-    
     // Send Confirmation Email via Google Apps Script for Google Users
     if (user.email) {
-        // Master emails will be handled dynamically when clicking Go to My Page.
-
         fetch('https://script.google.com/macros/s/AKfycbxxyYRM6I6c1QIY2lQ9sGAm2DIzXz0xKAkm7ne2gUTA4car0s1VC-zMhExnBpLl6oYjIw/exec', {
-
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
@@ -1988,7 +2009,7 @@ function handleGoogleSignIn(response) {
         }).catch(err => console.error('Social Login Email error:', err));
     }
     
-    updateAuthUI();
+    if (typeof updateAuthUI === 'function') updateAuthUI();
     
     // Close modal if open
     const authModal = document.getElementById('auth-modal');
@@ -1997,9 +2018,10 @@ function handleGoogleSignIn(response) {
         document.body.style.overflow = '';
     }
 
-    // ─── 이전 등록 이력 복원 (범용 함수 호출) ───────────────────
-    window.checkAndRestoreSession(user.email, user.name);
-    // ────────────────────────────────────────────────────────────
+    // Restore session
+    if (typeof window.checkAndRestoreSession === 'function') {
+        window.checkAndRestoreSession(user.email, user.name);
+    }
 }
 
 /**

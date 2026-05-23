@@ -9295,8 +9295,8 @@ window.subscribeToUserActiveState = function(email) {
     const stepConsultation = document.getElementById('step-consultation');
     const stepSelfTest = document.getElementById('step-self-test');
 
-    // DEFAULT STATE: show self-test and consultation form
-    if (stepConsultation) stepConsultation.style.display = 'block';
+    // DEFAULT STATE: show self-test, but hide consultation form initially
+    if (stepConsultation) stepConsultation.style.display = 'none';
     if (stepSelfTest) stepSelfTest.style.display = 'block';
 
     if (!email || typeof db === 'undefined' || !db) return;
@@ -9352,7 +9352,7 @@ window.subscribeToUserActiveState = function(email) {
                 window.showChatBlock('alimtalk'); // Force back to main chat view in case they were in dday
             }
             if (stepS) stepS.style.display = 'block';
-            if (stepC) stepC.style.display = 'block';
+            if (stepC) stepC.style.display = 'none'; // Hide when deactivated
             renderInlineConsultationForm(false);
             if (stepB) stepB.style.display = 'none';
             if (stepD) stepD.style.display = 'none';
@@ -9454,12 +9454,27 @@ window.submitPaymentInfo = function(btnEl) {
 
     const currentUser = firebase.auth().currentUser;
     if (currentUser) {
-        db.collection('users').doc(currentUser.uid).update({
+        db.collection('users').doc(currentUser.uid).set({
             paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
             paymentDetails: pVal || bVal,
             paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
             paymentStatus: 'pending_verification'
-        }).catch(err => console.error('Payment info save error:', err));
+        }, { merge: true }).catch(err => console.error('Payment info save error:', err));
+    } else {
+        // Fallback for cases where auth state isn't available but userEmail is in localStorage
+        const email = localStorage.getItem('userEmail');
+        if (email) {
+            db.collection('users').where('email', '==', email).get().then(snapshot => {
+                if (!snapshot.empty) {
+                    snapshot.docs[0].ref.set({
+                        paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
+                        paymentDetails: pVal || bVal,
+                        paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        paymentStatus: 'pending_verification'
+                    }, { merge: true });
+                }
+            });
+        }
     }
 
     if (typeof window.appendMessage === 'function') {

@@ -739,10 +739,13 @@
 
                     // Parse dates and stats
                     let dateObj = null;
-                    if (user.createdAt) {
+                    if (user.createdAt && typeof user.createdAt.toDate === 'function') {
                         dateObj = user.createdAt.toDate();
-                        if (dateObj >= sevenDaysAgo) recentUsers++;
+                    } else {
+                        // Handle pending serverTimestamp or missing dates by assuming it's right now
+                        dateObj = new Date(); 
                     }
+                    if (dateObj >= sevenDaysAgo) recentUsers++;
 
                     // Count stats
                     if (user.myPageActive) activeMypage++;

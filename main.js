@@ -4714,8 +4714,14 @@ function initDashboard() {
                 </div>`;
             } else {
                 finalMsg = `<span style="color: #dc2626; font-weight: 700;">🚨 준비물 미수령 접수 완료</span><br><br>
-                해당 내용을 담당 전담 담당자에게 즉시 전달했습니다. 의료기관에 확인 후 재발송 절차를 안내드리거나, 신속한 조치를 취할 수 있도록 돕겠습니다.<br><br>
-                감사합니다! 추가 궁금하신 사항이 있다면 언제든 문의해 주십시오.`;
+                체킷 담당자가 병원에 확인 후, 검진 전에 준비물을 안전하게 수령하실 수 있도록 신속히 조치를 취할 예정입니다.<br><br>
+                추후 준비물을 제대로 수령하셨다면, 아래 버튼을 눌러 다음 단계로 진행해 주세요.<br><br>
+                <div style="margin-top: 5px; padding: 15px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; text-align: center;">
+                    <p style="margin: 0 0 10px; font-size: 0.85rem; color: #166534; font-weight: 700;">👇 준비물을 검진 전에 제대로 받으셨다면 버튼을 눌러주세요.</p>
+                    <button onclick="window.submitSuppliesStatus('received')" style="width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-solid fa-check-circle"></i> 준비물 수령 완료 (다음 단계)
+                    </button>
+                </div>`;
             }
             window.appendMessage('coord', finalMsg);
         }, 800);

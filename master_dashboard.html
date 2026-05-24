@@ -944,8 +944,14 @@
                       snap.docs.forEach(doc => {
                           batch.update(doc.ref, { reservedDate: newDate });
                       });
+                      
+                      // Notify the user's chat screen remotely
+                      batch.update(db.collection('user_activations').doc(userEmail), {
+                          scheduleConfirmedAt: firebase.firestore.FieldValue.serverTimestamp()
+                      });
+
                       batch.commit().then(() => {
-                          alert(`예약 날짜가 ${newDate}로 성공적으로 변경되었습니다!\n고객의 D-Day 화면에 즉시 반영됩니다.`);
+                          alert(`예약 날짜가 ${newDate}로 성공적으로 변경되었습니다!\n고객 채팅창에도 확정 안내 멘트가 전송되었습니다.`);
                       }).catch(err => alert("업데이트 실패: " + err.message));
                   }
               })

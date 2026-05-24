@@ -877,6 +877,9 @@
                                  <button class="btn-payment-action pay" onclick="viewCustomerMypage('${user.email}', '${(user.displayName || 'Unnamed User').replace(/'/g, "\\'")}')" style="background: #10b981; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; font-family: 'Pretendard', sans-serif;">
                                      <i class="fa-solid fa-eye"></i> 마이페이지 보기
                                  </button>
+                                 <button class="btn-payment-action" onclick="editReservationDate('${user.email}')" style="background: #3b82f6; color: white; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; margin-top: 4px; font-family: 'Pretendard', sans-serif; display: flex; align-items: center; justify-content: center; gap: 4px; border: none; width: 100%;">
+                                     <i class="fa-solid fa-calendar-day"></i> 예약일 수정
+                                 </button>
                              </td>
                          </tr>
                     `;
@@ -918,6 +921,35 @@
             }).catch(err => {
                 alert(`Error clearing request: ${err.message}`);
             });
+        }
+
+        // Action: Edit Reservation Date
+        function editReservationDate(userEmail) {
+            const newDate = prompt("새로운 예약 일자를 입력하세요 (예: 2026-10-25).\nYYYY-MM-DD 형식으로 입력하면 고객의 D-Day 화면이 즉시 업데이트됩니다.");
+            if (!newDate) return;
+            
+            if (newDate.length < 8) {
+                alert("정확한 날짜 형식을 입력해주세요.");
+                return;
+            }
+
+            db.collection('scheduled_notifications')
+              .where('userGoogleEmail', '==', userEmail)
+              .get()
+              .then(snap => {
+                  if (snap.empty) {
+                      alert("이 고객은 아직 예약 확정(알림톡 예약) 전이거나 예약 정보가 없습니다.\n(알림톡 예약 후 다시 시도해주세요.)");
+                  } else {
+                      const batch = db.batch();
+                      snap.docs.forEach(doc => {
+                          batch.update(doc.ref, { reservedDate: newDate });
+                      });
+                      batch.commit().then(() => {
+                          alert(`예약 날짜가 ${newDate}로 성공적으로 변경되었습니다!\n고객의 D-Day 화면에 즉시 반영됩니다.`);
+                      }).catch(err => alert("업데이트 실패: " + err.message));
+                  }
+              })
+              .catch(err => console.error("Error updating date:", err));
         }
 
         // Action: Toggle My Page Active

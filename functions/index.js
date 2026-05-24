@@ -220,8 +220,24 @@ exports.sendImmediateNotificationConfirmation = functions.firestore
 
       const noticeContent = `귀하의 건강검진 사전 알림 예약이 정상 접수되었습니다.\n\n• 기관: ${hospitalName}\n• 예정일: ${checkupDate}\n\n지정된 일정(7, 3, 2, 1일 전)에 맞춰 주의사항 안내를 전달드리겠습니다.`;
 
+      const isUpdate = beforeData && beforeData.reservedDate !== checkupDate;
+      const oldDate = beforeData ? beforeData.reservedDate : '미정';
+
+      const emailSubject = isUpdate ? `[체킷] 건강검진 예약 일정이 변경되었습니다.` : `[체킷] 건강검진 안내 예약이 접수되었습니다.`;
+      const emailTitle = isUpdate ? `예약 일정 변경 안내` : `알림 예약 접수 완료`;
+      const emailDesc = isUpdate 
+        ? `<p>안녕하세요, <strong>${userName}</strong>님!</p><p>요청하신 건강검진 일정이 아래와 같이 <strong>성공적으로 변경</strong>되었습니다.</p>` 
+        : `<p>안녕하세요, <strong>${userName}</strong>님!</p><p>입력하신 정보에 맞춰 건강검진 맞춤형 알림 시스템 등록이 완료되었습니다.</p>`;
+
+      const dateHtml = isUpdate
+        ? `<p style="margin: 5px 0; color: #94a3b8; text-decoration: line-through;">이전 예정일: ${oldDate}</p>
+           <p style="margin: 5px 0; font-size: 1.1em; color: #2563eb;">📅 <strong>새로운 예정일: ${checkupDate}</strong></p>`
+        : `<p style="margin: 5px 0;">📅 <strong>검진 예정일:</strong> ${checkupDate}</p>`;
+
       if (data.contactType === 'alimtalk') {
-        const immediateNotice = `검진 알림 예약이 접수되었습니다. 기관: ${hospitalName}, 예정일: ${checkupDate}`;
+        const immediateNotice = isUpdate 
+          ? `건강검진 일정이 변경되었습니다.\n\n[변경 전] ${oldDate}\n[변경 후] ${checkupDate}\n기관: ${hospitalName}`
+          : `검진 알림 예약이 접수되었습니다. 기관: ${hospitalName}, 예정일: ${checkupDate}`;
         const dDayVal = '확인';
         
         // 즉시 알림톡 발송
@@ -246,25 +262,24 @@ exports.sendImmediateNotificationConfirmation = functions.firestore
         const emailResponse = await resend.emails.send({
           from: '체킷(Checkit) <no-reply@checkit082.kr>',
           to: data.contactValue,
-          subject: `[체킷] 건강검진 안내 예약이 접수되었습니다.`,
+          subject: emailSubject,
           html: `
             <div style="max-width: 600px; margin: 0 auto; font-family: sans-serif; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
-              <div style="background: #3b82f6; color: white; padding: 24px; text-align: center;">
-                <h2 style="margin: 0; font-size: 20px;">알림 예약 접수 완료</h2>
+              <div style="background: ${isUpdate ? '#8b5cf6' : '#3b82f6'}; color: white; padding: 24px; text-align: center;">
+                <h2 style="margin: 0; font-size: 20px;">${emailTitle}</h2>
               </div>
               <div style="padding: 30px; color: #334155; line-height: 1.6;">
-                <p>안녕하세요, <strong>${userName}</strong>님!</p>
-                <p>입력하신 정보에 맞춰 건강검진 맞춤형 알림 시스템 등록이 완료되었습니다.</p>
+                ${emailDesc}
                 <div style="background: #f8fafc; border-radius: 8px; padding: 20px; margin: 20px 0;">
                   <p style="margin: 5px 0;">🏢 <strong>검진 기관:</strong> ${hospitalName}</p>
-                  <p style="margin: 5px 0;">📅 <strong>검진 예정일:</strong> ${checkupDate}</p>
+                  ${dateHtml}
                 </div>
-                <p style="font-weight: 600; color: #2563eb;">💡 앞으로의 안내 일정</p>
+                <p style="font-weight: 600; color: ${isUpdate ? '#7c3aed' : '#2563eb'};">💡 앞으로의 안내 일정</p>
                 <ul style="padding-left: 20px; color: #475569;">
                   <li>검진 7일 전, 3일 전, 2일 전, 1일 전 (각 시점별 주의사항)</li>
                   <li>검진 당일 안내</li>
                 </ul>
-                <p style="text-align: center; margin-top: 30px; color: #64748b; font-size: 13px;">편안한 검진 되시길 응원합니다. 감사합니다!</p>
+                <p style="text-align: center; margin-top: 30px; color: #64748b; font-size: 13px;">변경된 일정에 맞춰 알림을 보내드리겠습니다. 감사합니다!</p>
               </div>
             </div>
           `

@@ -935,8 +935,8 @@
                       alert("이 고객은 아직 예약 확정(알림톡 예약) 전이거나 예약 정보가 없습니다.\n(알림톡 예약 후 다시 시도해주세요.)");
                   } else {
                       const sortedDocs = snap.docs.sort((a, b) => {
-                          const timeA = a.data().createdAt && a.data().createdAt.toMillis ? a.data().createdAt.toMillis() : 0;
-                          const timeB = b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0;
+                          const timeA = a.data().submittedAt && a.data().submittedAt.toMillis ? a.data().submittedAt.toMillis() : (a.data().createdAt && a.data().createdAt.toMillis ? a.data().createdAt.toMillis() : 0);
+                          const timeB = b.data().submittedAt && b.data().submittedAt.toMillis ? b.data().submittedAt.toMillis() : (b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0);
                           return timeB - timeA;
                       });
 

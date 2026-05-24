@@ -503,6 +503,8 @@ window.closeCheckitService = function() {
         localStorage.removeItem('consultationData_' + userEmail);
         localStorage.removeItem('hasSeenNotificationModal');
         localStorage.removeItem('chat_history_' + userEmail);
+        localStorage.removeItem('chat_history_html_' + userEmail);
+        localStorage.removeItem('dday_chat_history_html_' + userEmail);
         
         if (typeof db !== 'undefined' && db && userEmail) {
             // 2. 파이어베이스 데이터 업데이트 (myPageActive: false 로 비활성화)
@@ -8513,9 +8515,18 @@ function initDashboard() {
         });
         observer.observe(chatMessagesContainer, { childList: true, subtree: true, characterData: true });
     }
+    
+    const ddayMessagesContainer = document.getElementById('dday-chat-messages');
+    if (ddayMessagesContainer && userEmail) {
+        const ddayObserver = new MutationObserver(() => {
+            localStorage.setItem(`dday_chat_history_html_${userEmail}`, ddayMessagesContainer.innerHTML);
+        });
+        ddayObserver.observe(ddayMessagesContainer, { childList: true, subtree: true, characterData: true });
+    }
 
     const savedData = localStorage.getItem(`consultationData_${userEmail}`);
     const chatHistoryHtml = localStorage.getItem(`chat_history_html_${userEmail}`);
+    const ddayHistoryHtml = localStorage.getItem(`dday_chat_history_html_${userEmail}`);
     const oldChatHistoryJson = localStorage.getItem(`chat_history_${userEmail}`);
     
     if (chatHistoryHtml && chatHistoryHtml.trim().length > 50) {
@@ -8527,6 +8538,13 @@ function initDashboard() {
             chatMessagesContainer.innerHTML = chatHistoryHtml;
             setTimeout(() => {
                 chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            }, 100);
+        }
+        
+        if (ddayHistoryHtml && ddayHistoryHtml.trim().length > 50 && ddayMessagesContainer) {
+            ddayMessagesContainer.innerHTML = ddayHistoryHtml;
+            setTimeout(() => {
+                ddayMessagesContainer.scrollTop = ddayMessagesContainer.scrollHeight;
             }, 100);
         }
     } else if (savedData) {
@@ -8611,6 +8629,49 @@ function updateAuthUI() {
 // Initial UI Update Check
 window.addEventListener('DOMContentLoaded', () => {
     updateAuthUI();
+    
+    // --- Session Persistence ---
+    // Restore the correct view based on serviceStep without duplicating banners
+    window.restoreSession = function() {
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) return;
+        
+        const serviceStep = localStorage.getItem('serviceStep_' + userEmail);
+        if (serviceStep) {
+            console.log("CHECKIT: Restoring session to step:", serviceStep);
+            // Wait for mypage to be visible
+            setTimeout(() => {
+                if (typeof window.showChatBlock === 'function') {
+                    if (serviceStep === 'dday' || serviceStep === 'dday-in-progress') {
+                        // Switch to D-Day view silently if it's not active
+                        const ddayView = document.getElementById('dday-view');
+                        const mainChat = document.querySelector('.dash-chat-view:not(#dday-view)');
+                        if (ddayView && mainChat) {
+                            mainChat.classList.add('hidden-view');
+                            mainChat.style.display = 'none';
+                            ddayView.classList.remove('hidden-view');
+                            ddayView.style.display = 'block';
+                            ddayView.scrollTop = ddayView.scrollHeight;
+                        }
+                    } else {
+                        // Ensure main chat is visible
+                        const ddayView = document.getElementById('dday-view');
+                        const mainChat = document.querySelector('.dash-chat-view:not(#dday-view)');
+                        if (ddayView && mainChat) {
+                            ddayView.classList.add('hidden-view');
+                            ddayView.style.display = 'none';
+                            mainChat.classList.remove('hidden-view');
+                            mainChat.style.display = 'block';
+                            mainChat.scrollTop = mainChat.scrollHeight;
+                        }
+                    }
+                }
+            }, 800);
+        }
+    };
+    
+    // Call restoreSession immediately
+    window.restoreSession();
     
     // Inject Legal Terms
     const pipaContent = document.getElementById('pipa-content');
@@ -9586,9 +9647,18 @@ window.subscribeToUserActiveState = function(email) {
         const stepD = document.getElementById('step-dday');
 
         if (myPageActive) {
-            // ACTIVATED - Always show previous stages
-            if (stepS) stepS.style.display = 'block';
-            if (stepC) stepC.style.display = 'block';
+            // ACTIVATED
+            const currentStep = localStorage.getItem('serviceStep_' + email);
+            const hasChatHistory = localStorage.getItem('chat_history_html_' + email);
+            
+            // If user has progressed beyond the initial forms, hide them to keep the UI clean
+            if (savedData || currentStep || (hasChatHistory && hasChatHistory.trim().length > 50)) {
+                if (stepS) stepS.style.display = 'none';
+                if (stepC) stepC.style.display = 'none';
+            } else {
+                if (stepS) stepS.style.display = 'block';
+                if (stepC) stepC.style.display = 'block';
+            }
             renderInlineConsultationForm(true);
             
             if (savedData) {
@@ -9613,7 +9683,7 @@ window.subscribeToUserActiveState = function(email) {
             const chatSend = document.getElementById('chat-send');
             if (chatInput) {
                 chatInput.disabled = false;
-                chatInput.placeholder = "메시지를 입력하세요 (Type your message)...";
+                chatInput.placeholder = "*개인적인 대화 요청은 우측 상단 메일을 통해 소통해주세요";
             }
             if (chatSend) chatSend.disabled = false;
             

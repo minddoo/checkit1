@@ -936,7 +936,7 @@
                   } else {
                       const batch = db.batch();
                       snap.docs.forEach(doc => {
-                          batch.update(doc.ref, { reservedDate: newDate });
+                          batch.update(doc.ref, { reservedDate: newDate, status: 'pending' });
                       });
                       
                       // Notify the user's chat screen remotely

@@ -9617,7 +9617,7 @@ window.subscribeToUserActiveState = function(email) {
             if (chatSend) chatSend.disabled = false;
             
             const btnChange = document.getElementById('btn-change-request');
-            if (btnChange) btnChange.style.display = 'block';
+            if (btnChange) btnChange.style.display = 'flex';
 
         } else {
             const btnChange = document.getElementById('btn-change-request');

@@ -526,14 +526,8 @@ window.closeCheckitService = function() {
             
             batch.commit().then(() => {
                 alert('체킷 서비스를 이용해 주셔서 감사합니다.\n서비스가 정상적으로 종료되어 초기 상태로 돌아갑니다.');
-                // 로그아웃 후 새로고침하여 비활성화 화면으로 리셋
-                if (firebase.auth) {
-                    firebase.auth().signOut().then(() => {
-                        window.location.reload();
-                    });
-                } else {
-                    window.location.reload();
-                }
+                // 비활성화 화면으로 리셋 (로그아웃은 하지 않음)
+                window.location.reload();
             }).catch((e) => {
                 console.error("종료 처리 중 오류 발생:", e);
                 // 권한 문제로 배치 실패 시에도 로컬 초기화는 되었으므로 새로고침
@@ -9650,31 +9644,35 @@ window.submitPaymentInfo = function(btnEl) {
         return;
     }
 
-    const currentUser = firebase.auth().currentUser;
-    if (!currentUser) {
-        alert("결제 정보를 전송하려면 먼저 로그인(또는 회원가입)이 필요합니다.\n(Login required to submit payment info.)");
-        const authModal = document.getElementById('auth-modal');
-        if (authModal) {
-            authModal.classList.add('is-open');
-        }
-        return;
-    }
-
     let msg = "결제 확인 요청합니다.\n";
     if (pVal) msg += "페이팔 이메일: " + pVal + "\n";
     if (bVal) msg += "입금자명: " + bVal;
 
-    db.collection('users').doc(currentUser.uid).set({
-        paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
-        paymentDetails: pVal || bVal,
-        paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        paymentStatus: 'pending_verification'
-    }, { merge: true }).then(() => {
-        alert("결제 정보가 성공적으로 전송되었습니다.\n마스터가 확인 후 활성화해 드립니다.");
-    }).catch(err => {
-        console.error('Payment info save error:', err);
-        alert("저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
-    });
+    const currentUser = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+    
+    if (currentUser) {
+        db.collection('users').doc(currentUser.uid).set({
+            paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
+            paymentDetails: pVal || bVal,
+            paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            paymentStatus: 'pending_verification'
+        }, { merge: true }).catch(err => console.error('Payment info save error:', err));
+    } else {
+        // Fallback for cases where auth state isn't available but userEmail is in localStorage
+        const email = localStorage.getItem('userEmail');
+        if (email) {
+            db.collection('users').where('email', '==', email).get().then(snapshot => {
+                if (!snapshot.empty) {
+                    snapshot.docs[0].ref.set({
+                        paymentMethod: pVal ? 'PayPal' : (bVal ? 'Bank Transfer' : ''),
+                        paymentDetails: pVal || bVal,
+                        paymentRequestedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        paymentStatus: 'pending_verification'
+                    }, { merge: true });
+                }
+            });
+        }
+    }
 
     if (typeof window.appendMessage === 'function') {
         window.appendMessage('user', msg);

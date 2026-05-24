@@ -502,6 +502,7 @@ window.closeCheckitService = function() {
         localStorage.removeItem('serviceStep_' + userEmail);
         localStorage.removeItem('consultationData_' + userEmail);
         localStorage.removeItem('hasSeenNotificationModal');
+        localStorage.removeItem('chat_history_' + userEmail);
         
         if (typeof db !== 'undefined' && db && userEmail) {
             // 2. 파이어베이스 데이터 업데이트 (myPageActive: false 로 비활성화)
@@ -9547,6 +9548,21 @@ window.subscribeToUserActiveState = function(email) {
             if (typeof window.showChatBlock === 'function') {
                 window.showChatBlock('alimtalk'); // Force back to main chat view in case they were in dday
             }
+            
+            // 기존 고객이 서비스 종료 후 재진입 시 완벽한 초기화를 위해 남은 데이터 강제 삭제
+            const currentEmail = localStorage.getItem('userEmail') || email;
+            if (currentEmail) {
+                const hadHistory = localStorage.getItem('chat_history_' + currentEmail);
+                if (hadHistory && hadHistory.length > 5) {
+                    localStorage.removeItem('chat_history_' + currentEmail);
+                    localStorage.removeItem('consultationData_' + currentEmail);
+                    localStorage.removeItem('serviceStep_' + currentEmail);
+                    window.location.reload();
+                    return;
+                }
+            }
+
+
             if (stepS) stepS.style.display = 'block';
             if (stepC) stepC.style.display = 'none'; // Hide when deactivated
             renderInlineConsultationForm(false);

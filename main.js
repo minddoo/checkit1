@@ -493,26 +493,56 @@ window.displayAiReport = function(fileName, data, fileBase64, fileMimeType) {
 };
 
 window.closeCheckitService = function() {
-    if(confirm('체킷 서비스를 종료하시겠습니까?')) {
-        alert('체킷 서비스를 이용해 주셔서 감사합니다. 서비스가 정상적으로 종료되었습니다.');
+    if(confirm('체킷 서비스를 종료하시겠습니까?\n\n종료 시 마이페이지가 초기화되며, 다음에 다시 이용하시려면 신규 고객처럼 결제 후 활성화 절차를 거쳐야 합니다.')) {
         
         const userEmail = localStorage.getItem('userEmail') || '';
-        localStorage.setItem('serviceStep_' + userEmail, 'completed');
+        const user = typeof firebase !== 'undefined' && firebase.auth ? firebase.auth().currentUser : null;
+        
+        // 1. 로컬 스토리지 초기화 (처음 상태로 리셋)
+        localStorage.removeItem('serviceStep_' + userEmail);
+        localStorage.removeItem('consultationData_' + userEmail);
+        localStorage.removeItem('hasSeenNotificationModal');
         
         if (typeof db !== 'undefined' && db && userEmail) {
-            db.collection('users').doc(userEmail).update({
-                status: 'completed',
+            // 2. 파이어베이스 데이터 업데이트 (myPageActive: false 로 비활성화)
+            const batch = db.batch();
+            
+            // user_activations 컬렉션 업데이트
+            const actRef = db.collection('user_activations').doc(userEmail);
+            batch.set(actRef, {
+                myPageActive: false,
                 serviceCompletedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).catch(console.error);
+            }, { merge: true });
+            
+            // users 컬렉션 업데이트
+            if (user) {
+                const userRef = db.collection('users').doc(user.uid);
+                batch.update(userRef, {
+                    status: 'completed',
+                    myPageActive: false,
+                    serviceCompletedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+            
+            batch.commit().then(() => {
+                alert('체킷 서비스를 이용해 주셔서 감사합니다.\n서비스가 정상적으로 종료되어 초기 상태로 돌아갑니다.');
+                // 로그아웃 후 새로고침하여 비활성화 화면으로 리셋
+                if (firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    window.location.reload();
+                }
+            }).catch((e) => {
+                console.error("종료 처리 중 오류 발생:", e);
+                // 권한 문제로 배치 실패 시에도 로컬 초기화는 되었으므로 새로고침
+                window.location.reload();
+            });
+        } else {
+            alert('체킷 서비스를 이용해 주셔서 감사합니다.');
+            window.location.reload();
         }
-        
-        const closeBtns = document.querySelectorAll('button[onclick="window.closeCheckitService()"]');
-        closeBtns.forEach(btn => {
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> 서비스 종료 완료';
-            btn.style.background = '#94a3b8';
-            btn.style.cursor = 'default';
-            btn.disabled = true;
-        });
     }
 };
 

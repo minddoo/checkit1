@@ -96,7 +96,7 @@ service cloud.firestore {
     match /user_activations/{userEmail} {
       allow read: if true;
       allow create: if isMaster() || (request.auth != null && request.auth.token.email == userEmail);
-      allow update: if isMaster() || (request.auth != null && request.auth.token.email == userEmail && request.resource.data.myPageActive == resource.data.myPageActive);
+      allow update: if isMaster() || (request.auth != null && request.auth.token.email == userEmail && (request.resource.data.myPageActive == resource.data.myPageActive || request.resource.data.myPageActive == false));
       allow delete: if isMaster();
     }
 

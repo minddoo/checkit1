@@ -9103,8 +9103,34 @@ window.processChangeRequest = function() {
         }
         
         window.appendMessage('user', `변경 요청: ${request}`);
+        
+        // Firestore 업데이트 (마스터 대시보드 연동)
+        const userEmail = localStorage.getItem('userEmail');
+        if (userEmail && typeof firebase !== 'undefined') {
+            const db = firebase.firestore();
+            
+            // 1. user_activations 업데이트 (기존 로직)
+            db.collection('user_activations').doc(userEmail).set({
+                hasChangeRequest: true,
+                changeRequestMsg: request,
+                changeRequestTime: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }).catch(err => console.error("변경 요청 업데이트 에러 (activations):", err));
+            
+            // 2. users 컬렉션 업데이트 (대시보드 노출용)
+            db.collection('users').where('email', '==', userEmail).get().then(snapshot => {
+                if (!snapshot.empty) {
+                    snapshot.docs[0].ref.set({
+                        hasChangeRequest: true,
+                        changeRequestMsg: request,
+                        changeRequestTime: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                }
+            }).catch(err => console.error("변경 요청 업데이트 에러 (users):", err));
+        }
+        
         setTimeout(() => {
-            window.appendMessage('coord', "요청하신 변경 사항을 접수했습니다. 담당 부서 확인 후 답변 드리겠습니다.");
+            window.appendMessage('coord', "요청하신 변경 사항을 접수했습니다. 담당 부서 확인 후 새로운 일정으로 갱신해 드리겠습니다.");
             // Refresh the block to show updated count
             setTimeout(() => window.showChatBlock('change-request'), 1000);
         }, 1000);

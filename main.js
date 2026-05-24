@@ -9652,7 +9652,7 @@ window.subscribeToUserActiveState = function(email) {
             const hasChatHistory = localStorage.getItem('chat_history_html_' + email);
             
             // If user has progressed beyond the initial forms, hide them to keep the UI clean
-            if (savedData || currentStep || (hasChatHistory && hasChatHistory.trim().length > 50)) {
+            if (savedData || currentStep) {
                 if (stepS) stepS.style.display = 'none';
                 if (stepC) stepC.style.display = 'none';
             } else {

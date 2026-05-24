@@ -927,6 +927,8 @@
                 return;
             }
 
+            const newHospital = prompt("변경할 검진기관 이름을 입력하세요.\n(변경하지 않으려면 그냥 빈 칸으로 두고 '확인'을 누르세요.)");
+
             db.collection('scheduled_notifications')
               .where('userGoogleEmail', '==', userEmail)
               .get()
@@ -935,15 +937,20 @@
                       alert("이 고객은 아직 예약 확정(알림톡 예약) 전이거나 예약 정보가 없습니다.\n(알림톡 예약 후 다시 시도해주세요.)");
                   } else {
                       const sortedDocs = snap.docs.sort((a, b) => {
-                          const timeA = a.data().submittedAt && a.data().submittedAt.toMillis ? a.data().submittedAt.toMillis() : (a.data().createdAt && a.data().createdAt.toMillis ? a.data().createdAt.toMillis() : 0);
-                          const timeB = b.data().submittedAt && b.data().submittedAt.toMillis ? b.data().submittedAt.toMillis() : (b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0);
+                          const timeA = a.data().submittedAt && typeof a.data().submittedAt.toMillis === 'function' ? a.data().submittedAt.toMillis() : (a.data().createdAt && typeof a.data().createdAt.toMillis === 'function' ? a.data().createdAt.toMillis() : 0);
+                          const timeB = b.data().submittedAt && typeof b.data().submittedAt.toMillis === 'function' ? b.data().submittedAt.toMillis() : (b.data().createdAt && typeof b.data().createdAt.toMillis === 'function' ? b.data().createdAt.toMillis() : 0);
                           return timeB - timeA;
                       });
 
                       const batch = db.batch();
                       
+                      const updateData = { reservedDate: newDate, status: 'pending' };
+                      if (newHospital && newHospital.trim() !== '') {
+                          updateData.hospitalName = newHospital.trim();
+                      }
+                      
                       // 1. 가장 최신 문서 하나만 업데이트
-                      batch.update(sortedDocs[0].ref, { reservedDate: newDate, status: 'pending' });
+                      batch.update(sortedDocs[0].ref, updateData);
 
                       // 2. 나머지 중복 문서는 모조리 삭제 (이중 발송 방지)
                       for (let i = 1; i < sortedDocs.length; i++) {
@@ -956,7 +963,7 @@
                       });
 
                       batch.commit().then(() => {
-                          alert(`예약 날짜가 ${newDate}로 성공적으로 변경되었습니다!\n고객 채팅창에도 확정 안내 멘트가 전송되었습니다.`);
+                          alert(`예약이 성공적으로 변경되었습니다!\n고객 채팅창에도 확정 안내 멘트가 전송되었습니다.`);
                       }).catch(err => alert("업데이트 실패: " + err.message));
                   }
               })

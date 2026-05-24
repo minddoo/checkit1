@@ -934,10 +934,21 @@
                   if (snap.empty) {
                       alert("이 고객은 아직 예약 확정(알림톡 예약) 전이거나 예약 정보가 없습니다.\n(알림톡 예약 후 다시 시도해주세요.)");
                   } else {
-                      const batch = db.batch();
-                      snap.docs.forEach(doc => {
-                          batch.update(doc.ref, { reservedDate: newDate, status: 'pending' });
+                      const sortedDocs = snap.docs.sort((a, b) => {
+                          const timeA = a.data().createdAt && a.data().createdAt.toMillis ? a.data().createdAt.toMillis() : 0;
+                          const timeB = b.data().createdAt && b.data().createdAt.toMillis ? b.data().createdAt.toMillis() : 0;
+                          return timeB - timeA;
                       });
+
+                      const batch = db.batch();
+                      
+                      // 1. 가장 최신 문서 하나만 업데이트
+                      batch.update(sortedDocs[0].ref, { reservedDate: newDate, status: 'pending' });
+
+                      // 2. 나머지 중복 문서는 모조리 삭제 (이중 발송 방지)
+                      for (let i = 1; i < sortedDocs.length; i++) {
+                          batch.delete(sortedDocs[i].ref);
+                      }
                       
                       // Notify the user's chat screen remotely
                       batch.update(db.collection('user_activations').doc(userEmail), {

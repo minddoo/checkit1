@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_KEY = 'AIzaSyCLF8UtCqBm-dduMVUM37EfLAatFoz2ILk';
+const API_KEY = process.env.GEMINI_API_KEY || 'HIDDEN_API_KEY';
 
 async function listModels() {
   try {

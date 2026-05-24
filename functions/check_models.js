@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 async function listModels() {
-  const genAI = new GoogleGenerativeAI('AIzaSyCLF8UtCqBm-dduMVUM37EfLAatFoz2ILk');
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'HIDDEN_API_KEY');
   try {
     // We can't easily list models from the SDK without a special method, 
     // but we can try to initialize with the most basic 'gemini-pro' first to see if it works.

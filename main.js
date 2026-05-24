@@ -9668,8 +9668,14 @@ window.subscribeToUserActiveState = function(email) {
                 chatInput.placeholder = "메시지를 입력하세요 (Type your message)...";
             }
             if (chatSend) chatSend.disabled = false;
+            
+            const btnChange = document.getElementById('btn-change-request');
+            if (btnChange) btnChange.style.display = 'block';
 
         } else {
+            const btnChange = document.getElementById('btn-change-request');
+            if (btnChange) btnChange.style.display = 'none';
+
             // DEACTIVATED: Force back to test section ONLY
             if (typeof window.showChatBlock === 'function') {
                 window.showChatBlock('alimtalk'); // Force back to main chat view in case they were in dday

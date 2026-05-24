@@ -470,6 +470,50 @@ window.displayAiReport = function(fileName, data, fileBase64, fileMimeType) {
     `;
     chatMessages.appendChild(row);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // 서비스 종료 안내 멘트 및 버튼 추가
+    setTimeout(() => {
+        const closeRow = document.createElement('div');
+        closeRow.className = 'message-row coord';
+        closeRow.innerHTML = `
+            <div class="system-block" style="border-left: 4px solid #ef4444; background: #fef2f2; width: 100%;">
+                <div class="block-content">
+                    <p style="margin-top: 0; font-size: 0.9rem; color: #991b1b; line-height: 1.6; font-weight: 600;">
+                        결과 및 서류까지 문제없이 수령 및 번역본 확인까지 하셨으면 체킷 서비스를 종료해주세요.
+                    </p>
+                    <button onclick="window.closeCheckitService()" style="width: 100%; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                        <i class="fa-solid fa-power-off"></i> 서비스 종료하기
+                    </button>
+                </div>
+            </div>
+        `;
+        chatMessages.appendChild(closeRow);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 600);
+};
+
+window.closeCheckitService = function() {
+    if(confirm('체킷 서비스를 종료하시겠습니까?')) {
+        alert('체킷 서비스를 이용해 주셔서 감사합니다. 서비스가 정상적으로 종료되었습니다.');
+        
+        const userEmail = localStorage.getItem('userEmail') || '';
+        localStorage.setItem('serviceStep_' + userEmail, 'completed');
+        
+        if (typeof db !== 'undefined' && db && userEmail) {
+            db.collection('users').doc(userEmail).update({
+                status: 'completed',
+                serviceCompletedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(console.error);
+        }
+        
+        const closeBtns = document.querySelectorAll('button[onclick="window.closeCheckitService()"]');
+        closeBtns.forEach(btn => {
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> 서비스 종료 완료';
+            btn.style.background = '#94a3b8';
+            btn.style.cursor = 'default';
+            btn.disabled = true;
+        });
+    }
 };
 
 window.appendDdayCard = function(text) {

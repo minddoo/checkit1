@@ -1061,8 +1061,11 @@
                                     <h4>CHECKIT</h4>
                                 </div>
                             </div>
-                            <div class="chat-header-actions">
-                                <button id="btn-change-request" class="btn-chat-action" onclick="window.showChatBlock('change-request')" title="일정 변경 요청" style="display: none;"><i class="fa-solid fa-calendar-alt"></i></button>
+                            <div class="chat-header-actions" style="display: flex; align-items: center; gap: 15px;">
+                                <div id="btn-change-request" style="display: none; flex-direction: column; align-items: center; cursor: pointer;" onclick="window.showChatBlock('change-request')">
+                                    <button class="btn-chat-action" style="margin: 0;" title="일정 변경 요청"><i class="fa-solid fa-calendar-alt"></i></button>
+                                    <span style="font-size: 0.6rem; color: #64748b; font-weight: 700; margin-top: 4px;">일정변경</span>
+                                </div>
                                 <button class="btn-chat-action" onclick="window.toggleChatEditMode()"><i class="fa-solid fa-ellipsis-v"></i></button>
                             </div>
                         </div>

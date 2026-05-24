@@ -1066,7 +1066,10 @@
                                     <button class="btn-chat-action" style="margin: 0; background: none; border: none; color: #3b82f6;" title="일정변경 요청"><i class="fa-regular fa-envelope"></i></button>
                                     <span style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">날짜변경 요청</span>
                                 </div>
-                                <button class="btn-chat-action" onclick="window.toggleChatEditMode()"><i class="fa-solid fa-ellipsis-v"></i></button>
+                                <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer;" onclick="window.toggleChatEditMode()">
+                                    <button class="btn-chat-action" style="margin: 0;" title="메시지 삭제"><i class="fa-solid fa-ellipsis-v"></i></button>
+                                    <span style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">메시지 삭제</span>
+                                </div>
                             </div>
                         </div>
 

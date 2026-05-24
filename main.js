@@ -9098,9 +9098,7 @@ window.processChangeRequest = function() {
         }
         
         setTimeout(() => {
-            window.appendMessage('coord', "요청하신 변경 사항을 접수했습니다. 담당 부서 확인 후 새로운 일정으로 갱신해 드리겠습니다.");
-            // Refresh the block to show updated count
-            setTimeout(() => window.showChatBlock('change-request'), 1000);
+            window.appendMessage('coord', "요청하신 변경 사항을 접수했습니다. 담당 부서에서 확인 후 일정을 확정하면 이 화면에 다시 알려드리겠습니다.");
         }, 1000);
     }
 };
@@ -9576,7 +9574,40 @@ window.subscribeToUserActiveState = function(email) {
     // Listen to user_activations collection (allow read: if true - no Firebase Auth needed)
     // Master dashboard writes here when activating/deactivating a customer
     userActiveListener = db.collection('user_activations').doc(email).onSnapshot(function(snapshot) {
-        const myPageActive = snapshot.exists && snapshot.data().myPageActive === true;
+        const data = snapshot.exists ? snapshot.data() : {};
+        const myPageActive = data.myPageActive === true;
+        
+        // --- 일정 변경 확정 감지 로직 ---
+        if (data.scheduleConfirmedAt) {
+            const confirmedMs = data.scheduleConfirmedAt.toMillis ? data.scheduleConfirmedAt.toMillis() : Date.now();
+            const lastSeenConfirm = parseInt(localStorage.getItem('lastSeenConfirm_' + email) || '0');
+            
+            if (confirmedMs > lastSeenConfirm) {
+                localStorage.setItem('lastSeenConfirm_' + email, confirmedMs.toString());
+                
+                const finalMsg = `
+                    <div style="background: #f0fdf4; padding: 14px; border-radius: 10px; border: 1px solid #bbf7d0; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                        <p style="margin: 0 0 12px 0; font-size: 0.9rem; color: #166534; font-weight: 700; line-height: 1.5;">
+                            <i class="fa-solid fa-circle-check" style="color: #22c55e; margin-right: 6px; font-size: 1.1rem;"></i> 
+                            담당 부서에서 일정 변경 확정을 완료했습니다!<br>
+                            <span style="font-size: 0.8rem; font-weight: 500; color: #15803d; margin-top: 6px; display: block;">상단의 D-Day 타이머가 새로운 일정으로 업데이트되었습니다.</span>
+                        </p>
+                        <button class="btn-block-primary" onclick="window.viewFromBeginning()" style="background: #22c55e; padding: 12px; font-size: 0.85rem; width: 100%; border: none; border-radius: 8px; color: white; font-weight: 800; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
+                            <i class="fa-solid fa-angles-up" style="margin-right: 4px;"></i> 진행 중이던 화면으로 돌아가기
+                        </button>
+                    </div>
+                `;
+                window.appendMessage('system', finalMsg, 'system');
+                
+                // 스크롤 맨 아래로
+                setTimeout(() => {
+                    const chatMessages = document.getElementById('chat-messages');
+                    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 100);
+            }
+        }
+        // -------------------------------
+
         const savedData = localStorage.getItem('consultationData_' + email);
 
         const stepC = document.getElementById('step-consultation');

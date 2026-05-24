@@ -849,10 +849,10 @@
                                     ${pStatus.toUpperCase()}
                                 </span>
                                 ${user.paymentMethod ? `<div style="font-size: 0.75rem; color: #d97706; margin-top: 4px; font-weight: 700;">[요청됨] ${user.paymentMethod}: ${user.paymentDetails}</div>` : ''}
-                                ${(user.hasChangeRequest || (activationData[user.email] && activationData[user.email].hasChangeRequest)) ? `
+                                ${user.hasChangeRequest ? `
                                 <div style="margin-top: 8px; padding: 6px 10px; background: #fff1f2; border: 1px solid #fecaca; border-radius: 8px;">
                                     <div style="font-size: 0.75rem; color: #e11d48; font-weight: 800; margin-bottom: 2px;"><i class="fa-solid fa-bell" style="animation: pulse 2s infinite;"></i> 🚨 일정/항목 변경 요청</div>
-                                    <div style="font-size: 0.7rem; color: #be123c;">${user.changeRequestMsg || (activationData[user.email] && activationData[user.email].changeRequestMsg) || '내용 없음'}</div>
+                                    <div style="font-size: 0.7rem; color: #be123c;">${user.changeRequestMsg || '내용 없음'}</div>
                                     <button onclick="clearChangeRequest('${id}', '${user.email}')" style="margin-top: 4px; background: #ffe4e6; border: none; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; color: #e11d48; cursor: pointer; font-weight: 700;">확인 완료 (지우기)</button>
                                 </div>
                                 ` : ''}

@@ -2719,14 +2719,114 @@ function initDashboard() {
         
         if (index !== -1) {
             const history = JSON.parse(localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`) || '[]');
-            history.splice(index, 1);
-            localStorage.setItem(`chat_history_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(history));
+            // A simple approximation: if the message is roughly near the end, delete from history.
+            // In a robust implementation, we map history via IDs.
+            if (index < history.length + 3) {
+                // Usually there are 3 predefined blocks (welcome, self-test, consultation)
+                let hIndex = index - 3;
+                if (hIndex >= 0 && hIndex < history.length) {
+                    history.splice(hIndex, 1);
+                    localStorage.setItem(`chat_history_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(history));
+                }
+            }
             
             row.style.opacity = '0';
             row.style.transform = 'translateX(-20px)';
             row.style.transition = 'all 0.3s ease';
             setTimeout(() => row.remove(), 300);
         }
+    };
+
+    window.toggleChatEditMode = function() {
+        const chatMessages = document.getElementById('chat-messages');
+        const deleteBar = document.getElementById('chat-delete-bar');
+        const inputArea = document.querySelector('.chat-input-area');
+        
+        if (!chatMessages) return;
+        
+        chatMessages.classList.toggle('edit-mode');
+        
+        if (chatMessages.classList.contains('edit-mode')) {
+            // Show delete bar, hide input
+            if (deleteBar) deleteBar.style.display = 'flex';
+            if (inputArea) inputArea.style.display = 'none';
+            
+            // Clear selections
+            chatMessages.querySelectorAll('.selected-for-delete').forEach(el => el.classList.remove('selected-for-delete'));
+            updateDeleteCount();
+            
+            // Add click listeners
+            chatMessages.querySelectorAll('.message-row').forEach(row => {
+                row.removeEventListener('click', handleRowSelect);
+                row.addEventListener('click', handleRowSelect);
+            });
+        } else {
+            // Hide delete bar, show input
+            if (deleteBar) deleteBar.style.display = 'none';
+            if (inputArea) inputArea.style.display = 'block';
+            
+            // Remove click listeners
+            chatMessages.querySelectorAll('.message-row').forEach(row => {
+                row.removeEventListener('click', handleRowSelect);
+            });
+        }
+    };
+    
+    function handleRowSelect(e) {
+        if (!document.getElementById('chat-messages').classList.contains('edit-mode')) return;
+        // prevent toggling if clicking on options
+        if (e.target.closest('.msg-options-btn')) return;
+        
+        this.classList.toggle('selected-for-delete');
+        updateDeleteCount();
+    }
+    
+    function updateDeleteCount() {
+        const count = document.querySelectorAll('#chat-messages .selected-for-delete').length;
+        const countEl = document.getElementById('chat-delete-count');
+        if (countEl) countEl.innerText = `${count} selected`;
+    }
+    
+    window.deleteSelectedMessages = function() {
+        const chatMessages = document.getElementById('chat-messages');
+        const selectedRows = chatMessages.querySelectorAll('.selected-for-delete');
+        
+        if (selectedRows.length === 0) {
+            alert('삭제할 메시지를 선택해주세요.');
+            return;
+        }
+        
+        if (!confirm(`선택한 ${selectedRows.length}개의 메시지를 삭제하시겠습니까?`)) return;
+        
+        let history = JSON.parse(localStorage.getItem(`chat_history_${localStorage.getItem('userEmail') || ''}`) || '[]');
+        const allRows = Array.from(chatMessages.querySelectorAll('.message-row'));
+        
+        let indexesToRemove = [];
+        selectedRows.forEach(row => {
+            const index = allRows.indexOf(row);
+            if (index !== -1) {
+                indexesToRemove.push(index);
+            }
+        });
+        
+        indexesToRemove.sort((a, b) => b - a);
+        indexesToRemove.forEach(index => {
+            let hIndex = index - 3;
+            if (hIndex >= 0 && hIndex < history.length) {
+                history.splice(hIndex, 1);
+            }
+        });
+        
+        localStorage.setItem(`chat_history_${localStorage.getItem('userEmail') || ''}`, JSON.stringify(history));
+        
+        selectedRows.forEach(row => {
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(-20px)';
+            row.style.transition = 'all 0.3s ease';
+            setTimeout(() => row.remove(), 300);
+        });
+        
+        setTimeout(() => window.toggleChatEditMode(), 300);
     };
 
     window.appendMessage = function(sender, content, type = 'text', skipSave = false) {

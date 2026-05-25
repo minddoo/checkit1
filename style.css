@@ -6006,5 +6006,11 @@ html {
         45%, 95% { transform: translateY(-240px); }
         100% { transform: translateY(0); }
     }
+
+    /* 18. Story Arrow Mobile Animation */
+    .story-text .story-arrow {
+        animation: bounceDown 2s infinite !important;
+        opacity: 0.8 !important; /* Make it a bit more visible since it's animating */
+    }
 }
 

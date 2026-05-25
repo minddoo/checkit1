@@ -5359,32 +5359,35 @@ html {
     .nav-container {
         padding-left: 15px !important;
         padding-right: 15px !important;
-        gap: 5px !important;
     }
     
     .logo {
-        position: static !important; /* Removes absolute positioning */
-        transform: none !important;
-        font-size: 1.2rem !important;
-        gap: 6px !important;
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        font-size: 1.1rem !important;
+        gap: 5px !important;
     }
     
     .nav-logo {
-        height: 28px !important; /* Scale down logo to fit iPhone Mini */
+        height: 24px !important; /* Scale down logo slightly more */
     }
     
     .nav-links {
-        gap: 8px !important;
+        gap: 6px !important;
     }
     
     .language-selector {
-        padding: 4px 6px !important;
-        font-size: 0.75rem !important;
+        padding: 4px !important;
+    }
+
+    #current-lang {
+        display: none !important; /* Hide language text on mobile to save space */
     }
     
     .nav-btn {
-        padding: 6px 10px !important;
-        font-size: 0.8rem !important;
+        padding: 4px 10px !important;
+        font-size: 0.75rem !important;
     }
 
     /* 6. Comparison Grid Side-by-Side */

@@ -5824,6 +5824,18 @@ html {
 
     .kinetic-viewport {
         height: 240px !important; /* Increased from 180px for verbose languages like Russian */
+        margin-bottom: 5px !important; /* Reduce gap with subtitle below */
+    }
+
+    .transparency-header p.subtitle {
+        font-size: 0.95rem !important; /* Reduce text size from 1.4rem */
+        line-height: 1.4 !important;
+        padding: 0 15px !important;
+    }
+
+    .transparency-header p.subtitle span {
+        font-size: 1.15rem !important; /* Reduce the bold span size */
+        margin-bottom: 5px !important;
     }
 
     .kinetic-track {

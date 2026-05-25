@@ -1,109 +1,40 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    /** 
-     * [SECURITY HELPERS]
-     */
-     
-    // Check if the user is the super-admin (Master)
+    // Check if the user is a Master Admin
     function isMaster() {
-      return request.auth != null && 
-             (request.auth.token.email == "master@checkit.com" || 
-              request.auth.token.email == "checkit082082@gmail.com" ||
-              request.auth.token.email == "checkit082@gmail.com");
+      return request.auth != null && (
+        request.auth.token.email == 'master@checkit.com' ||
+        request.auth.token.email == 'checkit082082@gmail.com' ||
+        request.auth.token.email == 'checkit082@gmail.com'
+      );
+    }
+    
+    // Check if the user is accessing their own document
+    function isOwner(email) {
+      return request.auth != null && request.auth.token.email == email;
     }
 
-    // Get the current user's profile data from the 'users' collection
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    // 1. User Documents (Users Collection)
+    match /users/{email} {
+      // Masters can read/write all users. Users can only read/write their own document.
+      allow read, write: if isMaster() || isOwner(email);
     }
 
-    /** 
-     * [GLOBAL RULES]
-     */
+    // 2. Consultation States
+    match /user_chat_states/{email} {
+      allow read, write: if isMaster() || isOwner(email);
+    }
 
-    // Master account bypass - Full access to everything
+    // 3. User Activations
+    match /user_activations/{email} {
+      allow read, write: if isMaster() || isOwner(email);
+    }
+
+    // 4. Default rule: Deny everything else
     match /{document=**} {
-      allow read, write: if isMaster();
-    }
-
-    /** 
-     * [COLLECTION RULES]
-     */
-
-    // [1] USERS: Core account metadata
-    match /users/{userId} {
-      // Users can only read/write their own profile
-      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
-    }
-
-    // [2] COMPANY_INFO: Corporate settings and admin keys
-    match /company_info/{companyId} {
-      // allow 'get' for specific ID to support company-key validation during login
-      allow get: if true; 
-      
-      // Full read/write for Master or the verified Company Admin
-      allow read, write: if isMaster() || 
-                           (request.auth != null && 
-                            getUserData().role == 'company_admin' && 
-                            getUserData().companyId == companyId);
-      
-      // Prevent listing all companies for non-admin users
-      allow list: if isMaster();
-    }
-
-    // [3] WORKERS: The roster of employees for medical checkups
-    match /workers/{workerId} {
-      // Allow reading if Master, or Company Admin of that worker, or the Worker themselves
-      allow read: if request.auth != null && (
-        isMaster() || 
-        (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId) ||
-        (resource.data.uid == request.auth.uid)
-      );
-      
-      // Allow creation by Master or any verified Company Admin
-      allow create: if request.auth != null && (isMaster() || getUserData().role == 'company_admin');
-      
-      // Only Master or Company Admin can update/delete records
-      allow update, delete: if request.auth != null && (
-        isMaster() || 
-        (getUserData().role == 'company_admin' && getUserData().companyId == resource.data.companyId)
-      );
-    }
-
-    // [4] USER_PROCESS: Individual medical journey tracking
-    match /user_process/{userId} {
-      // Strictly private: Only the owner or Master can access
-      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
-    }
-
-    // [5] LEADS: Consultation requests from B2C site (1-ckc.pages.dev)
-    match /leads/{leadId} {
-      // Anyone can submit a consultation request
-      allow create: if true;
-      // Only Master can read/manage incoming leads
-      allow read, write: if isMaster();
-    }
-    // [6] SCHEDULED_NOTIFICATIONS: Automated reminders for B2C checkups
-    match /scheduled_notifications/{notifId} {
-      allow create, update: if true;
-      allow read, write: if isMaster();
-    }
-
-    // [8] USER_ACTIVATIONS: Publicly readable activation flag (customers read without Firebase Auth)
-    match /user_activations/{userEmail} {
-      allow read: if true;
-      allow create: if isMaster() || (request.auth != null && request.auth.token.email == userEmail);
-      allow update: if isMaster() || (request.auth != null && request.auth.token.email == userEmail && (request.resource.data.myPageActive == resource.data.myPageActive || request.resource.data.myPageActive == false));
-      allow delete: if isMaster();
-    }
-
-    // [7] BLOG_POSTS: Public read, admin/master write
-    match /blog_posts/{postId} {
-      allow read: if true;
-      allow write: if isMaster();
+      allow read, write: if false;
     }
   }
 }

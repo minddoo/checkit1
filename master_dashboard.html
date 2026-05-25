@@ -1107,7 +1107,7 @@
             
             if (iframe && title && modal) {
                 title.innerHTML = `🔧 [실시간 조회] <strong>${name} (${email})</strong> 고객의 마이페이지`;
-                iframe.src = `index.html?view=mypage&impersonate_email=${encodeURIComponent(email)}&impersonate_name=${encodeURIComponent(name)}`;
+                iframe.src = `index.html?view=mypage&impersonate_email=${encodeURIComponent(email)}&impersonate_name=${encodeURIComponent(name)}&_cb=${Date.now()}`;
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden'; // prevent dashboard scrolling
             }

@@ -2847,7 +2847,7 @@ window.showView = function(viewName) {
     if (viewName === 'mypage') {
         const userEmail = localStorage.getItem('userEmail');
         const MASTER_EMAILS = ['master@checkit.com', 'checkit082082@gmail.com', 'checkit082@gmail.com'];
-        if (MASTER_EMAILS.includes(userEmail)) {
+        if (MASTER_EMAILS.includes(userEmail) && !window.impersonatedUserEmail) {
             if (mypageModal) {
                 mypageModal.classList.remove('show');
                 document.body.style.overflow = '';

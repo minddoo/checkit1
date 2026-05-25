@@ -858,7 +858,7 @@
 
                             <!-- Secondary row: Cart + Domestic Payment -->
                             <div class="secondary-actions">
-                                <button type="button" class="btn-secondary" onclick="if(window.requireLoginForPayment && window.requireLoginForPayment('국내 결제')) { document.getElementById('domestic-pay-modal').classList.add('is-open'); }">💳 국내 결제</button>
+                                <button type="button" class="btn-secondary" onclick="if(window.requireLoginForPayment && window.requireLoginForPayment('국내 결제')) { openDomesticPayModal(); }">💳 국내 결제</button>
                             </div>
                         </div>
 
@@ -1707,6 +1707,10 @@
                 <strong style="color: #2d3748;">무통장 입금 계좌</strong><br>
                 <span style="font-size: 1.1rem; color: #3182ce; font-weight: bold;">농협 3561443326933</span><br>
                 예금주: 김선홍<br><br>
+                <span style="display: block; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; padding: 15px; border-radius: 8px; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                    입금하실 총 금액: <span id="dynamic-krw-amount" style="font-size: 1.25rem; color: #22c55e;">계산 중...</span>
+                    <span style="display: block; font-size: 0.8rem; font-weight: normal; margin-top: 6px; color: #15803d;">* 실시간 환율 적용 (<span id="current-exchange-rate">조회 중...</span>)</span>
+                </span>
                 <span style="font-size: 0.9rem; background: #edf2f7; padding: 10px; border-radius: 8px; display: block; margin-top: 15px; text-align: left;">
                     <i class="fa-solid fa-circle-info"></i> <strong>진행 안내:</strong> 입금 확인 후 관리자가 승인하면 <strong>마이페이지에서 예약 진행 단계가 활성화</strong>됩니다. 입금 전에는 마이페이지 접속은 가능하나 진행 단계가 시작되지 않습니다.
                 </span>
@@ -1714,6 +1718,41 @@
             <button type="button" class="btn-success-close" onclick="document.getElementById('domestic-pay-modal').classList.remove('is-open')" style="background:#2d3748; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;">확인</button>
         </div>
     </div>
+
+    <script>
+        function openDomesticPayModal() {
+            document.getElementById('domestic-pay-modal').classList.add('is-open');
+            
+            // UI에 표시된 총 결제 금액을 가져와서 파싱 (예: "$300.00" -> 300)
+            let totalStr = document.getElementById('total-price-amount').innerText;
+            let totalUsd = parseFloat(totalStr.replace(/[^0-9.]/g, '')) || 300;
+            
+            document.getElementById('dynamic-krw-amount').innerText = "환율 정보 불러오는 중...";
+            document.getElementById('current-exchange-rate').innerText = "조회 중...";
+
+            // 실시간 환율 API 호출 (open.er-api.com 은 무료, 인증키 불필요)
+            fetch('https://open.er-api.com/v6/latest/USD')
+                .then(res => res.json())
+                .then(data => {
+                    if(data && data.rates && data.rates.KRW) {
+                        let rate = data.rates.KRW;
+                        let totalKrw = Math.round(totalUsd * rate);
+                        // 천 단위 콤마 추가
+                        document.getElementById('dynamic-krw-amount').innerText = totalKrw.toLocaleString() + "원 ($" + totalUsd + ")";
+                        document.getElementById('current-exchange-rate').innerText = "1 USD = " + Math.round(rate).toLocaleString() + " KRW";
+                    } else {
+                        throw new Error('API format error');
+                    }
+                })
+                .catch(err => {
+                    // API 실패 시 기본 환율 1350원으로 대체 안내
+                    let fallbackRate = 1350;
+                    let totalKrw = totalUsd * fallbackRate;
+                    document.getElementById('dynamic-krw-amount').innerText = "약 " + totalKrw.toLocaleString() + "원 ($" + totalUsd + ")";
+                    document.getElementById('current-exchange-rate').innerText = "환율 조회 지연, 직접 계산 필요";
+                });
+        }
+    </script>
 
     <!-- Email Copy Modal for Translation -->
     <div id="email-modal" class="payment-success-modal" style="z-index: 10000; background: rgba(0,0,0,0.8);">

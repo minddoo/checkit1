@@ -6035,6 +6035,19 @@ html {
     .summary-price {
         flex: 0 0 auto !important;
     }
+    
+    .total-price-display {
+        margin-bottom: 20px !important;
+        align-items: center !important;
+    }
+    
+    .total-label {
+        font-size: 0.95rem !important;
+    }
+    
+    .total-value {
+        font-size: 1.6rem !important;
+    }
 
     /* 14. Korea Banner Mobile Fix (Background attachment & Font Size) */
     .korea-banner {

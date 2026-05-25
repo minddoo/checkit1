@@ -5982,7 +5982,7 @@ html {
 
     /* 13-b. Payment Section Mobile Text & Layout Fix */
     .payment-section {
-        padding: 60px 15px !important;
+        padding: 60px 0 !important;
     }
     
     .payment-section .section-head .pay-title-logo {

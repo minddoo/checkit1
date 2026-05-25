@@ -5515,18 +5515,39 @@ html {
         white-space: normal !important;
     }
 
-    /* 7. Evidence Cards Side-by-Side */
+    /* 7. Evidence Cards Horizontal Scroll (Carousel) */
     .evidence-row {
         display: flex !important;
         flex-direction: row !important;
-        gap: 8px !important;
+        gap: 15px !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        padding-bottom: 25px !important;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        margin-left: -15px !important;
+        margin-right: -15px !important;
+        -webkit-overflow-scrolling: touch !important;
         align-items: stretch !important;
     }
     
+    .evidence-row::-webkit-scrollbar {
+        height: 4px;
+    }
+    .evidence-row::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.05);
+        border-radius: 10px;
+    }
+    .evidence-row::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
+    
     .evidence-file {
-        flex: 1 1 50% !important;
-        min-width: 0 !important;
-        padding: 10px !important;
+        flex: 0 0 85% !important; /* Take 85% width like the comparison cards */
+        min-width: 280px !important;
+        padding: 25px 20px !important; /* Larger comfortable padding */
+        scroll-snap-align: center !important;
     }
     
     .evidence-vs {
@@ -5534,17 +5555,17 @@ html {
     }
 
     .evidence-caption {
-        font-size: 0.75rem !important;
-        line-height: 1.3 !important;
-        margin-top: 10px !important;
-        word-break: break-word !important;
+        font-size: 0.95rem !important; /* Restored size for readability */
+        line-height: 1.4 !important;
+        margin-top: 15px !important;
+        word-break: keep-all !important;
         white-space: normal !important;
     }
     
     .file-tag {
-        font-size: 0.65rem !important;
-        padding: 4px 6px !important;
-        margin-bottom: 8px !important;
+        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+        margin-bottom: 15px !important;
     }
     
     .file-tag span:first-child {

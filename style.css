@@ -5771,18 +5771,53 @@ html {
         padding: 0 15px !important;
     }
 
-    .reality-flow.grid-layout {
-        grid-template-columns: 1fr 1fr !important; /* Force 2 cards per row */
-        gap: 10px !important; /* Small gap for narrow mobile screens */
-        padding: 0 10px !important;
+    .reality-slider-container {
+        position: relative !important;
+        width: 100% !important;
+        overflow: visible !important;
     }
 
-    .reality-card {
-        padding: 15px 10px !important; /* Deep compression */
-        flex-direction: column !important; /* Stack icon above text */
+    .reality-flow.grid-layout.reality-slider-track {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        width: 100% !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+
+    .reality-slider-track .reality-card {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        padding: 30px 20px !important; /* Give it more breathing room since it's full width now */
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        flex-direction: column !important;
         gap: 12px !important;
-        align-items: center !important;
-        text-align: center !important;
+        align-items: flex-start !important; /* Keep original left alignment or center, center is fine */
+        text-align: left !important;
+    }
+    
+    .reality-dots {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    
+    .r-dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        background: rgba(255,255,255,0.2) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .r-dot.active {
+        background: #ef4444 !important;
+        width: 24px !important;
+        border-radius: 12px !important;
     }
 
     .reality-icon {

@@ -5424,40 +5424,60 @@ html {
         font-size: 0.75rem !important;
     }
 
-    /* 6. Comparison Grid Side-by-Side */
+    /* 6. Comparison Grid Horizontal Scroll (Carousel) */
     .comparison-grid-tp {
         display: flex !important;
-        flex-direction: row !important; /* Force side-by-side */
-        gap: 8px !important; /* Small gap to save space */
-        align-items: stretch !important;
+        flex-direction: row !important;
+        gap: 15px !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        padding-bottom: 25px !important;
+        padding-left: 20px !important; /* Peek padding */
+        padding-right: 20px !important;
+        margin-left: -20px !important; /* Break out of container */
+        margin-right: -20px !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     
+    .comparison-grid-tp::-webkit-scrollbar {
+        height: 4px;
+    }
+    .comparison-grid-tp::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.05);
+        border-radius: 10px;
+    }
+    .comparison-grid-tp::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
+
     .comparison-grid-tp .tp-card {
-        flex: 1 1 50% !important; /* Each takes exactly 50% */
-        min-width: 0 !important; /* Allow shrinking below min-content */
-        padding: 15px 10px !important; /* Compact padding */
+        flex: 0 0 85% !important; /* Takes most of the screen, leaves peek room */
+        min-width: 280px !important;
+        padding: 30px 20px !important; /* Comfortable padding */
+        scroll-snap-align: center !important;
     }
     
     .comparison-grid-tp .card-label {
-        font-size: 0.75rem !important;
-        margin-bottom: 8px !important;
+        font-size: 0.85rem !important; /* Restored size */
+        margin-bottom: 15px !important;
     }
     
     .comparison-grid-tp h3 {
-        font-size: 1.05rem !important;
-        margin-bottom: 12px !important;
-        word-break: break-word !important;
+        font-size: 1.3rem !important; /* Restored size */
+        margin-bottom: 20px !important;
+        word-break: keep-all !important;
         white-space: normal !important;
     }
     
     .comparison-grid-tp .formula-box {
-        padding: 10px !important;
-        margin-bottom: 15px !important;
+        padding: 15px !important;
+        margin-bottom: 25px !important;
     }
     
     .comparison-grid-tp .formula-main {
-        font-size: 0.9rem !important; /* Much smaller to fit */
-        word-break: break-word !important;
+        font-size: 1.1rem !important; /* Restored size */
+        word-break: keep-all !important;
         white-space: normal !important;
     }
     

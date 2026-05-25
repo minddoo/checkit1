@@ -5387,6 +5387,18 @@ html {
         padding: 8px !important;
     }
 
+    /* 4.5. Reddit Slider Compression */
+    .slide-num {
+        font-size: 1.35rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .slide-quote {
+        font-size: 0.95rem !important;
+        margin-bottom: 25px !important;
+        line-height: 1.4 !important;
+    }
+
     /* 5. Navbar Layout Fix (Single Row, Logo Left, Actions Right) */
     .glass-nav {
         padding: 8px 0 !important; /* Reduce massive 20px padding */

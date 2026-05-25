@@ -5565,7 +5565,24 @@ html {
     }
 
     .bulletin-board {
-        padding: 40px 20px 20px 20px !important;
+        padding: 20px !important; /* Normal uniform padding */
+        margin-top: 30px !important; /* Make room above */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .bulletin-board > div:first-child {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin-top: -35px !important; /* Pull out of the box */
+        margin-bottom: 15px !important; /* Safely push yellow cards down */
+        align-self: flex-start !important;
+        width: fit-content !important;
+        max-width: 100% !important;
+        line-height: 1.4 !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
 
     .bulletin-post {

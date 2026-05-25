@@ -5790,7 +5790,7 @@ html {
     .reality-slider-track .reality-card {
         flex: 0 0 100% !important;
         width: 100% !important;
-        aspect-ratio: 1 / 1 !important; /* Make it a square */
+        height: auto !important;
         padding: 30px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
@@ -5798,7 +5798,6 @@ html {
         gap: 15px !important;
         align-items: flex-start !important; 
         text-align: left !important;
-        justify-content: center !important; /* Vertically center content inside the square */
     }
     
     .reality-dots {

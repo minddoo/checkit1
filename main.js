@@ -9494,6 +9494,28 @@ const BLOG_SEED_DATA = [
     }
 ];
 
+// Generate 187 more posts dynamically to reach 23 pages (207 posts total)
+const categories = ['건강정보', '체킷소식', '고객후기', '한국생활'];
+for (let i = 21; i <= 207; i++) {
+    BLOG_SEED_DATA.push({
+        id: 'post-' + i,
+        title: '외국인 건강검진 비의료 행정 지원 데이터 ' + i,
+        category: categories[i % 4],
+        thumbnail: 'https://loremflickr.com/600/400/hospital,clinic?lock=' + i,
+        summary: 'CHECKIT의 비의료 행정 서비스와 다국어 번역 시스템을 통해 한국 건강검진을 언어 장벽 없이 이용하세요.',
+        content: '<p>CHECKIT은 의료 알선이나 중개가 아닌 순수한 IT 플랫폼 기반의 비의료 행정 지원 서비스입니다. 번거로운 예약부터 결과지 번역까지 완벽한 모국어 컨시어지를 제공합니다.</p><p>환자분들은 복잡한 언어 장벽이나 부풀려진 수수료 걱정 없이 한국의 선진화된 의료 시스템을 정가 그대로 투명하게 이용하실 수 있습니다.</p>',
+        author: 'CHECKIT',
+        createdAt: '2025.01.' + String((i % 28) + 1).padStart(2, '0')
+    });
+}
+
+// Fix broken Unsplash URLs in the first 20 items by replacing them with reliable LoremFlickr URLs
+BLOG_SEED_DATA.forEach((post, index) => {
+    if (index < 20) {
+        post.thumbnail = 'https://loremflickr.com/600/400/medical,hospital?lock=' + (index + 500);
+    }
+});
+
 // Initialize blog data
 
 // Category color map

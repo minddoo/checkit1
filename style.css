@@ -5689,4 +5689,37 @@ html {
         margin-top: 20px !important;
         padding-top: 20px !important;
     }
+
+    /* 12. Expert Authority Section Mobile Compression */
+    .authority-section {
+        padding: 60px 15px !important;
+    }
+
+    .authority-title {
+        font-size: 1.8rem !important; /* Scale down massive 3.5rem */
+        margin-bottom: 40px !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .authority-story {
+        gap: 25px !important; /* Scale down 40px gap */
+    }
+
+    .authority-story p {
+        font-size: 1rem !important; /* Scale down 1.3rem */
+        line-height: 1.5 !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .authority-final {
+        margin-top: 20px !important;
+        font-size: 1.15rem !important;
+    }
+
+    .authority-final strong {
+        font-size: 1.4rem !important; /* Scale down massive 2rem */
+        margin-top: 5px !important;
+    }
 }

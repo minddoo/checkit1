@@ -3313,7 +3313,67 @@ input:checked + .slider:before {
         justify-content: space-between;
         align-items: center;
     }
-    .dash-user-info { display: none; }
+    /* Mobile Dashboard Header (Sidebar Refinement) */
+    .dash-sidebar { 
+        padding: 12px 20px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        background: #ffffff;
+        z-index: 20;
+    }
+    
+    .dash-user-info { 
+        display: flex !important; 
+        flex-direction: row !important; 
+        align-items: center !important; 
+        gap: 12px !important; 
+        padding: 0 !important; 
+        border: none !important; 
+        margin: 0 !important; 
+        text-align: left !important;
+    }
+    
+    .dash-avatar { 
+        width: 38px !important; 
+        height: 38px !important; 
+        font-size: 1.2rem !important; 
+        margin: 0 !important; 
+    }
+    
+    #dash-user-name { 
+        font-size: 0.95rem !important; 
+        margin: 0 !important; 
+    }
+    
+    #dash-user-email { 
+        display: none !important; 
+    }
+    
+    .dash-sidebar-footer { 
+        display: flex !important; 
+        flex-direction: row !important; 
+        align-items: center !important;
+        gap: 10px !important; 
+        padding: 0 !important; 
+        border: none !important; 
+        margin: 0 !important;
+    }
+    
+    /* Make buttons into compact icon buttons on mobile */
+    .dash-sidebar-footer button {
+        padding: 0 !important;
+        width: 36px !important;
+        height: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0 !important; /* Hide text */
+        border-radius: 50% !important; /* Circular buttons */
+    }
+    
+    .dash-sidebar-footer button i {
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+    }
     .dash-nav { display: flex; padding: 0; }
     .dash-sidebar-footer { padding: 0; border: none; }
     .dash-main-content { padding: 30px 20px; min-height: 0; }

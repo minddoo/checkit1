@@ -5399,6 +5399,21 @@ html {
         line-height: 1.4 !important;
     }
 
+    .transition-text {
+        margin: 60px 0 30px !important; /* Reduce vertical spacing on mobile */
+    }
+
+    .transition-text p {
+        font-size: 1.5rem !important; /* Reduce huge 2.2rem size */
+        color: #dc2626 !important; /* Make entire text red per user request */
+        word-break: keep-all !important;
+    }
+    
+    .transition-text p .highlight-red {
+        color: #dc2626 !important;
+        text-decoration: none !important; /* Remove underline to match the full red text style */
+    }
+
     /* 5. Navbar Layout Fix (Single Row, Logo Left, Actions Right) */
     .glass-nav {
         padding: 8px 0 !important; /* Reduce massive 20px padding */

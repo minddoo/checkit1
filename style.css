@@ -3286,6 +3286,31 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+/* Action Menu Styles (Chat Header Dropdown) */
+.action-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.action-menu-item:hover {
+    background: #f1f5f9;
+}
+.action-menu-item i {
+    width: 16px;
+    text-align: center;
+    color: #64748b;
+}
+.mobile-text { display: none !important; }
+.desktop-text { display: inline-block !important; }
+.mobile-only-item { display: none !important; }
+
 /* Responsive Dashboard */
 @media (max-width: 1200px) {
     .dash-sidebar { width: 80px; }
@@ -3374,6 +3399,10 @@ input:checked + .slider:before {
         font-size: 1.1rem !important;
         margin: 0 !important;
     }
+
+    .desktop-text { display: none !important; }
+    .mobile-text { display: inline-block !important; }
+    .mobile-only-item { display: flex !important; }
 
     .dash-nav { display: flex; padding: 0; }
     .dash-sidebar-footer { padding: 0; border: none; }

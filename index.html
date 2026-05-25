@@ -1060,10 +1060,47 @@
                                     <button class="btn-chat-action" style="margin: 0; background: none; border: none; color: #3b82f6;" title="일정변경 요청"><i class="fa-regular fa-envelope"></i></button>
                                     <span style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">날짜변경 요청</span>
                                 </div>
-                                <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer;" onclick="window.toggleChatEditMode()">
-                                    <button class="btn-chat-action" style="margin: 0;" title="메시지 삭제"><i class="fa-solid fa-ellipsis-v"></i></button>
-                                    <span style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">메시지 삭제</span>
+                                <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;" onclick="window.toggleMobileActionMenu(event)">
+                                    <button class="btn-chat-action" style="margin: 0;" title="기타 기능"><i class="fa-solid fa-ellipsis-v"></i></button>
+                                    <span class="desktop-text" style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">메시지 삭제</span>
+                                    <span class="mobile-text" style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap; display: none;">기타 기능</span>
+
+                                    <!-- Dropdown Menu -->
+                                    <div id="mobile-action-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 8px; width: max-content; z-index: 100; flex-direction: column; gap: 2px; margin-top: 8px; border: 1px solid #e2e8f0;">
+                                        <div class="action-menu-item" onclick="event.stopPropagation(); window.toggleChatEditMode(); document.getElementById('mobile-action-menu').style.display='none';">
+                                            <i class="fa-solid fa-trash"></i> 메시지 삭제
+                                        </div>
+                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('mobile-action-menu').style.display='none'; alert('프로필 보기: ' + document.getElementById('dash-user-name').innerText);">
+                                            <i class="fa-solid fa-user"></i> 내 프로필 보기
+                                        </div>
+                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); window.viewFromBeginning(); document.getElementById('mobile-action-menu').style.display='none';">
+                                            <i class="fa-solid fa-arrow-up"></i> 상담 처음부터
+                                        </div>
+                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('dash-logout-btn').click(); document.getElementById('mobile-action-menu').style.display='none';">
+                                            <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+                                        </div>
+                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('mypage-view').classList.add('hidden-view'); document.getElementById('home-view').classList.remove('hidden-view'); window.scrollTo(0,0); document.getElementById('mobile-action-menu').style.display='none';">
+                                            <i class="fa-solid fa-house"></i> 메인화면으로
+                                        </div>
+                                    </div>
                                 </div>
+                                <script>
+                                    window.toggleMobileActionMenu = function(e) {
+                                        if (window.innerWidth <= 768) {
+                                            const menu = document.getElementById('mobile-action-menu');
+                                            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+                                        } else {
+                                            window.toggleChatEditMode();
+                                        }
+                                    };
+                                    // Close menu when clicking outside
+                                    document.addEventListener('click', function(e) {
+                                        const menu = document.getElementById('mobile-action-menu');
+                                        if (menu && menu.style.display === 'flex' && !e.target.closest('#mobile-action-menu') && !e.target.closest('.chat-header-actions')) {
+                                            menu.style.display = 'none';
+                                        }
+                                    });
+                                </script>
                             </div>
                         </div>
 

@@ -9571,9 +9571,28 @@ function renderBlogGrid() {
     // Render pagination
     let pagHTML = '';
     pagHTML += `<button class="blog-page-btn" onclick="goToBlogPage(${blogCurrentPage - 1})" ${blogCurrentPage <= 1 ? 'disabled' : ''}><i class="fa-solid fa-chevron-left"></i></button>`;
-    for (let i = 1; i <= totalPages; i++) {
-        pagHTML += `<button class="blog-page-btn ${i === blogCurrentPage ? 'active' : ''}" onclick="goToBlogPage(${i})">${i}</button>`;
+    
+    let pages = [];
+    if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+        if (blogCurrentPage <= 4) {
+            pages = [1, 2, 3, 4, 5, '...', totalPages];
+        } else if (blogCurrentPage >= totalPages - 3) {
+            pages = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+        } else {
+            pages = [1, '...', blogCurrentPage - 1, blogCurrentPage, blogCurrentPage + 1, '...', totalPages];
+        }
     }
+
+    pages.forEach(i => {
+        if (i === '...') {
+            pagHTML += `<span style="padding: 0 10px; color: #94a3b8; font-weight: 600; display: flex; align-items: center; justify-content: center;">...</span>`;
+        } else {
+            pagHTML += `<button class="blog-page-btn ${i === blogCurrentPage ? 'active' : ''}" onclick="goToBlogPage(${i})">${i}</button>`;
+        }
+    });
+
     pagHTML += `<button class="blog-page-btn" onclick="goToBlogPage(${blogCurrentPage + 1})" ${blogCurrentPage >= totalPages ? 'disabled' : ''}><i class="fa-solid fa-chevron-right"></i></button>`;
     pagination.innerHTML = pagHTML;
 }

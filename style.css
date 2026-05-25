@@ -1352,6 +1352,7 @@ ul {
     justify-content: center;
     gap: 30px;
     margin-bottom: 40px;
+    flex-wrap: wrap;
 }
 
 .chat-icon-btn {
@@ -1380,6 +1381,7 @@ ul {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
+    white-space: nowrap;
 }
 
 .chat-icon-btn.line i { color: #06C755; }
@@ -6387,18 +6389,25 @@ html {
     
     .contact-chat-links {
         gap: 15px !important;
+        flex-wrap: wrap !important;
     }
     
     .chat-icon-btn {
+        width: auto !important;
+        height: auto !important;
+        font-size: 1.6rem !important;
+    }
+
+    .chat-icon-btn i {
         width: 55px !important;
         height: 55px !important;
-        font-size: 1.6rem !important;
     }
     
     .chat-icon-btn span {
         font-size: 0.75rem !important;
         margin-top: 6px !important;
         word-break: keep-all !important;
+        white-space: nowrap !important;
     }
     
     .qna-section {

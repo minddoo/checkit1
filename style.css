@@ -5364,8 +5364,16 @@ html {
     }
 
     /* 5. Navbar Layout Fix (Single Row, Logo Left, Actions Right) */
+    .glass-nav {
+        padding: 8px 0 !important; /* Reduce massive 20px padding */
+    }
+
+    .glass-nav.scrolled {
+        padding: 8px 0 !important;
+    }
+
     .nav-container {
-        padding: 10px 15px !important;
+        padding: 5px 15px !important;
         flex-wrap: nowrap !important;
         justify-content: flex-start !important;
         gap: 6px !important;
@@ -5380,6 +5388,7 @@ html {
         order: 1 !important; 
         margin-bottom: 0 !important;
         margin-right: auto !important; /* Pushes everything else to the right edge */
+        gap: 4px !important; /* Move text closer to logo icon */
     }
     
     .logo span {

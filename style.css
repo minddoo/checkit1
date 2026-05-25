@@ -5386,4 +5386,62 @@ html {
         padding: 6px 10px !important;
         font-size: 0.8rem !important;
     }
+
+    /* 6. Comparison Grid Side-by-Side */
+    .comparison-grid-tp {
+        display: flex !important;
+        flex-direction: row !important; /* Force side-by-side */
+        gap: 8px !important; /* Small gap to save space */
+        align-items: stretch !important;
+    }
+    
+    .comparison-grid-tp .tp-card {
+        flex: 1 1 50% !important; /* Each takes exactly 50% */
+        min-width: 0 !important; /* Allow shrinking below min-content */
+        padding: 15px 10px !important; /* Compact padding */
+    }
+    
+    .comparison-grid-tp .card-label {
+        font-size: 0.75rem !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .comparison-grid-tp h3 {
+        font-size: 1.05rem !important;
+        margin-bottom: 12px !important;
+        word-break: keep-all !important;
+    }
+    
+    .comparison-grid-tp .formula-box {
+        padding: 10px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .comparison-grid-tp .formula-main {
+        font-size: 0.9rem !important; /* Much smaller to fit */
+        word-break: keep-all !important;
+    }
+    
+    .comparison-grid-tp .formula-note {
+        font-size: 0.75rem !important;
+        margin-top: 5px !important;
+    }
+    
+    .comparison-grid-tp .tp-features li {
+        font-size: 0.8rem !important; /* Smaller bullet points */
+        align-items: flex-start !important;
+        gap: 6px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .comparison-grid-tp .tp-features li b {
+        font-size: 0.85rem !important;
+        display: block !important;
+        margin-bottom: 3px !important;
+    }
+    
+    .comparison-grid-tp .tp-features li p {
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
+    }
 }

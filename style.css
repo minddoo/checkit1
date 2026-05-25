@@ -5654,4 +5654,39 @@ html {
         white-space: normal !important;
         margin-bottom: 6px !important;
     }
+
+    /* 11. Reality Narrative Mobile Compression */
+    .reality-narrative {
+        padding: 40px 20px !important;
+        border-radius: 20px !important;
+    }
+
+    .intro-line {
+        font-size: 1.4rem !important; /* Scale down massive 2.2rem */
+        margin-bottom: 30px !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .story-text {
+        font-size: 0.95rem !important;
+    }
+
+    .highlight-text {
+        font-size: 1.05rem !important;
+    }
+
+    .final-quote {
+        font-size: 1.2rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .punch-line {
+        font-size: 1rem !important;
+    }
+
+    .narrative-footer {
+        margin-top: 20px !important;
+        padding-top: 20px !important;
+    }
 }

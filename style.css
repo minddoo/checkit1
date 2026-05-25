@@ -6227,5 +6227,27 @@ html {
         font-size: 0.85rem !important;
         line-height: 1.5 !important;
     }
+
+    /* 21. Policy/Bulletin Section Mobile Text Fix */
+    .policy-header div {
+        padding: 20px !important;
+        font-size: 0.95rem !important;
+    }
+    
+    .policy-header div p {
+        font-size: 0.95rem !important;
+    }
+    
+    .policy-header div b, .policy-header div strong {
+        font-size: 1.05rem !important; /* Scale down the 1.15rem b tag */
+    }
+    
+    .bulletin-board {
+        padding: 35px 20px 20px 20px !important;
+    }
+    
+    .bulletin-post p {
+        font-size: 0.9rem !important;
+    }
 }
 

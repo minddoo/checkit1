@@ -36,6 +36,10 @@ body {
     font-family: 'Pretendard', sans-serif !important;
 }
 
+.block-content {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
 
 * {
     margin: 0;
@@ -2967,6 +2971,11 @@ ul {
     justify-content: center;
     font-size: 1.2rem;
     flex-shrink: 0;
+}
+.block-content {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 .block-content p {

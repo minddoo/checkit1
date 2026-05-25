@@ -16,20 +16,27 @@ $dir = "C:\Users\pc\.gemini\antigravity\scratch\-1-new\assets\workflow\clean"
             $g = [System.Drawing.Graphics]::FromImage($bmp)
             $g.DrawImage($img, 0, 0, $img.Width, $img.Height)
             
+            $imgW = [int]$img.Width
+            $imgH = [int]$img.Height
+            
             # 2. 로고 크기 및 정확한 좌표 설정 (핸드폰 베젤 안쪽)
             $w = 32
             $h = 32
             
-            if ($img.Width -eq 944) {
-                $rectX = $img.Width - 62
-                $rectY = $img.Height - 65
+            $rectX = 0
+            $rectY = 0
+            
+            if ($imgW -eq 944) {
+                $rectX = $imgW - 62
+                $rectY = $imgH - 65
             } else {
-                $rectX = $img.Width - 65
-                $rectY = $img.Height - 70
+                $rectX = $imgW - 65
+                $rectY = $imgH - 70
             }
             
             # 3. 로고 바로 왼쪽의 깨끗한 32x32 영역 복사
-            $srcRect = New-Object System.Drawing.Rectangle($rectX - $w, $rectY, $w, $h)
+            $startX = $rectX - $w
+            $srcRect = New-Object System.Drawing.Rectangle($startX, $rectY, $w, $h)
             $clone = $bmp.Clone($srcRect, $bmp.PixelFormat)
             
             # 4. 좌우 반전 (거울 반사 기법)

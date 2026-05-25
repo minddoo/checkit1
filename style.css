@@ -5413,7 +5413,8 @@ html {
     .comparison-grid-tp h3 {
         font-size: 1.05rem !important;
         margin-bottom: 12px !important;
-        word-break: keep-all !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
     
     .comparison-grid-tp .formula-box {
@@ -5423,7 +5424,8 @@ html {
     
     .comparison-grid-tp .formula-main {
         font-size: 0.9rem !important; /* Much smaller to fit */
-        word-break: keep-all !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
     
     .comparison-grid-tp .formula-note {
@@ -5442,11 +5444,15 @@ html {
         font-size: 0.85rem !important;
         display: block !important;
         margin-bottom: 3px !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
     
     .comparison-grid-tp .tp-features li p {
         font-size: 0.75rem !important;
         line-height: 1.4 !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
 
     /* 7. Evidence Cards Side-by-Side */
@@ -5471,7 +5477,8 @@ html {
         font-size: 0.75rem !important;
         line-height: 1.3 !important;
         margin-top: 10px !important;
-        word-break: keep-all !important;
+        word-break: break-word !important;
+        white-space: normal !important;
     }
     
     .file-tag {
@@ -5488,5 +5495,10 @@ html {
     .identity-card::before {
         width: 100% !important;
         height: 6px !important;
+    }
+    
+    .id-content h4, .id-content p {
+        word-break: break-word !important;
+        white-space: normal !important;
     }
 }

@@ -919,7 +919,7 @@
 
         // Action: Edit Reservation Date
         function editReservationDate(userEmail) {
-            const newDate = prompt("새로운 예약 일자를 입력하세요 (예: 2026-10-25).\nYYYY-MM-DD 형식으로 입력하면 고객의 D-Day 화면이 즉시 업데이트됩니다.");
+            const newDate = prompt("1단계: 새로운 예약 일자를 입력하세요 (예: 2026-10-25).\n(확인을 누르시면 다음 단계로 검진기관 변경 창이 뜹니다.)");
             if (!newDate) return;
             
             if (newDate.length < 8) {

@@ -2089,6 +2089,36 @@ window.checkAndRestoreSession = function(email, displayName) {
             return;
         }
 
+        // --- NEW CLOUD SYNC RESTORE LOGIC ---
+        db.collection('user_chat_states').doc(email).get().then(chatSnap => {
+            if (chatSnap.exists) {
+                const cloudData = chatSnap.data();
+                if (cloudData.chatHtml && cloudData.chatHtml.length > 50) {
+                    localStorage.setItem(`chat_history_html_${email}`, cloudData.chatHtml);
+                    const chatContainer = document.getElementById('chat-messages');
+                    if (chatContainer) {
+                        chatContainer.innerHTML = cloudData.chatHtml;
+                        setTimeout(() => chatContainer.scrollTop = chatContainer.scrollHeight, 100);
+                        const stepConsultation = document.getElementById('step-consultation');
+                        if (stepConsultation) stepConsultation.style.display = 'none';
+                    }
+                }
+                if (cloudData.ddayHtml && cloudData.ddayHtml.length > 50) {
+                    localStorage.setItem(`dday_chat_history_html_${email}`, cloudData.ddayHtml);
+                    const ddayContainer = document.getElementById('dday-chat-messages');
+                    if (ddayContainer) {
+                        ddayContainer.innerHTML = cloudData.ddayHtml;
+                        setTimeout(() => ddayContainer.scrollTop = ddayContainer.scrollHeight, 100);
+                    }
+                }
+                if (cloudData.serviceStep) localStorage.setItem(`serviceStep_${email}`, cloudData.serviceStep);
+                if (cloudData.consultationData) {
+                    localStorage.setItem(`consultationData_${email}`, cloudData.consultationData);
+                }
+            }
+        }).catch(err => console.error("Cloud chat sync restore error:", err));
+
+        // Resume existing logic
         db.collection('scheduled_notifications')
         .where('userGoogleEmail', '==', email)
         .where('status', '==', 'pending')
@@ -4550,9 +4580,9 @@ function initDashboard() {
                             <select id="kr-hospital-select" onchange="this.nextElementSibling.style.display = this.value === '기타' ? 'block' : 'none'" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
                                 <option value="">-- 의료기관 선택 --</option>
                                 ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
-                                <option value="기타">기타 (목록에 없음)</option>
+                                <option value="기타" ${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? 'selected' : ''}>기타 (목록에 없음)</option>
                             </select>
-                            <input type="text" id="kr-hospital-custom" placeholder="병원명을 직접 입력해주세요" style="display: none; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                            <input type="text" id="kr-hospital-custom" placeholder="병원명을 직접 입력해주세요" value="${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? window.lastSelectedHospitalName : ''}" style="display: ${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? 'block' : 'none'}; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
                         </div>
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
@@ -4681,9 +4711,9 @@ function initDashboard() {
                                 <select id="email-hospital-select" onchange="this.nextElementSibling.style.display = this.value === '기타' ? 'block' : 'none'" style="padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem; background: white;">
                                     <option value="">-- 의료기관 선택 --</option>
                                     ${(window.GLOBAL_HOSPITALS || []).map(h => `<option value="${h.name}" ${window.lastSelectedHospitalName === h.name ? 'selected' : ''}>${h.name}</option>`).join('')}
-                                    <option value="기타">기타 (목록에 없음)</option>
+                                    <option value="기타" ${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? 'selected' : ''}>기타 (목록에 없음)</option>
                                 </select>
-                                <input type="text" id="email-hospital-custom" placeholder="병원명을 직접 입력해주세요" style="display: none; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
+                                <input type="text" id="email-hospital-custom" placeholder="병원명을 직접 입력해주세요" value="${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? window.lastSelectedHospitalName : ''}" style="display: ${(window.lastSelectedHospitalName && !(window.GLOBAL_HOSPITALS || []).some(h => h.name === window.lastSelectedHospitalName)) ? 'block' : 'none'}; margin-top: 5px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.9rem;">
                             </div>
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <label style="font-size: 0.8rem; color: #475569; font-weight: 600;">이메일 주소</label>
@@ -8512,6 +8542,20 @@ function initDashboard() {
         // 1. Setup MutationObserver to automatically save the chat state whenever it changes
         const observer = new MutationObserver(() => {
             localStorage.setItem(`chat_history_html_${userEmail}`, chatMessagesContainer.innerHTML);
+            // Cloud Sync
+            if (window.cloudChatSyncTimeout) clearTimeout(window.cloudChatSyncTimeout);
+            window.cloudChatSyncTimeout = setTimeout(() => {
+                if (typeof db !== 'undefined' && db && userEmail) {
+                    const ddayContainer = document.getElementById('dday-chat-messages');
+                    db.collection('user_chat_states').doc(userEmail).set({
+                        chatHtml: chatMessagesContainer.innerHTML,
+                        ddayHtml: ddayContainer ? ddayContainer.innerHTML : '',
+                        serviceStep: localStorage.getItem(`serviceStep_${userEmail}`) || '',
+                        consultationData: localStorage.getItem(`consultationData_${userEmail}`) || '',
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true }).catch(e => console.log("Sync err", e));
+                }
+            }, 2500);
         });
         observer.observe(chatMessagesContainer, { childList: true, subtree: true, characterData: true });
     }
@@ -8520,6 +8564,15 @@ function initDashboard() {
     if (ddayMessagesContainer && userEmail) {
         const ddayObserver = new MutationObserver(() => {
             localStorage.setItem(`dday_chat_history_html_${userEmail}`, ddayMessagesContainer.innerHTML);
+            if (window.cloudChatSyncTimeoutDday) clearTimeout(window.cloudChatSyncTimeoutDday);
+            window.cloudChatSyncTimeoutDday = setTimeout(() => {
+                if (typeof db !== 'undefined' && db && userEmail) {
+                    db.collection('user_chat_states').doc(userEmail).set({
+                        ddayHtml: ddayMessagesContainer.innerHTML,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true }).catch(e => console.log("Sync err", e));
+                }
+            }, 2500);
         });
         ddayObserver.observe(ddayMessagesContainer, { childList: true, subtree: true, characterData: true });
     }

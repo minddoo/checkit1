@@ -5308,7 +5308,7 @@ html {
     }
 
     .container {
-        padding: 0 !important; /* Full width for all sections */
+        padding: 0 15px !important; /* Restore normal left/right margins */
     }
 
     /* 1. Hero Workflow Section */
@@ -5458,6 +5458,8 @@ html {
         padding-bottom: 25px !important;
         padding-left: 15px !important;
         padding-right: 15px !important;
+        margin-left: -15px !important;
+        margin-right: -15px !important;
         -webkit-overflow-scrolling: touch !important;
     }
     

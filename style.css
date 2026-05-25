@@ -5374,6 +5374,7 @@ html {
     }
     
     .nav-links {
+        display: flex !important; /* Force visibility over previous display: none */
         gap: 6px !important;
     }
     

@@ -5362,40 +5362,42 @@ html {
         padding: 8px !important;
     }
 
-    /* 5. Navbar Layout Fix (Two-Row Design for Mobile) */
+    /* 5. Navbar Layout Fix (Single Row, Logo Left, Actions Right) */
     .nav-container {
         padding: 10px 15px !important;
-        flex-wrap: wrap !important;
-        justify-content: space-between !important;
-        gap: 10px 0 !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        gap: 6px !important;
     }
     
     .logo {
         position: static !important;
         transform: none !important;
         left: auto !important;
-        width: 100% !important;
-        justify-content: center !important;
-        order: -1 !important; /* Force logo to the top row */
-        margin-bottom: 5px !important;
+        width: auto !important;
+        justify-content: flex-start !important;
+        order: 1 !important; 
+        margin-bottom: 0 !important;
+        margin-right: auto !important; /* Pushes everything else to the right edge */
     }
     
     .logo span {
-        font-size: 1.2rem !important; /* Slightly larger since it has space */
+        font-size: 1.05rem !important; 
         letter-spacing: -0.02em !important;
     }
     
     .nav-logo {
-        height: 26px !important;
+        height: 24px !important;
     }
     
     .nav-actions {
         order: 2 !important;
+        margin-right: 2px !important;
     }
     
     .nav-links {
         display: flex !important;
-        gap: 8px !important;
+        gap: 6px !important;
         order: 3 !important;
     }
     

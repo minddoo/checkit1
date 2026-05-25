@@ -48,22 +48,7 @@
     <!-- Toast Notification -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Mini Cart Panel -->
-    <div id="cart-panel" class="cart-panel">
-        <div class="cart-panel-header">
-            <h3><i class="fa-solid fa-cart-shopping"></i> Shopping Cart</h3>
-            <button class="cart-panel-close" id="cart-panel-close">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="cart-panel-body" id="cart-panel-body">
-            <!-- Cart items rendered by JS -->
-        </div>
-        <div class="cart-panel-footer" id="cart-panel-footer">
-            <!-- Footer rendered by JS -->
-        </div>
-    </div>
-    <div id="cart-overlay" class="cart-overlay"></div>
+
 
     <!-- Payment Success Modal -->
     <div id="payment-success-modal" class="payment-success-modal">
@@ -82,10 +67,6 @@
             <div class="nav-actions">
                 <a href="javascript:void(0)" class="nav-icon" id="blog-nav" onclick="showView('blog')">
                     <i class="fa-solid fa-newspaper"></i>
-                </a>
-                <a href="javascript:void(0)" class="nav-icon" id="cart-nav">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="cart-count">0</span>
                 </a>
             </div>
 
@@ -885,7 +866,6 @@
 
                             <!-- Secondary row: Cart + Domestic Payment -->
                             <div class="secondary-actions">
-                                <button class="btn-secondary" id="add-to-cart-btn">장바구니에 담기</button>
                                 <button type="button" class="btn-secondary" onclick="if(window.requireLoginForPayment && window.requireLoginForPayment('국내 결제')) { document.getElementById('domestic-pay-modal').classList.add('is-open'); }">💳 국내 결제</button>
                             </div>
                         </div>

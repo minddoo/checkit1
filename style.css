@@ -5592,4 +5592,66 @@ html {
     .bulletin-post p {
         font-size: 0.9rem !important;
     }
+
+    /* 10. Reality Section Mobile Grid & Compression */
+    .reality-section {
+        padding: 80px 0 60px !important; /* Reduce massive vertical padding */
+    }
+
+    .reality-section .section-head h2 {
+        font-size: 1.6rem !important; /* Scale down massive title */
+        margin-bottom: 15px !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .reality-section .section-head p {
+        font-size: 0.95rem !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+        padding: 0 15px !important;
+    }
+
+    .reality-flow.grid-layout {
+        grid-template-columns: 1fr 1fr !important; /* Force 2 cards per row */
+        gap: 10px !important; /* Small gap for narrow mobile screens */
+        padding: 0 10px !important;
+    }
+
+    .reality-card {
+        padding: 15px 10px !important; /* Deep compression */
+        flex-direction: column !important; /* Stack icon above text */
+        gap: 12px !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .reality-icon {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1.1rem !important;
+        border-radius: 10px !important;
+    }
+
+    .reality-card h3 {
+        font-size: 0.9rem !important;
+        margin-bottom: 8px !important;
+        text-align: center !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .reality-card ul {
+        align-items: center !important;
+    }
+
+    .reality-card ul li {
+        font-size: 0.72rem !important;
+        padding-left: 0 !important; /* Remove bullet indent */
+        text-align: center !important;
+        line-height: 1.35 !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+        margin-bottom: 6px !important;
+    }
 }

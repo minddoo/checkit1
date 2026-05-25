@@ -2018,7 +2018,7 @@ window.addEventListener('load', () => {
                 let nextIndex = (currentIndex + 1) % dots.length;
                 updateSlider(nextIndex);
             }
-        }, 1000); // 1 second interval as requested
+        }, 3000); // 3 seconds interval
     }
 
     function stopAutoPlay() {

@@ -5790,20 +5790,22 @@ html {
     .reality-slider-track .reality-card {
         flex: 0 0 100% !important;
         width: 100% !important;
-        padding: 30px 20px !important; /* Give it more breathing room since it's full width now */
+        aspect-ratio: 1 / 1 !important; /* Make it a square */
+        padding: 30px !important;
         margin: 0 !important;
         box-sizing: border-box !important;
         flex-direction: column !important;
-        gap: 12px !important;
-        align-items: flex-start !important; /* Keep original left alignment or center, center is fine */
+        gap: 15px !important;
+        align-items: flex-start !important; 
         text-align: left !important;
+        justify-content: center !important; /* Vertically center content inside the square */
     }
     
     .reality-dots {
         display: flex !important;
         justify-content: center !important;
         gap: 10px !important;
-        margin-top: 20px !important;
+        margin-top: 10px !important; /* Bring dots immediately below the card */
     }
     
     .r-dot {
@@ -5828,25 +5830,25 @@ html {
     }
 
     .reality-card h3 {
-        font-size: 0.9rem !important;
+        font-size: 1.15rem !important; /* Increase text size */
         margin-bottom: 8px !important;
-        text-align: center !important;
+        text-align: left !important; /* Align left */
         word-break: break-word !important;
         white-space: normal !important;
     }
 
     .reality-card ul {
-        align-items: center !important;
+        align-items: flex-start !important; /* Align items to start */
     }
 
     .reality-card ul li {
-        font-size: 0.72rem !important;
-        padding-left: 0 !important; /* Remove bullet indent */
-        text-align: center !important;
-        line-height: 1.35 !important;
+        font-size: 0.95rem !important; /* Increase text size */
+        padding-left: 0 !important;
+        text-align: left !important; /* Align left */
+        line-height: 1.5 !important;
         word-break: break-word !important;
         white-space: normal !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 8px !important;
     }
 
     /* 11. Reality Narrative Mobile Compression */

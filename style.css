@@ -5332,11 +5332,18 @@ html {
     }
 
     .hero-text-side h2 {
-        font-size: 1.5rem !important; 
+        font-size: 1.25rem !important; 
         min-height: auto !important; 
-        margin-top: 10px !important;
+        margin-top: 5px !important;
         margin-bottom: 5px !important;
         line-height: 1.3 !important;
+        word-break: keep-all !important;
+    }
+    
+    .hero-text-side h2 .highlight {
+        font-size: 1rem !important;
+        display: block !important;
+        margin-top: 5px !important;
     }
     
     .step-badge {
@@ -5357,16 +5364,23 @@ html {
 
     /* 5. Navbar Layout Fix */
     .nav-container {
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        justify-content: space-between !important;
+        gap: 5px !important;
     }
     
     .logo {
-        position: absolute !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
         font-size: 1.1rem !important;
         gap: 5px !important;
+    }
+    
+    .logo span {
+        font-size: 1rem !important;
+        letter-spacing: -0.02em !important;
     }
     
     .nav-logo {
@@ -5532,7 +5546,7 @@ html {
         gap: 15px !important;
     }
 
-    .forced-text-banner span:first-child {
+    .forced-text-banner > span:first-child {
         font-size: 1.3rem !important;
         border-right: none !important;
         padding-right: 0 !important;
@@ -5542,7 +5556,7 @@ html {
         width: 100% !important;
     }
 
-    .forced-text-banner span:nth-child(2) {
+    .forced-text-banner > span:nth-child(2) {
         font-size: 0.95rem !important;
         text-align: center !important;
     }
@@ -5721,5 +5735,24 @@ html {
     .authority-final strong {
         font-size: 1.4rem !important; /* Scale down massive 2rem */
         margin-top: 5px !important;
+    }
+
+    /* 13. Programs Section Mobile Width Fix */
+    .programs-section {
+        padding: 60px 0 !important;
+        overflow-x: hidden !important; /* Prevent horizontal scrolling */
+    }
+
+    .programs-grid {
+        padding: 0 15px !important;
+        gap: 20px !important;
+    }
+
+    .program-card {
+        padding: 25px 20px !important;
+        margin: 0 !important; /* Remove any weird margins */
+        width: 100% !important;
+        box-sizing: border-box !important; /* Ensure padding doesn't push width out */
+        max-width: 100vw !important; /* Absolutely cap width */
     }
 }

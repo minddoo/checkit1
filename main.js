@@ -9494,27 +9494,27 @@ const BLOG_SEED_DATA = [
     }
 ];
 
-// Helper to generate bright, relevant image keywords based on title and category
+// Helper to generate a SINGLE broad keyword to prevent Flickr search failures (which cause duplicate cat placeholders)
 const getKeywords = (title, category) => {
     const text = (title + ' ' + category).toLowerCase();
-    if (text.includes('비자') || text.includes('공항') || text.includes('교통')) return 'airport,bright,travel';
-    if (text.includes('결제') || text.includes('수수료') || text.includes('비용')) return 'desk,office,bright,business';
-    if (text.includes('가족') || text.includes('후기')) return 'smile,family,bright,happy';
-    if (text.includes('결과지') || text.includes('서류') || text.includes('kcd')) return 'document,paper,bright,desk';
-    if (text.includes('약국') || text.includes('처방전')) return 'pharmacy,bright,clean';
-    if (text.includes('식단') || text.includes('금식')) return 'healthy,food,bright,clean';
-    if (text.includes('온천') || text.includes('여행')) return 'hotel,relax,bright,seoul';
-    if (text.includes('치과')) return 'dentist,smile,bright,clean';
-    if (text.includes('보안') || text.includes('프라이버시')) return 'security,technology,bright,blue';
-    if (text.includes('내시경') || text.includes('검진')) return 'doctor,clinic,bright,clean';
-    if (text.includes('소식') || text.includes('시스템')) return 'laptop,office,bright,modern';
+    if (text.includes('비자') || text.includes('공항') || text.includes('교통')) return 'airport';
+    if (text.includes('결제') || text.includes('수수료') || text.includes('비용')) return 'business';
+    if (text.includes('가족') || text.includes('후기')) return 'family';
+    if (text.includes('결과지') || text.includes('서류') || text.includes('kcd')) return 'document';
+    if (text.includes('약국') || text.includes('처방전')) return 'pharmacy';
+    if (text.includes('식단') || text.includes('금식')) return 'food';
+    if (text.includes('온천') || text.includes('여행')) return 'hotel';
+    if (text.includes('치과')) return 'dentist';
+    if (text.includes('보안') || text.includes('프라이버시')) return 'security';
+    if (text.includes('내시경') || text.includes('검진')) return 'clinic';
+    if (text.includes('소식') || text.includes('시스템')) return 'office';
     
-    if (category === '건강정보') return 'doctor,hospital,bright,clean';
-    if (category === '고객후기') return 'people,smile,bright,clinic';
-    if (category === '체킷소식') return 'modern,office,bright,desk';
-    if (category === '한국생활') return 'seoul,city,bright,day';
+    if (category === '건강정보') return 'hospital';
+    if (category === '고객후기') return 'smile';
+    if (category === '체킷소식') return 'modern';
+    if (category === '한국생활') return 'seoul';
     
-    return 'hospital,bright,clean';
+    return 'health';
 };
 
 // Generate 187 more posts dynamically to reach 23 pages (207 posts total)

@@ -1944,7 +1944,7 @@ window.addEventListener('load', () => {
     function updateSlider(index) {
         currentIndex = index;
         if (window.innerWidth <= 768) {
-            track.style.transform = `translateX(-${currentIndex * 33.333}%)`;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
         } else {
             track.style.transform = `none`;
         }

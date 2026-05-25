@@ -5289,8 +5289,9 @@ html {
 @media (max-width: 768px) {
     /* 1. Hero Workflow Section */
     .hero-workflow {
-        padding: 90px 0 40px !important;
+        padding: 100px 0 40px !important;
         min-height: auto !important;
+        align-items: flex-start !important; /* Prevents vertical centering from pushing content under the fixed navbar */
     }
     
     .hero-slider-content {

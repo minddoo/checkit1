@@ -1932,6 +1932,61 @@ window.addEventListener('load', () => {
     setTimeout(nukeBar, 1500);
 });
 
+// Bulletin Board Mobile Slider Logic
+window.addEventListener('load', () => {
+    const track = document.querySelector('.bulletin-slider-track');
+    const dots = document.querySelectorAll('.b-dot');
+    if (!track || dots.length === 0) return;
+
+    let currentIndex = 0;
+    let intervalId;
+
+    function updateSlider(index) {
+        currentIndex = index;
+        if (window.innerWidth <= 768) {
+            track.style.transform = `translateX(-${currentIndex * 33.333}%)`;
+        } else {
+            track.style.transform = `none`;
+        }
+        
+        dots.forEach((dot, i) => {
+            if (i === currentIndex) dot.classList.add('active');
+            else dot.classList.remove('active');
+        });
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        intervalId = setInterval(() => {
+            if (window.innerWidth <= 768) {
+                let nextIndex = (currentIndex + 1) % dots.length;
+                updateSlider(nextIndex);
+            }
+        }, 2500); // 2.5 seconds (1s is too fast to read the text)
+    }
+
+    function stopAutoPlay() {
+        if (intervalId) clearInterval(intervalId);
+    }
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            updateSlider(index);
+            startAutoPlay(); // reset timer on click
+        });
+    });
+
+    // Handle window resize to reset transform if resizing to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            track.style.transform = `none`;
+        } else {
+            updateSlider(currentIndex);
+        }
+    });
+
+    startAutoPlay();
+});
 
 // Smooth Scroll for Nav Links
 document.querySelectorAll('nav a').forEach(anchor => {

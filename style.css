@@ -5281,6 +5281,19 @@ html {
 #chat-messages.edit-mode .msg-options-wrap {
     display: none !important;
 }
+
+/* Bulletin Slider Default (Desktop) */
+.bulletin-slider-container {
+    width: 100%;
+}
+.bulletin-slider-track {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.b-dot {
+    cursor: pointer;
+}
         
 
 /* =========================================
@@ -5648,12 +5661,50 @@ html {
         white-space: normal !important;
     }
 
+    .bulletin-board {
+        padding: 40px 20px 20px 20px !important;
+        overflow: hidden !important;
+    }
+
+    .bulletin-slider-container {
+        position: relative !important;
+        width: 100% !important;
+    }
+
+    .bulletin-slider-track {
+        flex-direction: row !important;
+        width: 300% !important; /* 3 posts * 100% */
+        gap: 0 !important;
+        transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    }
+    
     .bulletin-post {
+        flex: 0 0 33.333% !important; /* 1/3 of the 300% track = 100% of container */
+        width: 33.333% !important;
         padding: 20px !important;
+        box-sizing: border-box !important;
     }
 
     .bulletin-post p {
-        font-size: 0.9rem !important;
+        font-size: 0.95rem !important;
+    }
+    
+    .bulletin-dots {
+        display: flex !important;
+    }
+    
+    .b-dot {
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        background: #cbd5e1 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .b-dot.active {
+        background: #dc2626 !important;
+        width: 24px !important;
+        border-radius: 12px !important;
     }
 
     /* 10. Reality Section Mobile Grid & Compression */

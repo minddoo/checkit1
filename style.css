@@ -5920,10 +5920,23 @@ html {
         margin-top: 5px !important;
     }
 
-    /* 13. Programs Section Mobile Width Fix */
+    /* 13. Programs Section Mobile Width & Text Fix */
     .programs-section {
         padding: 60px 0 !important;
         overflow-x: hidden !important; /* Prevent horizontal scrolling */
+    }
+
+    .programs-section .section-head h2 {
+        font-size: 1.6rem !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+
+    .programs-section .section-head p {
+        font-size: 0.9rem !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+        padding: 0 15px !important;
     }
 
     .programs-grid {
@@ -5933,10 +5946,64 @@ html {
 
     .program-card {
         padding: 25px 20px !important;
-        margin: 0 !important; /* Remove any weird margins */
+        margin: 0 !important;
         width: 100% !important;
-        box-sizing: border-box !important; /* Ensure padding doesn't push width out */
-        max-width: 100vw !important; /* Absolutely cap width */
+        box-sizing: border-box !important;
+        max-width: 100vw !important;
+    }
+
+    .program-card .plan-price {
+        font-size: 1.6rem !important;
+    }
+    
+    .program-card .plan-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .program-card .plan-slogan {
+        font-size: 0.9rem !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .program-card .plan-content ul {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    
+    .program-card .plan-content ul li {
+        font-size: 0.85rem !important;
+    }
+    
+    .program-card .plan-footer p {
+        font-size: 0.75rem !important;
+    }
+
+    /* 13-b. Payment Section Mobile Text Fix */
+    .payment-section {
+        padding: 60px 15px !important;
+    }
+    
+    .payment-section .section-head .pay-title-logo {
+        font-size: 1.5rem !important;
+    }
+    
+    .payment-section .section-head p {
+        font-size: 0.9rem !important;
+    }
+    
+    .product-info-side .product-title {
+        font-size: 1.2rem !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+    
+    .info-table .info-label, .info-table .info-value {
+        font-size: 0.85rem !important;
+    }
+    
+    .service-period-notice {
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
     }
 
     /* 14. Korea Banner Mobile Fix (Background attachment & Font Size) */

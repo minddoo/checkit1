@@ -1070,16 +1070,13 @@
                                         <div class="action-menu-item" onclick="event.stopPropagation(); window.toggleChatEditMode(); document.getElementById('mobile-action-menu').style.display='none';">
                                             <i class="fa-solid fa-trash"></i> 메시지 삭제
                                         </div>
-                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('mobile-action-menu').style.display='none'; alert('프로필 보기: ' + document.getElementById('dash-user-name').innerText);">
-                                            <i class="fa-solid fa-user"></i> 내 프로필 보기
-                                        </div>
                                         <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); window.viewFromBeginning(); document.getElementById('mobile-action-menu').style.display='none';">
                                             <i class="fa-solid fa-arrow-up"></i> 상담 처음부터
                                         </div>
                                         <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('dash-logout-btn').click(); document.getElementById('mobile-action-menu').style.display='none';">
                                             <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
                                         </div>
-                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); document.getElementById('mypage-view').classList.add('hidden-view'); document.getElementById('home-view').classList.remove('hidden-view'); window.scrollTo(0,0); document.getElementById('mobile-action-menu').style.display='none';">
+                                        <div class="action-menu-item mobile-only-item" onclick="event.stopPropagation(); window.showView('home'); document.getElementById('mobile-action-menu').style.display='none';">
                                             <i class="fa-solid fa-house"></i> 메인화면으로
                                         </div>
                                     </div>

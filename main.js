@@ -9547,6 +9547,28 @@ const generateTitle = (i, category) => {
     return base + ' (업데이트)';
 };
 
+// Dynamic Content Generator for 4x longer, rich articles
+const generateContent = (title, category) => {
+    return `
+        <h3 style="color: #2e86ab; margin-bottom: 15px; font-size: 1.3rem;">[안내] ${title}</h3>
+        <p>CHECKIT은 단순한 에이전시나 의료 중개업체가 아닙니다. 철저히 IT 플랫폼 기반으로 구축된 <strong>외국인 전용 비의료 행정 지원 소프트웨어(SaaS)</strong>입니다. 그동안 외국인 환자들이 한국 병원을 이용할 때 겪었던 언어적, 행정적 장벽을 완전히 허물기 위해 만들어졌습니다.</p>
+        <p>가장 큰 문제는 '투명성'이었습니다. 수많은 외국인들이 병원비와 중개 수수료가 합쳐진 '깜깜이 청구서'를 받아왔습니다. 하지만 CHECKIT은 다릅니다. 저희는 고객이 병원에 직접 정가로 결제할 수 있도록 지원하며, 당사의 행정 시스템 이용료만을 완벽하게 분리하여 투명하게 운영합니다.</p>
+        
+        <div style="background: #f8fafc; border-left: 4px solid #4b6b8e; padding: 15px 20px; margin: 20px 0; border-radius: 0 8px 8px 0;">
+            <h4 style="margin: 0 0 10px 0; color: #1e293b; font-size: 1.1rem;">💡 핵심 행정 지원 포인트</h4>
+            <ul style="margin: 0; padding-left: 20px; color: #475569; line-height: 1.7;">
+                <li><strong>예약 조율:</strong> 대기 시간 없이 병원과 실시간으로 일정을 조율하고 확정합니다.</li>
+                <li><strong>사전 문진표 번역:</strong> 복잡한 의학 용어가 포함된 문진표를 고객의 모국어로 정확하게 번역하여 제공합니다.</li>
+                <li><strong>비자 서류 지원:</strong> 대사관 제출에 필요한 공식 예약확인증을 요건에 맞게 검수하여 발급합니다.</li>
+                <li><strong>결과지 데이터화:</strong> 검진 후 발급되는 결과지를 국제 표준 질병 코드(KCD/ICD-10) 맵핑과 함께 번역합니다.</li>
+            </ul>
+        </div>
+        
+        <p>한국의 선진화된 의료 시스템은 세계 최고 수준입니다. 하지만 아무리 뛰어난 시스템도 환자가 그 과정을 제대로 이해하지 못하면 의미가 없습니다. CHECKIT은 검사 전 금식 안내부터, 당일 병원 내 이동 동선, 검진 후 약국 이용 및 처방전 발급 방법까지 <strong>사소한 생활 행정 가이드 전체를 모국어로 커버</strong>합니다.</p>
+        <p>이제 더 이상 불투명한 중개 수수료나, 언어가 통하지 않아 병원에서 당황하는 일은 없을 것입니다. 스마트폰 안에 있는 가장 투명한 모국어 행정 비서, CHECKIT이 모든 과정을 완벽하게 지원해 드리겠습니다. 글로벌 시민을 위한 단 하나의 표준 행정 솔루션을 직접 경험해 보시길 바랍니다.</p>
+    `;
+};
+
 // Generate 187 more posts dynamically to reach 23 pages (207 posts total)
 const categories = ['건강정보', '체킷소식', '고객후기', '한국생활'];
 for (let i = 21; i <= 207; i++) {
@@ -9558,7 +9580,7 @@ for (let i = 21; i <= 207; i++) {
         category: category,
         thumbnail: 'https://loremflickr.com/600/400/' + getKeywords(title, category) + '?lock=' + (i + 100),
         summary: 'CHECKIT의 비의료 행정 서비스와 다국어 번역 시스템을 통해 한국 건강검진을 언어 장벽 없이 안전하고 편리하게 이용하세요.',
-        content: '<p>CHECKIT은 의료 알선이나 중개가 아닌 순수한 IT 플랫폼 기반의 비의료 행정 지원 서비스입니다. 번거로운 예약부터 결과지 번역까지 완벽한 모국어 컨시어지를 제공합니다.</p><p>환자분들은 복잡한 언어 장벽이나 부풀려진 수수료 걱정 없이 한국의 선진화된 의료 시스템을 정가 그대로 투명하게 이용하실 수 있습니다.</p>',
+        content: generateContent(title, category),
         author: 'CHECKIT',
         createdAt: '2025.01.' + String((i % 28) + 1).padStart(2, '0')
     });

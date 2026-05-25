@@ -5354,4 +5354,36 @@ html {
         border-radius: 20px !important;
         padding: 8px !important;
     }
+
+    /* 5. Navbar Layout Fix */
+    .nav-container {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        gap: 5px !important;
+    }
+    
+    .logo {
+        position: static !important; /* Removes absolute positioning */
+        transform: none !important;
+        font-size: 1.2rem !important;
+        gap: 6px !important;
+    }
+    
+    .nav-logo {
+        height: 28px !important; /* Scale down logo to fit iPhone Mini */
+    }
+    
+    .nav-links {
+        gap: 8px !important;
+    }
+    
+    .language-selector {
+        padding: 4px 6px !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .nav-btn {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
+    }
 }

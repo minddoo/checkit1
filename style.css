@@ -5861,27 +5861,27 @@ html {
     }
 
     .intro-line {
-        font-size: 1.4rem !important; /* Scale down massive 2.2rem */
+        font-size: 1.15rem !important; /* Scale down massive 2.2rem */
         margin-bottom: 30px !important;
         word-break: break-word !important;
         white-space: normal !important;
     }
 
     .story-text {
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important;
     }
 
     .highlight-text {
-        font-size: 1.05rem !important;
+        font-size: 0.95rem !important;
     }
 
     .final-quote {
-        font-size: 1.2rem !important;
+        font-size: 1rem !important;
         margin-bottom: 15px !important;
     }
 
     .punch-line {
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
     }
 
     .narrative-footer {
@@ -5895,7 +5895,7 @@ html {
     }
 
     .authority-title {
-        font-size: 1.5rem !important; /* Scale down massive 3.5rem further */
+        font-size: 1.4rem !important; /* Scale down massive 3.5rem further */
         margin-bottom: 30px !important;
         word-break: break-word !important;
         white-space: normal !important;
@@ -5906,7 +5906,7 @@ html {
     }
 
     .authority-story p {
-        font-size: 0.9rem !important; /* Further scale down */
+        font-size: 0.85rem !important; /* Further scale down */
         line-height: 1.5 !important;
         word-break: break-word !important;
         white-space: normal !important;
@@ -6248,6 +6248,23 @@ html {
     
     .bulletin-post p {
         font-size: 0.9rem !important;
+    }
+
+    /* 22. Reddit Capture & Footer Mobile Text Fix */
+    .reddit-capture .capture-body p {
+        font-size: 0.9rem !important;
+    }
+    
+    .reddit-capture .capture-footer .stats {
+        font-size: 0.75rem !important;
+    }
+    
+    .footer-info-centered .info-block h4 {
+        font-size: 1rem !important;
+    }
+    
+    .footer-info-centered .info-block p {
+        font-size: 0.8rem !important;
     }
 }
 

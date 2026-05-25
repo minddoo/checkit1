@@ -1521,8 +1521,8 @@ ul {
     height: 60vh;
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.1)), url('assets/korea-banner.png');
     background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-position: center 0;
+    background-attachment: scroll;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1988,6 +1988,24 @@ window.addEventListener('load', () => {
     startAutoPlay();
 });
 
+// Parallax Effect for Korea Banner
+window.addEventListener('scroll', () => {
+    const koreaBanner = document.querySelector('.korea-banner');
+    if (koreaBanner) {
+        // Calculate how far the user has scrolled relative to the banner
+        const rect = koreaBanner.getBoundingClientRect();
+        
+        // Only run calculations if the banner is currently visible in the viewport
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+            // Apply a translateY to the background position for parallax
+            // 0.4 multiplier controls the speed of the parallax (lower is slower/subtle)
+            const scrollPos = window.pageYOffset;
+            // Center is base position, add scroll offset
+            koreaBanner.style.backgroundPosition = `center ${scrollPos * 0.4}px`;
+        }
+    }
+});
+
 // Smooth Scroll for Nav Links
 document.querySelectorAll('nav a').forEach(anchor => {
     anchor.addEventListener('click', function(e) {

@@ -2809,7 +2809,9 @@ if (mypageModal && mypageClose) {
 
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to sign out?')) {
+            const lang = localStorage.getItem('preferred-lang') || 'en';
+            const messages = { 'ko': '로그아웃 하시겠습니까?', 'en': 'Are you sure you want to sign out?', 'ja': 'ログアウトしますか？', 'zh-CN': '您确定要退出吗？', 'vi': 'Bạn có chắc chắn muốn đăng xuất không?', 'th': 'คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?', 'ru': 'Вы уверены, что хотите выйти?' };
+            if (confirm(messages[lang] || messages['en'])) {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userName');
                 localStorage.removeItem('userEmail');
@@ -8824,7 +8826,9 @@ function initDashboard() {
     const dashLogoutBtn = document.getElementById('dash-logout-btn');
     if (dashLogoutBtn) {
         dashLogoutBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to sign out?')) {
+            const lang = localStorage.getItem('preferred-lang') || 'en';
+            const messages = { 'ko': '로그아웃 하시겠습니까?', 'en': 'Are you sure you want to sign out?', 'ja': 'ログアウトしますか？', 'zh-CN': '您确定要退出吗？', 'vi': 'Bạn có chắc chắn muốn đăng xuất không?', 'th': 'คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?', 'ru': 'Вы уверены, что хотите выйти?' };
+            if (confirm(messages[lang] || messages['en'])) {
                 // Clear only session tokens to preserve namespaced user data
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userName');

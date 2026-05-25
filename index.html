@@ -1062,7 +1062,7 @@
                                 </div>
                             </div>
                             <div class="chat-header-actions" style="display: flex; align-items: center; gap: 15px;">
-                                <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer;" onclick="prompt('일정/항목 변경을 원하시면 아래 이메일 주소를 복사하여 고객님의 성함과 함께 요청 내용을 보내주세요.', 'checkit082@gmail.com')">
+                                <div style="display: flex; flex-direction: column; align-items: center; cursor: pointer;" onclick="document.getElementById('email-modal').classList.add('is-open')">
                                     <button class="btn-chat-action" style="margin: 0; background: none; border: none; color: #3b82f6;" title="일정변경 요청"><i class="fa-regular fa-envelope"></i></button>
                                     <span style="font-size: 0.55rem; color: #64748b; font-weight: 700; margin-top: 4px; white-space: nowrap;">날짜변경 요청</span>
                                 </div>
@@ -1720,6 +1720,29 @@
                 </span>
             </p>
             <button type="button" class="btn-success-close" onclick="document.getElementById('domestic-pay-modal').classList.remove('is-open')" style="background:#2d3748; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;">확인</button>
+        </div>
+    </div>
+
+    <!-- Email Copy Modal for Translation -->
+    <div id="email-modal" class="payment-success-modal" style="z-index: 10000; background: rgba(0,0,0,0.8);">
+        <div class="payment-success-card" style="background: white; padding: 30px; border-radius: 16px; text-align: left; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-envelope" style="color: #2ECC71;"></i> 이메일 복사
+                </h3>
+                <button onclick="document.getElementById('email-modal').classList.remove('is-open')" style="background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; padding: 0;">&times;</button>
+            </div>
+            
+            <p style="font-size: 0.95rem; color: #64748b; margin-bottom: 20px; line-height: 1.5; word-break: break-word; overflow-wrap: anywhere;">
+                일정/항목 변경을 원하시면 아래 이메일 주소를 복사하여 <b>고객님의 성함</b>과 함께 요청 내용을 보내주세요.
+            </p>
+            
+            <div style="background: #f8fafc; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                <span id="email-text-to-copy" style="font-weight: 700; color: #0f172a; font-size: 1.05rem;">checkit082@gmail.com</span>
+                <button onclick="navigator.clipboard.writeText('checkit082@gmail.com'); this.innerHTML='<i class=\'fa-solid fa-check\'></i> 완료'; this.style.background='#059669'; setTimeout(() => { this.innerHTML='복사'; this.style.background='#2ECC71'; }, 2000);" style="background: #2ECC71; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">복사</button>
+            </div>
+            
+            <button type="button" onclick="document.getElementById('email-modal').classList.remove('is-open')" style="background:#1e293b; color: white; border: none; padding: 12px 30px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%;">확인</button>
         </div>
     </div>
 

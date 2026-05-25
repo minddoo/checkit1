@@ -11,25 +11,31 @@ service cloud.firestore {
       );
     }
     
-    // Check if the user is accessing their own document
-    function isOwner(email) {
+    // Check if the user is accessing their own document by email
+    function isOwnerByEmail(email) {
       return request.auth != null && request.auth.token.email == email;
     }
 
+    // Check if the user is accessing their own document by uid
+    function isOwnerByUid(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
     // 1. User Documents (Users Collection)
-    match /users/{email} {
-      // Masters can read/write all users. Users can only read/write their own document.
-      allow read, write: if isMaster() || isOwner(email);
+    // Document ID can be UID or Email depending on how it was created
+    match /users/{docId} {
+      allow read: if isMaster() || isOwnerByUid(docId) || isOwnerByEmail(docId) || (request.auth != null && resource.data.email == request.auth.token.email) || (request.auth != null && resource.data.uid == request.auth.uid);
+      allow write: if isMaster() || isOwnerByUid(docId) || isOwnerByEmail(docId);
     }
 
-    // 2. Consultation States
-    match /user_chat_states/{email} {
-      allow read, write: if isMaster() || isOwner(email);
+    // 2. Consultation States (Document ID is usually Email)
+    match /user_chat_states/{docId} {
+      allow read, write: if isMaster() || isOwnerByEmail(docId) || isOwnerByUid(docId) || (request.auth != null && resource.data.email == request.auth.token.email);
     }
 
-    // 3. User Activations
-    match /user_activations/{email} {
-      allow read, write: if isMaster() || isOwner(email);
+    // 3. User Activations (Document ID is usually Email)
+    match /user_activations/{docId} {
+      allow read, write: if isMaster() || isOwnerByEmail(docId) || isOwnerByUid(docId) || (request.auth != null && resource.data.email == request.auth.token.email);
     }
 
     // 4. Default rule: Deny everything else

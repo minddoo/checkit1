@@ -5572,60 +5572,73 @@ html {
         display: none !important; /* Hide "Evidence #01" text to save space */
     }
 
-    /* 8. Identity Card Top Border */
-    .identity-card::before {
-        width: 100% !important;
-        height: 6px !important;
-    }
-    
-    .id-content h4 {
-        word-break: break-word !important;
-        white-space: normal !important;
-        font-size: 1.3rem !important; /* Overrides inline 1.8rem/2rem */
-    }
-
-    .id-content p {
-        word-break: break-word !important;
-        white-space: normal !important;
-        font-size: 0.95rem !important; /* Overrides inline 1.15rem */
-    }
-
-    /* 9. Mobile Text & Padding Compression for Sections */
-    .identity-card {
-        padding: 40px 20px !important;
+    /* 8. Flatten Identity Cards (Remove Card Design) */
+    .identity-card, .identity-card.unified {
+        padding: 40px 0 !important; /* Remove side padding to use full screen width */
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
         gap: 30px !important;
     }
 
-    .identity-card.unified {
-        padding: 40px 20px !important;
+    .identity-card::before {
+        display: none !important; /* Remove colored top border */
+    }
+    
+    .id-content h4 {
+        word-break: keep-all !important;
+        white-space: normal !important;
+        font-size: 1.3rem !important;
+        padding: 0 15px !important;
     }
 
+    .id-content p {
+        word-break: keep-all !important;
+        white-space: normal !important;
+        font-size: 0.95rem !important;
+        padding: 0 15px !important;
+    }
+
+    /* 9. Mobile Text & Padding Compression for Sections */
     .evidence-file.trap-file {
-        padding: 20px !important;
+        padding: 20px 10px !important;
     }
 
     .evidence-title {
-        font-size: 1.1rem !important;
+        font-size: 1.15rem !important;
+        word-break: keep-all !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
+        padding: 0 15px !important;
+        text-align: center !important;
     }
 
     .forced-text-banner {
         flex-direction: column !important;
         gap: 15px !important;
+        width: 100% !important;
     }
 
     .forced-text-banner > span:first-child {
-        font-size: 1.3rem !important;
+        font-size: 1.25rem !important;
         border-right: none !important;
         padding-right: 0 !important;
         border-bottom: 2px solid #e2e8f0 !important;
         padding-bottom: 15px !important;
         text-align: center !important;
         width: 100% !important;
+        word-break: keep-all !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
     }
 
     .forced-text-banner > span:nth-child(2) {
         font-size: 0.95rem !important;
         text-align: center !important;
+        word-break: keep-all !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
     }
 
     .policy-header h4 {

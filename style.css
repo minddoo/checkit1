@@ -1521,8 +1521,8 @@ ul {
     height: 60vh;
     background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.1)), url('assets/korea-banner.png');
     background-size: cover;
-    background-position: center 0;
-    background-attachment: scroll;
+    background-position: center;
+    background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5939,7 +5939,7 @@ html {
     /* 14. Korea Banner Mobile Fix (Background attachment & Font Size) */
     .korea-banner {
         background-attachment: scroll !important; /* Fixes mobile iOS/Chrome stretch bug */
-        background-position: center !important;
+        background-position: center;
         background-size: cover !important;
         height: 35vh !important; 
         min-height: 250px !important;

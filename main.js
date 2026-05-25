@@ -2044,20 +2044,20 @@ window.addEventListener('load', () => {
     startAutoPlay();
 });
 
-// Parallax Effect for Korea Banner
+// Parallax Effect for Korea Banner (Mobile Only fallback)
 window.addEventListener('scroll', () => {
     const koreaBanner = document.querySelector('.korea-banner');
     if (koreaBanner) {
-        // Calculate how far the user has scrolled relative to the banner
-        const rect = koreaBanner.getBoundingClientRect();
-        
-        // Only run calculations if the banner is currently visible in the viewport
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-            // Apply a translateY to the background position for parallax
-            // 0.4 multiplier controls the speed of the parallax (lower is slower/subtle)
-            const scrollPos = window.pageYOffset;
-            // Center is base position, add scroll offset
-            koreaBanner.style.backgroundPosition = `center ${scrollPos * 0.4}px`;
+        // Desktop relies on CSS background-attachment: fixed. Mobile uses JS fallback.
+        if (window.innerWidth <= 768) {
+            const rect = koreaBanner.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                // Calculate parallax relative to viewport position to avoid massive offsets
+                koreaBanner.style.backgroundPosition = `center ${rect.top * -0.3}px`;
+            }
+        } else {
+            // Clean up inline styles so CSS native parallax works perfectly on PC
+            koreaBanner.style.backgroundPosition = '';
         }
     }
 });

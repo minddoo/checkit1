@@ -3,11 +3,7 @@ Add-Type -AssemblyName System.Drawing
 $dir = "C:\Users\pc\.gemini\antigravity\scratch\-1-new\assets"
 
 # 복원할 대상 이미지 파일들
-$files = @(
-    "hero-1.jpg", "hero-2.jpg", "hero-3.jpg", "hero.png",
-    "cartoon_consult.png", "cartoon_language.png", "cartoon_notification.png", "cartoon_results.png",
-    "consultation.png", "interior.png", "korea-banner.png", "process.png", "reality-bg.png"
-)
+$files = "hero-1.jpg", "hero-2.jpg", "hero-3.jpg", "hero.png", "cartoon_consult.png", "cartoon_language.png", "cartoon_notification.png", "cartoon_results.png", "consultation.png", "interior.png", "korea-banner.png", "process.png", "reality-bg.png"
 
 # 워터마크 제거 영역 크기 (제미나이 로고 기준)
 $w = 65

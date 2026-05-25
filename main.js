@@ -1894,13 +1894,22 @@ function changeLanguage(langCode) {
     // Save to local storage for our custom UI
     localStorage.setItem('preferred-lang', langCode);
 
-    // 구글 번역 쿠키 강제 설정 (항상 auto에서 타겟 언어로 번역)
+    // 기존 번역 쿠키 완벽하게 삭제 (중복 쿠키 방지)
+    const host = window.location.hostname;
+    const domains = [host, `.${host}`, ''];
+    domains.forEach(domain => {
+        const domainStr = domain ? `domain=${domain};` : '';
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; ${domainStr}`;
+    });
+
+    // 구글 번역 쿠키 새롭게 단일 설정 (항상 auto에서 타겟 언어로 번역)
     document.cookie = `googtrans=/auto/${langCode}; path=/;`;
-    document.cookie = `googtrans=/auto/${langCode}; domain=.${window.location.hostname}; path=/;`;
-    document.cookie = `googtrans=/auto/${langCode}; domain=${window.location.hostname}; path=/;`;
+    if (host !== 'localhost' && host !== '127.0.0.1') {
+        document.cookie = `googtrans=/auto/${langCode}; domain=.${host}; path=/;`;
+    }
     
-    // 강제로 페이지를 새로고침하여 구글 위젯이 쿠키를 읽고 즉시 번역하도록 처리
-    window.location.reload();
+    // 완벽한 초기화 및 리로드를 위해 href 재할당
+    window.location.href = window.location.pathname + window.location.search;
 }
 
 // 페이지 로드 시 저장된 언어 UI 적용 (실제 번역은 쿠키에 의해 자동 수행됨)

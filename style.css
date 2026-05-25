@@ -5775,6 +5775,7 @@ html {
         position: relative !important;
         width: 100% !important;
         overflow: visible !important;
+        margin-bottom: 50px !important; /* Add space between dots and the story section below */
     }
 
     .reality-flow.grid-layout.reality-slider-track {

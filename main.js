@@ -9544,6 +9544,9 @@ const generateTitle = (i, category) => {
     
     if (i % 3 === 0) return base + ' ' + suffix;
     if (i % 3 === 1) return '[' + suffix + '] ' + base;
+    return base + ' (업데이트)';
+};
+
 // Dynamic Content Generator for category-specific, title-aware, long-form articles
 const generateContent = (title, category) => {
     let content = `<p>안녕하세요. 외국인 건강검진 전문 비의료 행정 IT 플랫폼 CHECKIT입니다. 오늘은 <strong>'${title}'</strong>에 대해 상세히 알아보겠습니다.</p>`;

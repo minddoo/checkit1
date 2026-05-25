@@ -2017,17 +2017,8 @@ if (stepItems.length > 0) {
             'ko': '병원 예약 및 검진 전 주의사항 안내', 'en': 'Guide to Hospital Appointments & Precautions', 'ja': '病院予約及び検診前の注意事項案内',
             'zh-CN': '医院预约及体检前注意事项指南', 'vi': 'Hướng dẫn Đặt lịch & Lưu ý Trước khi Khám', 'th': 'คำแนะนำการจองโรงพยาบาลและข้อควรระวังก่อนตรวจ', 'ru': 'Руководство по записи и меры предосторожности'
         };
-        if (index >= 6) {
-            // PHASE 02
-            if (heroSection) heroSection.classList.add('phase-2');
-            if (phaseLabel) phaseLabel.innerText = 'PHASE 02';
-            if (phaseTitle) phaseTitle.innerText = phase2Trans[document.documentElement.lang || 'en'] || phase2Trans['en'];
-        } else {
-            // PHASE 01
-            if (heroSection) heroSection.classList.remove('phase-2');
-            if (phaseLabel) phaseLabel.innerText = 'PHASE 01';
-            if (phaseTitle) phaseTitle.innerText = phase1Trans[document.documentElement.lang || 'en'] || phase1Trans['en'];
-        }
+        // Ensure background stays light green
+        if (heroSection) heroSection.classList.remove('phase-2');
         
         currentHeroStep = index;
     }

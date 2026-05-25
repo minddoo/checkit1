@@ -5978,7 +5978,7 @@ html {
         font-size: 0.75rem !important;
     }
 
-    /* 13-b. Payment Section Mobile Text Fix */
+    /* 13-b. Payment Section Mobile Text & Layout Fix */
     .payment-section {
         padding: 60px 15px !important;
     }
@@ -6004,6 +6004,32 @@ html {
     .service-period-notice {
         font-size: 0.75rem !important;
         line-height: 1.4 !important;
+    }
+    
+    .product-select {
+        padding: 12px 10px !important;
+        font-size: 0.9rem !important;
+        word-break: break-word !important;
+        white-space: normal !important;
+    }
+    
+    .summary-box {
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+    }
+    
+    .summary-name {
+        flex: 0 0 100% !important;
+        margin-bottom: 5px !important;
+        text-align: left !important;
+    }
+    
+    .summary-qty {
+        flex: 0 0 auto !important;
+    }
+    
+    .summary-price {
+        flex: 0 0 auto !important;
     }
 
     /* 14. Korea Banner Mobile Fix (Background attachment & Font Size) */

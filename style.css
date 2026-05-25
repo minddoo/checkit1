@@ -5362,34 +5362,41 @@ html {
         padding: 8px !important;
     }
 
-    /* 5. Navbar Layout Fix */
+    /* 5. Navbar Layout Fix (Two-Row Design for Mobile) */
     .nav-container {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
+        padding: 10px 15px !important;
+        flex-wrap: wrap !important;
         justify-content: space-between !important;
-        gap: 5px !important;
+        gap: 10px 0 !important;
     }
     
     .logo {
         position: static !important;
         transform: none !important;
         left: auto !important;
-        font-size: 1.1rem !important;
-        gap: 5px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        order: -1 !important; /* Force logo to the top row */
+        margin-bottom: 5px !important;
     }
     
     .logo span {
-        font-size: 1rem !important;
+        font-size: 1.2rem !important; /* Slightly larger since it has space */
         letter-spacing: -0.02em !important;
     }
     
     .nav-logo {
-        height: 24px !important; /* Scale down logo slightly more */
+        height: 26px !important;
+    }
+    
+    .nav-actions {
+        order: 2 !important;
     }
     
     .nav-links {
-        display: flex !important; /* Force visibility over previous display: none */
-        gap: 6px !important;
+        display: flex !important;
+        gap: 8px !important;
+        order: 3 !important;
     }
     
     .language-selector {

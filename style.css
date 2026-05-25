@@ -5497,8 +5497,82 @@ html {
         height: 6px !important;
     }
     
-    .id-content h4, .id-content p {
+    .id-content h4 {
         word-break: break-word !important;
         white-space: normal !important;
+        font-size: 1.3rem !important; /* Overrides inline 1.8rem/2rem */
+    }
+
+    .id-content p {
+        word-break: break-word !important;
+        white-space: normal !important;
+        font-size: 0.95rem !important; /* Overrides inline 1.15rem */
+    }
+
+    /* 9. Mobile Text & Padding Compression for Sections */
+    .identity-card {
+        padding: 40px 20px !important;
+        gap: 30px !important;
+    }
+
+    .identity-card.unified {
+        padding: 40px 20px !important;
+    }
+
+    .evidence-file.trap-file {
+        padding: 20px !important;
+    }
+
+    .evidence-title {
+        font-size: 1.1rem !important;
+    }
+
+    .forced-text-banner {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .forced-text-banner span:first-child {
+        font-size: 1.3rem !important;
+        border-right: none !important;
+        padding-right: 0 !important;
+        border-bottom: 2px solid #e2e8f0 !important;
+        padding-bottom: 15px !important;
+        text-align: center !important;
+        width: 100% !important;
+    }
+
+    .forced-text-banner span:nth-child(2) {
+        font-size: 0.95rem !important;
+        text-align: center !important;
+    }
+
+    .policy-header h4 {
+        font-size: 1.3rem !important;
+    }
+    
+    .policy-header h4 span {
+        font-size: 0.9rem !important;
+    }
+
+    .policy-header div {
+        padding: 20px !important;
+        font-size: 0.95rem !important;
+    }
+
+    .policy-header div p {
+        font-size: 0.95rem !important;
+    }
+
+    .bulletin-board {
+        padding: 40px 20px 20px 20px !important;
+    }
+
+    .bulletin-post {
+        padding: 20px !important;
+    }
+
+    .bulletin-post p {
+        font-size: 0.9rem !important;
     }
 }

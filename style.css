@@ -45,6 +45,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-wrap: break-word; /* Prevent text overflow for all languages globally */
+    word-wrap: break-word;
 }
 
 html {
@@ -5967,12 +5969,12 @@ html {
     
     .program-card .plan-content ul {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px 8px !important;
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
     }
     
     .program-card .plan-content ul li {
-        font-size: 0.78rem !important;
+        font-size: 0.85rem !important; /* Reverted to slightly larger size since it's 1 column again */
         align-items: flex-start !important;
     }
     

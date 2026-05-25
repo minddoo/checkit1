@@ -5483,4 +5483,10 @@ html {
     .file-tag span:first-child {
         display: none !important; /* Hide "Evidence #01" text to save space */
     }
+
+    /* 8. Identity Card Top Border */
+    .identity-card::before {
+        width: 100% !important;
+        height: 6px !important;
+    }
 }

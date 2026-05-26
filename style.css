@@ -6480,3 +6480,12 @@ html {
     }
 }
 
+/* ==========================================================================
+   23. Multi-Language Translation Overflow Fix
+   ========================================================================== */
+html:not([lang="ko"]) *,
+html:not([lang="ko"]).translated-ltr *,
+html:not([lang="ko"]).translated-rtl * {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+}

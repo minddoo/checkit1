@@ -9899,14 +9899,9 @@ window.subscribeToUserActiveState = function(email) {
             const currentStep = localStorage.getItem('serviceStep_' + email);
             const hasChatHistory = localStorage.getItem('chat_history_html_' + email);
             
-            // If user has progressed beyond the initial forms, hide them to keep the UI clean
-            if (savedData || currentStep) {
-                if (stepS) stepS.style.display = 'none';
-                if (stepC) stepC.style.display = 'none';
-            } else {
-                if (stepS) stepS.style.display = 'block';
-                if (stepC) stepC.style.display = 'block';
-            }
+            // Ensure the initial forms remain visible so the user can see their completed history
+            if (stepS) stepS.style.display = 'block';
+            if (stepC) stepC.style.display = 'block';
             renderInlineConsultationForm(true);
             
             if (savedData) {

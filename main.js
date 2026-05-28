@@ -4761,10 +4761,7 @@ function initDashboard() {
             alert("예약하신 의료기관을 선택해주세요.");
             return;
         }
-        if (!emailInput || !emailInput.value.trim() || !dateInput || !dateInput.value) {
-            alert("이메일 주소와 검진 확정 날짜를 모두 입력해주세요.");
-            return;
-        }
+        // validation removed
         
         const message = `의료기관: ${selectedHospital}<br>이메일: ${emailInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');
@@ -4897,10 +4894,7 @@ function initDashboard() {
             alert("예약하신 의료기관을 선택해주세요.");
             return;
         }
-        if (!contactInput || !contactInput.value.trim() || !dateInput || !dateInput.value) {
-            alert("이메일과 검진 확정 날짜를 모두 입력해주세요.");
-            return;
-        }
+        // validation removed
 
         const message = `의료기관: ${selectedHospital}<br>이메일: ${contactInput.value.trim()}<br>검진 확정일: ${dateInput.value}`;
         window.appendMessage('user', message, 'user');

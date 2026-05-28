@@ -2287,6 +2287,9 @@ window.checkAndRestoreSession = function(email, displayName) {
     db.collection('user_activations').doc(email).get().then(actSnap => {
         if (!actSnap.exists || actSnap.data().myPageActive !== true) {
             console.log("User is deactivated. Skipping session restore.");
+            if (typeof window.subscribeToUserActiveState === 'function') {
+                window.subscribeToUserActiveState(email);
+            }
             return;
         }
 
@@ -2819,10 +2822,7 @@ window.showView = function(viewName) {
         // (handles re-navigation to mypage without full re-init)
         if (typeof window.subscribeToUserActiveState === 'function') {
             const currentEmail = localStorage.getItem('userEmail') || '';
-            const alreadySubmitted = localStorage.getItem('consultationData_' + currentEmail);
-            if (!alreadySubmitted) {
-                window.subscribeToUserActiveState(currentEmail);
-            }
+            window.subscribeToUserActiveState(currentEmail);
         }
     } else if (viewName === 'home') {
         // Show global navbar
@@ -8742,11 +8742,13 @@ function initDashboard() {
         }
     } else {
         // 4. Brand new session
-        if (typeof window.subscribeToUserActiveState === 'function') {
-            window.subscribeToUserActiveState(userEmail);
-        } else {
+        if (typeof window.subscribeToUserActiveState !== 'function') {
             renderInlineConsultationForm();
         }
+    }
+
+    if (typeof window.subscribeToUserActiveState === 'function') {
+        window.subscribeToUserActiveState(userEmail);
     }
 
     // Dashboard Logout

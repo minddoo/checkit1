@@ -38,6 +38,11 @@ service cloud.firestore {
       allow read, write: if isMaster() || isOwnerByEmail(docId) || isOwnerByUid(docId) || (request.auth != null && resource.data.email == request.auth.token.email);
     }
 
+    
+    // 5. Scheduled Notifications
+    match /scheduled_notifications/{docId} {
+      allow read, write: if true;
+    }
     // 4. Default rule: Deny everything else
     match /{document=**} {
       allow read, write: if false;

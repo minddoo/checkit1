@@ -6492,7 +6492,7 @@ html:not([lang="ko"]).translated-rtl * {
 
 /* Mobile optimizations for Program Modals */
 @media (max-width: 768px) {
-    #program-modal .modal-container, #selection-modal .modal-container {
+    #program-modal .modal-container, #selection-modal .modal-container, #precaution-modal .modal-container {
         height: 85vh !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -6507,13 +6507,13 @@ html:not([lang="ko"]).translated-rtl * {
         from { transform: translateY(100%); }
         to { transform: translateY(0); }
     }
-    .program-modal-header {
+    .program-modal-header, .precaution-modal-header {
         padding: 24px 20px 10px 20px !important;
     }
     .program-modal-body {
         padding: 0 20px !important;
     }
-    .program-modal-footer {
+    .program-modal-footer, .precaution-modal-footer {
         padding: 16px 20px 24px 20px !important;
     }
     #modal-program-name {

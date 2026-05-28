@@ -8921,7 +8921,7 @@ function renderInlineConsultationForm(isActive) {
                 <input type="text" id="c-name" value="${savedName}" placeholder="Name of test-taker" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
             </div>
             
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:10px;">
                 <div class="c-form-group">
                     <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">DOB (YYMMDD)</label>
                     <input type="text" id="c-dob" placeholder="6 digits" maxlength="6" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
@@ -8942,7 +8942,7 @@ function renderInlineConsultationForm(isActive) {
                 <input type="text" id="c-address" placeholder="For kit delivery" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:10px;">
                 <div class="c-form-group">
                     <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Arrival Date (Korea)</label>
                     <input type="date" id="c-arrival" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
@@ -8955,7 +8955,7 @@ function renderInlineConsultationForm(isActive) {
 
             <div class="c-form-group" style="margin-top:10px;">
                 <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">검진 희망 일자 <span style="font-weight:normal; font-size:0.75rem; color:#6b7280;">(병원과의 일정 조율을 위해 희망 1주 기간을 선택해주세요)</span></label>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:10px;">
                     <input type="date" id="c-period-start" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                     <input type="date" id="c-period-end" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
                 </div>

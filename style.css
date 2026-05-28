@@ -6584,3 +6584,7 @@ html:not([lang="ko"]).translated-rtl * {
         text-align: left !important;
     }
 }
+/* Hide scrollbar for D-day chips wrapper */
+.dday-chips-wrapper::-webkit-scrollbar {
+    display: none;
+}

@@ -1,4 +1,4 @@
-// Hook localStorage.getItem to support impersonation for Master viewing customer My Page
+﻿// Hook localStorage.getItem to support impersonation for Master viewing customer My Page
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const impEmail = urlParams.get('impersonate_email');
@@ -8910,7 +8910,11 @@ function renderInlineConsultationForm(isActive) {
     const savedName = localStorage.getItem('userName') || '';
     const savedEmail = localStorage.getItem('userEmail') || '';
 
-    container.innerHTML = `
+    // Check if form is already rendered to preserve user input
+    const isAlreadyRendered = container.querySelector('#c-name') !== null;
+    
+    if (!isAlreadyRendered) {
+        container.innerHTML = `
         <div class="chat-form-box " style="margin: 15px 0 0 0; padding: 20px; background: rgba(255,255,255,0.8); border-radius: 20px; border: 1.5px solid rgba(46, 204, 113, 0.2);">
             <div class="c-form-group">
                 <label style="display:block; margin-bottom:5px; font-weight:700; font-size:0.85rem;">Full Name</label>
@@ -9034,7 +9038,14 @@ function renderInlineConsultationForm(isActive) {
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.style.background = '#cbd5e1';
-            submitBtn.innerText = '계정 활성화 대기 중 (Waiting for Activation)';
+            submitBtn.innerText = '관리자 활성화 대기 (Waiting for Activation)';
+        }
+    } else {
+        const submitBtn = document.getElementById('c-submit-btn');
+        if (submitBtn && !submitBtn.disabled) {
+            submitBtn.disabled = false;
+            submitBtn.style.background = 'var(--primary)';
+            submitBtn.innerText = 'Complete Registration';
         }
     }
 }

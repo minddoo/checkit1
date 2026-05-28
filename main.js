@@ -9951,8 +9951,11 @@ window.subscribeToUserActiveState = function(email) {
             const currentEmail = localStorage.getItem('userEmail') || email;
             if (currentEmail) {
                 const hadHistory = localStorage.getItem('chat_history_' + currentEmail);
-                if (hadHistory && hadHistory.length > 5) {
+                const hadHtmlHistory = localStorage.getItem('chat_history_html_' + currentEmail);
+                if ((hadHistory && hadHistory.length > 5) || (hadHtmlHistory && hadHtmlHistory.length > 50)) {
                     localStorage.removeItem('chat_history_' + currentEmail);
+                    localStorage.removeItem('chat_history_html_' + currentEmail);
+                    localStorage.removeItem('dday_chat_history_html_' + currentEmail);
                     localStorage.removeItem('consultationData_' + currentEmail);
                     localStorage.removeItem('serviceStep_' + currentEmail);
                     window.location.reload();

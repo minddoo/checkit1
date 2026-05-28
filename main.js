@@ -8513,7 +8513,7 @@ function initDashboard() {
             }
             
             const resultHtml = `
-                <div class="notranslate" style="background: #ffffff; padding: 18px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left; width: 100%;">
+                <div class="notranslate auto-translate-bubble" style="background: #ffffff; padding: 18px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: left; width: 100%;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
                         <i class="fa-solid fa-language" style="color: var(--primary); font-size: 0.9rem;"></i>
                         <span style="font-weight: 800; color: var(--primary); font-size: 0.85rem; letter-spacing: 0.05em;">자동 번역</span>

@@ -6577,3 +6577,10 @@ html:not([lang="ko"]).translated-rtl * {
         text-align: center !important;
     }
 }
+/* Fix Auto Translate text alignment on mobile */
+@media (max-width: 768px) {
+    .auto-translate-bubble,
+    .auto-translate-bubble > div {
+        text-align: left !important;
+    }
+}

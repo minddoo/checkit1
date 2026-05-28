@@ -6540,3 +6540,40 @@ html:not([lang="ko"]).translated-rtl * {
         font-size: 1rem !important;
     }
 }
+/* Mobile optimizations for Selection Item Cards */
+@media (max-width: 768px) {
+    .selection-item-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        padding: 20px 16px !important;
+    }
+    .selection-card-left {
+        width: 100% !important;
+        align-items: flex-start !important;
+    }
+    .selection-icon-circle {
+        flex-shrink: 0 !important;
+    }
+    .selection-card-info {
+        flex: 1 !important;
+    }
+    .selection-main-title {
+        font-size: 1.15rem !important;
+        line-height: 1.35 !important;
+        margin-top: 4px !important;
+    }
+    .selection-tag {
+        font-size: 0.65rem !important;
+    }
+    .selection-card-right {
+        width: 100% !important;
+        display: flex !important;
+    }
+    .selection-card-right .btn-premium-select {
+        width: 100% !important;
+        font-size: 1rem !important;
+        padding: 14px !important;
+        text-align: center !important;
+    }
+}

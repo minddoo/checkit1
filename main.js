@@ -1,4 +1,4 @@
-﻿// Hook localStorage.getItem to support impersonation for Master viewing customer My Page
+// Hook localStorage.getItem to support impersonation for Master viewing customer My Page
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const impEmail = urlParams.get('impersonate_email');
@@ -9032,6 +9032,8 @@ function renderInlineConsultationForm(isActive) {
         </div>
     `;
 
+    }
+
     // Disable if inactive
     if (isActive === false) {
         const submitBtn = document.getElementById('c-submit-btn');
@@ -9042,7 +9044,7 @@ function renderInlineConsultationForm(isActive) {
         }
     } else {
         const submitBtn = document.getElementById('c-submit-btn');
-        if (submitBtn && !submitBtn.disabled) {
+        if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.style.background = 'var(--primary)';
             submitBtn.innerText = 'Complete Registration';

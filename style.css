@@ -3393,7 +3393,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     
     #main-header nav .cta-button-secondary {
-        display: none !important; /* 모바일에서 PC nav 버튼 숨김 — 드롭다운 메뉴 사용 */
+        margin-left: 8px !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        vertical-align: middle !important;
+        display: inline-block; /* Ensure they show up */
     }
 
     /* [Mobile hamburger toggle button] */

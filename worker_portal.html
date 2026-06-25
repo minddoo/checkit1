@@ -1,0 +1,2901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHECKIT - 근로자 포털 (v1.0.2)</title> <!-- fix nesting bug -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=713836b01fc11196150f09&libraries=services"></script>
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Initialize Kakao SDK immediately if possible
+        window.addEventListener('load', () => {
+            if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+                Kakao.init('713836b01fc11196150f09');
+                console.log('Kakao SDK Initialized');
+            }
+        });
+        // Set PDF.js worker source
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+    </script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --dark: #1e1b4b;
+            --bg: #f0f4ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .hidden { display: none !important; }
+        .visible-mobile { display: none; }
+        @media (max-width: 768px) {
+            .hidden-mobile { display: none !important; }
+            .visible-mobile { display: block !important; }
+            .visible-mobile-flex { display: flex !important; }
+        }
+
+        /* Loader */
+        #pageLoader { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+        .loader { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 44px; height: 44px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Header */
+        .top-bar { background: var(--dark); color: white; padding: 15px 20px; display: flex; justify-content: flex-start; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); gap: 15px; }
+        .top-bar > div { flex-shrink: 0; }
+        .top-bar .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 10px; flex-shrink: 0; white-space: nowrap; }
+        .top-bar .logo i { color: var(--primary-light); }
+        .top-bar .user-info { display: flex; align-items: center; gap: 15px; font-size: 0.9rem; flex-shrink: 0; }
+        .top-bar .user-info .name-badge { background: rgba(255,255,255,0.15); padding: 6px 15px; border-radius: 20px; white-space: nowrap; }
+        .top-bar .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 7px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+        .top-bar .logout-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Main Content */
+        .main { max-width: 900px; margin: 30px auto; padding: 0 20px 50px; }
+
+        /* Welcome Banner */
+        .welcome-banner { background: linear-gradient(135deg, var(--dark) 0%, #4338ca 100%); color: white; border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .welcome-banner h2 { font-size: 1.6rem; margin-bottom: 8px; }
+        .welcome-banner p { opacity: 0.8; font-size: 0.95rem; }
+
+        /* Cards */
+        .card { background: var(--card-bg); border-radius: 14px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--border); }
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .card-header h3 { font-size: 1.1rem; color: var(--text); }
+        .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .icon-purple { background: #ede9fe; color: var(--primary); }
+        .icon-green { background: #d1fae5; color: var(--success); }
+        .icon-blue { background: #dbeafe; color: #3b82f6; }
+
+        /* Status Badge */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; transition: 0.3s; }
+        .status-pending { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+        .status-reservation { background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; }
+        .status-checkup { background: #d1fae5; color: #059669; border: 1px solid #6ee7b7; }
+        .status-result { background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+        .status-recheck-target { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .status-recheck-done { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+
+        /* Progress Stepper */
+        .stepper { display: flex; justify-content: space-between; margin: 30px 0; position: relative; padding: 0 10px; }
+        .stepper::before { content: ''; position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #e2e8f0; z-index: 1; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+        .step-icon { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; transition: 0.3s; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; transition: 0.3s; white-space: nowrap; }
+        .step.active .step-icon { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 0 15px rgba(99, 102, 241, 0.3); }
+        .step.active .step-label { color: var(--primary); font-weight: 700; }
+        .step.completed .step-icon { background: #10b981; border-color: #10b981; color: white; }
+        .step.completed .step-label { color: #10b981; }
+        .step.warning .step-icon { background: var(--warning); border-color: var(--warning); color: white; }
+        .step.warning .step-label { color: var(--warning); }
+
+        /* Info Grid */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .info-item { background: #f8fafc; border-radius: 10px; padding: 14px 16px; }
+        .info-item .label { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+        .info-item .value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+        /* Hospital List */
+        .hospital-guide-container { display: flex; flex-direction: column; gap: 20px; }
+        .map-section { width: 100%; height: 320px; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; background: #eaeff5; position: relative; }
+        .hospital-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 640px) { 
+            .hospital-cards { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .hospital-card { padding: 12px; }
+            .h-card-name { font-size: 0.85rem; }
+            .h-card-address { font-size: 0.7rem; }
+            .h-card-meta { gap: 8px; font-size: 0.65rem; }
+            .btn-h-action { padding: 6px; font-size: 0.65rem; border-radius: 6px; }
+        }
+        
+        .hospital-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; gap: 12px; }
+        .hospital-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+        .h-card-status { position: absolute; top: 15px; right: 20px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+        .status-open { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+        .status-closed { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        .h-card-name { font-size: 1.05rem; font-weight: 800; color: #1e1b4b; display: flex; align-items: center; gap: 8px; }
+        .h-card-address { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+        .h-card-meta { display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.82rem; color: #94a3b8; }
+        .h-card-meta item { display: flex; align-items: center; gap: 5px; }
+
+        .h-card-actions { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .btn-h-action { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .btn-h-call { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .btn-h-call:hover { background: #f1f5f9; }
+        .btn-h-book { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+        .btn-h-book:hover { background: #4f46e5; transform: translateY(-1px); }
+        .btn-h-map { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; display: none; } /* Hidden by default if specialized buttons exist */
+        
+        .btn-portal-naver { background: #03cf5d; color: white; }
+        .btn-portal-naver:hover { background: #02b350; transform: translateY(-1px); }
+        .btn-portal-kakao { background: #fee500; color: #3c1e1e; }
+        .btn-portal-kakao:hover { background: #fada00; transform: translateY(-1px); }
+
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        .loading-text { color: #94a3b8; text-align: center; padding: 20px 0; font-size: 0.9rem; }
+
+        /* Sidebar Layout (Desktop) */
+        .portal-wrapper { display: flex; min-height: calc(100vh - 60px); position: relative; }
+        .sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 30px 20px; flex-shrink: 0; transition: 0.3s; }
+        .main-content { flex: 1; padding: 30px 40px; background: var(--bg); overflow-y: auto; }
+
+        .sidebar-menu { list-style: none; margin-top: 10px; }
+        .sidebar-menu li { 
+            padding: 14px 18px; 
+            border-radius: 12px; 
+            margin-bottom: 8px; 
+            cursor: pointer; 
+            color: var(--text-muted); 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            transition: 0.2s; 
+        }
+        .sidebar-menu li i { font-size: 1.1rem; width: 24px; text-align: center; }
+        .sidebar-menu li:hover { background: #f8fafc; color: var(--primary); }
+        .sidebar-menu li.active { background: #f5f3ff; color: var(--primary); border-left: 4px solid var(--primary); border-radius: 0 12px 12px 0; margin-left: -20px; padding-left: 34px; }
+
+        /* Mobile Hamburger Button (Hidden on Desktop) */
+        .menu-toggle { display: none; background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; align-items: center; justify-content: center; }
+
+        @media (max-width: 900px) {
+            /* Lang switcher gracefully kept visible on mobile */
+        }
+        @media (max-width: 768px) {
+            .top-bar { padding: 6px 8px; gap: 0; position: relative; justify-content: space-between; }
+            .top-bar .logo { position: absolute; left: 50%; transform: translateX(-50%); font-size: 1rem; gap: 4px; margin: 0; z-index: 1; }
+            .top-bar .logo i { font-size: 0.95rem; }
+            .top-bar .user-info { display: none !important; }
+            .lang-switcher { margin: 0 !important; padding: 2px !important; gap: 2px !important; position: relative; z-index: 10; }
+            .lang-btn { padding: 3px 6px !important; font-size: 0.65rem !important; }
+            .menu-toggle { display: flex; width: 34px !important; height: 34px !important; margin: 0 !important; font-size: 1rem !important; }
+            .mobile-home-btn { width: 34px !important; height: 34px !important; margin: 0 0 0 4px !important; font-size: 1rem !important; }
+
+            .portal-wrapper { flex-direction: column; }
+            .sidebar { 
+                position: fixed; 
+                top: 0; 
+                left: -100%; 
+                width: 280px; 
+                height: 100%; 
+                z-index: 3000; 
+                box-shadow: 20px 0 50px rgba(0,0,0,0.2); 
+                transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                background: linear-gradient(180deg, var(--dark) 0%, #312e81 100%);
+                color: white;
+                border-right: none;
+                padding-top: 60px;
+                display: flex;
+                flex-direction: column;
+            }
+            .sidebar.active { left: 0; }
+            .sidebar .sidebar-menu li { color: rgba(255,255,255,0.7); }
+            .sidebar .sidebar-menu li:hover { background: rgba(255,255,255,0.1); color: white; }
+            .sidebar .sidebar-menu li.active { 
+                background: rgba(255,255,255,0.2); 
+                color: white; 
+                border-left: 4px solid var(--primary-light); 
+                margin-left: -20px; 
+                padding-left: 34px;
+                border-radius: 0 12px 12px 0;
+            }
+            
+            .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2999; }
+            .sidebar-overlay.active { display: block; }
+            
+            .main-content { padding: 15px; }
+            .welcome-banner { padding: 20px; border-radius: 12px; }
+            .welcome-banner h2 { font-size: 1.3rem; }
+            
+            /* Horizontal Scroll for Cards */
+            .hospital-cards { 
+                display: flex; 
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory; 
+                gap: 15px; 
+                padding: 5px 5px 15px 5px; 
+                margin: 0 -15px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .hospital-cards::-webkit-scrollbar { display: none; }
+            .hospital-card { 
+                flex: 0 0 calc(85%); 
+                scroll-snap-align: center;
+                margin-bottom: 0;
+            }
+            .hospital-card:first-child { margin-left: 15px; }
+            .hospital-card:last-child { margin-right: 15px; }
+
+            .info-grid { grid-template-columns: 1fr; }
+        }
+        /* Existing styles... */
+        /* Booking Form Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .booking-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .booking-modal h3 { margin-bottom: 20px; color: var(--dark); font-weight: 800; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.85rem; font-weight: 600; color: #64748b; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .btn-submit:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+            min-width: 280px;
+        }
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        
+        @keyframes toastIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+
+        .lang-switcher { display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px; border-radius: 10px; margin: 0 10px 0 auto; flex-shrink: 0; }
+        .lang-btn { 
+            background: transparent; 
+            border: none; 
+            color: rgba(255,255,255,0.6); 
+            padding: 5px 10px; 
+            border-radius: 7px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .lang-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .lang-btn.active { background: white; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .lang-btn i { font-size: 0.8rem; }
+
+        .translation-box {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-style: italic;
+        }
+    </style>
+
+
+</head>
+<body>
+
+<div id="pageLoader">
+    <div class="loader"></div>
+    <p style="color: #64748b; font-size: 0.95rem; margin-top: 10px;">포털을 불러오는 중...</p>
+    <button id="loaderCloseBtn" style="display: none; margin-top: 20px; background: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; color: var(--text-muted);" onclick="this.parentElement.style.display='none'">닫기 (창이 멈춘 경우)</button>
+</div>
+
+<div id="portalContent" class="hidden">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div style="display: flex; align-items: center; position: relative; z-index: 10;">
+            <button id="menuToggle" class="menu-toggle" onclick="toggleMobileMenu()"><i class="fa-solid fa-bars"></i></button>
+            <button class="mobile-home-btn" onclick="window.location.href='index.html'" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 44px; height: 44px; border-radius: 10px; cursor: pointer; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin-left: 5px;" title="메인 홈으로">
+                <i class="fa-solid fa-house"></i>
+            </button>
+        </div>
+        <div class="logo notranslate"><i class="fa-solid fa-briefcase-medical"></i> CHECKIT <span class="hidden-mobile">근로자 포털</span> <span id="masterBadge" class="hidden" style="background:var(--danger); font-size:0.7rem; padding:2px 8px; border-radius:4px; margin-left:10px;">MASTER</span></div>
+        
+        <div class="lang-switcher notranslate">
+            <button class="lang-btn active" data-lang="ko" onclick="changePortalLanguage('ko')">KR</button>
+            <button class="lang-btn" data-lang="en" onclick="changePortalLanguage('en')">EN</button>
+            <button class="lang-btn" data-lang="cn" onclick="changePortalLanguage('cn')">CN</button>
+            <button class="lang-btn" data-lang="vn" onclick="changePortalLanguage('vn')">VN</button>
+        </div>
+
+        <div class="user-info">
+            <span class="name-badge notranslate"><i class="fa-solid fa-user"></i> <span id="displayName">-</span> 님</span>
+            <button id="logoutBtn" class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button id="closeBtn" class="logout-btn hidden" onclick="window.close()" style="background:var(--danger); border-color:var(--danger);"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <div class="portal-wrapper">
+        <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+        <!-- Sidebar -->
+        <div id="sideDrawer" class="sidebar">
+            <div class="hidden-mobile" style="padding: 0 5px 20px;">
+                <button onclick="window.location.href='index.html'" style="width: 100%; background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700;">
+                    <i class="fa-solid fa-house" style="color: var(--primary);"></i> 메인 홈으로 돌아가기
+                </button>
+            </div>
+            <div style="padding: 0 0 20px 5px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;" class="visible-mobile">
+                <div style="font-size: 1.1rem; font-weight: 800;"><i class="fa-solid fa-briefcase-medical" style="color: var(--primary-light);"></i> CHECKIT</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li id="menuProgress" class="active" onclick="switchSection('progress')">
+                    <i class="fa-solid fa-person-walking-arrow-right"></i> 나의 진행상황
+                </li>
+                <li id="menuChat" onclick="switchSection('chat')">
+                    <i class="fa-solid fa-comments"></i> CHECKIT 1:1 대화방
+                </li>
+                <li id="menuResults" onclick="switchSection('results')">
+                    <i class="fa-solid fa-file-shield"></i> 결과 관리
+                </li>
+            </ul>
+            
+            <div class="visible-mobile" style="margin-top: auto; padding: 20px 5px 30px;">
+                <button onclick="window.location.href='index.html'" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 10px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; transition: 0.2s;">
+                    <i class="fa-solid fa-house" style="color: var(--primary-light);"></i> 메인 홈으로 돌아가기
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- SECTION 1: MY PROGRESS -->
+            <div id="sectionProgress" class="reveal">
+                <!-- Welcome -->
+                <div class="welcome-banner">
+                    <h2>안녕하세요, <span id="welcomeName">-</span> 님 👋</h2>
+                    <p>나의 건강검진 현황과 제휴 병원 정보를 확인하세요.</p>
+                </div>
+
+                <!-- Phone Number Registration (Added) -->
+                <div class="card" id="phoneRegistrationCard" style="border-left: 4px solid #f59e0b;">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: #fff7ed; color: #f59e0b;"><i class="fa-solid fa-phone"></i></div>
+                        <h3>알림톡 수신 번호 등록 (Kakao Notification Phone)</h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 12px;">알림톡을 받을 정확한 연락처를 입력해주세요. (Enter the phone number to receive Kakao notifications)</p>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="tel" id="workerPhoneInput" placeholder="010-0000-0000" style="flex: 1; padding: 10px 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none;">
+                            <button id="savePhoneBtn" onclick="updateWorkerPhone()" class="btn-submit" style="width: auto; margin-top: 0; padding: 10px 20px; background: #f59e0b;">저장 (Save)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Checkup Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-stethoscope"></i></div>
+                        <h3>나의 검진 현황</h3>
+                    </div>
+                    <div id="checkupStatus">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 불러오는 중...</div>
+                    </div>
+                </div>
+
+                <!-- Affiliated Hospitals -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon icon-green"><i class="fa-solid fa-hospital"></i></div>
+                        <h3>제휴 병원 안내</h3>
+                    </div>
+                    <div id="hospitalGuide" class="hospital-guide-container">
+                        <div id="hospitalList" class="hospital-cards">
+                            <!-- Cards will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: CHAT ROOM -->
+            <div id="sectionChat" class="hidden reveal">
+                <div class="card" style="height: 600px; display: flex; flex-direction: column; padding: 0; overflow: hidden; border: none;">
+                    <!-- Chat Header -->
+                    <div style="padding: 15px 25px; background: white; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px;">
+                        <div class="card-icon icon-purple" style="width: 36px; height: 36px; font-size: 1rem;">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 1rem; color: var(--text);">CHECKIT 1:1 케어 센터</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-circle" style="color: #10b981; font-size: 0.5rem; vertical-align: middle;"></i> 온라인 상담 대기 중</p>
+                        </div>
+                        <!-- Language Switcher -->
+                        <div id="chatLangSwitcher" class="hidden-mobile" style="margin-left: auto; display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px;">
+                            <button onclick="setChatLanguage('ko')" class="lang-btn active" data-lang="ko" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">KR</button>
+                            <button onclick="setChatLanguage('en')" class="lang-btn" data-lang="en" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">EN</button>
+                            <button onclick="setChatLanguage('cn')" class="lang-btn" data-lang="cn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">CN</button>
+                            <button onclick="setChatLanguage('vn')" class="lang-btn" data-lang="vn" style="padding: 4px 8px; border: none; border-radius: 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: 0.2s;">VN</button>
+                        </div>
+                    </div>
+
+                    <!-- Message Body -->
+                    <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 25px; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Messages will be injected here -->
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> 대화 내용을 불러오는 중...</div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div style="padding: 20px; background: white; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-end;">
+                        <input type="file" id="chatFileInput" style="display: none;" onchange="handleChatFileUpload(this)" accept="image/*,application/pdf">
+                        <button onclick="document.getElementById('chatFileInput').click()" style="width: 50px; height: 50px; background: #f1f5f9; color: #64748b; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;" title="파일 첨부">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <textarea id="chatInput" placeholder="궁금한 점을 남겨주세요..." style="flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 12px 15px; font-family: inherit; font-size: 0.9rem; resize: none; height: 50px; outline: none; transition: 0.2s; overflow-y: auto;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                        <button onclick="sendChatMessage()" style="width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s;">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: RESULT MANAGEMENT -->
+            <div id="sectionResults" class="hidden reveal">
+                <!-- Persistent hidden file input for all result uploads -->
+                <input type="file" id="resultFileInput" style="display: none;" accept="image/*,application/pdf" onchange="handleResultFileUpload(this)">
+                <div class="card" style="border-left: 4px solid var(--primary);">
+                    <div class="card-header">
+                        <div class="card-icon icon-purple"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <h3>기업에 결과지 제출하기</h3>
+                    </div>
+                    <div id="resultSubmissionArea" style="padding: 20px; text-align: center; background: #f8fafc; border-radius: 12px; border: 2px dashed var(--border);">
+                        <!-- Dynamic content -->
+                        <div id="noSubmissionUI">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                            <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                            
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button onclick="document.getElementById('resultFileInput').click()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                    <i class="fa-solid fa-camera"></i> 사진 업로드
+                                </button>
+                                <button onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                    <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="translationCard" class="card hidden">
+                    <div class="card-header">
+                        <div class="card-icon icon-blue"><i class="fa-solid fa-language"></i></div>
+                        <h3>나의 언어로 번역보기 (Translation)</h3>
+                    </div>
+                    <div style="background: #f5f3ff; padding: 20px; border-radius: 12px; border: 1px solid #ddd6fe;">
+                        <p style="font-size: 0.9rem; margin-bottom: 8px; color: #5b21b6; font-weight: 600;">제출하신 한국어 결과지를 분석하여 나의 언어로 번역된 결과를 제공합니다.</p>
+                        
+                        <div style="background: white; border-radius: 8px; padding: 12px; margin-bottom: 15px; border: 1px dashed #c4b5fd;">
+                            <p style="font-size: 0.8rem; color: #6d28d9; line-height: 1.5;">
+                                <i class="fa-solid fa-circle-info" style="color: #8b5cf6;"></i> <strong>안내사항:</strong> AI 단순 번역 특성상 의학 용어의 의미나 뉘앙스가 약간 다를 수 있습니다.<br>
+                                이를 방지하고 정확한 확인을 돕기 위해 <strong>① 원본 결과지, ② 번역 결과지, ③ KCD/ICD 국제 질병코드</strong>를 함께 제공해 드립니다.
+                            </p>
+                            <p style="font-size: 0.75rem; color: #ef4444; margin-top: 8px; font-weight: 600;">
+                                ※ CHECKIT은 번역 서비스를 제공할 뿐, 어떠한 의학적 진단이나 판단도 내리지 않음을 알려드립니다.
+                            </p>
+                        </div>
+                        
+                        <button onclick="window.openTranslationModal()" class="btn-submit" style="width: auto; padding: 12px 25px; margin-top: 0; background: #7c3aed;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 번역된 결과 확인하기
+                        </button>
+                    </div>
+                </div>
+            </div> <!-- End sectionResults -->
+        </div> <!-- End main-content -->
+    </div> <!-- End portal-wrapper -->
+</div> <!-- End portalContent -->
+
+<!-- Booking Form Modal HTML -->
+<div id="bookingModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeBookingForm()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-file-signature" style="color: var(--primary); margin-right: 10px;"></i>예약 신청서 작성</h3>
+        <form id="bookingForm" onsubmit="submitBookingForm(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>성함</label>
+                    <input type="text" id="bf_name" required>
+                </div>
+                <div class="form-group">
+                    <label>생년월일</label>
+                    <input type="date" id="bf_dob" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>연락처</label>
+                <input type="tel" id="bf_phone" placeholder="010-0000-0000" required>
+            </div>
+            <div class="form-group">
+                <label>한국 거주 주소</label>
+                <input type="text" id="bf_address" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 병원</label>
+                <input type="text" id="bf_hospital" placeholder="제휴 병원 중 선택 또는 기입" required>
+            </div>
+            <div class="form-group">
+                <label>희망 검진 날짜 (7일 기간으로 입력)</label>
+                <input type="text" id="bf_dateRange" placeholder="예: 2024.05.01 ~ 2024.05.07" required>
+            </div>
+            <div class="form-group">
+                <label>추가 검사 항목 유무</label>
+                <select id="bf_extraItems">
+                    <option value="none">없음</option>
+                    <option value="yes">있음 (상담 필요)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>개인 희망 서류 (선택 사항)</label>
+                <textarea id="bf_documents" placeholder="예: 실손보험 청구용 서류 등" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">신청서 제출하기</button>
+        </form>
+    </div>
+</div>
+
+<!-- Alimtalk Paste Modal HTML -->
+<div id="alimtalkModalOverlay" class="modal-overlay">
+    <div class="booking-modal">
+        <button class="close-modal" onclick="closeAlimtalkModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-comment-sms" style="color: var(--warning); margin-right: 10px;"></i>예약 확정 정보 올리기</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px; line-height: 1.5;">병원에서 받으신 한국어 알림톡이나 문자 내용을 아래에 복사해서 붙여넣어 주세요.</p>
+        <div class="form-group">
+            <textarea id="alimtalkContent" placeholder="여기에 내용을 붙여넣으세요..." rows="10" style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; resize: vertical;"></textarea>
+        </div>
+        <button onclick="submitAlimtalk()" class="btn-submit" style="background: var(--warning);">내용 전송하기</button>
+    </div>
+</div>
+
+<!-- Translation Modal HTML -->
+<div id="translationModalOverlay" class="modal-overlay">
+    <div class="booking-modal" style="max-width: 850px;">
+        <button class="close-modal" onclick="document.getElementById('translationModalOverlay').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+        <h3><i class="fa-solid fa-language" style="color: var(--primary); margin-right: 10px;"></i>검진 결과 번역 (Translated Result)</h3>
+        
+        <div style="background: #fff7ed; border-left: 4px solid #f97316; padding: 12px 15px; margin-bottom: 20px; border-radius: 0 8px 8px 0;">
+            <p style="font-size: 0.85rem; color: #c2410c; font-weight: 700; margin-bottom: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 읽어보시고 꼭 참고해 주세요!</p>
+            <p style="font-size: 0.75rem; color: #9a3412; line-height: 1.5;">
+                본 번역 결과는 원본의 이해를 돕기 위한 <strong>AI 자동 번역물</strong>로, 의학 용어 특성상 뉘앙스 차이가 발생할 수 있어 <strong>원본 및 국제 질병코드(KCD/ICD)와 교차로 확인</strong>하시길 권장합니다. CHECKIT은 건강검진 절차를 돕는 플랫폼이며 <strong>절대 의학적 진단이나 판단을 대신하지 않으므로</strong>, 정확한 진단을 위해서는 반드시 담당 의사와 상담하셔야 합니다.
+            </p>
+        </div>
+
+        <div id="translationContent" style="background: #f8fafc; border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p>결과지를 분석하여 번역 중입니다...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hospital Precaution Modal HTML -->
+<div id="precautionModalOverlay" class="modal-overlay">
+    <div class="booking-modal" style="max-width: 700px; padding: 0; overflow: hidden;">
+        <div style="padding: 25px 30px; background: var(--dark); color: white; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; color: white; font-size: 1.2rem;"><i class="fa-solid fa-circle-exclamation" style="color: var(--primary-light); margin-right: 10px;"></i><span id="precautionHospName">병원</span> 주의사항</h3>
+            <button class="close-modal" onclick="closePrecautionModal()" style="position: static; color: white; opacity: 0.8; font-size: 1.5rem;">&times;</button>
+        </div>
+        <div id="precautionContent" style="padding: 30px; overflow-y: auto; max-height: calc(85vh - 80px);">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+</div>
+
+
+<style>
+    /* 1. Hide the Google Translate iframe banner completely */
+    iframe.goog-te-banner-frame { display: none !important; }
+    iframe[id^="goog-te-banner-frame"] { display: none !important; }
+    .goog-te-banner-frame { display: none !important; visibility: hidden !important; }
+    
+    /* 2. Prevent body from shifting down */
+    body { top: 0px !important; position: static !important; }
+    
+    /* 3. Hide the Google Translate popup/tooltip when hovering over translated text */
+    #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+    
+    /* 4. Remove yellow highlight on translated text */
+    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+    font { background: transparent !important; }
+    
+    /* 5. Hide the translation widget completely without breaking functionality */
+    #google_translate_element { opacity: 0 !important; position: absolute !important; left: -9999px !important; z-index: -9999999 !important; pointer-events: none !important; }
+    
+    /* 6. Hide NEW Google Translate classes */
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc { display: none !important; }
+    .skiptranslate > iframe { display: none !important; }
+</style>
+
+<div id="google_translate_element"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'ko', 
+    includedLanguages: 'ko,en,zh-CN,vi',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+    // Forcefully remove Google Translate banner and fix layout shifts using MutationObserver
+    const observer = new MutationObserver(() => {
+        // Force body top back to 0
+        if (document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.setProperty('top', '0px', 'important');
+        }
+        
+        // Target any new/old banner iframes and hide them
+        document.querySelectorAll('iframe.goog-te-banner-frame, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf, .skiptranslate > iframe').forEach(el => {
+            if (el.style.display !== 'none') {
+                el.style.setProperty('display', 'none', 'important');
+                el.style.setProperty('visibility', 'hidden', 'important');
+            }
+        });
+    });
+    
+    // Start observing the body for injected elements and style modifications
+    document.addEventListener("DOMContentLoaded", () => {
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+    });
+</script>
+
+<script>
+    window.changePortalLanguage = function(langCode) {
+        // Update active button UI
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-lang') === langCode);
+        });
+
+        // Save preference to Firebase & LocalStorage
+        localStorage.setItem('checkit_lang', langCode);
+        const user = window.auth && window.auth.currentUser;
+        if (user && window.db) {
+            window.db.collection('users').doc(user.uid).get().then(doc => {
+                if(doc.exists && doc.data().workerDocId) {
+                    window.db.collection('workers').doc(doc.data().workerDocId).update({ prefLang: langCode });
+                }
+            }).catch(e => console.error("Lang save error", e));
+        }
+
+        // Trigger Google Translate Widget
+        const langMap = { 'ko': 'ko', 'en': 'en', 'cn': 'zh-CN', 'vn': 'vi' };
+        const targetLang = langMap[langCode] || 'ko';
+        
+        if (targetLang === 'ko') {
+            const iframe = document.querySelector('iframe.goog-te-banner-frame');
+            if (iframe) {
+                const restoreBtn = iframe.contentWindow.document.getElementById('restore');
+                if (restoreBtn) restoreBtn.click();
+            } else {
+                // To restore Korean, clear cookies and reload only if googtrans cookie exists
+                const hasTransCookie = document.cookie.split(';').some(c => c.trim().startsWith('googtrans='));
+                if (hasTransCookie) {
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname;
+                    window.location.reload();
+                }
+            }
+            return;
+        }
+
+        const selectField = document.querySelector("select.goog-te-combo");
+        if (selectField) {
+            selectField.value = targetLang;
+            selectField.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        } else {
+            // Retry if the widget hasn't loaded yet
+            setTimeout(() => window.changePortalLanguage(langCode), 500);
+        }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem('checkit_lang');
+        // Initial translation only if not in the default Korean state to avoid unnecessary reloads
+        if (savedLang && savedLang !== 'ko') {
+            setTimeout(() => window.changePortalLanguage(savedLang), 1000);
+        }
+    });
+
+
+    // Chat input Enter key listener
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    });
+</script>
+<!-- External Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDAdW_vJHUHuDaun2Kh94uC8ywlfOdyPco",
+        authDomain: "checkit-43341.firebaseapp.com",
+        projectId: "checkit-43341",
+        storageBucket: "checkit-43341.appspot.com",
+        messagingSenderId: "818434232492",
+        appId: "1:818434232492:web:713836b01fc11196150f09"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    function toggleMobileMenu() {
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && overlay) {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (sidebar.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+    }
+
+    // Section Switching
+    window.switchSection = (target) => {
+        // Close mobile menu if open
+        const sidebar = document.getElementById('sideDrawer');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (sidebar && sidebar.classList.contains('active')) {
+            toggleMobileMenu();
+        }
+
+        const sections = ['sectionProgress', 'sectionChat', 'sectionResults'];
+        const menus = ['menuProgress', 'menuChat', 'menuResults'];
+
+        sections.forEach(s => {
+            const el = document.getElementById(s);
+            if (el) el.classList.add('hidden');
+        });
+        menus.forEach(m => {
+            const el = document.getElementById(m);
+            if (el) el.classList.remove('active');
+        });
+
+        const targetSection = document.getElementById('section' + target.charAt(0).toUpperCase() + target.slice(1));
+        const targetMenu = document.getElementById('menu' + target.charAt(0).toUpperCase() + target.slice(1));
+        
+        if (targetSection) targetSection.classList.remove('hidden');
+        if (targetMenu) targetMenu.classList.add('active');
+        
+        if (target === 'chat') {
+            const chatBody = document.getElementById('chatMessages');
+            if (chatBody) {
+                setTimeout(() => { chatBody.scrollTop = chatBody.scrollHeight; }, 100);
+            }
+        } else if (target === 'results') {
+            window.renderResultsSection();
+        }
+    };
+
+    let chatUnsub = null;
+
+    auth.onAuthStateChanged(async (user) => {
+        const loader = document.getElementById('pageLoader');
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramWorkerDocId = urlParams.get('workerDocId');
+        const paramCompanyId = urlParams.get('companyId');
+
+        try {
+            // Check if Master Admin or regular worker
+            db.collection('users').doc(user.uid).onSnapshot(async (userDoc) => {
+                try {
+                    const userData = userDoc.data() || {};
+                    const isMaster = user.email === "master@checkit.com" || user.email === "checkit082@gmail.com" || user.email === "checkit082082@gmail.com";
+                    
+                    let workerDocId = userData.workerDocId;
+                    let companyId = userData.companyId || paramCompanyId;
+
+                    // Mode: Master Viewing a specific worker
+                    if (isMaster && paramWorkerDocId && paramCompanyId) {
+                        workerDocId = paramWorkerDocId;
+                        companyId = paramCompanyId;
+                        
+                        document.getElementById('masterBadge').classList.remove('hidden');
+                        document.getElementById('logoutBtn').classList.add('hidden');
+                        document.getElementById('closeBtn').classList.remove('hidden');
+                    } else if (userDoc.exists && userData.role !== 'worker' && !isMaster) {
+                        console.warn('Invalid role for current user');
+                        loader.style.display = 'none';
+                        document.getElementById('portalContent').classList.remove('hidden');
+                        return;
+                    }
+
+                    // 기본 정보 표시
+                    document.getElementById('displayName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+                    document.getElementById('welcomeName').textContent = userData.name || (isMaster ? '관리자' : '근로자');
+
+                    if (!workerDocId && !isMaster) {
+                        console.log("WorkerDocId missing, attempting to relink by UID...");
+                        const snap = await db.collection('workers')
+                            .where('uid', '==', user.uid)
+                            .limit(1).get();
+                        
+                        if (!snap.empty) {
+                            const newDocId = snap.docs[0].id;
+                            companyId = snap.docs[0].data().companyId;
+                            console.log("Diagnostic: Relink match found!", { newDocId, companyId });
+                            await db.collection('users').doc(user.uid).update({ 
+                                workerDocId: newDocId,
+                                companyId: companyId
+                            });
+                            await db.collection('workers').doc(newDocId).update({ uid: user.uid });
+                            console.log("Diagnostic: Relink sync complete.");
+                        } else {
+                            console.warn("Diagnostic: No worker doc found for UID. Trying manual...");
+                            tryToRelinkWorker(user.uid, userData.name || user.displayName || user.email || '근로자', companyId);
+                        }
+                    }
+
+                    console.log("Diagnostic: Current Session", { uid: user.uid, workerDocId, companyId, isMaster });
+
+                    if (workerDocId) {
+                        db.collection('workers').doc(workerDocId).onSnapshot(workerDoc => {
+                            try {
+                                if (workerDoc.exists) {
+                                    const wData = workerDoc.data();
+                                    
+                                    // Robustness: If companyId is missing from users doc, take it from worker doc
+                                    if (!companyId && wData.companyId) {
+                                        console.log("Recovered companyId from worker doc:", wData.companyId);
+                                        companyId = wData.companyId;
+                                        // Sync to users doc to satisfy Security Rules (which check getUserData().companyId)
+                                        db.collection('users').doc(user.uid).update({ companyId: companyId }).catch(e => console.warn("Failed to sync companyId:", e));
+                                        // Load hospitals now that we have companyId
+                                        startHospitalSnapshot(companyId);
+                                    }
+
+                                    if (isMaster) {
+                                        document.getElementById('displayName').textContent = wData.name + ' (조회 중)';
+                                        document.getElementById('welcomeName').textContent = wData.name;
+                                    } else {
+                                        document.getElementById('displayName').textContent = wData.name;
+                                        document.getElementById('welcomeName').textContent = wData.name;
+                                    }
+                                                                         // Populate phone input if exists
+                                     const phoneVal = wData.연락처 || wData.phone || '';
+                                     const phoneInput = document.getElementById('workerPhoneInput');
+                                     if (phoneInput && !phoneInput.value) { 
+                                         phoneInput.value = phoneVal;
+                                     }
+                                     if (phoneVal) {
+                                         document.getElementById('phoneRegistrationCard').style.borderLeftColor = 'var(--primary)';
+                                         const sBtn = document.getElementById('savePhoneBtn');
+                                         if(sBtn) sBtn.innerText = '수정 (Edit)';
+                                     }
+
+                                     const prefLang = wData.prefLang || 'ko';
+                                    document.querySelectorAll('.lang-btn').forEach(btn => {
+                                        btn.classList.toggle('active', btn.getAttribute('data-lang') === prefLang);
+                                    });
+                                    renderCheckupStatus(wData);
+                                }
+                            } catch (e) { console.error("Worker snapshot error:", e); }
+                        });
+                        loadChatMessages(workerDocId, companyId);
+                    } else {
+                        console.warn("Final workerDocId is still empty.");
+                        if (!isMaster) {
+                            const statusEl = document.getElementById('checkupStatus');
+                            if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 연동을 재시도 중입니다...</p>';
+                        }
+                    }
+
+                    if (companyId) {
+                        startHospitalSnapshot(companyId);
+                    }
+
+                    function startHospitalSnapshot(cid) {
+                        if (window._hospitalUnsub) window._hospitalUnsub();
+                        window._hospitalUnsub = db.collection('hospitals').where('companyId', '==', cid).onSnapshot(hospSnap => {
+                            renderHospitals(hospSnap.docs);
+                        });
+                    }
+
+                    loader.style.display = 'none';
+                    document.getElementById('portalContent').classList.remove('hidden');
+                } catch (snapErr) {
+                    console.error("Snapshot processing error:", snapErr);
+                    loader.style.display = 'none';
+                }
+            });
+        } catch (err) {
+            console.error('Portal sync error:', err);
+            loader.style.display = 'none';
+        }
+    });
+
+    // Chat / Workflow Logic
+    function loadChatMessages(workerDocId, companyId, retryCount = 0) {
+        if (!workerDocId) {
+            const chatBody = document.getElementById('chatMessages');
+            if (chatBody) chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">사용자 정보 확인 중...</div>';
+            return;
+        }
+
+        if (chatUnsub) chatUnsub();
+        chatUnsub = db.collection('messages')
+            .where('workerDocId', '==', workerDocId)
+            .onSnapshot({ includeMetadataChanges: true }, snap => {
+                const chatBody = document.getElementById('chatMessages');
+                if (!chatBody) return;
+
+                try {
+                    const docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    
+                    // Manual Sort
+                    docs.sort((a, b) => {
+                        const tA = (a.timestamp && a.timestamp.toMillis) ? a.timestamp.toMillis() : 0;
+                        const tB = (b.timestamp && b.timestamp.toMillis) ? b.timestamp.toMillis() : 0;
+                        return tA - tB;
+                    });
+
+                    const hasCareGuide = docs.some(m => m.type === 'guide' || m.type === 'action_check');
+                    const hasRecheckSelfGuide = docs.some(m => m.type === 'action_check' && (m.text || '').includes('재검사가 필요한 항목'));
+
+                    if (!hasCareGuide && workerDocId) {
+                        if (!window._guideSentFor?.includes(workerDocId)) {
+                            window._guideSentFor = window._guideSentFor || [];
+                            window._guideSentFor.push(workerDocId);
+                            sendSystemGuide(workerDocId, companyId);
+                        }
+                    }
+
+                    // [Trigger] Self-Recheck Guide when status is Result Complete
+                    db.collection('workers').doc(workerDocId).get().then(doc => {
+                        if (doc.exists && doc.data().status === '결과완료' && !hasRecheckSelfGuide) {
+                            if (!window._recheckGuideSentFor?.includes(workerDocId)) {
+                                window._recheckGuideSentFor = window._recheckGuideSentFor || [];
+                                window._recheckGuideSentFor.push(workerDocId);
+                                sendSelfRecheckGuide(workerDocId, companyId);
+                            }
+                        }
+                    });
+
+                    if (snap.empty) {
+                        chatBody.innerHTML = '<div style="padding: 40px; text-align: center; color: #94a3b8;">메시지가 없습니다. 1:1 케어센터에 궁금한 점을 남겨주세요.</div>';
+                        return;
+                    }
+
+                    let html = '';
+                    docs.forEach(msg => {
+                        html += renderMessage(msg);
+                    });
+                    chatBody.innerHTML = html;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } catch (e) {
+                    console.error("Render error:", e);
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 표시 중 오류가 발생했습니다.</div>';
+                }
+            }, err => {
+                console.error("Diagnostic: Chat sync error", { code: err.code, message: err.message, workerDocId });
+                const chatBody = document.getElementById('chatMessages');
+                if (!chatBody) return;
+
+                if (err.code === 'permission-denied' && retryCount < 5) {
+                    chatBody.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #64748b;">
+                            <i class="fa-solid fa-sync fa-spin"></i><br>
+                            데이터 보안 동기화 중... (${retryCount + 1})<br>
+                            <span style="font-size:0.7rem; color:#94a3b8;">잠시만 기다려주세요.</span>
+                        </div>`;
+                    setTimeout(() => loadChatMessages(workerDocId, companyId, retryCount + 1), 2000);
+                } else if (err.code === 'permission-denied') {
+                    chatBody.innerHTML = `
+                        <div style="padding: 20px; text-align: center; color: #e74c3c;">
+                            <i class="fa-solid fa-shield-halved"></i><br>
+                            보안 권한이 만료되었습니다.<br>
+                            <span style="font-size:0.7rem; color:#94a3b8;">새로고침을 시도하거나 관리자에게 문의하세요.</span>
+                        </div>`;
+                } else {
+                    chatBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #e74c3c;">대화 내용을 불러오지 못했습니다. (네트워크 오류)</div>';
+                }
+            });
+    }
+
+    function renderMessage(msg) {
+        if (!msg) return '';
+        const isSystem = msg.sender === 'system';
+        const isAdmin = msg.sender === 'admin';
+        const isWorker = msg.sender === 'worker';
+        
+        let timestamp = ''; // Clear default to avoid "전송 중..." showing briefly
+        try {
+            if (msg.timestamp && typeof msg.timestamp.toDate === 'function') {
+                timestamp = new Date(msg.timestamp.toDate()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } else if (msg.timestamp instanceof Date) {
+                timestamp = msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+        } catch (e) { console.error("Time format error", e); }
+
+        let wrapperStyle = 'display: flex; flex-direction: column; margin-bottom: 12px;';
+        if (isWorker) wrapperStyle += ' align-items: flex-end;';
+        else if (isSystem) wrapperStyle += ' align-items: center; margin: 10px 0;';
+        else wrapperStyle += ' align-items: flex-start;';
+
+        let bubbleStyle = 'max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; position: relative;';
+        if (isWorker) bubbleStyle += ' background: var(--primary); color: white; border-bottom-right-radius: 2px;';
+        else if (isSystem) bubbleStyle += ' background: transparent; color: var(--text-muted); font-size: 0.8rem; text-align: center; border: none;';
+        else bubbleStyle += ' background: white; color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);';
+
+        // Automated Translation Logic for worker view
+        let translationHtml = '';
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        if (!isWorker && prefLang !== 'ko' && msg.text && msg.type === 'text') {
+            const cacheKey = `${msg.id || msg.timestamp?.seconds || 'temp'}_${prefLang}`;
+            if (window.translationCache && window.translationCache[cacheKey]) {
+                translationHtml = `<div class="translation-box"><i class="fa-solid fa-language"></i> ${window.translationCache[cacheKey]}</div>`;
+            } else {
+                translationHtml = `<div class="translation-box" id="trans_${cacheKey}"><i class="fa-solid fa-spinner fa-spin"></i> Translating...</div>`;
+                triggerTranslation(msg.text, prefLang, cacheKey);
+            }
+        }
+
+        if (msg.type === 'guide') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: var(--dark); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-file-invoice" style="margin-right: 8px; color: var(--primary-light);"></i> 기업 건강검진 안내
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="showMyRegisteredInfo()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">내 검진 정보 확인하기</button>
+                            <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-muted); text-align: center; padding-top: 10px; border-top: 1px dashed var(--border);">검진 전 반드시 정보를 확인해 주세요.</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'booking') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px;">
+                        <div style="background: #10b981; color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-calendar-check" style="margin-right: 8px;"></i> 검진 예약 단계
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 15px; line-height: 1.6;">${msg.text || ''}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; margin-bottom: 8px;">제휴 병원 목록 보기</button>
+                            <button onclick="openBookingForm()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">예약 신청서 작성하기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'action_check') {
+            const btnColor = msg.btnColor || 'var(--primary)';
+            const btnTextColor = msg.btnTextColor || 'white';
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-left: 4px solid ${btnColor};">
+                        <div style="padding: 15px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6;">${(msg.text || '').replace(/\n/g, '<br>')}</p>
+                            <button onclick="${msg.action}" style="width: 100%; background: ${btnColor}; color: ${btnTextColor}; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">${msg.btnText}</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'date_input_request') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2px; border-top: 4px solid var(--warning);">
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <input type="date" class="resv-date-input" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; font-family: inherit;">
+                            <button onclick="submitReservationDate(this)" style="width: 100%; background: var(--dark); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">날짜 확인 및 알림 등록</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'recheck_notice') {
+            return `
+                <div style="${wrapperStyle}">
+                    <div style="background: white; border: 1px solid var(--danger); border-radius: 16px; width: 100%; max-width: 320px; overflow: hidden; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1); margin-bottom: 2px;">
+                        <div style="background: var(--danger); color: white; padding: 15px; font-weight: 700; font-size: 0.95rem;">
+                            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 8px;"></i> 재검사 안내 공지
+                        </div>
+                        <div style="padding: 18px;">
+                            <p style="font-size: 0.85rem; color: #475569; margin-bottom: 12px; line-height: 1.6; font-weight: 600;">${msg.text || ''}</p>
+                            <button onclick="switchSection('progress')" style="width: 100%; background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: 0.2s;">안내 사항 자세히 보기</button>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px;">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'image') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="max-width: 250px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: white; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <img src="${msg.url}" style="width: 100%; height: auto; display: block;">
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
+        if (msg.type === 'file') {
+            return `
+                <div style="${wrapperStyle}">
+                    ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                    <div style="${bubbleStyle}; display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.open('${msg.url}', '_blank')">
+                        <i class="fa-solid fa-file-lines" style="font-size: 1.5rem; color: var(--primary);"></i>
+                        <div style="text-align: left;">
+                            <div style="font-size: 0.85rem; font-weight: 600;">${msg.fileName || '첨부 파일'}</div>
+                            <div style="font-size: 0.7rem; opacity: 0.8;">클릭하여 보기</div>
+                        </div>
+                    </div>
+                    <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+                </div>`;
+        }
+
+        return `
+            <div style="${wrapperStyle}">
+                ${isAdmin ? '<span style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; margin-left: 5px; font-weight: 600;">체킷 케어센터</span>' : ''}
+                <div style="${bubbleStyle}">
+                    ${(msg.text || '').replace(/\n/g, '<br>')}
+                </div>
+                <span style="font-size: 0.65rem; color: #94a3b8; margin-top: 4px; ${isWorker ? 'margin-right: 5px;' : 'margin-left: 5px;'}">${timestamp}</span>
+            </div>`;
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            if (!workerDocId) {
+                showToast("근로자 정보 연동 중입니다. 잠시 후 다시 시도해주세요.", "info");
+                return;
+            }
+
+            input.value = '';
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) {
+            console.error("Chat send error:", e);
+            showToast("메시지 전송에 실패했습니다.", "error");
+        }
+    }
+
+    async function sendSystemGuide(workerDocId, companyId) {
+        try {
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'system',
+                text: '안녕하세요! 체킷 1:1 케어센터입니다. 건강검진 여정을 돕기 위해 매니저가 곧 연결될 예정입니다. 궁금한 점은 언제든 남겨주세요!',
+                type: 'guide',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Guide send error:", e); }
+    }
+
+    async function sendSelfRecheckGuide(workerDocId, companyId) {
+        try {
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'admin',
+                text: '검진 결과를 확인해 보셨나요? 만약 결과표에 이상 소견이 있거나 재검사가 필요한 항목(재검대상자)인 것으로 확인되신다면, 아래 버튼을 눌러 상태를 업데이트해 주세요.',
+                type: 'action_check',
+                btnText: '재검대상자입니다',
+                btnColor: '#ef4444',
+                action: 'setSelfRecheckStatus()',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (e) { console.error("Self-recheck guide error:", e); }
+    }
+
+    async function submitReservationDate(btn) {
+        const container = btn.closest('div');
+        const dateInput = container.querySelector('.resv-date-input');
+        const dateValue = dateInput ? dateInput.value : null;
+
+        if (!dateValue) {
+            alert('예약 날짜를 선택해주세요.');
+            return;
+        }
+
+        const loader = document.getElementById('pageLoader');
+        if (loader) loader.style.display = 'flex';
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            if (!workerDocId) throw new Error('근로자 정보 연동 오류');
+
+            // 1. Update worker document with reserved date
+            await db.collection('workers').doc(workerDocId).update({
+                reservedDate: dateValue,
+                status: '예약완료',
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // 2. Add a message to trigger Alimtalk (if logic is based on message creation)
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                companyId: companyId,
+                sender: 'system',
+                text: `[예약 확정 안내]\n검진 예약이 ${dateValue}로 등록되었습니다. 일정에 맞춰 방문해 주세요.`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            alert('예약 날짜가 등록되었습니다. 일정에 맞춰 안내 가이드를 보내드리겠습니다.');
+            
+            // UI Refresh
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+
+        } catch (e) {
+            console.error("Date submission error:", e);
+            alert('오류 발생: ' + e.message);
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    }
+
+    async function tryToRelinkWorker(uid, name, compId) {
+        try {
+            // Find by name matching
+            const q = compId 
+                ? db.collection('workers').where('companyId', '==', compId).where('name', '==', name)
+                : db.collection('workers').where('name', '==', name);
+
+            const snap = await q.limit(1).get();
+            
+            if (!snap.empty) {
+                const workerDoc = snap.docs[0];
+                const newDocId = workerDoc.id;
+                const newCompId = workerDoc.data().companyId;
+
+                await db.collection('users').doc(uid).update({ 
+                    workerDocId: newDocId,
+                    companyId: newCompId 
+                });
+                await db.collection('workers').doc(newDocId).update({ uid: uid });
+                console.log("Successfully manual-relinked:", newDocId);
+            } else {
+                const statusEl = document.getElementById('checkupStatus');
+                if(statusEl) statusEl.innerHTML = '<p class="loading-text">기업 명단에 등록되지 않은 계정입니다. 관리자에게 문의하세요.</p>';
+            }
+        } catch (e) { console.error("Relink error:", e); }
+    }
+
+    function renderCheckupStatus(data) {
+        const statusLabel = data.status || '진행 전';
+        const statuses = ['진행 전', '예약완료', '검사완료', '결과완료', '재검대상자', '재검완료'];
+        const currentIdx = statuses.indexOf(statusLabel);
+
+        let badgeClass = 'status-pending';
+        let icon = 'fa-circle-dot';
+        
+        switch(statusLabel) {
+            case '예약완료': badgeClass = 'status-reservation'; icon = 'fa-calendar-check'; break;
+            case '검사완료': badgeClass = 'status-checkup'; icon = 'fa-stethoscope'; break;
+            case '결과완료': badgeClass = 'status-result'; icon = 'fa-file-medical'; break;
+            case '재검대상자': badgeClass = 'status-recheck-target'; icon = 'fa-triangle-exclamation'; break;
+            case '재검완료': badgeClass = 'status-recheck-done'; icon = 'fa-circle-check'; break;
+        }
+
+        const statusContainer = document.getElementById('checkupStatus');
+        if (!statusContainer) return;
+
+        // Progress Stepper HTML
+        let stepperHtml = '<div class="stepper">';
+        statuses.forEach((s, idx) => {
+            if (s === '진행 전') return;
+            let stepClass = '';
+            
+            if (idx < currentIdx) stepClass = 'completed';
+            else if (idx === currentIdx) stepClass = 'active';
+            
+            if (statusLabel === '재검대상자' && s === '재검대상자') stepClass = 'warning active';
+            if (statusLabel === '재검완료' && s === '재검대상자') stepClass = 'completed';
+
+            stepperHtml += `
+                <div class="step ${stepClass}">
+                    <div class="step-icon">${idx < currentIdx ? '<i class="fa-solid fa-check"></i>' : idx}</div>
+                    <div class="step-label">${s}</div>
+                </div>
+            `;
+        });
+        stepperHtml += '</div>';
+
+        const recheckAlertHtml = (data.status === '재검대상자' && data.recheckInformed) ? `
+            <div style="background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #fecaca; box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.05);">
+                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <div style="width: 48px; height: 48px; background: #e11d48; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="color: #9f1239; margin-bottom: 6px; font-size: 1.05rem; font-weight: 800;">재검사 대상 안내</h4>
+                        <p style="color: #be123c; font-size: 0.88rem; line-height: 1.6; margin-bottom: 15px; font-weight: 500;">
+                            건강검진 결과, 일부 항목에 대한 정밀 검사 또는 재검사가 필요합니다.<br>
+                            나의 건강을 위해 가까운 시일 내에 병원에 방문해 주세요.
+                        </p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button onclick="window.handleRecheckConsult()" style="background: #e11d48; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검사 방법 안내받기</button>
+                            <button onclick="openBookingForm()" style="background: white; color: #e11d48; border: 1px solid #fecaca; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s;">재검 예약 신청서 쓰기</button>
+                            <button onclick="window.setRecheckDone()" style="background: #10b981; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);">재검사 완료 보고</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ` : '';
+
+        statusContainer.innerHTML = `
+            ${recheckAlertHtml}
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                    <span class="status-badge ${badgeClass}">
+                        <i class="fa-solid ${icon}"></i> ${statusLabel}
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">
+                        마지막 업데이트: ${data.statusUpdatedAt ? new Date(data.statusUpdatedAt.toDate()).toLocaleString() : '기록 없음'}
+                    </span>
+                </div>
+                ${stepperHtml}
+            </div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="label">소속 현장</div>
+                    <div class="value">${data.site || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">국적</div>
+                    <div class="value">${data.nationality || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">필수 검진 항목</div>
+                    <div class="value">${data.checkup || '-'}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">검진 가능 기간</div>
+                    <div class="value">${data.period || '-'}</div>
+                </div>
+            </div>
+            <div style="margin-top: 25px; padding-top: 20px; border-top: 1px dashed var(--border);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: #4338ca;">
+                    <i class="fa-solid fa-file-circle-check" style="font-size: 1.1rem;"></i>
+                    <span style="font-weight: 800; font-size: 0.95rem;">기업 제출 필요 서류</span>
+                </div>
+                <div style="background: #fdf2f8; border-radius: 12px; padding: 15px; border: 1px solid #fbcfe8;">
+                    <p style="color: #9d174d; font-size: 0.9rem; line-height: 1.6; font-weight: 600; margin: 0;">
+                        ${data.docs || '등록된 필요 서류가 없습니다.'}
+                    </p>
+                </div>
+            </div>
+        `;
+    }
+
+    // ========== RESULT FILE UPLOAD & SUBMISSION ==========
+    window.handleResultFileUpload = async function(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        console.log("File selected (Base64 Mode):", file.name, file.size);
+        const isPdf = file.type === 'application/pdf';
+
+        const loader = document.getElementById('pageLoader');
+        const lt = loader ? loader.querySelector('p') : null;
+        
+        if (loader) {
+            loader.style.display = 'flex';
+            if (lt) lt.innerText = '파일 처리 중...';
+        }
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data() ? userDoc.data().workerDocId : null;
+            if (!workerDocId) throw new Error('근로자 정보를 찾을 수 없습니다.');
+
+            // 1. Convert to Base64 with Compression fallback
+            let finalBase64 = null;
+            
+            if (!isPdf && file.type.startsWith('image/')) {
+                if (lt) lt.innerText = '이미지 최적화 중...';
+                // Image Compression logic using Canvas
+                finalBase64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = new Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            // Max dimension 1600px for 1MB safety
+                            const MAX_SIDE = 1600;
+                            if (width > MAX_SIDE || height > MAX_SIDE) {
+                                if (width > height) {
+                                    height *= MAX_SIDE / width;
+                                    width = MAX_SIDE;
+                                } else {
+                                    width *= MAX_SIDE / height;
+                                    height = MAX_SIDE;
+                                }
+                            }
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            
+                            // 0.7 quality balance between size and OCR accuracy
+                            resolve(canvas.toDataURL('image/jpeg', 0.7));
+                        };
+                        img.onerror = reject;
+                        img.src = e.target.result;
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                // PDF or regular approach
+                finalBase64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            if (!finalBase64) throw new Error('파일 처리 실패');
+
+            // 2. Submit to Firestore
+            if (lt) lt.innerText = '결과지 제출 중...';
+            await db.collection('workers').doc(workerDocId).update({
+                resultFileBase64: finalBase64,
+                resultFileUrl: firebase.firestore.FieldValue.delete(),
+                resultFileName: file.name,
+                resultFileType: file.type,
+                resultSubmittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                status: '결과완료',
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // 3. Clear OCR cache to force re-analysis if needed
+            await db.collection('workers').doc(workerDocId).update({
+                resultOcrBase64: firebase.firestore.FieldValue.delete(),
+                ocrResultText: firebase.firestore.FieldValue.delete()
+            });
+
+            alert('결과지가 성공적으로 제출되었습니다. 잠시 후 스마트 판독 기능을 이용하실 수 있습니다.');
+            
+            // UI Update
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+            
+        } catch (e) {
+            console.error("Submission error:", e);
+            alert('오류 발생: ' + e.message);
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    };
+
+    window.submitResultToCompany = async function() {
+        if (!confirm('결과지 파일 없이 검진 완료를 보고하시겠습니까?\n내역이 기업 담당자에게 즉시 전달됩니다.')) return;
+
+        const loader = document.getElementById('pageLoader');
+        if (loader) loader.style.display = 'flex';
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data()?.workerDocId;
+            if (!workerDocId) throw new Error('근로자 정보 연동 오류');
+
+            await db.collection('workers').doc(workerDocId).update({
+                status: '결과완료',
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(workerDoc.data());
+            
+            showToast('검진 완료 상태가 담당자에게 전달되었습니다.', 'success');
+        } catch (e) {
+            console.error('Submission error:', e);
+            alert('오류 발생: ' + e.message);
+        } finally {
+            if (loader) loader.style.display = 'none';
+        }
+    };
+
+    window.startConfirmationFlow = () => {
+        openAlimtalkModal();
+    };
+
+    window.openAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'flex';
+        const textarea = document.getElementById('alimtalkContent');
+        if (textarea) {
+            textarea.value = '';
+            textarea.focus();
+        }
+    };
+
+    window.closeAlimtalkModal = () => {
+        document.getElementById('alimtalkModalOverlay').style.display = 'none';
+    };
+
+    async function handleChatFileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        showToast("파일을 업로드 중입니다...", "info");
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Url = e.target.result;
+                const isImage = file.type.startsWith('image/');
+
+                await db.collection('messages').add({
+                    workerDocId: workerDocId,
+                    sender: 'worker',
+                    url: base64Url,
+                    fileName: file.name,
+                    type: isImage ? 'image' : 'file',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showToast("전송 완료!", "success");
+                input.value = '';
+            };
+            reader.readAsDataURL(file);
+
+        } catch (e) {
+            console.error("Chat upload error:", e);
+            showToast("파일 업로드에 실패했습니다.", "error");
+        }
+    }
+
+    async function submitAlimtalk() {
+        const text = document.getElementById('alimtalkContent').value.trim();
+        if (!text) {
+            alert('내용을 입력해 주세요.');
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (!user) return;
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: text,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            const prefLang = workerDoc.data().prefLang || 'ko';
+
+            if (prefLang !== 'ko') {
+                showToast(`번역 중 (${prefLang})...`, "info");
+                const translated = await translateText(text, prefLang);
+                if (translated) {
+                    await db.collection('messages').add({
+                        workerDocId: workerDocId,
+                        sender: 'admin',
+                        text: `[Translation to ${prefLang}]\n\n${translated}`,
+                        type: 'text',
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '확인 감사합니다! 마지막으로 **검진 예약 날짜**를 입력해 주시면 일정에 맞춰 주의사항 가이드를 보내드리겠습니다.',
+                type: 'date_input_request',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeAlimtalkModal();
+            showToast("정보가 성공적으로 전송되었습니다.", "success");
+        } catch (e) {
+            console.error("Submit alimtalk error:", e);
+            alert('오류가 발생했습니다. 다시 시도해 주세요.');
+        }
+    }
+
+    window.translationCache = {};
+    window.ongoingTranslations = {};
+
+    async function triggerTranslation(text, lang, cacheKey) {
+        if (window.ongoingTranslations[cacheKey]) return;
+        window.ongoingTranslations[cacheKey] = true;
+        
+        const translated = await translateText(text, lang);
+        if (translated) {
+            window.translationCache[cacheKey] = translated;
+            const el = document.getElementById(`trans_${cacheKey}`);
+            if (el) el.innerHTML = `<i class="fa-solid fa-language"></i> ${translated}`;
+        }
+        delete window.ongoingTranslations[cacheKey];
+    }
+
+    async function translateText(text, targetLang) {
+        if (!text || targetLang === 'ko') return text;
+        try {
+            const MAX_CHUNK = 1000;
+            const chunks = [];
+            for (let i = 0; i < text.length; i += MAX_CHUNK) {
+                chunks.push(text.substring(i, i + MAX_CHUNK));
+            }
+
+            const translatedChunks = await Promise.all(chunks.map(async (chunk) => {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ko&tl=${targetLang}&dt=t&q=${encodeURIComponent(chunk)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data && data[0]) {
+                    return data[0].map(x => x[0]).join('');
+                }
+                return chunk;
+            }));
+
+            return translatedChunks.join('\n');
+        } catch (e) {
+            console.error("Translation error:", e);
+            return text;
+        }
+    }
+
+    window.setChatLanguage = async (lang) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            if (!workerDocId) return;
+
+            // Update UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            // Save to Firestore
+            await db.collection('workers').doc(workerDocId).update({
+                prefLang: lang
+            });
+            
+            // Re-render chat locally
+            renderChatHistory();
+            
+            showToast(`언어가 ${lang.toUpperCase()}(으)로 설정되었습니다.`, "success");
+        } catch (e) {
+            console.error("Set language error:", e);
+        }
+    };
+
+    // [NEW] Update Worker Phone Number
+    window.updateWorkerPhone = async () => {
+        const user = auth.currentUser;
+        if (!user) return;
+        
+        const phone = document.getElementById('workerPhoneInput').value.trim();
+        if (!phone) {
+            showToast("연락처를 입력해주세요.", "error");
+            return;
+        }
+
+        const saveBtn = document.getElementById('savePhoneBtn');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 저장 중...';
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                throw new Error("근로자 정보가 연동되지 않았습니다.");
+            }
+
+            await db.collection('workers').doc(workerDocId).update({
+                연락처: phone,
+                phone: phone
+            });
+
+            showToast("연락처가 성공적으로 등록되었습니다. 이제 알림톡을 받으실 수 있습니다!", "success");
+            saveBtn.innerText = '수정 (Edit)';
+        } catch (e) {
+            console.error("Phone update error:", e);
+            showToast("저장 실패: " + e.message, "error");
+        } finally {
+            saveBtn.disabled = false;
+        }
+    };
+
+    // Registration Form Functions
+    window.openBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'flex';
+        // Auto-fill name if available
+        const nameDisplay = document.getElementById('displayName').textContent;
+        if (nameDisplay && nameDisplay !== '-' && nameDisplay !== '관리자' && nameDisplay !== '근로자') {
+            document.getElementById('bf_name').value = nameDisplay.split(' ')[0];
+        }
+    };
+
+    window.closeBookingForm = () => {
+        document.getElementById('bookingModalOverlay').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+    };
+
+    async function submitBookingForm(event) {
+        event.preventDefault();
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const formData = {
+            name: document.getElementById('bf_name').value,
+            dob: document.getElementById('bf_dob').value,
+            phone: document.getElementById('bf_phone').value,
+            address: document.getElementById('bf_address').value,
+            hospital: document.getElementById('bf_hospital').value,
+            dateRange: document.getElementById('bf_dateRange').value,
+            extraItems: document.getElementById('bf_extraItems').value,
+            documents: document.getElementById('bf_documents').value,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            status: '신청완료'
+        };
+
+        try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (!userDoc.exists) throw new Error("User record not found");
+            
+            const userData = userDoc.data();
+            const workerDocId = userData.workerDocId;
+            const companyId = userData.companyId;
+
+            formData.workerDocId = workerDocId || "ADMIN_SUBMISSION";
+            formData.companyId = companyId || "UNKNOWN";
+
+            // Determine booking type based on worker status
+            let currentStatus = '진행 전';
+            if (workerDocId && workerDocId !== "ADMIN_SUBMISSION") {
+                try {
+                    const workerDoc = await db.collection('workers').doc(workerDocId).get();
+                    if (workerDoc.exists && workerDoc.data()) {
+                        currentStatus = workerDoc.data().status || '진행 전';
+                    }
+                } catch (e) {
+                    console.warn("Worker doc fetch failed, defaulting to general:", e);
+                }
+            }
+            formData.type = (currentStatus === '재검대상자') ? 'recheck' : 'general';
+
+            // Save to bookings collection
+            await db.collection('bookings').add(formData);
+
+            // Sync phone number to workers collection for future notifications
+            if (workerDocId && workerDocId !== "ADMIN_SUBMISSION") {
+                await db.collection('workers').doc(workerDocId).update({
+                    연락처: formData.phone,
+                    phone: formData.phone // Also save as 'phone' for compatibility
+                }).catch(e => console.warn("Failed to sync phone to worker doc:", e));
+            }
+
+            // [NEW] Add to alarms collection for Master page
+            await db.collection('alarms').add({
+                type: 'new_booking',
+                workerName: formData.name,
+                companyId: companyId,
+                workerDocId: workerDocId,
+                bookingType: formData.type,
+                hospital: formData.hospital,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                message: `${formData.name}님 (${formData.type === 'recheck' ? '재검' : '일반'}) 예약 신청서 접수됨`
+            });
+
+            // Add chat notification
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'worker',
+                text: `[${formData.type === 'recheck' ? '재검사' : '일반검진'}] 신청서를 제출했습니다. [희망병원: ${formData.hospital}, 희망기간: ${formData.dateRange}]`,
+                type: 'text',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            await db.collection('messages').add({
+                workerDocId: workerDocId,
+                sender: 'admin',
+                text: '신청서가 성공적으로 접수되었습니다.\n\ncheckit 담당자가 내용을 확인 후 예약 진행 예정입니다. 병원에서 예약 확정 문자나 카톡을 받기 전까지 기다려주세요.\n\n예약 확정 안내를 받은 분은 아래 \'예약 확정 문자 올리기\' 버튼을 클릭 후 안내받은 한국어 알림톡을 복붙해서 보내주세요.',
+                type: 'action_check',
+                btnText: '예약 확정 문자 올리기',
+                action: 'startConfirmationFlow()',
+                btnColor: '#f59e0b',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            closeBookingForm();
+            alert('신청서가 성공적으로 제출되었습니다.');
+        } catch (e) {
+            console.error("Booking submission error detail:", e);
+            alert('오류가 발생했습니다: ' + e.message + '\n관리자에게 문의해 주세요.');
+        }
+    }
+
+
+    // Original renderResults function removed to avoid redundancy with renderResultsSection
+
+    window.reSubmitResult = () => {
+        // Direct trigger of file input for smoother UX as requested
+        const fileInput = document.getElementById('resultFileInput');
+        if (fileInput) fileInput.click();
+    };
+
+    // Helper to normalize images for OCR (Handles CORS, resizing, and format conversion)
+    async function normalizeImageForOCR(imageSrc) {
+        console.log("Starting normalizeImageForOCR...");
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            // Only set crossOrigin for external URLs to avoid issues with Data URLs
+            if (imageSrc && imageSrc.startsWith('http')) {
+                img.crossOrigin = 'Anonymous';
+            }
+            
+            const timeout = setTimeout(() => {
+                img.src = ""; // Stop loading
+                reject(new Error('이미지 분석 시간 초과 (15초)'));
+            }, 15000);
+
+            img.onload = () => {
+                clearTimeout(timeout);
+                console.log("Image loaded for normalization:", img.width, "x", img.height);
+                try {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Resize if too large for Firestore (Max ~600KB base64 safe)
+                    const MAX_DIM = 1200;
+                    if (width > MAX_DIM || height > MAX_DIM) {
+                        if (width > height) {
+                            height *= MAX_DIM / width;
+                            width = MAX_DIM;
+                        } else {
+                            width *= MAX_DIM / height;
+                            height = MAX_DIM;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Convert to high-quality JPEG Data URL (smaller than PNG)
+                    const result = canvas.toDataURL('image/jpeg', 0.8);
+                    console.log("Normalization complete. Result size:", Math.round(result.length / 1024), "KB");
+                    resolve(result);
+                } catch (e) {
+                    console.error("Canvas normalization error:", e);
+                    reject(e);
+                }
+            };
+
+            img.onerror = (err) => {
+                clearTimeout(timeout);
+                console.error("Image load error for normalization:", err);
+                reject(new Error('이미지를 읽을 수 없습니다. (데이터 오류)'));
+            };
+
+            img.src = imageSrc;
+        });
+    }
+
+    // Disease extraction dictionary
+    // Disease extraction dictionary (KCD-8 / ICD-10 based)
+    const DISEASE_DIC = [
+        // Cardiovascular
+        { key: /고혈압|혈압고|하이퍼텐션|hypertension|high blood pressure/i, name: '고혈압 (Hypertension)', kcd: 'I10', icd: 'I10' },
+        { key: /심부전|하트페일|heart failure/i, name: '심부전 (Heart Failure)', kcd: 'I50', icd: 'I50.9' },
+        { key: /협심증|안지나|angina/i, name: '협심증 (Angina Pectoris)', kcd: 'I20', icd: 'I20.9' },
+        { key: /심근경색|마이오카디알|myocardial infarction|heart attack/i, name: '심근경색 (Myocardial Infarction)', kcd: 'I21', icd: 'I21.9' },
+        { key: /부정맥|아리스미아|arrhythmia/i, name: '부정맥 (Arrhythmia)', kcd: 'I49', icd: 'I49.9' },
+        { key: /뇌졸중|중풍|뇌경색|스트로크|stroke/i, name: '뇌졸중/뇌경색 (Stroke)', kcd: 'I63', icd: 'I63.9' },
+
+        // Endocrine & Metabolic
+        { key: /당뇨|혈당|글루코스|디아베테스|diabetes/i, name: '당뇨병 (Diabetes Mellitus)', kcd: 'E10-E14', icd: 'E11' },
+        { key: /이상지질혈증|고지혈증|콜레스테롤|중성지방|트리글리|dyslipidemia|hyperlipidemia/i, name: '이상지질혈증 (Dyslipidemia)', kcd: 'E78', icd: 'E78.5' },
+        { key: /갑상선|서이로이드|thyroid/i, name: '갑상선 질환 (Thyroid Disease)', kcd: 'E00-E07', icd: 'E07.9' },
+        { key: /통풍|가우트|gout/i, name: '통풍 (Gout)', kcd: 'M10', icd: 'M10.9' },
+        { key: /비만|오베시티|obesity/i, name: '비만 (Obesity)', kcd: 'E66', icd: 'E66.9' },
+
+        // Digestive
+        { key: /위염|가스트리티스|gastritis/i, name: '위염 (Gastritis)', kcd: 'K29', icd: 'K29.7' },
+        { key: /위궤양|거스트릭 울서|gastric ulcer/i, name: '위궤양 (Gastric Ulcer)', kcd: 'K25', icd: 'K25.9' },
+        { key: /역류성 식도염|식도염|reflux esophagitis|gerd/i, name: '역류성 식도염 (GERD)', kcd: 'K21.0', icd: 'K21.0' },
+        { key: /지방간|패티리버|fatty liver/i, name: '지방간 (Fatty Liver)', kcd: 'K76.0', icd: 'K76.0' },
+        { key: /간염|헤파티티스|hepatitis/i, name: '간염 (Hepatitis)', kcd: 'B15-B19', icd: 'B19' },
+        { key: /간경변|서로시스|cirrhosis/i, name: '간경변 (Liver Cirrhosis)', kcd: 'K74.6', icd: 'K74.6' },
+        { key: /치질|헤모라이드|hemorrhoids/i, name: '치질 (Hemorrhoids)', kcd: 'K64', icd: 'K64.9' },
+        { key: /담석|콜레리스|gallstone/i, name: '담석증 (Gallstone)', kcd: 'K80', icd: 'K80.2' },
+
+        // Respiratory
+        { key: /결핵|티비|tuberculosis|tb/i, name: '결핵 (Tuberculosis)', kcd: 'A15-A19', icd: 'A15' },
+        { key: /천식|아스마|asthma/i, name: '천식 (Asthma)', kcd: 'J45', icd: 'J45' },
+        { key: /비염|라이나이티스|rhinitis/i, name: '비염 (Rhinitis)', kcd: 'J31.0', icd: 'J31.0' },
+        { key: /폐렴|뉴모니아|pneumonia/i, name: '폐렴 (Pneumonia)', kcd: 'J12-J18', icd: 'J18.9' },
+        { key: /만성 폐쇄성 폐질환|만성폐질환|copd/i, name: '만성 폐쇄성 폐질환 (COPD)', kcd: 'J44', icd: 'J44.9' },
+
+        // Renal & Urology
+        { key: /신부전|콩팥|kidney failure|renal failure/i, name: '신부전 (Renal Failure)', kcd: 'N17-N19', icd: 'N19' },
+        { key: /만성 신장병|신장질환|ckd/i, name: '만성 신장병 (CKD)', kcd: 'N18', icd: 'N18.9' },
+        { key: /방광염|시스티티스|cystitis/i, name: '방광염 (Cystitis)', kcd: 'N30', icd: 'N30.9' },
+        { key: /요로결석|유리너리 스톤|urinary stone/i, name: '요로결석 (Urinary Stone)', kcd: 'N20', icd: 'N20.9' },
+
+        // Musculoskeletal
+        { key: /관절염|아쓰라이티스|arthritis/i, name: '관절염 (Arthritis)', kcd: 'M13', icd: 'M13.9' },
+        { key: /골다공증|오스테오포로|osteoporosis/i, name: '골다공증 (Osteoporosis)', kcd: 'M81', icd: 'M81.9' },
+        { key: /디스크|추간판|disc/i, name: '추간판 장애 (Disc)', kcd: 'M51', icd: 'M51.2' },
+
+        // Others
+        { key: /빈혈|어지럼|아네미아|anemia/i, name: '빈혈 (Anemia)', kcd: 'D64.9', icd: 'D64.9' },
+        { key: /백내장|카타랙트|cataract/i, name: '백내장 (Cataract)', kcd: 'H26', icd: 'H26.9' },
+        { key: /두드러기|얼티카리아|urticaria/i, name: '두드러기 (Urticaria)', kcd: 'L50', icd: 'L50.9' },
+        { key: /아토피|atopy/i, name: '아토피 피부염 (Atopic Dermatitis)', kcd: 'L20', icd: 'L20.9' },
+
+        // Cancers (Common)
+        { key: /위암|stomach cancer|gastric cancer/i, name: '위암 (Gastric Cancer)', kcd: 'C16', icd: 'C16.9' },
+        { key: /간암|liver cancer|hcc/i, name: '간암 (Liver Cancer)', kcd: 'C22', icd: 'C22.0' },
+        { key: /폐암|lung cancer/i, name: '폐암 (Lung Cancer)', kcd: 'C34', icd: 'C34.9' },
+        { key: /대장암|colorectal cancer/i, name: '대장암 (Colorectal Cancer)', kcd: 'C18-C20', icd: 'C18.9' },
+        { key: /유방암|breast cancer/i, name: '유방암 (Breast Cancer)', kcd: 'C50', icd: 'C50.9' }
+    ];
+
+    function extractDiseaseCodes(text) {
+        if (!text) return [];
+        const found = [];
+        DISEASE_DIC.forEach(d => {
+            if (d.key.test(text)) {
+                found.push({ name: d.name, kcd: d.kcd, icd: d.icd });
+            }
+        });
+        return found;
+    }
+
+    // Translation Logic
+    window.openTranslationModal = async () => {
+        const modal = document.getElementById('translationModalOverlay');
+        const content = document.getElementById('translationContent');
+        const prefLang = document.querySelector('.lang-btn.active')?.getAttribute('data-lang') || 'ko';
+        
+        modal.style.display = 'flex';
+        content.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #94a3b8;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <p id="ocrStatusText">결과지 이미지를 분석하는 중입니다...</p>
+                <div id="ocrProgressBar" style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; margin-top: 15px; overflow: hidden;">
+                    <div id="ocrProgressInner" style="width: 0%; height: 100%; background: var(--primary); transition: 0.3s;"></div>
+                </div>
+            </div>
+        `;
+
+        try {
+            const user = auth.currentUser;
+            if (!user) throw new Error('로그인이 필요합니다.');
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const userData = userDoc.data();
+            if (!userData || !userData.workerDocId) throw new Error('근로자 정보가 연결되지 않았습니다.');
+            
+            const workerDoc = await db.collection('workers').doc(userData.workerDocId).get();
+            const wData = workerDoc.data();
+            const fileContent = wData.resultFileBase64 || wData.resultFileUrl;
+
+            if (!wData || !fileContent) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">제출된 결과지 파일이 없습니다. 결과지를 먼저 업로드해 주세요.</div>';
+                return;
+            }
+
+            let rawImageSource = fileContent;
+            let processingImage = null;
+
+            // Prefer the optimized base64 for OCR to bypass CORS entirely
+            if (wData.resultOcrBase64) {
+                processingImage = wData.resultOcrBase64;
+            } else if (wData.resultFileType === 'application/pdf') {
+                const statusEl = document.getElementById('ocrStatusText');
+                if (statusEl) statusEl.innerText = 'PDF 스마트 판독 준비 중...';
+                
+                try {
+                    let bytes = null;
+                    if (rawImageSource.startsWith('data:')) {
+                        // Data URL
+                        const base64Content = rawImageSource.split(',')[1];
+                        const binaryContent = atob(base64Content);
+                        bytes = new Uint8Array(binaryContent.length);
+                        for (let i = 0; i < binaryContent.length; i++) {
+                            bytes[i] = binaryContent.charCodeAt(i);
+                        }
+                    } else {
+                        // Storage URL - pdf.js fetch and convert to array buffer
+                        if (statusEl) statusEl.innerText = 'PDF 데이터 수신 중...';
+                        const response = await fetch(rawImageSource);
+                        const buffer = await response.arrayBuffer();
+                        bytes = new Uint8Array(buffer);
+                    }
+
+                    const loadingTask = pdfjsLib.getDocument({ data: bytes });
+                    const pdf = await loadingTask.promise;
+                    const page = await pdf.getPage(1);
+                    const viewport = page.getViewport({ scale: 2.0 });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                    processingImage = canvas.toDataURL('image/png');
+                } catch (pdfErr) {
+                    console.error('PDF Conversion Error:', pdfErr);
+                    throw new Error('PDF 파일 변환에 실패했습니다. (CORS 또는 파일 오류)');
+                }
+            } else {
+                // For images without resultOcrBase64, try normalization
+                const statusEl = document.getElementById('ocrStatusText');
+                if (statusEl) statusEl.innerText = '이미지 데이터 최적화 중...';
+                try {
+                    processingImage = await normalizeImageForOCR(rawImageSource);
+                } catch (normErr) {
+                    console.error('Normalization error:', normErr);
+                    // Fallback: If it's already a data URL, try it directly
+                    if (rawImageSource.startsWith('data:')) {
+                        processingImage = rawImageSource;
+                    } else {
+                        throw new Error('보안 정책(CORS)으로 인해 파일을 분석할 수 없습니다. 파일을 다시 업로드해 주세요.');
+                    }
+                }
+            }
+
+            if (!processingImage) throw new Error('처리할 이미지를 생성할 수 없습니다.');
+
+            // OCR Start
+            const ocrStatusEl = document.getElementById('ocrStatusText');
+            if (ocrStatusEl) ocrStatusEl.innerText = '인공지능 분석 엔진 초기화 중...';
+            
+            // Use high-level simplify API for better stability in Tesseract v5
+            const { data: { text } } = await Tesseract.recognize(processingImage, 'kor', {
+                logger: m => {
+                    if (m && m.status === 'recognizing text') {
+                        const pct = Math.round((m.progress || 0) * 100);
+                        const progressEl = document.getElementById('ocrProgressInner');
+                        const statusEl = document.getElementById('ocrStatusText');
+                        if (progressEl) progressEl.style.width = pct + '%';
+                        if (statusEl) statusEl.innerText = `텍스트 판독 중... (${pct}%)`;
+                    }
+                }
+            });
+
+            if (!text || text.trim().length === 0) {
+                content.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">데이터를 분석할 수 없습니다. 문서 가림이나 흔들림이 없는 사진을 다시 업로드해 주세요.</div>';
+                return;
+            }
+
+            // Translation Start
+            const statusEl = document.getElementById('ocrStatusText');
+            if (statusEl) statusEl.innerText = `번역 중입니다... (${prefLang.toUpperCase()})`;
+            const translated = await translateText(text, prefLang);
+
+            // Display Results
+            const langName = { ko: '한국어', en: 'English', cn: 'Chinese', vn: 'Vietnamese' }[prefLang] || prefLang;
+            
+            content.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-file-lines"></i> 원본 텍스트 (Original Text)
+                        </h4>
+                        <div class="notranslate" translate="no" style="background: white; padding: 15px; border-radius: 10px; border: 1px solid var(--border); font-size: 0.85rem; max-height: 200px; overflow-y: auto; line-height: 1.6; white-space: pre-line;">
+                            ${text}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom: 10px; color: var(--primary); font-size: 0.8rem; text-transform: uppercase;">
+                            <i class="fa-solid fa-language"></i> 번역된 결과 (Translated - ${langName})
+                        </h4>
+                        <div style="background: #f5f3ff; padding: 15px; border-radius: 10px; border: 1px solid #ddd6fe; font-size: 0.9rem; max-height: 250px; overflow-y: auto; line-height: 1.6; font-weight: 500; white-space: pre-line; color: #4338ca;">
+                            ${translated}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="copyTranslationToClipboard(\`${translated.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" style="flex: 1; border: 1px solid var(--primary); background: white; color: var(--primary); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-copy"></i> 번역 내용 복사
+                        </button>
+                        <button onclick="window.downloadTranslationAsPDF()" style="flex: 1; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-file-pdf"></i> PDF로 다운로드
+                        </button>
+                    </div>
+
+                    <!-- Disease Code Section -->
+                    <div id="diseaseInfoSection" style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h4 style="color: #e11d48; font-size: 0.85rem; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <i class="fa-solid fa-file-medical"></i> 감지된 질병 코드 (Detected Disease Codes)
+                            </h4>
+                            <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                                <div style="font-size: 0.65rem; color: var(--text-muted);"><i class="fa-solid fa-circle-info"></i> 궁금한 질병코드는 직접 검색 가능합니다.</div>
+                                <div style="display: flex; gap: 5px;">
+                                    <input type="text" id="diseaseSearchInput" placeholder="질병명 또는 코드 검색..." style="padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; width: 180px;">
+                                    <button onclick="window.manualSearchDisease()" style="background: var(--dark); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="diseaseCodeList" style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+                            <!-- Will be filled by JS -->
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Process and display disease codes
+            const foundDiseases = extractDiseaseCodes(text);
+            const diseaseListEl = document.getElementById('diseaseCodeList');
+            if (foundDiseases.length > 0) {
+                diseaseListEl.innerHTML = foundDiseases.map(d => `
+                    <div style="background: white; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05);">
+                        <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name}</div>
+                        <div style="display: flex; gap: 8px;">
+                            <span style="background: #fff1f2; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                            <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                diseaseListEl.innerHTML = `
+                    <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px; border: 1px dashed var(--border); color: var(--text-muted); font-size: 0.85rem;">
+                        감지된 주요 질병 코드가 없습니다.
+                    </div>
+                `;
+            }
+
+        } catch (e) {
+            console.error('Translation process error:', e);
+            const errMsg = e && e.message ? e.message : String(e);
+            content.innerHTML = `<div style="padding:40px; text-align:center; color:var(--danger);">분석 중 오류 발생: ${errMsg}</div>`;
+        }
+    };
+    
+    window.manualSearchDisease = () => {
+        const query = document.getElementById('diseaseSearchInput').value.trim().toLowerCase();
+        if (!query) {
+            alert('검색어를 입력해 주세요.');
+            return;
+        }
+
+        const results = DISEASE_DIC.filter(d => 
+            d.name.toLowerCase().includes(query) || 
+            d.kcd.toLowerCase().includes(query) || 
+            d.icd.toLowerCase().includes(query) ||
+            (d.key && d.key.test(query))
+        );
+
+        const diseaseListEl = document.getElementById('diseaseCodeList');
+        if (results.length > 0) {
+            const resultsHtml = results.map(d => `
+                <div style="background: #fff1f2; border: 1px solid #fecaca; border-radius: 10px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(225, 29, 72, 0.05); margin-bottom: 10px;">
+                    <div style="font-weight: 700; color: #9f1239; font-size: 0.9rem;">${d.name} <span style="font-size: 0.7rem; color: #e11d48;">(검색결과)</span></div>
+                    <div style="display: flex; gap: 8px;">
+                        <span style="background: white; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #fecaca;">KCD: ${d.kcd}</span>
+                        <span style="background: #f8fafc; color: #64748b; padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; border: 1px solid #e2e8f0;">ICD-10: ${d.icd}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Prepend results if it's a search
+            diseaseListEl.innerHTML = resultsHtml + (diseaseListEl.innerHTML.includes('감지된 주요 질병 코드가 없습니다.') ? '' : diseaseListEl.innerHTML);
+            
+            showToast(`${results.length}개의 질병 코드를 찾았습니다.`, "success");
+        } else {
+            showToast("검색 결과가 없습니다.", "error");
+        }
+    };
+
+    window.downloadTranslationAsPDF = () => {
+        const element = document.getElementById('translationContent');
+        const nameText = document.getElementById('displayName').innerText.split(' ')[0] || 'worker';
+        const opt = {
+            margin:       [15, 15],
+            filename:     `CHECKIT_Result_${nameText}_${new Date().toISOString().slice(0,10)}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Create a clone for PDF rendering to avoid UI glitches
+        const clone = element.cloneNode(true);
+        clone.id = 'pdf-render-clone';
+        clone.style.padding = '30px';
+        clone.style.background = 'white';
+        clone.style.width = '180mm';
+        clone.style.height = 'auto';
+        
+        // Ensure all text is visible in PDF and remove buttons
+        const flexContainers = clone.querySelectorAll('div[style*="display: flex; gap: 10px;"]');
+        flexContainers.forEach(fc => {
+            if (fc.innerHTML.includes('fa-copy') || fc.innerHTML.includes('fa-file-pdf')) {
+                fc.remove(); // Remove the button container entirely
+            }
+        });
+        
+        // Hide individual buttons just in case
+        clone.querySelectorAll('button').forEach(btn => btn.remove());
+        
+        // Expand scrollable text areas aggressively
+        const scrollDivs = clone.querySelectorAll('div');
+        scrollDivs.forEach(div => {
+            if (div.style.maxHeight || div.style.overflowY) {
+                div.style.setProperty('max-height', 'none', 'important');
+                div.style.setProperty('height', 'auto', 'important');
+                div.style.setProperty('overflow', 'visible', 'important');
+                div.style.setProperty('overflow-y', 'visible', 'important');
+            }
+        });
+
+        // Add header to PDF
+        const header = document.createElement('div');
+        header.innerHTML = `
+            <div style="text-align:center; border-bottom: 2px solid #6366f1; padding-bottom: 10px; margin-bottom: 20px; font-family: 'Pretendard', sans-serif;">
+                <h2 style="color: #1e1b4b; margin: 0;">CHECKIT Medical Result Translation</h2>
+                <div style="font-size: 0.8rem; color: #64748b; margin-top: 5px;">AI Automated Translation Service</div>
+            </div>
+        `;
+        clone.prepend(header);
+
+        // Add footer
+        const footer = document.createElement('div');
+        footer.innerHTML = `
+            <div style="text-align:center; border-top: 1px solid #e2e8f0; padding-top: 10px; margin-top: 30px; font-size: 0.7rem; color: #94a3b8; font-family: 'Pretendard', sans-serif;">
+                This translation is automatically generated by AI. Please consult a doctor for official diagnosis.
+            </div>
+        `;
+        clone.appendChild(footer);
+
+        showToast("PDF 생성을 시작합니다...", "info");
+        html2pdf().set(opt).from(clone).save().then(() => {
+            showToast("PDF 다운로드가 완료되었습니다.", "success");
+        }).catch(err => {
+            console.error("PDF generation error:", err);
+            showToast("PDF 생성에 실패했습니다.", "error");
+        });
+    };
+
+    window.copyTranslationToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('복사되었습니다!', 'success');
+        }).catch(err => {
+            showToast('복사 실패', 'error');
+        });
+    };
+
+    async function updateStatus(newStatus) {
+        try {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = userDoc.data().workerDocId;
+            
+            if (!workerDocId) {
+                alert('연결된 직원 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            const loader = document.getElementById('pageLoader');
+            loader.style.display = 'flex';
+            
+            await db.collection('workers').doc(workerDocId).update({
+                status: newStatus,
+                statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Local refresh will be handled by the state change listener if we were using one,
+            // but here we just reload the data manually for simplicity.
+            const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+            renderCheckupStatus(updatedWorker.data());
+            
+            alert(`검진 상태가 '${newStatus}'(으)로 업데이트되었습니다.`);
+        } catch (err) {
+            console.error('Status update error:', err);
+            alert('상태 업데이트에 실패했습니다.');
+        } finally {
+            document.getElementById('pageLoader').style.display = 'none';
+        }
+    }
+
+    window.setSelfRecheckStatus = async () => {
+        if (confirm("정말로 '재검대상자' 상태로 변경하시겠습니까?\n이 작업은 되돌릴 수 없으며 관리자가 확인하게 됩니다.")) {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const workerDocId = userDoc.data().workerDocId;
+                if (!workerDocId) return;
+
+                const loader = document.getElementById('pageLoader');
+                if (loader) loader.style.display = 'flex';
+
+                await db.collection('workers').doc(workerDocId).update({
+                    status: '재검대상자',
+                    recheckInformed: true,
+                    statusUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                const updatedWorker = await db.collection('workers').doc(workerDocId).get();
+                renderCheckupStatus(updatedWorker.data());
+                showToast("재검대상자로 상태가 변경되었습니다.", "success");
+                
+                // [NEW] Automatically switch to status section to show the alert card
+                switchSection('progress');
+            } catch (e) {
+                console.error("Self recheck error:", e);
+                alert("처리 중 오류가 발생했습니다.");
+            } finally {
+                document.getElementById('pageLoader').style.display = 'none';
+            }
+        }
+    }
+
+    window.setRecheckDone = async () => {
+        if (confirm("재검사를 모두 완료하셨습니까?\n상태를 '재검완료'로 변경하여 기업 담당자에게 알립니다.")) {
+            await updateStatus('재검완료');
+        }
+    }
+
+    window.handleRecheckConsult = () => {
+        switchSection('chat');
+        setTimeout(() => {
+            openBookingForm();
+        }, 300);
+    }
+
+    let kakaoMap = null;
+    let markers = [];
+
+    function renderHospitals(docs) {
+        const container = document.getElementById('hospitalList');
+        if (docs.length === 0) {
+            container.innerHTML = '<p class="loading-text">등록된 제휴 병원이 없습니다.</p>';
+            return;
+        }
+
+        // Initialize Map once
+        if (!kakaoMap && window.kakao && kakaoMap === null) {
+            const mapContainer = document.getElementById('hospitalMap');
+            const mapOption = { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 8 };
+            kakaoMap = new kakao.maps.Map(mapContainer, mapOption);
+        }
+
+        let html = '';
+        const now = new Date();
+        const day = now.getDay(); // 0:Sun, 1:Mon...
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+        docs.forEach((doc, idx) => {
+            const h = doc.data();
+            const id = doc.id;
+            
+            const cardId = `hospCard_${idx}`;
+            
+            // Standard fallback URLs using name
+            const naverSearchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(h.name)}`;
+            const kakaoSearchUrl = `https://map.kakao.com/link/search/${encodeURIComponent(h.name)}`;
+
+            html += `
+                <div class="hospital-card" id="${cardId}">
+                    <div class="h-card-name"><i class="fa-solid fa-square-h" style="color:var(--primary);"></i> ${h.name}</div>
+                    <div class="h-card-meta-detail" style="display:flex; flex-direction:column; gap:6px; margin-top:5px; border-top:1px dashed var(--border); padding-top:10px;">
+                        <div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-calendar-check" style="color:#10b981; margin-right:5px;"></i> <strong>검진기간:</strong> ${h.schedule || '-'}</div>
+                        <div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-clock" style="color:#0ea5e9; margin-right:5px;"></i> <strong>예약기간:</strong> ${h.period || '-'}</div>
+                        ${h.extraCost ? `<div style="font-size:0.8rem; color:#475569;"><i class="fa-solid fa-comment-medical" style="color:#f43f5e; margin-right:5px;"></i> <strong>추가옵션:</strong> ${h.extraCost}</div>` : ''}
+                        <div id="${cardId}_phone" style="font-size:0.8rem; color:#64748b;"></div>
+                    </div>
+                    
+                    <!-- Portal Aggregated Action: Highlighted Prompt -->
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin: 5px 0 2px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:24px; height:24px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                                <i class="fa-solid fa-clock" style="font-size:0.8rem; color:var(--primary);"></i>
+                            </div>
+                            <div>
+                                <div style="font-size:0.78rem; font-weight:800; color:#1e1b4b;">포털 정보 확인 필요</div>
+                                <div style="font-size:0.7rem; color:#64748b; line-height:1.3;">실제 포털(네이버/카카오)에서 **진료 시간, 점심 시간, 휴진일** 등을 확인하세요.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-card-actions">
+                        <a href="${naverSearchUrl}" target="_blank" class="btn-h-action btn-portal-naver" id="${cardId}_naver" onclick="event.stopPropagation()">
+                            <img src="https://www.naver.com/favicon.ico" style="width:14px;height:14px;border-radius:2px;"> 네이버
+                        </a>
+                        <a href="${kakaoSearchUrl}" target="_blank" class="btn-h-action btn-portal-kakao" id="${cardId}_kakao" onclick="event.stopPropagation()">
+                            <i class="fa-comment fa-solid" style="font-size:0.8rem;"></i> 카카오
+                        </a>
+                        <a href="#" class="btn-h-action btn-h-call hidden" id="${cardId}_callBtn" onclick="event.stopPropagation()"><i class="fa-solid fa-phone"></i> 전화</a>
+                    </div>
+                    <div class="h-card-actions" style="margin-top: -5px;">
+                        ${h.hasLink === 'Y' && h.link ? `
+                        <div style="width:100%;">
+                            <a href="${h.link}" target="_blank" class="btn-h-action btn-h-book" style="background:#4f46e5; color:white; width:100%;" onclick="event.stopPropagation()">
+                                <i class="fa-solid fa-calendar-check"></i> 간편 예약하기
+                            </a>
+                            ${h.code ? `<div style="text-align:center; font-size:0.7rem; color:#94a3b8; margin-top:5px;">기업코드: <strong>${h.code}</strong></div>` : ''}
+                        </div>` : ''}
+                        <button onclick="openPrecautionModal('${h.name}')" class="btn-h-action" style="display:flex; border:1px solid #fecaca; border-radius:10px; color:#e11d48; background:#fff1f2; cursor:pointer;">
+                            <i class="fa-solid fa-circle-exclamation"></i> 주의사항
+                        </button>
+                    </div>
+                </div>`;
+            
+            // Trigger Real-time Data Fetch from Portals
+            setTimeout(() => fetchHospitalLiveInfo(h.name, cardId), 100 * idx);
+        });
+        container.innerHTML = html;
+    }
+
+    // [New] Real-time Hospital Info Aggregation logic
+    function fetchHospitalLiveInfo(hospName, cardId) {
+        if (!window.kakao || !window.kakao.maps || !window.kakao.maps.services) return;
+        
+        const ps = new kakao.maps.services.Places();
+        ps.keywordSearch(hospName, (data, status) => {
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const info = data[0]; // Take the most relevant match
+                
+                // Update Address
+                const addrEl = document.getElementById(`${cardId}_address`);
+                if (addrEl) addrEl.innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> ${info.address_name}`;
+                
+                // Update Phone
+                const phoneEl = document.getElementById(`${cardId}_phone`);
+                if (phoneEl) {
+                    if (info.phone) {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${info.phone}`;
+                        const callBtn = document.getElementById(`${cardId}_callBtn`);
+                        if (callBtn) {
+                            callBtn.href = `tel:${info.phone}`;
+                            callBtn.classList.remove('hidden');
+                        }
+                    } else {
+                        phoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+                    }
+                }
+
+                // Update Action Links with precise location info if available
+                const naverBtn = document.getElementById(`${cardId}_naver`);
+                const kakaoBtn = document.getElementById(`${cardId}_kakao`);
+                const routeBtn = document.getElementById(`${cardId}_route`);
+
+                const query = encodeURIComponent(info.place_name + ' ' + (info.road_address_name || info.address_name));
+                if (naverBtn) naverBtn.href = `https://map.naver.com/v5/search/${query}`;
+                if (kakaoBtn) kakaoBtn.href = info.place_url || `https://map.kakao.com/link/search/${query}`;
+                if (routeBtn) {
+                    routeBtn.href = `https://map.kakao.com/link/to/${info.place_name},${info.y},${info.x}`;
+                    routeBtn.style.display = 'flex';
+                }
+
+            } else {
+                // Fallback for search failure
+                document.getElementById(`${cardId}_address`).innerHTML = `<i class="fa-solid fa-location-dot" style="font-size:0.75rem;"></i> 주소 정보 없음`;
+                document.getElementById(`${cardId}_phone`).innerHTML = `<i class="fa-solid fa-phone"></i> 연락처 미등록`;
+            }
+        });
+    }
+
+    function doLogout() {
+        auth.signOut().then(() => { window.location.href = 'index.html'; });
+    }
+
+    function showToast(message, type = 'success') {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3100);
+    }
+
+    // ========== RESULT FILE UPLOAD & SUBMISSION ==========
+    window.renderResultsSection = async function(workerDocData) {
+        const area = document.getElementById('resultSubmissionArea');
+        if (!area) return;
+
+        let w = workerDocData;
+        if (!w) {
+            const user = auth.currentUser;
+            if (!user) return;
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            const workerDocId = (userDoc.data() || {}).workerDocId;
+            if (!workerDocId) return;
+            const workerDoc = await db.collection('workers').doc(workerDocId).get();
+            if (!workerDoc.exists) return;
+            w = workerDoc.data();
+        }
+
+        try {
+            const hasFile = w.resultFileBase64 || w.resultFileUrl;
+            if (hasFile) {
+                const fileSource = w.resultFileBase64 || w.resultFileUrl;
+                const submittedAt = w.resultSubmittedAt ? new Date(w.resultSubmittedAt.seconds * 1000).toLocaleString('ko-KR') : '-';
+                const isImage = w.resultFileType && w.resultFileType.startsWith('image/');
+                
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">결과지 제출 완료</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">파일명: ${w.resultFileName || '첨부파일'}</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:18px;">제출일: ${submittedAt}</p>
+                        ${isImage ? `<div style="border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:15px; display:inline-block; background:white;"><img src="${fileSource}" style="max-width:300px; max-height:250px; border-radius:6px;"></div><br>` : ''}
+                        <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; display:inline-flex; align-items:center; gap:8px; background:var(--dark);">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i> 결과지 다시 올리기
+                        </button>
+                    </div>
+                `;
+
+                // Show translation card
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.remove('hidden');
+            } else if (w.status === '결과완료') {
+                area.innerHTML = `
+                    <div style="text-align:center;">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:#10b981; margin-bottom:12px;"></i>
+                        <h3 style="color:#059669; margin-bottom:6px;">검진 완료 보고됨</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:18px;">파일이 첨부되지 않았습니다. 결과지를 추가로 업로드할 수 있습니다.</p>
+                        <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width:auto; padding:10px 25px; margin-top:0; background:var(--dark);">
+                            <i class="fa-solid fa-camera"></i> 결과지 업로드
+                        </button>
+                    </div>
+                `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
+            } else {
+                area.innerHTML = `
+                    <div id="noSubmissionUI">
+                        <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                        <p style="font-weight: 600; color: var(--text);">아직 제출된 결과지가 없습니다.</p>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">검진 결과표(결과지)나 보건증을 찍어서 업로드하거나,<br>확인 버튼을 눌러 기업에 검진 완료를 알릴 수 있습니다.</p>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button type="button" onclick="window.reSubmitResult()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0; background: var(--dark);">
+                                <i class="fa-solid fa-camera"></i> 사진 업로드
+                            </button>
+                            <button type="button" onclick="window.submitResultToCompany()" class="btn-submit" style="width: auto; padding: 10px 20px; margin-top: 0;">
+                                <i class="fa-solid fa-paper-plane"></i> 바로 제출하기
+                            </button>
+                        </div>
+                    </div>
+                `;
+                const transCard = document.getElementById('translationCard');
+                if (transCard) transCard.classList.add('hidden');
+            }
+        } catch (e) {
+            console.error('Render results error:', e);
+        }
+    };
+
+    window.openPrecautionModal = (hospName) => {
+        document.getElementById('precautionHospName').innerText = hospName;
+        document.getElementById('precautionModalOverlay').style.display = 'flex';
+        
+        const contentArea = document.getElementById('precautionContent');
+        
+        // Verbatim content from images for KMI
+        if (hospName.includes('KMI') || hospName.includes('한국의학연구소')) {
+            contentArea.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 25px; line-height: 1.6;">
+                    
+                    <!-- 14일 전 -->
+                    <section>
+                        <h4 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid #eef2ff; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-calendar-days"></i> 건강검진 14일 전
+                        </h4>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                            <strong style="color: var(--dark); display: block; margin-bottom: 8px;">약물 복용 안내</strong>
+                            <ul style="padding-left: 20px; color: #475569; font-size: 0.9rem; display: flex; flex-direction: column; gap: 6px;">
+                                <li>위고비, 마운자로, 오젬픽 등 비만/당뇨병 치료제로 사용되는 GLP-1 수용체 작용제는 위장 운동을 지연시켜 내시경 검사 시 음식물 잔류 가능성을 높일 수 있습니다.</li>
+                                <li>검진일 기준 최소 2주 전부터 해당 주사제 투여 및 약물 복용을 중단하시기 바랍니다.</li>
+                                <li>중단 전, 반드시 처방 주치의와 사전 상담을 진행해 주시기 바랍니다.</li>
+                                <li>위장관 증상(심한 오심, 구토, 복부팽만)이 있는 경우 검진 전 의료진과 상담하시기 바랍니다.</li>
+                                <li style="color: var(--danger); font-weight: 600; list-style: none; margin-left: -20px;">※ 단, 2주 이상 중단하더라도 개인차에 따라 위 내 음식물 잔류로 인해 재검이 필요할 수 있습니다.</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 7일 전 -->
+                    <section>
+                        <h4 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid #eef2ff; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-calendar-days"></i> 건강검진 7일 전
+                        </h4>
+                        <div style="background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                            <strong style="color: var(--dark); display: block; margin-bottom: 8px;">약물 복용 안내</strong>
+                            <p style="color: #475569; font-size: 0.9rem;">
+                                항혈소판제 또는 항응고제(아스피린, 아스트릭스, 플라빅스, 프레탈, 와파린(쿠마딘), 프라다사, 자렐토, 브릴린타 등)를 복용하시는 분은 내시경 검사 중 조직검사나 용종제거 시 출혈의 위험이 있으므로 반드시 처방한 의사와 사전 협의 후 약 1주일 혹은 최소 일 수 동안 복용을 중단하십시오.
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 전날 -->
+                    <section>
+                        <h4 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px solid #eef2ff; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-calendar-day"></i> 건강검진 전날
+                        </h4>
+                        <div style="background: #fdf2f8; padding: 15px; border-radius: 12px; border: 1px solid #fbcfe8;">
+                            <strong style="color: #9d174d; display: block; margin-bottom: 8px;">금식</strong>
+                            <ul style="padding-left: 20px; color: #475569; font-size: 0.9rem; display: flex; flex-direction: column; gap: 6px;">
+                                <li>검사 전 8시간 이상 금식해야 합니다. (내원시간 기준 12시간 이상 금식 권장)
+                                    <ul style="margin-top: 4px; color: #64748b; font-size: 0.85rem;">
+                                        <li>오전 예약자 : 오후 8시 전까지 가벼운 식사</li>
+                                        <li>오후 예약자 : 밤 12시 전까지 가벼운 식사</li>
+                                    </ul>
+                                </li>
+                                <li style="color: #be123c; font-weight: 700;">금식 시간 중엔 물, 껌, 사탕, 담배, 커피, 색 있는 음료, 유제품 모두 절대 드시면 안됩니다.</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 여성고객 -->
+                    <section>
+                        <h4 style="color: #be185d; font-size: 1.1rem; border-bottom: 2px solid #fdf2f8; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-person-dress"></i> 여성고객 안내
+                        </h4>
+                        <div style="background: #eff6ff; padding: 12px 18px; border-radius: 10px; border-left: 4px solid #2563eb; margin-bottom: 15px;">
+                            <p style="color: #1e40af; font-size: 0.9rem; font-weight: 700;">생리 종료일로부터 7일 이후에 소변검사, 부인과검사가 가능합니다.</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div>
+                                <strong style="color: var(--dark); font-size: 0.95rem; display: block; margin-bottom: 5px;">임신 가능성</strong>
+                                <ul style="padding-left: 20px; color: #475569; font-size: 0.9rem; display: flex; flex-direction: column; gap: 4px;">
+                                    <li>임신 가능성이 있는 경우 X-ray, 내시경, 방사선 관련 검사 등 일부 항목은 제한됩니다.</li>
+                                    <li>검진 전 임신 여부를 확인하시고, 예약 또는 접수 시 반드시 미리 알려주시기 바랍니다.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong style="color: var(--dark); font-size: 0.95rem; display: block; margin-bottom: 5px;">모유 수유</strong>
+                                <ul style="padding-left: 20px; color: #475569; font-size: 0.9rem; display: flex; flex-direction: column; gap: 8px;">
+                                    <li>모유 수유 중에는 유방촬영술 및 유방초음파 검사, 그리고 진정(수면)내시경을 연기하시는 것을 권유드립니다.</li>
+                                    <li>유방촬영술과 유방초음파 검사의 경우, 수유로 인해 유선이 변화하여 검사 결과의 정확도가 떨어질 수 있습니다. 수유 중단 후 유방조직이 정상상태에 적합한 상태로 안정화되는 6개월이 지난 이후에 검사 받으실 것을 권해드립니다. (단, 불편한 증상이 있으시다면 검사를 미루지 마시고, 유방외과 진료를 받으시기 바랍니다.)</li>
+                                    <li>진정(수면)내시경 검사를 받으시는 경우 약물이 몸에 남아 있을 수 있으니 검사 후 24시간 동안은 모유 수유를 중단하셔야 합니다.</li>
+                                    <li>추가적으로 위장조영촬영에 사용되는 조영제인 황산바륨은 모유 수유에 영향을 미치지 않는 것으로 알려져 있습니다. 안심하고 검사를 받으실 수 있으나, 검사에 대해 불편함이나 우려가 있으신 경우에는 수유 중단 후에 검사를 받으시길 권해드립니다.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong style="color: var(--dark); font-size: 0.95rem; display: block; margin-bottom: 5px;">자궁경부암 검사</strong>
+                                <p style="padding-left: 20px; color: #475569; font-size: 0.9rem;">자궁경부암 검사 시 24시간 내 성관계, 크림사용, 질세척과 72시간 내 질정 사용은 금합니다.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 신분증 안내 -->
+                    <section>
+                        <h4 style="color: var(--dark); font-size: 1.1rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-id-card"></i> 신분증 안내사항
+                        </h4>
+                        <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem; color: #475569;">
+                            <p style="margin-bottom: 12px;">24.05.20부터 요양기관 본인확인 강화 제도가 적용되어, <strong>신분증을 통한 본인확인이 의무화</strong>되었습니다.</p>
+                            <p style="color: var(--danger); font-weight: 700; margin-bottom: 15px;">진정(수면)내시경 검사 및 채용 건강검진 여부에 따라 지참하셔야 하는 신분증의 종류가 달라지니, 반드시 확인해 주시기 바랍니다.</p>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <strong style="color: var(--dark); display: block; margin-bottom: 8px; border-left: 3px solid var(--primary); padding-left: 10px;">진정(수면) 내시경 대상자 및 채용 건강검진</strong>
+                                <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 4px;">
+                                    <li>주민등록증, 운전면허증, (구)여권, 외국인등록증, 영주증 등</li>
+                                    <li>진정(수면) 유도제 사용 시 <strong>사진과 주민등록번호 또는 외국인 등록번호 전체가 기재된 실물 신분증</strong>을 지참하셔야 원활한 진행이 가능합니다.</li>
+                                    <li>신여권을 지참하시는 경우 주민등록번호 확인을 위하여, 여권정보증명서를 함께 지참해 주시기 바랍니다.</li>
+                                    <li>채용 건강검진의 경우 타인이 대신 건강검진을 받는 경우를 방지하기 위하여 사진과 주민등록번호 전체가 기재된 신분증을 지참부탁드립니다.</li>
+                                    <li style="color: var(--danger); font-weight: 700;">※ 거소신고증은 사용 불가능 하오니, 반드시 여권을 함께 지참해 주시기 바랍니다.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <strong style="color: var(--dark); display: block; margin-bottom: 8px; border-left: 3px solid #64748b; padding-left: 10px;">진정(수면)내시경 비대상자</strong>
+                                <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+                                    <li><strong>(신분증)</strong> 건강보험증, 주민등록증, 운전면허증, 여권, 국가보훈등록증, 장애인등록증, 외국인등록증, 국내거소신고증, 영주증 등 (행정·공공기관이 발행한 증명서 또는 서류, 사진과 주민등록번호가 포함된 것에 한함)</li>
+                                    <li><strong>(전자서명인증서)</strong> 공동인증서, 금융인증서, 디지털 원패스, 간편인증(PASS, 네이버·카카오 인증서, 삼성페이, NH인증서 등) 등</li>
+                                    <li><strong>(본인확인 서비스)</strong> 통신사 및 신용카드사, 은행 등</li>
+                                    <li><strong>(전자신분증)</strong> 모바일 건강보험증, 모바일 운전면허증, 주민등록증 확인서비스(PASS) 등</li>
+                                    <li style="color: #64748b; font-size: 0.85rem;">※ 신분증 사본(캡쳐, 사진 등), 각종 자격증 등은 전자신분증이 아니며 사용 불가</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            `;
+        } else {
+            contentArea.innerHTML = `
+                <div style="text-align: center; padding: 50px 20px; color: #94a3b8;">
+                    <i class="fa-solid fa-hospital-user" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.3;"></i>
+                    <p>해당 병원의 상세 주의사항 정보가 아직 등록되지 않았습니다.</p>
+                    <p style="font-size: 0.85rem; margin-top: 10px;">병원에서 제공하는 개별 안내 문자를 확인해 주세요.</p>
+                </div>
+            `;
+        }
+    };
+
+    window.closePrecautionModal = () => {
+        document.getElementById('precautionModalOverlay').style.display = 'none';
+    };
+
+</script>
+
+</body>
+</html>

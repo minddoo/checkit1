@@ -1,52 +1,129 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Check if the user is a Master Admin
+    /** 
+     * [SECURITY HELPERS]
+     */
+     
+    // Check if the user is the super-admin (Master)
     function isMaster() {
-      return request.auth != null && (
-        request.auth.token.email == 'master@checkit.com' ||
-        request.auth.token.email == 'checkit082082@gmail.com' ||
-        request.auth.token.email == 'checkit082@gmail.com'
-      );
-    }
-    
-    // Check if the user is accessing their own document by email
-    function isOwnerByEmail(email) {
-      return request.auth != null && request.auth.token.email == email;
+      return request.auth != null && 
+             (request.auth.token.email == "master@checkit.com" || 
+              request.auth.token.email == "checkit082082@gmail.com");
     }
 
-    // Check if the user is accessing their own document by uid
-    function isOwnerByUid(uid) {
-      return request.auth != null && request.auth.uid == uid;
+    // Get the current user's profile data from the 'users' collection
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
 
-    // 1. User Documents (Users Collection)
-    // Document ID can be UID or Email depending on how it was created
-    match /users/{docId} {
-      allow read: if isMaster() || isOwnerByUid(docId) || isOwnerByEmail(docId) || (request.auth != null && resource.data.email == request.auth.token.email) || (request.auth != null && resource.data.uid == request.auth.uid);
-      allow write: if isMaster() || isOwnerByUid(docId) || isOwnerByEmail(docId);
+    /** 
+     * [GLOBAL RULES]
+     */
+
+    // Master account bypass - Full access to everything
+    match /{document=**} {
+      allow read, write: if isMaster();
     }
 
-    // 2. Consultation States (Document ID is usually Email)
-    match /user_chat_states/{docId} {
-      allow read, write: if isMaster() || isOwnerByEmail(docId) || isOwnerByUid(docId) || (request.auth != null && resource.data.email == request.auth.token.email);
+    /** 
+     * [COLLECTION RULES]
+     */
+
+    // [1] USERS: Core account metadata
+    match /users/{userId} {
+      // Users can only read/write their own profile
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
     }
 
-    // 3. User Activations (Document ID is usually Email)
-    match /user_activations/{docId} {
+    // [2] COMPANY_INFO: Corporate settings and admin keys
+    match /company_info/{companyId} {
+      // allow 'get' for specific ID to support company-key validation during login
+      allow get: if true; 
+      
+      // Full read/write for Master or the verified Company Admin
+      allow read, write: if isMaster() || 
+                           (request.auth != null && 
+                            getUserData().role == 'company_admin' && 
+                            getUserData().companyId == companyId);
+      
+      // Prevent listing all companies for non-admin users
+      allow list: if isMaster();
+    }
+
+    // [3] WORKERS: The roster of employees for medical checkups
+    match /workers/{workerId} {
+      // Allow everyone to read (needed for recovery lookup)
       allow read: if true;
-      allow write: if isMaster() || isOwnerByEmail(docId) || isOwnerByUid(docId) || (request.auth != null && resource.data.email == request.auth.token.email);
+      
+      // Allow everyone to update passwordKey and uid (needed for recovery reset)
+      // Restricted to only these two keys for security
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['passwordKey', 'uid'])) ||
+                      (request.auth != null);
+
+      // Only authenticated users (admins) can create or delete
+      allow create, delete: if request.auth != null;
     }
 
-    // 5. Scheduled Notifications
-    match /scheduled_notifications/{docId} {
+    // [4] USER_PROCESS: Individual medical journey tracking
+    match /user_process/{userId} {
+      // Strictly private: Only the owner or Master can access
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isMaster());
+    }
+
+    // [5] LEADS: Consultation requests from B2C site (1-ckc.pages.dev)
+    match /leads/{leadId} {
+      // Anyone can submit a consultation request
+      allow create: if true;
+      // Only Master can read/manage incoming leads
+      allow read, write: if isMaster();
+    }
+
+    // [6] HOSPITALS: Hospital list for each company
+    match /hospitals/{hospitalId} {
+      allow read: if request.auth != null;
+      allow write: if isMaster();
+    }
+
+    // [7] MESSAGES: 1:1 Chat messages
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // [8] BOOKINGS: Worker appointment requests
+    match /bookings/{bookingId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // [9] ALARMS: Real-time notifications for Master
+    match /alarms/{alarmId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // [10] CONTRACTS: Company service agreements
+    match /contracts/{companyId} {
+      allow read, write: if isMaster() || 
+                           (request.auth != null && 
+                            getUserData().role == 'company_admin' && 
+                            getUserData().companyId == companyId);
+    }
+
+    // [11] NOTICES: General and company-specific announcements
+    match /notices/{noticeId} {
+      allow read: if request.auth != null;
+      allow write: if isMaster();
+    }
+
+    // [12] USER_ACTIVATIONS (Compatibility with previous rules)
+    match /user_activations/{docId} {
       allow read, write: if true;
     }
-    
-    // 4. Default rule: Deny everything else
-    match /{document=**} {
-      allow read, write: if false;
+
+    // [13] SCHEDULED_NOTIFICATIONS (Compatibility with previous rules)
+    match /scheduled_notifications/{docId} {
+      allow read, write: if true;
     }
   }
 }

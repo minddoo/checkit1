@@ -1237,58 +1237,56 @@
 
         try {
             const userDoc = await db.collection('users').doc(user.uid).get();
-            const isEmailMaster = user.email === 'master@checkit.com' || user.email === 'checkit082@gmail.com' || user.email === 'checkit082082@gmail.com';
-            let isMaster = isEmailMaster;
-            let isCompanyAdmin = false;
-            
             if (userDoc.exists) {
                 currentUserData = userDoc.data();
-                if (currentUserData.role === 'admin') isMaster = true;
-                if (currentUserData.role === 'company_admin') isCompanyAdmin = true;
-            } else {
-                currentUserData = isEmailMaster ? { role: 'admin', name: '마스터' } : {};
-            }
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlCompanyId = urlParams.get('companyId');
 
-            if (!isMaster && !isCompanyAdmin) {
-                alert("권한이 없는 계정입니다.");
+                // 마스터거나 기업 관리자면 허용
+                const isMaster = currentUserData.role === 'admin' || user.email === 'master@checkit.com';
+                const isCompanyAdmin = currentUserData.role === 'company_admin';
+
+                if (!isMaster && !isCompanyAdmin) {
+                    alert("권한이 없는 계정입니다.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // 마스터가 URL로 들어온 경우 해당 기업 ID 사용
+                if (isMaster && urlCompanyId) {
+                    currentCompanyId = urlCompanyId;
+                    showToast("마스터 관리자 모드로 접속 중입니다.", "info");
+                } else {
+                    currentCompanyId = currentUserData.companyId;
+                }
+
+                if (!currentCompanyId) {
+                    alert("기업 정보가 연결되지 않았습니다.");
+                    window.location.href = 'index.html';
+                    return;
+                }
+                
+                // 회사 이름 가져오기
+                const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
+                if (compDoc.exists) {
+                    const data = compDoc.data();
+                    document.getElementById("displayCompanyName").innerText = data.name || currentCompanyId;
+                } else {
+                    document.getElementById("displayCompanyName").innerText = currentCompanyId;
+                }
+
+                // 권한 확인 및 로딩 완료 후 화면 표시
+                document.getElementById("superSection").style.display = "flex";
+                loader.style.display = "none";
+                
+                window.loadWorkers(currentCompanyId);
+                window.loadHospitals(currentCompanyId);
+                window.loadNotices();
+
+            } else {
                 auth.signOut();
-                window.location.href = 'index.html';
-                return;
             }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const urlCompanyId = urlParams.get('companyId');
-
-            // 마스터가 URL로 들어온 경우 해당 기업 ID 사용
-            if (isMaster && urlCompanyId) {
-                currentCompanyId = urlCompanyId;
-                showToast("마스터 관리자 모드로 접속 중입니다.", "info");
-            } else {
-                currentCompanyId = currentUserData.companyId;
-            }
-
-            if (!currentCompanyId) {
-                alert("기업 정보가 연결되지 않았습니다.");
-                window.location.href = 'index.html';
-                return;
-            }
-            
-            // 회사 이름 가져오기
-            const compDoc = await db.collection('company_info').doc(currentCompanyId).get();
-            if (compDoc.exists) {
-                const data = compDoc.data();
-                document.getElementById("displayCompanyName").innerText = data.name || currentCompanyId;
-            } else {
-                document.getElementById("displayCompanyName").innerText = currentCompanyId;
-            }
-
-            // 권한 확인 및 로딩 완료 후 화면 표시
-            document.getElementById("superSection").style.display = "flex";
-            loader.style.display = "none";
-            
-            window.loadWorkers(currentCompanyId);
-            window.loadHospitals(currentCompanyId);
-            window.loadNotices();
         } catch (error) {
             console.error("Auth routing error:", error);
             loader.style.display = "none";

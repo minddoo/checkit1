@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'process_step3_desc_new': 'We translate and summarize the results you provide into your language and deliver them via email or messenger.',
             'testimonials_title': 'Corporate Client Testimonials',
             'testimonials_subtitle': 'Many companies are already innovating their foreign worker health management with CHECKIT.',
-            'testimonial1_text': '"Booking regular check-ups for 300 foreign employees was a huge burden every year, but after adopting CHECKIT, the entire process was automated. Employee satisfaction with the result summary service is particularly high."',
+            'testimonial1_text': '"Booking foreign employees was a huge burden every year, but after adopting CHECKIT, the entire process was automated. Employee satisfaction with the result summary service is particularly high."',
             'testimonial1_author': 'Director Kim', 'testimonial1_type': 'Construction HR Team',
             'testimonial2_text': '"Field managers struggled with different booking methods and language barriers at each hospital. With CHECKIT, all communication is possible through one channel, increasing staff efficiency by more than double."',
             'testimonial2_author': 'Manager Lee', 'testimonial2_type': 'Manufacturing Health Manager',
@@ -1677,7 +1677,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (user.email === "master@checkit.com" || user.email === "checkit082@gmail.com" || user.email === "checkit082082@gmail.com") {
+        if (user.email === "master@checkit.com" || user.email === "checkit082082@gmail.com" || user.email === "checkit082@gmail.com") {
             window.location.href = 'platform.html?role=master';
             return;
         }
@@ -2049,9 +2049,17 @@ document.addEventListener('DOMContentLoaded', () => {
             auth.signInWithEmailAndPassword(email, password)
                 .then(async (cred) => {
                     const userDoc = await db.collection('users').doc(cred.user.uid).get();
-                    if (userDoc.exists && userDoc.data().role === 'worker') {
-                        const userData = userDoc.data();
+                    const userData = userDoc.data();
+                    // 암호키가 worker로 시작하면 무조건 근로자로 간주 (유저 요청 사항)
+                    const isWorker = (userDoc.exists && userData.role === 'worker') || securityKey.startsWith('worker');
+
+                    if (userDoc.exists && isWorker) {
                         const companyId = companyKey.replace('comp_', '');
+                        
+                        // 역할이 근로자로 되어 있지 않으면 업데이트
+                        if (userData.role !== 'worker') {
+                            await db.collection('users').doc(cred.user.uid).update({ role: 'worker' });
+                        }
                         
                         // [데이터 연동] workerDocId가 없거나 새로 로그인한 경우 연동 시도
                         if (!userData.workerDocId) {
@@ -2297,6 +2305,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (findWorkerLink) {
         findWorkerLink.addEventListener('click', (e) => {
             e.preventDefault();
+            if (loginCorpContent) loginCorpContent.style.display = 'none';
+            if (loginWorkerContent) loginWorkerContent.style.display = 'none';
+            if (modalTabs) modalTabs.style.display = 'none';
+            if (recoveryContent) recoveryContent.style.display = 'block';
+            if (recoveryResult) recoveryResult.style.display = 'none';
+        });
+    }
+
+    const findWorkerLinkFooter = document.getElementById('find-worker-link-footer');
+    if (findWorkerLinkFooter) {
+        findWorkerLinkFooter.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (loginCorpContent) loginCorpContent.style.display = 'none';
             if (loginWorkerContent) loginWorkerContent.style.display = 'none';
             if (modalTabs) modalTabs.style.display = 'none';
             if (recoveryContent) recoveryContent.style.display = 'block';
@@ -2329,101 +2350,97 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Get companyId from companyKey (handles 'comp_' prefix if needed)
                 const companyId = companyKey.startsWith('comp_') ? companyKey.substring(5) : companyKey;
+                const searchId = companyId.toLowerCase().replace('comp_', '');
+                const searchBirth = birthDate.replace(/[^0-9]/g, ''); 
+                const cleanName = name.replace(/\s/g, '');
+                const data = translations[currentLang] || translations['ko'];
+                let matchedWorker = null;
 
-                // Search primarily by name (now allowed by the broadened rules)
-                // We'll filter by companyId and birthDate in the client to be more flexible
+                // 1. 먼저 직원 명단(workers)에서 성함으로 검색
                 const workerSnap = await db.collection('workers')
-                    .where('name', '==', name)
+                    .where('name', '==', cleanName)
                     .limit(20)
                     .get();
-
-                const data = translations[currentLang] || translations['ko'];
-
-                let matchedWorker = null;
-                const searchId = companyId.toLowerCase().replace('comp_', '');
-                const searchBirth = birthDate.replace(/[^0-9]/g, ''); // Remove dashes, dots, etc.
 
                 workerSnap.forEach(doc => {
                     const wData = doc.data();
                     const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
                     const dbBirthDate = (wData.birthDate || '').replace(/[^0-9]/g, '');
-                    
-                    // Ultra-flexible match
-                    if (dbCompanyId === searchId && dbBirthDate === searchBirth) {
+                    const isBirthMatch = (dbBirthDate === searchBirth) || 
+                                       (searchBirth.length === 8 && dbBirthDate === searchBirth.substring(2)) ||
+                                       (dbBirthDate.length === 8 && searchBirth === dbBirthDate.substring(2));
+
+                    if (dbCompanyId === searchId && isBirthMatch) {
                         matchedWorker = { id: doc.id, ...wData };
                     }
                 });
 
+                // 2. 만약 성함으로 매칭이 안 되면, 생년월일로 한 번 더 시도 (성함 공백/오타 대비)
+                if (!matchedWorker) {
+                    const birthSnap = await db.collection('workers')
+                        .where('birthDate', 'in', [searchBirth, searchBirth.length === 8 ? searchBirth.substring(2) : '19' + searchBirth])
+                        .limit(20)
+                        .get();
+                    
+                    birthSnap.forEach(doc => {
+                        const wData = doc.data();
+                        const dbName = (wData.name || '').replace(/\s/g, '');
+                        const dbCompanyId = (wData.companyId || '').toLowerCase().replace('comp_', '');
+                        
+                        if (dbName === cleanName && dbCompanyId === searchId) {
+                            matchedWorker = { id: doc.id, ...wData };
+                        }
+                    });
+                }
+
                 if (matchedWorker) {
-                    const companyId = matchedWorker.companyId;
-                    const passwordKey = matchedWorker.passwordKey || '(정보 없음)';
+                    const displayCompanyId = matchedWorker.companyId;
+                    let passwordKey = matchedWorker.passwordKey;
+                    
+                    // 1. 만약 workers 컬렉션에 암호키가 없다면, 연결된 uid로 users 컬렉션 확인
+                    if (!passwordKey && matchedWorker.uid) {
+                        try {
+                            const userDoc = await db.collection('users').doc(matchedWorker.uid).get();
+                            if (userDoc.exists) {
+                                passwordKey = userDoc.data().securityKey;
+                            }
+                        } catch (e) { console.warn("UID lookup failed:", e); }
+                    }
+                    
+                    // 2. 여전히 암호키가 없다면, 회사ID로 해당 기업 사용자들을 가져와 이름으로 직접 매칭 (users 컬렉션)
+                    if (!passwordKey) {
+                        try {
+                            const usersSnap = await db.collection('users')
+                                .where('companyId', '==', searchId)
+                                .limit(20)
+                                .get();
+                            
+                            usersSnap.forEach(uDoc => {
+                                const uData = uDoc.data();
+                                const dbUserName = (uData.name || '').replace(/\s/g, '');
+                                if (dbUserName === cleanName) {
+                                    passwordKey = uData.securityKey;
+                                }
+                            });
+                        } catch (e) { console.warn("Company user list lookup failed:", e); }
+                    }
+                    
+                    passwordKey = passwordKey || '(정보 없음)';
                     
                     recoveryResult.innerHTML = `
                         <div style="background: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 12px; text-align: left; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
                             <p style="color: #166534; font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
                                 <i class="fa-solid fa-circle-check"></i> ${data['find_worker_result_success']}
                             </p>
-                            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #dcfce7; margin-bottom: 15px;">
-                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> comp_${companyId}</p>
-                                <p style="font-size: 0.95rem; color: #374151;"><strong>${data['find_worker_result_pw']}</strong> <span id="display-password-key" style="color: var(--primary); font-weight: 700;">${passwordKey}</span></p>
+                            <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #dcfce7; margin-bottom: 5px;">
+                                <p style="font-size: 0.95rem; margin-bottom: 8px; color: #374151;"><strong>${data['find_worker_result_id']}</strong> ${displayCompanyId}</p>
+                                <p style="font-size: 0.95rem; color: #374151;"><strong>${data['find_worker_result_pw']}</strong> <span style="color: var(--primary); font-weight: 700;">${passwordKey}</span></p>
                             </div>
-                            
-                            <hr style="border: 0; border-top: 1px solid #dcfce7; margin: 15px 0;">
-                            
-                            <div id="password-change-section">
-                                <button type="button" id="show-change-pw-btn" class="cta-button-primary" style="background: #64748b; font-size: 0.85rem; padding: 8px 15px;">
-                                    ${data['find_worker_change_btn']}
-                                </button>
-                            </div>
-                            <div id="password-change-form" style="display: none; margin-top: 15px;">
-                                <label style="display: block; font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">${data['find_worker_new_pw_label']}</label>
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="text" id="new-password-key" style="flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 0.9rem;" placeholder="Ex: ABC123">
-                                    <button type="button" id="confirm-change-pw-btn" class="cta-button-primary" style="width: auto; padding: 8px 15px; font-size: 0.85rem;">확인</button>
-                                </div>
-                            </div>
+                            <p style="font-size: 0.8rem; color: #6b7280; text-align: center; margin-top: 10px;">위 정보로 로그인을 진행해 주세요.</p>
                         </div>
                     `;
-
-                    // Event Listeners for the new result UI
-                    document.getElementById('show-change-pw-btn').addEventListener('click', () => {
-                        document.getElementById('password-change-section').style.display = 'none';
-                        document.getElementById('password-change-form').style.display = 'block';
-                    });
-
-                    document.getElementById('confirm-change-pw-btn').addEventListener('click', async () => {
-                        const newKey = document.getElementById('new-password-key').value.trim();
-                        if (!newKey) return;
-
-                        if (!confirm(data['find_worker_change_confirm'])) return;
-
-                        loader.style.display = 'flex';
-                        try {
-                            // Update Firestore. Security rules will allow this because we match companyId, name, birthDate 
-                            // and only change passwordKey and uid.
-                            await db.collection('workers').doc(matchedWorker.id).update({
-                                passwordKey: newKey,
-                                uid: null // Clear UID so they can re-register with the new key
-                            });
-                            
-                            alert(data['find_worker_change_success']);
-                            window.location.reload(); // Refresh to clear state
-                        } catch (err) {
-                            console.error("Update error:", err);
-                            alert("오류가 발생했습니다: " + err.message);
-                        } finally {
-                            loader.style.display = 'none';
-                        }
-                    });
-
                 } else {
-                    const count = workerSnap.size;
-                    let errorMsg = data['find_worker_result_fail'] || '일치하는 정보가 없습니다.';
-                    
-                    if (count > 0) {
-                        errorMsg = `성함('${name}')이 일치하는 분을 ${count}명 찾았으나, 회사 ID나 생년월일이 다릅니다. 입력하신 정보를 다시 확인해 주세요.`;
-                    }
-
+                    let errorMsg = data['find_worker_result_fail'] || '일치하는 정보가 없습니다. 입력하신 정보를 다시 확인해 주세요.';
                     recoveryResult.innerHTML = `
                         <div style="background: #fef2f2; border: 1px solid #fee2e2; padding: 15px; border-radius: 8px; color: #991b1b; text-align: center; font-weight: 600;">
                             <i class="fa-solid fa-circle-exclamation"></i> ${errorMsg}

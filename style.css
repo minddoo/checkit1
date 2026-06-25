@@ -2672,6 +2672,11 @@ body.platform-view-active #mypage-overlay { display: flex; }
     display: none; /* hidden — replaced by new row */
 }
 
+/* [Mobile hamburger toggle button — hidden on PC] */
+.mobile-menu-toggle-btn {
+    display: none; /* PC에서 숨김 */
+}
+
 /* [Header: Scrolled State] */
 #main-header.scrolled {
     background: rgba(255, 255, 255, 0.95);
@@ -3388,10 +3393,33 @@ body.platform-view-active #mypage-overlay { display: flex; }
     }
     
     #main-header nav .cta-button-secondary {
-        margin-left: 8px !important;
-        padding: 6px 12px !important;
-        font-size: 0.8rem !important;
-        vertical-align: middle !important;
+        display: none !important; /* 모바일에서 PC nav 버튼 숨김 — 드롭다운 메뉴 사용 */
+    }
+
+    /* [Mobile hamburger toggle button] */
+    .mobile-menu-toggle-btn {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        width: 32px;
+        height: 22px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-top: 4px;
+        margin-left: 10px;
+        gap: 5px;
+    }
+
+    .mobile-menu-toggle-btn span {
+        display: block;
+        width: 100%;
+        height: 2.5px;
+        background: var(--primary-dark, #1e8449);
+        border-radius: 2px;
+        transition: all 0.3s ease;
     }
     
     #mobile-menu-overlay {
